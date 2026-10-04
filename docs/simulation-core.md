@@ -25,7 +25,7 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 ### Zeitintegration
 - Rueckwaerts-Euler (implizit, A-stabil) mit Begleitmodellen fuer Kondensator und Spule.
 - Volta 1: feste Schrittweite 1 ms, Echtzeitbezug; Zeitraffer x1, x10, x100.
-- Ab Volta 2: variable Schrittweite bis 10 µs (Audio bis 20 kHz), Audioberechnung im Puffer mit kurzem Vorlauf;
+- Ab Volta 2: variable Schrittweite bis ca. 20 µs (Audio bis 20 kHz), Audioberechnung im Puffer mit kurzem Vorlauf;
   optional Trapezregel mit Daempfung gegen Klingeln.
 - Nach Topologiewechsel und nach Undo: DC-Arbeitspunkt mit Quellenrampe (Source Stepping) als Startwert.
 
@@ -43,7 +43,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 
 | Typ (`typ`) | Elektrisches Modell | Thermik/Grenzen | Ereignis |
 |---|---|---|---|
-| `batterie_9v` | Quelle 9 V (umschaltbar 4,5 V) mit Ri ≈ 1,5 Ω | Erwaermung bei Kurzschluss | `BatteryHot` |
+| `batterie` | Reihe aus 1,5-V-Zellen, waehlbar 3 V / 4,5 V / 9 V (2/3/6 Zellen); Ri ≈ 0,25 Ω je Zelle (9 V ≈ 1,5 Ω) | Erwaermung bei Kurzschluss, Kapazitaet optional | `BatteryHot` |
 | `gluehlampe` | R(T): kalt ≈ R_heiss/10, Faden mit eigener Zeitkonstante | Durchbrennen bei Ueberspannung | `Destroyed` |
 | `led_rot`, `led_gruen`, `led_gelb`, `led_blau` | Shockley-Diode + Bahnwiderstand, Uf 1,8–3,2 V | Imax 20 mA dauerhaft, thermisch | `Destroyed` |
 | `diode_si`, `diode_ge` | Shockley-Diode | Verlustleistung | `Destroyed` |

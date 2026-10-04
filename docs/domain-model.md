@@ -31,7 +31,7 @@
 
 | Pultfeld | Bauteil | Bedeutung |
 |---|---|---|
-| `+9V`, `0V` | Batterie | Plus, Minus (Masse) |
+| `+9V`, `0V` | Batterie | Plus, Minus (Masse); Batterie aus 1,5-V-Zellen, waehlbar 3 / 4,5 / 9 V. Der Feldname `+9V` bleibt bei jeder Wahl gleich |
 | `P1a`, `P1s`, `P1b` | Potentiometer P1 | Anschluss a, Schleifer, Anschluss b |
 | `P2a`, `P2s`, `P2b` | Potentiometer P2 | wie P1 |
 | `S1`, `S2` | Schalter | Kontakte |
