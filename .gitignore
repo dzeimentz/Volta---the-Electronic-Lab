@@ -1,0 +1,14 @@
+build/
+*.user
+*.autosave
+.qtcreator/
+CMakeUserPresets.json
+.DS_Store
+# Signierschluessel nie einchecken
+*.keystore
+*.jks
+*.pfx
+*.p12
+.env
+.env.*
+__pycache__/

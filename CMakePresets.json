@@ -1,0 +1,77 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 24, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": { "VOLTA_EDITION": "volta1" }
+    },
+    {
+      "name": "core-only",
+      "displayName": "Nur Simulationskern (ohne Qt)",
+      "inherits": "base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "VOLTA_BUILD_APP": "OFF" }
+    },
+    {
+      "name": "desktop-debug",
+      "displayName": "Desktop x86-64 Debug",
+      "inherits": "base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "CMAKE_PREFIX_PATH": "$env{QT_ROOT_DESKTOP}" }
+    },
+    {
+      "name": "desktop-release",
+      "displayName": "Desktop x86-64 Release",
+      "inherits": "desktop-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release", "VOLTA_BUILD_TESTS": "OFF" }
+    },
+    {
+      "name": "android-base",
+      "hidden": true,
+      "inherits": "base",
+      "toolchainFile": "$env{QT_ROOT_ANDROID}/lib/cmake/Qt6/qt.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "VOLTA_BUILD_TESTS": "OFF",
+        "QT_HOST_PATH": "$env{QT_HOST_PATH}",
+        "ANDROID_NDK_ROOT": "$env{ANDROID_NDK_ROOT}",
+        "ANDROID_SDK_ROOT": "$env{ANDROID_SDK_ROOT}",
+        "ANDROID_PLATFORM": "android-26"
+      }
+    },
+    {
+      "name": "android-arm64",
+      "displayName": "Android arm64-v8a",
+      "inherits": "android-base",
+      "cacheVariables": { "ANDROID_ABI": "arm64-v8a" }
+    },
+    {
+      "name": "android-armv7",
+      "displayName": "Android armeabi-v7a",
+      "inherits": "android-base",
+      "cacheVariables": { "ANDROID_ABI": "armeabi-v7a" }
+    },
+    {
+      "name": "ios",
+      "displayName": "iPadOS arm64 (Phase 5b, benoetigt macOS)",
+      "inherits": "base",
+      "generator": "Xcode",
+      "toolchainFile": "$env{QT_ROOT_IOS}/lib/cmake/Qt6/qt.toolchain.cmake",
+      "cacheVariables": { "QT_HOST_PATH": "$env{QT_HOST_PATH}", "VOLTA_BUILD_TESTS": "OFF" },
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "core-only", "configurePreset": "core-only" },
+    { "name": "desktop-debug", "configurePreset": "desktop-debug" },
+    { "name": "desktop-release", "configurePreset": "desktop-release" },
+    { "name": "android-arm64", "configurePreset": "android-arm64" },
+    { "name": "android-armv7", "configurePreset": "android-armv7" }
+  ],
+  "testPresets": [
+    { "name": "core-only", "configurePreset": "core-only", "output": { "outputOnFailure": true } },
+    { "name": "desktop-debug", "configurePreset": "desktop-debug", "output": { "outputOnFailure": true } }
+  ]
+}

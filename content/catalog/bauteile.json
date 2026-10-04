@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "bauteile": [
+    {"typ": "gluehlampe", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "lamp",
+     "parameter": {"u_nenn_V": 6.0, "i_nenn_mA": 50}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_gluehlampe"},
+    {"typ": "taster", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "switch",
+     "parameter": {}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_taster"},
+    {"typ": "motor", "anschluesse": ["a", "b"], "spannweite": ["lang"], "modell": "motor",
+     "parameter": {"ra_ohm": 8.0}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_motor"},
+    {"typ": "summer", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "buzzer",
+     "parameter": {"f_Hz": 2400}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_summer"},
+    {"typ": "widerstand", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "resistor",
+     "parameter": {"pmax_W": 0.25, "reihe": "E12"}, "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_widerstand"},
+    {"typ": "led_rot", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"], "modell": "led",
+     "parameter": {"uf_V": 1.9, "imax_mA": 20}, "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_led"},
+    {"typ": "led_gruen", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"], "modell": "led",
+     "parameter": {"uf_V": 2.1, "imax_mA": 20}, "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_led"},
+    {"typ": "diode_si", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"], "modell": "diode",
+     "parameter": {"uf_V": 0.7}, "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_diode"},
+    {"typ": "kondensator", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "capacitor",
+     "parameter": {}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_kondensator"},
+    {"typ": "elko", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "capacitor_polar",
+     "parameter": {"umax_V": 16}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_elko"},
+    {"typ": "fotowiderstand", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "ldr",
+     "parameter": {}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_fotowiderstand"},
+    {"typ": "transistor_npn", "anschluesse": ["b", "c", "e"], "spannweite": ["traeger"], "modell": "bjt_npn",
+     "parameter": {"beta": 200}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_transistor"}
+  ],
+  "module": [
+    {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",
+     "ab_band": "volta1", "ab_stufe": 0, "lexikon_key": "lex_blinkmodul"},
+    {"typ": "tonmodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "teilschaltung",
+     "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_tonmodul"}
+  ]
+}

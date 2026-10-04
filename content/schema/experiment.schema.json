@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dc-software-engineering.com/volta/schema/experiment-1.json",
+  "title": "Volta Experiment (schema_version 1)",
+  "type": "object",
+  "required": ["id", "band", "stufe", "titel_key", "zerstoerend", "bauteile_frei", "frage_key",
+               "vermutungen", "vorlage", "erfolg", "hilfen", "erklaerung_key", "jetzt_in_echt_key"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^(volta1|volta2|volta3|zuse1)\\.[0-9]+\\.[0-9]+$"},
+    "band": {"enum": ["volta1", "volta2", "volta3", "zuse1"]},
+    "stufe": {"type": "integer", "minimum": 0, "maximum": 9},
+    "kapitel": {"type": "integer", "minimum": 0},
+    "titel_key": {"$ref": "#/$defs/key"},
+    "dauer_min": {"type": "integer", "minimum": 1, "maximum": 45},
+    "zerstoerend": {"type": "boolean"},
+    "bauteile_frei": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "frage_key": {"$ref": "#/$defs/key"},
+    "vermutungen": {"type": "array", "items": {"$ref": "#/$defs/key"}, "minItems": 2, "maxItems": 5},
+    "vorlage": {
+      "type": "object",
+      "required": ["pult", "bauteile", "leitungen"],
+      "additionalProperties": false,
+      "properties": {
+        "pult": {"enum": ["bedienpult_1", "bedienpult_2"]},
+        "bauteile": {"type": "array", "items": {"$ref": "#/$defs/placement"}},
+        "module": {"type": "array", "items": {"$ref": "#/$defs/module"}},
+        "leitungen": {"type": "array", "items": {"$ref": "#/$defs/wire"}},
+        "anzeigen": {"type": "array", "items": {"$ref": "#/$defs/anchor"}}
+      }
+    },
+    "schritte": {"type": "array", "items": {"$ref": "#/$defs/key"}},
+    "erfolg": {"$ref": "#/$defs/condition"},
+    "hilfen": {"type": "array", "items": {"$ref": "#/$defs/key"}, "minItems": 1},
+    "erklaerung_key": {"$ref": "#/$defs/key"},
+    "mehr_wissen_key": {"$ref": "#/$defs/key"},
+    "weiterforschen": {"type": "array", "items": {"$ref": "#/$defs/key"}},
+    "jetzt_in_echt_key": {"$ref": "#/$defs/key"}
+  },
+  "$defs": {
+    "key": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "field": {"type": "string", "pattern": "^[A-E][1-8]$"},
+    "anchor": {"type": "string",
+      "pattern": "^([A-E][1-8]|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z]+)$"},
+    "placement": {
+      "type": "object",
+      "required": ["id", "typ", "felder"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z]+[0-9]+$"},
+        "typ": {"type": "string"},
+        "felder": {"oneOf": [
+          {"type": "array", "items": {"$ref": "#/$defs/field"}, "minItems": 2, "maxItems": 3},
+          {"type": "object", "additionalProperties": {"$ref": "#/$defs/field"}}
+        ]},
+        "wert": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "module": {
+      "type": "object",
+      "required": ["id", "typ", "position"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z]+[0-9]+$"},
+        "typ": {"type": "string"},
+        "position": {"type": "integer", "minimum": 1, "maximum": 16}
+      }
+    },
+    "wire": {
+      "type": "object",
+      "required": ["von", "nach"],
+      "additionalProperties": false,
+      "properties": {
+        "von": {"$ref": "#/$defs/anchor"},
+        "nach": {"$ref": "#/$defs/anchor"},
+        "farbe": {"enum": ["rot", "schwarz", "blau", "gelb", "gruen", "weiss"]},
+        "zwischenpunkt": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2}
+      }
+    },
+    "condition": {
+      "type": "object",
+      "oneOf": [
+        {"required": ["alle"], "properties": {"alle": {"type": "array", "items": {"$ref": "#/$defs/condition"}, "minItems": 1}}},
+        {"required": ["eine"], "properties": {"eine": {"type": "array", "items": {"$ref": "#/$defs/condition"}, "minItems": 1}}},
+        {"required": ["nicht"], "properties": {"nicht": {"$ref": "#/$defs/condition"}}},
+        {"required": ["groesse"], "properties": {
+          "bauteil": {"type": "string"}, "rolle": {"type": "string"}, "feld": {"$ref": "#/$defs/anchor"},
+          "groesse": {"enum": ["strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C"]},
+          "zwischen": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+          "min": {"type": "number"}, "max": {"type": "number"}, "dauer_s": {"type": "number", "minimum": 0}}},
+        {"required": ["zustand"], "properties": {
+          "bauteil": {"type": "string"}, "rolle": {"type": "string"},
+          "zustand": {"enum": ["intakt", "ueberlastet", "zerstoert"]}}}
+      ]
+    }
+  }
+}

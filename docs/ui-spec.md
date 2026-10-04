@@ -1,0 +1,88 @@
+# Oberflaeche – Spezifikation
+
+## Grundsaetze
+- Gegenstaendlich: Bauteile sehen aus wie Bauteile; Schaltzeichen begleiten sie.
+- Finger, Stift und Maus sind gleichwertig; Tastatur auf dem Desktop vollstaendig nutzbar.
+- Bedienelemente ≥ 48 dp; Kontaktfelder ≥ 56 dp hoch, 24 dp Abstand.
+- Farbe nie alleiniger Informationstraeger (Kontur, Muster, Skalenmarke).
+- Animationen reduzierbar (Systemeinstellung respektieren).
+
+## Startseite (Dashboard)
+- Kacheln: Lernpfad, Freies Labor, Forscherheft, Readme (Fragezeichen), Info (i).
+- **Flaggensymbol** oben rechts: Auswahl mit Flagge, Kuerzel und Eigenname:
+  Deutsch (DE), Français (FR), English (EN), Lëtzebuergesch (LU). Wechsel sofort, ohne Neustart,
+  laufendes Experiment bleibt erhalten. Nicht hinter der Elternschranke.
+- Forscherprofil-Auswahl, wenn Profile aktiviert sind.
+
+## Experimentansicht (Lab)
+- Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.
+- Werkzeugleiste: Rueckgaengig, Wiederholen, Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
+  Flaggensymbol, Hauptmenue.
+
+### Gesten und Eingaben
+| Aktion | Touch/Stift | Maus/Tastatur |
+|---|---|---|
+| Bauteil setzen | aus Fach ziehen | ziehen |
+| Leitung ziehen | von Feld zu Feld ziehen | ziehen |
+| Leitungsende umsetzen | Ende greifen und ziehen | ziehen |
+| Kontextmenue | langer Druck | Rechtsklick |
+| Zoom/Verschieben | zwei Finger | Strg + Mausrad / Leertaste + Ziehen |
+| Rueckgaengig | Tippen mit zwei Fingern | Strg+Z |
+| Wiederholen | Tippen mit drei Fingern | Strg+Y / Strg+Umschalt+Z |
+| Regler drehen | Kreisbewegung oder Wischen | Ziehen, Mausrad |
+| Regler auf Mitte | Doppeltippen | Doppelklick |
+
+Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganzes Feld + 8 dp.
+
+## Bedienpult
+- **Hauptschalter** fuer die Batterie.
+- **Drehregler mit Lichtring**: 16 Segmente auf 270°, Luecke unten; Segmente vom linken Anschlag bis zur Stellung
+  leuchtend (Akzentfarbe Signal Orange #FF6B1A / Solder Amber #FFB07A), Rest als blasse Umrisse. Stellung intern
+  stufenlos. Ab Stufe 3 zeigt langer Druck Teilwiderstand in Ω und Stellung in %.
+- **Lautsprecher mit Leuchtring (Klanganzeige)**: Lautsprechersymbol im geschlossenen Ring.
+  - Tonhoehe -> Farbton, logarithmisch: 100 Hz Gelb (#FFD400) ueber Orange bis ≥ 5 kHz Rot (#E8221B).
+  - Signalstaerke -> Helligkeit; Stille -> dunkel.
+  - Impulse unter 20 Hz -> kurzes Aufblinken je Impuls.
+  - Skalenmarke wandert mit der Tonhoehe im Uhrzeigersinn (Farbfehlsichtigkeit).
+  - Ab Stufe 3: langer Druck zeigt Frequenz in Hz. Bleibt im Klassenmodus aktiv.
+- **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
+  Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
+- **Pultleiste**: Felder mit vier Steckplaetzen und Bezeichnung; Gruppenlinien mit Schaltzeichen
+  (Batterie, P1, P2, Schalter, Lautsprecher). Tippen auf Schaltzeichen hebt Gruppe und Pultelement hervor.
+
+## Grundplatte
+- Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.
+- Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
+- Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
+- Wassermodell als zuschaltbare Erklaerebene.
+- Schaltplanansicht ab Stufe 2 parallel; Knoten mit Feldnamen; wechselseitige Hervorhebung.
+
+## Werkzeugkasten (Seitenleiste)
+- Farbcode und E-Reihen (E6, E12, E24; ab Volta 2 E48, E96; Kondensatorcodes ab Volta 2).
+- Formelrechner mit Einheiten und Vorsaetzen (p, n, µ/u, m, k, M) und Rechenblaettern; Rechenweg immer sichtbar.
+- Bauteillexikon, Zeitschreiber (ab Stufe 3), Fehlersuche (ab Stufe 2, antwortet mit einer Frage), Teileliste mit
+  Aufbaukarte (PDF), Kennlinienschreiber (Volta 2).
+- »Uebernehmen« schreibt Werte auf ein ausgewaehltes Bauteil (Befehl, undo-faehig).
+
+## Interaktives Readme
+- Rundgang beim ersten Start mit Begleitfigur; danach ueber das Fragezeichen.
+- Abschnitte: Willkommen, Grundplatte, Leitungen, Bedienpult, Anzeigen, Rueckgaengig, Werkzeugkasten,
+  Sprache und Einstellungen – jeweils mit Uebungsplatte (vom Lernpfad getrennt) und Aufgabe mit Bestaetigung.
+- Teil fuer Erwachsene (hinter Elternschranke): Systemanforderungen, Gesten/Tastenkuerzel, Datenschutz,
+  Konfigurationsschluessel fuer Schulen, Aenderungsliste. »Was ist neu« nach Updates. Kontexthilfe, Volltextsuche.
+
+## Info-Seite
+- Produkt: »Volta 1 – Das Elektronik-Labor«, Version, Build, Paket- und Kernversion.
+- Hersteller: DC Software Engineering, Daniel Zeimentz, Anschrift (Anbieterkennzeichnung).
+- Kontakt: dc-software-engineering.com, info@dc-software-engineering.com (Links hinter Elternschranke).
+- Verwendete Techniken: Qt 6, Qt Quick (QML), Qt RHI, C++17-Simulationskern (MNA, Newton-Raphson, Rueckwaerts-Euler),
+  JSON-Inhaltspakete, Systemsprachausgabe und eigene Tonaufnahmen.
+- Lizenzen (alle Open-Source-Bestandteile mit Texten), Datenschutzerklaerung (offline), Nutzungsbedingungen, Danksagung.
+- »Supportangaben kopieren« und vorbereitete Support-E-Mail (ohne Namen, Profile, Inhalte).
+
+## Elternschranke
+- Einfache Rechenaufgabe mit Zahlen in Worten; schuetzt Elternbereich, externe Links, Readme-Erwachsenenteil.
+
+## Farben (Markenwerte DC Software Engineering)
+- Engineering Navy #0A2540, Pult #1A3A5C, Akzent #2E7DBE, Signal Orange #FF6B1A, Solder Amber #FFB07A,
+  Spannungsbalken #8EE68A mit Kontur #3E8E3A, Grundplatte #F7F3EA, Felder #CFC5AE.

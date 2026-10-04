@@ -1,0 +1,132 @@
+# CLAUDE.md – Volta – Das Elektronik-Labor
+
+Diese Datei ist der Einstieg fuer Claude Code. Sie beschreibt, was Volta ist, wie das Repository aufgebaut ist,
+wie gebaut und getestet wird und welche Regeln ohne Ausnahme gelten. Details stehen in `docs/`; die
+Unterverzeichnisse `core/`, `app/` und `content/` haben eigene CLAUDE.md-Dateien mit Regeln fuer ihren Bereich.
+
+## Projekt in Kuerze
+
+Volta ist eine Reihe virtueller Elektronik-Experimentierkaesten fuer Kinder und Jugendliche
+(Volta 1: 8–12 Jahre, Volta 2: 11–14, Volta 3: 13–16; spaeter Zuse 1 – Computertechnik fuer Einsteiger).
+Kinder stecken Bauteile zwischen bezeichnete Kontaktfelder einer Grundplatte, ziehen Leitungen, bedienen ein
+Bedienpult und beobachten das Ergebnis einer echten Schaltungssimulation. Gestalterisches Vorbild ist das
+Prinzip der Kosmos-X-Reihe (Kontaktfelder als Knoten, Bedienpult, Module) – uebernommen wird nur das Prinzip.
+
+- Hersteller: DC Software Engineering, Daniel Zeimentz, Irrel (DE)
+- Web: https://dc-software-engineering.com – Support: info@dc-software-engineering.com
+- Massgebliches Konzept: `docs/Konzept_Volta_v3.0.pdf` (falls vorhanden) bzw. die Zusammenfassung in `docs/`
+- Aktuelles Ziel: **Volta 1**, Phase 0/1 (Simulationskern, Projektgeruest, Prototyp), siehe `docs/roadmap.md`
+
+## Technikstapel (identisch mit Visual Technic Studio)
+
+- **Qt 6.8 LTS oder neuer**, Qt Quick/QML fuer die Oberflaeche, Qt RHI fuer die Grafik
+- **C++17** durchgehend; Simulationskern `core/` ist **frei von Qt** (nur Standardbibliothek)
+- CMake ≥ 3.24 mit Presets, Ninja
+- Tests: Catch2 v3 (Kern), Qt Test (Modell/App)
+- Plattformen: Android arm64 + armv7 (Phase 1), Windows/Linux x86-64 (Phase 5a), iPadOS arm64 (Phase 5b)
+
+## Repository
+
+```
+CLAUDE.md                 dieser Leitfaden
+CMakeLists.txt            Wurzelprojekt
+CMakePresets.json         desktop-debug, desktop-release, android-arm64, android-armv7, ios
+core/                     Simulationskern (C++17, Qt-frei)  -> core/CLAUDE.md
+  include/volta/core/     oeffentliche Header
+  src/                    MNA, Bauteilmodelle, Zeitintegration, Ereignisse
+  tests/                  Catch2-Tests, Referenzschaltungen
+app/                      Qt-Anwendung                       -> app/CLAUDE.md
+  src/model/              Schaltungsmodell, Befehle (Undo/Redo), Feldbelegung
+  src/services/           Inhaltspakete, Profile, Sicherung, Konfiguration, Audio, Sprache
+  qml/                    Oberflaeche (Grundplatte, Pult, Werkzeugkasten, Readme, Info)
+content/                  Inhaltspakete (JSON)               -> content/CLAUDE.md
+  schema/                 JSON-Schemata
+  catalog/                Bauteil- und Modulkatalog
+  volta1/                 Experimente und Texte von Volta 1
+i18n/                     Qt-Linguist-Dateien (volta_de.ts, _fr, _en, _lb)
+packaging/                android, windows (MSIX/MSI), linux (AppImage), ios
+tools/                    Hilfsskripte (validate_content.py)
+docs/                     Architektur, Fachmodell, Spezifikationen, ADRs
+.claude/                  Einstellungen, Slash-Befehle, Agenten fuer Claude Code
+```
+
+## Bauen und Testen
+
+```bash
+# Desktop (Entwicklungs- und Testziel)
+cmake --preset desktop-debug
+cmake --build --preset desktop-debug
+ctest --preset desktop-debug
+
+# Nur der Simulationskern (ohne Qt, schnell)
+cmake --preset core-only
+cmake --build --preset core-only
+ctest --preset core-only
+
+# Inhaltspakete pruefen (vor jedem Commit, der content/ beruehrt)
+python3 tools/validate_content.py
+
+# Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
+cmake --preset android-arm64
+cmake --build --preset android-arm64
+```
+
+Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach Aenderungen an `content/`:
+`python3 tools/validate_content.py` muss ohne Fehler durchlaufen.
+
+## Unverhandelbare Regeln
+
+1. **Keine Datenerhebung, kein Netz.** Kein Konto, keine Analyse, keine Werbung, keine Kaeufe in der App,
+   kein Netzwerkzugriff im Kernbetrieb. Keine Bibliothek einbinden, die das verletzt. Siehe `docs/privacy-safety.md`.
+2. **Keine Nachbildung des Vorbilds.** Keine Texte, Abbildungen, Versuchsaufbauten, Kapitelnamen,
+   Feldnummerierung, Figuren oder Namen aus Kosmos-Handbuechern. Der Name »Kosmos« erscheint nirgends
+   in App, Store-Texten oder Inhalten. Experimente sind Eigenentwicklungen.
+3. **Physik ist ehrlich.** Verhalten entsteht aus der Simulation, nie aus hinterlegten Ergebnissen.
+   Vereinfachungen sind erlaubt, Verfaelschungen nicht. Abweichung zu Referenzwerten < 2 %.
+4. **Kern bleibt Qt-frei.** `core/` darf nur die C++-Standardbibliothek verwenden (Wiederverwendung in VTS).
+5. **Jede Aufbauaenderung ist ein Befehl.** Alles, was den Aufbau aendert, laeuft ueber das Befehlsmuster
+   (Undo/Redo) – inklusive Wiederherstellung des Bauteilzustands. Bedienhandlungen (Schalter, Regler) nicht.
+6. **Kindersicherheit.** Zerstoerende Experimente tragen »Nur in der App!«; »Jetzt in echt« schlaegt nie
+   zerstoerende Versuche vor; keine Netzspannung als Experimentierquelle. Externe Links nur hinter der Elternschranke.
+7. **Barrierefreiheit.** Bedienelemente ≥ 48 dp, Kontaktfelder ≥ 56 dp hoch; Farbe nie alleiniger Informationstraeger.
+8. **Mehrsprachig von Anfang an.** Kein sichtbarer Text ohne Uebersetzungsschluessel. Sprachen DE, FR, EN, LU
+   (Anzeige »LU«, interner Code `lb`).
+
+## Konventionen
+
+- C++: Namen auf Englisch, `CamelCase` fuer Typen, `camelCase` fuer Funktionen, `m_` fuer Member,
+  `snake_case` fuer Dateien. Formatierung mit `.clang-format`. Keine Ausnahmen im Simulationspfad
+  (Echtzeit-Thread); Fehler als Statuswerte.
+- QML: eine Komponente je Datei, `PascalCase.qml`; keine Logik, die ins Modell gehoert.
+- Fachbegriffe im Code: `Field` (Kontaktfeld), `Wire` (Leitung), `Component` (Bauteil), `Module` (Modul),
+  `ControlDesk` (Bedienpult), `DeskStrip` (Pultleiste), `ModuleBar` (Modulleiste), `Meter` (Dreifach-Messgeraet).
+  Siehe `docs/glossary.md`.
+- Inhaltspakete: JSON-Schluessel deutsch wie in `docs/content-format.md` festgelegt.
+- Kommentare und Commit-Nachrichten auf Deutsch, in Codebloecken ASCII (ae, oe, ue, ss).
+- Commits klein und thematisch; Format `bereich: kurze Beschreibung` (z. B. `core: Diodenmodell mit Spannungsbegrenzung`).
+
+## Arbeitsweise fuer Claude Code
+
+- Vor groesseren Aenderungen die passende Datei in `docs/` lesen; bei Architekturfragen `docs/architecture.md`
+  und die ADRs in `docs/adr/`.
+- Neue Architekturentscheidungen als ADR in `docs/adr/` festhalten (Vorlage: bestehende ADRs).
+- Neue Bauteile: Slash-Befehl `/neues-bauteil`; neue Experimente: `/neues-experiment`.
+- Vor Abschluss einer Aufgabe: Tests ausfuehren, `tools/validate_content.py` bei Inhaltsaenderungen,
+  bei Kernaenderungen Agent `simulations-pruefer`, bei Inhalten Agent `inhalts-pruefer`.
+- Nichts pushen, keine Releases signieren, keine Store-Uploads ohne ausdrueckliche Anweisung.
+
+## Weiterfuehrende Dokumente
+
+| Datei | Inhalt |
+|---|---|
+| `docs/architecture.md` | Schichten, Module, Threads, Datenfluss, Undo/Redo |
+| `docs/simulation-core.md` | MNA, Newton-Raphson, Zeitintegration, Bauteilmodelle, Thermik |
+| `docs/domain-model.md` | Grundplatte, Kontaktfelder, Pultleiste, Modulleiste, Messgeraet, Bezeichner |
+| `docs/content-format.md` | Experimente, Module, Bauteilkatalog, Erfolgsbedingungen |
+| `docs/ui-spec.md` | Bedienung, Lichtring, Klanganzeige, Spannungsanzeige, Werkzeugkasten, Readme, Info |
+| `docs/i18n.md` | Sprachen, Uebersetzung, Tonaufnahmen |
+| `docs/platforms.md` | Android, Desktop x86-64, iPadOS, Paketierung, verwaltete Konfiguration |
+| `docs/testing.md` | Teststrategie, Referenzschaltungen, Leistungsmessung |
+| `docs/privacy-safety.md` | Datenschutz, Kinderschutz, Store-Auflagen |
+| `docs/roadmap.md` | Phasen, Aufwaende, offene Entscheidungen |
+| `docs/glossary.md` | Begriffe deutsch/englisch |
