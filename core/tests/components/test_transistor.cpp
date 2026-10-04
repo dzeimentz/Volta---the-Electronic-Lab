@@ -124,3 +124,11 @@ TEST_CASE("Transistor ohne Kollektorwiderstand: Ueberlast zerstoert ihn", "[tran
     for (double i : s.sim.probe().readings[3].terminalCurrentA) CHECK(std::fabs(i) < 1e-6);
     requireKirchhoff(s.sim);
 }
+
+TEST_CASE("Transistor: erster Schritt nach dem Arbeitspunkt ohne kuenstlichen Ladestrom", "[transistor]") {
+    Stage s;
+    build(s, 1000.0, 1e6);
+    const double ibOp = s.sim.probe().readings[3].terminalCurrentA[0];
+    REQUIRE(s.sim.step(1e-9) == Status::Ok); // sehr kleiner Schritt: ein Ladungssprung waere riesig
+    CHECK(s.sim.probe().readings[3].terminalCurrentA[0] == Approx(ibOp).epsilon(1e-3));
+}

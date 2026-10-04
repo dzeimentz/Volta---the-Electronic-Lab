@@ -52,7 +52,7 @@ void Capacitor::updateState(const SolutionView& x, double dtS) noexcept {
 }
 
 void Capacitor::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_destroyed) return;
+    if (isDestroyed()) return;
     const bool over = std::fabs(m_voltV) > m_params.umaxV;
     const bool reverse = m_params.polarized && m_voltV < -m_params.reverseMaxV;
     m_overloaded = over || reverse;

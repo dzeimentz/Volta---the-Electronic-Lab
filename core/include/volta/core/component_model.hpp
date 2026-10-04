@@ -77,7 +77,8 @@ struct ComponentState {
 // - terminalCurrent() nichtlinearer Modelle liefert den Strom der zuletzt gestempelten Linearisierung, ausgewertet
 //   an x. Damit gilt die Kirchhoffsche Knotenregel exakt im Rahmen der Rechengenauigkeit. Allgemein: stamp() und
 //   terminalCurrent() muessen dieselben Kennwerte verwenden; zustandsabhaengige Kennwerte werden in beginSolve()
-//   festgeschrieben und erst im naechsten beginSolve() geaendert, nicht in thermal()/updateState().
+//   festgeschrieben und erst im naechsten beginSolve() geaendert, nicht in thermal()/updateState()/checkLimits().
+//   Das gilt auch fuer Zerstoerung (destroy() merkt vor) und ausgeloeste Sicherungen.
 // - Leitwerte ueber kMaxConductance werden in MnaSystem begrenzt; ein Modell begrenzt selbst ebenso, damit
 //   terminalCurrent() zum Stempel passt.
 // - branchCount() wird nur beim Topologiewechsel gelesen. Wechselt ein Modell die Zahl seiner Zweigstroeme
@@ -127,7 +128,8 @@ public:
     // Strom, der am Anschluss t in das Bauteil hineinfliesst (Kirchhoff, Stromflussdarstellung).
     virtual double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept = 0;
 
-    // Nach angenommenem Zeitschritt: innere Zustaende (Ladung, Drehzahl) fortschreiben.
+    // Nach angenommenem Zeitschritt: innere Zustaende (Ladung, Drehzahl) fortschreiben. Nach einem Arbeitspunkt
+    // wird updateState mit dtS = 0 aufgerufen: Zustaende an den Arbeitspunkt angleichen, ohne Zeitfortschritt.
     virtual void updateState(const SolutionView& /*x*/, double /*dtS*/) noexcept {}
     // Thermisches Modell erster Ordnung fortschreiben (ab Thermikmodell, Phase 0 Schritt 3).
     virtual void thermal(const SolutionView& /*x*/, double /*dtS*/) noexcept {}
@@ -139,14 +141,23 @@ public:
     virtual ComponentState saveState() const noexcept;
     virtual void restoreState(const ComponentState& state) noexcept;
 
-    bool isDestroyed() const noexcept { return m_destroyed; }
+    // Zerstoert (auch wenn die Zerstoerung erst im naechsten Loesungsvorgang elektrisch wirksam wird).
+    bool isDestroyed() const noexcept { return m_destroyed || m_destroyPending; }
+    // Vom Simulator vor jedem Loesungsvorgang aufgerufen: vorgemerkte Zerstoerung elektrisch wirksam machen.
+    void applyPendingState() noexcept {
+        if (m_destroyPending) {
+            m_destroyed = true;
+            m_destroyPending = false;
+        }
+    }
     bool isOverloaded() const noexcept { return m_overloaded; }
     double tempK() const noexcept { return m_tempK; }
 
 protected:
     // Exakte Loesung von Cth*dT/dt = P - (T - Tamb)/Rth ueber dtS (stabil fuer jede Schrittweite).
     void integrateThermal(double powerW, double dtS, const ThermalParams& p) noexcept;
-    // Zerstoert das Bauteil (einmalig) und meldet SimEventType::Destroyed.
+    // Merkt die Zerstoerung vor (einmalig) und meldet SimEventType::Destroyed. Elektrisch wirksam (m_destroyed)
+    // wird sie erst im naechsten Loesungsvorgang, damit die Messwerte des laufenden Schritts zum Stempel passen.
     void destroy(EventQueue& events, std::size_t index, double timeS) noexcept;
     // Zerstoerung, sobald die Temperatur die Grenze der Thermikparameter uebersteigt.
     void checkThermalLimit(const ThermalParams& p, EventQueue& events, std::size_t index, double timeS) noexcept;
@@ -154,7 +165,8 @@ protected:
     std::size_t firstBranch() const noexcept { return m_firstBranch; }
     NodeId internalNode(std::size_t k) const noexcept { return m_firstInternalNode + k; }
 
-    bool m_destroyed = false;
+    bool m_destroyed = false; // elektrisch wirksam: Stempel und terminalCurrent verwenden nur diesen Wert
+    bool m_destroyPending = false;
     bool m_overloaded = false;
     double m_tempK = kAmbientK;
 

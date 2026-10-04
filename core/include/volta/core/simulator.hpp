@@ -59,7 +59,8 @@ public:
 
 private:
     // warmStart: von der letzten Naeherung statt vom angenommenen Zustand ausgehen.
-    Status newton(const StampContext& ctx, bool warmStart = false) noexcept;
+    // allowEarlyAbort: bei Pendeln frueh abbrechen (nur sinnvoll, wenn danach noch halbiert werden kann).
+    Status newton(const StampContext& ctx, bool warmStart = false, bool allowEarlyAbort = true) noexcept;
     Status advance(double dtS, int depth, bool warmStart) noexcept;
     void accept(double dtS) noexcept;
     void publish() noexcept;
@@ -82,7 +83,7 @@ private:
     int m_stepIterations = 0;
     int m_stepMaxDepth = 0;
     bool m_budgetExceeded = false;
-    bool m_hitIterationLimit = false; // letzter Newton-Lauf endete an der Iterationsgrenze (nicht durch Pendeln)
+    bool m_hitIterationLimit = false; // letzter Newton-Lauf endete an der Iterationsgrenze mit Fortschritt
     bool m_ready = false;
 };
 

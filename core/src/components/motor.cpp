@@ -77,6 +77,7 @@ void Motor::updateState(const SolutionView& x, double dtS) noexcept {
     const double i = m_destroyed ? 0.0 : x.branchCurrent(firstBranch());
     const int s = motionSign(); // Modus, mit dem gestempelt wurde
     m_lastCurrentA = std::isfinite(i) ? i : 0.0;
+    if (!(dtS > 0.0)) return; // Arbeitspunkt: nur den Strom uebernehmen
     if (s == 0 || m_destroyed) {
         m_omega = 0.0;
         return;
@@ -95,10 +96,10 @@ void Motor::thermal(const SolutionView& /*x*/, double dtS) noexcept {
 }
 
 void Motor::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_destroyed) return;
+    if (isDestroyed()) return;
     m_overloaded = std::fabs(m_lastCurrentA) > m_params.overloadA;
     checkThermalLimit(m_params.thermal, events, index, timeS);
-    if (m_destroyed) m_omega = 0.0;
+    if (isDestroyed()) m_omega = 0.0;
 }
 
 ComponentReading Motor::read(const SolutionView& x) const noexcept {

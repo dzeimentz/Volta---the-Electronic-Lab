@@ -60,8 +60,11 @@ void Npn::evaluate(double vbe, double vbc) noexcept {
     // Ladungsspeicher (Rueckwaerts-Euler): i = (Q(v) - Q_alt) / dt, B->E bzw. B->C
     const double iQbe = (m_params.cbeF * vbe + m_params.tauFS * iF - m_qbeOld) * m_invDt;
     const double iQbc = (m_params.cbcF * vbc + m_params.tauRS * iR - m_qbcOld) * m_invDt;
-    const double gQbe = (m_params.cbeF + m_params.tauFS * gF) * m_invDt;
-    const double gQbc = (m_params.cbcF + m_params.tauRS * gR) * m_invDt;
+    // Leitwerte der Ladungsspeicher begrenzen (Vertrag: Modell begrenzt selbst); der Strom am Linearisierungspunkt
+    // bleibt exakt, nur die Steigung wird flacher (sehr kleine Teilschritte bei hohem Strom).
+    const double gQMax = kMaxConductance / 4.0;
+    const double gQbe = std::min((m_params.cbeF + m_params.tauFS * gF) * m_invDt, gQMax);
+    const double gQbc = std::min((m_params.cbcF + m_params.tauRS * gR) * m_invDt, gQMax);
 
     m_vbe0 = vbe;
     m_vbc0 = vbc;
@@ -146,7 +149,7 @@ void Npn::thermal(const SolutionView& x, double dtS) noexcept {
 }
 
 void Npn::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_destroyed) return;
+    if (isDestroyed()) return;
     m_overloaded = m_lastIcA > m_params.icMaxA;
     const bool severe = m_lastIcA > m_params.overloadFactor * m_params.icMaxA;
     m_overloadS = severe ? m_overloadS + m_lastDtS : 0.0;

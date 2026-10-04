@@ -82,7 +82,7 @@ void Lamp::thermal(const SolutionView& x, double dtS) noexcept {
 }
 
 void Lamp::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_destroyed) return;
+    if (isDestroyed()) return;
     m_overloaded = m_tempK > m_wearK;
     m_wearS = m_overloaded ? m_wearS + m_lastDtS : 0.0;
     if (m_overloaded && m_wearS >= m_params.wearFailS - 1e-9) destroy(events, index, timeS);

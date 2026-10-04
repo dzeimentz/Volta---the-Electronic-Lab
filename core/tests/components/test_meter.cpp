@@ -200,3 +200,80 @@ TEST_CASE("Messart umschalten ist eine Bedienhandlung ohne Topologiewechsel", "[
     REQUIRE(sim.step() == Status::Ok);
     CHECK(sim.probe().readings[3].displayValue == Approx(4.5).epsilon(1e-3));
 }
+
+TEST_CASE("Sicherung: 0,45 A haelt, 0,6 A loest aus", "[messgeraet][grenzwert]") {
+    for (double ohm : {9.0 / 0.45 - 1.6, 9.0 / 0.6 - 1.6}) {
+        Circuit c;
+        const NodeId plus = c.addNode();
+        const NodeId a = c.addNode();
+        const NodeId vo = c.addNode();
+        c.add<Battery>("B1", plus, kGround);
+        c.add<Resistor>("R1", plus, a, ResistorParams{ohm});
+        c.add<Meter>("MESS", kGround, vo, a).setMode(MeterMode::Ampere);
+        Simulator sim;
+        REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+        runFor(sim, 0.05);
+        const double current = 9.0 / (ohm + 1.6);
+        INFO(current << " A");
+        CHECK(static_cast<const Meter&>(sim.circuit().component(2)).isFuseBlown() == (current > 0.5));
+    }
+}
+
+TEST_CASE("Widerstandsmessung an einer LED: Durchlass ergibt einige kOhm, Sperrrichtung OL", "[messgeraet]") {
+    for (bool forward : {true, false}) {
+        Circuit c;
+        const NodeId vo = c.addNode();
+        const NodeId ampJack = c.addNode();
+        if (forward)
+            c.add<Diode>("D1", vo, kGround, DiodeParams::ledRed());
+        else
+            c.add<Diode>("D1", kGround, vo, DiodeParams::ledRed());
+        c.add<Meter>("MESS", kGround, vo, ampJack).setMode(MeterMode::Ohm);
+        Simulator sim;
+        REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+        REQUIRE(sim.step() == Status::Ok);
+        const ComponentReading& m = sim.probe().readings[1];
+        INFO((forward ? "Durchlass: " : "Sperr: ") << m.displayValue << " Ohm, Flags " << m.displayFlags);
+        if (forward) {
+            // Messquelle 3 V / 3 kOhm, LED ca. 1,7 V bei ca. 0,43 mA -> R = U / I ca. 4 kOhm (nichtlinear!)
+            CHECK(m.displayFlags == 0);
+            CHECK(m.displayValue > 2000.0);
+            CHECK(m.displayValue < 8000.0);
+        } else {
+            CHECK(m.displayFlags & kDisplayOverrange);
+        }
+        requireKirchhoff(sim);
+    }
+}
+
+TEST_CASE("Ohm-Bereich: gleichgepolte Fremdspannung unter 3 V bleibt unbemerkt (dokumentierte Grenze)", "[messgeraet]") {
+    // Thevenin-Quelle 1,5 V (eine Zelle) ueber 1 kOhm: Messwert verfaelscht, keine Warnung - wie bei realen Geraeten
+    Circuit c;
+    const NodeId plus = c.addNode();
+    const NodeId vo = c.addNode();
+    const NodeId ampJack = c.addNode();
+    c.add<Battery>("B1", plus, kGround, BatteryParams{1});
+    c.add<Resistor>("R1", plus, vo, ResistorParams{1000.0});
+    c.add<Meter>("MESS", kGround, vo, ampJack).setMode(MeterMode::Ohm);
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    REQUIRE(sim.step() == Status::Ok);
+    CHECK(sim.probe().readings[2].displayFlags == 0);
+    CHECK(sim.probe().readings[2].displayValue > 1500.0); // statt 1000 Ohm
+}
+
+TEST_CASE("Analoges Messgeraet an hochohmiger Quelle: Bereichswahl verstaerkt die Belastung", "[messgeraet]") {
+    Simulator sim;
+    REQUIRE(sim.setCircuit(dividerWithMeter(1e6, true)) == Status::Ok);
+    const auto& meter = static_cast<const Meter&>(sim.circuit().component(3));
+    CHECK(meter.analogRangeV() == 30.0); // ohne Messwert: groesster Bereich (Ri 600 kOhm)
+    runFor(sim, 0.01);
+    // Im Gleichgewicht passt der Bereich zum Messwert, und der Messwert zum Bereich (Ri = 20 kOhm/V * Bereich)
+    const double r = meter.analogRangeV();
+    const double low = parallel(1e6, 20e3 * r);
+    const double expected = 9.0 * low / (1e6 + low + 1.5);
+    INFO("Bereich " << r << " V, Anzeige " << sim.probe().readings[3].displayValue << " V");
+    CHECK(sim.probe().readings[3].displayValue == Approx(expected).epsilon(2e-3));
+    CHECK(sim.probe().readings[3].displayValue < 1.0); // weit unter 4,5 V
+    CHECK(std::fabs(sim.probe().readings[3].displayValue) <= 0.95 * r);
+}

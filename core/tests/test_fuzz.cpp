@@ -86,7 +86,10 @@ struct Fuzzer {
         else if (auto* r = dynamic_cast<Resistor*>(&m)) r->setOhm(resistor());
         else if (auto* mo = dynamic_cast<Motor*>(&m)) mo->setBlocked(!mo->isBlocked());
         else if (auto* b = dynamic_cast<Battery*>(&m)) b->setCells(uniform(1, 6));
-        else if (auto* me = dynamic_cast<Meter*>(&m)) me->setMode(static_cast<MeterMode>(uniform(0, 2)));
+        else if (auto* me = dynamic_cast<Meter*>(&m)) {
+            if (uniform(0, 1)) me->setMode(static_cast<MeterMode>(uniform(0, 2)));
+            else me->setAnalog(!me->isAnalog());
+        }
     }
 };
 
@@ -147,11 +150,33 @@ TEST_CASE("Zufallsschaltungen: kein Absturz, kein NaN, Kirchhoff, seltene Nichtk
         REQUIRE((op == Status::Ok || op == Status::NotConverged));
         if (op != Status::Ok) ++opFailures;
         bool stepFailure = false;
+        int failedSteps = 0;
+        std::vector<ComponentState> snapshot;
         for (int i = 0; i < kSteps; ++i) {
             if (fz.uniform(0, 49) == 0) fz.operate(sim.circuit());
+            // Undo: Zustand aller Bauteile sichern und spaeter zuruecksetzen, dann neuer Arbeitspunkt
+            if (i == 100) {
+                for (std::size_t j = 0; j < sim.circuit().componentCount(); ++j)
+                    snapshot.push_back(sim.circuit().component(j).saveState());
+            }
+            if (i == 200) {
+                for (std::size_t j = 0; j < snapshot.size(); ++j) sim.circuit().component(j).restoreState(snapshot[j]);
+                const Status u = sim.solveOperatingPoint();
+                REQUIRE((u == Status::Ok || u == Status::NotConverged));
+            }
             const Status s = sim.step();
             REQUIRE((s == Status::Ok || s == Status::NotConverged));
+            if (s != Status::Ok) ++failedSteps;
             stepFailure = stepFailure || s != Status::Ok;
+            double worstStep = 0.0;
+            if (i % 25 == 0 && sim.probe().valid && !kirchhoffHolds(sim, worstStep)) {
+                ++kirchhoffViolations;
+                INFO("Kirchhoff verletzt in Schaltung " << k << ", Schritt " << i << " um " << worstStep
+                                                        << " A, Status " << int(s) << ", Iterationen "
+                                                        << sim.lastStepIterations() << ", Tiefe "
+                                                        << sim.lastStepMaxDepth());
+                CHECK(worstStep <= 0.0);
+            }
             if (sim.probe().valid && !allFinite(sim.probe())) {
                 INFO("Schaltung " << k << ", Schritt " << i);
                 FAIL("NaN/Inf in der Probe");
@@ -161,13 +186,18 @@ TEST_CASE("Zufallsschaltungen: kein Absturz, kein NaN, Kirchhoff, seltene Nichtk
         double worst = 0.0;
         if (sim.probe().valid && !kirchhoffHolds(sim, worst)) {
             ++kirchhoffViolations;
-            UNSCOPED_INFO("Kirchhoff verletzt in Schaltung " << k << " um " << worst << " A");
+            INFO("Kirchhoff verletzt am Ende von Schaltung " << k << " um " << worst << " A");
+            CHECK(worst <= 0.0);
         }
         SimEvent e;
+        std::size_t troubleHere = 0;
         while (sim.events().pop(e)) {
-            if (e.type == SimEventType::ConvergenceTrouble) ++convergenceEvents;
+            if (e.type == SimEventType::ConvergenceTrouble) ++troubleHere;
             if (e.type == SimEventType::Destroyed) ++destroyedEvents;
         }
+        convergenceEvents += troubleHere;
+        // jeder gescheiterte Schritt meldet genau ein Konvergenzereignis (Arbeitspunkte koennen weitere melden)
+        CHECK(troubleHere >= static_cast<std::size_t>(failedSteps));
     }
     INFO("Arbeitspunkt gescheitert: " << opFailures << ", Schaltungen mit gescheitertem Schritt: "
                                       << circuitsWithStepFailure << ", Konvergenzereignisse: " << convergenceEvents

@@ -66,18 +66,23 @@ bool Simulator::withinTolerance() const noexcept {
     return true;
 }
 
-Status Simulator::newton(const StampContext& ctx, bool warmStart) noexcept {
+Status Simulator::newton(const StampContext& ctx, bool warmStart, bool allowEarlyAbort) noexcept {
     m_hitIterationLimit = false;
     const std::size_t count = m_circuit.componentCount();
-    for (std::size_t i = 0; i < count; ++i) m_circuit.component(i).beginSolve(ctx);
+    for (std::size_t i = 0; i < count; ++i) {
+        ComponentModel& c = m_circuit.component(i);
+        c.applyPendingState();
+        c.beginSolve(ctx);
+    }
     if (!warmStart) { // sonst: letzte Naeherung und Linearisierung des gescheiterten Versuchs weiterverwenden
         std::copy(m_accepted.begin(), m_accepted.end(), m_iter.begin());
         for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(ctx.accepted);
     }
 
     const int maxIter = ctx.isDc() ? kMaxNewtonIter : kMaxNewtonIterTransient;
-    int reversals = 0;      // Richtungsumkehrungen der Korrektur ohne Begrenzung und ohne Schrumpfen
-    double prevNorm2 = 0.0; // Quadrat der vorigen Korrektur
+    int reversals = 0;       // Richtungsumkehrungen ohne Schrumpfen seit der letzten Begrenzung
+    double prevNorm2 = 0.0;  // Quadrat der vorigen Korrektur
+    double firstNorm2 = -1.0; // Quadrat der ersten Korrektur (Fortschritt fuer den Warmstart)
     std::fill(m_delta.begin(), m_delta.end(), 0.0);
     for (int k = 0; k < maxIter; ++k) {
         if (!ctx.isDc() && m_stepIterations >= kStepIterationBudget) {
@@ -116,14 +121,18 @@ Status Simulator::newton(const StampContext& ctx, bool warmStart) noexcept {
         }
         std::swap(m_iter, m_next);
         if (converged) return Status::Ok;
+        if (firstNorm2 < 0.0) firstNorm2 = norm2;
+        const bool reversal = k > 0 && dot < 0.0 && norm2 > kReversalShrink * kReversalShrink * prevNorm2;
         if (limited || ctx.isDc()) {
             reversals = 0;
-        } else if (k > 0 && dot < 0.0 && norm2 > kReversalShrink * kReversalShrink * prevNorm2) {
-            if (++reversals >= kMaxReversals) return Status::NotConverged;
+        } else if (reversal && ++reversals >= kMaxReversals && allowEarlyAbort) {
+            return Status::NotConverged;
         }
         prevNorm2 = norm2;
     }
-    m_hitIterationLimit = true;
+    // Iterationsgrenze erreicht: Warmstart lohnt nur, wenn das Verfahren vorankam (letzte Korrektur kleiner als die
+    // erste); sonst startet der halbe Schritt wieder beim angenommenen Zustand.
+    m_hitIterationLimit = prevNorm2 < firstNorm2;
     return Status::NotConverged;
 }
 
@@ -154,6 +163,9 @@ Status Simulator::solveOperatingPoint() noexcept {
         return s;
     }
     std::copy(m_iter.begin(), m_iter.end(), m_accepted.begin());
+    // Innere Zustaende an den Arbeitspunkt angleichen (z. B. Transistor-Ladungen), ohne Zeitfortschritt
+    const SolutionView x = view(m_accepted);
+    for (std::size_t i = 0; i < m_circuit.componentCount(); ++i) m_circuit.component(i).updateState(x, 0.0);
     publish();
     return Status::Ok;
 }
@@ -174,7 +186,8 @@ Status Simulator::advance(double dtS, int depth, bool warmStart) noexcept {
     ctx.timeS = m_timeS + dtS;
     ctx.accepted = view(m_accepted);
 
-    const Status s = newton(ctx, warmStart);
+    // Auf der tiefsten Ebene kann nicht mehr halbiert werden: dort die Iterationen ausschoepfen.
+    const Status s = newton(ctx, warmStart, depth < kMaxStepHalvings);
     if (s == Status::Ok) {
         accept(dtS);
         return Status::Ok;

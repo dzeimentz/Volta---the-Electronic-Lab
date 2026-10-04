@@ -37,15 +37,21 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
   geben dem Umschalten eine aufloesbare Zeitkonstante. Gemessen: Kippstufen aus Katalogteilen (RC 100–1000 Ω)
   erreichen Tiefe 21 (Reserve 3), hoechstens ca. 1000 Iterationen je Schritt; Blinkmodul 10 s Simulation in
   ca. 0,5 s (Debug-Build).
-- Leistung (Desktop, Release, `volta_core_bench`): 41 Bauteile inkl. Blinkmodul, 1000 Schritte in ca. 31 ms
-  (Vorgabe < 50 ms); schlechtester Einzelschritt ca. 8 ms beim Umkippen der Kippstufe (dichte LU mit ca. 45
+- Leistung (Desktop, Release, `volta_core_bench`): 42 Bauteile inkl. Blinkmodul und Messgeraet, die ersten
+  1000 Schritte nach dem Einschalten (mit Anlauf von Kippstufe, Motor und Lampe) in ca. 41 ms (Vorgabe < 50 ms);
+  schlechtester Einzelschritt ca. 8 ms beim Umkippen der Kippstufe (dichte LU mit ca. 45
   Unbekannten, bis ca. 780 Iterationen). Auf dem Referenztablet (Faktor 5–10) ist das ein spuerbarer Ruckler je
   Umkippen; Abhilfe ab Volta 2 mit duenn besetzter LU und Wiederverwendung der Faktorisierung, bei Bedarf frueher.
-- Pendeln: Kehrt im Zeitschritt die Newton-Korrektur viermal die Richtung um, ohne auf die Haelfte zu schrumpfen
+- Pendeln: Kehrt im Zeitschritt die Newton-Korrektur seit der letzten Begrenzung insgesamt viermal die Richtung um, ohne auf die Haelfte zu schrumpfen
   und ohne Begrenzung, wird sofort halbiert (Kipppunkt einer Rueckkopplung). Gedaempftes Pendeln und langsame
-  monotone Konvergenz bleiben unberuehrt.
-- Warmstart: Scheitert ein Versuch nur an der Iterationsgrenze, setzt der halbe Schritt bei der letzten Naeherung
+  monotone Konvergenz bleiben unberuehrt; auf der tiefsten Halbierungsebene wird nicht frueh abgebrochen.
+- Warmstart: Scheitert ein Versuch nur an der Iterationsgrenze und kam dabei voran (letzte Korrektur kleiner als
+  die erste), setzt der halbe Schritt bei der letzten Naeherung
   fort (z. B. Diodenkette nach dem Schliessen eines Schalters), statt den Fortschritt zu verwerfen.
+- Zustandswechsel mit elektrischer Wirkung (Zerstoerung, ausgeloeste Sicherung) werden in `checkLimits`
+  vorgemerkt und erst vor dem naechsten Loesungsvorgang wirksam; Ereignis und Anzeige erscheinen sofort. So sind die
+  Messwerte jedes Schritts in sich stimmig (Kirchhoff). Nach jedem Arbeitspunkt ruft der Simulator
+  `updateState(x, 0)`, damit innere Zustaende (z. B. Transistorladungen) zum Arbeitspunkt passen.
 - `beginSolve(ctx)` legt vor jedem Loesungsvorgang zustandsabhaengige Kennwerte fest (R(T) der Glühlampe, C/dt der
   Sperrschichtkapazitaeten), damit Stempel und Messwerte zueinander passen.
 

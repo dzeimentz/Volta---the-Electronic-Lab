@@ -28,20 +28,21 @@ ComponentReading ComponentModel::read(const SolutionView& x) const noexcept {
     }
     r.powerW = p;
     r.tempK = m_tempK;
-    r.overloaded = m_overloaded && !m_destroyed;
-    r.destroyed = m_destroyed;
+    r.overloaded = m_overloaded && !isDestroyed();
+    r.destroyed = isDestroyed();
     return r;
 }
 
 ComponentState ComponentModel::saveState() const noexcept {
     ComponentState s;
-    s.destroyed = m_destroyed;
+    s.destroyed = isDestroyed();
     s.tempK = m_tempK;
     return s;
 }
 
 void ComponentModel::restoreState(const ComponentState& state) noexcept {
     m_destroyed = state.destroyed;
+    m_destroyPending = false;
     m_tempK = std::isfinite(state.tempK) ? state.tempK : kAmbientK;
     m_overloaded = false;
 }
@@ -55,8 +56,8 @@ void ComponentModel::integrateThermal(double powerW, double dtS, const ThermalPa
 }
 
 void ComponentModel::destroy(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_destroyed) return;
-    m_destroyed = true;
+    if (isDestroyed()) return;
+    m_destroyPending = true;
     m_overloaded = false;
     events.push({SimEventType::Destroyed, index, timeS});
 }

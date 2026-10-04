@@ -31,16 +31,23 @@ struct MeterParams {
 //  - V/Ohm-COM: im V- und A-Bereich Eingangswiderstand (digital 10 MOhm, analog 20 kOhm/V * Bereich, Bereich
 //    selbsttaetig aus dem letzten Messwert); im Ohm-Bereich Messquelle 3 V ueber 3 kOhm, Anzeige U/I.
 //  - A-COM: immer Shunt 0,1 Ohm mit Sicherung (danach offen, SimEventType::FuseBlown).
-// Messart und Anzeigeart sind Bedienhandlungen. Anzeigewert und Zustand in ComponentReading::displayValue/-Flags.
+// Messart und Anzeigeart sind Bedienhandlungen. Anzeigewert und Zustand in ComponentReading::displayValue/-Flags;
+// level = Zeigerausschlag (nur analog im V-Bereich, sonst 0).
+// Vereinfachungen: Die Sicherung loest nach fester Zeit aus (keine I^2*t-Kennlinie). Fremdspannung im Ohm-Bereich
+// wird nur erkannt, wenn sie gegen die Messquelle treibt oder ueber deren 3 V liegt; eine gleichgepolte
+// Fremdspannung unter 3 V verfaelscht den Messwert unbemerkt, wie bei realen Geraeten.
 class Meter final : public ComponentModel {
 public:
     Meter(std::string id, NodeId com, NodeId vOhm, NodeId amp, MeterParams params = {});
 
     MeterMode mode() const noexcept { return m_mode; }
-    void setMode(MeterMode mode) noexcept { m_mode = mode; }
+    void setMode(MeterMode mode) noexcept {
+        if (mode != m_mode) m_hasMeasurement = false; // Bereichswahl beginnt wieder im groessten Bereich
+        m_mode = mode;
+    }
     bool isAnalog() const noexcept { return m_analog; }
     void setAnalog(bool analog) noexcept { m_analog = analog; }
-    bool isFuseBlown() const noexcept { return m_fuseBlown; }
+    bool isFuseBlown() const noexcept { return m_fuseBlown || m_fusePending; }
     double analogRangeV() const noexcept { return m_rangeV; }
     // Eingangswiderstand im V-Bereich fuer den laufenden Loesungsvorgang
     double inputOhm() const noexcept { return m_inputOhm; }
@@ -64,10 +71,12 @@ private:
     MeterParams m_params;
     MeterMode m_mode = MeterMode::Volt;
     bool m_analog = false;
-    bool m_fuseBlown = false;
+    bool m_fuseBlown = false;   // elektrisch wirksam (ab dem naechsten Loesungsvorgang nach dem Ausloesen)
+    bool m_fusePending = false;
     double m_inputOhm = 10e6;
     double m_rangeV = 30.0;
     double m_lastVoltV = 0.0; // letzter Messwert V/Ohm-COM (Bereichswahl)
+    bool m_hasMeasurement = false; // ohne Messwert beginnt die Bereichswahl im groessten Bereich
     double m_lastAmpA = 0.0;  // letzter Strom im A-Eingang (Sicherung)
     double m_fuseS = 0.0;
     double m_lastDtS = 0.0;

@@ -111,7 +111,7 @@ void Diode::thermal(const SolutionView& x, double dtS) noexcept {
 }
 
 void Diode::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_destroyed) return;
+    if (isDestroyed()) return;
     m_overloaded = m_lastCurrentA > m_params.imaxA;
     const bool severe = m_lastCurrentA > m_params.overloadFactor * m_params.imaxA;
     m_overloadS = severe ? m_overloadS + m_lastDtS : 0.0;

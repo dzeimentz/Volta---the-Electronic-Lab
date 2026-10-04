@@ -29,6 +29,10 @@ Meter::Meter(std::string id, NodeId com, NodeId vOhm, NodeId amp, MeterParams pa
 }
 
 void Meter::beginSolve(const StampContext& /*ctx*/) noexcept {
+    if (m_fusePending) {
+        m_fuseBlown = true;
+        m_fusePending = false;
+    }
     if (!m_analog) {
         m_inputOhm = m_params.digitalInputOhm;
         return;
@@ -37,6 +41,7 @@ void Meter::beginSolve(const StampContext& /*ctx*/) noexcept {
     const double v = std::fabs(m_lastVoltV);
     m_rangeV = m_params.analogRangesV.back();
     for (double r : m_params.analogRangesV) {
+        if (!m_hasMeasurement) break;
         if (v <= 0.95 * r) {
             m_rangeV = r;
             break;
@@ -75,15 +80,16 @@ void Meter::thermal(const SolutionView& x, double dtS) noexcept {
     m_lastDtS = dtS;
     m_lastVoltV = x.voltage(vo()) - x.voltage(com());
     m_lastAmpA = terminalCurrent(x, 2);
+    m_hasMeasurement = true;
 }
 
 void Meter::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    if (m_fuseBlown) return;
+    if (isFuseBlown()) return;
     const bool over = std::fabs(m_lastAmpA) > m_params.fuseA;
     m_fuseS = over ? m_fuseS + m_lastDtS : 0.0;
     m_overloaded = over;
     if (over && m_fuseS >= m_params.fuseTimeS - 1e-12) {
-        m_fuseBlown = true;
+        m_fusePending = true;
         m_overloaded = false;
         events.push({SimEventType::FuseBlown, index, timeS});
     }
@@ -92,7 +98,7 @@ void Meter::checkLimits(EventQueue& events, std::size_t index, double timeS) noe
 ComponentReading Meter::read(const SolutionView& x) const noexcept {
     ComponentReading r = ComponentModel::read(x);
     const double v = x.voltage(vo()) - x.voltage(com());
-    int flags = m_fuseBlown ? kDisplayFuseBlown : 0;
+    int flags = isFuseBlown() ? kDisplayFuseBlown : 0;
     double value = 0.0;
     switch (m_mode) {
     case MeterMode::Volt:
@@ -104,7 +110,7 @@ ComponentReading Meter::read(const SolutionView& x) const noexcept {
         break;
     case MeterMode::Ohm: {
         const double iOut = -terminalCurrent(x, 1); // Messstrom aus V/Ohm in die Schaltung
-        if (v > m_params.ohmSourceV * 1.001 || v < -1e-3 || iOut < -kOpenCurrentA) {
+        if (v > m_params.ohmSourceV * 1.001 || v < -1e-3) {
             flags |= kDisplayForeignVoltage; // fremde Spannung treibt gegen die Messquelle
         } else if (iOut <= kOpenCurrentA || v / iOut > m_params.ohmMaxOhm) {
             flags |= kDisplayOverrange; // offener Kreis oder ueber dem groessten Bereich
@@ -116,13 +122,13 @@ ComponentReading Meter::read(const SolutionView& x) const noexcept {
     }
     r.displayValue = value;
     r.displayFlags = flags;
-    r.level = m_analog ? value / (m_mode == MeterMode::Volt ? m_rangeV : 1.0) : 0.0; // Zeigerausschlag (V)
+    r.level = (m_analog && m_mode == MeterMode::Volt) ? value / m_rangeV : 0.0; // Zeigerausschlag
     return r;
 }
 
 ComponentState Meter::saveState() const noexcept {
     ComponentState s = ComponentModel::saveState();
-    s.internal[0] = m_fuseBlown ? 1.0 : 0.0;
+    s.internal[0] = isFuseBlown() ? 1.0 : 0.0;
     s.internal[1] = m_fuseS;
     return s;
 }
@@ -130,6 +136,7 @@ ComponentState Meter::saveState() const noexcept {
 void Meter::restoreState(const ComponentState& state) noexcept {
     ComponentModel::restoreState(state);
     m_fuseBlown = state.internal[0] != 0.0;
+    m_fusePending = false;
     m_fuseS = std::isfinite(state.internal[1]) ? state.internal[1] : 0.0;
 }
 

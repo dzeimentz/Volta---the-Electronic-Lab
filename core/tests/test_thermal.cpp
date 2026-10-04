@@ -232,3 +232,19 @@ TEST_CASE("Thermik und Zerstoerung bleiben unter Schrittweitenhalbierung gleich"
     CHECK(t == Approx(0.484).margin(0.002));
     CHECK(countEvents(sim, SimEventType::Destroyed, 2) == 1);
 }
+
+TEST_CASE("Kirchhoff gilt auch im Schritt der Zerstoerung (Zerstoerung wirkt ab dem naechsten Schritt)", "[thermik][robust]") {
+    Simulator sim;
+    REQUIRE(sim.setCircuit(makeLed(kMinOhm)) == Status::Ok);
+    bool seen = false;
+    for (int i = 0; i < 2000 && !seen; ++i) {
+        REQUIRE(sim.step() == Status::Ok);
+        seen = sim.probe().readings[2].destroyed;
+    }
+    REQUIRE(seen);
+    CHECK(sim.probe().readings[2].currentA > 0.5); // dieser Schritt wurde noch intakt gerechnet ...
+    requireKirchhoff(sim);                         // ... und ist in sich stimmig
+    REQUIRE(sim.step() == Status::Ok);
+    CHECK(std::fabs(sim.probe().readings[2].currentA) < 1e-6); // ab jetzt offen
+    requireKirchhoff(sim);
+}

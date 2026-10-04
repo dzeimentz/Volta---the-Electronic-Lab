@@ -13,6 +13,7 @@
 #include "volta/core/components/capacitor.hpp"
 #include "volta/core/components/diode.hpp"
 #include "volta/core/components/lamp.hpp"
+#include "volta/core/components/meter.hpp"
 #include "volta/core/components/motor.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/components/switch.hpp"
@@ -81,10 +82,12 @@ Circuit makeLargeCircuit() {
     const NodeId s = c.addNode();
     c.add<Switch>("S_S", plus, s, true);
     c.add<Buzzer>("SU1", s, kGround);
-    // Leitungen
+    // Leitungen und Messgeraet (Spannung am RC-Glied)
     const NodeId w = c.addNode();
     c.add<Wire>("W1", plus, w);
     c.add<Resistor>("R_W", w, kGround, ResistorParams{10000.0});
+    const NodeId ampJack = c.addNode();
+    c.add<Meter>("MESS", kGround, rc, ampJack);
     return c;
 }
 
@@ -94,20 +97,22 @@ int main() {
     std::printf("Volta Simulationskern %s - Leistungsmessung\n\n", version());
     bool ok = true;
 
-    // 1. Grosser Aufbau: bestes von 5 Durchlaeufen zu je 1000 Schritten
+    // 1. Grosser Aufbau: bestes von 5 Durchlaeufen zu je 1000 Schritten, jeder mit frischem Simulator (gleiche Arbeit)
     {
-        Simulator sim;
-        Circuit c = makeLargeCircuit();
-        const std::size_t components = c.componentCount();
-        const std::size_t nodes = c.nodeCount();
-        if (sim.setCircuit(std::move(c)) != Status::Ok) {
-            std::printf("FEHLER: Arbeitspunkt des grossen Aufbaus nicht gefunden\n");
-            return 1;
-        }
+        std::size_t components = 0;
+        std::size_t nodes = 0;
         double best = 1e9;
         double worstStep = 0.0;
         int failed = 0;
         for (int run = 0; run < 5; ++run) {
+            Simulator sim;
+            Circuit c = makeLargeCircuit();
+            components = c.componentCount();
+            nodes = c.nodeCount();
+            if (sim.setCircuit(std::move(c)) != Status::Ok) {
+                std::printf("FEHLER: Arbeitspunkt des grossen Aufbaus nicht gefunden\n");
+                return 1;
+            }
             const auto t0 = Clock::now();
             for (int i = 0; i < 1000; ++i) {
                 const auto s0 = Clock::now();

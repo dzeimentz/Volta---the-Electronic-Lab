@@ -43,7 +43,7 @@ void Resistor::thermal(const SolutionView& x, double dtS) noexcept {
 }
 
 void Resistor::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
-    m_overloaded = !m_destroyed && m_lastPowerW > m_params.pmaxW;
+    m_overloaded = !isDestroyed() && m_lastPowerW > m_params.pmaxW;
     checkThermalLimit(m_params.thermal, events, index, timeS);
 }
 
