@@ -9,6 +9,8 @@ namespace volta::core {
 
 namespace {
 constexpr int kSourceRampSteps = 10; // Quellenrampe in 10-%-Stufen
+constexpr int kMaxReversals = 4;          // so viele Richtungsumkehrungen gelten als Pendeln
+constexpr double kReversalShrink = 0.5;   // Umkehr zaehlt nur, wenn die Korrektur nicht auf die Haelfte schrumpft
 } // namespace
 
 Simulator::Simulator() {
@@ -37,6 +39,7 @@ Status Simulator::setCircuit(Circuit circuit) {
         m_iter.assign(n, 0.0);
         m_next.assign(n, 0.0);
         m_backup.assign(n, 0.0);
+        m_delta.assign(n, 0.0);
         m_nonlinear.clear();
         for (std::size_t i = 0; i < circuit.componentCount(); ++i)
             if (circuit.component(i).isNonlinear()) m_nonlinear.push_back(i);
@@ -63,13 +66,19 @@ bool Simulator::withinTolerance() const noexcept {
     return true;
 }
 
-Status Simulator::newton(const StampContext& ctx) noexcept {
-    std::copy(m_accepted.begin(), m_accepted.end(), m_iter.begin());
+Status Simulator::newton(const StampContext& ctx, bool warmStart) noexcept {
+    m_hitIterationLimit = false;
     const std::size_t count = m_circuit.componentCount();
     for (std::size_t i = 0; i < count; ++i) m_circuit.component(i).beginSolve(ctx);
-    for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(ctx.accepted);
+    if (!warmStart) { // sonst: letzte Naeherung und Linearisierung des gescheiterten Versuchs weiterverwenden
+        std::copy(m_accepted.begin(), m_accepted.end(), m_iter.begin());
+        for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(ctx.accepted);
+    }
 
     const int maxIter = ctx.isDc() ? kMaxNewtonIter : kMaxNewtonIterTransient;
+    int reversals = 0;      // Richtungsumkehrungen der Korrektur ohne Begrenzung und ohne Schrumpfen
+    double prevNorm2 = 0.0; // Quadrat der vorigen Korrektur
+    std::fill(m_delta.begin(), m_delta.end(), 0.0);
     for (int k = 0; k < maxIter; ++k) {
         if (!ctx.isDc() && m_stepIterations >= kStepIterationBudget) {
             m_budgetExceeded = true;
@@ -93,9 +102,28 @@ Status Simulator::newton(const StampContext& ctx) noexcept {
             return Status::Ok;
         }
         const bool converged = !limited && withinTolerance();
+        // Pendeln erkennen (nur im Zeitschritt, dort hilft Halbieren): kehrt die Korrektur der Knotenpotentiale
+        // wiederholt ihre Richtung um (Skalarprodukt aufeinanderfolgender Korrekturen negativ), ohne zu schrumpfen
+        // und ohne dass ein Modell begrenzt, haengt das Verfahren am Kipppunkt einer Rueckkopplung: frueh
+        // abbrechen, damit sofort halbiert wird. Monotone oder gedaempft pendelnde Konvergenz bleibt unberuehrt.
+        double dot = 0.0;
+        double norm2 = 0.0;
+        for (std::size_t i = 0; i < m_sys.nodeUnknowns(); ++i) {
+            const double delta = m_next[i] - m_iter[i];
+            dot += delta * m_delta[i];
+            norm2 += delta * delta;
+            m_delta[i] = delta;
+        }
         std::swap(m_iter, m_next);
         if (converged) return Status::Ok;
+        if (limited || ctx.isDc()) {
+            reversals = 0;
+        } else if (k > 0 && dot < 0.0 && norm2 > kReversalShrink * kReversalShrink * prevNorm2) {
+            if (++reversals >= kMaxReversals) return Status::NotConverged;
+        }
+        prevNorm2 = norm2;
     }
+    m_hitIterationLimit = true;
     return Status::NotConverged;
 }
 
@@ -136,17 +164,17 @@ Status Simulator::step(double dtS) noexcept {
     m_stepIterations = 0;
     m_stepMaxDepth = 0;
     m_budgetExceeded = false;
-    return advance(dtS, 0);
+    return advance(dtS, 0, false);
 }
 
-Status Simulator::advance(double dtS, int depth) noexcept {
+Status Simulator::advance(double dtS, int depth, bool warmStart) noexcept {
     m_stepMaxDepth = std::max(m_stepMaxDepth, depth);
     StampContext ctx;
     ctx.dtS = dtS;
     ctx.timeS = m_timeS + dtS;
     ctx.accepted = view(m_accepted);
 
-    const Status s = newton(ctx);
+    const Status s = newton(ctx, warmStart);
     if (s == Status::Ok) {
         accept(dtS);
         return Status::Ok;
@@ -157,9 +185,11 @@ Status Simulator::advance(double dtS, int depth) noexcept {
         m_events.push({SimEventType::ConvergenceTrouble, kNoComponent, m_timeS});
         return s;
     }
-    const Status first = advance(0.5 * dtS, depth + 1);
+    // Scheiterte der Versuch nur an der Iterationsgrenze (Newton kam voran, z. B. Diodenkette nach dem Schliessen
+    // eines Schalters), setzt der halbe Schritt bei der letzten Naeherung fort, statt den Fortschritt zu verwerfen.
+    const Status first = advance(0.5 * dtS, depth + 1, m_hitIterationLimit);
     if (first != Status::Ok) return first;
-    return advance(0.5 * dtS, depth + 1);
+    return advance(0.5 * dtS, depth + 1, false);
 }
 
 void Simulator::accept(double dtS) noexcept {

@@ -21,7 +21,9 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 ### Nichtlineare Bauteile – Newton-Raphson
 - Dioden, Leuchtdioden, Transistoren, Gluehlampe (temperaturabhaengig) werden je Iteration linearisiert.
 - Spannungsbegrenzung je Iteration fuer pn-Uebergaenge (`pnjlim` nach SPICE3 ueber `Vcrit = n·Vt·ln(n·Vt/(√2·Is))`);
-  `exp` wird oberhalb des Arguments 80 linear fortgesetzt. GMIN liegt zusaetzlich parallel zu jedem Uebergang.
+  die Kennlinie `Is·exp` wird dort linear fortgesetzt, wo ihre Steigung die Leitwertgrenze erreicht (Transistor
+  ca. 0,85 V / 6 A). Ableitung und Kennlinie bleiben so konsistent, und auch ein Uebergang direkt an der Batterie
+  konvergiert sofort (gemeinsame Hilfen in `src/components/pn_junction.hpp`). GMIN liegt zusaetzlich parallel zu jedem Uebergang.
 - Bahnwiderstaende liegen ueber einen inneren Knoten des Modells (`internalNodeCount`); innere Knoten sind in
   der `Probe` nicht sichtbar und erhalten kein GMIN gegen Masse.
 - Abbruch: |dV| < 1e-6 V und |dI| < 1e-9 A (jeweils zuzueglich 1e-6 relativ zum Betrag, damit Stroeme im
@@ -34,7 +36,16 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
   gebraucht: Dort waechst die Abweichung mit gm/C ≈ 1e9/s, und erst die Sperrschichtkapazitaeten der Transistoren
   geben dem Umschalten eine aufloesbare Zeitkonstante. Gemessen: Kippstufen aus Katalogteilen (RC 100–1000 Ω)
   erreichen Tiefe 21 (Reserve 3), hoechstens ca. 1000 Iterationen je Schritt; Blinkmodul 10 s Simulation in
-  ca. 0,5 s (Debug-Build). Die Leistungsmessung auf dem Referenztablet folgt in Schritt 5.
+  ca. 0,5 s (Debug-Build).
+- Leistung (Desktop, Release, `volta_core_bench`): 41 Bauteile inkl. Blinkmodul, 1000 Schritte in ca. 31 ms
+  (Vorgabe < 50 ms); schlechtester Einzelschritt ca. 8 ms beim Umkippen der Kippstufe (dichte LU mit ca. 45
+  Unbekannten, bis ca. 780 Iterationen). Auf dem Referenztablet (Faktor 5–10) ist das ein spuerbarer Ruckler je
+  Umkippen; Abhilfe ab Volta 2 mit duenn besetzter LU und Wiederverwendung der Faktorisierung, bei Bedarf frueher.
+- Pendeln: Kehrt im Zeitschritt die Newton-Korrektur viermal die Richtung um, ohne auf die Haelfte zu schrumpfen
+  und ohne Begrenzung, wird sofort halbiert (Kipppunkt einer Rueckkopplung). Gedaempftes Pendeln und langsame
+  monotone Konvergenz bleiben unberuehrt.
+- Warmstart: Scheitert ein Versuch nur an der Iterationsgrenze, setzt der halbe Schritt bei der letzten Naeherung
+  fort (z. B. Diodenkette nach dem Schliessen eines Schalters), statt den Fortschritt zu verwerfen.
 - `beginSolve(ctx)` legt vor jedem Loesungsvorgang zustandsabhaengige Kennwerte fest (R(T) der Glühlampe, C/dt der
   Sperrschichtkapazitaeten), damit Stempel und Messwerte zueinander passen.
 

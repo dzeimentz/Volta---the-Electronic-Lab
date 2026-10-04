@@ -3,37 +3,13 @@
 #include <cmath>
 #include <utility>
 
+#include "pn_junction.hpp"
+
 namespace volta::core {
 
 namespace {
 constexpr double kBoltzmannJPerK = 1.380649e-23;
 constexpr double kElementaryChargeC = 1.602176634e-19;
-constexpr double kMaxExpArg = 80.0; // darueber wird exp linear fortgesetzt (Schutz vor Ueberlauf)
-
-// exp mit linearer Fortsetzung oberhalb kMaxExpArg; liefert auch die Ableitung.
-void safeExp(double x, double& value, double& deriv) noexcept {
-    if (x > kMaxExpArg) {
-        const double e = std::exp(kMaxExpArg);
-        value = e * (1.0 + x - kMaxExpArg);
-        deriv = e;
-    } else {
-        value = std::exp(x);
-        deriv = value;
-    }
-}
-
-// Spannungsbegrenzung fuer pn-Uebergaenge nach SPICE3 (DEVpnjlim).
-double pnjlim(double vnew, double vold, double nVt, double vcrit, bool& limited) noexcept {
-    if (vnew > vcrit && std::fabs(vnew - vold) > 2.0 * nVt) {
-        limited = true;
-        if (vold > 0.0) {
-            const double arg = 1.0 + (vnew - vold) / nVt;
-            return arg > 0.0 ? vold + nVt * std::log(arg) : vcrit;
-        }
-        return nVt * std::log(vnew / nVt);
-    }
-    return vnew;
-}
 } // namespace
 
 Diode::Diode(std::string id, NodeId anode, NodeId cathode, DiodeParams params)
@@ -59,25 +35,25 @@ Diode::Diode(std::string id, NodeId anode, NodeId cathode, DiodeParams params)
     // Untergrenze: bei unsinnigen Kennwerten (sehr grosses Is) waere vcrit negativ und log(vnew/nVt) in pnjlim
     // nicht definiert.
     if (!std::isfinite(m_vcrit) || m_vcrit < m_nVt) m_vcrit = m_nVt;
+    m_xMax = pn::linearFromArg(m_isA, m_nVt, kMaxConductance - kJunctionGmin);
     evaluate(0.0);
 }
 
 double Diode::junctionCurrentA(double vdV) const noexcept {
     double e = 0.0;
     double de = 0.0;
-    safeExp(vdV / m_nVt, e, de);
+    pn::safeExp(vdV / m_nVt, m_xMax, e, de);
     return m_isA * (e - 1.0);
 }
 
 void Diode::evaluate(double vdV) noexcept {
     double e = 0.0;
     double de = 0.0;
-    safeExp(vdV / m_nVt, e, de);
+    pn::safeExp(vdV / m_nVt, m_xMax, e, de);
     const double id = m_isA * (e - 1.0);
-    // Leitwert begrenzen (Vertrag ComponentModel): flachere Gerade durch den exakten Punkt (vdV, id). Newton
-    // konvergiert dann nur linear; die Grenze greift erst bei ca. 50 A und ist ein reiner Schutz.
-    double gd = m_isA * de / m_nVt;
-    if (gd > kMaxConductance - kJunctionGmin) gd = kMaxConductance - kJunctionGmin;
+    // Oberhalb m_xMax ist die Kennlinie linear mit der Steigung kMaxConductance: Leitwert und Kennlinie passen
+    // zusammen (Vertrag ComponentModel), Newton konvergiert dort sofort.
+    const double gd = m_isA * de / m_nVt;
     m_vdLin = vdV;
     m_g = gd + kJunctionGmin; // parallel zum Uebergang (SPICE GMIN), haelt den inneren Knoten in Sperrrichtung
     m_ieq = id - gd * vdV;
@@ -89,7 +65,7 @@ bool Diode::linearize(const SolutionView& iterate) noexcept {
         return false;
     }
     bool limited = false;
-    const double vd = pnjlim(junctionVoltage(iterate), m_vdLin, m_nVt, m_vcrit, limited);
+    const double vd = pn::pnjlim(junctionVoltage(iterate), m_vdLin, m_nVt, m_vcrit, limited);
     evaluate(vd);
     return limited;
 }

@@ -65,6 +65,7 @@ private:
     BjtParams m_params;
     double m_vt = 0.0;
     double m_vcrit = 0.0;
+    double m_xMax = 80.0; // darueber Kennlinien linear (Steigung = Leitwertgrenze)
     // Linearisierung: I_t = m_i0[t] + m_dbe[t]*(vbe - m_vbe0) + m_dbc[t]*(vbc - m_vbc0)
     double m_vbe0 = 0.0;
     double m_vbc0 = 0.0;

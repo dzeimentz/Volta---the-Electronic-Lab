@@ -63,6 +63,11 @@ cmake --preset core-only
 cmake --build --preset core-only
 ctest --preset core-only
 
+# Leistungsmessung des Kerns (Release)
+cmake --preset core-release
+cmake --build --preset core-release
+build/core-release/core/bench/volta_core_bench
+
 # Inhaltspakete pruefen (vor jedem Commit, der content/ beruehrt)
 python3 tools/validate_content.py
 

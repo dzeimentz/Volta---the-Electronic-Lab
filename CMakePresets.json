@@ -16,6 +16,12 @@
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", "VOLTA_BUILD_APP": "OFF" }
     },
     {
+      "name": "core-release",
+      "displayName": "Nur Simulationskern, Release (Leistungsmessung)",
+      "inherits": "base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release", "VOLTA_BUILD_APP": "OFF" }
+    },
+    {
       "name": "desktop-debug",
       "displayName": "Desktop x86-64 Debug",
       "inherits": "base",
@@ -65,6 +71,7 @@
   ],
   "buildPresets": [
     { "name": "core-only", "configurePreset": "core-only" },
+    { "name": "core-release", "configurePreset": "core-release" },
     { "name": "desktop-debug", "configurePreset": "desktop-debug" },
     { "name": "desktop-release", "configurePreset": "desktop-release" },
     { "name": "android-arm64", "configurePreset": "android-arm64" },
@@ -72,6 +79,7 @@
   ],
   "testPresets": [
     { "name": "core-only", "configurePreset": "core-only", "output": { "outputOnFailure": true } },
+    { "name": "core-release", "configurePreset": "core-release", "output": { "outputOnFailure": true } },
     { "name": "desktop-debug", "configurePreset": "desktop-debug", "output": { "outputOnFailure": true } }
   ]
 }

@@ -58,8 +58,9 @@ public:
     int lastStepMaxDepth() const noexcept { return m_stepMaxDepth; }
 
 private:
-    Status newton(const StampContext& ctx) noexcept;
-    Status advance(double dtS, int depth) noexcept;
+    // warmStart: von der letzten Naeherung statt vom angenommenen Zustand ausgehen.
+    Status newton(const StampContext& ctx, bool warmStart = false) noexcept;
+    Status advance(double dtS, int depth, bool warmStart) noexcept;
     void accept(double dtS) noexcept;
     void publish() noexcept;
     SolutionView view(const std::vector<double>& x) const noexcept { return {x.data(), m_sys.nodeUnknowns()}; }
@@ -72,6 +73,7 @@ private:
     std::vector<double> m_iter;     // aktuelle Newton-Naeherung
     std::vector<double> m_next;     // naechste Newton-Naeherung
     std::vector<double> m_backup;   // Sicherung waehrend der Quellenrampe
+    std::vector<double> m_delta;    // letzte Newton-Korrektur (Erkennung von Pendeln)
     std::vector<std::size_t> m_nonlinear;
     Probe m_probe;
     EventQueue m_events;
@@ -80,6 +82,7 @@ private:
     int m_stepIterations = 0;
     int m_stepMaxDepth = 0;
     bool m_budgetExceeded = false;
+    bool m_hitIterationLimit = false; // letzter Newton-Lauf endete an der Iterationsgrenze (nicht durch Pendeln)
     bool m_ready = false;
 };
 

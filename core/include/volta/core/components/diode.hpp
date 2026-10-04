@@ -51,7 +51,7 @@ public:
     double thermalVoltageV() const noexcept { return m_nVt / m_params.n; }
     double criticalVoltageV() const noexcept { return m_vcrit; }
 
-    // Strom des pn-Uebergangs nach Shockley (ohne Begrenzung), fuer Tests und Erklaerungen.
+    // Strom des pn-Uebergangs nach Shockley, oberhalb der Leitwertgrenze linear fortgesetzt (Tests, Erklaerungen).
     double junctionCurrentA(double vdV) const noexcept;
 
     std::size_t internalNodeCount() const noexcept override { return m_params.rsOhm > 0.0 ? 1 : 0; }
@@ -78,6 +78,7 @@ private:
     double m_isA = 1e-14; // Saettigungsstrom
     double m_nVt = 0.0;   // n * Temperaturspannung
     double m_vcrit = 0.0; // kritische Spannung fuer die Begrenzung
+    double m_xMax = 80.0; // darueber Kennlinie linear (Steigung = Leitwertgrenze)
     // Linearisierung i = m_g * vd + m_ieq um m_vdLin
     double m_vdLin = 0.0;
     double m_g = kJunctionGmin;

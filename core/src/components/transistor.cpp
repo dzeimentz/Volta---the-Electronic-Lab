@@ -4,36 +4,13 @@
 #include <cmath>
 #include <utility>
 
+#include "pn_junction.hpp"
+
 namespace volta::core {
 
 namespace {
 constexpr double kBoltzmannJPerK = 1.380649e-23;
 constexpr double kElementaryChargeC = 1.602176634e-19;
-constexpr double kMaxExpArg = 80.0;
-
-void safeExp(double x, double& value, double& deriv) noexcept {
-    if (x > kMaxExpArg) {
-        const double ex = std::exp(kMaxExpArg);
-        value = ex * (1.0 + x - kMaxExpArg);
-        deriv = ex;
-    } else {
-        value = std::exp(x);
-        deriv = value;
-    }
-}
-
-// Spannungsbegrenzung fuer pn-Uebergaenge nach SPICE3 (DEVpnjlim), wie im Diodenmodell.
-double pnjlim(double vnew, double vold, double vt, double vcrit, bool& limited) noexcept {
-    if (vnew > vcrit && std::fabs(vnew - vold) > 2.0 * vt) {
-        limited = true;
-        if (vold > 0.0) {
-            const double arg = 1.0 + (vnew - vold) / vt;
-            return arg > 0.0 ? vold + vt * std::log(arg) : vcrit;
-        }
-        return vt * std::log(vnew / vt);
-    }
-    return vnew;
-}
 } // namespace
 
 Npn::Npn(std::string id, NodeId base, NodeId collector, NodeId emitter, BjtParams params)
@@ -55,19 +32,20 @@ Npn::Npn(std::string id, NodeId base, NodeId collector, NodeId emitter, BjtParam
     m_vt = kBoltzmannJPerK * kAmbientK / kElementaryChargeC;
     m_vcrit = m_vt * std::log(m_vt / (std::sqrt(2.0) * m_params.isA));
     if (!std::isfinite(m_vcrit) || m_vcrit < m_vt) m_vcrit = m_vt;
+    m_xMax = pn::linearFromArg(m_params.isA, m_vt, kMaxConductance / 4.0);
     evaluate(0.0, 0.0);
 }
 
 void Npn::evaluate(double vbe, double vbc) noexcept {
     double ebe = 0.0, dbe = 0.0, ebc = 0.0, dbc = 0.0;
-    safeExp(vbe / m_vt, ebe, dbe);
-    safeExp(vbc / m_vt, ebc, dbc);
+    pn::safeExp(vbe / m_vt, m_xMax, ebe, dbe);
+    pn::safeExp(vbc / m_vt, m_xMax, ebc, dbc);
     const double is = m_params.isA;
     const double iF = is * (ebe - 1.0);
     const double iR = is * (ebc - 1.0);
-    const double gMax = kMaxConductance / 4.0;
-    const double gF = std::min(is * dbe / m_vt, gMax);
-    const double gR = std::min(is * dbc / m_vt, gMax);
+    // Oberhalb m_xMax linear mit Steigung kMaxConductance/4: Ableitung und Kennlinie passen zusammen.
+    const double gF = is * dbe / m_vt;
+    const double gR = is * dbc / m_vt;
     const double bf = m_params.betaF;
     const double br = m_params.betaR;
 
@@ -100,21 +78,21 @@ void Npn::evaluate(double vbe, double vbc) noexcept {
 
 double Npn::chargeBe(double vbeV) const noexcept {
     double e = 0.0, d = 0.0;
-    safeExp(vbeV / m_vt, e, d);
+    pn::safeExp(vbeV / m_vt, m_xMax, e, d);
     return m_params.cbeF * vbeV + m_params.tauFS * m_params.isA * (e - 1.0);
 }
 
 double Npn::chargeBc(double vbcV) const noexcept {
     double e = 0.0, d = 0.0;
-    safeExp(vbcV / m_vt, e, d);
+    pn::safeExp(vbcV / m_vt, m_xMax, e, d);
     return m_params.cbcF * vbcV + m_params.tauRS * m_params.isA * (e - 1.0);
 }
 
 bool Npn::linearize(const SolutionView& iterate) noexcept {
     if (m_destroyed) return false;
     bool limited = false;
-    const double vbeNew = pnjlim(vbe(iterate), m_vbe0, m_vt, m_vcrit, limited);
-    const double vbcNew = pnjlim(vbc(iterate), m_vbc0, m_vt, m_vcrit, limited);
+    const double vbeNew = pn::pnjlim(vbe(iterate), m_vbe0, m_vt, m_vcrit, limited);
+    const double vbcNew = pn::pnjlim(vbc(iterate), m_vbc0, m_vt, m_vcrit, limited);
     evaluate(vbeNew, vbcNew);
     return limited;
 }
