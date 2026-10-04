@@ -20,6 +20,8 @@ namespace volta::core {
 //   SimEventType::ConvergenceTrouble wird gemeldet.
 // - probe(): Messwerte des letzten angenommenen Zustands, nie NaN/Inf.
 //
+// - Je step() stehen hoechstens kStepIterationBudget Newton-Iterationen zur Verfuegung (Echtzeit); danach wird
+//   wie bei Nichtkonvergenz abgebrochen.
 // - Gelingt bei der Halbierung ein Teilschritt und scheitert ein spaeterer, bleiben die angenommenen Teilschritte
 //   erhalten (sie sind gueltige Zustaende); die Zeit rueckt nur um diese vor und step() meldet NotConverged.
 // - setCircuit() setzt weder die Simulationszeit noch die Ereignis-Queue zurueck: die Zeit laeuft ueber
@@ -51,6 +53,9 @@ public:
 
     // Newton-Iterationen des letzten Loesungsvorgangs (Diagnose, Leistungsmessung).
     int lastNewtonIterations() const noexcept { return m_lastIterations; }
+    // Summe der Newton-Iterationen und groesste Halbierungstiefe des letzten step() (Diagnose, Leistungsmessung).
+    int lastStepIterations() const noexcept { return m_stepIterations; }
+    int lastStepMaxDepth() const noexcept { return m_stepMaxDepth; }
 
 private:
     Status newton(const StampContext& ctx) noexcept;
@@ -72,6 +77,9 @@ private:
     EventQueue m_events;
     double m_timeS = 0.0;
     int m_lastIterations = 0;
+    int m_stepIterations = 0;
+    int m_stepMaxDepth = 0;
+    bool m_budgetExceeded = false;
     bool m_ready = false;
 };
 

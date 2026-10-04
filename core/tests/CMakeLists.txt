@@ -19,6 +19,10 @@ add_executable(volta_core_tests
     components/test_diode.cpp
     components/test_capacitor.cpp
     test_thermal.cpp
+    test_blink_module.cpp
+    components/test_transistor.cpp
+    components/test_lamp_motor.cpp
+    components/test_switch_buzzer.cpp
 )
 target_include_directories(volta_core_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(volta_core_tests PRIVATE volta::core Catch2::Catch2WithMain)

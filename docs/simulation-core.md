@@ -25,10 +25,18 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 - Bahnwiderstaende liegen ueber einen inneren Knoten des Modells (`internalNodeCount`); innere Knoten sind in
   der `Probe` nicht sichtbar und erhalten kein GMIN gegen Masse.
 - Abbruch: |dV| < 1e-6 V und |dI| < 1e-9 A (jeweils zuzueglich 1e-6 relativ zum Betrag, damit Stroeme im
-  Amperebereich nicht an der Rechengenauigkeit scheitern) oder max. 50 Iterationen. Eine Iteration, in der
+  Amperebereich nicht an der Rechengenauigkeit scheitern) oder max. 50 Iterationen im Arbeitspunkt bzw. 20 im
+  Zeitschritt (SPICE: 10); je `step()` hoechstens 3000 Iterationen insgesamt (Echtzeitbudget). Eine Iteration, in der
   ein Modell die Spannung begrenzt hat, gilt nie als konvergiert.
-- Bei Nichtkonvergenz: Zeitschritt halbieren (bis 1/16), dann `SimEvent::ConvergenceTrouble` und
-  letzter gueltiger Zustand bleibt erhalten. Nie abstuerzen, nie NaN an die Oberflaeche geben.
+- Bei Nichtkonvergenz: Zeitschritt halbieren (bis 2^-24, d. h. ca. 60 ps bei 1 ms), dann
+  `SimEvent::ConvergenceTrouble` und letzter gueltiger Zustand bleibt erhalten. Nie abstuerzen, nie NaN an die
+  Oberflaeche geben. Die tiefe Halbierung wird nur beim Umkippen rueckgekoppelter Schaltungen (Kippstufen)
+  gebraucht: Dort waechst die Abweichung mit gm/C ≈ 1e9/s, und erst die Sperrschichtkapazitaeten der Transistoren
+  geben dem Umschalten eine aufloesbare Zeitkonstante. Gemessen: Kippstufen aus Katalogteilen (RC 100–1000 Ω)
+  erreichen Tiefe 21 (Reserve 3), hoechstens ca. 1000 Iterationen je Schritt; Blinkmodul 10 s Simulation in
+  ca. 0,5 s (Debug-Build). Die Leistungsmessung auf dem Referenztablet folgt in Schritt 5.
+- `beginSolve(ctx)` legt vor jedem Loesungsvorgang zustandsabhaengige Kennwerte fest (R(T) der Glühlampe, C/dt der
+  Sperrschichtkapazitaeten), damit Stempel und Messwerte zueinander passen.
 
 ### Zeitintegration
 - Rueckwaerts-Euler (implizit, A-stabil) mit Begleitmodellen fuer Kondensator und Spule.
@@ -60,7 +68,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | Typ (`typ`) | Elektrisches Modell | Thermik/Grenzen | Ereignis |
 |---|---|---|---|
 | `batterie` | Reihe aus 1,5-V-Zellen, waehlbar 3 V / 4,5 V / 9 V (2/3/6 Zellen); Ri ≈ 0,25 Ω je Zelle (9 V ≈ 1,5 Ω) | Erwaermung durch I²·Ri (Rth 20 K/W, τ 60 s); heiss ab 60 °C, erneut erst nach Abkuehlen unter 45 °C; Kapazitaet optional | `BatteryHot` |
-| `gluehlampe` | R(T): kalt ≈ R_heiss/10, Faden mit eigener Zeitkonstante | Durchbrennen bei Ueberspannung | `Destroyed` |
+| `gluehlampe` | R(T) = R_kalt·(T/T0)^1,2, R_kalt = R_heiss/10; Faden strahlt ab: Cth·dT/dt = P − k·(T⁴ − T0⁴), τ 50 ms bei Nenntemperatur ca. 2000 K; Kennlinie I ~ U^0,54 (6-V-Lampe: 34 mA bei 3 V, 62 mA bei 9 V) | ab 1,25 × U_nenn Alterung (durchgebrannt nach 5 s), ab 1,6 × U_nenn sofort | `Destroyed` |
 | `led_rot`, `led_gruen`, `led_gelb`, `led_blau` | Shockley-Diode + Bahnwiderstand (innerer Knoten); Is aus `uf_V` bei 20 mA; n = 2 (blau 3), Rs = 5 Ω (blau 10 Ω); Uf rot 1,9 / gelb 2,0 / gruen 2,1 / blau 3,1 V | Imax 20 mA dauerhaft, thermisch | `Destroyed` |
 | `diode_si`, `diode_ge` | Shockley-Diode + Bahnwiderstand; Si wie 1N4148 (0,70 V bei 10 mA, n = 1,75, Rs = 0,57 Ω), Ge 0,35 V bei 10 mA | Verlustleistung | `Destroyed` |
 | `widerstand` | linear, E12-Werte, Farbringe | 0,25 W | `Destroyed` |
@@ -68,10 +76,11 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `kondensator`, `elko` | C als Spannungszweig (Rueckwaerts-Euler; im Arbeitspunkt Quelle der Ladung mit 10 µs/C) mit Leckwiderstand (Folie 1 GΩ, Elko 10 MΩ); Elko gepolt, 16 V | Verpolung > 1 V oder Ueberspannung laenger als 0,2 s -> offen | `Destroyed` |
 | `leitung` (`Wire`) | 0,01 Ω | glueht ab 1 A (nur Anzeige), wird nie zerstoert | – |
 | `spule`, `relais` | L mit R; Relaiskontakt ab Ansprechstrom mit Hysterese | – | `RelayClick` |
-| `motor` | Ra + Gegenspannung k·ω, Traegheit J, Reibung | Blockade erwaermt | `Destroyed` |
-| `summer`, `piezo` | Lastwiderstand + Tonerzeugung aus Strom | – | Audio |
+| `motor` | Ra 8 Ω + Gegenspannung k·ω (k = 0,013 V·s), Traegheit J, viskose Reibung und Haftreibung; implizit als Spannungszweig; Leerlauf 3 V ca. 2080 U/min | blockiert (Bedienhandlung) erwaermt: Wicklung 30 K/W, τ 20 s, 130 °C | `Destroyed` |
+| `summer`, `piezo` | gepolte Last (Diode + 330 Ω, ca. 25 mA bei 9 V); Ton als Verhaltensanteil: Lautstaerke aus der Spannung (1,5–9 V), 2,4 kHz | wie Diode | Audio |
+| `schalter`, `taster`, `reedkontakt`, `wechselschalter` | Kontakt 0,02 Ω, offen 1 nS; Stellung ist Bedienhandlung | – | – |
 | `lautsprecher` | 8 Ω, Signal -> Klanganzeige (Frequenz, Pegel, Impulse) | – | Audio |
-| `transistor_npn` | vereinfachtes Ebers-Moll | Verlustleistung | `Destroyed` |
+| `transistor_npn` | Ebers-Moll (Transportform) wie BC547B: Is 1,8e-14 A, βF 200, βR 7; Ladungsspeicher Q = C·V + τ·I (Cbe 10 pF, Cbc 4 pF, τF 0,5 ns, τR 10 ns); pnjlim je Uebergang | groesster Anschlussstrom > 100 mA ueberlastet, > 250 mA nach 3 s zerstoert; 250 K/W, τ 5 s, 150 °C | `Destroyed` |
 | `fotowiderstand`, `heissleiter`, `fototransistor` | R bzw. I abhaengig von Licht/Temperatur (Eingabe) | – | – |
 | `messgeraet` | V: Ri 10 MΩ (digital) bzw. 20 kΩ/V (analog); A: Rshunt 0,1 Ω mit Sicherung; Ω: Messstrom 1 mA | Sicherung loest aus | `FuseBlown` |
 
@@ -100,7 +109,17 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
 ## Module
 
 - **Teilschaltung**: Modul ist eine Unterschaltung aus Katalogbauteilen, wird beim Netzlistenaufbau expandiert
-  (Blinkmodul, Tonmodul, Zeitmodul, Verstaerkermodul).
+  (Blinkmodul, Zeitmodul, Verstaerkermodul). Die Aufbaufunktionen liegen im Kern (`modules/`), damit sie getestet
+  und in VTS wiederverwendet werden koennen; die App ruft sie im `NetlistBuilder` auf. Bauteilkennungen
+  `<Modul-ID>.<Name>` (z. B. `BL1.T1`), der belegte Bereich wird fuer »Blick hinein« zurueckgegeben.
+  - Blinkmodul (`addBlinkModule`): astabile Kippstufe aus zwei NPN (RC 1 kΩ, RB 22/27 kΩ, 2 × 22 µF) mit
+    Ausgangstransistor (offener Kollektor an `aus`); ca. 0,85 Hz, ein Widerstand von `takt` nach `plus`
+    beschleunigt (4,7 kΩ: ca. 1,1 Hz). Die Basen schwingen beim Umkippen bis ca. −8 V; der reale
+    Basis-Emitter-Durchbruch (BC547 meist 8–9 V) wird nicht nachgebildet und verkuerzt real die Halbperiode
+    nur wenig. Bei »Blick hinein« und im Elternbereich erwaehnen.
+  - Tonmodul: Ein Ton im Hoerbereich ist mit 1 ms Schrittweite nicht als Schwingung simulierbar. In Volta 1 wird
+    es deshalb als Verhaltensmodell umgesetzt (Ton aus Eingangsspannung, wie der Summer) und im Elternbereich
+    als solches offengelegt; als Teilschaltung erst ab Volta 2 mit Audioschrittweite.
 - **Makromodell** (ab Volta 2): Operationsverstaerker mit Aussteuergrenzen, Anstiegsrate, GBW.
 - **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
   Abstimmung und Antenne. Im Elternbereich als solches offengelegt.

@@ -31,6 +31,10 @@ public:
     // I ist der Zweigstrom, der am Anschluss plus in den Zweig hineinfliesst.
     void stampVoltageBranch(NodeId plus, NodeId minus, std::size_t branch, double volt,
                             double seriesOhm) noexcept;
+    // Allgemeine Eintraege fuer Modelle mit gesteuerten Quellen (Transistor): Matrix in Zeile des Knotens row,
+    // Spalte des Knotens col; rechte Seite der Zeile des Knotens row. Masse wird ignoriert.
+    void stampNodeMatrix(NodeId row, NodeId col, double value) noexcept;
+    void stampNodeRhs(NodeId row, double value) noexcept;
     // Zweig ohne Strom (z. B. zerstoerter Kondensator): I = 0.
     void stampBranchOpen(std::size_t branch) noexcept;
     // Leitwert g von den Knoten 1..nodeCount-1 gegen Masse (GMIN fuer die aeusseren Knoten).

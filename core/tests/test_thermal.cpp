@@ -224,7 +224,7 @@ TEST_CASE("Thermik und Zerstoerung bleiben unter Schrittweitenhalbierung gleich"
     auto& stub = static_cast<StubbornResistor&>(sim.circuit().component(4));
     double t = -1.0;
     while (sim.timeS() < 2.0 && t < 0.0) {
-        stub.failIterations = kMaxNewtonIter + 1;
+        stub.failIterations = kMaxNewtonIterTransient + 1;
         REQUIRE(sim.step() == Status::Ok);
         if (sim.probe().readings[2].destroyed) t = sim.timeS();
     }

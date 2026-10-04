@@ -42,7 +42,7 @@ struct DiodeParams {
 // Anschluss 0 = Anode, Anschluss 1 = Kathode. Der Bahnwiderstand liegt zwischen Anode und einem inneren Knoten.
 // Newton-Linearisierung mit Spannungsbegrenzung nach SPICE (pnjlim). Ueberlastet oberhalb imaxA, zerstoert
 // (danach offen) bei Uebertemperatur oder anhaltender starker Stromueberlast.
-class Diode final : public ComponentModel {
+class Diode : public ComponentModel {
 public:
     Diode(std::string id, NodeId anode, NodeId cathode, DiodeParams params = DiodeParams::silicon());
 
@@ -62,6 +62,8 @@ public:
     double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
     void thermal(const SolutionView& x, double dtS) noexcept override;
     void checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept override;
+    // level = Strom / Bezugsstrom (LED: 1 bei 20 mA)
+    ComponentReading read(const SolutionView& x) const noexcept override;
     ComponentState saveState() const noexcept override;
     void restoreState(const ComponentState& state) noexcept override;
 
@@ -78,7 +80,7 @@ private:
     double m_vcrit = 0.0; // kritische Spannung fuer die Begrenzung
     // Linearisierung i = m_g * vd + m_ieq um m_vdLin
     double m_vdLin = 0.0;
-    double m_g = kGmin;
+    double m_g = kJunctionGmin;
     double m_ieq = 0.0;
     double m_lastCurrentA = 0.0;
     double m_lastDtS = 0.0;

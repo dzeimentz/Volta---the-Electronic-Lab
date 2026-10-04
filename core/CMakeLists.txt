@@ -12,6 +12,12 @@ add_library(volta_core STATIC
     src/components/diode.cpp
     src/components/capacitor.cpp
     src/components/wire.cpp
+    src/components/switch.cpp
+    src/components/lamp.cpp
+    src/components/motor.cpp
+    src/components/buzzer.cpp
+    src/components/transistor.cpp
+    src/modules/blink_module.cpp
 )
 add_library(volta::core ALIAS volta_core)
 

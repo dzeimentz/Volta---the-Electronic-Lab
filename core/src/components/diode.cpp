@@ -77,9 +77,9 @@ void Diode::evaluate(double vdV) noexcept {
     // Leitwert begrenzen (Vertrag ComponentModel): flachere Gerade durch den exakten Punkt (vdV, id). Newton
     // konvergiert dann nur linear; die Grenze greift erst bei ca. 50 A und ist ein reiner Schutz.
     double gd = m_isA * de / m_nVt;
-    if (gd > kMaxConductance - kGmin) gd = kMaxConductance - kGmin;
+    if (gd > kMaxConductance - kJunctionGmin) gd = kMaxConductance - kJunctionGmin;
     m_vdLin = vdV;
-    m_g = gd + kGmin; // GMIN parallel zum Uebergang (SPICE), haelt den inneren Knoten auch in Sperrrichtung
+    m_g = gd + kJunctionGmin; // parallel zum Uebergang (SPICE GMIN), haelt den inneren Knoten in Sperrrichtung
     m_ieq = id - gd * vdV;
 }
 
@@ -108,8 +108,8 @@ void Diode::resetLinearization(const SolutionView& accepted) noexcept {
 void Diode::stamp(MnaSystem& sys, const StampContext& /*ctx*/) const noexcept {
     const NodeId ja = junctionAnode();
     if (m_params.rsOhm > 0.0) sys.stampConductance(terminal(0), ja, 1.0 / m_params.rsOhm);
-    if (m_destroyed) { // zerstoert: Uebergang offen, nur GMIN haelt den inneren Knoten
-        sys.stampConductance(ja, terminal(1), kGmin);
+    if (m_destroyed) { // zerstoert: Uebergang offen, nur kJunctionGmin haelt den inneren Knoten
+        sys.stampConductance(ja, terminal(1), kJunctionGmin);
         return;
     }
     sys.stampConductance(ja, terminal(1), m_g);
@@ -123,7 +123,7 @@ double Diode::terminalCurrent(const SolutionView& x, std::size_t t) const noexce
         if (t == 0) return (x.voltage(terminal(0)) - x.voltage(internalNode(0))) / m_params.rsOhm;
     }
     const double vd = junctionVoltage(x);
-    i = m_destroyed ? kGmin * vd : m_g * vd + m_ieq;
+    i = m_destroyed ? kJunctionGmin * vd : m_g * vd + m_ieq;
     return t == 0 ? i : -i;
 }
 
@@ -141,6 +141,12 @@ void Diode::checkLimits(EventQueue& events, std::size_t index, double timeS) noe
     m_overloadS = severe ? m_overloadS + m_lastDtS : 0.0;
     if (severe && m_overloadS >= m_params.overloadFailS - 1e-9) destroy(events, index, timeS);
     checkThermalLimit(m_params.thermal, events, index, timeS);
+}
+
+ComponentReading Diode::read(const SolutionView& x) const noexcept {
+    ComponentReading r = ComponentModel::read(x);
+    r.level = (m_destroyed || r.currentA <= 0.0) ? 0.0 : r.currentA / m_params.ifRefA;
+    return r;
 }
 
 ComponentState Diode::saveState() const noexcept {

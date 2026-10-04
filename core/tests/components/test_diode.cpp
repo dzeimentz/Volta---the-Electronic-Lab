@@ -310,7 +310,7 @@ TEST_CASE("Zerstoerte Dioden: step() konvergiert, Undo ueber step() kehrt zuruec
 
         model.restoreState(intact); // Undo ohne neuen Arbeitspunkt: grosser Sprung im Newton-Verfahren
         REQUIRE(sim.step() == Status::Ok);
-        CHECK(sim.lastNewtonIterations() < kMaxNewtonIter);
+        CHECK(sim.lastNewtonIterations() < kMaxNewtonIterTransient);
         for (int i = 0; i < 5; ++i) REQUIRE(sim.step() == Status::Ok);
         CHECK(sim.probe().readings[idx].currentA == Catch::Approx(iIntact).epsilon(1e-4));
         requireKirchhoff(sim);

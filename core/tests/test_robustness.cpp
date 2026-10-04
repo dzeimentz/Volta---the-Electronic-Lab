@@ -119,8 +119,9 @@ TEST_CASE("Nichtkonvergenz: Halbierung bis 1/16, dann Ereignis und letzter guelt
     stub.failIterations = -1;
     stub.linearizeCalls = 0;
     CHECK(sim.step() == Status::NotConverged);
-    // Versuche mit dt, dt/2, dt/4, dt/8, dt/16 je kMaxNewtonIter Iterationen
-    CHECK(stub.linearizeCalls == (kMaxStepHalvings + 1) * kMaxNewtonIter);
+    // Versuche mit dt, dt/2, ..., dt/2^kMaxStepHalvings je kMaxNewtonIterTransient Iterationen
+    CHECK(stub.linearizeCalls == (kMaxStepHalvings + 1) * kMaxNewtonIterTransient);
+    CHECK(sim.lastStepMaxDepth() == kMaxStepHalvings);
     CHECK(sim.timeS() == t0);
     CHECK(sim.probe().voltage(plus) == v0);
     requireFinite(sim.probe());
@@ -141,7 +142,7 @@ TEST_CASE("Nichtkonvergenz: halbierter Schritt rettet den vollen Zeitschritt", "
     countEvents(sim, SimEventType::ConvergenceTrouble);
 
     auto& stub = static_cast<StubbornResistor&>(sim.circuit().component(1));
-    stub.failIterations = kMaxNewtonIter + 3; // erster Versuch scheitert, Halbschritte gelingen
+    stub.failIterations = kMaxNewtonIterTransient + 3; // erster Versuch scheitert, Halbschritte gelingen
     REQUIRE(sim.step(1e-3) == Status::Ok);
     CHECK(sim.timeS() == Catch::Approx(1e-3));
     CHECK(countEvents(sim, SimEventType::ConvergenceTrouble) == 0);
@@ -168,4 +169,20 @@ TEST_CASE("Zustandsschnappschuss eines Bauteils (Undo)", "[undo]") {
     r.restoreState(s);
     CHECK(r.isDestroyed());
     CHECK(r.tempK() == 400.0);
+}
+
+TEST_CASE("Rechenbudget je Zeitschritt begrenzt die Newton-Iterationen", "[robust][newton][echtzeit]") {
+    Circuit c;
+    const NodeId plus = c.addNode();
+    c.add<Battery>("B1", plus, kGround);
+    c.add<StubbornResistor>("X1", plus, kGround);
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    auto& stub = static_cast<StubbornResistor&>(sim.circuit().component(1));
+    // Konvergiert jeweils erst nach vielen Iterationen: jeder Teilschritt scheitert knapp, bis das Budget greift
+    stub.failIterations = -1;
+    stub.linearizeCalls = 0;
+    CHECK(sim.step() == Status::NotConverged);
+    CHECK(sim.lastStepIterations() <= kStepIterationBudget);
+    CHECK(stub.linearizeCalls <= kStepIterationBudget);
 }

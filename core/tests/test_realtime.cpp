@@ -11,6 +11,7 @@
 #include "volta/core/components/battery.hpp"
 #include "volta/core/components/capacitor.hpp"
 #include "volta/core/components/wire.hpp"
+#include "volta/core/modules/blink_module.hpp"
 #include "volta/core/components/diode.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/simulator.hpp"
@@ -84,7 +85,7 @@ TEST_CASE("Newton, Halbierung und Quellenrampe fordern keinen Speicher an", "[ec
 
     g_allocations = 0;
     g_counting = true;
-    stub.failIterations = kMaxNewtonIter + 3; // Halbierung, dann Erfolg
+    stub.failIterations = kMaxNewtonIterTransient + 3; // Halbierung, dann Erfolg
     const Status halved = sim.step();
     stub.failIterations = -1;                 // Halbierung bis 1/16 scheitert, Ereignis
     const Status failed = sim.step();
@@ -97,5 +98,27 @@ TEST_CASE("Newton, Halbierung und Quellenrampe fordern keinen Speicher an", "[ec
     CHECK(halved == Status::Ok);
     CHECK(failed == Status::NotConverged);
     CHECK(ramped == Status::Ok);
+    CHECK(g_allocations.load() == 0);
+}
+
+TEST_CASE("Blinkmodul: Umkippen mit tiefer Halbierung fordert keinen Speicher an", "[echtzeit][modul]") {
+    Circuit c;
+    const NodeId plus = c.addNode();
+    const NodeId out = c.addNode();
+    const NodeId rate = c.addNode();
+    const NodeId led = c.addNode();
+    c.add<Battery>("B1", plus, kGround);
+    addBlinkModule(c, "BL1", {plus, kGround, out, rate});
+    c.add<Resistor>("RV", plus, led, ResistorParams{470.0});
+    c.add<Diode>("D1", led, out, DiodeParams::ledRed());
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+
+    g_allocations = 0;
+    g_counting = true;
+    bool ok = true;
+    for (int i = 0; i < 3000; ++i) ok = (sim.step() == Status::Ok) && ok; // mehrere Umschaltvorgaenge
+    g_counting = false;
+    CHECK(ok);
     CHECK(g_allocations.load() == 0);
 }

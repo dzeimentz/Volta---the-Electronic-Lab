@@ -65,10 +65,17 @@ bool Simulator::withinTolerance() const noexcept {
 
 Status Simulator::newton(const StampContext& ctx) noexcept {
     std::copy(m_accepted.begin(), m_accepted.end(), m_iter.begin());
+    const std::size_t count = m_circuit.componentCount();
+    for (std::size_t i = 0; i < count; ++i) m_circuit.component(i).beginSolve(ctx);
     for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(ctx.accepted);
 
-    const std::size_t count = m_circuit.componentCount();
-    for (int k = 0; k < kMaxNewtonIter; ++k) {
+    const int maxIter = ctx.isDc() ? kMaxNewtonIter : kMaxNewtonIterTransient;
+    for (int k = 0; k < maxIter; ++k) {
+        if (!ctx.isDc() && m_stepIterations >= kStepIterationBudget) {
+            m_budgetExceeded = true;
+            return Status::NotConverged;
+        }
+        ++m_stepIterations;
         m_lastIterations = k + 1;
         bool limited = false;
         const SolutionView iterView = view(m_iter);
@@ -126,10 +133,14 @@ Status Simulator::solveOperatingPoint() noexcept {
 Status Simulator::step(double dtS) noexcept {
     if (!m_ready) return Status::NoCircuit;
     if (!(dtS > 0.0) || !std::isfinite(dtS)) return Status::InvalidStep;
+    m_stepIterations = 0;
+    m_stepMaxDepth = 0;
+    m_budgetExceeded = false;
     return advance(dtS, 0);
 }
 
 Status Simulator::advance(double dtS, int depth) noexcept {
+    m_stepMaxDepth = std::max(m_stepMaxDepth, depth);
     StampContext ctx;
     ctx.dtS = dtS;
     ctx.timeS = m_timeS + dtS;
@@ -140,8 +151,8 @@ Status Simulator::advance(double dtS, int depth) noexcept {
         accept(dtS);
         return Status::Ok;
     }
-    // Halbieren hilft nur bei Nichtkonvergenz, nicht bei einem singulaeren Gleichungssystem.
-    if (s == Status::Singular || depth >= kMaxStepHalvings) {
+    // Halbieren hilft nur bei Nichtkonvergenz, nicht bei einem singulaeren Gleichungssystem oder erschoepftem Budget.
+    if (s == Status::Singular || depth >= kMaxStepHalvings || m_budgetExceeded) {
         for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(view(m_accepted));
         m_events.push({SimEventType::ConvergenceTrouble, kNoComponent, m_timeS});
         return s;
@@ -175,6 +186,8 @@ void Simulator::publish() noexcept {
         r.voltV = finiteOr0(r.voltV);
         r.currentA = finiteOr0(r.currentA);
         r.powerW = finiteOr0(r.powerW);
+        r.level = finiteOr0(r.level);
+        r.frequencyHz = finiteOr0(r.frequencyHz);
         for (double& ti : r.terminalCurrentA) ti = finiteOr0(ti);
         r.tempK = std::isfinite(r.tempK) ? r.tempK : kAmbientK;
         m_probe.readings[i] = r;

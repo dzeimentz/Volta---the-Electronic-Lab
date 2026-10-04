@@ -48,6 +48,16 @@ void MnaSystem::stampVoltageBranch(NodeId plus, NodeId minus, std::size_t branch
     m_b[k] += volt;
 }
 
+void MnaSystem::stampNodeMatrix(NodeId r, NodeId c, double value) noexcept {
+    if (r == kGround || c == kGround || !std::isfinite(value)) return;
+    at(row(r), row(c)) += value;
+}
+
+void MnaSystem::stampNodeRhs(NodeId r, double value) noexcept {
+    if (r == kGround || !std::isfinite(value)) return;
+    m_b[row(r)] += value;
+}
+
 void MnaSystem::stampBranchOpen(std::size_t branch) noexcept {
     const std::size_t k = branchRow(branch);
     at(k, k) += 1.0;

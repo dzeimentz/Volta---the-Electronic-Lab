@@ -39,7 +39,11 @@ struct ComponentReading {
     double powerW = 0.0;   // aufgenommene Leistung (negativ bei Quellen, die Leistung abgeben)
     std::array<double, kMaxTerminals> terminalCurrentA{}; // Strom je Anschluss, in das Bauteil hinein
     double tempK = kAmbientK;
-    bool overloaded = false; // ueber Dauergrenzwert (Strom, Leistung, Spannung), aber noch nicht zerstoert
+    // Wirkung fuer die Darstellung, modellabhaengig: LED/Lampe Helligkeit (1 = Nennwert), Motor Drehzahl
+    // (1 = Leerlauf bei Nennspannung, Vorzeichen = Drehrichtung), Summer Lautstaerke 0..1, Schalter 0/1.
+    double level = 0.0;
+    double frequencyHz = 0.0; // Tonfrequenz (Summer), sonst 0
+    bool overloaded = false;  // ueber Dauergrenzwert (Strom, Leistung, Spannung), aber noch nicht zerstoert
     bool destroyed = false;
 };
 
@@ -69,7 +73,9 @@ struct ComponentState {
 //   in updateState() fortgeschriebenen Zustand, nie aus StampContext::accepted. Nur so stellt restoreState()
 //   (Undo) den Zustand vollstaendig her.
 // - terminalCurrent() nichtlinearer Modelle liefert den Strom der zuletzt gestempelten Linearisierung, ausgewertet
-//   an x. Damit gilt die Kirchhoffsche Knotenregel exakt im Rahmen der Rechengenauigkeit.
+//   an x. Damit gilt die Kirchhoffsche Knotenregel exakt im Rahmen der Rechengenauigkeit. Allgemein: stamp() und
+//   terminalCurrent() muessen dieselben Kennwerte verwenden; zustandsabhaengige Kennwerte werden in beginSolve()
+//   festgeschrieben und erst im naechsten beginSolve() geaendert, nicht in thermal()/updateState().
 // - Leitwerte ueber kMaxConductance werden in MnaSystem begrenzt; ein Modell begrenzt selbst ebenso, damit
 //   terminalCurrent() zum Stempel passt.
 // - branchCount() wird nur beim Topologiewechsel gelesen. Wechselt ein Modell die Zahl seiner Zweigstroeme
@@ -102,6 +108,10 @@ public:
     void assignFirstInternalNode(NodeId node) noexcept { m_firstInternalNode = node; }
 
     virtual bool isNonlinear() const noexcept { return false; }
+
+    // Vor jedem Loesungsvorgang (Arbeitspunkt, Zeitschritt, Teilschritt): zustandsabhaengige Kennwerte fuer
+    // Stempel und terminalCurrent() festschreiben (z. B. R(T) der Glühlampe aus dem angenommenen Zustand).
+    virtual void beginSolve(const StampContext& /*ctx*/) noexcept {}
 
     // Nichtlineare Modelle: Linearisierung um die aktuelle Newton-Naeherung, inkl. Spannungsbegrenzung.
     // Rueckgabe true, wenn begrenzt wurde (die Iteration gilt dann noch nicht als konvergiert).

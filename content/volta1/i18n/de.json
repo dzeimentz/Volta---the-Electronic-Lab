@@ -16,6 +16,8 @@
   "exp_2_4_echt": "Baue die Schaltung mit deinem Experimentierkasten nach – aber nur mit Widerstand! Echte Leuchtdioden kann man nicht mit einem Tippen reparieren.",
   "lex_gluehlampe": "Ein Glühlämpchen leuchtet, weil ein sehr dünner Draht heiß wird.",
   "lex_taster": "Ein Taster schließt den Stromkreis nur, solange du drückst.",
+  "lex_wechselschalter": "Ein Wechselschalter verbindet seine Mitte entweder mit dem einen oder mit dem anderen Anschluss. So kannst du ein Licht von zwei Stellen aus schalten.",
+  "lex_reedkontakt": "Ein Reedkontakt ist ein Schalter in einem kleinen Glasröhrchen. Hältst du einen Magneten daneben, schließt er sich.",
   "lex_motor": "Ein Motor verwandelt Strom in Drehbewegung.",
   "lex_summer": "Ein Summer brummt oder piept, wenn Strom durch ihn fließt.",
   "lex_widerstand": "Ein Widerstand bremst den Strom. Die Farbringe verraten, wie stark.",

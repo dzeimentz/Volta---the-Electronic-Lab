@@ -24,16 +24,22 @@ enum class Status {
 
 // Numerische Konstanten (docs/simulation-core.md).
 inline constexpr double kGmin = 1e-9;          // Ableitleitwert je Knoten gegen Masse (1 GOhm)
+inline constexpr double kJunctionGmin = 1e-12; // Leitwert parallel zu pn-Uebergaengen (wie SPICE GMIN)
 inline constexpr double kWireOhm = 0.01;       // Leitungswiderstand je Leitung
 // Kleinster zulaessiger Widerstandswert. Begrenzt den groessten Leitwert auf 1 kS, damit GMIN (1e-9 S)
 // gegenueber der Pivotschwelle der LU-Zerlegung (1e-14 relativ) erhalten bleibt.
 inline constexpr double kMinOhm = 1e-3;
 inline constexpr double kMaxConductance = 1.0 / kMinOhm; // zentral in MnaSystem::stampConductance erzwungen
-inline constexpr int kMaxNewtonIter = 50;      // Abbruch des Newton-Verfahrens
+inline constexpr int kMaxNewtonIter = 50;          // Abbruch des Newton-Verfahrens im Arbeitspunkt
+inline constexpr int kMaxNewtonIterTransient = 20; // im Zeitschritt (SPICE: 10); danach wird halbiert
+inline constexpr int kStepIterationBudget = 3000;  // hoechstens so viele Newton-Iterationen je step()
 inline constexpr double kVoltTolAbs = 1e-6;    // Konvergenz: |dV| (V)
 inline constexpr double kCurrentTolAbs = 1e-9; // Konvergenz: |dI| (A)
 inline constexpr double kTolRel = 1e-6;        // zusaetzliche relative Toleranz bezogen auf |x|
-inline constexpr int kMaxStepHalvings = 4;     // Zeitschritt bis 1/16 halbieren
+// Zeitschritt bis 2^-24 halbieren (1 ms -> ca. 60 ps): Umschaltvorgaenge mit Rueckkopplung (Kippstufen) werden
+// erst in der Zeitskala der Transistor-Ladungsspeicher (ns) aufgeloest. Die zweite Haelfte eines Teilschritts wird
+// in gleicher Groesse versucht, die naechste Ebene darueber wieder in doppelter Groesse.
+inline constexpr int kMaxStepHalvings = 24;
 inline constexpr double kDefaultStepS = 1e-3;  // feste Schrittweite Volta 1
 inline constexpr double kAmbientK = 293.15;    // Umgebungstemperatur 20 Grad C
 
