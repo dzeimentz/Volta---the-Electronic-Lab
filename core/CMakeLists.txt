@@ -9,6 +9,7 @@ add_library(volta_core STATIC
     src/simulator.cpp
     src/components/resistor.cpp
     src/components/battery.cpp
+    src/components/diode.cpp
 )
 add_library(volta::core ALIAS volta_core)
 

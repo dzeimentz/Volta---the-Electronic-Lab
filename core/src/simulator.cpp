@@ -20,14 +20,17 @@ Status Simulator::setCircuit(Circuit circuit) {
     if (!circuit.isValid()) return Status::InvalidCircuit;
 
     std::size_t branches = 0;
+    NodeId nextInternal = circuit.nodeCount(); // innere Knoten folgen auf die Knoten der Netzliste
     for (std::size_t i = 0; i < circuit.componentCount(); ++i) {
         ComponentModel& c = circuit.component(i);
         c.assignFirstBranch(branches);
         branches += c.branchCount();
+        c.assignFirstInternalNode(nextInternal);
+        nextInternal += c.internalNodeCount();
     }
 
     try {
-        m_sys.resize(circuit.nodeCount(), branches);
+        m_sys.resize(nextInternal, branches);
         const std::size_t n = m_sys.size();
         m_lu.resize(n);
         m_accepted.assign(n, 0.0);
@@ -72,7 +75,7 @@ Status Simulator::newton(const StampContext& ctx) noexcept {
         for (std::size_t idx : m_nonlinear) limited = m_circuit.component(idx).linearize(iterView) || limited;
 
         m_sys.clear();
-        m_sys.stampGminAllNodes(kGmin);
+        m_sys.stampGmin(m_circuit.nodeCount(), kGmin);
         for (std::size_t i = 0; i < count; ++i) m_circuit.component(i).stamp(m_sys, ctx);
 
         if (!m_lu.factor(m_sys.matrix())) return Status::Singular;

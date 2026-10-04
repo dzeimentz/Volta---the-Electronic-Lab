@@ -9,6 +9,7 @@
 #include <string>
 
 #include "volta/core/components/battery.hpp"
+#include "volta/core/components/diode.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/simulator.hpp"
 #include "test_support.hpp"
@@ -47,6 +48,9 @@ TEST_CASE("Simulator::step fordert keinen Speicher an", "[echtzeit]") {
         c.add<Resistor>("G" + std::to_string(i), next, kGround, ResistorParams{10000.0});
         prev = next;
     }
+    const NodeId led = c.addNode();
+    c.add<Resistor>("RV", prev, led, ResistorParams{100.0});
+    c.add<Diode>("D1", led, kGround, DiodeParams::ledRed()); // nichtlinearer Pfad mit innerem Knoten
     Simulator sim;
     REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
 

@@ -81,6 +81,12 @@ public:
     // Vom Simulator beim Topologiewechsel gesetzt: Index des ersten eigenen Zweigstroms.
     void assignFirstBranch(std::size_t branch) noexcept { m_firstBranch = branch; }
 
+    // Anzahl innerer Knoten (z. B. zwischen Bahnwiderstand und pn-Uebergang). Innere Knoten sind nach aussen
+    // unsichtbar (nicht in der Probe) und erhalten kein GMIN; das Modell muss sie selbst leitend anbinden.
+    virtual std::size_t internalNodeCount() const noexcept { return 0; }
+    // Vom Simulator beim Topologiewechsel gesetzt: NodeId des ersten inneren Knotens.
+    void assignFirstInternalNode(NodeId node) noexcept { m_firstInternalNode = node; }
+
     virtual bool isNonlinear() const noexcept { return false; }
 
     // Nichtlineare Modelle: Linearisierung um die aktuelle Newton-Naeherung, inkl. Spannungsbegrenzung.
@@ -112,6 +118,7 @@ public:
 
 protected:
     std::size_t firstBranch() const noexcept { return m_firstBranch; }
+    NodeId internalNode(std::size_t k) const noexcept { return m_firstInternalNode + k; }
 
     bool m_destroyed = false;
     double m_tempK = kAmbientK;
@@ -121,6 +128,7 @@ private:
     std::array<NodeId, kMaxTerminals> m_terminals{};
     std::size_t m_terminalCount = 0;
     std::size_t m_firstBranch = 0;
+    NodeId m_firstInternalNode = kGround;
 };
 
 } // namespace volta::core

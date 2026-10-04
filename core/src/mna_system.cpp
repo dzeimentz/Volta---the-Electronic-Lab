@@ -48,8 +48,9 @@ void MnaSystem::stampVoltageBranch(NodeId plus, NodeId minus, std::size_t branch
     m_b[k] += volt;
 }
 
-void MnaSystem::stampGminAllNodes(double g) noexcept {
-    for (std::size_t i = 0; i < m_nodeUnknowns; ++i) at(i, i) += g;
+void MnaSystem::stampGmin(std::size_t nodeCount, double g) noexcept {
+    const std::size_t n = nodeCount > 0 ? std::min(nodeCount - 1, m_nodeUnknowns) : 0;
+    for (std::size_t i = 0; i < n; ++i) at(i, i) += g;
 }
 
 } // namespace volta::core

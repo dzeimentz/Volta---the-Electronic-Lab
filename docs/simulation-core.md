@@ -20,7 +20,10 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 
 ### Nichtlineare Bauteile – Newton-Raphson
 - Dioden, Leuchtdioden, Transistoren, Gluehlampe (temperaturabhaengig) werden je Iteration linearisiert.
-- Spannungsbegrenzung je Iteration fuer pn-Uebergaenge (Begrenzung nach SPICE-Art ueber `Vcrit`).
+- Spannungsbegrenzung je Iteration fuer pn-Uebergaenge (`pnjlim` nach SPICE3 ueber `Vcrit = n·Vt·ln(n·Vt/(√2·Is))`);
+  `exp` wird oberhalb des Arguments 80 linear fortgesetzt. GMIN liegt zusaetzlich parallel zu jedem Uebergang.
+- Bahnwiderstaende liegen ueber einen inneren Knoten des Modells (`internalNodeCount`); innere Knoten sind in
+  der `Probe` nicht sichtbar und erhalten kein GMIN gegen Masse.
 - Abbruch: |dV| < 1e-6 V und |dI| < 1e-9 A (jeweils zuzueglich 1e-6 relativ zum Betrag, damit Stroeme im
   Amperebereich nicht an der Rechengenauigkeit scheitern) oder max. 50 Iterationen. Eine Iteration, in der
   ein Modell die Spannung begrenzt hat, gilt nie als konvergiert.
@@ -55,8 +58,8 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 |---|---|---|---|
 | `batterie` | Reihe aus 1,5-V-Zellen, waehlbar 3 V / 4,5 V / 9 V (2/3/6 Zellen); Ri ≈ 0,25 Ω je Zelle (9 V ≈ 1,5 Ω) | Erwaermung bei Kurzschluss, Kapazitaet optional | `BatteryHot` |
 | `gluehlampe` | R(T): kalt ≈ R_heiss/10, Faden mit eigener Zeitkonstante | Durchbrennen bei Ueberspannung | `Destroyed` |
-| `led_rot`, `led_gruen`, `led_gelb`, `led_blau` | Shockley-Diode + Bahnwiderstand, Uf 1,8–3,2 V | Imax 20 mA dauerhaft, thermisch | `Destroyed` |
-| `diode_si`, `diode_ge` | Shockley-Diode | Verlustleistung | `Destroyed` |
+| `led_rot`, `led_gruen`, `led_gelb`, `led_blau` | Shockley-Diode + Bahnwiderstand (innerer Knoten); Is aus `uf_V` bei 20 mA; n = 2 (blau 3), Rs = 5 Ω (blau 10 Ω); Uf rot 1,9 / gelb 2,0 / gruen 2,1 / blau 3,1 V | Imax 20 mA dauerhaft, thermisch | `Destroyed` |
+| `diode_si`, `diode_ge` | Shockley-Diode + Bahnwiderstand; Si wie 1N4148 (0,70 V bei 10 mA, n = 1,75, Rs = 0,57 Ω), Ge 0,35 V bei 10 mA | Verlustleistung | `Destroyed` |
 | `widerstand` | linear, E12-Werte, Farbringe | 0,25 W | `Destroyed` |
 | `potentiometer` | zwei Teilwiderstaende, Stellung 0..1 | 0,25 W | – |
 | `kondensator`, `elko` | C mit Leckwiderstand; Elko gepolt | Verpolung/Ueberspannung | `Destroyed` |
