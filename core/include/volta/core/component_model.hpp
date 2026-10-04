@@ -22,7 +22,9 @@ struct SolutionView {
 
 // Kontext eines Stempelvorgangs.
 struct StampContext {
-    double dtS = 0.0;         // Zeitschritt; <= 0 bedeutet Gleichstrom-Arbeitspunkt
+    // Zeitschritt; <= 0 bedeutet Arbeitspunkt zum aktuellen Zeitpunkt. Speichernde Bauteile wirken darin mit
+    // ihrem gespeicherten Zustand (Kondensator als Spannungsquelle seiner Ladung, wie SPICE `UIC`).
+    double dtS = 0.0;
     double timeS = 0.0;       // Zeitpunkt am Ende des Schritts
     double sourceScale = 1.0; // Quellenrampe (Source Stepping) beim Arbeitspunkt, sonst 1
     SolutionView accepted;    // letzter angenommener Zustand (nur als Startwert, z. B. fuer Spannungsbegrenzung)
@@ -37,7 +39,17 @@ struct ComponentReading {
     double powerW = 0.0;   // aufgenommene Leistung (negativ bei Quellen, die Leistung abgeben)
     std::array<double, kMaxTerminals> terminalCurrentA{}; // Strom je Anschluss, in das Bauteil hinein
     double tempK = kAmbientK;
+    bool overloaded = false; // ueber Dauergrenzwert (Strom, Leistung, Spannung), aber noch nicht zerstoert
     bool destroyed = false;
+};
+
+// Thermisches Modell erster Ordnung: Waermekapazitaet Cth, Waermewiderstand Rth zur Umgebung, Grenztemperatur.
+// Zeitkonstanten sind didaktisch gewaehlt (sichtbares Erhitzen in Zehntelsekunden bis Sekunden), siehe
+// docs/simulation-core.md.
+struct ThermalParams {
+    double rthKPerW = 0.0; // <= 0: kein Thermikmodell
+    double cthJPerK = 0.0;
+    double tmaxK = 0.0;    // Zerstoerung oberhalb; <= 0: keine Zerstoerung durch Waerme
 };
 
 // Zustand eines Bauteils fuer Rueckgaengig/Wiederholen (ADR-0005): intakt/zerstoert, Temperatur und
@@ -64,6 +76,8 @@ struct ComponentState {
 //   (z. B. Messgeraet V <-> A), ist das ein Topologiewechsel.
 // - Bedienparameter (Zellenzahl, Schalterstellung, Reglerstellung) gehoeren nicht zu ComponentState; sie sind
 //   Bedienhandlungen und werden von der App gesetzt.
+// - `overloaded` und Temperatur werden nur in angenommenen Zeitschritten fortgeschrieben (nicht im Arbeitspunkt)
+//   und koennen nach restoreState() oder einer Bedienhandlung bis zum naechsten Schritt veraltet sein.
 class ComponentModel {
 public:
     ComponentModel(std::string id, std::initializer_list<NodeId> terminals);
@@ -114,13 +128,22 @@ public:
     virtual void restoreState(const ComponentState& state) noexcept;
 
     bool isDestroyed() const noexcept { return m_destroyed; }
+    bool isOverloaded() const noexcept { return m_overloaded; }
     double tempK() const noexcept { return m_tempK; }
 
 protected:
+    // Exakte Loesung von Cth*dT/dt = P - (T - Tamb)/Rth ueber dtS (stabil fuer jede Schrittweite).
+    void integrateThermal(double powerW, double dtS, const ThermalParams& p) noexcept;
+    // Zerstoert das Bauteil (einmalig) und meldet SimEventType::Destroyed.
+    void destroy(EventQueue& events, std::size_t index, double timeS) noexcept;
+    // Zerstoerung, sobald die Temperatur die Grenze der Thermikparameter uebersteigt.
+    void checkThermalLimit(const ThermalParams& p, EventQueue& events, std::size_t index, double timeS) noexcept;
+
     std::size_t firstBranch() const noexcept { return m_firstBranch; }
     NodeId internalNode(std::size_t k) const noexcept { return m_firstInternalNode + k; }
 
     bool m_destroyed = false;
+    bool m_overloaded = false;
     double m_tempK = kAmbientK;
 
 private:

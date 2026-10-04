@@ -25,4 +25,31 @@ double Battery::terminalCurrent(const SolutionView& x, std::size_t t) const noex
     return t == 0 ? i : -i;
 }
 
+void Battery::thermal(const SolutionView& x, double dtS) noexcept {
+    const double i = x.branchCurrent(firstBranch());
+    integrateThermal(i * i * innerOhm(), dtS, m_params.thermal);
+}
+
+void Battery::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
+    if (!m_hot && m_tempK > m_params.hotK) {
+        m_hot = true;
+        events.push({SimEventType::BatteryHot, index, timeS});
+    } else if (m_hot && m_tempK < m_params.coolK) {
+        m_hot = false;
+    }
+    m_overloaded = m_hot;
+}
+
+ComponentState Battery::saveState() const noexcept {
+    ComponentState s = ComponentModel::saveState();
+    s.internal[0] = m_hot ? 1.0 : 0.0;
+    return s;
+}
+
+void Battery::restoreState(const ComponentState& state) noexcept {
+    ComponentModel::restoreState(state);
+    m_hot = state.internal[0] != 0.0;
+    m_overloaded = m_hot;
+}
+
 } // namespace volta::core

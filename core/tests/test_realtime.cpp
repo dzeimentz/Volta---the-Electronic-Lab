@@ -9,6 +9,8 @@
 #include <string>
 
 #include "volta/core/components/battery.hpp"
+#include "volta/core/components/capacitor.hpp"
+#include "volta/core/components/wire.hpp"
 #include "volta/core/components/diode.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/simulator.hpp"
@@ -51,6 +53,9 @@ TEST_CASE("Simulator::step fordert keinen Speicher an", "[echtzeit]") {
     const NodeId led = c.addNode();
     c.add<Resistor>("RV", prev, led, ResistorParams{100.0});
     c.add<Diode>("D1", led, kGround, DiodeParams::ledRed()); // nichtlinearer Pfad mit innerem Knoten
+    const NodeId cap = c.addNode();
+    c.add<Wire>("W1", prev, cap);
+    c.add<Capacitor>("C1", cap, kGround, CapacitorParams::electrolytic(100e-6)); // Begleitmodell, Thermik
     Simulator sim;
     REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
 

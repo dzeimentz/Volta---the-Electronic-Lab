@@ -4,6 +4,7 @@
 #include "test_support.hpp"
 #include "volta/core/components/battery.hpp"
 #include "volta/core/components/resistor.hpp"
+#include "volta/core/components/wire.hpp"
 
 using namespace volta::core;
 using namespace volta::core::test;
@@ -42,7 +43,7 @@ TEST_CASE("Batterie: Kurzschluss ueber eine Leitung bleibt endlich", "[bauteil][
     Circuit c;
     const NodeId plus = c.addNode();
     c.add<Battery>("B1", plus, kGround);
-    c.add<Resistor>("W1", plus, kGround, ResistorParams{kWireOhm});
+    c.add<Wire>("W1", plus, kGround);
     Simulator sim;
     REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
     requireFinite(sim.probe());

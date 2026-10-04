@@ -35,10 +35,13 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 - Volta 1: feste Schrittweite 1 ms, Echtzeitbezug; Zeitraffer x1, x10, x100.
 - Ab Volta 2: variable Schrittweite bis ca. 20 µs (Audio bis 20 kHz), Audioberechnung im Puffer mit kurzem Vorlauf;
   optional Trapezregel mit Daempfung gegen Klingeln.
-- Nach Topologiewechsel und nach Undo: DC-Arbeitspunkt mit Quellenrampe (Source Stepping) als Startwert.
-  Gespeicherte Zustaende (Kondensatorladung, Drehzahl) gehen dabei als Anfangsbedingungen ein: ein geladener
-  Kondensator wirkt im Arbeitspunkt als Spannungsquelle mit seiner Ladespannung (wie SPICE `UIC`), damit
-  Leitungswechsel und Undo die Ladung nicht verlieren. Umsetzung mit dem Kondensatormodell (Phase 0, Schritt 3).
+- Nach Topologiewechsel und nach Undo: Arbeitspunkt zum aktuellen Zeitpunkt mit Quellenrampe (Source Stepping)
+  als Rueckfall. Gespeicherte Zustaende (Kondensatorladung, spaeter Drehzahl) gehen dabei als Anfangsbedingungen
+  ein: ein Kondensator wirkt im Arbeitspunkt als Spannungsquelle seiner Ladespannung (Serienwiderstand
+  `kMinOhm`, wie SPICE `UIC`), damit Leitungswechsel und Undo die Ladung nicht verlieren. Ein ungeladener
+  Kondensator wirkt dort folgerichtig als Kurzschluss (Einschaltstrom).
+- Kondensator im Zeitschritt als Spannungszweig: `V(a) - V(b) - (dt/C)·I = U_alt` (Rueckwaerts-Euler); damit
+  bleibt die Ladung zweier verbundener Kondensatoren exakt erhalten.
 - Begleitmodelle beziehen ihren Vorzustand nur aus dem eigenen Bauteilzustand (`updateState`), nicht aus dem
   letzten Loesungsvektor; so stellt `restoreState` (Undo) den Zustand vollstaendig her.
 
@@ -56,13 +59,14 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 
 | Typ (`typ`) | Elektrisches Modell | Thermik/Grenzen | Ereignis |
 |---|---|---|---|
-| `batterie` | Reihe aus 1,5-V-Zellen, waehlbar 3 V / 4,5 V / 9 V (2/3/6 Zellen); Ri ≈ 0,25 Ω je Zelle (9 V ≈ 1,5 Ω) | Erwaermung bei Kurzschluss, Kapazitaet optional | `BatteryHot` |
+| `batterie` | Reihe aus 1,5-V-Zellen, waehlbar 3 V / 4,5 V / 9 V (2/3/6 Zellen); Ri ≈ 0,25 Ω je Zelle (9 V ≈ 1,5 Ω) | Erwaermung durch I²·Ri (Rth 20 K/W, τ 60 s); heiss ab 60 °C, erneut erst nach Abkuehlen unter 45 °C; Kapazitaet optional | `BatteryHot` |
 | `gluehlampe` | R(T): kalt ≈ R_heiss/10, Faden mit eigener Zeitkonstante | Durchbrennen bei Ueberspannung | `Destroyed` |
 | `led_rot`, `led_gruen`, `led_gelb`, `led_blau` | Shockley-Diode + Bahnwiderstand (innerer Knoten); Is aus `uf_V` bei 20 mA; n = 2 (blau 3), Rs = 5 Ω (blau 10 Ω); Uf rot 1,9 / gelb 2,0 / gruen 2,1 / blau 3,1 V | Imax 20 mA dauerhaft, thermisch | `Destroyed` |
 | `diode_si`, `diode_ge` | Shockley-Diode + Bahnwiderstand; Si wie 1N4148 (0,70 V bei 10 mA, n = 1,75, Rs = 0,57 Ω), Ge 0,35 V bei 10 mA | Verlustleistung | `Destroyed` |
 | `widerstand` | linear, E12-Werte, Farbringe | 0,25 W | `Destroyed` |
 | `potentiometer` | zwei Teilwiderstaende, Stellung 0..1 | 0,25 W | – |
-| `kondensator`, `elko` | C mit Leckwiderstand; Elko gepolt | Verpolung/Ueberspannung | `Destroyed` |
+| `kondensator`, `elko` | C als Spannungszweig (Rueckwaerts-Euler; im Arbeitspunkt Quelle der Ladung mit 10 µs/C) mit Leckwiderstand (Folie 1 GΩ, Elko 10 MΩ); Elko gepolt, 16 V | Verpolung > 1 V oder Ueberspannung laenger als 0,2 s -> offen | `Destroyed` |
+| `leitung` (`Wire`) | 0,01 Ω | glueht ab 1 A (nur Anzeige), wird nie zerstoert | – |
 | `spule`, `relais` | L mit R; Relaiskontakt ab Ansprechstrom mit Hysterese | – | `RelayClick` |
 | `motor` | Ra + Gegenspannung k·ω, Traegheit J, Reibung | Blockade erwaermt | `Destroyed` |
 | `summer`, `piezo` | Lastwiderstand + Tonerzeugung aus Strom | – | Audio |
@@ -70,6 +74,28 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `transistor_npn` | vereinfachtes Ebers-Moll | Verlustleistung | `Destroyed` |
 | `fotowiderstand`, `heissleiter`, `fototransistor` | R bzw. I abhaengig von Licht/Temperatur (Eingabe) | – | – |
 | `messgeraet` | V: Ri 10 MΩ (digital) bzw. 20 kΩ/V (analog); A: Rshunt 0,1 Ω mit Sicherung; Ω: Messstrom 1 mA | Sicherung loest aus | `FuseBlown` |
+
+## Thermikmodell
+
+Jedes Bauteil mit `ThermalParams` (Rth, Cth, Tmax) rechnet `Cth·dT/dt = P - (T - Tamb)/Rth` mit der exakten
+Loesung je Schritt (stabil fuer jede Schrittweite). Rth folgt Datenblattwerten, die Zeitkonstanten sind
+**didaktisch** gewaehlt, damit Erwaermung sichtbar wird (Zehntelsekunden bis Sekunden statt Millisekunden).
+`overloaded` (Inhaltsformat: Zustand `ueberlastet`) zeigt eine Ueberschreitung des Dauergrenzwerts an,
+`destroyed` folgt bei T > Tmax; zerstoerte Widerstaende und Dioden sind offen.
+
+| Modell | Rth | τ | Tmax | Ueberlastet ab | Kennfall |
+|---|---|---|---|---|---|
+| Widerstand 0,25 W | 340 K/W | 10 s | 232 °C | P > 0,25 W | 100 Ω an 9 V brennt nach ca. 16 s durch |
+| LED | 350 K/W | 12,6 s | 125 °C | I > 20 mA | ohne Vorwiderstand an 9 V zerstoert nach ca. 0,5 s; 50 ms Stoss: +11 K; ueber 50 mA (2,5 × Imax) zerstoert nach 3 s (z. B. 100 Ω an 9 V) |
+| Si-Diode | 350 K/W | 5 s | 200 °C | I > 200 mA | – |
+| Ge-Diode | 500 K/W | 3 s | 90 °C | I > 50 mA | – |
+| Batterie | 20 K/W | 60 s | – | heiss > 60 °C | Kurzschluss ueber Leitung: heiss nach ca. 2,3 s |
+
+Dioden und LEDs werden zusaetzlich zeitbasiert zerstoert, wenn der Strom laenger als 3 s ueber dem 2,5-fachen
+Dauergrenzstrom liegt (vereinfachte Alterung; die reine Thermik wuerde eine LED erst ab ca. 120 mA zerstoeren).
+Zwischen Dauergrenzwert und Zerstoerung liegt bewusst ein Bereich, in dem das Bauteil nur als
+ueberlastet gilt (z. B. LED bei 40 mA). Die Oberflaeche zeigt ihn deutlich an (Gluehen), damit kein Kind
+eine dauerhafte Ueberlast fuer unbedenklich haelt.
 
 ## Module
 
@@ -88,7 +114,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `ComponentModel` | `component_model.hpp` | Bauteilschnittstelle inkl. `ComponentState` fuer Undo |
 | `MnaSystem`, `DenseLu` | `mna_system.hpp`, `dense_lu.hpp` | Aufbau bzw. Loesung des Gleichungssystems |
 | `Simulator` | `simulator.hpp` | `setCircuit` (Topologie, Arbeitspunkt), `step` (allokationsfrei), `probe`, `events` |
-| `Probe` | `probe.hpp` | Knotenpotentiale und `ComponentReading` je Bauteil (inkl. Strom je Anschluss) |
+| `Probe` | `probe.hpp` | Knotenpotentiale und `ComponentReading` je Bauteil (Strom je Anschluss, Temperatur, `overloaded`, `destroyed`) |
 | `EventQueue` | `sim_event.hpp` | Ringpuffer fester Groesse (256); bei Ueberlauf verworfen und gezaehlt |
 
 Bedienhandlungen (z. B. Zellenzahl, spaeter Schalter und Regler) aendern Parameter ueber `Simulator::circuit()`

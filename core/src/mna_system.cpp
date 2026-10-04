@@ -48,6 +48,11 @@ void MnaSystem::stampVoltageBranch(NodeId plus, NodeId minus, std::size_t branch
     m_b[k] += volt;
 }
 
+void MnaSystem::stampBranchOpen(std::size_t branch) noexcept {
+    const std::size_t k = branchRow(branch);
+    at(k, k) += 1.0;
+}
+
 void MnaSystem::stampGmin(std::size_t nodeCount, double g) noexcept {
     const std::size_t n = nodeCount > 0 ? std::min(nodeCount - 1, m_nodeUnknowns) : 0;
     for (std::size_t i = 0; i < n; ++i) at(i, i) += g;

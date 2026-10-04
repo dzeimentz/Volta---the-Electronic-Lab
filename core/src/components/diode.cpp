@@ -44,6 +44,9 @@ Diode::Diode(std::string id, NodeId anode, NodeId cathode, DiodeParams params)
     if (!(m_params.rsOhm >= 0.0) || !std::isfinite(m_params.rsOhm)) m_params.rsOhm = 0.0;
     if (m_params.rsOhm > 0.0 && m_params.rsOhm < kMinOhm) m_params.rsOhm = kMinOhm;
     if (!std::isfinite(m_params.ufV)) m_params.ufV = def.ufV;
+    if (!(m_params.imaxA > 0.0) || !std::isfinite(m_params.imaxA)) m_params.imaxA = def.imaxA;
+    if (!(m_params.overloadFactor >= 1.0) || !std::isfinite(m_params.overloadFactor)) m_params.overloadFactor = 2.5;
+    if (!(m_params.overloadFailS >= 0.0) || !std::isfinite(m_params.overloadFailS)) m_params.overloadFailS = 3.0;
 
     const double vt = kBoltzmannJPerK * kAmbientK / kElementaryChargeC; // ca. 25,3 mV bei 20 Grad C
     m_nVt = m_params.n * vt;
@@ -122,6 +125,33 @@ double Diode::terminalCurrent(const SolutionView& x, std::size_t t) const noexce
     const double vd = junctionVoltage(x);
     i = m_destroyed ? kGmin * vd : m_g * vd + m_ieq;
     return t == 0 ? i : -i;
+}
+
+void Diode::thermal(const SolutionView& x, double dtS) noexcept {
+    m_lastDtS = dtS;
+    m_lastCurrentA = terminalCurrent(x, 0);
+    const double p = (x.voltage(terminal(0)) - x.voltage(terminal(1))) * m_lastCurrentA;
+    integrateThermal(m_destroyed ? 0.0 : p, dtS, m_params.thermal);
+}
+
+void Diode::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
+    if (m_destroyed) return;
+    m_overloaded = m_lastCurrentA > m_params.imaxA;
+    const bool severe = m_lastCurrentA > m_params.overloadFactor * m_params.imaxA;
+    m_overloadS = severe ? m_overloadS + m_lastDtS : 0.0;
+    if (severe && m_overloadS >= m_params.overloadFailS - 1e-9) destroy(events, index, timeS);
+    checkThermalLimit(m_params.thermal, events, index, timeS);
+}
+
+ComponentState Diode::saveState() const noexcept {
+    ComponentState s = ComponentModel::saveState();
+    s.internal[0] = m_overloadS;
+    return s;
+}
+
+void Diode::restoreState(const ComponentState& state) noexcept {
+    ComponentModel::restoreState(state);
+    m_overloadS = std::isfinite(state.internal[0]) ? state.internal[0] : 0.0;
 }
 
 } // namespace volta::core
