@@ -14,6 +14,7 @@
 #include "volta/core/components/capacitor.hpp"
 #include "volta/core/components/diode.hpp"
 #include "volta/core/components/lamp.hpp"
+#include "volta/core/components/meter.hpp"
 #include "volta/core/components/motor.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/components/switch.hpp"
@@ -42,7 +43,7 @@ struct Fuzzer {
         c.add<Battery>("B1", 1, kGround, BatteryParams{uniform(1, 6)});
         for (int i = 0; i < count; ++i) {
             const std::string id = "X" + std::to_string(i);
-            switch (uniform(0, 13)) {
+            switch (uniform(0, 14)) {
             case 0:
             case 1: c.add<Resistor>(id, node(), node(), ResistorParams{resistor()}); break;
             case 2: c.add<Wire>(id, node(), node()); break;
@@ -61,6 +62,12 @@ struct Fuzzer {
             case 10: c.add<Switch>(id, node(), node(), uniform(0, 1) == 1); break;
             case 11: c.add<ChangeoverSwitch>(id, node(), node(), node(), uniform(0, 1) == 1); break;
             case 12: c.add<Npn>(id, node(), node(), node()); break;
+            case 13: {
+                Meter& m = c.add<Meter>(id, node(), node(), node());
+                m.setMode(static_cast<MeterMode>(uniform(0, 2)));
+                m.setAnalog(uniform(0, 1) == 1);
+                break;
+            }
             default: {
                 const NodeId rate = c.addNode();
                 addBlinkModule(c, id, {node(), node(), node(), rate});
@@ -79,6 +86,7 @@ struct Fuzzer {
         else if (auto* r = dynamic_cast<Resistor*>(&m)) r->setOhm(resistor());
         else if (auto* mo = dynamic_cast<Motor*>(&m)) mo->setBlocked(!mo->isBlocked());
         else if (auto* b = dynamic_cast<Battery*>(&m)) b->setCells(uniform(1, 6));
+        else if (auto* me = dynamic_cast<Meter*>(&m)) me->setMode(static_cast<MeterMode>(uniform(0, 2)));
     }
 };
 

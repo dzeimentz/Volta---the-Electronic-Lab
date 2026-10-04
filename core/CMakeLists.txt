@@ -17,6 +17,7 @@ add_library(volta_core STATIC
     src/components/motor.cpp
     src/components/buzzer.cpp
     src/components/transistor.cpp
+    src/components/meter.cpp
     src/modules/blink_module.cpp
 )
 add_library(volta::core ALIAS volta_core)

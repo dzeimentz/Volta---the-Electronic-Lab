@@ -43,6 +43,8 @@ struct ComponentReading {
     // (1 = Leerlauf bei Nennspannung, Vorzeichen = Drehrichtung), Summer Lautstaerke 0..1, Schalter 0/1.
     double level = 0.0;
     double frequencyHz = 0.0; // Tonfrequenz (Summer), sonst 0
+    double displayValue = 0.0; // Messgeraet: angezeigter Wert in V, A oder Ohm je Messart
+    int displayFlags = 0;      // Messgeraet: kDisplayOverrange, kDisplayForeignVoltage, kDisplayFuseBlown
     bool overloaded = false;  // ueber Dauergrenzwert (Strom, Leistung, Spannung), aber noch nicht zerstoert
     bool destroyed = false;
 };

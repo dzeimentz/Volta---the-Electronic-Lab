@@ -218,6 +218,7 @@ void Simulator::publish() noexcept {
         r.powerW = finiteOr0(r.powerW);
         r.level = finiteOr0(r.level);
         r.frequencyHz = finiteOr0(r.frequencyHz);
+        r.displayValue = finiteOr0(r.displayValue);
         for (double& ti : r.terminalCurrentA) ti = finiteOr0(ti);
         r.tempK = std::isfinite(r.tempK) ? r.tempK : kAmbientK;
         m_probe.readings[i] = r;

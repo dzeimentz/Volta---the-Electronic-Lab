@@ -93,7 +93,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `lautsprecher` | 8 Ω, Signal -> Klanganzeige (Frequenz, Pegel, Impulse) | – | Audio |
 | `transistor_npn` | Ebers-Moll (Transportform) wie BC547B: Is 1,8e-14 A, βF 200, βR 7; Ladungsspeicher Q = C·V + τ·I (Cbe 10 pF, Cbc 4 pF, τF 0,5 ns, τR 10 ns); pnjlim je Uebergang | groesster Anschlussstrom > 100 mA ueberlastet, > 250 mA nach 3 s zerstoert; 250 K/W, τ 5 s, 150 °C | `Destroyed` |
 | `fotowiderstand`, `heissleiter`, `fototransistor` | R bzw. I abhaengig von Licht/Temperatur (Eingabe) | – | – |
-| `messgeraet` | V: Ri 10 MΩ (digital) bzw. 20 kΩ/V (analog); A: Rshunt 0,1 Ω mit Sicherung; Ω: Messstrom 1 mA | Sicherung loest aus | `FuseBlown` |
+| `messgeraet` (`Meter`, Buchsen COM, V/Ω, A) | V: Ri 10 MΩ (digital) bzw. 20 kΩ/V × Bereich 1/3/10/30 V (analog, Bereich selbsttaetig); A-Buchse immer Shunt 0,1 Ω nach COM; Ω: Messquelle 3 V ueber 3 kΩ (≤ 1 mA), Anzeige U/I, »OL« offen oder > 40 MΩ, »Spannung abschalten!« bei Fremdspannung; Messart/Anzeigeart sind Bedienhandlungen | Sicherung > 0,5 A fuer 10 ms, danach A-Eingang offen | `FuseBlown` |
 
 ## Thermikmodell
 
