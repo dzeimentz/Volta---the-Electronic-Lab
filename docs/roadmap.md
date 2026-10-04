@@ -29,7 +29,14 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 | Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich | vor Phase 3 |
 
 ## Naechste konkrete Schritte (Phase 0)
-1. `core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.
-2. Thermikmodell und Ereignisse; Robustheitstests.
-3. `app/`: Qt-Projektgeruest, `Board`-Modell, `NetlistBuilder`, leere `Lab.qml` mit Grundplatte.
-4. Inhaltsvalidator in CI.
+1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
+2. ~~Thermikmodell und Ereignisse; Robustheitstests.~~ erledigt, dazu: alle Bauteile der Stufen 1–4 inkl.
+   Transistor, Blinkmodul als Teilschaltung, Dreifach-Messgeraet, Referenztests 1–7, Zufallstest,
+   Leistungsprogramm (siehe `docs/simulation-core.md`, `docs/testing.md`)
+3. `app/`: Qt-Projektgeruest, `Board`-Modell, `NetlistBuilder`, leere `Lab.qml` mit Grundplatte;
+   Grafikschicht aus VTS (`J:\VISUAL Technic STUDIO`) sichten und uebernehmen.
+4. Inhaltsvalidator in CI; `ContentSmokeTest` simuliert jede Vorlage gegen ihre Erfolgsbedingung.
+
+Offen aus Phase 0 (Kern): Kalibrierung der Bauteilmodelle an realem Material; Leistungsmessung auf dem
+Referenztablet (Desktop: schlechtester Einzelschritt ca. 8 ms beim Umkippen einer Kippstufe); Tonmodul als
+Verhaltensmodell; Nennspannung der Katalog-Gluehlampe (6 V brennt an 9 V nach ca. 5 s durch).
