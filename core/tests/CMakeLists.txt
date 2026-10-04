@@ -9,8 +9,15 @@ if(NOT Catch2_FOUND)
 endif()
 
 add_executable(volta_core_tests
-    test_circuit.cpp
+    test_dense_lu.cpp
+    test_events.cpp
+    test_reference_dc.cpp
+    test_robustness.cpp
+    test_realtime.cpp
+    components/test_resistor.cpp
+    components/test_battery.cpp
 )
+target_include_directories(volta_core_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(volta_core_tests PRIVATE volta::core Catch2::Catch2WithMain)
 
 include(Catch)

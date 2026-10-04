@@ -1,0 +1,182 @@
+#include "volta/core/simulator.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <new>
+#include <utility>
+
+namespace volta::core {
+
+namespace {
+constexpr int kSourceRampSteps = 10; // Quellenrampe in 10-%-Stufen
+} // namespace
+
+Simulator::Simulator() {
+    m_events.reserve(kEventCapacity);
+    m_probe.nodeVolt.assign(1, 0.0);
+}
+
+Status Simulator::setCircuit(Circuit circuit) {
+    if (!circuit.isValid()) return Status::InvalidCircuit;
+
+    std::size_t branches = 0;
+    for (std::size_t i = 0; i < circuit.componentCount(); ++i) {
+        ComponentModel& c = circuit.component(i);
+        c.assignFirstBranch(branches);
+        branches += c.branchCount();
+    }
+
+    try {
+        m_sys.resize(circuit.nodeCount(), branches);
+        const std::size_t n = m_sys.size();
+        m_lu.resize(n);
+        m_accepted.assign(n, 0.0);
+        m_iter.assign(n, 0.0);
+        m_next.assign(n, 0.0);
+        m_backup.assign(n, 0.0);
+        m_nonlinear.clear();
+        for (std::size_t i = 0; i < circuit.componentCount(); ++i)
+            if (circuit.component(i).isNonlinear()) m_nonlinear.push_back(i);
+        m_probe.nodeVolt.assign(circuit.nodeCount(), 0.0);
+        m_probe.readings.assign(circuit.componentCount(), ComponentReading{});
+    } catch (const std::bad_alloc&) {
+        m_ready = false;
+        return Status::OutOfMemory;
+    }
+
+    m_circuit = std::move(circuit);
+    m_probe.valid = false;
+    m_ready = true;
+    return solveOperatingPoint();
+}
+
+bool Simulator::withinTolerance() const noexcept {
+    const std::size_t nv = m_sys.nodeUnknowns();
+    for (std::size_t i = 0; i < m_next.size(); ++i) {
+        const double absTol = i < nv ? kVoltTolAbs : kCurrentTolAbs;
+        const double tol = absTol + kTolRel * std::max(std::fabs(m_next[i]), std::fabs(m_iter[i]));
+        if (std::fabs(m_next[i] - m_iter[i]) > tol) return false;
+    }
+    return true;
+}
+
+Status Simulator::newton(const StampContext& ctx) noexcept {
+    std::copy(m_accepted.begin(), m_accepted.end(), m_iter.begin());
+    for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(ctx.accepted);
+
+    const std::size_t count = m_circuit.componentCount();
+    for (int k = 0; k < kMaxNewtonIter; ++k) {
+        m_lastIterations = k + 1;
+        bool limited = false;
+        const SolutionView iterView = view(m_iter);
+        for (std::size_t idx : m_nonlinear) limited = m_circuit.component(idx).linearize(iterView) || limited;
+
+        m_sys.clear();
+        m_sys.stampGminAllNodes(kGmin);
+        for (std::size_t i = 0; i < count; ++i) m_circuit.component(i).stamp(m_sys, ctx);
+
+        if (!m_lu.factor(m_sys.matrix())) return Status::Singular;
+        if (!m_lu.solve(m_sys.rhs(), m_next)) return Status::Singular;
+
+        if (m_nonlinear.empty()) { // lineares System: eine Loesung ist exakt
+            std::swap(m_iter, m_next);
+            return Status::Ok;
+        }
+        const bool converged = !limited && withinTolerance();
+        std::swap(m_iter, m_next);
+        if (converged) return Status::Ok;
+    }
+    return Status::NotConverged;
+}
+
+Status Simulator::solveOperatingPoint() noexcept {
+    if (!m_ready) return Status::NoCircuit;
+
+    StampContext ctx;
+    ctx.dtS = 0.0;
+    ctx.timeS = m_timeS;
+    ctx.accepted = view(m_accepted);
+
+    Status s = newton(ctx);
+    if (s == Status::NotConverged) {
+        // Quellenrampe: Quellen schrittweise von 10 % auf 100 %, jede Stufe startet von der vorigen Loesung.
+        std::copy(m_accepted.begin(), m_accepted.end(), m_backup.begin());
+        std::fill(m_accepted.begin(), m_accepted.end(), 0.0);
+        for (int r = 1; r <= kSourceRampSteps; ++r) {
+            ctx.sourceScale = static_cast<double>(r) / kSourceRampSteps;
+            s = newton(ctx);
+            if (s != Status::Ok) break;
+            std::copy(m_iter.begin(), m_iter.end(), m_accepted.begin());
+        }
+        if (s != Status::Ok) std::copy(m_backup.begin(), m_backup.end(), m_accepted.begin());
+    }
+    if (s != Status::Ok) {
+        for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(view(m_accepted));
+        m_events.push({SimEventType::ConvergenceTrouble, kNoComponent, m_timeS});
+        return s;
+    }
+    std::copy(m_iter.begin(), m_iter.end(), m_accepted.begin());
+    publish();
+    return Status::Ok;
+}
+
+Status Simulator::step(double dtS) noexcept {
+    if (!m_ready) return Status::NoCircuit;
+    if (!(dtS > 0.0) || !std::isfinite(dtS)) return Status::InvalidStep;
+    return advance(dtS, 0);
+}
+
+Status Simulator::advance(double dtS, int depth) noexcept {
+    StampContext ctx;
+    ctx.dtS = dtS;
+    ctx.timeS = m_timeS + dtS;
+    ctx.accepted = view(m_accepted);
+
+    const Status s = newton(ctx);
+    if (s == Status::Ok) {
+        accept(dtS);
+        return Status::Ok;
+    }
+    // Halbieren hilft nur bei Nichtkonvergenz, nicht bei einem singulaeren Gleichungssystem.
+    if (s == Status::Singular || depth >= kMaxStepHalvings) {
+        for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(view(m_accepted));
+        m_events.push({SimEventType::ConvergenceTrouble, kNoComponent, m_timeS});
+        return s;
+    }
+    const Status first = advance(0.5 * dtS, depth + 1);
+    if (first != Status::Ok) return first;
+    return advance(0.5 * dtS, depth + 1);
+}
+
+void Simulator::accept(double dtS) noexcept {
+    std::copy(m_iter.begin(), m_iter.end(), m_accepted.begin());
+    m_timeS += dtS;
+    const SolutionView x = view(m_accepted);
+    for (std::size_t i = 0; i < m_circuit.componentCount(); ++i) {
+        ComponentModel& c = m_circuit.component(i);
+        c.updateState(x, dtS);
+        c.thermal(x, dtS);
+        c.checkLimits(m_events, i, m_timeS);
+    }
+    publish();
+}
+
+void Simulator::publish() noexcept {
+    auto finiteOr0 = [](double v) { return std::isfinite(v) ? v : 0.0; };
+    const SolutionView x = view(m_accepted);
+    m_probe.timeS = m_timeS;
+    m_probe.nodeVolt[0] = 0.0;
+    for (NodeId n = 1; n < m_probe.nodeVolt.size(); ++n) m_probe.nodeVolt[n] = finiteOr0(x.voltage(n));
+    for (std::size_t i = 0; i < m_probe.readings.size(); ++i) {
+        ComponentReading r = m_circuit.component(i).read(x);
+        r.voltV = finiteOr0(r.voltV);
+        r.currentA = finiteOr0(r.currentA);
+        r.powerW = finiteOr0(r.powerW);
+        for (double& ti : r.terminalCurrentA) ti = finiteOr0(ti);
+        r.tempK = std::isfinite(r.tempK) ? r.tempK : kAmbientK;
+        m_probe.readings[i] = r;
+    }
+    m_probe.valid = true;
+}
+
+} // namespace volta::core

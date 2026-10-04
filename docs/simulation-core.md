@@ -13,12 +13,17 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 - Volta 1: < 100 Knoten -> dichte LU-Zerlegung mit Teilpivotsuche.
 - Ab Volta 2: dünn besetzte LU-Zerlegung; Wiederverwendung der symbolischen Faktorisierung bei unveraenderter
   Topologie; numerische Refaktorisierung nur bei geaenderten Werten.
-- Aufbau und Loesung des Gleichungssystems sind getrennt (Vorleistung fuer Volta 2).
+- Aufbau und Loesung des Gleichungssystems sind getrennt (Vorleistung fuer Volta 2): `MnaSystem` nimmt die
+  Stempel auf, `DenseLu` zerlegt und loest. Beide fordern Speicher nur beim Topologiewechsel an.
+- Vorzeichen: `terminalCurrent(t)` ist der Strom, der am Anschluss `t` in das Bauteil hineinfliesst. Eine
+  entladende Batterie hat daher am Pluspol einen negativen Strom und eine negative (abgegebene) Leistung.
 
 ### Nichtlineare Bauteile – Newton-Raphson
 - Dioden, Leuchtdioden, Transistoren, Gluehlampe (temperaturabhaengig) werden je Iteration linearisiert.
 - Spannungsbegrenzung je Iteration fuer pn-Uebergaenge (Begrenzung nach SPICE-Art ueber `Vcrit`).
-- Abbruch: |dV| < 1e-6 V und |dI| < 1e-9 A oder max. 50 Iterationen.
+- Abbruch: |dV| < 1e-6 V und |dI| < 1e-9 A (jeweils zuzueglich 1e-6 relativ zum Betrag, damit Stroeme im
+  Amperebereich nicht an der Rechengenauigkeit scheitern) oder max. 50 Iterationen. Eine Iteration, in der
+  ein Modell die Spannung begrenzt hat, gilt nie als konvergiert.
 - Bei Nichtkonvergenz: Zeitschritt halbieren (bis 1/16), dann `SimEvent::ConvergenceTrouble` und
   letzter gueltiger Zustand bleibt erhalten. Nie abstuerzen, nie NaN an die Oberflaeche geben.
 
@@ -28,6 +33,11 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 - Ab Volta 2: variable Schrittweite bis ca. 20 µs (Audio bis 20 kHz), Audioberechnung im Puffer mit kurzem Vorlauf;
   optional Trapezregel mit Daempfung gegen Klingeln.
 - Nach Topologiewechsel und nach Undo: DC-Arbeitspunkt mit Quellenrampe (Source Stepping) als Startwert.
+  Gespeicherte Zustaende (Kondensatorladung, Drehzahl) gehen dabei als Anfangsbedingungen ein: ein geladener
+  Kondensator wirkt im Arbeitspunkt als Spannungsquelle mit seiner Ladespannung (wie SPICE `UIC`), damit
+  Leitungswechsel und Undo die Ladung nicht verlieren. Umsetzung mit dem Kondensatormodell (Phase 0, Schritt 3).
+- Begleitmodelle beziehen ihren Vorzustand nur aus dem eigenen Bauteilzustand (`updateState`), nicht aus dem
+  letzten Loesungsvektor; so stellt `restoreState` (Undo) den Zustand vollstaendig her.
 
 ### Robustheit
 - Ideale Schleifen aus Quellen und Leitungen vermeiden: Innenwiderstand der Batterie, Leitungswiderstand
@@ -66,6 +76,20 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 - **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
   Abstimmung und Antenne. Im Elternbereich als solches offengelegt.
 - **Logikmodell** (Volta 3, Zuse 1): ereignisgesteuerte Gatter mit Kopplung an analoge Pegel.
+
+## Programmierschnittstelle (Phase 0)
+
+| Typ | Datei | Aufgabe |
+|---|---|---|
+| `Circuit` | `circuit.hpp` | Knoten und Bauteile; verschiebbar, wird je Topologiewechsel neu uebergeben |
+| `ComponentModel` | `component_model.hpp` | Bauteilschnittstelle inkl. `ComponentState` fuer Undo |
+| `MnaSystem`, `DenseLu` | `mna_system.hpp`, `dense_lu.hpp` | Aufbau bzw. Loesung des Gleichungssystems |
+| `Simulator` | `simulator.hpp` | `setCircuit` (Topologie, Arbeitspunkt), `step` (allokationsfrei), `probe`, `events` |
+| `Probe` | `probe.hpp` | Knotenpotentiale und `ComponentReading` je Bauteil (inkl. Strom je Anschluss) |
+| `EventQueue` | `sim_event.hpp` | Ringpuffer fester Groesse (256); bei Ueberlauf verworfen und gezaehlt |
+
+Bedienhandlungen (z. B. Zellenzahl, spaeter Schalter und Regler) aendern Parameter ueber `Simulator::circuit()`
+zwischen zwei Schritten; die Kopplung an den UI-Thread uebernimmt die App.
 
 ## Messschnittstelle
 

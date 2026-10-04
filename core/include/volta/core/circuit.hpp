@@ -1,56 +1,49 @@
 #pragma once
 
 #include <cstddef>
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
+
+#include "volta/core/component_model.hpp"
+#include "volta/core/types.hpp"
 
 namespace volta::core {
 
-// Knotenindex; 0 ist Masse (Pultfeld 0V).
-using NodeId = std::size_t;
-inline constexpr NodeId kGround = 0;
-
-// Minimale Netzliste fuer Phase 0. Bauteilmodelle folgen gemaess docs/simulation-core.md.
-struct ResistorSpec {
-    std::string id;
-    NodeId a = kGround;
-    NodeId b = kGround;
-    double ohm = 1.0;
-};
-
-struct VoltageSourceSpec {
-    std::string id;
-    NodeId plus = kGround;
-    NodeId minus = kGround;
-    double volt = 0.0;
-    double innerOhm = 0.0;
-};
-
+// Netzliste aus Knoten und Bauteilinstanzen. Wird vom Schaltungsmodell der App erzeugt und bei jedem
+// Topologiewechsel als Ganzes an den Simulator uebergeben (verschiebbar, nicht kopierbar).
 class Circuit {
 public:
-    NodeId addNode();
+    Circuit() = default;
+    Circuit(Circuit&&) noexcept = default;
+    Circuit& operator=(Circuit&&) noexcept = default;
+
+    NodeId addNode() { return m_nodeCount++; }
     std::size_t nodeCount() const noexcept { return m_nodeCount; }
 
-    void addResistor(ResistorSpec spec);
-    void addVoltageSource(VoltageSourceSpec spec);
+    // Legt ein Bauteil an und gibt eine Referenz darauf zurueck.
+    template <class T, class... Args>
+    T& add(Args&&... args) {
+        auto p = std::make_unique<T>(std::forward<Args>(args)...);
+        T& ref = *p;
+        m_components.push_back(std::move(p));
+        return ref;
+    }
 
-    const std::vector<ResistorSpec>& resistors() const noexcept { return m_resistors; }
-    const std::vector<VoltageSourceSpec>& sources() const noexcept { return m_sources; }
+    std::size_t componentCount() const noexcept { return m_components.size(); }
+    ComponentModel& component(std::size_t i) noexcept { return *m_components[i]; }
+    const ComponentModel& component(std::size_t i) const noexcept { return *m_components[i]; }
+
+    // Index des Bauteils mit der Kennung id oder kNoComponent.
+    std::size_t indexOf(const std::string& id) const noexcept;
+
+    // true, wenn alle Anschluesse auf vorhandene Knoten zeigen.
+    bool isValid() const noexcept;
 
 private:
     std::size_t m_nodeCount = 1; // Masse existiert immer
-    std::vector<ResistorSpec> m_resistors;
-    std::vector<VoltageSourceSpec> m_sources;
+    std::vector<std::unique_ptr<ComponentModel>> m_components;
 };
-
-// Ergebnis einer DC-Loesung.
-struct DcSolution {
-    bool ok = false;
-    std::vector<double> nodeVolt;      // Index = NodeId
-    std::vector<double> sourceCurrent; // Index = Reihenfolge der Quellen
-};
-
-// Dichte MNA-Loesung (Phase 0, nur lineare Bauteile). Wirft keine Ausnahmen.
-DcSolution solveDc(const Circuit& circuit) noexcept;
 
 } // namespace volta::core

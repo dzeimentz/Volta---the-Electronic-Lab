@@ -1,7 +1,14 @@
 # Simulationskern - Qt-frei (siehe docs/adr/0002-qt-freier-kern.md)
 add_library(volta_core STATIC
     src/version.cpp
+    src/mna_system.cpp
+    src/dense_lu.cpp
+    src/sim_event.cpp
+    src/component_model.cpp
     src/circuit.cpp
+    src/simulator.cpp
+    src/components/resistor.cpp
+    src/components/battery.cpp
 )
 add_library(volta::core ALIAS volta_core)
 
