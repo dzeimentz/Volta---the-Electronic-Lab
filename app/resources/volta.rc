@@ -1,0 +1,2 @@
+// Windows-Ressourcen: Programmsymbol (Explorer, Taskleiste). Erzeugt aus icons/volta.svg (tools/make_icons.py).
+IDI_ICON1 ICON "icons/volta.ico"

@@ -1,6 +1,7 @@
 // Einstiegspunkt der Qt-Anwendung. Modell, Dienste und Lernpfad folgen gemaess docs/architecture.md.
 #include <QFileInfo>
 #include <QGuiApplication>
+#include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -18,6 +19,9 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setOrganizationDomain(QStringLiteral("dc-software-engineering.com"));
     QGuiApplication::setApplicationName(QStringLiteral(VOLTA_APP_NAME));
     QGuiApplication::setApplicationVersion(QStringLiteral(VOLTA_VERSION));
+    QIcon icon; // Fenster- und Taskleistensymbol (Rasterbilder, kein SVG-Plugin noetig)
+    for (int size : {32, 64, 256}) icon.addFile(QStringLiteral(":/icons/volta_%1.png").arg(size), QSize(size, size));
+    QGuiApplication::setWindowIcon(icon);
 
     // Inhaltspakete: zuerst neben der ausfuehrbaren Datei (Release-Ordner, tools/deploy_release.py), sonst aus dem
     // Quellbaum. Die Einbettung als Ressource folgt mit der Paketierung (Phase 5).

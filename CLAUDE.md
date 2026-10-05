@@ -84,6 +84,9 @@ python3 tools/check_all.py
 # Lokales Release (lauffaehiges Programm mit Qt-Laufzeit und Inhalten in Release/, nicht im Repository)
 python3 tools/deploy_release.py
 
+# App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
+python3 tools/make_icons.py
+
 # Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
 cmake --preset android-arm64
 cmake --build --preset android-arm64

@@ -29,6 +29,15 @@ target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads:
 qt_add_executable(volta_app
     src/main.cpp
 )
+# App-Symbol (Quelle resources/icons/volta.svg, Rasterbilder mit tools/make_icons.py)
+if(WIN32)
+    # eigene Objektbibliothek ohne Include-Pfade: windres (MinGW) scheitert an Leerzeichen in Include-Pfaden
+    add_library(volta_app_rc OBJECT resources/volta.rc)
+    set_target_properties(volta_app_rc PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)
+    target_sources(volta_app PRIVATE $<TARGET_OBJECTS:volta_app_rc>)
+endif()
+qt_add_resources(volta_app "icons" PREFIX "/icons" BASE resources/icons FILES
+    resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png)
 set_target_properties(volta_app PROPERTIES
     OUTPUT_NAME "${VOLTA_EDITION}"
     WIN32_EXECUTABLE ON
