@@ -9,6 +9,7 @@
 #include <QtQml/qqmlextensionplugin.h>
 
 #include "lab_controller.hpp"
+#include "language_service.hpp"
 #include "volta/core/version.hpp"
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
@@ -31,6 +32,15 @@ int main(int argc, char* argv[]) {
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("labController"), &lab);
+    // Anzeigesprache: Oberflaeche (Uebersetzung, retranslate) und Inhalte (Experimenttexte) gemeinsam umschalten
+    // Entwicklerhilfe: VOLTA_DEMO_LANG=fr|en startet in dieser Sprache, ohne die gespeicherte Wahl zu aendern
+    const QString demoLang = qEnvironmentVariable("VOLTA_DEMO_LANG");
+    volta::LanguageService language(&engine, demoLang.isEmpty());
+    if (!demoLang.isEmpty()) language.setLanguage(demoLang);
+    lab.setContentLanguage(language.language());
+    QObject::connect(&language, &volta::LanguageService::languageChanged, &lab,
+                     &volta::LabController::setContentLanguage);
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_languageService"), &language);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");
@@ -78,6 +88,14 @@ int main(int argc, char* argv[]) {
     // Entwicklerhilfe: VOLTA_DEMO_COLUMNS=8|10|12 stellt die Breite der Grundplatte ein (wie +/- in der Werkzeugleiste)
     if (const int columns = qEnvironmentVariableIntValue("VOLTA_DEMO_COLUMNS"); columns > 0)
         QTimer::singleShot(400, &lab, [&lab, columns] { lab.setBoardColumns(columns); });
+
+    // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
+        QTimer::singleShot(600, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("infoDialog")))
+                QMetaObject::invokeMethod(dlg, "open");
+        });
 
     const QString shot = qEnvironmentVariable("VOLTA_SCREENSHOT");
     if (!shot.isEmpty()) {

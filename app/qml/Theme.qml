@@ -34,9 +34,10 @@ QtObject {
     readonly property int fieldHeight: 56   // Kontaktfelder >= 56 dp
     readonly property int fieldGap: 24
     readonly property int deskFieldWidth: 56
-    readonly property int deskFieldGap: 12
+    readonly property int deskFieldGap: 6 // kompakt: Pultleiste passt ueber 8 Spalten
     readonly property int slotWidth: 36
     // Steckloecher: fuenf je Feld, mittig; Abstand von Lochmitte zu Lochmitte (Pultfelder sind schmaler)
+    readonly property int meterAreaWidth: 120 // Messgeraet rechts neben der Grundplatte
     readonly property int socketSize: 8
     readonly property int socketPitch: 13
     readonly property int deskSocketPitch: 10

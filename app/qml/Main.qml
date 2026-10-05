@@ -17,6 +17,7 @@ ApplicationWindow {
     Lab {
         anchors.fill: parent
         controller: labController
+        languageService: typeof volta_languageService !== "undefined" ? volta_languageService : null
         Component.onCompleted: labController.startExperiment("volta1.1.1")
     }
 }

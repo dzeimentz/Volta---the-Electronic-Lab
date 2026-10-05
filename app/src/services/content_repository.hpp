@@ -49,7 +49,8 @@ public:
     QStringList experimentIds(const QString& band) const;
     // Experiment nach id (z. B. "volta1.2.4") aus content/<band>/experiments/<stufe>.<nr>.json
     bool loadExperiment(const QString& id, Experiment& out);
-    // Texte einer Sprache (z. B. "de") fuer einen Band; text() liefert den Schluessel, wenn er fehlt.
+    // Texte einer Sprache (z. B. "fr") fuer einen Band, Deutsch als Rueckfall; text() liefert den Schluessel, wenn
+    // er auch auf Deutsch fehlt. false, wenn die Sprachdatei fehlt (dann gilt Deutsch).
     bool loadTexts(const QString& band, const QString& language);
     QString text(const QString& key) const;
 

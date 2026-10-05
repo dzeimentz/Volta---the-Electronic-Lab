@@ -1,5 +1,9 @@
 #include "lab_controller.hpp"
 
+#include <QCoreApplication>
+#include <QFile>
+#include <QSysInfo>
+
 #include <cstdlib>
 
 namespace volta {
@@ -28,19 +32,7 @@ LabController::LabController(QString contentRoot, QObject* parent)
     m_session = std::make_unique<model::LabSession>(loadCatalog(m_repo, m_errors));
     m_repo.loadTexts(QStringLiteral("volta1"), QStringLiteral("de"));
     m_experimentIds = m_repo.experimentIds(QStringLiteral("volta1"));
-    for (const QString& id : m_experimentIds) {
-        services::Experiment exp;
-        if (!m_repo.loadExperiment(id, exp)) {
-            m_errors << m_repo.lastError();
-            continue;
-        }
-        QVariantMap m;
-        m.insert(QStringLiteral("id"), id);
-        m.insert(QStringLiteral("title"), m_repo.text(exp.titleKey));
-        m.insert(QStringLiteral("stage"), exp.stage);
-        m.insert(QStringLiteral("destructive"), exp.destructive);
-        m_experimentList << m;
-    }
+    rebuildExperimentList();
     m_session->onBoardChanged = [this] {
         m_errors.clear();
         for (const auto& e : m_session->netlist().errors) m_errors << qs(e);
@@ -79,6 +71,7 @@ bool LabController::loadExperiment(const QString& id) {
 }
 
 bool LabController::startExperiment(const QString& id) {
+    m_freeLab = false;
     services::Experiment exp;
     if (!m_repo.loadExperiment(id, exp)) {
         m_errors = QStringList{m_repo.lastError()};
@@ -100,7 +93,56 @@ bool LabController::startExperiment(const QString& id) {
     return true;
 }
 
+void LabController::rebuildExperimentList() {
+    m_experimentList.clear();
+    for (const QString& id : m_experimentIds) {
+        services::Experiment exp;
+        if (!m_repo.loadExperiment(id, exp)) {
+            m_errors << m_repo.lastError();
+            continue;
+        }
+        QVariantMap m;
+        m.insert(QStringLiteral("id"), id);
+        m.insert(QStringLiteral("title"), m_repo.text(exp.titleKey));
+        m.insert(QStringLiteral("stage"), exp.stage);
+        m.insert(QStringLiteral("destructive"), exp.destructive);
+        m_experimentList << m;
+    }
+}
+
+void LabController::setContentLanguage(const QString& code) {
+    m_contentLanguage = code;
+    m_repo.loadTexts(QStringLiteral("volta1"), code);
+    rebuildExperimentList();
+    if (m_freeLab)
+        m_title = tr("Freies Labor");
+    else if (!m_experiment.titleKey.isEmpty())
+        m_title = m_repo.text(m_experiment.titleKey);
+    emit experimentChanged();
+    emit flowChanged();
+}
+
+QVariantMap LabController::appInfo() const {
+#if defined(__clang__)
+    const QString compiler = QStringLiteral("Clang %1.%2").arg(__clang_major__).arg(__clang_minor__);
+#elif defined(__GNUC__)
+    const QString compiler = QStringLiteral("GCC %1.%2 (MinGW-w64)").arg(__GNUC__).arg(__GNUC_MINOR__);
+#elif defined(_MSC_VER)
+    const QString compiler = QStringLiteral("MSVC %1").arg(_MSC_VER);
+#else
+    const QString compiler = QStringLiteral("C++17");
+#endif
+    return {{QStringLiteral("name"), QCoreApplication::applicationName()},
+            {QStringLiteral("version"), QCoreApplication::applicationVersion()},
+            {QStringLiteral("qtVersion"), QString::fromLatin1(qVersion())},
+            {QStringLiteral("compiler"), compiler},
+            {QStringLiteral("platform"), QSysInfo::prettyProductName() + QStringLiteral(" (") +
+                                             QSysInfo::currentCpuArchitecture() + QStringLiteral(")")},
+            {QStringLiteral("hasLogo"), QFile::exists(QStringLiteral(":/brand/dc_logo.png"))}};
+}
+
 void LabController::startFreeLab() {
+    m_freeLab = true;
     m_flow.stop();
     m_experiment = services::Experiment{};
     m_title = tr("Freies Labor");

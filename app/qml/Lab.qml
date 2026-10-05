@@ -8,10 +8,15 @@ import QtQuick.Controls.Basic
 Item {
     id: lab
     required property var controller
+    property var languageService: null // Anzeigesprache (main.cpp); ohne: Knopf ausgeblendet
 
     // ------------------------------------------------------------------ Geometrie
     readonly property var deskNames: ["P:+9V", "P:0V", "P:P1a", "P:P1s", "P:P1b", "P:P2a", "P:P2s", "P:P2b",
-                                      "P:S1", "P:S2", "P:LS1", "P:LS2", "MESS:COM", "MESS:VOHM", "MESS:A"]
+                                      "P:S1", "P:S2", "P:LS1", "P:LS2"]
+    // Buchsen des Dreifach-Messgeraets: eigener Bereich rechts neben der Grundplatte (Zeilen B, C, D)
+    readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
+    readonly property int deskStripWidth: deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
+    readonly property int meterX: boardWidth + Theme.fieldGap
     readonly property var rows: ["A", "B", "C", "D", "E"]
     readonly property int columns: controller.boardColumns // 8, 10 oder 12 (+/- in der Werkzeugleiste)
     readonly property int slots: 16
@@ -23,7 +28,7 @@ Item {
     readonly property int boardWidth: columns * Theme.fieldWidth + (columns - 1) * Theme.fieldGap
     readonly property int moduleY: boardY + rows.length * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
     readonly property var allAnchors: {
-        let a = deskNames.slice()
+        let a = deskNames.concat(meterNames)
         for (let r = 0; r < rows.length; ++r)
             for (let c = 1; c <= columns; ++c) a.push(rows[r] + c)
         for (let m = 1; m <= slots; ++m) a.push("M:" + m)
@@ -34,12 +39,17 @@ Item {
     function isBoardField(name) { return /^[A-E](1[0-2]|[1-9])$/.test(name) }
 
     function anchorSize(name) {
-        if (deskNames.indexOf(name) >= 0) return Qt.size(Theme.deskFieldWidth, Theme.fieldHeight)
+        if (deskNames.indexOf(name) >= 0 || meterNames.indexOf(name) >= 0)
+            return Qt.size(Theme.deskFieldWidth, Theme.fieldHeight)
         if (name.startsWith("M:")) return Qt.size(Theme.slotWidth, Theme.fieldHeight)
         return Qt.size(Theme.fieldWidth, Theme.fieldHeight)
     }
 
     function anchorPoint(name) {
+        const m = meterNames.indexOf(name)
+        if (m >= 0)
+            return Qt.point(meterX + Theme.meterAreaWidth / 2,
+                            boardY + (m + 1) * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldHeight / 2)
         let i = deskNames.indexOf(name)
         if (i >= 0)
             return Qt.point(i * (Theme.deskFieldWidth + Theme.deskFieldGap) + Theme.deskFieldWidth / 2,
@@ -55,7 +65,9 @@ Item {
     }
 
     // Mittelpunkt eines Stecklochs (0 links ... 4 rechts); Felder mit einem Loch: Feldmitte
-    function socketPitch(name) { return deskNames.indexOf(name) >= 0 ? Theme.deskSocketPitch : Theme.socketPitch }
+    function socketPitch(name) {
+        return deskNames.indexOf(name) >= 0 || meterNames.indexOf(name) >= 0 ? Theme.deskSocketPitch : Theme.socketPitch
+    }
     function socketPoint(name, index) {
         const c = anchorPoint(name)
         if (name.startsWith("M:") || index === undefined) return c
@@ -84,10 +96,10 @@ Item {
         {name: "p1", symbol: "P1", first: 2, last: 4},
         {name: "p2", symbol: "P2", first: 5, last: 7},
         {name: "schalter", symbol: "S", first: 8, last: 9},
-        {name: "lautsprecher", symbol: "LS", first: 10, last: 11},
-        {name: "messgeraet", symbol: "V A Ω", first: 12, last: 14}
+        {name: "lautsprecher", symbol: "LS", first: 10, last: 11}
     ]
     function inHighlightedGroup(name) {
+        if (meterNames.indexOf(name) >= 0) return highlightGroup === "messgeraet"
         const i = deskNames.indexOf(name)
         for (let g = 0; g < groups.length; ++g)
             if (groups[g].name === highlightGroup && i >= groups[g].first && i <= groups[g].last) return true
@@ -119,6 +131,97 @@ Item {
         anchors { left: parent.left; right: parent.right; top: parent.top }
         height: Theme.control + 16
         color: Theme.desk
+
+        // Oben rechts wie in Visual Technic Studio: Anzeigesprache (runde Flagge) und Info
+        Row {
+            anchors.right: parent.right
+            anchors.rightMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 6
+
+            ToolButton {
+                id: languageButton
+                objectName: "languageButton"
+                visible: lab.languageService !== null
+                width: Theme.control; height: Theme.control
+                onClicked: languageMenu.open()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Anzeigesprache wählen")
+                Accessible.name: ToolTip.text
+                background: Rectangle { // wie VTS: ohne Flaeche, nur Hervorhebung beim Zeigen/Druecken
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+                }
+                contentItem: Item {
+                    Image {
+                        anchors.centerIn: parent
+                        width: 32; height: 32
+                        sourceSize: Qt.size(64, 64)
+                        source: lab.languageService ? "qrc:/flags/" + lab.languageService.language + ".svg" : ""
+                    }
+                }
+                Menu {
+                    id: languageMenu
+                    objectName: "languageMenu"
+                    y: parent.height
+                    x: parent.width - width
+                    Repeater {
+                        model: lab.languageService ? lab.languageService.languages : []
+                        MenuItem {
+                            id: langItem
+                            required property var modelData
+                            objectName: "language_" + modelData.code
+                            height: Theme.control
+                            enabled: modelData.available
+                            checkable: true
+                            checked: lab.languageService && lab.languageService.language === modelData.code
+                            // Flagge nie allein: Kuerzel und Eigenname; LU folgt (grau)
+                            text: modelData.short + "  " + modelData.name + (modelData.available ? "" : "  – " + qsTr("folgt"))
+                            contentItem: Row {
+                                spacing: 10
+                                leftPadding: 28
+                                Image {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 24; height: 24
+                                    sourceSize: Qt.size(48, 48)
+                                    source: "qrc:/flags/" + langItem.modelData.code + ".svg"
+                                    opacity: langItem.enabled ? 1 : 0.35
+                                }
+                                Label {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: langItem.text
+                                    font.pixelSize: 15
+                                    color: langItem.enabled ? "#1E2B38" : "#9AA3AD"
+                                }
+                            }
+                            onTriggered: lab.languageService.setLanguage(modelData.code)
+                        }
+                    }
+                }
+            }
+            ToolButton {
+                objectName: "infoButton"
+                width: Theme.control; height: Theme.control
+                onClicked: infoDialog.open()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Info")
+                Accessible.name: qsTr("Info")
+                background: Rectangle { // wie VTS: ohne Flaeche, nur Hervorhebung beim Zeigen/Druecken
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+                }
+                contentItem: Item {
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: 30; height: 30; radius: 15
+                        color: "transparent"
+                        border.color: "white"
+                        border.width: 2
+                        Label { anchors.centerIn: parent; text: "i"; color: "white"; font.pixelSize: 18; font.bold: true; font.italic: true }
+                    }
+                }
+            }
+        }
 
         Row {
             anchors.verticalCenter: parent.verticalCenter
@@ -250,7 +353,8 @@ Item {
                     }
                 }
             }
-            Label {
+            Label { // Entwicklerhilfe (VOLTA_SHOW_TIME=1): Simulationszeit, Echtzeitpruefung
+                visible: lab.controller.showSimTime
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Zeit %1 s").arg(lab.controller.simTime.toLocaleString(Qt.locale(), "f", 1))
                 color: Theme.solderAmber
@@ -264,7 +368,7 @@ Item {
         objectName: "experimentPanel"
         controller: lab.controller
         anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
-        width: lab.controller.phase > 0 ? 340 : 0
+        width: lab.controller.phase > 0 ? (collapsed ? Theme.control + 8 : 340) : 0
         visible: width > 0
     }
 
@@ -299,7 +403,7 @@ Item {
             objectName: "canvas"
             x: Theme.margin
             y: Theme.margin
-            width: Math.max(lab.boardWidth, lab.deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap))
+            width: Math.max(lab.meterX + Theme.meterAreaWidth, lab.deskStripWidth)
             height: lab.moduleY + Theme.fieldHeight
             // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
             transformOrigin: Item.TopLeft
@@ -327,6 +431,33 @@ Item {
                     toX: lab.deskX(modelData.last) + Theme.deskFieldWidth / 2 - 4
                     symbol: modelData.symbol
                     onTapped: lab.highlightGroup = lab.highlightGroup === modelData.name ? "" : modelData.name
+                }
+            }
+
+            // Messgeraet: Rahmen mit Titel um die drei Buchsen (Anzeige und Drehschalter folgen in Schritt B)
+            Rectangle {
+                objectName: "meterArea"
+                x: lab.meterX
+                y: lab.boardY - 4
+                width: Theme.meterAreaWidth
+                height: 4 * (Theme.fieldHeight + Theme.fieldGap) + 8 - Theme.fieldGap
+                radius: 10
+                color: "#E4E8EE"
+                border.color: "#9AA6B4"
+                GroupLine {
+                    y: 10
+                    fromX: 8
+                    toX: Theme.meterAreaWidth - 8
+                    symbol: "V A Ω"
+                    onTapped: lab.highlightGroup = lab.highlightGroup === "messgeraet" ? "" : "messgeraet"
+                }
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: 38
+                    text: qsTr("Messgerät")
+                    font.pixelSize: 13
+                    font.bold: true
+                    color: Theme.navy
                 }
             }
 
@@ -596,6 +727,12 @@ Item {
             lab.selectedPart = ""
             lab.selectedWire = ""
         }
+    }
+
+    InfoDialog {
+        id: infoDialog
+        objectName: "infoDialog"
+        controller: lab.controller
     }
 
     Toast {

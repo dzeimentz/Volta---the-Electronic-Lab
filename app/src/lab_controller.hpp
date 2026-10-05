@@ -42,11 +42,12 @@ class LabController : public QObject {
     Q_PROPERTY(double pot2 READ pot2 WRITE setPot2 NOTIFY deskChanged)
     Q_PROPERTY(bool deskSwitch READ deskSwitch WRITE setDeskSwitch NOTIFY deskChanged)
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
+    Q_PROPERTY(bool showSimTime READ showSimTime CONSTANT) // Entwicklerhilfe VOLTA_SHOW_TIME=1
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
     Q_PROPERTY(double realtimeRatio READ realtimeRatio NOTIFY stateChanged)
     Q_PROPERTY(double batteryVolt READ batteryVolt NOTIFY deskChanged)
     // Gefuehrtes Experiment (Phase 1: Frage -> Aufbau -> Erfolg)
-    Q_PROPERTY(QVariantList experiments READ experiments CONSTANT)
+    Q_PROPERTY(QVariantList experiments READ experiments NOTIFY experimentChanged)
     Q_PROPERTY(QString experimentId READ experimentId NOTIFY experimentChanged)
     Q_PROPERTY(int phase READ phase NOTIFY flowChanged) // 0 freies Labor, 1 Frage, 2 Aufbau, 3 Erfolg
     Q_PROPERTY(bool destructive READ destructive NOTIFY experimentChanged)
@@ -89,6 +90,7 @@ public:
     void setPot2(double v) { setPot(2, v); }
     bool deskSwitch() const { return m_session->board().desk.switchClosed; }
     double simTime() const;
+    bool showSimTime() const { return qEnvironmentVariableIntValue("VOLTA_SHOW_TIME") == 1; }
     double timeScale() const { return m_timeScale; }
     void setTimeScale(double scale);
     double realtimeRatio() const;
@@ -99,6 +101,10 @@ public:
     // Gefuehrtes Experiment: leere Grundplatte, Pultstellung der Vorlage, Ablauf beginnt mit der Frage
     Q_INVOKABLE bool startExperiment(const QString& id);
     Q_INVOKABLE void startFreeLab();
+    // Sprache der Inhalte (Experimenttexte, Titel); Oberflaeche: LanguageService
+    Q_INVOKABLE void setContentLanguage(const QString& code);
+    // Programminfo fuer das Info-Fenster: name, version, qtVersion, compiler, platform, hasLogo
+    Q_INVOKABLE QVariantMap appInfo() const;
     Q_INVOKABLE void chooseGuess(int index);
     Q_INVOKABLE void nextHint();
     Q_INVOKABLE bool showTemplate(); // Musteraufbau (Befehl, rueckgaengig machbar) - erst nach der Loesungshilfe
@@ -165,6 +171,7 @@ private:
     void onFrame();
     bool result(bool ok);
     QStringList texts(const QStringList& keys) const;
+    void rebuildExperimentList();
 
     services::ContentRepository m_repo;
     std::unique_ptr<model::LabSession> m_session;
@@ -173,6 +180,8 @@ private:
     model::ExperimentFlow m_flow;
     QStringList m_experimentIds;
     QVariantList m_experimentList;
+    QString m_contentLanguage = QStringLiteral("de");
+    bool m_freeLab = false;
     QStringList m_errors;
     QString m_lastEditError;
     double m_timeScale = 1.0;

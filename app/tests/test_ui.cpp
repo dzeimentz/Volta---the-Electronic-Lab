@@ -9,6 +9,7 @@
 #include <QtTest>
 
 #include "lab_controller.hpp"
+#include "language_service.hpp"
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 
@@ -20,6 +21,7 @@ class UiTest : public QObject {
 private:
     std::unique_ptr<LabController> m_lab;
     std::unique_ptr<QQmlApplicationEngine> m_engine;
+    std::unique_ptr<LanguageService> m_language;
     QQuickWindow* m_window = nullptr;
 
     // Repeater-Elemente haengen im visuellen Baum (childItems), nicht zwingend im QObject-Baum
@@ -101,6 +103,9 @@ private slots:
         m_lab = std::make_unique<LabController>(QStringLiteral(VOLTA_CONTENT_DIR));
         m_engine = std::make_unique<QQmlApplicationEngine>();
         m_engine->rootContext()->setContextProperty(QStringLiteral("labController"), m_lab.get());
+        m_language = std::make_unique<LanguageService>(m_engine.get(), false); // ohne Speichern
+        connect(m_language.get(), &LanguageService::languageChanged, m_lab.get(), &LabController::setContentLanguage);
+        m_engine->rootContext()->setContextProperty(QStringLiteral("volta_languageService"), m_language.get());
         m_engine->loadFromModule("Volta", "Main");
         QVERIFY(!m_engine->rootObjects().isEmpty());
         m_window = qobject_cast<QQuickWindow*>(m_engine->rootObjects().first());
@@ -274,8 +279,56 @@ private slots:
         QTRY_VERIFY(item(QStringLiteral("field_E12")));
     }
 
+    // Sprache oben rechts: Menue mit runden Flaggen, LU noch nicht waehlbar; Oberflaeche und Inhalte wechseln
+    void languageSwitch() {
+        m_lab->startExperiment(QStringLiteral("volta1.1.1"));
+        QQuickItem* button = item(QStringLiteral("languageButton"));
+        QVERIFY(button && button->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
+        QQuickItem* fr = nullptr;
+        QTRY_VERIFY((fr = item(QStringLiteral("language_fr"))) != nullptr && fr->isVisible());
+        QQuickItem* lb = item(QStringLiteral("language_lb"));
+        QVERIFY(lb && !lb->isEnabled()); // Luxemburgisch folgt
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(fr));
+        QTRY_COMPARE(m_language->language(), QStringLiteral("fr"));
+        QCOMPARE(m_lab->title(), QStringLiteral("Comment allumer une ampoule ?"));
+        QCOMPARE(QCoreApplication::translate("Lab", "Experimente"), QStringLiteral("Expériences"));
+        QCOMPARE(QLocale().decimalPoint(), QStringLiteral(","));
+        QVERIFY(!m_language->setLanguage(QStringLiteral("lb")));
+        QVERIFY(m_language->setLanguage(QStringLiteral("en")));
+        QCOMPARE(m_lab->title(), QStringLiteral("How do you make a bulb light up?"));
+        QCOMPARE(QLocale().decimalPoint(), QStringLiteral("."));
+        QVERIFY(m_language->setLanguage(QStringLiteral("de")));
+        QCOMPARE(QCoreApplication::translate("Lab", "Experimente"), QStringLiteral("Experimente"));
+        QCOMPARE(m_lab->title(), QStringLiteral("Wie bringst du ein Lämpchen zum Leuchten?"));
+    }
+
+    void infoDialogShowsPublisher() {
+        QObject* dlg = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("infoDialog"));
+        QVERIFY(dlg);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("infoButton"))));
+        QTRY_VERIFY(dlg->property("opened").toBool());
+        const QVariantMap info = m_lab->appInfo();
+        QVERIFY(!info.value(QStringLiteral("qtVersion")).toString().isEmpty());
+        QTest::keyClick(m_window, Qt::Key_Escape);
+        QTRY_VERIFY(!dlg->property("opened").toBool());
+    }
+
+    // Experimentfeld einklappen schafft Platz fuer die Grundplatte
+    void experimentPanelCollapses() {
+        QQuickItem* panel = item(QStringLiteral("experimentPanel"));
+        QVERIFY(panel);
+        const double wide = panel->width();
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("panelToggle"))));
+        QTRY_VERIFY(panel->width() < wide / 3);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("panelToggle"))));
+        QTRY_COMPARE(panel->width(), wide);
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
+        m_language.reset();
         m_lab.reset();
     }
 };

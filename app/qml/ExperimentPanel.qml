@@ -7,6 +7,7 @@ Rectangle {
     id: panel
     required property var controller
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Erfolg
+    property bool collapsed: false // eingeklappt: nur der Knopf zum Aufklappen (mehr Platz fuer die Grundplatte)
 
     color: "#FFFDF7"
     border.color: Theme.fieldOutline
@@ -59,10 +60,38 @@ Rectangle {
         panel.lastPhase = panel.phase
     }
 
+    // Ein-/Ausklappen (oben links im Feld)
+    ToolButton {
+        id: toggle
+        objectName: "panelToggle"
+        x: 4
+        y: 4
+        width: Theme.control; height: Theme.control
+        text: panel.collapsed ? "«" : "»"
+        font.pixelSize: 24
+        onClicked: panel.collapsed = !panel.collapsed
+        ToolTip.visible: hovered
+        ToolTip.text: panel.collapsed ? qsTr("Experiment aufklappen") : qsTr("Experiment einklappen")
+        Accessible.name: ToolTip.text
+    }
+    Label {
+        visible: panel.collapsed
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: toggle.y + toggle.height + 16 + width / 2
+        rotation: 90
+        transformOrigin: Item.Center
+        text: qsTr("Experiment")
+        font.pixelSize: 15
+        font.bold: true
+        color: Theme.navy
+    }
+
     ScrollView {
         id: scroll
+        visible: !panel.collapsed
         anchors.fill: parent
         anchors.margins: 16
+        anchors.topMargin: Theme.control + 8
         contentWidth: availableWidth
         clip: true
 

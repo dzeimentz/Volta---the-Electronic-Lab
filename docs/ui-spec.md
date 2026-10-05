@@ -18,6 +18,12 @@
 - Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.
 - Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen, Breite der Grundplatte »− 1–12 +« (8/10/12 Felder je Reihe), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
+- Oben rechts wie in Visual Technic Studio: **Anzeigesprache** (runde Flagge der aktuellen Sprache; Menue mit runder
+  Flagge, Kuerzel und Eigenname; LU bis Phase 6 grau mit »folgt«) und **Info** (i). Die Simulationszeit erscheint
+  nur als Entwicklerhilfe (`VOLTA_SHOW_TIME=1`).
+- Das Experimentfeld (rechts) laesst sich ein- und aufklappen (»/«), damit die Grundplatte mehr Platz bekommt.
+- Pultleiste kompakt (12 Felder); die Buchsen des Dreifach-Messgeraets (COM, V/Ω, A) sitzen im Messgeraete-Bereich
+  rechts neben der Grundplatte.
 
 ### Gesten und Eingaben
 | Aktion | Touch/Stift | Maus/Tastatur |
@@ -79,6 +85,10 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   JSON-Inhaltspakete, Systemsprachausgabe und eigene Tonaufnahmen.
 - Lizenzen (alle Open-Source-Bestandteile mit Texten), Datenschutzerklaerung (offline), Nutzungsbedingungen, Danksagung.
 - »Supportangaben kopieren« und vorbereitete Support-E-Mail (ohne Namen, Profile, Inhalte).
+- Stand Phase 1 (`InfoDialog.qml`): Produkt, Version, Plattformen (diese Ausgabe und vorgesehene), verwendete Technik
+  (Qt-Version zur Laufzeit, Uebersetzer), Hersteller mit Logo (`app/resources/brand/dc_logo.png`, sonst Schriftzug),
+  Name, E-Mail und Web als Text (keine Links ohne Elternschranke), Datenschutz. Offen: Anschrift, Lizenztexte,
+  Supportangaben.
 
 ## Elternschranke
 - Einfache Rechenaufgabe mit Zahlen in Worten; schuetzt Elternbereich, externe Links, Readme-Erwachsenenteil.

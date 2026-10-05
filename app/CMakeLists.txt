@@ -36,8 +36,7 @@ if(WIN32)
     set_target_properties(volta_app_rc PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)
     target_sources(volta_app PRIVATE $<TARGET_OBJECTS:volta_app_rc>)
 endif()
-qt_add_resources(volta_app "icons" PREFIX "/icons" BASE resources/icons FILES
-    resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png)
+
 set_target_properties(volta_app PROPERTIES
     OUTPUT_NAME "${VOLTA_EDITION}"
     WIN32_EXECUTABLE ON
@@ -74,22 +73,35 @@ qt_add_qml_module(volta_ui
         qml/ControlDesk.qml
         qml/GroupLine.qml
         qml/ExperimentPanel.qml
+        qml/InfoDialog.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp
+        src/language_service.hpp
+        src/language_service.cpp
 )
 target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2)
+# Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben
+qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE resources/icons FILES
+    resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png)
+# Runde Flaggen der Anzeigesprachen (Werkzeugleiste oben rechts)
+qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
+    resources/flags/de.svg resources/flags/fr.svg resources/flags/en.svg resources/flags/lb.svg)
+# Firmenlogo fuer das Info-Fenster (optional; ohne Datei zeigt Info den Schriftzug)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/brand/dc_logo.png")
+    qt_add_resources(volta_ui "brand" PREFIX "/brand" BASE resources/brand FILES resources/brand/dc_logo.png)
+endif()
 
 # Uebersetzungen: qt_add_lrelease statt qt_add_translations, weil Letzteres (Qt 6.11) an Leerzeichen im
 # Quellpfad scheitert ("VOLTA Elektronik-Labor"). lupdate bei Bedarf von Hand: lupdate app -ts i18n/volta_de.ts
-qt_add_lrelease(volta_app
+qt_add_lrelease(volta_ui
     TS_FILES
         ${PROJECT_SOURCE_DIR}/i18n/volta_de.ts
         ${PROJECT_SOURCE_DIR}/i18n/volta_fr.ts
         ${PROJECT_SOURCE_DIR}/i18n/volta_en.ts
         ${PROJECT_SOURCE_DIR}/i18n/volta_lb.ts
     QM_FILES_OUTPUT_VARIABLE volta_qm_files)
-qt_add_resources(volta_app "translations" PREFIX "/i18n" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES ${volta_qm_files})
+qt_add_resources(volta_ui "translations" PREFIX "/i18n" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES ${volta_qm_files})
 
 target_link_libraries(volta_app PRIVATE
     volta_ui volta_uiplugin

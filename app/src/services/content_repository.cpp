@@ -303,10 +303,16 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
 }
 
 bool ContentRepository::loadTexts(const QString& band, const QString& language) {
+    // Deutsch ist Quellsprache und vollstaendig (docs/i18n.md); fehlende Uebersetzungen fallen darauf zurueck
+    QJsonObject de;
+    if (!readJson(QStringLiteral("%1/i18n/de.json").arg(band), de)) return false;
+    m_texts.clear();
+    for (auto it = de.begin(); it != de.end(); ++it) m_texts.insert(it.key(), it.value().toString());
+    if (language == QLatin1String("de")) return true;
     QJsonObject o;
     if (!readJson(QStringLiteral("%1/i18n/%2.json").arg(band, language), o)) return false;
-    m_texts.clear();
-    for (auto it = o.begin(); it != o.end(); ++it) m_texts.insert(it.key(), it.value().toString());
+    for (auto it = o.begin(); it != o.end(); ++it)
+        if (!it.value().toString().isEmpty()) m_texts.insert(it.key(), it.value().toString());
     return true;
 }
 

@@ -28,7 +28,8 @@ Rectangle {
             objectName: "cellsBox"
             width: 96
             height: Theme.control - 6
-            model: ["3 V", "4,5 V", "9 V"]
+            // Zahlenformat der Anzeigesprache (4,5 V / 4.5 V); Neuaufbau bei Sprachwechsel ueber qsTr-Bindung
+            model: [qsTr("%1 V").arg(3), qsTr("%1 V").arg((4.5).toLocaleString(Qt.locale(), "f", 1)), qsTr("%1 V").arg(9)]
             currentIndex: desk.controller.cells === 2 ? 0 : (desk.controller.cells === 3 ? 1 : 2)
             onActivated: (index) => { desk.controller.cells = [2, 3, 6][index] }
             Accessible.name: qsTr("Batteriespannung")
