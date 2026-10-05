@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64">
+  <!-- Werkzeugkasten (vereinfacht nach Vorlage des Auftraggebers): Koffer mit Griff, gekreuzter
+       Schraubenschluessel und Schraubendreher; kraeftige Linien fuer kleine Groessen -->
+  <g fill="none" stroke="#0A2540" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="26" height="17" rx="2"/>
+    <path d="M11 11 V8 Q11 6 13 6 H19 Q21 6 21 8 V11"/>
+    <path d="M3 16 H8 M24 16 H29"/>
+    <!-- Schraubenschluessel: Stiel nach unten links, offenes Maul oben rechts -->
+    <path d="M11.8 25.2 L18 19"/>
+    <path d="M17 17.6 A3.3 3.3 0 1 0 20.4 14.2" stroke-width="2"/>
+    <!-- Schraubendreher: Klinge oben links, kraeftiger Griff unten rechts -->
+    <path d="M12.4 15.4 L16.2 19.2" stroke-width="1.7"/>
+    <path d="M16.6 19.6 L20.6 23.6" stroke-width="3.6"/>
+  </g>
+</svg>

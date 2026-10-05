@@ -67,7 +67,7 @@ Drawer {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 28; height: 28
                 sourceSize: Qt.size(64, 64)
-                source: "qrc:/icons/toolbox_dark_64.png"
+                source: "qrc:/icons/toolbox_dark.svg"
             }
             Label {
                 width: parent.width - closeButton.width - 36

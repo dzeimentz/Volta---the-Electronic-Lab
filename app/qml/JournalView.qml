@@ -27,8 +27,14 @@ Rectangle {
             ToolButton {
                 objectName: "journalBack"
                 width: Theme.control; height: Theme.control
-                text: "⌂"
-                font.pixelSize: 20
+                contentItem: Item {
+                    Image {
+                        anchors.centerIn: parent
+                        width: 24; height: 24
+                        sourceSize: Qt.size(48, 48)
+                        source: "qrc:/icons/home_light.svg"
+                    }
+                }
                 palette.buttonText: "white"
                 onClicked: journal.backRequested()
                 Accessible.name: qsTr("Startseite")

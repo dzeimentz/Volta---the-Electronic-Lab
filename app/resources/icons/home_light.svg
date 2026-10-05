@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64">
+  <!-- Startseite: hell gefuelltes Haus mit Tuer (gut erkennbar auf dunkler Leiste) -->
+  <path d="M16 3.5 L2.5 15.5 Q2 16.2 2.8 16.4 H6.5 V27.5 Q6.5 28.5 7.5 28.5 H13 V20.5 H19 V28.5 H24.5 Q25.5 28.5 25.5 27.5 V16.4 H29.2 Q30 16.2 29.5 15.5 Z"
+        fill="#FFFFFF" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round"/>
+</svg>

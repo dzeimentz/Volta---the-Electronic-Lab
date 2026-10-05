@@ -167,8 +167,14 @@ Item {
             ToolButton {
                 objectName: "homeButton"
                 width: Theme.control; height: Theme.control
-                text: "⌂"
-                font.pixelSize: 20
+                contentItem: Item {
+                    Image {
+                        anchors.centerIn: parent
+                        width: 24; height: 24
+                        sourceSize: Qt.size(48, 48)
+                        source: "qrc:/icons/home_light.svg"
+                    }
+                }
                 palette.buttonText: "white"
                 onClicked: lab.homeRequested()
                 ToolTip.visible: hovered
@@ -317,7 +323,7 @@ Item {
                         anchors.centerIn: parent
                         width: 26; height: 26
                         sourceSize: Qt.size(64, 64)
-                        source: "qrc:/icons/toolbox_light_64.png"
+                        source: "qrc:/icons/toolbox_light.svg"
                         smooth: true
                     }
                 }
