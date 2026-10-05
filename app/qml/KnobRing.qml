@@ -67,7 +67,7 @@ Item {
         anchors.verticalCenterOffset: 40
         text: knob.label
         color: "white"
-        font.pixelSize: 13
+        font.pixelSize: Math.round((13) * Theme.fontScale)
         font.bold: true
     }
 

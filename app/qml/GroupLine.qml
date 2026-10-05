@@ -30,7 +30,7 @@ Item {
             id: symbolText
             anchors.centerIn: parent
             text: line.symbol
-            font.pixelSize: 13
+            font.pixelSize: Math.round((13) * Theme.fontScale)
             font.bold: true
             color: "#5A5A5A"
         }

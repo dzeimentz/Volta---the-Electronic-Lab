@@ -16,7 +16,7 @@ Rectangle {
         id: heading
         text: qsTr("Bauteilfach")
         color: "white"
-        font.pixelSize: 16
+        font.pixelSize: Math.round((16) * Theme.fontScale)
         font.bold: true
         anchors { top: parent.top; left: parent.left; margins: 12 }
     }
@@ -55,7 +55,7 @@ Rectangle {
                     height: 26
                     text: Texts.partName(entry.modelData.type)
                     color: Theme.navy
-                    font.pixelSize: 12
+                    font.pixelSize: Math.round((12) * Theme.fontScale)
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter

@@ -20,6 +20,9 @@ ApplicationWindow {
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
     Binding { target: labController; property: "unlockAll"; value: root.settings ? root.settings.unlockAll : false }
+    // Schriftgroesse in drei Stufen (A-/A+ oben rechts)
+    Binding { target: Theme; property: "fontScale"; value: root.settings ? [0.8, 0.9, 1.0][root.settings.fontLevel] : 1.0 }
+    font.pixelSize: Math.round(15 * Theme.fontScale)
 
     Home {
         objectName: "home"

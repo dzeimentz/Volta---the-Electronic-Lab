@@ -32,6 +32,7 @@ QtObject {
     // Einstellungen der Darstellung (von Lab.qml aus AppSettings gebunden)
     property bool reduceMotion: false   // Animationen reduzieren (docs/ui-spec.md)
     property bool showCurrentFlow: true // Stromflusspunkte auf den Leitungen
+    property real fontScale: 1.0        // Schriftgroesse (Einstellung A-/A+): 0,8 / 0,9 / 1,0
 
     // Masse in dp (Qt Quick: geraeteunabhaengige Pixel)
     readonly property int fieldWidth: 72

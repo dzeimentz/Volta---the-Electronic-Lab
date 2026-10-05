@@ -80,7 +80,7 @@ Item {
         Text {
             anchors.centerIn: parent
             text: "🔈"
-            font.pixelSize: 24
+            font.pixelSize: Math.round((24) * Theme.fontScale)
             opacity: speaker.destroyed ? 0.4 : 1
         }
     }

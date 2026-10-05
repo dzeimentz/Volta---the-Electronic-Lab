@@ -23,7 +23,7 @@ Rectangle {
         x: desk.batteryX - width / 2
         anchors.verticalCenter: parent.verticalCenter
         spacing: 4
-        Label { text: qsTr("Batterie"); color: "white"; font.pixelSize: 13; font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        Label { text: qsTr("Batterie"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
         ComboBox {
             objectName: "cellsBox"
             width: 96
@@ -48,7 +48,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text: desk.controller.mainSwitch ? qsTr("Ein") : qsTr("Aus")
                 color: "white"
-                font.pixelSize: 14
+                font.pixelSize: Math.round((14) * Theme.fontScale)
                 font.bold: true
             }
         }
@@ -78,7 +78,7 @@ Rectangle {
         x: desk.switchX - width / 2
         anchors.verticalCenter: parent.verticalCenter
         spacing: 6
-        Label { text: "S"; color: "white"; font.pixelSize: 13; font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        Label { text: "S"; color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
         Switch {
             objectName: "deskSwitch"
             checked: desk.controller.deskSwitch
@@ -96,6 +96,6 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             controller: desk.controller
         }
-        Label { text: qsTr("Lautsprecher"); color: "white"; font.pixelSize: 12; anchors.horizontalCenter: parent.horizontalCenter }
+        Label { text: qsTr("Lautsprecher"); color: "white"; font.pixelSize: Math.round((12) * Theme.fontScale); anchors.horizontalCenter: parent.horizontalCenter }
     }
 }

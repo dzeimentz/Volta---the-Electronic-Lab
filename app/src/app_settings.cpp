@@ -1,6 +1,8 @@
 #include "app_settings.hpp"
 
 #include <QDir>
+
+#include <algorithm>
 #include <QSettings>
 #include <QStandardPaths>
 
@@ -21,6 +23,7 @@ AppSettings::AppSettings(bool persist, QObject* parent) : QObject(parent), m_per
     m_reduceMotion = s.value(QStringLiteral("anzeige/animationen_reduziert"), false).toBool();
     m_showSplash = s.value(QStringLiteral("anzeige/startbildschirm"), true).toBool();
     m_unlockAll = s.value(QStringLiteral("lernpfad/alles_frei"), false).toBool();
+    m_fontLevel = std::clamp(s.value(QStringLiteral("anzeige/schriftgroesse"), 2).toInt(), 0, 2);
 }
 
 bool AppSettings::splashAvailable() {
@@ -55,6 +58,17 @@ void AppSettings::setShowSplash(bool on) {
     if (on == m_showSplash) return;
     m_showSplash = on;
     save(QStringLiteral("anzeige/startbildschirm"), on);
+    emit changed();
+}
+
+void AppSettings::setFontLevel(int level) {
+    level = std::clamp(level, 0, 2);
+    if (level == m_fontLevel) return;
+    m_fontLevel = level;
+    if (m_persist) {
+        QSettings s(settingsFile(), QSettings::IniFormat);
+        s.setValue(QStringLiteral("anzeige/schriftgroesse"), level);
+    }
     emit changed();
 }
 

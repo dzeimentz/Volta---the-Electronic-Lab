@@ -11,6 +11,39 @@ Row {
     signal infoRequested()
     spacing: 6
 
+    // Schriftgroesse: A- kleiner, A+ groesser (drei Stufen; groesste ist die Vorgabe)
+    Row {
+        visible: bar.settings !== null
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 0
+        Repeater {
+            model: [{label: "A−", step: -1, name: "fontSmaller"}, {label: "A+", step: 1, name: "fontLarger"}]
+            ToolButton {
+                required property var modelData
+                objectName: modelData.name
+                width: Theme.control; height: Theme.control
+                enabled: bar.settings !== null && (modelData.step < 0 ? bar.settings.fontLevel > 0 : bar.settings.fontLevel < 2)
+                onClicked: bar.settings.fontLevel = bar.settings.fontLevel + modelData.step
+                ToolTip.visible: hovered
+                ToolTip.text: modelData.step < 0 ? qsTr("Schrift kleiner") : qsTr("Schrift größer")
+                Accessible.name: ToolTip.text
+                contentItem: Label {
+                    text: parent.modelData.label
+                    color: parent.enabled ? "white" : "#6F8399"
+                    // feste Groesse: die Knoepfe selbst wachsen nicht mit
+                    font.pixelSize: parent.modelData.step < 0 ? 15 : 19
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+                }
+            }
+        }
+    }
+
     ToolButton {
         id: languageButton
         objectName: "languageButton"
@@ -60,7 +93,7 @@ Row {
                         }
                         Label {
                             text: langItem.text
-                            font.pixelSize: 15
+                            font.pixelSize: Math.round((15) * Theme.fontScale)
                             color: langItem.enabled ? "#1E2B38" : "#9AA3AD"
                         }
                     }
@@ -87,7 +120,7 @@ Row {
                 color: "transparent"
                 border.color: "white"
                 border.width: 2
-                Label { anchors.centerIn: parent; text: "i"; color: "white"; font.pixelSize: 18; font.bold: true; font.italic: true }
+                Label { anchors.centerIn: parent; text: "i"; color: "white"; font.pixelSize: Math.round((18) * Theme.fontScale); font.bold: true; font.italic: true }
             }
         }
     }
@@ -96,7 +129,7 @@ Row {
         objectName: "settingsButton"
         width: Theme.control; height: Theme.control
         text: "☰"
-        font.pixelSize: 24
+        font.pixelSize: Math.round((24) * Theme.fontScale)
         palette.buttonText: "white"
         onClicked: settingsMenu.open()
         ToolTip.visible: hovered

@@ -42,7 +42,7 @@ Rectangle {
         anchors.topMargin: 3
         anchors.horizontalCenter: parent.horizontalCenter
         text: root.label
-        font.pixelSize: 13
+        font.pixelSize: Math.round((13) * Theme.fontScale)
         font.bold: true
         color: Theme.navy
     }

@@ -179,7 +179,7 @@ Item {
                 width: 4; height: kuppel.height - 6
                 color: Theme.navy
             }
-            Text { x: kuppel.x - 12; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: 14; font.bold: true; color: Theme.navy }
+            Text { x: kuppel.x - 12; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: Math.round((14) * Theme.fontScale); font.bold: true; color: Theme.navy }
         }
     }
 
@@ -243,7 +243,7 @@ Item {
                 color: "#B8BEC6"
                 border.color: "#5A6470"
                 border.width: 2
-                Text { anchors.centerIn: parent; text: "M"; font.pixelSize: 14; font.bold: true; color: Theme.navy }
+                Text { anchors.centerIn: parent; text: "M"; font.pixelSize: Math.round((14) * Theme.fontScale); font.bold: true; color: Theme.navy }
             }
             // Propeller: dreht mit der simulierten Drehzahl (level = omega / Leerlauf), Richtung nach Vorzeichen
             Item {
@@ -269,7 +269,7 @@ Item {
                 width: parent.height * 1.1; height: width; radius: width / 2
                 color: "#1E1E1E"
                 Rectangle { anchors.centerIn: parent; width: 6; height: 6; radius: 3; color: "#555555" }
-                Text { x: -12; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: 14; font.bold: true; color: Theme.navy }
+                Text { x: -12; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: Math.round((14) * Theme.fontScale); font.bold: true; color: Theme.navy }
             }
             // Schallwellen: sichtbar, auch wenn der Ton stumm geschaltet ist (Klassenmodus)
             Repeater {
@@ -329,7 +329,7 @@ Item {
                 visible: root.closed
                 anchors.bottom: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "🧲"; font.pixelSize: 14
+                text: "🧲"; font.pixelSize: Math.round((14) * Theme.fontScale)
             }
         }
     }
@@ -340,8 +340,8 @@ Item {
             Rectangle {
                 anchors.fill: parent; radius: 6
                 color: "#E9D7B0"; border.color: Theme.navy
-                Text { x: 6; anchors.verticalCenter: parent.verticalCenter; text: "A"; font.pixelSize: 11; color: Theme.navy }
-                Text { anchors.right: parent.right; anchors.rightMargin: 6; anchors.verticalCenter: parent.verticalCenter; text: "B"; font.pixelSize: 11; color: Theme.navy }
+                Text { x: 6; anchors.verticalCenter: parent.verticalCenter; text: "A"; font.pixelSize: Math.round((11) * Theme.fontScale); color: Theme.navy }
+                Text { anchors.right: parent.right; anchors.rightMargin: 6; anchors.verticalCenter: parent.verticalCenter; text: "B"; font.pixelSize: Math.round((11) * Theme.fontScale); color: Theme.navy }
                 Rectangle { // Hebel zeigt zur geschlossenen Seite
                     anchors.centerIn: parent
                     width: parent.width * 0.4; height: 6; radius: 3
@@ -371,8 +371,8 @@ Item {
                 color: "#2C62C9"
                 // Minus-Streifen rechts (zweiter Anschluss), mit Zeichen
                 Rectangle { anchors.right: parent.right; width: 10; height: parent.height; radius: 4; color: "#C9D6F0"
-                    Text { anchors.centerIn: parent; text: "−"; font.pixelSize: 12; font.bold: true; color: "#2C62C9" } }
-                Text { x: 4; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: 12; font.bold: true; color: "white" }
+                    Text { anchors.centerIn: parent; text: "−"; font.pixelSize: Math.round((12) * Theme.fontScale); font.bold: true; color: "#2C62C9" } }
+                Text { x: 4; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: Math.round((12) * Theme.fontScale); font.bold: true; color: "white" }
             }
         }
     }
@@ -410,7 +410,7 @@ Item {
                 width: 26; height: 22; radius: 11
                 color: "#1E1E1E"; border.color: "#000000"
                 Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: parent.height / 2; color: "#1E1E1E" }
-                Text { anchors.centerIn: parent; text: "T"; color: "#E0E0E0"; font.pixelSize: 11; font.bold: true }
+                Text { anchors.centerIn: parent; text: "T"; color: "#E0E0E0"; font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true }
             }
             // Fussbezeichnung (Farbe nie allein: Buchstaben)
             Repeater {
@@ -419,7 +419,7 @@ Item {
                     required property int index
                     required property string modelData
                     text: modelData
-                    font.pixelSize: 11; font.bold: true; color: "white"
+                    font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true; color: "white"
                     // neben dem Fuss, zur Platinenmitte hin (folgt der Drehung)
                     x: pcb.f[index].x + (pcb.f[index].x < pcb.width / 2 ? 7 : -7 - width)
                     y: pcb.f[index].y + (pcb.f[index].y < pcb.height / 2 ? 4 : -4 - height)

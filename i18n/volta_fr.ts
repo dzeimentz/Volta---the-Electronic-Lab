@@ -537,6 +537,14 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <source>Schrift kleiner</source>
+        <translation>Texte plus petit</translation>
+    </message>
+    <message>
+        <source>Schrift größer</source>
+        <translation>Texte plus grand</translation>
+    </message>
+    <message>
         <source>Anzeigesprache wählen</source>
         <translation>Choisir la langue</translation>
     </message>

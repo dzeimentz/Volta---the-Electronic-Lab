@@ -46,7 +46,10 @@ int main(int argc, char* argv[]) {
                      &volta::LabController::setContentLanguage);
     engine.rootContext()->setContextProperty(QStringLiteral("volta_languageService"), &language);
     // Einstellungen (Menue oben rechts), lokal gespeichert; Entwicklerhilfen aendern sie nicht
-    volta::AppSettings settings(demoLang.isEmpty());
+    // Entwicklerhilfe: VOLTA_DEMO_FONT=0|1|2 Schriftstufe (ohne Speichern)
+    const QString demoFont = qEnvironmentVariable("VOLTA_DEMO_FONT");
+    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty());
+    if (!demoFont.isEmpty()) settings.setFontLevel(demoFont.toInt());
     engine.rootContext()->setContextProperty(QStringLiteral("volta_settings"), &settings);
     // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux); abschaltbar in den Einstellungen
     // oder mit VOLTA_NO_SPLASH=1
@@ -56,6 +59,10 @@ int main(int argc, char* argv[]) {
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");
+    // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
+    for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS"})
+        if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
+            engine.rootObjects().first()->setProperty("inLab", true);
 
     // Entwicklerhilfe: VOLTA_SCREENSHOT=<datei.png> speichert nach 3 s ein Bild des Fensters und beendet die App
     // (Sichtpruefung ohne Bedienung). Optional VOLTA_SCREENSHOT_MAINSWITCH=1 schaltet vorher den Hauptschalter ein.
@@ -90,6 +97,7 @@ int main(int argc, char* argv[]) {
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {
         QTimer::singleShot(300, &lab, [&lab] {
+            lab.startExperiment(QStringLiteral("volta1.1.1"));
             lab.chooseGuess(1);
             while (lab.moreHints()) lab.nextHint();
             lab.showTemplate();

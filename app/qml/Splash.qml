@@ -32,14 +32,14 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             text: splash.app.name
             color: "white"
-            font.pixelSize: 34
+            font.pixelSize: Math.round((34) * Theme.fontScale)
             font.bold: true
         }
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Version %1").arg(splash.app.version)
             color: Theme.solderAmber
-            font.pixelSize: 16
+            font.pixelSize: Math.round((16) * Theme.fontScale)
         }
     }
 
@@ -64,7 +64,7 @@ Rectangle {
             anchors.centerIn: parent
             text: "DC SOFTWARE ENGINEERING"
             color: "#2E8BEA"
-            font.pixelSize: 20
+            font.pixelSize: Math.round((20) * Theme.fontScale)
             font.bold: true
         }
     }

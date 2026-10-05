@@ -34,7 +34,7 @@ Rectangle {
         y: 8
         text: qsTr("Messgerät")
         color: "white"
-        font.pixelSize: 14
+        font.pixelSize: Math.round((14) * Theme.fontScale)
         font.bold: true
     }
 
@@ -65,14 +65,14 @@ Rectangle {
                     : meter.state.overrange ? "OL"
                     : (meter.state.text || "")
                 font.family: "Consolas"
-                font.pixelSize: 34
+                font.pixelSize: Math.round((34) * Theme.fontScale)
                 font.bold: true
                 color: "#18221A"
             }
             Label {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: meter.state.fuseBlown || meter.state.foreignVoltage || meter.state.overrange ? "" : (meter.state.unit || "")
-                font.pixelSize: 16
+                font.pixelSize: Math.round((16) * Theme.fontScale)
                 font.bold: true
                 color: "#18221A"
             }
@@ -126,13 +126,13 @@ Rectangle {
                     required property int index
                     readonly property real a: (-50 + index * 50) * Math.PI / 180
                     text: dial.majorText(index)
-                    font.pixelSize: 11
+                    font.pixelSize: Math.round((11) * Theme.fontScale)
                     color: "#222222"
                     x: dial.cx + Math.sin(a) * (dial.r + 12) - width / 2
                     y: dial.cy - Math.cos(a) * (dial.r + 12) - height
                 }
             }
-            Label { objectName: "meterUnit"; x: 6; y: 4; text: dial.unit; font.pixelSize: 13; font.bold: true; color: "#222222" }
+            Label { objectName: "meterUnit"; x: 6; y: 4; text: dial.unit; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; color: "#222222" }
             Rectangle {
                 id: needle
                 objectName: "meterNeedle"
@@ -170,7 +170,7 @@ Rectangle {
             : (meter.analog && meter.state.overrange && meter.mode !== 2) ? qsTr("Zu viel für den Zeiger")
             : ""
         color: Theme.solderAmber
-        font.pixelSize: 12
+        font.pixelSize: Math.round((12) * Theme.fontScale)
         font.bold: true
     }
 
@@ -219,7 +219,7 @@ Rectangle {
                         anchors.centerIn: parent
                         text: selector.labels[index]
                         color: "white"
-                        font.pixelSize: 16
+                        font.pixelSize: Math.round((16) * Theme.fontScale)
                         font.bold: true
                     }
                 }
@@ -236,7 +236,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         y: selector.y + selector.height + 2
         spacing: 2
-        Label { anchors.verticalCenter: parent.verticalCenter; text: qsTr("digital"); color: "white"; font.pixelSize: 12 }
+        Label { anchors.verticalCenter: parent.verticalCenter; text: qsTr("digital"); color: "white"; font.pixelSize: Math.round((12) * Theme.fontScale) }
         Switch {
             objectName: "meterAnalog"
             checked: meter.controller.meterAnalog
@@ -247,7 +247,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("analog")
             color: "white"
-            font.pixelSize: 12
+            font.pixelSize: Math.round((12) * Theme.fontScale)
         }
     }
     Button {

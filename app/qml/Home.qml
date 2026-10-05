@@ -35,7 +35,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text: home.controller.appInfo().name
                 color: "white"
-                font.pixelSize: 20
+                font.pixelSize: Math.round((20) * Theme.fontScale)
                 font.bold: true
             }
         }
@@ -67,12 +67,12 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             x: 18
             spacing: 14
-            Label { anchors.verticalCenter: parent.verticalCenter; text: tile.icon; font.pixelSize: 38 }
+            Label { anchors.verticalCenter: parent.verticalCenter; text: tile.icon; font.pixelSize: Math.round((38) * Theme.fontScale) }
             Column {
                 anchors.verticalCenter: parent.verticalCenter
                 width: tile.width - 90
-                Label { text: tile.title; font.pixelSize: 20; font.bold: true; color: tile.available ? Theme.navy : "#6E6A60" }
-                Label { width: parent.width; text: tile.subtitle; wrapMode: Text.Wrap; font.pixelSize: 13; color: "#4A5866" }
+                Label { text: tile.title; font.pixelSize: Math.round((20) * Theme.fontScale); font.bold: true; color: tile.available ? Theme.navy : "#6E6A60" }
+                Label { width: parent.width; text: tile.subtitle; wrapMode: Text.Wrap; font.pixelSize: Math.round((13) * Theme.fontScale); color: "#4A5866" }
             }
         }
         TapHandler { id: tap; enabled: tile.available; onTapped: tile.activated() }
@@ -113,7 +113,7 @@ Rectangle {
 
             Label {
                 text: qsTr("Lernpfad")
-                font.pixelSize: 24
+                font.pixelSize: Math.round((24) * Theme.fontScale)
                 font.bold: true
                 color: Theme.navy
             }
@@ -149,7 +149,7 @@ Rectangle {
                                     // Schloss zusaetzlich zur Farbe (Farbe nie allein)
                                     text: stage.modelData.unlocked ? stage.modelData.number : "🔒"
                                     color: "white"
-                                    font.pixelSize: 20
+                                    font.pixelSize: Math.round((20) * Theme.fontScale)
                                     font.bold: true
                                 }
                             }
@@ -157,14 +157,14 @@ Rectangle {
                                 width: parent.width - 260
                                 Label {
                                     text: qsTr("Stufe %1: %2").arg(stage.modelData.number).arg(stage.modelData.title)
-                                    font.pixelSize: 18
+                                    font.pixelSize: Math.round((18) * Theme.fontScale)
                                     font.bold: true
                                     color: Theme.navy
                                 }
                                 Label {
                                     width: parent.width
                                     text: stage.modelData.question
-                                    font.pixelSize: 14
+                                    font.pixelSize: Math.round((14) * Theme.fontScale)
                                     font.italic: true
                                     color: "#4A5866"
                                     wrapMode: Text.Wrap
@@ -177,7 +177,7 @@ Rectangle {
                                 spacing: 4
                                 Label {
                                     text: qsTr("%1 von %2 geschafft").arg(stage.modelData.done).arg(stage.modelData.total)
-                                    font.pixelSize: 13
+                                    font.pixelSize: Math.round((13) * Theme.fontScale)
                                     color: "#4A5866"
                                 }
                                 Rectangle {
@@ -196,13 +196,13 @@ Rectangle {
                         Label {
                             visible: !stage.modelData.unlocked
                             text: qsTr("Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.").arg(stage.modelData.number - 1)
-                            font.pixelSize: 13
+                            font.pixelSize: Math.round((13) * Theme.fontScale)
                             color: "#6E6A60"
                         }
                         Label {
                             visible: stage.modelData.unlocked && stage.modelData.total === 0
                             text: qsTr("Experimente folgen.")
-                            font.pixelSize: 13
+                            font.pixelSize: Math.round((13) * Theme.fontScale)
                             color: "#6E6A60"
                         }
 
@@ -231,7 +231,7 @@ Rectangle {
                                         Label {
                                             width: parent.width
                                             text: card.modelData.title
-                                            font.pixelSize: 14
+                                            font.pixelSize: Math.round((14) * Theme.fontScale)
                                             font.bold: true
                                             color: Theme.navy
                                             wrapMode: Text.Wrap
@@ -241,7 +241,7 @@ Rectangle {
                                         Label {
                                             visible: card.modelData.destructive
                                             text: "⚠ " + qsTr("Nur in der App!")
-                                            font.pixelSize: 11
+                                            font.pixelSize: Math.round((11) * Theme.fontScale)
                                             color: "#8A3200"
                                         }
                                     }
@@ -251,7 +251,7 @@ Rectangle {
                                         anchors.rightMargin: 10
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: card.modelData.done ? "✓" : "›"
-                                        font.pixelSize: card.modelData.done ? 26 : 30
+                                        font.pixelSize: Math.round((card.modelData.done ? 26 : 30) * Theme.fontScale)
                                         font.bold: true
                                         color: card.modelData.done ? "#2E7D32" : Theme.accent
                                     }

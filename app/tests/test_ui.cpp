@@ -439,6 +439,24 @@ private slots:
         QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4")));
     }
 
+    // Schriftgroesse in drei Stufen ueber A- / A+ (Vorgabe: groesste)
+    void fontSizeButtons() {
+        QCOMPARE(m_settings->fontLevel(), 2);
+        QQuickItem* larger = item(QStringLiteral("fontLarger"));
+        QQuickItem* smaller = item(QStringLiteral("fontSmaller"));
+        QVERIFY(larger && smaller);
+        QVERIFY(!larger->isEnabled()); // schon am groessten
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(smaller));
+        QTRY_COMPARE(m_settings->fontLevel(), 1);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(smaller));
+        QTRY_COMPARE(m_settings->fontLevel(), 0);
+        QTRY_VERIFY(!smaller->isEnabled());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(larger));
+        QTRY_COMPARE(m_settings->fontLevel(), 1);
+        m_settings->setFontLevel(2);
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_language.reset();

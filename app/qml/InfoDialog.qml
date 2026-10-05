@@ -21,7 +21,7 @@ Popup {
 
     component Heading: Label {
         width: parent.width
-        font.pixelSize: 15
+        font.pixelSize: Math.round((15) * Theme.fontScale)
         font.bold: true
         color: Theme.navy
         topPadding: 6
@@ -29,7 +29,7 @@ Popup {
     component Line: Label {
         width: parent.width
         wrapMode: Text.Wrap
-        font.pixelSize: 14
+        font.pixelSize: Math.round((14) * Theme.fontScale)
         color: "#1E2B38"
     }
 
@@ -52,8 +52,8 @@ Popup {
             anchors.left: appIcon.right
             anchors.leftMargin: 14
             anchors.verticalCenter: parent.verticalCenter
-            Label { text: info.app.name; color: "white"; font.pixelSize: 18; font.bold: true }
-            Label { text: qsTr("Version %1").arg(info.app.version); color: Theme.solderAmber; font.pixelSize: 13 }
+            Label { text: info.app.name; color: "white"; font.pixelSize: Math.round((18) * Theme.fontScale); font.bold: true }
+            Label { text: qsTr("Version %1").arg(info.app.version); color: Theme.solderAmber; font.pixelSize: Math.round((13) * Theme.fontScale) }
         }
         ToolButton {
             objectName: "infoClose"
@@ -62,7 +62,7 @@ Popup {
             anchors.verticalCenter: parent.verticalCenter
             width: Theme.control; height: Theme.control
             text: "✕"
-            font.pixelSize: 20
+            font.pixelSize: Math.round((20) * Theme.fontScale)
             palette.buttonText: "white"
             onClicked: info.close()
             Accessible.name: qsTr("Schließen")
@@ -118,11 +118,11 @@ Popup {
                 color: "#14243A"
                 Column {
                     anchors.centerIn: parent
-                    Label { text: "DC SOFTWARE ENGINEERING"; color: "#2E8BEA"; font.pixelSize: 17; font.bold: true; font.letterSpacing: 1 }
+                    Label { text: "DC SOFTWARE ENGINEERING"; color: "#2E8BEA"; font.pixelSize: Math.round((17) * Theme.fontScale); font.bold: true; font.letterSpacing: 1 }
                     Label {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: "TECHNOLOGY. INNOVATION. SOLUTIONS."
-                        color: "#C9D3DE"; font.pixelSize: 9; font.letterSpacing: 1.5
+                        color: "#C9D3DE"; font.pixelSize: Math.round((9) * Theme.fontScale); font.letterSpacing: 1.5
                     }
                 }
             }

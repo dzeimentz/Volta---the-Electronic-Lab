@@ -15,14 +15,14 @@ Rectangle {
     component Heading: Label {
         width: parent.width
         wrapMode: Text.Wrap
-        font.pixelSize: 15
+        font.pixelSize: Math.round((15) * Theme.fontScale)
         font.bold: true
         color: Theme.navy
     }
     component Body: Label {
         width: parent.width
         wrapMode: Text.Wrap
-        font.pixelSize: 15
+        font.pixelSize: Math.round((15) * Theme.fontScale)
         lineHeight: 1.15
         color: "#1E2B38"
     }
@@ -39,7 +39,7 @@ Rectangle {
         contentItem: Label {
             text: parent.text
             wrapMode: Text.Wrap
-            font.pixelSize: 15
+            font.pixelSize: Math.round((15) * Theme.fontScale)
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
         }
@@ -68,7 +68,7 @@ Rectangle {
         y: 4
         width: Theme.control; height: Theme.control
         text: panel.collapsed ? "«" : "»"
-        font.pixelSize: 24
+        font.pixelSize: Math.round((24) * Theme.fontScale)
         onClicked: panel.collapsed = !panel.collapsed
         ToolTip.visible: hovered
         ToolTip.text: panel.collapsed ? qsTr("Experiment aufklappen") : qsTr("Experiment einklappen")
@@ -81,7 +81,7 @@ Rectangle {
         rotation: 90
         transformOrigin: Item.Center
         text: qsTr("Experiment")
-        font.pixelSize: 15
+        font.pixelSize: Math.round((15) * Theme.fontScale)
         font.bold: true
         color: Theme.navy
     }
@@ -101,7 +101,7 @@ Rectangle {
 
             Label {
                 text: panel.phase === 1 ? qsTr("Frage") : panel.phase === 2 ? qsTr("Aufbau") : qsTr("Geschafft!")
-                font.pixelSize: 22
+                font.pixelSize: Math.round((22) * Theme.fontScale)
                 font.bold: true
                 color: panel.phase === 3 ? "#2E7D32" : Theme.navy
                 // Haken zusaetzlich zur Farbe (Farbe nie allein)
@@ -109,7 +109,7 @@ Rectangle {
                 Label {
                     visible: panel.phase === 3
                     text: "✓"
-                    font.pixelSize: 24
+                    font.pixelSize: Math.round((24) * Theme.fontScale)
                     font.bold: true
                     color: "#2E7D32"
                     anchors.verticalCenter: parent.verticalCenter

@@ -24,7 +24,7 @@ Rectangle {
         id: label
         anchors.centerIn: parent
         color: "white"
-        font.pixelSize: 15
+        font.pixelSize: Math.round((15) * Theme.fontScale)
     }
 
     Timer {

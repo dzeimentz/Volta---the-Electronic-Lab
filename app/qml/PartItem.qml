@@ -117,7 +117,7 @@ Item {
                                             : root.partType === "gluehlampe" && root.value > 0
                                               ? " " + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
                                               : "")
-        font.pixelSize: 12
+        font.pixelSize: Math.round((12) * Theme.fontScale)
         color: Theme.navy
     }
     }

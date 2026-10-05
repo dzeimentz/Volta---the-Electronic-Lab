@@ -27,6 +27,8 @@
 - Links: **Experimentauswahl** als Aufklappfeld (»Freies Labor«, »Stufe n: Titel«); zeigt zugleich den Titel.
 - Ganz rechts: **Einstellungen** (☰): Stromfluss anzeigen, Animationen reduzieren, Startbildschirm zeigen (Desktop),
   Messgeraet anzeigen, Felder je Reihe, Info. Lokal gespeichert (`AppSettings`, `einstellungen.ini`).
+- Oben rechts, links vom Flaggensymbol: **Schriftgroesse** »A− / A+« in drei Stufen (80 / 90 / 100 %, Vorgabe 100 %),
+  gespeichert; Schaltzeichen bleiben Grafik.
 - Oben rechts wie in Visual Technic Studio: **Anzeigesprache** (runde Flagge der aktuellen Sprache; Menue mit runder
   Flagge, Kuerzel und Eigenname; LU bis Phase 6 grau mit »folgt«) und **Info** (i). Die Simulationszeit erscheint
   nur als Entwicklerhilfe (`VOLTA_SHOW_TIME=1`).

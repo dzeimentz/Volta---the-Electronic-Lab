@@ -166,7 +166,7 @@ Item {
                 objectName: "homeButton"
                 width: Theme.control; height: Theme.control
                 text: "⌂"
-                font.pixelSize: 26
+                font.pixelSize: Math.round((26) * Theme.fontScale)
                 palette.buttonText: "white"
                 onClicked: lab.homeRequested()
                 ToolTip.visible: hovered
@@ -182,7 +182,7 @@ Item {
                 id: experimentBox
                 objectName: "experimentBox"
                 anchors.verticalCenter: parent.verticalCenter
-                width: 380
+                width: 250 // laengere Titel werden gekuerzt; die Liste ist breiter
                 height: Theme.control
                 textRole: "text"
                 readonly property var entries: {
@@ -209,14 +209,14 @@ Item {
                     if (index === 0) lab.controller.startFreeLab()
                     else lab.controller.startExperiment(entries[index].id)
                 }
-                font.pixelSize: 16
+                font.pixelSize: Math.round((16) * Theme.fontScale)
                 font.bold: true
                 indicator: Label {
                     x: experimentBox.width - width - 12
                     anchors.verticalCenter: parent.verticalCenter
                     text: "▾"
                     color: "white"
-                    font.pixelSize: 18
+                    font.pixelSize: Math.round((18) * Theme.fontScale)
                 }
                 contentItem: Label {
                     leftPadding: 12
@@ -238,7 +238,7 @@ Item {
                     width: experimentBox.popup.width
                     height: Theme.control
                     text: modelData.text
-                    font.pixelSize: 15
+                    font.pixelSize: Math.round((15) * Theme.fontScale)
                     font.bold: index === experimentBox.currentIndex
                     highlighted: experimentBox.highlightedIndex === index
                 }
@@ -250,7 +250,7 @@ Item {
             ToolButton {
                 objectName: "undoButton"
                 text: "↶"
-                font.pixelSize: 24
+                font.pixelSize: Math.round((24) * Theme.fontScale)
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canUndo
                 onClicked: lab.controller.undo()
@@ -261,7 +261,7 @@ Item {
             ToolButton {
                 objectName: "redoButton"
                 text: "↷"
-                font.pixelSize: 24
+                font.pixelSize: Math.round((24) * Theme.fontScale)
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canRedo
                 onClicked: lab.controller.redo()
@@ -276,7 +276,7 @@ Item {
                 ToolButton {
                     objectName: "columnsMinus"
                     text: "−"
-                    font.pixelSize: 24
+                    font.pixelSize: Math.round((24) * Theme.fontScale)
                     width: Theme.control; height: Theme.control
                     enabled: lab.columns > 8
                     onClicked: lab.controller.setBoardColumns(lab.columns - 2)
@@ -290,14 +290,14 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     text: qsTr("1–%1").arg(lab.columns)
                     color: "white"
-                    font.pixelSize: 15
+                    font.pixelSize: Math.round((15) * Theme.fontScale)
                     font.bold: true
                     Accessible.name: qsTr("Felder je Reihe: %1").arg(lab.columns)
                 }
                 ToolButton {
                     objectName: "columnsPlus"
                     text: "+"
-                    font.pixelSize: 24
+                    font.pixelSize: Math.round((24) * Theme.fontScale)
                     width: Theme.control; height: Theme.control
                     enabled: lab.columns < 12
                     onClicked: lab.controller.setBoardColumns(lab.columns + 2)
@@ -320,7 +320,7 @@ Item {
                 contentItem: Label {
                     text: "V A Ω"
                     color: "white"
-                    font.pixelSize: 15
+                    font.pixelSize: Math.round((15) * Theme.fontScale)
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -358,7 +358,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Zeit %1 s").arg(lab.controller.simTime.toLocaleString(Qt.locale(), "f", 1))
                 color: Theme.solderAmber
-                font.pixelSize: 15
+                font.pixelSize: Math.round((15) * Theme.fontScale)
             }
         }
     }
@@ -610,7 +610,7 @@ Item {
                 color: Theme.solderAmber
                 opacity: 0.8
                 border.color: Theme.navy
-                Label { anchors.centerIn: parent; text: Texts.partName(lab.trayType); font.pixelSize: 10 }
+                Label { anchors.centerIn: parent; text: Texts.partName(lab.trayType); font.pixelSize: Math.round((10) * Theme.fontScale) }
             }
         }
 

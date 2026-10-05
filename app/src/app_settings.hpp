@@ -17,6 +17,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool showSplash READ showSplash WRITE setShowSplash NOTIFY changed)
     // Alle Bauteile und Stufen freigeben (spaeter hinter der Elternschranke, Phase 3)
     Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY changed)
+    // Schriftgroesse in drei Stufen: 0 klein (80 %), 1 mittel (90 %), 2 gross (100 %, Vorgabe)
+    Q_PROPERTY(int fontLevel READ fontLevel WRITE setFontLevel NOTIFY changed)
     Q_PROPERTY(bool splashAvailable READ splashAvailable CONSTANT) // nur Desktop-Ausgabe
 
 public:
@@ -31,6 +33,8 @@ public:
     static bool splashAvailable();
     bool unlockAll() const { return m_unlockAll; }
     void setUnlockAll(bool on);
+    int fontLevel() const { return m_fontLevel; }
+    void setFontLevel(int level);
 
 signals:
     void changed();
@@ -43,6 +47,7 @@ private:
     bool m_reduceMotion = false;
     bool m_showSplash = true;
     bool m_unlockAll = false;
+    int m_fontLevel = 2;
 };
 
 } // namespace volta
