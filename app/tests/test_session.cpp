@@ -8,8 +8,10 @@
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
+#include "services/journal_store.hpp"
 #include "services/progress_store.hpp"
 
+#include <QJsonArray>
 #include <QTemporaryDir>
 
 using namespace volta;
@@ -532,26 +534,68 @@ private slots:
     }
 
     void experimentFlow() {
+        using P = model::ExperimentFlow::Phase;
+        using C = model::ExperimentFlow::Comparison;
         model::ExperimentFlow f;
-        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::None);
+        QCOMPARE(f.phase(), P::None);
         QVERIFY(!f.reportSuccess());
-        f.start(3);
-        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::Question);
+        f.start(3, 2);
+        QCOMPARE(f.phase(), P::Question);
         QVERIFY(!f.nextHint());      // Hilfen erst beim Aufbau
         QVERIFY(!f.reportSuccess()); // Erfolg erst nach der Vermutung
         QVERIFY(f.chooseGuess(1));
         QCOMPARE(f.guess(), 1);
-        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::Build);
+        QCOMPARE(f.phase(), P::Build);
         QVERIFY(f.nextHint() && f.nextHint());
         QVERIFY(!f.solutionShown());
         QVERIFY(f.nextHint());
         QVERIFY(f.solutionShown());
         QVERIFY(!f.nextHint());
+        QVERIFY(!f.chooseObservation(0, true, false)); // erst nach dem Versuch
         QVERIFY(f.reportSuccess());
-        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::Success);
+        QCOMPARE(f.phase(), P::Observe);
         QVERIFY(!f.reportSuccess());
+        QVERIFY(!f.chooseObservation(2, true, false)); // nur angebotene Beobachtungen
+        QVERIFY(f.chooseObservation(0, false, false));
+        QCOMPARE(f.comparison(), C::Differs);
+        QCOMPARE(f.phase(), P::Explain);
+        // ohne Beobachtungsangebot direkt zur Erklaerung; offene Vermutung
+        f.start(1, 0);
+        QVERIFY(f.chooseGuess(0));
+        QVERIFY(f.reportSuccess());
+        QCOMPARE(f.phase(), P::Explain);
+        f.start(1, 2);
+        QVERIFY(f.chooseGuess(2) && f.reportSuccess());
+        QVERIFY(f.chooseObservation(1, false, true));
+        QCOMPARE(f.comparison(), C::Open);
         f.stop();
-        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::None);
+        QCOMPARE(f.phase(), P::None);
+    }
+
+    // Forscherheft: Vermutung, Beobachtung, Vergleich und Notizen bleiben erhalten
+    void journalStorePersists() {
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+        const QString file = dir.filePath(QStringLiteral("forscherheft.json"));
+        {
+            services::JournalStore j(file);
+            QVERIFY(j.setGuess(QStringLiteral("volta1.1.1"), QStringLiteral("Zwei Leitungen")));
+            QVERIFY(j.setObservation(QStringLiteral("volta1.1.1"), QStringLiteral("Es leuchtet"), QStringLiteral("passt")));
+            QVERIFY(j.addNote(QStringLiteral("volta1.1.1"), QStringLiteral("  Bei 3 V dunkler  ")));
+            QVERIFY(!j.addNote(QStringLiteral("volta1.1.1"), QStringLiteral("   "))); // leere Notiz nicht
+        }
+        services::JournalStore again(file);
+        const QJsonObject e = again.entry(QStringLiteral("volta1.1.1"));
+        QCOMPARE(e.value(QStringLiteral("vermutung")).toString(), QStringLiteral("Zwei Leitungen"));
+        QCOMPARE(e.value(QStringLiteral("vergleich")).toString(), QStringLiteral("passt"));
+        QCOMPARE(e.value(QStringLiteral("notizen")).toArray().size(), 1);
+        QCOMPARE(e.value(QStringLiteral("notizen")).toArray().at(0).toString(), QStringLiteral("Bei 3 V dunkler"));
+        // neue Vermutung: neuer Durchgang, Beobachtung offen, Notizen bleiben
+        QVERIFY(again.setGuess(QStringLiteral("volta1.1.1"), QStringLiteral("Eine Leitung")));
+        QVERIFY(!again.entry(QStringLiteral("volta1.1.1")).contains(QStringLiteral("beobachtung")));
+        QCOMPARE(again.entries().size(), 1);
+        QVERIFY(again.reset());
+        QVERIFY(services::JournalStore(file).entries().isEmpty());
     }
 };
 

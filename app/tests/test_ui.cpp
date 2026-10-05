@@ -104,7 +104,17 @@ private:
         QVERIFY(mainSwitch);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(mainSwitch));
         QTRY_VERIFY(board().desk.mainSwitch);
-        QTRY_COMPARE_WITH_TIMEOUT(m_lab->phase(), 3, 10000); // Haltedauer 2 s in Echtzeit
+        QTRY_COMPARE_WITH_TIMEOUT(m_lab->phase(), 3, 10000); // Haltedauer 2 s in Echtzeit; dann Beobachtung
+        clickInPanel(QStringLiteral("observation_0"));            // »mit zwei Leitungen hat es geleuchtet«
+        QTRY_COMPARE(m_lab->phase(), 4);
+        QCOMPARE(m_lab->comparison(), 1); // Vermutung »zwei Leitungen« passt
+        QVERIFY(m_lab->addNote(QStringLiteral("Bei 3 V leuchtet es schwaecher")));
+        const QVariantList journal = m_lab->journal();
+        QCOMPARE(journal.size(), 1);
+        const QVariantMap entry = journal.first().toMap();
+        QCOMPARE(entry.value(QStringLiteral("comparison")).toInt(), 1);
+        QVERIFY(!entry.value(QStringLiteral("guess")).toString().isEmpty());
+        QCOMPARE(entry.value(QStringLiteral("notes")).toStringList().size(), 1);
         clickInPanel(QStringLiteral("nextButton"));
         QTRY_COMPARE(m_lab->experimentId(), QStringLiteral("volta1.1.2"));
         QCOMPARE(m_lab->phase(), 1);
@@ -401,6 +411,19 @@ private slots:
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(flow));
         QTRY_VERIFY(!m_settings->showCurrentFlow());
         m_settings->setShowCurrentFlow(true);
+    }
+
+    // Forscherheft-Seite: Eintrag aus dem gefuehrten Experiment 1.1 (initTestCase) ist sichtbar
+    void journalPage() {
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("homeButton"))));
+        QTRY_VERIFY(item(QStringLiteral("home"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("tileJournal"))));
+        QTRY_VERIFY(item(QStringLiteral("journal"))->isVisible());
+        QTRY_VERIFY(item(QStringLiteral("journal_volta1.1.1")) != nullptr);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("journalBack"))));
+        QTRY_VERIFY(item(QStringLiteral("home"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("tileFreeLab"))));
+        QTRY_VERIFY(m_lab->freeLab());
     }
 
     // Startseite: zurueck aus dem Labor, freies Labor; Freischaltung der Stufe 2 nach Stufe 1

@@ -58,7 +58,7 @@ def collect_keys(exp: dict) -> set[str]:
     for k in ("titel_key", "frage_key", "erklaerung_key", "mehr_wissen_key", "jetzt_in_echt_key"):
         if isinstance(exp.get(k), str):
             keys.add(exp[k])
-    for k in ("vermutungen", "hilfen", "schritte", "weiterforschen"):
+    for k in ("vermutungen", "beobachtungen", "hilfen", "schritte", "weiterforschen"):
         for v in exp.get(k, []) or []:
             if isinstance(v, str):
                 keys.add(v)
@@ -211,6 +211,13 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
         if not ANCHOR.match(str(a)):
             rep.error(where, f"Spannungsanzeige an ungueltigem Feld '{a}'")
 
+    n_guess = len(exp.get("vermutungen", []) or [])
+    for k in ("vermutung_passt", "vermutung_offen"):
+        for i in exp.get(k, []) or []:
+            if not isinstance(i, int) or not 0 <= i < n_guess:
+                rep.error(where, f"{k}: Index {i} ausserhalb der Vermutungen")
+    if set(exp.get("vermutung_passt", []) or []) & set(exp.get("vermutung_offen", []) or []):
+        rep.error(where, "eine Vermutung kann nicht zugleich passen und offen sein")
     check_condition(exp.get("erfolg"), f"{where}:erfolg", part_ids, rep)
 
     keys = collect_keys(exp)

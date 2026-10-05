@@ -16,6 +16,17 @@
     "exp_1_1_v2",
     "exp_1_1_v3"
   ],
+  "beobachtungen": [
+    "exp_1_1_b1",
+    "exp_1_1_b2",
+    "exp_1_1_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
   "vorlage": {
     "pult": "bedienpult_1",
     "pult_stellung": {

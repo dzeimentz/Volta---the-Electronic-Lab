@@ -85,5 +85,17 @@
   "stufe_3_titel": "Messen und verstehen",
   "stufe_3_frage": "Wie viel Strom fließt eigentlich?",
   "stufe_4_titel": "Kleine Elektronik",
-  "stufe_4_frage": "Wie kann ein Strom einen anderen steuern?"
+  "stufe_4_frage": "Wie kann ein Strom einen anderen steuern?",
+  "exp_1_1_b1": "Mit einer Leitung blieb das Lämpchen dunkel, mit zwei Leitungen hat es geleuchtet.",
+  "exp_1_1_b2": "Das Lämpchen hat schon mit einer Leitung geleuchtet.",
+  "exp_1_1_b3": "Ich bin mir nicht sicher, was passiert ist.",
+  "exp_1_2_b1": "Der Summer hat nur gesummt, solange ich den Taster gedrückt habe.",
+  "exp_1_2_b2": "Der Summer hat die ganze Zeit gesummt.",
+  "exp_1_2_b3": "Der Summer blieb still.",
+  "exp_1_3_b1": "Der Motor lief weiter, ohne dass ich etwas gedrückt halten musste.",
+  "exp_1_3_b2": "Der Motor lief nur kurz.",
+  "exp_1_3_b3": "Der Motor hat sich nicht gedreht.",
+  "exp_2_4_b1": "Ohne Widerstand ging die Leuchtdiode kaputt, mit Widerstand hat sie geleuchtet.",
+  "exp_2_4_b2": "Die Leuchtdiode hat ohne Widerstand ganz normal geleuchtet.",
+  "exp_2_4_b3": "Die Leuchtdiode hat gar nicht geleuchtet."
 }

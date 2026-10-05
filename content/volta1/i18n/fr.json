@@ -85,5 +85,17 @@
   "stufe_3_titel": "Mesurer et comprendre",
   "stufe_3_frage": "Combien de courant circule vraiment ?",
   "stufe_4_titel": "Petite électronique",
-  "stufe_4_frage": "Comment un courant peut-il en commander un autre ?"
+  "stufe_4_frage": "Comment un courant peut-il en commander un autre ?",
+  "exp_1_1_b1": "Avec un fil, l'ampoule est restée éteinte ; avec deux fils, elle s'est allumée.",
+  "exp_1_1_b2": "L'ampoule s'est allumée dès le premier fil.",
+  "exp_1_1_b3": "Je ne suis pas sûr de ce qui s'est passé.",
+  "exp_1_2_b1": "Le buzzer n'a sonné que tant que j'appuyais sur le bouton.",
+  "exp_1_2_b2": "Le buzzer a sonné tout le temps.",
+  "exp_1_2_b3": "Le buzzer est resté silencieux.",
+  "exp_1_3_b1": "Le moteur a continué à tourner sans que je doive appuyer.",
+  "exp_1_3_b2": "Le moteur n'a tourné qu'un instant.",
+  "exp_1_3_b3": "Le moteur n'a pas tourné.",
+  "exp_2_4_b1": "Sans résistance, la LED a grillé ; avec la résistance, elle s'est allumée.",
+  "exp_2_4_b2": "La LED s'est allumée normalement sans résistance.",
+  "exp_2_4_b3": "La LED ne s'est pas allumée du tout."
 }

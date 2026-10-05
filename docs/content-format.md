@@ -64,6 +64,8 @@ content/
 | `id` | ja | `<band>.<stufe>.<nr>`, eindeutig |
 | `stufe` | ja | 0 (Auftakt) bis 4 in Volta 1 |
 | `zerstoerend` | ja | `true`, wenn im Ablauf ein Bauteil zerstoert wird -> Hinweis »Nur in der App!« |
+| `beobachtungen` | nein | Auswahl nach dem Versuch (2–5 Schluessel); ohne: direkt zur Erklaerung |
+| `vermutung_passt` / `vermutung_offen` | nein | Indizes der Vermutungen, die zum Ergebnis passen bzw. offen sind (»weiss nicht«); Vergleich ohne Wertung |
 | `bauteile_frei` | ja | Typen aus `catalog/bauteile.json` oder `leitung` |
 | `vorlage` | ja | Musteraufbau; dient Anzeige und Schritt-fuer-Schritt-Hilfe, **nicht** der Erfolgspruefung |
 | `erfolg` | ja | zustandsbasierte Bedingungen (siehe unten) |

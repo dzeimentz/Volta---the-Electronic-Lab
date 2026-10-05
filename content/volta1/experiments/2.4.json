@@ -6,30 +6,98 @@
   "titel_key": "exp_2_4_titel",
   "dauer_min": 12,
   "zerstoerend": true,
-  "bauteile_frei": ["led_rot", "widerstand", "leitung"],
+  "bauteile_frei": [
+    "led_rot",
+    "widerstand",
+    "leitung"
+  ],
   "frage_key": "exp_2_4_frage",
-  "vermutungen": ["exp_2_4_v1", "exp_2_4_v2", "exp_2_4_v3", "exp_2_4_v4"],
+  "vermutungen": [
+    "exp_2_4_v1",
+    "exp_2_4_v2",
+    "exp_2_4_v3",
+    "exp_2_4_v4"
+  ],
+  "beobachtungen": [
+    "exp_2_4_b1",
+    "exp_2_4_b2",
+    "exp_2_4_b3"
+  ],
+  "vermutung_passt": [
+    2
+  ],
+  "vermutung_offen": [
+    3
+  ],
   "vorlage": {
     "pult": "bedienpult_1",
     "bauteile": [
-      {"id": "R1", "typ": "widerstand", "felder": ["B3", "B4"], "wert": 470},
-      {"id": "D1", "typ": "led_rot", "felder": {"anode": "B4", "kathode": "C4"}}
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B4"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B4",
+          "kathode": "C4"
+        }
+      }
     ],
     "module": [],
     "leitungen": [
-      {"von": "P:+9V", "nach": "B3", "farbe": "rot"},
-      {"von": "C4", "nach": "P:0V", "farbe": "schwarz"}
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "C4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
     ],
-    "anzeigen": ["B3", "B4"]
+    "anzeigen": [
+      "B3",
+      "B4"
+    ]
   },
-  "schritte": ["exp_2_4_s1", "exp_2_4_s2"],
-  "erfolg": {"alle": [
-    {"bauteil": "D1", "groesse": "strom_mA", "zwischen": [5, 25], "dauer_s": 5},
-    {"bauteil": "D1", "zustand": "intakt"}
-  ]},
-  "hilfen": ["exp_2_4_h1", "exp_2_4_h2", "exp_2_4_loesung"],
+  "schritte": [
+    "exp_2_4_s1",
+    "exp_2_4_s2"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "zwischen": [
+          5,
+          25
+        ],
+        "dauer_s": 5
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_2_4_h1",
+    "exp_2_4_h2",
+    "exp_2_4_loesung"
+  ],
   "erklaerung_key": "exp_2_4_erklaerung",
   "mehr_wissen_key": "exp_2_4_mehr",
-  "weiterforschen": ["exp_2_4_w1"],
+  "weiterforschen": [
+    "exp_2_4_w1"
+  ],
   "jetzt_in_echt_key": "exp_2_4_echt"
 }

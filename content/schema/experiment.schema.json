@@ -17,6 +17,9 @@
     "bauteile_frei": {"type": "array", "items": {"type": "string"}, "minItems": 1},
     "frage_key": {"$ref": "#/$defs/key"},
     "vermutungen": {"type": "array", "items": {"$ref": "#/$defs/key"}, "minItems": 2, "maxItems": 5},
+    "beobachtungen": {"type": "array", "items": {"$ref": "#/$defs/key"}, "minItems": 2, "maxItems": 5},
+    "vermutung_passt": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+    "vermutung_offen": {"type": "array", "items": {"type": "integer", "minimum": 0}},
     "vorlage": {
       "type": "object",
       "required": ["pult", "bauteile", "leitungen"],

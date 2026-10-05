@@ -298,6 +298,9 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     out.furtherKeys = keys("weiterforschen");
     out.realKey = o.value(QStringLiteral("jetzt_in_echt_key")).toString();
     out.freeParts = keys("bauteile_frei");
+    out.observationKeys = keys("beobachtungen");
+    for (const QJsonValue& v : o.value(QStringLiteral("vermutung_passt")).toArray()) out.guessMatches << v.toInt();
+    for (const QJsonValue& v : o.value(QStringLiteral("vermutung_offen")).toArray()) out.guessOpen << v.toInt();
     const QJsonObject vorlage = o.value(QStringLiteral("vorlage")).toObject();
     for (const QJsonValue& v : vorlage.value(QStringLiteral("anzeigen")).toArray()) out.shownVoltages << v.toString();
     QString error;

@@ -11,6 +11,7 @@ Rectangle {
     property var settings: null
     signal experimentRequested(string id)
     signal freeLabRequested()
+    signal journalRequested()
     signal infoRequested()
 
     color: Theme.board
@@ -106,8 +107,8 @@ Rectangle {
                     objectName: "tileJournal"
                     icon: "📓"
                     title: qsTr("Forscherheft")
-                    subtitle: qsTr("Deine Vermutungen und Beobachtungen – folgt")
-                    available: false
+                    subtitle: qsTr("Deine Vermutungen, Beobachtungen und Notizen")
+                    onActivated: home.journalRequested()
                 }
             }
 

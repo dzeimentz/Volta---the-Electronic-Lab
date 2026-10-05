@@ -17,6 +17,7 @@ ApplicationWindow {
     readonly property var languageService: typeof volta_languageService !== "undefined" ? volta_languageService : null
     readonly property var settings: typeof volta_settings !== "undefined" ? volta_settings : null
     property bool inLab: false
+    property bool inJournal: false
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
     Binding { target: labController; property: "unlockAll"; value: root.settings ? root.settings.unlockAll : false }
@@ -27,12 +28,13 @@ ApplicationWindow {
     Home {
         objectName: "home"
         anchors.fill: parent
-        visible: !root.inLab
+        visible: !root.inLab && !root.inJournal
         controller: labController
         languageService: root.languageService
         settings: root.settings
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) root.inLab = true }
         onFreeLabRequested: { labController.startFreeLab(); root.inLab = true }
+        onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
     }
 
@@ -45,6 +47,18 @@ ApplicationWindow {
         settings: root.settings
         onHomeRequested: root.inLab = false
         onInfoRequested: infoDialog.open()
+    }
+
+    JournalView {
+        objectName: "journal"
+        anchors.fill: parent
+        visible: root.inJournal && !root.inLab
+        controller: labController
+        languageService: root.languageService
+        settings: root.settings
+        onBackRequested: root.inJournal = false
+        onInfoRequested: infoDialog.open()
+        onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
     }
 
     InfoDialog {

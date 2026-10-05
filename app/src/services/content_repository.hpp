@@ -33,6 +33,9 @@ struct Experiment {
     QStringList furtherKeys;
     QString realKey;
     QStringList freeParts;      // "bauteile_frei": Bauteiltypen im Bauteilfach (und "leitung")
+    QStringList observationKeys; // "beobachtungen": Auswahl nach dem Versuch
+    QList<int> guessMatches;     // "vermutung_passt": Vermutungen, die zum Ergebnis passen
+    QList<int> guessOpen;        // "vermutung_offen": Vermutungen ohne Aussage (z. B. »weiss nicht«)
 };
 
 // Stufe des Lernpfads (content/<band>/stufen.json)

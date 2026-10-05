@@ -59,8 +59,12 @@
         <translation>Build</translation>
     </message>
     <message>
-        <source>Geschafft!</source>
-        <translation>Well done!</translation>
+        <source>Geschafft! Was hast du beobachtet?</source>
+        <translation>Well done! What did you observe?</translation>
+    </message>
+    <message>
+        <source>Erklärung</source>
+        <translation>Explanation</translation>
     </message>
     <message>
         <source>Nur in der App!</source>
@@ -87,12 +91,44 @@
         <translation>Insert the sample build</translation>
     </message>
     <message>
+        <source>Deine Vermutung hat gestimmt!</source>
+        <translation>Your guess was right!</translation>
+    </message>
+    <message>
+        <source>Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.</source>
+        <translation>Surprise! It turned out differently than you guessed – that&apos;s what makes research exciting.</translation>
+    </message>
+    <message>
+        <source>Jetzt weißt du es!</source>
+        <translation>Now you know!</translation>
+    </message>
+    <message>
+        <source>Deine Beobachtung: %1</source>
+        <translation>Your observation: %1</translation>
+    </message>
+    <message>
         <source>Mehr wissen</source>
         <translation>Learn more</translation>
     </message>
     <message>
         <source>Weiterforschen</source>
         <translation>Explore further</translation>
+    </message>
+    <message>
+        <source>Was hast du beim Weiterforschen herausgefunden?</source>
+        <translation>What did you find out while exploring further?</translation>
+    </message>
+    <message>
+        <source>Notiz für das Forscherheft</source>
+        <translation>Note for the research journal</translation>
+    </message>
+    <message>
+        <source>Ins Forscherheft schreiben</source>
+        <translation>Write in the journal</translation>
+    </message>
+    <message>
+        <source>Im Forscherheft gespeichert.</source>
+        <translation>Saved in the journal.</translation>
     </message>
     <message>
         <source>Jetzt in echt</source>
@@ -122,8 +158,8 @@
         <translation>Research journal</translation>
     </message>
     <message>
-        <source>Deine Vermutungen und Beobachtungen – folgt</source>
-        <translation>Your guesses and observations – coming soon</translation>
+        <source>Deine Vermutungen, Beobachtungen und Notizen</source>
+        <translation>Your guesses, observations and notes</translation>
     </message>
     <message>
         <source>Lernpfad</source>
@@ -219,6 +255,45 @@
     <message>
         <source>Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.</source>
         <translation>Volta collects no data, shows no advertising and needs no internet.</translation>
+    </message>
+</context>
+<context>
+    <name>JournalView</name>
+    <message>
+        <source>Startseite</source>
+        <translation>Home</translation>
+    </message>
+    <message>
+        <source>Forscherheft</source>
+        <translation>Research journal</translation>
+    </message>
+    <message>
+        <source>Noch leer. Sobald du bei einem Experiment eine Vermutung wählst, schreibt Volta sie hier hinein.</source>
+        <translation>Still empty. As soon as you choose a guess in an experiment, Volta writes it in here.</translation>
+    </message>
+    <message>
+        <source>Meine Vermutung</source>
+        <translation>My guess</translation>
+    </message>
+    <message>
+        <source>Meine Beobachtung</source>
+        <translation>My observation</translation>
+    </message>
+    <message>
+        <source>Die Vermutung hat gestimmt.</source>
+        <translation>The guess was right.</translation>
+    </message>
+    <message>
+        <source>Es kam anders als vermutet.</source>
+        <translation>It turned out differently than guessed.</translation>
+    </message>
+    <message>
+        <source>Jetzt weiß ich es.</source>
+        <translation>Now I know.</translation>
+    </message>
+    <message>
+        <source>Experiment öffnen</source>
+        <translation>Open experiment</translation>
     </message>
 </context>
 <context>

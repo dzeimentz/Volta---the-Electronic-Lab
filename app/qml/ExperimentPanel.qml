@@ -6,7 +6,7 @@ import QtQuick.Controls.Basic
 Rectangle {
     id: panel
     required property var controller
-    readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Erfolg
+    readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
     property bool collapsed: false // eingeklappt: nur der Knopf zum Aufklappen (mehr Platz fuer die Grundplatte)
 
     color: "#FFFDF7"
@@ -55,7 +55,7 @@ Rectangle {
     Timer { id: follow; interval: 30; onTriggered: panel.followFlow() }
     function followFlow() {
         const f = scroll.contentItem // Flickable der ScrollView
-        if (panel.phase !== panel.lastPhase) f.contentY = 0
+        if (panel.phase !== panel.lastPhase) { f.contentY = 0; noteSaved.visible = false }
         else f.contentY = Math.max(0, f.contentHeight - f.height)
         panel.lastPhase = panel.phase
     }
@@ -100,7 +100,10 @@ Rectangle {
             spacing: 12
 
             Label {
-                text: panel.phase === 1 ? qsTr("Frage") : panel.phase === 2 ? qsTr("Aufbau") : qsTr("Geschafft!")
+                text: panel.phase === 1 ? qsTr("Frage") : panel.phase === 2 ? qsTr("Aufbau")
+                    : panel.phase === 3 ? qsTr("Geschafft! Was hast du beobachtet?") : qsTr("Erklärung")
+                width: parent.width
+                wrapMode: Text.Wrap
                 font.pixelSize: Math.round((22) * Theme.fontScale)
                 font.bold: true
                 color: panel.phase === 3 ? "#2E7D32" : Theme.navy
@@ -199,23 +202,86 @@ Rectangle {
                 onClicked: panel.controller.showTemplate()
             }
 
-            // ---- 3 Erfolg
-            Body { visible: panel.phase === 3; text: panel.controller.explanation }
-            Heading { visible: panel.phase === 3 && panel.controller.moreKnowledge !== ""; text: qsTr("Mehr wissen") }
-            Body { visible: panel.phase === 3 && panel.controller.moreKnowledge !== ""; text: panel.controller.moreKnowledge }
-            Heading { visible: panel.phase === 3 && panel.controller.further.length > 0; text: qsTr("Weiterforschen") }
+            // ---- 3 Beobachtung (Auswahl; danach Vergleich mit der Vermutung, ohne zu werten)
             Repeater {
-                model: panel.phase === 3 ? panel.controller.further : []
+                model: panel.phase === 3 ? panel.controller.observations : []
+                WideButton {
+                    required property int index
+                    required property string modelData
+                    objectName: "observation_" + index
+                    text: modelData
+                    onClicked: panel.controller.chooseObservation(index)
+                }
+            }
+
+            // ---- 4 Erklaerung und Weiterforschen
+            Rectangle {
+                objectName: "comparisonBox"
+                visible: panel.phase === 4 && panel.controller.comparison > 0
+                width: parent.width
+                height: cmpText.implicitHeight + 20
+                radius: 8
+                color: panel.controller.comparison === 1 ? "#E6F4E7" : "#FFF4D6"
+                border.color: panel.controller.comparison === 1 ? "#2E7D32" : Theme.solderAmber
+                Body {
+                    id: cmpText
+                    x: 10; y: 10
+                    width: parent.width - 20
+                    font.bold: true
+                    // Symbol zusaetzlich zur Farbe
+                    text: panel.controller.comparison === 1 ? "✓ " + qsTr("Deine Vermutung hat gestimmt!")
+                        : panel.controller.comparison === 2 ? "★ " + qsTr("Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.")
+                        : "★ " + qsTr("Jetzt weißt du es!")
+                }
+            }
+            Body {
+                visible: panel.phase === 4 && panel.controller.observation >= 0
+                text: qsTr("Deine Beobachtung: %1").arg(panel.controller.observations[panel.controller.observation] ?? "")
+                font.italic: true
+                color: "#4A5866"
+            }
+            Body { visible: panel.phase === 4; text: panel.controller.explanation }
+            Heading { visible: panel.phase === 4 && panel.controller.moreKnowledge !== ""; text: qsTr("Mehr wissen") }
+            Body { visible: panel.phase === 4 && panel.controller.moreKnowledge !== ""; text: panel.controller.moreKnowledge }
+            Heading { visible: panel.phase === 4 && panel.controller.further.length > 0; text: qsTr("Weiterforschen") }
+            Repeater {
+                model: panel.phase === 4 ? panel.controller.further : []
                 Body {
                     required property string modelData
                     text: "• " + modelData
                 }
             }
-            Heading { visible: panel.phase === 3; text: qsTr("Jetzt in echt") }
-            Body { visible: panel.phase === 3; text: panel.controller.realLife }
+            // eigene Notiz ins Forscherheft
+            TextArea {
+                id: noteField
+                objectName: "noteField"
+                visible: panel.phase === 4
+                width: parent.width
+                height: Math.max(Theme.control + 24, implicitHeight)
+                wrapMode: TextEdit.Wrap
+                font.pixelSize: Math.round(15 * Theme.fontScale)
+                placeholderText: qsTr("Was hast du beim Weiterforschen herausgefunden?")
+                background: Rectangle { radius: 6; color: "white"; border.color: Theme.fieldOutline }
+                Accessible.name: qsTr("Notiz für das Forscherheft")
+            }
+            WideButton {
+                objectName: "noteButton"
+                visible: panel.phase === 4
+                enabled: noteField.text.trim().length > 0
+                text: qsTr("Ins Forscherheft schreiben")
+                onClicked: if (panel.controller.addNote(noteField.text)) { noteField.text = ""; noteSaved.visible = true }
+            }
+            Body {
+                id: noteSaved
+                visible: false
+                text: "✓ " + qsTr("Im Forscherheft gespeichert.")
+                color: "#2E7D32"
+            }
+            Heading { visible: panel.phase === 4; text: qsTr("Jetzt in echt") }
+            Body { visible: panel.phase === 4; text: panel.controller.realLife }
             WideButton {
                 objectName: "nextButton"
-                visible: panel.phase === 3
+                visible: panel.phase === 4
                 text: panel.controller.nextExperimentId !== "" ? qsTr("Nächstes Experiment") : qsTr("Freies Labor")
                 onClicked: panel.controller.nextExperimentId !== ""
                            ? panel.controller.startExperiment(panel.controller.nextExperimentId)

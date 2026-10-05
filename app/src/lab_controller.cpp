@@ -1,6 +1,8 @@
 #include "lab_controller.hpp"
 
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QJsonArray>
 #include <QFile>
 #include <QSysInfo>
 
@@ -92,7 +94,7 @@ bool LabController::startExperiment(const QString& id) {
     start.desk.mainSwitch = false;
     m_session->setSuccess(exp.successCondition, exp.templateBoard);
     m_session->loadBoard(start);
-    m_flow.start(static_cast<int>(exp.hintKeys.size()));
+    m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
     m_experiment = std::move(exp);
     emit experimentChanged();
     emit flowChanged();
@@ -209,6 +211,7 @@ void LabController::setContentLanguage(const QString& code) {
     m_repo.loadTexts(QStringLiteral("volta1"), code);
     rebuildExperimentList();
     emit progressChanged();
+    emit journalChanged(); // Titel in der neuen Sprache
     if (m_freeLab)
         m_title = tr("Freies Labor");
     else if (!m_experiment.titleKey.isEmpty())
@@ -251,7 +254,56 @@ void LabController::startFreeLab() {
 }
 
 void LabController::chooseGuess(int index) {
-    if (m_flow.chooseGuess(index)) emit flowChanged();
+    if (!m_flow.chooseGuess(index)) return;
+    // Forscherheft: Vermutung festhalten, ohne sie zu bewerten
+    if (index < m_experiment.guessKeys.size()) m_journal.setGuess(m_experiment.id, m_repo.text(m_experiment.guessKeys.at(index)));
+    emit flowChanged();
+    emit journalChanged();
+}
+
+void LabController::chooseObservation(int index) {
+    const int g = m_flow.guess();
+    if (!m_flow.chooseObservation(index, m_experiment.guessMatches.contains(g), m_experiment.guessOpen.contains(g)))
+        return;
+    static const char* const kComparison[] = {"", "passt", "anders", "offen"};
+    m_journal.setObservation(m_experiment.id, m_repo.text(m_experiment.observationKeys.at(index)),
+                             QString::fromLatin1(kComparison[comparison()]));
+    emit flowChanged();
+    emit journalChanged();
+}
+
+bool LabController::addNote(const QString& text) {
+    if (m_experiment.id.isEmpty() || !m_journal.addNote(m_experiment.id, text)) return false;
+    emit journalChanged();
+    return true;
+}
+
+void LabController::useJournalFile(const QString& path) {
+    m_journal = services::JournalStore(path);
+    emit journalChanged();
+}
+
+QVariantList LabController::journal() const {
+    QVariantList out;
+    for (const QJsonObject& e : m_journal.entries()) {
+        const QString id = e.value(QStringLiteral("id")).toString();
+        QString title = id;
+        for (const QVariant& v : m_experimentList)
+            if (v.toMap().value(QStringLiteral("id")).toString() == id) title = v.toMap().value(QStringLiteral("title")).toString();
+        const QDateTime when = QDateTime::fromString(e.value(QStringLiteral("datum")).toString(), Qt::ISODate);
+        QStringList notes;
+        for (const QJsonValue& n : e.value(QStringLiteral("notizen")).toArray()) notes << n.toString();
+        const QString cmp = e.value(QStringLiteral("vergleich")).toString();
+        out << QVariantMap{{QStringLiteral("id"), id},
+                           {QStringLiteral("title"), title},
+                           {QStringLiteral("date"), QLocale().toString(when, QLocale::ShortFormat)},
+                           {QStringLiteral("guess"), e.value(QStringLiteral("vermutung")).toString()},
+                           {QStringLiteral("observation"), e.value(QStringLiteral("beobachtung")).toString()},
+                           {QStringLiteral("comparison"), cmp == QLatin1String("passt") ? 1 : cmp == QLatin1String("anders") ? 2
+                                                          : cmp == QLatin1String("offen") ? 3 : 0},
+                           {QStringLiteral("notes"), notes}};
+    }
+    return out;
 }
 
 void LabController::nextHint() {

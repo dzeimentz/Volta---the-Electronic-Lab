@@ -85,6 +85,14 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 
+## Forschungskreislauf und Forscherheft (D2)
+- Experimentfeld: 1 Frage mit Vermutung (wird ohne Wertung ins Forscherheft geschrieben) -> 2 Aufbau mit Schritten
+  und gestuften Hilfen -> 3 nach dem Erfolg »Was hast du beobachtet?« (Auswahl) -> 4 Vergleich mit der Vermutung
+  (»hat gestimmt« / »Ueberraschung! …« / »Jetzt weisst du es!«, Symbol zusaetzlich zur Farbe), Erklaerung,
+  Mehr wissen, Weiterforschen mit eigener Notiz, Jetzt in echt, naechstes Experiment.
+- Forscherheft-Seite (Kachel auf der Startseite): je Experiment Vermutung, Beobachtung, Vergleich, Notizen, Datum;
+  `forscherheft.json` im privaten App-Speicher (`JournalStore`, `QSaveFile`). Zeichnungen, Fotos, PDF folgen.
+
 ## Grundplatte
 - Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).

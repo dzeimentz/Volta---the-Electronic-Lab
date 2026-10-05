@@ -2,19 +2,22 @@
 
 namespace volta::model {
 
-// Einfacher Ablauf eines gefuehrten Experiments (Phase 1, docs/roadmap.md): Frage mit Vermutung -> Aufbau mit
-// gestuften Hilfen -> Erfolg mit Erklaerung. Der volle Forschungskreislauf (Beobachten, Vergleich mit der Vermutung,
-// Forscherheft) folgt in Phase 2. Ohne Oberflaeche testbar.
+// Forschungskreislauf eines gefuehrten Experiments (Konzept 5.6, docs/ui-spec.md):
+// Frage mit Vermutung -> Aufbau und Versuch mit gestuften Hilfen -> Beobachtung (Vergleich mit der Vermutung)
+// -> Erklaerung mit Weiterforschen. Ohne Beobachtungsangebot geht es vom Erfolg direkt zur Erklaerung.
+// Ohne Oberflaeche testbar.
 class ExperimentFlow {
 public:
-    enum class Phase { None, Question, Build, Success };
+    enum class Phase { None, Question, Build, Observe, Explain };
+    // Vergleich der Beobachtung mit der Vermutung (wertet nicht, ermuntert)
+    enum class Comparison { None, Matches, Differs, Open };
 
-    // Neues Experiment mit hintCount Hilfen (die letzte ist die Loesung)
-    void start(int hintCount) {
+    // Neues Experiment mit hintCount Hilfen (die letzte ist die Loesung) und observationCount Beobachtungen
+    void start(int hintCount, int observationCount = 0) {
+        *this = ExperimentFlow{};
         m_phase = Phase::Question;
         m_hintCount = hintCount;
-        m_hintsShown = 0;
-        m_guess = -1;
+        m_observationCount = observationCount;
     }
     void stop() { *this = ExperimentFlow{}; }
 
@@ -34,12 +37,23 @@ public:
     // Erfolgsbedingung erreicht (nur waehrend des Aufbaus wirksam)
     bool reportSuccess() {
         if (m_phase != Phase::Build) return false;
-        m_phase = Phase::Success;
+        m_phase = m_observationCount > 0 ? Phase::Observe : Phase::Explain;
+        return true;
+    }
+    // Beobachtung waehlen; vergleicht mit der Vermutung: matches = Vermutung passt, open = Vermutung war offen
+    // (z. B. »Ich weiss es nicht«)
+    bool chooseObservation(int index, bool matches, bool open) {
+        if (m_phase != Phase::Observe || index < 0 || index >= m_observationCount) return false;
+        m_observation = index;
+        m_comparison = open ? Comparison::Open : (matches ? Comparison::Matches : Comparison::Differs);
+        m_phase = Phase::Explain;
         return true;
     }
 
     Phase phase() const { return m_phase; }
     int guess() const { return m_guess; }
+    int observation() const { return m_observation; }
+    Comparison comparison() const { return m_comparison; }
     int hintsShown() const { return m_hintsShown; }
     int hintCount() const { return m_hintCount; }
     bool solutionShown() const { return m_hintCount > 0 && m_hintsShown == m_hintCount; }
@@ -48,7 +62,10 @@ private:
     Phase m_phase = Phase::None;
     int m_hintCount = 0;
     int m_hintsShown = 0;
+    int m_observationCount = 0;
     int m_guess = -1;
+    int m_observation = -1;
+    Comparison m_comparison = Comparison::None;
 };
 
 } // namespace volta::model

@@ -14,6 +14,7 @@
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
+#include "services/journal_store.hpp"
 #include "services/progress_store.hpp"
 
 namespace volta {
@@ -61,7 +62,14 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList experiments READ experiments NOTIFY experimentChanged)
     Q_PROPERTY(QString experimentId READ experimentId NOTIFY experimentChanged)
     Q_PROPERTY(bool freeLab READ freeLab NOTIFY experimentChanged)
-    Q_PROPERTY(int phase READ phase NOTIFY flowChanged) // 0 freies Labor, 1 Frage, 2 Aufbau, 3 Erfolg
+    // 0 freies Labor, 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung (Forschungskreislauf, Konzept 5.6)
+    Q_PROPERTY(int phase READ phase NOTIFY flowChanged)
+    Q_PROPERTY(QStringList observations READ observations NOTIFY experimentChanged)
+    Q_PROPERTY(int observation READ observation NOTIFY flowChanged)
+    // Vergleich der Beobachtung mit der Vermutung: 0 noch keiner, 1 passt, 2 anders, 3 offen
+    Q_PROPERTY(int comparison READ comparison NOTIFY flowChanged)
+    // Forscherheft: [{id, title, date, guess, observation, comparison, notes[]}], neueste zuerst
+    Q_PROPERTY(QVariantList journal READ journal NOTIFY journalChanged)
     Q_PROPERTY(bool destructive READ destructive NOTIFY experimentChanged)
     Q_PROPERTY(QString question READ question NOTIFY experimentChanged)
     Q_PROPERTY(QStringList guesses READ guesses NOTIFY experimentChanged)
@@ -136,6 +144,13 @@ public:
     Q_INVOKABLE QVariantMap appInfo() const;
     Q_INVOKABLE void chooseGuess(int index);
     Q_INVOKABLE void nextHint();
+    Q_INVOKABLE void chooseObservation(int index);
+    Q_INVOKABLE bool addNote(const QString& text); // Notiz zum laufenden Experiment ins Forscherheft
+    QStringList observations() const { return texts(m_experiment.observationKeys); }
+    int observation() const { return m_flow.observation(); }
+    int comparison() const { return static_cast<int>(m_flow.comparison()); }
+    QVariantList journal() const;
+    void useJournalFile(const QString& path);
     Q_INVOKABLE bool showTemplate(); // Musteraufbau (Befehl, rueckgaengig machbar) - erst nach der Loesungshilfe
 
     QVariantList experiments() const { return m_experimentList; }
@@ -205,6 +220,7 @@ signals:
     void editFailed();
     void flowChanged();
     void progressChanged();
+    void journalChanged();
 
 private:
     void onFrame();
@@ -221,6 +237,7 @@ private:
     QVariantList m_experimentList;
     QList<services::Stage> m_stages;
     services::ProgressStore m_progress;
+    services::JournalStore m_journal;
     bool m_unlockAll = false;
     int highestUnlockedStage() const;
     QString m_contentLanguage = QStringLiteral("de");

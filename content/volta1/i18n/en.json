@@ -85,5 +85,17 @@
   "stufe_3_titel": "Measure and understand",
   "stufe_3_frage": "How much current is actually flowing?",
   "stufe_4_titel": "Little electronics",
-  "stufe_4_frage": "How can one current control another?"
+  "stufe_4_frage": "How can one current control another?",
+  "exp_1_1_b1": "With one wire the bulb stayed dark; with two wires it lit up.",
+  "exp_1_1_b2": "The bulb already lit up with one wire.",
+  "exp_1_1_b3": "I'm not sure what happened.",
+  "exp_1_2_b1": "The buzzer only buzzed while I was pressing the button.",
+  "exp_1_2_b2": "The buzzer buzzed all the time.",
+  "exp_1_2_b3": "The buzzer stayed silent.",
+  "exp_1_3_b1": "The motor kept running without me holding anything down.",
+  "exp_1_3_b2": "The motor only ran briefly.",
+  "exp_1_3_b3": "The motor did not turn.",
+  "exp_2_4_b1": "Without a resistor the LED broke; with the resistor it lit up.",
+  "exp_2_4_b2": "The LED lit up normally without a resistor.",
+  "exp_2_4_b3": "The LED did not light up at all."
 }

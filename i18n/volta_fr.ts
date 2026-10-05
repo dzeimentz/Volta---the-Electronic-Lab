@@ -59,8 +59,12 @@
         <translation>Montage</translation>
     </message>
     <message>
-        <source>Geschafft!</source>
-        <translation>Réussi !</translation>
+        <source>Geschafft! Was hast du beobachtet?</source>
+        <translation>Réussi ! Qu&apos;as-tu observé ?</translation>
+    </message>
+    <message>
+        <source>Erklärung</source>
+        <translation>Explication</translation>
     </message>
     <message>
         <source>Nur in der App!</source>
@@ -87,12 +91,44 @@
         <translation>Placer le montage modèle</translation>
     </message>
     <message>
+        <source>Deine Vermutung hat gestimmt!</source>
+        <translation>Ton hypothèse était juste !</translation>
+    </message>
+    <message>
+        <source>Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.</source>
+        <translation>Surprise ! Ça s&apos;est passé autrement que prévu – c&apos;est ce qui rend la recherche passionnante.</translation>
+    </message>
+    <message>
+        <source>Jetzt weißt du es!</source>
+        <translation>Maintenant, tu le sais !</translation>
+    </message>
+    <message>
+        <source>Deine Beobachtung: %1</source>
+        <translation>Ton observation : %1</translation>
+    </message>
+    <message>
         <source>Mehr wissen</source>
         <translation>En savoir plus</translation>
     </message>
     <message>
         <source>Weiterforschen</source>
         <translation>Pour aller plus loin</translation>
+    </message>
+    <message>
+        <source>Was hast du beim Weiterforschen herausgefunden?</source>
+        <translation>Qu&apos;as-tu découvert en continuant tes recherches ?</translation>
+    </message>
+    <message>
+        <source>Notiz für das Forscherheft</source>
+        <translation>Note pour le carnet de recherche</translation>
+    </message>
+    <message>
+        <source>Ins Forscherheft schreiben</source>
+        <translation>Écrire dans le carnet</translation>
+    </message>
+    <message>
+        <source>Im Forscherheft gespeichert.</source>
+        <translation>Enregistré dans le carnet.</translation>
     </message>
     <message>
         <source>Jetzt in echt</source>
@@ -122,8 +158,8 @@
         <translation>Carnet de recherche</translation>
     </message>
     <message>
-        <source>Deine Vermutungen und Beobachtungen – folgt</source>
-        <translation>Tes hypothèses et observations – bientôt</translation>
+        <source>Deine Vermutungen, Beobachtungen und Notizen</source>
+        <translation>Tes hypothèses, observations et notes</translation>
     </message>
     <message>
         <source>Lernpfad</source>
@@ -219,6 +255,45 @@
     <message>
         <source>Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.</source>
         <translation>Volta ne collecte aucune donnée, n&apos;affiche aucune publicité et n&apos;a pas besoin d&apos;Internet.</translation>
+    </message>
+</context>
+<context>
+    <name>JournalView</name>
+    <message>
+        <source>Startseite</source>
+        <translation>Accueil</translation>
+    </message>
+    <message>
+        <source>Forscherheft</source>
+        <translation>Carnet de recherche</translation>
+    </message>
+    <message>
+        <source>Noch leer. Sobald du bei einem Experiment eine Vermutung wählst, schreibt Volta sie hier hinein.</source>
+        <translation>Encore vide. Dès que tu choisis une hypothèse dans une expérience, Volta l&apos;écrit ici.</translation>
+    </message>
+    <message>
+        <source>Meine Vermutung</source>
+        <translation>Mon hypothèse</translation>
+    </message>
+    <message>
+        <source>Meine Beobachtung</source>
+        <translation>Mon observation</translation>
+    </message>
+    <message>
+        <source>Die Vermutung hat gestimmt.</source>
+        <translation>L&apos;hypothèse était juste.</translation>
+    </message>
+    <message>
+        <source>Es kam anders als vermutet.</source>
+        <translation>Ça s&apos;est passé autrement que prévu.</translation>
+    </message>
+    <message>
+        <source>Jetzt weiß ich es.</source>
+        <translation>Maintenant, je sais.</translation>
+    </message>
+    <message>
+        <source>Experiment öffnen</source>
+        <translation>Ouvrir l&apos;expérience</translation>
     </message>
 </context>
 <context>

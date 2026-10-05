@@ -31,8 +31,10 @@ int main(int argc, char* argv[]) {
     const bool deployed = QFileInfo::exists(besideExe + QStringLiteral("/catalog/bauteile.json"));
     volta::LabController lab(deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR));
     // Fortschritt im Lernpfad lokal speichern; Entwicklerhilfen (VOLTA_SCREENSHOT ...) lassen ihn unberuehrt
-    if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty())
+    if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty()) {
         lab.useProgressFile(volta::services::ProgressStore::defaultFile());
+        lab.useJournalFile(volta::services::JournalStore::defaultFile());
+    }
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("labController"), &lab);
@@ -136,6 +138,15 @@ int main(int argc, char* argv[]) {
                 }
             }
             if (qEnvironmentVariableIntValue("VOLTA_DEMO_ANALOG") == 1) lab.setMeterAnalog(true); // Zeiger
+        });
+
+    // Entwicklerhilfe: VOLTA_DEMO_JOURNAL=1 legt einen Eintrag an (Vermutung, Notiz) und zeigt das Forscherheft
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_JOURNAL") == 1)
+        QTimer::singleShot(300, &lab, [&lab, &engine] {
+            lab.startExperiment(QStringLiteral("volta1.1.1"));
+            lab.chooseGuess(1);
+            lab.addNote(QStringLiteral("Bei 3 V leuchtet das Lämpchen schwächer."));
+            if (!engine.rootObjects().isEmpty()) engine.rootObjects().first()->setProperty("inJournal", true);
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
