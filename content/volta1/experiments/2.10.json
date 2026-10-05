@@ -1,0 +1,103 @@
+{
+  "id": "volta1.2.10",
+  "band": "volta1",
+  "stufe": 2,
+  "kapitel": 1,
+  "titel_key": "exp_2_10_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "summer",
+    "leitung"
+  ],
+  "frage_key": "exp_2_10_frage",
+  "vermutungen": [
+    "exp_2_10_v1",
+    "exp_2_10_v2",
+    "exp_2_10_v3"
+  ],
+  "beobachtungen": [
+    "exp_2_10_b1",
+    "exp_2_10_b2",
+    "exp_2_10_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "SU1",
+        "typ": "summer",
+        "felder": {
+          "plus": "B2",
+          "minus": "B3"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "BL1",
+        "typ": "blinkmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "BL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "BL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B2",
+        "farbe": "rot"
+      },
+      {
+        "von": "B3",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_2_10_s1",
+    "exp_2_10_s2",
+    "exp_2_10_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "SU1",
+        "groesse": "frequenz_Hz",
+        "min": 1000,
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "SU1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_2_10_h1",
+    "exp_2_10_h2",
+    "exp_2_10_loesung"
+  ],
+  "erklaerung_key": "exp_2_10_erklaerung",
+  "mehr_wissen_key": "exp_2_10_mehr",
+  "weiterforschen": [
+    "exp_2_10_w1"
+  ],
+  "jetzt_in_echt_key": "exp_2_10_echt"
+}

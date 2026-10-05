@@ -393,11 +393,19 @@ private slots:
         QObject* box = item(QStringLiteral("experimentBox"));
         QVERIFY(box);
         m_lab->startExperiment(QStringLiteral("volta1.1.2"));
-        QTRY_COMPARE(box->property("currentIndex").toInt(), 2); // 0 Freies Labor, 1 = 1.1, 2 = 1.2
+        // Eintraege: 0 Freies Labor, danach die freigeschalteten Experimente in Lernpfad-Reihenfolge
+        auto indexOf = [box](const QString& id) {
+            const QVariantList entries = box->property("entries").value<QJSValue>().toVariant().toList();
+            for (int i = 0; i < entries.size(); ++i)
+                if (entries.at(i).toMap().value(QStringLiteral("id")).toString() == id) return i;
+            return -1;
+        };
+        QVERIFY(indexOf(QStringLiteral("volta1.1.2")) > 1);
+        QTRY_COMPARE(box->property("currentIndex").toInt(), indexOf(QStringLiteral("volta1.1.2")));
         QMetaObject::invokeMethod(box, "activated", Q_ARG(int, 0));
         QTRY_VERIFY(m_lab->freeLab());
         QCOMPARE(box->property("currentIndex").toInt(), 0);
-        QMetaObject::invokeMethod(box, "activated", Q_ARG(int, 1));
+        QMetaObject::invokeMethod(box, "activated", Q_ARG(int, indexOf(QStringLiteral("volta1.1.1"))));
         QTRY_COMPARE(m_lab->experimentId(), QStringLiteral("volta1.1.1"));
         QVERIFY(!m_lab->freeLab());
 
@@ -447,16 +455,16 @@ private slots:
             QVERIFY(store.markDone(QStringLiteral("volta1.1.2")));
         }
         m_lab->useProgressFile(file);
-        QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4"))); // 1.3 fehlt noch
+        QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4"))); // Stufe 1 noch nicht ganz geschafft
         {
-            services::ProgressStore store(file);
-            QVERIFY(store.markDone(QStringLiteral("volta1.1.3")));
+            services::ProgressStore store(file); // alle uebrigen Experimente der Stufe 1
+            for (int nr = 3; nr <= 7; ++nr) QVERIFY(store.markDone(QStringLiteral("volta1.1.%1").arg(nr)));
         }
         m_lab->useProgressFile(file);
         QVERIFY(m_lab->isUnlocked(QStringLiteral("volta1.2.4")));
         const QVariantList stages = m_lab->stages();
         const QVariantMap s1 = stages.at(1).toMap();
-        QCOMPARE(s1.value(QStringLiteral("done")).toInt(), 3);
+        QCOMPARE(s1.value(QStringLiteral("done")).toInt(), s1.value(QStringLiteral("total")).toInt());
         QVERIFY(stages.at(2).toMap().value(QStringLiteral("unlocked")).toBool());
         QVERIFY(!stages.at(3).toMap().value(QStringLiteral("unlocked")).toBool());
         m_lab->resetProgress();

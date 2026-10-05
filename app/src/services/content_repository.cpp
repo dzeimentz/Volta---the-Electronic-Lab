@@ -48,6 +48,13 @@ QStringList ContentRepository::experimentIds(const QString& band) const {
     const QDir dir(QDir(m_root).filePath(band + QStringLiteral("/experiments")));
     for (const QString& f : dir.entryList({QStringLiteral("*.json")}, QDir::Files, QDir::Name))
         out << band + QLatin1Char('.') + f.chopped(5);
+    // numerisch nach Stufe und Nummer (2.9 vor 2.10)
+    std::sort(out.begin(), out.end(), [](const QString& a, const QString& b) {
+        const QStringList x = a.split(QLatin1Char('.')), y = b.split(QLatin1Char('.'));
+        for (int i = 1; i < 3 && i < x.size() && i < y.size(); ++i)
+            if (x.at(i).toInt() != y.at(i).toInt()) return x.at(i).toInt() < y.at(i).toInt();
+        return a < b;
+    });
     return out;
 }
 

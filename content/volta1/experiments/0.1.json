@@ -1,0 +1,116 @@
+{
+  "id": "volta1.0.1",
+  "band": "volta1",
+  "stufe": 0,
+  "kapitel": 1,
+  "titel_key": "exp_0_1_titel",
+  "dauer_min": 6,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "led_rot",
+    "widerstand",
+    "leitung"
+  ],
+  "frage_key": "exp_0_1_frage",
+  "vermutungen": [
+    "exp_0_1_v1",
+    "exp_0_1_v2",
+    "exp_0_1_v3"
+  ],
+  "beobachtungen": [
+    "exp_0_1_b1",
+    "exp_0_1_b2",
+    "exp_0_1_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B4"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B4",
+          "kathode": "C4"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "BL1",
+        "typ": "blinkmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "BL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "BL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "C4",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_0_1_s1",
+    "exp_0_1_s2",
+    "exp_0_1_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "zwischen": [
+          5,
+          25
+        ],
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_0_1_h1",
+    "exp_0_1_h2",
+    "exp_0_1_loesung"
+  ],
+  "erklaerung_key": "exp_0_1_erklaerung",
+  "mehr_wissen_key": "exp_0_1_mehr",
+  "weiterforschen": [
+    "exp_0_1_w1"
+  ],
+  "jetzt_in_echt_key": "exp_0_1_echt"
+}

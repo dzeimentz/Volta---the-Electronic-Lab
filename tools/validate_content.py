@@ -137,7 +137,8 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
         if spec is None:
             rep.error(where, f"Bauteil {pid}: Typ '{typ}' unbekannt")
             continue
-        if spec.get("ab_band") == band and spec.get("ab_stufe", 0) > stufe:
+        # Stufe 0 (Auftakt) beginnt bewusst mitten drin mit Blinkmodul, Leuchtdiode und Widerstand (Konzept 5.5)
+        if stufe > 0 and spec.get("ab_band") == band and spec.get("ab_stufe", 0) > stufe:
             rep.warn(where, f"Bauteil {pid}: Typ '{typ}' erst ab Stufe {spec['ab_stufe']} freigeschaltet")
         felder = p.get("felder")
         if isinstance(felder, dict):

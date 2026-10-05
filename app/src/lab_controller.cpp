@@ -94,6 +94,7 @@ bool LabController::startExperiment(const QString& id) {
     model::Board start;
     start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
     start.desk.mainSwitch = false;
+    start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
     m_session->setSuccess(exp.successCondition, exp.templateBoard);
     m_session->loadBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));

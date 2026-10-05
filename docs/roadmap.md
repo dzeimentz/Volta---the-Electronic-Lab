@@ -39,6 +39,16 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
   Dreifach-Messgeraet bedienbar (Phase 4), Breite der Grundplatte 8/10/12, Transistor auf 2-x-2-Platine.
 - Offen: Android-Build (Kit fehlt auf dem Entwicklungsrechner), Erprobung mit Kindern, Begleitfigur.
 
+## Phase 2 – Stand (Inhalt Stufen 1–2)
+- D1 Startseite mit Lernpfad, Freischaltung und gespeichertem Fortschritt: erledigt.
+- D2 Forschungskreislauf mit Beobachtung, Vergleich mit der Vermutung und Forscherheft: erledigt.
+- D3 Werkzeugkasten: Farbcode, E-Reihen, Bauteillexikon: erledigt (Formelrechner, Zeitschreiber, Fehlersuche folgen).
+- D4 Schaltplanansicht mit wechselseitiger Hervorhebung: erledigt.
+- D5 Experimente: 20 (Auftakt 0.1; Stufe 1: 1.1–1.7; Stufe 2: 2.1–2.12), jede Vorlage im ContentSmokeTest
+  gegen ihre Erfolgsbedingung simuliert; Texte DE, FR und EN (FR/EN Entwurf). Ziel fuer Version 1.0: etwa 30.
+- Offen in Phase 2: Vorlesen (Systemstimme), Tonmodul mit »Blick hinein«, Schritt-fuer-Schritt-Aufbauhilfe mit
+  hervorgehobenen Zielfeldern, Modulfach, weitere Experimente (u. a. Leiter/Nichtleiter, Tonmodul), LU-Texte.
+
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
 2. ~~Thermikmodell und Ereignisse; Robustheitstests.~~ erledigt, dazu: alle Bauteile der Stufen 1–4 inkl.

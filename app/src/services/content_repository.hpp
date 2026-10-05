@@ -56,7 +56,7 @@ public:
     bool loadCatalog(model::Catalog& out);
     // Baende im Inhaltsverzeichnis (Verzeichnisse mit paket.json), z. B. "volta1"
     QStringList bands() const;
-    // IDs aller Experimente eines Bandes (z. B. "volta1.2.4"), sortiert
+    // IDs aller Experimente eines Bandes (z. B. "volta1.2.4"), numerisch nach Stufe und Nummer sortiert
     QStringList experimentIds(const QString& band) const;
     // Stufen eines Bandes; leer, wenn stufen.json fehlt
     QList<Stage> stages(const QString& band);

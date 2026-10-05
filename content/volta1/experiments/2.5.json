@@ -1,0 +1,110 @@
+{
+  "id": "volta1.2.5",
+  "band": "volta1",
+  "stufe": 2,
+  "kapitel": 1,
+  "titel_key": "exp_2_5_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "gluehlampe",
+    "leitung"
+  ],
+  "frage_key": "exp_2_5_frage",
+  "vermutungen": [
+    "exp_2_5_v1",
+    "exp_2_5_v2",
+    "exp_2_5_v3"
+  ],
+  "beobachtungen": [
+    "exp_2_5_b1",
+    "exp_2_5_b2",
+    "exp_2_5_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "pult_stellung": {
+      "batterie_V": 4.5
+    },
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "A2",
+          "A3"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "P:S1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:S2",
+        "nach": "A2",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_2_5_s1",
+    "exp_2_5_s2",
+    "exp_2_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_2_5_h1",
+    "exp_2_5_h2",
+    "exp_2_5_loesung"
+  ],
+  "erklaerung_key": "exp_2_5_erklaerung",
+  "mehr_wissen_key": "exp_2_5_mehr",
+  "weiterforschen": [
+    "exp_2_5_w1"
+  ],
+  "jetzt_in_echt_key": "exp_2_5_echt"
+}
