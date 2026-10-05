@@ -80,7 +80,8 @@ python3 tools/check_all.py
 # App mit Bildschirmfoto statt Bedienung (Sichtpruefung): VOLTA_SCREENSHOT=bild.png build/desktop-debug/app/volta1.exe
 #   weitere Entwicklerhilfen: VOLTA_SCREENSHOT_S=<s>, VOLTA_SCREENSHOT_MAINSWITCH=1, VOLTA_DEMO_GALLERY=1,
 #   VOLTA_DEMO_SOLVE=1 (loest das gefuehrte Experiment mit dem Musteraufbau), VOLTA_DEMO_COLUMNS=8|10|12,
-#   VOLTA_DEMO_LANG=fr|en (Sprache ohne Speichern), VOLTA_SHOW_TIME=1 (Simulationszeit), VOLTA_DEMO_INFO=1
+#   VOLTA_DEMO_LANG=fr|en (Sprache ohne Speichern), VOLTA_SHOW_TIME=1 (Simulationszeit), VOLTA_DEMO_INFO=1,
+#   VOLTA_NO_SPLASH=1 (ohne Startbildschirm)
 
 # Lokales Release (lauffaehiges Programm mit Qt-Laufzeit und Inhalten in Release/, nicht im Repository)
 python3 tools/deploy_release.py

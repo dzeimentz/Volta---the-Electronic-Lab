@@ -20,4 +20,12 @@ ApplicationWindow {
         languageService: typeof volta_languageService !== "undefined" ? volta_languageService : null
         Component.onCompleted: labController.startExperiment("volta1.1.1")
     }
+
+    // Startbildschirm nur in der Desktop-Ausgabe (main.cpp setzt volta_showSplash)
+    Loader {
+        anchors.fill: parent
+        z: 1000
+        active: typeof volta_showSplash !== "undefined" && volta_showSplash
+        sourceComponent: Splash { controller: labController }
+    }
 }

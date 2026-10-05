@@ -300,6 +300,13 @@
     </message>
 </context>
 <context>
+    <name>Splash</name>
+    <message>
+        <source>Version %1</source>
+        <translation type="unfinished">Version %1</translation>
+    </message>
+</context>
+<context>
     <name>Texts</name>
     <message>
         <source>Widerstand</source>

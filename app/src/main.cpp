@@ -41,6 +41,13 @@ int main(int argc, char* argv[]) {
     QObject::connect(&language, &volta::LanguageService::languageChanged, &lab,
                      &volta::LabController::setContentLanguage);
     engine.rootContext()->setContextProperty(QStringLiteral("volta_languageService"), &language);
+    // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux); abschaltbar mit VOLTA_NO_SPLASH=1
+#if (defined(Q_OS_WIN) || defined(Q_OS_LINUX)) && !defined(Q_OS_ANDROID)
+    const bool splash = qEnvironmentVariableIntValue("VOLTA_NO_SPLASH") != 1;
+#else
+    const bool splash = false;
+#endif
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_showSplash"), splash);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");

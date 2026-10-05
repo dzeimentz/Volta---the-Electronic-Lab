@@ -74,6 +74,7 @@ qt_add_qml_module(volta_ui
         qml/GroupLine.qml
         qml/ExperimentPanel.qml
         qml/InfoDialog.qml
+        qml/Splash.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp
