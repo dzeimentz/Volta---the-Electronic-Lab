@@ -1,0 +1,80 @@
+{
+  "id": "volta1.1.1",
+  "band": "volta1",
+  "stufe": 1,
+  "kapitel": 1,
+  "titel_key": "exp_1_1_titel",
+  "dauer_min": 8,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "gluehlampe",
+    "leitung"
+  ],
+  "frage_key": "exp_1_1_frage",
+  "vermutungen": [
+    "exp_1_1_v1",
+    "exp_1_1_v2",
+    "exp_1_1_v3"
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "pult_stellung": {
+      "batterie_V": 4.5
+    },
+    "bauteile": [
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_1_1_s1",
+    "exp_1_1_s2",
+    "exp_1_1_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 2
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_1_1_h1",
+    "exp_1_1_h2",
+    "exp_1_1_loesung"
+  ],
+  "erklaerung_key": "exp_1_1_erklaerung",
+  "mehr_wissen_key": "exp_1_1_mehr",
+  "weiterforschen": [
+    "exp_1_1_w1",
+    "exp_1_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp_1_1_echt"
+}

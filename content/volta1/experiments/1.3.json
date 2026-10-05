@@ -1,0 +1,85 @@
+{
+  "id": "volta1.1.3",
+  "band": "volta1",
+  "stufe": 1,
+  "kapitel": 1,
+  "titel_key": "exp_1_3_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "motor",
+    "leitung"
+  ],
+  "frage_key": "exp_1_3_frage",
+  "vermutungen": [
+    "exp_1_3_v1",
+    "exp_1_3_v2",
+    "exp_1_3_v3"
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "pult_stellung": {
+      "schalter": true
+    },
+    "bauteile": [
+      {
+        "id": "M1",
+        "typ": "motor",
+        "felder": [
+          "C1",
+          "C3"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "P:S1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:S2",
+        "nach": "C1",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_1_3_s1",
+    "exp_1_3_s2",
+    "exp_1_3_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "M1",
+        "groesse": "drehzahl",
+        "min": 500,
+        "dauer_s": 2
+      },
+      {
+        "bauteil": "M1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_1_3_h1",
+    "exp_1_3_h2",
+    "exp_1_3_loesung"
+  ],
+  "erklaerung_key": "exp_1_3_erklaerung",
+  "mehr_wissen_key": "exp_1_3_mehr",
+  "weiterforschen": [
+    "exp_1_3_w1",
+    "exp_1_3_w2"
+  ],
+  "jetzt_in_echt_key": "exp_1_3_echt"
+}

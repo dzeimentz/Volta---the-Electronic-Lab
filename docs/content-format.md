@@ -76,6 +76,9 @@ content/
 - Modul: `{"id": "BL1", "typ": "blinkmodul", "feld": 1}` – belegt die Felder der Modulleiste ab `M:<feld>` in der
   Reihenfolge der Katalog-Anschluesse (Blinkmodul: `plus`, `minus`, `aus`, `takt`).
 - Leitung: `{"von", "nach", "farbe"?, "id"?}`; ohne `id` vergibt das Laden `L1`, `L2`, …
+- Pultstellung (optional): `"pult_stellung": {"batterie_V": 3 | 4.5 | 9, "schalter": bool, "p1": 0..1, "p2": 0..1}`.
+  Gilt beim Start des gefuehrten Experiments (leere Grundplatte) und fuer den Musteraufbau; der Hauptschalter
+  bleibt aus – Einschalten ist Sache des Kindes. Fehlt der Schluessel: 9 V, Pultschalter offen, Regler in der Mitte.
 
 ### Anschlussbezeichner
 - Kontaktfeld: `A1` … `E8`
@@ -98,6 +101,11 @@ Bedingungen werden ueber den simulierten Zustand geprueft; jeder funktionierende
 Groessen: `strom_mA`, `spannung_V`, `leistung_mW`, `helligkeit` (0..1), `drehzahl`, `frequenz_Hz`, `temperatur_C`.
 Bauteilbezug ueber die Rolle in der Vorlage: Das Kind darf andere Bezeichner verwenden; die Zuordnung erfolgt ueber
 Typ und Funktion (z. B. »die einzige rote LED«). Bei Mehrdeutigkeit `rolle` statt `bauteil` verwenden.
+
+Umsetzung (Phase 1, `LabSession::setSuccess`): Ein Vorlagenbauteil gilt als das Bauteil gleicher Kennung, wenn
+dieses denselben Typ hat; sonst als das naechste noch nicht zugeordnete Bauteil desselben Typs (Reihenfolge des
+Aufbaus). Die Pruefung laeuft im Simulations-Thread nach jedem Schritt; nach einer Aufbauaenderung beginnen die
+Haltedauern (`dauer_s`) neu. `rolle` (Funktion statt Typ) folgt mit der Lernpfad-Engine in Phase 2.
 
 ## Bauteilkatalog (`catalog/bauteile.json`)
 

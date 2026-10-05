@@ -26,7 +26,17 @@
         "bauteile": {"type": "array", "items": {"$ref": "#/$defs/placement"}},
         "module": {"type": "array", "items": {"$ref": "#/$defs/module"}},
         "leitungen": {"type": "array", "items": {"$ref": "#/$defs/wire"}},
-        "anzeigen": {"type": "array", "items": {"$ref": "#/$defs/anchor"}}
+        "anzeigen": {"type": "array", "items": {"$ref": "#/$defs/anchor"}},
+        "pult_stellung": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "batterie_V": {"enum": [3, 4.5, 9]},
+            "schalter": {"type": "boolean"},
+            "p1": {"type": "number", "minimum": 0, "maximum": 1},
+            "p2": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        }
       }
     },
     "schritte": {"type": "array", "items": {"$ref": "#/$defs/key"}},

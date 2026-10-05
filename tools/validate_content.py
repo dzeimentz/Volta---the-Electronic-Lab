@@ -183,6 +183,15 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
             rep.error(where, f"Leitung {i}: Anfang und Ende gleich")
         if "farbe" in w and w["farbe"] not in COLORS:
             rep.error(where, f"Leitung {i}: unbekannte Farbe '{w['farbe']}'")
+    pult = tpl.get("pult_stellung", {}) or {}
+    for k in pult:
+        if k not in ("batterie_V", "schalter", "p1", "p2"):
+            rep.error(where, f"pult_stellung: unbekannter Schluessel '{k}'")
+    if "batterie_V" in pult and pult["batterie_V"] not in (3, 4.5, 9):
+        rep.error(where, "pult_stellung: batterie_V muss 3, 4.5 oder 9 sein")
+    for k in ("p1", "p2"):
+        if k in pult and not (isinstance(pult[k], (int, float)) and 0 <= pult[k] <= 1):
+            rep.error(where, f"pult_stellung: {k} muss zwischen 0 und 1 liegen")
     for a in tpl.get("anzeigen", []):
         if not ANCHOR.match(str(a)):
             rep.error(where, f"Spannungsanzeige an ungueltigem Feld '{a}'")
