@@ -3,8 +3,8 @@
 ## Grundplatte und Kontaktfelder
 
 - Die Grundplatte besteht aus **Kontaktfeldern** in Zeilen und Spalten. Volta 1: Zeilen `A`–`E`, Spalten `1`–`8`.
-- Jedes Feld hat **vier Steckplaetze**, die leitend verbunden sind. Elektrisch ist ein Feld **ein Knoten**.
-- Bezeichner: `<Zeile><Spalte>`, Regex `^[A-E][1-8]$` (Volta 1). Die Koordinatenform ist bewusst eigenstaendig
+- Jedes Feld hat **fuenf Steckplaetze**, die leitend verbunden sind. Elektrisch ist ein Feld **ein Knoten**.
+- Bezeichner: `<Zeile><Spalte>`, Regex `^[A-E](1[0-2]|[1-9])$` (Volta 1: 5 Zeilen x 12 Spalten). Die Koordinatenform ist bewusst eigenstaendig
   (das Vorbild nummeriert durchgehend).
 - Freischaltung: Stufe 1 nur Zeilen `A`–`C`, ab Stufe 3 volle Flaeche.
 - Mindestgroesse: Feld 56 dp hoch, 24 dp Abstand.
@@ -16,7 +16,7 @@
 - Bauteile mit drei Anschluessen (Transistor) sitzen auf einer **Traegerplatine** mit Schaltzeichen und
   Anschlussbezeichnung (B, C, E), die drei Felder ueberspannt.
 - Gepolte Bauteile tragen Anschlussnamen: Diode/LED `anode`, `kathode`; Elko `plus`, `minus`; Transistor `b`, `c`, `e`.
-- Ein Steckplatz ist maximal einmal belegt; ein Feld hat damit hoechstens vier Bauteilbeine plus beliebig viele Leitungen
+- Ein Steckplatz ist maximal einmal belegt; ein Feld hat damit hoechstens fuenf Bauteilbeine plus beliebig viele Leitungen
   (Leitungen belegen keinen Steckplatz, sie enden am Feld).
 
 ## Leitungen
@@ -37,7 +37,7 @@
 | `S1`, `S2` | Schalter | Kontakte |
 | `LS1`, `LS2` | Lautsprecher | Anschluesse |
 
-- Jedes Pultfeld ist ein Kontaktfeld mit vier Steckplaetzen und eigenem Knoten.
+- Jedes Pultfeld ist ein Kontaktfeld mit fuenf Steckplaetzen und eigenem Knoten.
 - **Gruppenlinie**: graue waagrechte Linie ueber den Feldern eines Bauteils mit dessen Schaltzeichen in der Mitte;
   zeigt Zugehoerigkeit, ist **keine** Leitung. Felder einer Gruppe sind elektrisch getrennte Knoten.
 - Pultelemente: Hauptschalter (Batterie), zwei Drehregler mit 270°-Lichtring (16 Segmente), Lautsprecher mit

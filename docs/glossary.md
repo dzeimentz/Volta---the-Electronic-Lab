@@ -4,7 +4,7 @@
 |---|---|---|
 | Band | Edition | eigenstaendige App der Reihe (volta1, volta2, volta3, zuse1) |
 | Grundplatte | Board | Arbeitsflaeche mit Kontaktfeldern |
-| Kontaktfeld | Field | Feld mit 4 leitend verbundenen Steckplaetzen = 1 Knoten; A1–E8 |
+| Kontaktfeld | Field | Feld mit 5 leitend verbundenen Steckplaetzen = 1 Knoten; A1–E12 |
 | Steckplatz | Socket | einzelnes Loch in einem Feld |
 | Leitung | Wire | frei gezogene Verbindung |
 | Bauteil | Component | Typ im Katalog / Instanz auf der Platte |

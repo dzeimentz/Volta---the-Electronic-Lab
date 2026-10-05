@@ -47,7 +47,7 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   - Ab Stufe 3: langer Druck zeigt Frequenz in Hz. Bleibt im Klassenmodus aktiv.
 - **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
-- **Pultleiste**: Felder mit vier Steckplaetzen und Bezeichnung; Gruppenlinien mit Schaltzeichen
+- **Pultleiste**: Felder mit fuenf Steckplaetzen und Bezeichnung; Gruppenlinien mit Schaltzeichen
   (Batterie, P1, P2, Schalter, Lautsprecher). Tippen auf Schaltzeichen hebt Gruppe und Pultelement hervor.
 
 ## Grundplatte

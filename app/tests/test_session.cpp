@@ -52,6 +52,8 @@ private slots:
         // passt nicht auf die Platte
         QVERIFY(!s->addPart("widerstand", "E8", Orientation::Vertical, Span::Short));
         QVERIFY(!s->lastError().empty());
+        QVERIFY(!s->addPart("widerstand", "A12", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addPart("widerstand", "A11", Orientation::Horizontal, Span::Short)); // A11-A12
         // Motor nur mit langer Spannweite (Katalog)
         QVERIFY(!s->addPart("motor", "D1", Orientation::Horizontal, Span::Short));
         QVERIFY(s->addPart("motor", "D1", Orientation::Horizontal, Span::Long));
@@ -63,9 +65,10 @@ private slots:
         QCOMPARE(pins(*s, id), (std::vector<std::pair<std::string, std::string>>{
                                    {"mitte", "D6"}, {"a", "C6"}, {"b", "E6"}}));
 
-        // hoechstens vier Beine je Feld (B4 hat schon R1 und D1)
+        // hoechstens fuenf Beine je Feld (B4 hat schon R1 und D1)
         QVERIFY(s->addPart("widerstand", "B4", Orientation::Horizontal, Span::Short));
         QVERIFY(s->addPart("widerstand", "A4", Orientation::Vertical, Span::Short));
+        QVERIFY(s->addPart("widerstand", "B4", Orientation::Horizontal, Span::Long)); // fuenftes Bein
         QVERIFY(!s->addPart("widerstand", "B4", Orientation::Vertical, Span::Short));
         QVERIFY(QString::fromStdString(s->lastError()).contains(QStringLiteral("voll")));
     }

@@ -13,7 +13,7 @@ Item {
     readonly property var deskNames: ["P:+9V", "P:0V", "P:P1a", "P:P1s", "P:P1b", "P:P2a", "P:P2s", "P:P2b",
                                       "P:S1", "P:S2", "P:LS1", "P:LS2", "MESS:COM", "MESS:VOHM", "MESS:A"]
     readonly property var rows: ["A", "B", "C", "D", "E"]
-    readonly property int columns: 8
+    readonly property int columns: 12
     readonly property int slots: 16
     // Pult (Bedienelemente), Gruppenlinien, Pultleiste, Grundplatte, Modulleiste von oben nach unten
     readonly property int deskPanelHeight: 128
@@ -31,7 +31,7 @@ Item {
     }
 
     function deskLabel(name) { return name.startsWith("MESS:") ? name.substring(5).replace("VOHM", "V/Ω") : name.substring(2) }
-    function isBoardField(name) { return /^[A-E][1-8]$/.test(name) }
+    function isBoardField(name) { return /^[A-E](1[0-2]|[1-9])$/.test(name) }
 
     function anchorSize(name) {
         if (deskNames.indexOf(name) >= 0) return Qt.size(Theme.deskFieldWidth, Theme.fieldHeight)
@@ -295,7 +295,7 @@ Item {
                     anchorName: modelData
                     label: lab.isBoardField(modelData) ? modelData
                          : modelData.startsWith("M:") ? "M" + modelData.substring(2) : lab.deskLabel(modelData)
-                    sockets: modelData.startsWith("M:") ? 1 : 4
+                    sockets: modelData.startsWith("M:") ? 1 : 5
                     width: lab.anchorSize(modelData).width
                     height: lab.anchorSize(modelData).height
                     x: lab.anchorPoint(modelData).x - width / 2

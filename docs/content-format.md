@@ -81,7 +81,7 @@ content/
   bleibt aus – Einschalten ist Sache des Kindes. Fehlt der Schluessel: 9 V, Pultschalter offen, Regler in der Mitte.
 
 ### Anschlussbezeichner
-- Kontaktfeld: `A1` … `E8`
+- Kontaktfeld: `A1` … `E12` (5 Zeilen x 12 Spalten, je Feld 5 Steckplaetze)
 - Pultfeld: `P:+9V`, `P:0V`, `P:P1a`, `P:P1s`, `P:P1b`, `P:P2a`, `P:P2s`, `P:P2b`, `P:S1`, `P:S2`, `P:LS1`, `P:LS2`
 - Modulanschluss: `<Modul-ID>.<Anschluss>` (z. B. `BL1.takt`)
 - Messgeraet: `MESS:COM`, `MESS:VOHM`, `MESS:A`

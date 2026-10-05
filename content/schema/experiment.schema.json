@@ -49,9 +49,9 @@
   },
   "$defs": {
     "key": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
-    "field": {"type": "string", "pattern": "^[A-E][1-8]$"},
+    "field": {"type": "string", "pattern": "^[A-E](1[0-2]|[1-9])$"},
     "anchor": {"type": "string",
-      "pattern": "^([A-E][1-8]|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z]+)$"},
+      "pattern": "^([A-E](1[0-2]|[1-9])|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z]+)$"},
     "placement": {
       "type": "object",
       "required": ["id", "typ", "felder"],

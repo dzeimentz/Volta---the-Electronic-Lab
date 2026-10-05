@@ -15,11 +15,11 @@ enum class AnchorKind {
     ModulePin   // Modulanschluss ueber den Namen, z. B. "BL1.takt"
 };
 
-// Aufbau der Grundplatte von Volta 1: Zeilen A-E, Spalten 1-8; Pultleiste; Messgeraet; Modulleiste M1-M16.
+// Aufbau der Grundplatte von Volta 1: Zeilen A-E, Spalten 1-12; Pultleiste; Messgeraet; Modulleiste M1-M16.
 struct BoardLayout {
     char firstRow = 'A';
     char lastRow = 'E';
-    int columns = 8;
+    int columns = 12;
     int moduleSlots = 16;
 
     static const BoardLayout& volta1();
@@ -27,7 +27,7 @@ struct BoardLayout {
 
 AnchorKind classifyAnchor(const std::string& anchor, const BoardLayout& layout = BoardLayout::volta1());
 
-// Alle Felder der Grundplatte in Lesereihenfolge (A1, A2, ..., E8).
+// Alle Felder der Grundplatte in Lesereihenfolge (A1, A2, ..., E12).
 std::vector<std::string> boardFields(const BoardLayout& layout = BoardLayout::volta1());
 // Pultfelder in Anzeigereihenfolge (P:+9V, P:0V, P:P1a, ...).
 const std::vector<std::string>& deskFields();

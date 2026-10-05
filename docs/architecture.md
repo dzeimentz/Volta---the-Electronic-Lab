@@ -42,7 +42,7 @@ entstehen alle Baende (Volta 1–3, Zuse 1) als eigene Apps und alle Plattformen
 - Wiederverwendung im Elektrik-Modul von VTS Education Light. Deshalb keine Abhaengigkeit von Qt oder `app/`.
 
 ### app/src/model – Schaltungsmodell
-- `Board` – Grundplatte mit Kontaktfeldern (A1–E8 in Volta 1), Pultleiste, Modulleiste.
+- `Board` – Grundplatte mit Kontaktfeldern (A1–E12 in Volta 1), Pultleiste, Modulleiste.
 - `Placement` – Bauteil auf Feldern (Spannweite kurz = 1 Feldabstand, lang = 2).
 - `Wire` – frei gezogene Leitung zwischen zwei Anschlusspunkten mit Farbe und optionalem Zwischenpunkt.
 - `ModuleInstance` – Modul in der Modulleiste; Teilschaltung oder Verhaltensmodell.
@@ -52,7 +52,7 @@ entstehen alle Baende (Volta 1–3, Zuse 1) als eigene Apps und alle Plattformen
   `transferStates` uebernimmt Bauteilzustaende (Ladung, Temperatur, zerstoert, Sicherung) bei jedem
   Topologiewechsel.
 - `Board` (`model/board.hpp`) – Aufbau: Bauteile mit Anschlussbelegung, Leitungen, Module, Pultzustand.
-- Anschlussbezeichner (`model/anchor.*`) – Kontaktfelder A1–E8, `P:…`, `MESS:…`, `M:n`, `<Modul-ID>.<Anschluss>`.
+- Anschlussbezeichner (`model/anchor.*`) – Kontaktfelder A1–E12, `P:…`, `MESS:…`, `M:n`, `<Modul-ID>.<Anschluss>`.
 - `LabSession` (`model/lab_session.*`) – Experimentsitzung ohne Oberflaeche: Aufbau, Netzliste, SimulationBridge,
   `QUndoStack` mit `BoardCommand`, Bearbeitungsbefehle mit Platzierregeln (`model/board_edit.*`), Bedienhandlungen.
   `LabController` ist die duenne QML-Anbindung darueber.

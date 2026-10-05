@@ -11,7 +11,7 @@ Vorgehen:
    Fehlt ein Typ, brich ab und schlage `/neues-bauteil` vor.
 3. Entwirf den Ablauf nach dem Forschungskreislauf: Frage, 3–4 Vermutungen, Aufbau, Versuch, Beobachtung,
    Erklaerung, Weiterforschen, Jetzt in echt. Ziel: 10–15 Minuten.
-4. Lege `content/<band>/experiments/<stufe>.<nr>.json` an. Feldbezeichner A1–E8, Pult `P:...`, Leitungen mit Farbe
+4. Lege `content/<band>/experiments/<stufe>.<nr>.json` an. Feldbezeichner A1–E12, Pult `P:...`, Leitungen mit Farbe
    (rot fuer Plus, schwarz fuer Minus). Erfolgsbedingungen zustandsbasiert, nicht aufbaubezogen.
 5. Setze `zerstoerend` korrekt; bei `true` darf »Jetzt in echt« nur den sicheren Nachbau beschreiben.
 6. Trage alle Schluessel in `content/<band>/i18n/de.json` ein: Du-Form, kurze Saetze, eigenstaendige Formulierungen.

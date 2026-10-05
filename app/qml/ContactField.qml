@@ -1,4 +1,4 @@
-// Kontaktfeld (Grundplatte, Pultleiste, Messgeraet, Modulleiste): ein Knoten mit vier Steckplaetzen.
+// Kontaktfeld (Grundplatte, Pultleiste, Messgeraet, Modulleiste): ein Knoten mit fuenf Steckplaetzen.
 // Von einem Feld aus wird eine Leitung gezogen; langer Druck/Rechtsklick oeffnet das Feldmenue.
 import QtQuick
 
@@ -8,7 +8,7 @@ Rectangle {
     property string label: anchorName
     property bool showVoltage: false
     property int bars: 0
-    property int sockets: 4 // Steckplaetze (Modulleiste: schmale Felder mit einem Steckplatz)
+    property int sockets: 5 // Steckplaetze (Modulleiste: schmale Felder mit einem Steckplatz)
     property bool highlighted: false
 
     signal wireDragUpdated(point scenePos)
@@ -20,13 +20,14 @@ Rectangle {
     border.color: highlighted ? Theme.signalOrange : Theme.fieldOutline
     border.width: highlighted ? 4 : 1
 
+    // Steckplaetze links unten (rechts unten sitzt die Spannungsanzeige); schmale Pultfelder: mittig, enger
     Grid {
-        anchors.left: parent.left
-        anchors.leftMargin: root.sockets > 1 ? 8 : (parent.width - 6) / 2
+        readonly property bool narrow: root.width < 64
+        x: root.sockets === 1 || narrow ? (root.width - width) / 2 : 6
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
         columns: root.sockets
-        spacing: 6
+        spacing: narrow ? 3 : 4
         Repeater {
             model: root.sockets
             Rectangle { width: 6; height: 6; radius: 3; color: Theme.fieldOutline }

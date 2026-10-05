@@ -12,7 +12,7 @@ namespace volta::model {
 enum class Orientation { Horizontal, Vertical };
 enum class Span { Short = 1, Long = 2 }; // ein bzw. zwei Feldabstaende
 
-inline constexpr int kSocketsPerField = 4;
+inline constexpr int kSocketsPerField = 5;
 
 // Felder, die ein Bauteil vom Startfeld aus belegt; leer, wenn es nicht auf die Grundplatte passt.
 // Zweipolig: Startfeld und Feld im Abstand span. Traegerplatine (drei Anschluesse): drei benachbarte Felder.
@@ -27,7 +27,7 @@ std::string nextPartId(const Board& board, const std::string& type);
 std::string nextWireId(const Board& board);
 
 // Prueft, ob ein Bauteil gesetzt werden kann: Typ bekannt, Anschluesse auf gueltigen Feldern, Spannweite erlaubt,
-// Steckplaetze frei (hoechstens vier Beine je Feld). ignoreId: bei Verschieben das Bauteil selbst nicht mitzaehlen.
+// Steckplaetze frei (hoechstens fuenf Beine je Feld). ignoreId: bei Verschieben das Bauteil selbst nicht mitzaehlen.
 bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& part, std::string& error,
               const std::string& ignoreId = {});
 

@@ -18,9 +18,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content"
 
-FIELD = re.compile(r"^[A-E][1-8]$")
+FIELD = re.compile(r"^[A-E](1[0-2]|[1-9])$")
 ANCHOR = re.compile(
-    r"^([A-E][1-8]|P:(\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\.[a-z]+)$"
+    r"^([A-E](1[0-2]|[1-9])|P:(\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\.[a-z]+)$"
 )
 KEY = re.compile(r"^[a-z][a-z0-9_]*$")
 EXP_ID = re.compile(r"^(volta1|volta2|volta3|zuse1)\.[0-9]+\.[0-9]+$")
@@ -167,8 +167,8 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
         if typ == "widerstand" and "wert" not in p:
             rep.error(where, f"Bauteil {pid}: Widerstand ohne 'wert'")
     for f, n in used_sockets.items():
-        if n > 4:
-            rep.error(where, f"Feld {f}: {n} Bauteilbeine, maximal 4 Steckplaetze")
+        if n > 5:
+            rep.error(where, f"Feld {f}: {n} Bauteilbeine, maximal 5 Steckplaetze")
 
     for m in tpl.get("module", []):
         if m.get("typ") not in catalog["modules"]:

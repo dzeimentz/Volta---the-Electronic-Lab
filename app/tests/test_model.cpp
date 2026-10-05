@@ -50,8 +50,10 @@ private slots:
     void anchors() {
         QCOMPARE(model::classifyAnchor("A1"), AnchorKind::Field);
         QCOMPARE(model::classifyAnchor("E8"), AnchorKind::Field);
+        QCOMPARE(model::classifyAnchor("E12"), AnchorKind::Field);
+        QCOMPARE(model::classifyAnchor("A13"), AnchorKind::Invalid);
         QCOMPARE(model::classifyAnchor("F1"), AnchorKind::Invalid);
-        QCOMPARE(model::classifyAnchor("A9"), AnchorKind::Invalid);
+        QCOMPARE(model::classifyAnchor("A9"), AnchorKind::Field);
         QCOMPARE(model::classifyAnchor("A0"), AnchorKind::Invalid);
         QCOMPARE(model::classifyAnchor("A01"), AnchorKind::Invalid);
         QCOMPARE(model::classifyAnchor("P:+9V"), AnchorKind::Desk);
@@ -63,9 +65,9 @@ private slots:
         QCOMPARE(model::classifyAnchor("M:17"), AnchorKind::Invalid);
         QCOMPARE(model::classifyAnchor("BL1.takt"), AnchorKind::ModulePin);
         QCOMPARE(model::classifyAnchor("bl1.takt"), AnchorKind::Invalid);
-        QCOMPARE(model::boardFields().size(), std::size_t(40));
+        QCOMPARE(model::boardFields().size(), std::size_t(60));
         QCOMPARE(model::boardFields().front(), std::string("A1"));
-        QCOMPARE(model::boardFields().back(), std::string("E8"));
+        QCOMPARE(model::boardFields().back(), std::string("E12"));
     }
 
     void catalogLoads() {
