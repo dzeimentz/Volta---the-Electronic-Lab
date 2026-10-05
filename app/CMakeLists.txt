@@ -56,6 +56,7 @@ qt_add_qml_module(volta_ui
         qml/ContactField.qml
         qml/VoltageBars.qml
         qml/PartItem.qml
+        qml/PartBody.qml
         qml/WireItem.qml
         qml/WireEndHandle.qml
         qml/PartTray.qml

@@ -61,35 +61,28 @@ Item {
         }
     }
 
-    // Koerper
-    Rectangle {
+    // Koerper (Traegerplatine ueberspannt alle drei Felder)
+    PartBody {
         id: body
-        width: 64
-        height: 32
-        radius: 8
+        readonly property real span: Math.sqrt(Math.pow(root.b.x - root.a.x, 2) + Math.pow(root.b.y - root.a.y, 2))
+        width: root.points.length > 2 ? span + 40 : 72
+        height: 34
         x: root.cx - width / 2
         y: root.cy - height / 2
         rotation: Math.atan2(root.b.y - root.a.y, root.b.x - root.a.x) * 180 / Math.PI
-        color: root.destroyed ? Theme.destroyed
-             : root.overloaded ? Theme.signalOrange
-             : root.partType.startsWith("led") ? "#E8221B"
-             : "#E9D7B0"
-        border.color: root.selected ? Theme.accent : (root.overloaded ? "#B23A00" : Theme.navy)
-        border.width: root.selected || root.overloaded ? 3 : 1
-
-        // leuchtende LED: Helligkeit aus dem Strom (level = I / 20 mA)
-        Rectangle {
-            anchors.fill: parent
-            radius: parent.radius
-            visible: root.partType.startsWith("led") && !root.destroyed
-            color: "#FFF4B0"
-            opacity: Math.min(1, Math.max(0, (root.partState.level || 0) * 0.8))
-        }
+        type: root.partType
+        value: root.value
+        level: root.partState.level || 0
+        closed: root.closed
+        destroyed: root.destroyed
+        overloaded: root.overloaded
+        selected: root.selected
     }
 
     Text {
         anchors.horizontalCenter: body.horizontalCenter
         y: body.y + body.height + 4
+        // Beschriftung unter dem Bauteil (bei senkrechter Lage daneben)
         text: root.destroyed ? qsTr("%1 kaputt").arg(root.partId)
                              : root.partId + (root.partType === "widerstand" ? " " + Texts.ohm(root.value) : "")
         font.pixelSize: 12

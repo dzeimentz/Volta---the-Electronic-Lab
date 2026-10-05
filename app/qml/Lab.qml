@@ -312,10 +312,15 @@ Item {
                     readonly property point toPoint: movingTo ? lab.wirePreviewEnd : lab.anchorPoint(modelData.to)
 
                     WireItem {
+                        id: wireShape
                         from: wire.fromPoint
                         to: wire.toPoint
                         wireColor: Theme.wireColor(wire.modelData.color)
                         selected: lab.selectedWire === wire.modelData.id
+                        Connections {
+                            target: lab.controller
+                            function onStateChanged() { wireShape.currentmA = lab.controller.wireCurrent(wire.modelData.id) }
+                        }
                     }
                     Repeater {
                         model: [true, false] // Anfang, Ende
