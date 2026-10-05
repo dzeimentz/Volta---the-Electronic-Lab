@@ -165,9 +165,10 @@ private:
         } else if ((m == "led" || m == "diode") && n.size() == 2) {
             c.add<core::Diode>(p.id, n[0], n[1], diodeParams(*e));
         } else if (m == "lamp" && n.size() == 2) {
+            // Variante ueber die Nennspannung (Wert des Bauteils); ohne Wert: Katalogvorgabe
             core::LampParams lp;
-            lp.uNomV = e->param("u_nenn_V", lp.uNomV);
-            lp.iNomA = e->param("i_nenn_mA", lp.iNomA * 1e3) * 1e-3;
+            lp.uNomV = p.value > 0.0 ? p.value : e->param("u_nenn_V", lp.uNomV);
+            lp.iNomA = e->variantParam("u_nenn_V", lp.uNomV, "i_nenn_mA", lp.iNomA * 1e3) * 1e-3;
             c.add<core::Lamp>(p.id, n[0], n[1], lp);
         } else if (m == "switch" && n.size() == 2) {
             c.add<core::Switch>(p.id, n[0], n[1], p.closed);

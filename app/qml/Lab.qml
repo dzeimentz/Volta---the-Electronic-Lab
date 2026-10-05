@@ -90,6 +90,13 @@ Item {
         return ""
     }
 
+    function catalogEntry(type) {
+        const list = controller.catalogParts
+        for (let i = 0; i < list.length; ++i) if (list[i].type === type) return list[i]
+        return ({})
+    }
+    // Nennspannung einer Gluehlampe (Wert; ohne Wert die Katalogvorgabe)
+    function lampVolt(part) { return part && part.value > 0 ? part.value : (catalogEntry("gluehlampe").defaultVolt || 0) }
     function toCanvas(scenePos) { return canvas.mapFromItem(null, scenePos.x, scenePos.y) }
     // Mitte und Rand einer Gruppe von Pultfeldern (Index in deskNames)
     function deskX(i) { return anchorPoint(deskNames[i]).x }
@@ -631,7 +638,7 @@ Item {
                     objectName: "part_" + modelData.id
                     partId: modelData.id
                     partType: modelData.type
-                    value: modelData.value
+                    value: modelData.type === "gluehlampe" ? lab.lampVolt(modelData) : modelData.value
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id
                     points: modelData.anchors.map((a, i) => lab.socketPoint(a, modelData.sockets[i]))
@@ -798,6 +805,23 @@ Item {
                 }
                 onObjectAdded: (index, object) => valueMenu.insertItem(index, object)
                 onObjectRemoved: (index, object) => valueMenu.removeItem(object)
+            }
+        }
+        Menu {
+            id: voltMenu
+            title: qsTr("Nennspannung")
+            enabled: partMenu.part.type === "gluehlampe"
+            Instantiator {
+                model: lab.catalogEntry("gluehlampe").voltages || []
+                delegate: MenuItem {
+                    required property var modelData
+                    text: qsTr("%1 V").arg(Number(modelData).toLocaleString(Qt.locale(), "f", modelData % 1 === 0 ? 0 : 1))
+                    checkable: true
+                    checked: Math.abs(lab.lampVolt(partMenu.part) - modelData) < 1e-9
+                    onTriggered: lab.controller.setPartValue(partMenu.part.id, modelData)
+                }
+                onObjectAdded: (index, object) => voltMenu.insertItem(index, object)
+                onObjectRemoved: (index, object) => voltMenu.removeItem(object)
             }
         }
         MenuItem {

@@ -70,6 +70,12 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - **Pultleiste**: Felder mit fuenf Steckplaetzen und Bezeichnung; Gruppenlinien mit Schaltzeichen
   (Batterie, P1, P2, Schalter, Lautsprecher). Tippen auf Schaltzeichen hebt Gruppe und Pultelement hervor.
 
+## Bauteilfach
+- Jede Kachel zeigt das Schaltzeichen nach DIN EN 60617 (`SchematicSymbol.qml`, einfarbig) ueber dem Namen; die
+  Zeichen dienen spaeter auch der Schaltplanansicht.
+- Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
+  an der Lampe.
+
 ## Grundplatte
 - Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).

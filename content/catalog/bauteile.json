@@ -2,7 +2,9 @@
   "schema_version": 1,
   "bauteile": [
     {"typ": "gluehlampe", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "lamp",
-     "parameter": {"u_nenn_V": 6.0, "i_nenn_mA": 50}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_gluehlampe"},
+     "parameter": {"u_nenn_V": 6.0, "i_nenn_mA": 50},
+     "varianten": [{"u_nenn_V": 2.5, "i_nenn_mA": 200}, {"u_nenn_V": 6.0, "i_nenn_mA": 50}, {"u_nenn_V": 10.0, "i_nenn_mA": 50}],
+     "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_gluehlampe"},
     {"typ": "taster", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "switch",
      "parameter": {}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_taster"},
     {"typ": "wechselschalter", "anschluesse": ["mitte", "a", "b"], "spannweite": ["traeger"], "lage": ["a", "mitte", "b"], "modell": "changeover_switch",

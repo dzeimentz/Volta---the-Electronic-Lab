@@ -327,10 +327,17 @@ QStringList LabController::voltageFields() const {
 QVariantList LabController::catalogParts() const {
     QVariantList out;
     for (const auto& [type, e] : m_session->catalog().parts)
+    {
+        QVariantList volts; // Gluehlampe: waehlbare Nennspannungen
+        for (const auto& v : e.variants)
+            if (const auto it = v.find("u_nenn_V"); it != v.end()) volts << it->second;
         out << QVariantMap{{QStringLiteral("type"), qs(type)},
                            {QStringLiteral("model"), qs(e.model)},
                            {QStringLiteral("stage"), e.fromStage},
-                           {QStringLiteral("pins"), static_cast<int>(e.pins.size())}};
+                           {QStringLiteral("pins"), static_cast<int>(e.pins.size())},
+                           {QStringLiteral("voltages"), volts},
+                           {QStringLiteral("defaultVolt"), e.param("u_nenn_V", 0.0)}};
+    }
     return out;
 }
 

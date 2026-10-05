@@ -70,7 +70,8 @@ content/
 
 ### Vorlage: Bauteile, Module, Leitungen
 - Bauteil: `{"id", "typ", "felder", "wert"?, "geschlossen"?, "stellung"?}`. `felder` ist ein Array in der
-  Reihenfolge der Katalog-Anschluesse oder ein Objekt `{anschluss: feld}`. `wert` in Ohm bzw. Farad;
+  Reihenfolge der Katalog-Anschluesse oder ein Objekt `{anschluss: feld}`. `wert` in Ohm bzw. Farad, bei der Gluehlampe die
+  Nennspannung in Volt (Katalog `varianten`: 2,5 / 6 / 10 V, Vorgabe 6 V);
   `geschlossen` fuer Schalter, Taster, Reedkontakt (Wechselschalter: Stellung B); `stellung` 0..1 fuer
   Potentiometer.
 - Modul: `{"id": "BL1", "typ": "blinkmodul", "feld": 1}` – belegt die Felder der Modulleiste ab `M:<feld>` in der

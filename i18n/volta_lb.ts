@@ -297,6 +297,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Nennspannung</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 V</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Reparieren</source>
         <translation type="unfinished"></translation>
     </message>
@@ -376,6 +384,10 @@
     <name>PartItem</name>
     <message>
         <source>%1 kaputt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 V</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

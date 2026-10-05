@@ -175,6 +175,10 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
                 ok = False
             if not ok:
                 rep.error(where, f"Bauteil {pid}: Platine braucht einen 2x2-Block in der Lage {lage}")
+        if spec.get("varianten") and "wert" in p:
+            volts = [v.get("u_nenn_V") for v in spec["varianten"]]
+            if p["wert"] not in volts:
+                rep.error(where, f"Bauteil {pid}: Nennspannung {p['wert']} V nicht im Katalog {volts}")
         if typ == "widerstand" and "wert" not in p:
             rep.error(where, f"Bauteil {pid}: Widerstand ohne 'wert'")
     for f, n in used_sockets.items():

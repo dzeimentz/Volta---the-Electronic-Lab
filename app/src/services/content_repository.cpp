@@ -71,6 +71,13 @@ bool ContentRepository::loadCatalog(model::Catalog& out) {
         const QJsonObject params = o.value(QStringLiteral("parameter")).toObject();
         for (auto it = params.begin(); it != params.end(); ++it)
             if (it.value().isDouble()) e.params[it.key().toStdString()] = it.value().toDouble();
+        for (const QJsonValue& var : o.value(QStringLiteral("varianten")).toArray()) {
+            std::map<std::string, double> m;
+            const QJsonObject vo = var.toObject();
+            for (auto it = vo.begin(); it != vo.end(); ++it)
+                if (it.value().isDouble()) m[it.key().toStdString()] = it.value().toDouble();
+            e.variants.push_back(std::move(m));
+        }
         out.parts[e.type] = e;
     }
     for (const QJsonValue& v : root.value(QStringLiteral("module")).toArray()) {

@@ -248,6 +248,9 @@ bool LabSession::addPart(const std::string& type, const std::string& startField,
     p.id = nextPartId(m_board, type);
     p.type = type;
     p.value = value > 0.0 ? value : (type == "widerstand" ? 1000.0 : (type == "elko" ? 100e-6 : 0.0));
+    if (!(value > 0.0))
+        if (const CatalogEntry* ce = m_catalog.part(type); ce && !ce->variants.empty())
+            p.value = ce->param("u_nenn_V", 0.0); // Gluehlampe: Nennspannung der Vorgabe
     std::string err;
     if (!placePins(*e, startField, o, span, p.pins, err) || !canPlace(m_board, m_catalog, p, err)) return fail(err);
     Board after = m_board;
@@ -311,6 +314,12 @@ bool LabSession::setPartValue(const std::string& id, double value) {
     Board after = m_board;
     PartPlacement* p = findPart(after, id);
     if (!p) return fail("Bauteil " + id + " nicht gefunden");
+    if (const CatalogEntry* ce = m_catalog.part(p->type); ce && !ce->variants.empty()) {
+        bool offered = false;
+        for (const auto& v : ce->variants)
+            if (const auto it = v.find("u_nenn_V"); it != v.end() && std::abs(it->second - value) < 1e-9) offered = true;
+        if (!offered) return fail(p->type + ": diese Nennspannung gibt es nicht");
+    }
     if (p->value == value) return true;
     p->value = value;
     return push(QStringLiteral("Wert von %1 aendern").arg(q(id)), std::move(after), BoardCommand::MergePartValue,

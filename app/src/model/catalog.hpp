@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <map>
 #include <string>
 #include <vector>
@@ -15,11 +16,23 @@ struct CatalogEntry {
     std::vector<std::string> layout; // Traegerplatine: Anschluesse in Lage-Reihenfolge (leer: wie pins);
                                      // platine_2x2: oben links, oben rechts, unten links, unten rechts
     std::map<std::string, double> params;
+    // Auswahlvarianten ("varianten"), z. B. Gluehlampe 2,5 / 6 / 10 V; der Wert des Bauteils (PartPlacement::value)
+    // waehlt die Variante ueber u_nenn_V. Leer: keine Auswahl.
+    std::vector<std::map<std::string, double>> variants;
     int fromStage = 0;
 
     double param(const std::string& key, double fallback) const {
         const auto it = params.find(key);
         return it == params.end() ? fallback : it->second;
+    }
+    // Parameter der Variante mit variants[i][selector] == value, sonst der allgemeine Parameter
+    double variantParam(const std::string& selector, double value, const std::string& key, double fallback) const {
+        for (const auto& v : variants) {
+            const auto s = v.find(selector);
+            const auto k = v.find(key);
+            if (s != v.end() && k != v.end() && std::abs(s->second - value) < 1e-9) return k->second;
+        }
+        return param(key, fallback);
     }
 };
 

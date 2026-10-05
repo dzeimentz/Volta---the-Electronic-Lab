@@ -453,6 +453,30 @@ private slots:
         QCOMPARE(s->undoStack().count(), 1);
     }
 
+    // Gluehlampe: Nennspannung 2,5 / 6 / 10 V waehlbar (Befehl); die Variante bestimmt das Modell
+    void lampVariants() {
+        auto s = session();
+        QVERIFY(s->addPart("gluehlampe", "A1", Orientation::Horizontal, Span::Short));
+        QCOMPARE(s->board().findPart("L1")->value, 6.0); // Vorgabe aus dem Katalog
+        QVERIFY(!s->setPartValue("L1", 12.0));           // nicht im Katalog
+        QVERIFY(s->setPartValue("L1", 2.5));
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "P:0V", "schwarz"));
+        s->setCells(2); // 3 V
+        s->setMainSwitch(true);
+        run(*s, 0.5);
+        const core::ComponentReading* r = s->reading("L1");
+        QVERIFY(r);
+        // 2,5-V-Lampe (200 mA) an 3 V (Innenwiderstand 0,5 Ohm): etwas ueber Nennleistung, hell
+        QVERIFY2(r->level > 0.8, qPrintable(QString::number(r->level)));
+        QVERIFY(s->setPartValue("L1", 10.0));
+        run(*s, 0.5);
+        r = s->reading("L1");
+        QVERIFY2(r->level < 0.2, qPrintable(QString::number(r->level))); // 10-V-Lampe an 3 V: kaum Licht
+        s->undoStack().undo();
+        QCOMPARE(s->board().findPart("L1")->value, 2.5);
+    }
+
     void boardColumnsAreACommand() {
         auto s = session();
         QCOMPARE(s->board().columns, 12);

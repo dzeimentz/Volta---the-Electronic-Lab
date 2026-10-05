@@ -77,6 +77,7 @@ qt_add_qml_module(volta_ui
         qml/Splash.qml
         qml/MeterPanel.qml
         qml/SpeakerRing.qml
+        qml/SchematicSymbol.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

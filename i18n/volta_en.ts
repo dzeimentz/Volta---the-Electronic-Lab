@@ -297,6 +297,14 @@
         <translation>Value</translation>
     </message>
     <message>
+        <source>Nennspannung</source>
+        <translation>Rated voltage</translation>
+    </message>
+    <message>
+        <source>%1 V</source>
+        <translation>%1 V</translation>
+    </message>
+    <message>
         <source>Reparieren</source>
         <translation>Repair</translation>
     </message>
@@ -377,6 +385,10 @@
     <message>
         <source>%1 kaputt</source>
         <translation>%1 broken</translation>
+    </message>
+    <message>
+        <source>%1 V</source>
+        <translation>%1 V</translation>
     </message>
 </context>
 <context>

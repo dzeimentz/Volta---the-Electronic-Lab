@@ -113,7 +113,10 @@ Item {
         y: body.y + body.height + 4
         // Beschriftung unter dem Bauteil (bei senkrechter Lage daneben)
         text: root.destroyed ? qsTr("%1 kaputt").arg(root.partId)
-                             : root.partId + (root.partType === "widerstand" ? " " + Texts.ohm(root.value) : "")
+                             : root.partId + (root.partType === "widerstand" ? " " + Texts.ohm(root.value)
+                                            : root.partType === "gluehlampe" && root.value > 0
+                                              ? " " + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
+                                              : "")
         font.pixelSize: 12
         color: Theme.navy
     }

@@ -297,6 +297,14 @@
         <translation>Valeur</translation>
     </message>
     <message>
+        <source>Nennspannung</source>
+        <translation>Tension nominale</translation>
+    </message>
+    <message>
+        <source>%1 V</source>
+        <translation>%1 V</translation>
+    </message>
+    <message>
         <source>Reparieren</source>
         <translation>Réparer</translation>
     </message>
@@ -377,6 +385,10 @@
     <message>
         <source>%1 kaputt</source>
         <translation>%1 cassé</translation>
+    </message>
+    <message>
+        <source>%1 V</source>
+        <translation>%1 V</translation>
     </message>
 </context>
 <context>

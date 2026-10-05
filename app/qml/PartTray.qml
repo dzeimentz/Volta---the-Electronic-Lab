@@ -24,7 +24,7 @@ Rectangle {
     Grid {
         anchors { top: heading.bottom; topMargin: 10; left: parent.left; leftMargin: 8 }
         columns: 2
-        spacing: 8
+        spacing: 6
 
         Repeater {
             model: tray.parts.filter(p => p.model !== "ldr")
@@ -33,14 +33,26 @@ Rectangle {
                 required property var modelData
                 objectName: "tray_" + modelData.type
                 width: 92
-                height: Theme.control + 4
+                height: 68
                 radius: 8
                 color: drag.active ? Theme.solderAmber : "#E9D7B0"
                 border.color: Theme.navy
 
+                // Schaltzeichen nach Norm (DIN EN 60617) ueber dem Namen
+                SchematicSymbol {
+                    objectName: "symbol_" + entry.modelData.type
+                    type: entry.modelData.type
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    y: 4
+                    width: 72
+                    height: 32
+                }
                 Label {
-                    anchors.fill: parent
-                    anchors.margins: 4
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 3
+                    height: 28
                     text: Texts.partName(entry.modelData.type)
                     color: Theme.navy
                     font.pixelSize: 12
