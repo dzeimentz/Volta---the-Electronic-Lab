@@ -340,14 +340,14 @@ private slots:
         QTest::qWait(50);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterMode_1"))));
         QTRY_COMPARE(m_lab->meterMode(), 1);
-        QVERIFY(!item(QStringLiteral("meterAnalog"))->isEnabled());
-        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterMode_0"))));
-        QTRY_COMPARE(m_lab->meterMode(), 0);
-        QTRY_VERIFY(item(QStringLiteral("meterAnalog"))->isEnabled());
+        QVERIFY(item(QStringLiteral("meterAnalog"))->isEnabled()); // Zeiger in allen Messarten
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterAnalog"))));
         QTRY_VERIFY(m_lab->meterAnalog());
-        m_lab->setMeterMode(2); // Ohm schaltet analog ab
-        QVERIFY(!m_lab->meterAnalog());
+        QTRY_COMPARE(item(QStringLiteral("meterUnit"))->property("text").toString(), QStringLiteral("mA"));
+        m_lab->setMeterMode(2); // Ohm: Zeiger bleibt, Skala in Ohm
+        QVERIFY(m_lab->meterAnalog());
+        QTRY_COMPARE(item(QStringLiteral("meterUnit"))->property("text").toString(), QStringLiteral("Ω"));
+        m_lab->setMeterAnalog(false);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterToggle"))));
         QTRY_VERIFY(!m_lab->meterVisible());
         QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("field_MESS:COM")) == nullptr);

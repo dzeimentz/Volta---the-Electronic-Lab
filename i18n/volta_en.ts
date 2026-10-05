@@ -344,8 +344,8 @@
         <translation>Switch off the voltage!</translation>
     </message>
     <message>
-        <source>Zu viel Spannung für den Zeiger</source>
-        <translation>Too much voltage for the needle</translation>
+        <source>Zu viel für den Zeiger</source>
+        <translation>Too much for the needle</translation>
     </message>
     <message>
         <source>Messart</source>

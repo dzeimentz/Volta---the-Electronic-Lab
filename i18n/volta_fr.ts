@@ -344,8 +344,8 @@
         <translation>Coupe la tension !</translation>
     </message>
     <message>
-        <source>Zu viel Spannung für den Zeiger</source>
-        <translation>Trop de tension pour l&apos;aiguille</translation>
+        <source>Zu viel für den Zeiger</source>
+        <translation>Trop fort pour l&apos;aiguille</translation>
     </message>
     <message>
         <source>Messart</source>

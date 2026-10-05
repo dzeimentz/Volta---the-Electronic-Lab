@@ -17,6 +17,8 @@ struct MeterParams {
     double digitalInputOhm = 10e6;                     // Eingangswiderstand digital (V)
     double analogOhmPerVolt = 20e3;                    // Kennwiderstand analog (V): 20 kOhm/V * Messbereich
     std::array<double, 4> analogRangesV{1.0, 3.0, 10.0, 30.0}; // selbsttaetige Bereichswahl (Volta 1)
+    std::array<double, 7> analogRangesA{1e-3, 3e-3, 10e-3, 30e-3, 100e-3, 300e-3, 1.0}; // nur Anzeige (Shunt bleibt)
+    std::array<double, 6> analogOhmCenters{10.0, 100.0, 1e3, 10e3, 100e3, 1e6}; // Skalenmitte je Ohm-Bereich
     double shuntOhm = 0.1;                             // A-Eingang
     double fuseA = 0.5;                                // Sicherung A-Eingang
     double fuseTimeS = 0.01;                           // loest aus, wenn der Strom so lange ueber fuseA liegt
@@ -32,7 +34,9 @@ struct MeterParams {
 //    selbsttaetig aus dem letzten Messwert); im Ohm-Bereich Messquelle 3 V ueber 3 kOhm, Anzeige U/I.
 //  - A-COM: immer Shunt 0,1 Ohm mit Sicherung (danach offen, SimEventType::FuseBlown).
 // Messart und Anzeigeart sind Bedienhandlungen. Anzeigewert und Zustand in ComponentReading::displayValue/-Flags;
-// level = Zeigerausschlag (nur analog im V-Bereich, sonst 0).
+// level = Zeigerausschlag analog (sonst 0): V und A = Messwert / Bereich (selbsttaetig), Ohm wie beim klassischen
+// Zeiger-Ohmmeter level = Rm / (Rm + R) mit der Skalenmitte Rm in Zehnerstufen (0 Ohm rechts, offen links);
+// displayRange = Bereich bzw. Skalenmitte. Die Bereichswahl im A- und Ohm-Bereich betrifft nur die Anzeige.
 // Vereinfachungen: Die Sicherung loest nach fester Zeit aus (keine I^2*t-Kennlinie). Fremdspannung im Ohm-Bereich
 // wird nur erkannt, wenn sie gegen die Messquelle treibt oder ueber deren 3 V liegt; eine gleichgepolte
 // Fremdspannung unter 3 V verfaelscht den Messwert unbemerkt, wie bei realen Geraeten.

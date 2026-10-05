@@ -344,7 +344,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Zu viel Spannung für den Zeiger</source>
+        <source>Zu viel für den Zeiger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

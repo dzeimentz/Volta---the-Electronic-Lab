@@ -33,7 +33,7 @@ Rectangle {
                 required property var modelData
                 objectName: "tray_" + modelData.type
                 width: 92
-                height: 68
+                height: 60
                 radius: 8
                 color: drag.active ? Theme.solderAmber : "#E9D7B0"
                 border.color: Theme.navy
@@ -43,16 +43,16 @@ Rectangle {
                     objectName: "symbol_" + entry.modelData.type
                     type: entry.modelData.type
                     anchors.horizontalCenter: parent.horizontalCenter
-                    y: 4
-                    width: 72
-                    height: 32
+                    y: 5
+                    width: 52
+                    height: 22
                 }
                 Label {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     anchors.margins: 3
-                    height: 28
+                    height: 26
                     text: Texts.partName(entry.modelData.type)
                     color: Theme.navy
                     font.pixelSize: 12

@@ -107,6 +107,17 @@ ComponentReading Meter::read(const SolutionView& x) const noexcept {
         break;
     case MeterMode::Ampere:
         value = terminalCurrent(x, 2);
+        if (m_analog) {
+            double range = m_params.analogRangesA.back();
+            for (double r : m_params.analogRangesA)
+                if (std::fabs(value) <= r) {
+                    range = r;
+                    break;
+                }
+            if (std::fabs(value) > m_params.analogRangesA.back()) flags |= kDisplayOverrange;
+            r.displayRange = range;
+            r.level = value / range;
+        }
         break;
     case MeterMode::Ohm: {
         const double iOut = -terminalCurrent(x, 1); // Messstrom aus V/Ohm in die Schaltung
@@ -117,12 +128,32 @@ ComponentReading Meter::read(const SolutionView& x) const noexcept {
         } else {
             value = v / iOut;
         }
+        if (m_analog) {
+            // Skalenmitte: naechste Zehnerstufe zum Messwert (Zeiger moeglichst mittig)
+            double center = m_params.analogOhmCenters.front();
+            if (!(flags & (kDisplayOverrange | kDisplayForeignVoltage)) && value > 0.0) {
+                double best = 1e300;
+                for (double c : m_params.analogOhmCenters) {
+                    const double d = std::fabs(std::log10(value / c));
+                    if (d < best) {
+                        best = d;
+                        center = c;
+                    }
+                }
+            }
+            r.displayRange = center;
+            // offen: Zeiger links (0), Kurzschluss: rechts (1); Fremdspannung: Zeiger in Ruhe
+            r.level = (flags & (kDisplayOverrange | kDisplayForeignVoltage)) ? 0.0 : center / (center + value);
+        }
         break;
     }
     }
     r.displayValue = value;
     r.displayFlags = flags;
-    r.level = (m_analog && m_mode == MeterMode::Volt) ? value / m_rangeV : 0.0; // Zeigerausschlag
+    if (m_analog && m_mode == MeterMode::Volt) { // Zeigerausschlag im selbsttaetig gewaehlten V-Bereich
+        r.level = value / m_rangeV;
+        r.displayRange = m_rangeV;
+    }
     return r;
 }
 

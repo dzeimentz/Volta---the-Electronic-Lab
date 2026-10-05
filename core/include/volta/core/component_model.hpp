@@ -45,6 +45,7 @@ struct ComponentReading {
     double frequencyHz = 0.0; // Tonfrequenz (Summer), sonst 0
     double displayValue = 0.0; // Messgeraet: angezeigter Wert in V, A oder Ohm je Messart
     int displayFlags = 0;      // Messgeraet: kDisplayOverrange, kDisplayForeignVoltage, kDisplayFuseBlown
+    double displayRange = 0.0; // Messgeraet analog: Messbereich in V bzw. A, im Ohm-Bereich Skalenmitte in Ohm
     bool overloaded = false;  // ueber Dauergrenzwert (Strom, Leistung, Spannung), aber noch nicht zerstoert
     bool destroyed = false;
 };

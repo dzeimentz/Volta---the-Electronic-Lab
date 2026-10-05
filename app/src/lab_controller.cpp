@@ -414,12 +414,11 @@ void LabController::setMeterVisible(bool visible) {
 
 void LabController::setMeterMode(int mode) {
     m_session->setMeterMode(static_cast<core::MeterMode>(std::clamp(mode, 0, 2)));
-    if (mode != 0 && m_session->board().desk.meterAnalog) m_session->setMeterAnalog(false); // analog nur fuer V
     emit deskChanged();
 }
 
 void LabController::setMeterAnalog(bool analog) {
-    m_session->setMeterAnalog(analog && m_session->board().desk.meterMode == core::MeterMode::Volt);
+    m_session->setMeterAnalog(analog);
     emit deskChanged();
 }
 
@@ -448,16 +447,12 @@ QVariantMap LabController::meterState() {
     const model::MeterText t = model::formatMeter(mode, r->displayValue);
     QString value = QString::fromStdString(t.value);
     value.replace(QLatin1Char('.'), QLocale().decimalPoint());
-    if (std::fabs(r->level) > 1e-9) {
-        // Bereich aus Messwert/Ausschlag; auf die Bereiche des Geraets runden (1, 3, 10, 30 V)
-        const double range = std::fabs(r->displayValue / r->level);
-        for (double cand : {1.0, 3.0, 10.0, 30.0})
-            if (std::fabs(range - cand) < 0.05 * cand) m_meterRangeV = cand;
-    }
+    if (r->displayRange > 0.0) m_meterRangeV = r->displayRange; // letzter Bereich bleibt fuer die Skala stehen
     m.insert(QStringLiteral("text"), value);
     m.insert(QStringLiteral("unit"), QString::fromStdString(t.unit));
     m.insert(QStringLiteral("level"), r->level);
-    m.insert(QStringLiteral("rangeV"), m_meterRangeV);
+    m.insert(QStringLiteral("range"), m_meterRangeV); // V, A bzw. Skalenmitte in Ohm
+    m.insert(QStringLiteral("mode"), static_cast<int>(mode));
     m.insert(QStringLiteral("overrange"), (r->displayFlags & core::kDisplayOverrange) != 0);
     m.insert(QStringLiteral("foreignVoltage"), (r->displayFlags & core::kDisplayForeignVoltage) != 0);
     m.insert(QStringLiteral("fuseBlown"), (r->displayFlags & core::kDisplayFuseBlown) != 0);

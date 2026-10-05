@@ -124,6 +124,7 @@ int main(int argc, char* argv[]) {
                     lab.addWire(QStringLiteral("B7"), QStringLiteral("MESS:COM"), QStringLiteral("schwarz"));
                 }
             }
+            if (qEnvironmentVariableIntValue("VOLTA_DEMO_ANALOG") == 1) lab.setMeterAnalog(true); // Zeiger
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)

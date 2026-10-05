@@ -41,7 +41,7 @@ class LabController : public QObject {
     Q_PROPERTY(double pot1 READ pot1 WRITE setPot1 NOTIFY deskChanged)
     Q_PROPERTY(double pot2 READ pot2 WRITE setPot2 NOTIFY deskChanged)
     Q_PROPERTY(bool deskSwitch READ deskSwitch WRITE setDeskSwitch NOTIFY deskChanged)
-    // Dreifach-Messgeraet: 0 V, 1 A, 2 Ohm; analog nur im V-Bereich
+    // Dreifach-Messgeraet: 0 V, 1 A, 2 Ohm; analog (Zeiger) in allen drei Messarten
     Q_PROPERTY(bool meterVisible READ meterVisible WRITE setMeterVisible NOTIFY deskChanged)
     Q_PROPERTY(int meterMode READ meterMode WRITE setMeterMode NOTIFY deskChanged)
     Q_PROPERTY(bool meterAnalog READ meterAnalog WRITE setMeterAnalog NOTIFY deskChanged)
@@ -170,7 +170,7 @@ public:
     Q_INVOKABLE void setDeskSwitch(bool closed);
     Q_INVOKABLE void setPot(int which, double position);
     Q_INVOKABLE void setMotorBlocked(const QString& id, bool blocked);
-    // Anzeige des Messgeraets: text, unit (Dezimalzeichen der Sprache), level (Zeiger, analog V), rangeV,
+    // Anzeige des Messgeraets: text, unit (Dezimalzeichen der Sprache), level (Zeiger), range, mode,
     // overrange, foreignVoltage, fuseBlown, valid
     Q_INVOKABLE QVariantMap meterState();
     Q_INVOKABLE bool replaceMeterFuse(); // Befehl
@@ -210,7 +210,7 @@ private:
     QTimer m_timer;
     QElapsedTimer m_clock;
     double m_sinceNotifyS = 0.0;
-    double m_meterRangeV = 30.0; // zuletzt erkannter Analogbereich (fuer die Skala)
+    double m_meterRangeV = 30.0; // zuletzt gelieferter Analogbereich (fuer die Skala)
 };
 
 } // namespace volta

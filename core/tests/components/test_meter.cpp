@@ -142,6 +142,49 @@ TEST_CASE("Undo stellt die Sicherung wieder her", "[messgeraet][undo]") {
     CHECK_FALSE(static_cast<const Meter&>(sim.circuit().component(1)).isFuseBlown());
 }
 
+TEST_CASE("Messgeraet analog im A- und Ohm-Bereich: Zeigerausschlag und Bereich", "[messgeraet]") {
+    // A: +9V -> 470 Ohm -> A-Buchse, COM -> Masse: ca. 19 mA -> Bereich 30 mA
+    {
+        Circuit c;
+        const NodeId plus = c.addNode();
+        const NodeId a = c.addNode();
+        const NodeId vo = c.addNode();
+        c.add<Battery>("B1", plus, kGround);
+        c.add<Resistor>("R1", plus, a, ResistorParams{470.0});
+        Meter& m = c.add<Meter>("MESS", kGround, vo, a);
+        m.setMode(MeterMode::Ampere);
+        m.setAnalog(true);
+        Simulator sim;
+        REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+        REQUIRE(sim.step() == Status::Ok);
+        const ComponentReading& r = sim.probe().readings[2];
+        CHECK(r.displayRange == 30e-3);
+        CHECK(r.level == Approx(r.displayValue / 30e-3).epsilon(1e-9));
+        CHECK(r.level == Approx(9.0 / 471.6 / 30e-3).epsilon(2e-2));
+        requireKirchhoff(sim);
+    }
+    // Ohm: Zeiger-Ohmmeter, Skalenmitte in Zehnerstufen; 0 Ohm rechts, offen links
+    for (double rx : {47.0, 470.0, 3300.0, 1e6}) {
+        Circuit c;
+        const NodeId vo = c.addNode();
+        const NodeId ampJack = c.addNode();
+        c.add<Resistor>("R1", vo, kGround, ResistorParams{rx});
+        Meter& m = c.add<Meter>("MESS", kGround, vo, ampJack);
+        m.setMode(MeterMode::Ohm);
+        m.setAnalog(true);
+        Simulator sim;
+        REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+        REQUIRE(sim.step() == Status::Ok);
+        const ComponentReading& r = sim.probe().readings[1];
+        INFO(rx << " Ohm");
+        const double center = std::pow(10.0, std::round(std::log10(rx)));
+        CHECK(r.displayRange == Approx(center));
+        CHECK(r.level == Approx(center / (center + rx)).epsilon(5e-3));
+        CHECK(r.level > 0.2);
+        CHECK(r.level < 0.8);
+    }
+}
+
 TEST_CASE("Widerstandsmessung: Anzeige R, offen OL, unter Spannung Warnung", "[messgeraet]") {
     for (double r : {10.0, 470.0, 10e3, 1e6}) {
         Circuit c;

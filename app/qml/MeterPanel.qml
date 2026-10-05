@@ -1,5 +1,6 @@
 // Dreifach-Messgeraet (docs/ui-spec.md, Bedienpult): Anzeige (digital: 3 Stellen + Einheit, 3 Hz; analog: Zeiger mit
-// Traegheit und leichtem Ueberschwingen, nur im V-Bereich), Drehschalter V / A / Ohm, Umschalter digital/analog.
+// Traegheit und leichtem Ueberschwingen in allen Messarten; Ohm-Skala rueckwaerts und nichtlinear wie beim
+// Zeiger-Ohmmeter), Drehschalter V / A / Ohm, Umschalter digital/analog.
 // Die Buchsen COM, V/Ohm, A sind Kontaktfelder der Arbeitsflaeche (Lab.qml) und sitzen unten in diesem Rahmen.
 // Messart und Anzeigeart sind Bedienhandlungen; »Sicherung tauschen« ist ein Befehl.
 import QtQuick
@@ -11,7 +12,7 @@ Rectangle {
     required property var controller
     property var state: ({})
     readonly property int mode: controller.meterMode // 0 V, 1 A, 2 Ohm
-    readonly property bool analog: controller.meterAnalog && mode === 0
+    readonly property bool analog: controller.meterAnalog
 
     radius: 12
     color: "#2B3440"
@@ -77,24 +78,45 @@ Rectangle {
             }
         }
 
-        // analog: Skala 0 ... Bereich, Zeiger mit Feder (Ueberschwingen)
+        // analog: Skala je Messart, Zeiger mit Feder (Ueberschwingen)
         Item {
+            id: dial
             visible: meter.analog
             anchors.fill: parent
             readonly property real cx: width / 2
             readonly property real cy: height - 10
             readonly property real r: 54
+            readonly property real range: meter.state.range || 0
+            // Skalenpunkte als Anteil 0..1 des Ausschlags; Ohm: p = Rm / (Rm + R) fuer R = oo, 10, 3, 1, 1/3, 1/10, 0 * Rm
+            readonly property var ticks: meter.mode === 2 ? [0, 1 / 11, 0.25, 0.5, 0.75, 10 / 11, 1]
+                                                          : [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]
+            readonly property var majors: meter.mode === 2 ? [0, 0.5, 1] : [0, 0.5, 1]
+            function ohmText(v) {
+                if (v >= 1e6) return (v / 1e6).toLocaleString(Qt.locale(), "f", 0) + "M"
+                if (v >= 1e3) return (v / 1e3).toLocaleString(Qt.locale(), "f", 0) + "k"
+                return v.toLocaleString(Qt.locale(), "f", 0)
+            }
+            function num(v) { return v.toLocaleString(Qt.locale(), "f", v < 10 && v % 1 !== 0 ? 1 : 0) }
+            // Beschriftung an den Hauptpunkten links, Mitte, rechts
+            function majorText(i) {
+                if (meter.mode === 2) return i === 0 ? "∞" : (i === 1 ? ohmText(range) : "0")
+                const v = range * i / 2
+                return meter.mode === 1 && range < 1 ? num(v * 1000) : num(v)
+            }
+            readonly property string unit: meter.mode === 0 ? "V" : meter.mode === 1 ? (range < 1 ? "mA" : "A") : "Ω"
+
             Repeater {
-                model: 11
+                model: dial.ticks
                 Rectangle {
-                    required property int index
-                    readonly property real a: (-50 + index * 10) * Math.PI / 180
+                    required property real modelData
+                    readonly property real deg: -50 + modelData * 100
+                    readonly property bool major: dial.majors.indexOf(modelData) >= 0
                     width: 2
-                    height: index % 5 === 0 ? 12 : 7
+                    height: major ? 12 : 7
                     color: "#222222"
-                    x: parent.cx + Math.sin(a) * parent.r - 1
-                    y: parent.cy - Math.cos(a) * parent.r - height
-                    rotation: -50 + index * 10
+                    x: dial.cx + Math.sin(deg * Math.PI / 180) * dial.r - 1
+                    y: dial.cy - Math.cos(deg * Math.PI / 180) * dial.r - height
+                    rotation: deg
                     transformOrigin: Item.Bottom
                 }
             }
@@ -103,31 +125,30 @@ Rectangle {
                 Label {
                     required property int index
                     readonly property real a: (-50 + index * 50) * Math.PI / 180
-                    readonly property real v: meter.state.rangeV ? meter.state.rangeV * index / 2 : 0
-                    text: v.toLocaleString(Qt.locale(), "f", v < 10 && v % 1 !== 0 ? 1 : 0)
+                    text: dial.majorText(index)
                     font.pixelSize: 11
                     color: "#222222"
-                    x: parent.cx + Math.sin(a) * (parent.r + 12) - width / 2
-                    y: parent.cy - Math.cos(a) * (parent.r + 12) - height
+                    x: dial.cx + Math.sin(a) * (dial.r + 12) - width / 2
+                    y: dial.cy - Math.cos(a) * (dial.r + 12) - height
                 }
             }
-            Label { x: 6; y: 4; text: "V"; font.pixelSize: 13; font.bold: true; color: "#222222" }
+            Label { objectName: "meterUnit"; x: 6; y: 4; text: dial.unit; font.pixelSize: 13; font.bold: true; color: "#222222" }
             Rectangle {
                 id: needle
                 objectName: "meterNeedle"
                 property real level: 0
                 width: 3
-                height: parent.r + 4
+                height: dial.r + 4
                 radius: 1.5
                 color: "#C62828"
-                x: parent.cx - 1.5
-                y: parent.cy - height
+                x: dial.cx - 1.5
+                y: dial.cy - height
                 transformOrigin: Item.Bottom
-                // 0 ... 1 Bereich -> -50 ... +50 Grad; Anschlag knapp darueber/darunter
+                // 0 ... 1 -> -50 ... +50 Grad; Anschlag knapp darueber/darunter (Gegenrichtung: links am Anschlag)
                 rotation: -50 + Math.max(-0.04, Math.min(1.06, level)) * 100
                 Behavior on rotation { enabled: !Theme.reduceMotion; SpringAnimation { spring: 4; damping: 0.22; epsilon: 0.05 } }
             }
-            Rectangle { width: 10; height: 10; radius: 5; color: "#333333"; x: parent.cx - 5; y: parent.cy - 5 }
+            Rectangle { width: 10; height: 10; radius: 5; color: "#333333"; x: dial.cx - 5; y: dial.cy - 5 }
         }
         Accessible.role: Accessible.StaticText
         Accessible.name: meter.state.fuseBlown ? qsTr("Sicherung durchgebrannt")
@@ -146,7 +167,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         text: meter.state.fuseBlown ? qsTr("Sicherung durchgebrannt!")
             : meter.state.foreignVoltage ? qsTr("Spannung abschalten!")
-            : (meter.analog && meter.state.overrange) ? qsTr("Zu viel Spannung für den Zeiger")
+            : (meter.analog && meter.state.overrange && meter.mode !== 2) ? qsTr("Zu viel für den Zeiger")
             : ""
         color: Theme.solderAmber
         font.pixelSize: 12
@@ -218,7 +239,6 @@ Rectangle {
         Label { anchors.verticalCenter: parent.verticalCenter; text: qsTr("digital"); color: "white"; font.pixelSize: 12 }
         Switch {
             objectName: "meterAnalog"
-            enabled: meter.mode === 0
             checked: meter.controller.meterAnalog
             onToggled: meter.controller.meterAnalog = checked
             Accessible.name: qsTr("Zeigeranzeige")
@@ -226,7 +246,7 @@ Rectangle {
         Label {
             anchors.verticalCenter: parent.verticalCenter
             text: qsTr("analog")
-            color: meter.mode === 0 ? "white" : "#7F8A95"
+            color: "white"
             font.pixelSize: 12
         }
     }
