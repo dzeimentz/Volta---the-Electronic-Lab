@@ -170,6 +170,32 @@ private slots:
         QTRY_VERIFY(!menu->property("opened").toBool());
     }
 
+    void knobTurnsByCircularDrag() {
+        QQuickItem* knob = item(QStringLiteral("knobP1"));
+        QVERIFY(knob);
+        // vom oberen Ringrand (Mitte) im Uhrzeigersinn nach rechts: 90 Grad -> (90 + 135) / 270
+        const QPointF c(knob->width() / 2, knob->height() / 2);
+        const QPoint top = knob->mapToScene(c + QPointF(0, -40)).toPoint();
+        const QPoint right = knob->mapToScene(c + QPointF(40, 0)).toPoint();
+        drag(top, right);
+        QTRY_VERIFY(std::abs(board().desk.p1 - 225.0 / 270.0) < 0.03);
+        const QString undoBefore = m_lab->undoText();
+        // Doppeltippen stellt auf Mitte
+        QTest::mouseDClick(m_window, Qt::LeftButton, {}, centerOf(knob));
+        QTRY_VERIFY(std::abs(board().desk.p1 - 0.5) < 1e-9);
+        QCOMPARE(m_lab->undoText(), undoBefore);
+    }
+
+    void deskSwitchToggles() {
+        QQuickItem* sw = item(QStringLiteral("deskSwitch"));
+        QVERIFY(sw);
+        const bool before = board().desk.switchClosed;
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(sw));
+        QTRY_COMPARE(board().desk.switchClosed, !before);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(sw));
+        QTRY_COMPARE(board().desk.switchClosed, before);
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_lab.reset();

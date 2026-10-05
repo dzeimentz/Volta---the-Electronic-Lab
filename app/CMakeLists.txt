@@ -61,6 +61,9 @@ qt_add_qml_module(volta_ui
         qml/WireEndHandle.qml
         qml/PartTray.qml
         qml/Toast.qml
+        qml/KnobRing.qml
+        qml/ControlDesk.qml
+        qml/GroupLine.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

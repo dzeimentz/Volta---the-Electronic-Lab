@@ -1,0 +1,95 @@
+// Bedienpult I (docs/ui-spec.md, Bedienpult): Batterie mit Zellenwahl und Hauptschalter, Drehregler P1 und P2 mit
+// Lichtring, Pultschalter S, Lautsprecher. Jedes Element sitzt ueber seinen Feldern der Pultleiste (Positionen von
+// Lab.qml). Alles hier sind Bedienhandlungen (kein Verlauf).
+import QtQuick
+import QtQuick.Controls
+
+Rectangle {
+    id: desk
+    required property var controller
+    // Mittelpunkte (x) der Gruppen ueber der Pultleiste
+    property real batteryX
+    property real p1X
+    property real p2X
+    property real switchX
+    property real speakerX
+
+    color: Theme.desk
+    radius: 10
+    height: 128
+
+    // Batterie: Zellenwahl und Hauptschalter
+    Column {
+        x: desk.batteryX - width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 4
+        Label { text: qsTr("Batterie"); color: "white"; font.pixelSize: 13; font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        ComboBox {
+            objectName: "cellsBox"
+            width: 96
+            height: Theme.control - 6
+            model: ["3 V", "4,5 V", "9 V"]
+            currentIndex: desk.controller.cells === 2 ? 0 : (desk.controller.cells === 3 ? 1 : 2)
+            onActivated: (index) => { desk.controller.cells = [2, 3, 6][index] }
+            Accessible.name: qsTr("Batteriespannung")
+        }
+        Switch {
+            objectName: "mainSwitch"
+            anchors.horizontalCenter: parent.horizontalCenter
+            checked: desk.controller.mainSwitch
+            onToggled: desk.controller.mainSwitch = checked
+            text: checked ? qsTr("Ein") : qsTr("Aus")
+            palette.windowText: "white"
+            Accessible.name: qsTr("Hauptschalter")
+        }
+    }
+
+    KnobRing {
+        objectName: "knobP1"
+        x: desk.p1X - width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -8
+        label: "P1"
+        value: desk.controller.pot1
+        onMoved: (v) => desk.controller.pot1 = v
+    }
+    KnobRing {
+        objectName: "knobP2"
+        x: desk.p2X - width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -8
+        label: "P2"
+        value: desk.controller.pot2
+        onMoved: (v) => desk.controller.pot2 = v
+    }
+
+    // Pultschalter S
+    Column {
+        x: desk.switchX - width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 6
+        Label { text: "S"; color: "white"; font.pixelSize: 13; font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        Switch {
+            objectName: "deskSwitch"
+            checked: desk.controller.deskSwitch
+            onToggled: desk.controller.deskSwitch = checked
+            Accessible.name: qsTr("Pultschalter")
+        }
+    }
+
+    // Lautsprecher (Klanganzeige mit Leuchtring folgt in Phase 4)
+    Column {
+        x: desk.speakerX - width / 2
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 6
+        Rectangle {
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: 56; height: 56; radius: 28
+            color: "#203650"
+            border.color: "#7F93A8"
+            border.width: 3
+            Text { anchors.centerIn: parent; text: "🔈"; font.pixelSize: 24 }
+        }
+        Label { text: qsTr("Lautsprecher"); color: "white"; font.pixelSize: 12; anchors.horizontalCenter: parent.horizontalCenter }
+    }
+}

@@ -36,6 +36,9 @@ class LabController : public QObject {
     Q_PROPERTY(QString redoText READ redoText NOTIFY historyChanged)
     Q_PROPERTY(bool mainSwitch READ mainSwitch WRITE setMainSwitch NOTIFY deskChanged)
     Q_PROPERTY(int cells READ cells WRITE setCells NOTIFY deskChanged)
+    Q_PROPERTY(double pot1 READ pot1 WRITE setPot1 NOTIFY deskChanged)
+    Q_PROPERTY(double pot2 READ pot2 WRITE setPot2 NOTIFY deskChanged)
+    Q_PROPERTY(bool deskSwitch READ deskSwitch WRITE setDeskSwitch NOTIFY deskChanged)
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
     Q_PROPERTY(double realtimeRatio READ realtimeRatio NOTIFY stateChanged)
@@ -61,6 +64,11 @@ public:
     void setMainSwitch(bool on);
     int cells() const;
     void setCells(int cells);
+    double pot1() const { return m_session->board().desk.p1; }
+    void setPot1(double v) { setPot(1, v); }
+    double pot2() const { return m_session->board().desk.p2; }
+    void setPot2(double v) { setPot(2, v); }
+    bool deskSwitch() const { return m_session->board().desk.switchClosed; }
     double simTime() const;
     double timeScale() const { return m_timeScale; }
     void setTimeScale(double scale);

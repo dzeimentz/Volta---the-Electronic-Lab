@@ -15,8 +15,11 @@ Item {
     readonly property var rows: ["A", "B", "C", "D", "E"]
     readonly property int columns: 8
     readonly property int slots: 16
-    readonly property int deskY: 0
-    readonly property int boardY: Theme.fieldHeight + 2 * Theme.fieldGap
+    // Pult (Bedienelemente), Gruppenlinien, Pultleiste, Grundplatte, Modulleiste von oben nach unten
+    readonly property int deskPanelHeight: 128
+    readonly property int groupLineY: deskPanelHeight + 6
+    readonly property int deskY: groupLineY + 26
+    readonly property int boardY: deskY + Theme.fieldHeight + 2 * Theme.fieldGap
     readonly property int boardWidth: columns * Theme.fieldWidth + (columns - 1) * Theme.fieldGap
     readonly property int moduleY: boardY + rows.length * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
     readonly property var allAnchors: {
@@ -64,6 +67,24 @@ Item {
     }
 
     function toCanvas(scenePos) { return canvas.mapFromItem(null, scenePos.x, scenePos.y) }
+    // Mitte und Rand einer Gruppe von Pultfeldern (Index in deskNames)
+    function deskX(i) { return anchorPoint(deskNames[i]).x }
+    function groupCenter(first, last) { return (deskX(first) + deskX(last)) / 2 }
+    property string highlightGroup: "" // Gruppe, deren Felder hervorgehoben sind (Tippen auf Schaltzeichen)
+    readonly property var groups: [
+        {name: "batterie", symbol: "−|+", first: 0, last: 1},
+        {name: "p1", symbol: "P1", first: 2, last: 4},
+        {name: "p2", symbol: "P2", first: 5, last: 7},
+        {name: "schalter", symbol: "S", first: 8, last: 9},
+        {name: "lautsprecher", symbol: "LS", first: 10, last: 11},
+        {name: "messgeraet", symbol: "V A Ω", first: 12, last: 14}
+    ]
+    function inHighlightedGroup(name) {
+        const i = deskNames.indexOf(name)
+        for (let g = 0; g < groups.length; ++g)
+            if (groups[g].name === highlightGroup && i >= groups[g].first && i <= groups[g].last) return true
+        return false
+    }
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
@@ -150,22 +171,6 @@ Item {
                     }
                 }
             }
-            Switch {
-                height: Theme.control
-                text: qsTr("Hauptschalter")
-                checked: lab.controller.mainSwitch
-                onToggled: lab.controller.mainSwitch = checked
-                palette.windowText: "white"
-            }
-            ComboBox {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 100
-                height: Theme.control
-                model: ["3 V", "4,5 V", "9 V"]
-                currentIndex: lab.controller.cells === 2 ? 0 : (lab.controller.cells === 3 ? 1 : 2)
-                onActivated: (index) => { lab.controller.cells = [2, 3, 6][index] }
-                Accessible.name: qsTr("Batteriespannung")
-            }
             Label {
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Zeit %1 s").arg(lab.controller.simTime.toLocaleString(Qt.locale(), "f", 1))
@@ -205,9 +210,37 @@ Item {
             id: canvas
             objectName: "canvas"
             x: Theme.margin
-            y: Theme.margin * 2
+            y: Theme.margin
             width: Math.max(lab.boardWidth, lab.deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap))
             height: lab.moduleY + Theme.fieldHeight
+            // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
+            transformOrigin: Item.TopLeft
+            scale: Math.min(1, (boardArea.width - 2 * Theme.margin) / width, (boardArea.height - 2 * Theme.margin) / height)
+
+            ControlDesk {
+                controller: lab.controller
+                x: -8
+                y: 0
+                width: canvas.width + 16
+                height: lab.deskPanelHeight
+                batteryX: lab.groupCenter(0, 1) + 8
+                p1X: lab.groupCenter(2, 4) + 8
+                p2X: lab.groupCenter(5, 7) + 8
+                switchX: lab.groupCenter(8, 9) + 8
+                speakerX: lab.groupCenter(10, 11) + 8
+            }
+
+            Repeater {
+                model: lab.groups
+                GroupLine {
+                    required property var modelData
+                    y: lab.groupLineY
+                    fromX: lab.deskX(modelData.first) - Theme.deskFieldWidth / 2 + 4
+                    toX: lab.deskX(modelData.last) + Theme.deskFieldWidth / 2 - 4
+                    symbol: modelData.symbol
+                    onTapped: lab.highlightGroup = lab.highlightGroup === modelData.name ? "" : modelData.name
+                }
+            }
 
             // Alle Anschlusspunkte: Pultleiste, Messgeraet, Grundplatte, Modulleiste
             Repeater {
@@ -225,7 +258,7 @@ Item {
                     x: lab.anchorPoint(modelData).x - width / 2
                     y: lab.anchorPoint(modelData).y - height / 2
                     color: modelData.startsWith("MESS:") ? "#D9DEE6" : Theme.field
-                    highlighted: lab.highlightAnchor === modelData
+                    highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
 
                     onWireDragUpdated: (scenePos) => {
