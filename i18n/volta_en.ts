@@ -256,6 +256,14 @@
         <translation>Fewer fields per row</translation>
     </message>
     <message>
+        <source>Ganze Platte zeigen</source>
+        <translation>Show whole board</translation>
+    </message>
+    <message>
+        <source>Ansicht zurücksetzen</source>
+        <translation>Reset view</translation>
+    </message>
+    <message>
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>

@@ -256,6 +256,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Ganze Platte zeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ansicht zurücksetzen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>1–%1</source>
         <translation type="unfinished"></translation>
     </message>

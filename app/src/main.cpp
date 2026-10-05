@@ -60,9 +60,22 @@ int main(int argc, char* argv[]) {
     const bool splash = volta::AppSettings::splashAvailable() && settings.showSplash() &&
                         qEnvironmentVariableIntValue("VOLTA_NO_SPLASH") != 1;
     engine.rootContext()->setContextProperty(QStringLiteral("volta_showSplash"), splash);
+    // Entwicklerhilfe: VOLTA_DEMO_TOUCH=1 zeigt die Touch-Oberflaeche wie auf Android/iOS (Originalgroesse, ohne
+    // Mindestgroesse des Fensters); VOLTA_DEMO_SIZE=<breite>x<hoehe> setzt die Fenstergroesse in dp, z. B. 800x1280
+    // fuer ein Tablet im Hochformat oder 1180x820 fuer ein iPad im Querformat
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_forceTouch"),
+                                             qEnvironmentVariableIntValue("VOLTA_DEMO_TOUCH") == 1);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");
+    const QStringList demoSize = qEnvironmentVariable("VOLTA_DEMO_SIZE").split(QLatin1Char('x'));
+    if (demoSize.size() == 2 && !engine.rootObjects().isEmpty()) {
+        QObject* window = engine.rootObjects().first();
+        window->setProperty("minimumWidth", 0);
+        window->setProperty("minimumHeight", 0);
+        window->setProperty("width", demoSize[0].toInt());
+        window->setProperty("height", demoSize[1].toInt());
+    }
     // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
