@@ -189,10 +189,6 @@
         <translation>Info</translation>
     </message>
     <message>
-        <source>Experimente</source>
-        <translation>Expériences</translation>
-    </message>
-    <message>
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
@@ -223,6 +219,34 @@
     <message>
         <source>1–%1</source>
         <translation>1–%1</translation>
+    </message>
+    <message>
+        <source>Einstellungen</source>
+        <translation>Réglages</translation>
+    </message>
+    <message>
+        <source>Stromfluss anzeigen</source>
+        <translation>Afficher le courant</translation>
+    </message>
+    <message>
+        <source>Animationen reduzieren</source>
+        <translation>Réduire les animations</translation>
+    </message>
+    <message>
+        <source>Startbildschirm zeigen</source>
+        <translation>Afficher l&apos;écran de démarrage</translation>
+    </message>
+    <message>
+        <source>Messgerät anzeigen</source>
+        <translation>Afficher le multimètre</translation>
+    </message>
+    <message>
+        <source>Felder je Reihe</source>
+        <translation>Cases par rangée</translation>
+    </message>
+    <message>
+        <source>Experiment wählen</source>
+        <translation>Choisir une expérience</translation>
     </message>
     <message>
         <source>Felder je Reihe: %1</source>

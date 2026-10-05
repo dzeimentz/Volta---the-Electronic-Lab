@@ -9,6 +9,9 @@ Item {
     id: lab
     required property var controller
     property var languageService: null // Anzeigesprache (main.cpp); ohne: Knopf ausgeblendet
+    property var settings: null        // Einstellungen (main.cpp); ohne: Grundwerte
+    Binding { target: Theme; property: "reduceMotion"; value: lab.settings ? lab.settings.reduceMotion : false }
+    Binding { target: Theme; property: "showCurrentFlow"; value: lab.settings ? lab.settings.showCurrentFlow : true }
 
     // ------------------------------------------------------------------ Geometrie
     readonly property var deskNames: ["P:+9V", "P:0V", "P:P1a", "P:P1s", "P:P1b", "P:P2a", "P:P2s", "P:P2b",
@@ -222,6 +225,82 @@ Item {
                     }
                 }
             }
+            // Einstellungen (ganz rechts)
+            ToolButton {
+                objectName: "settingsButton"
+                width: Theme.control; height: Theme.control
+                text: "☰"
+                font.pixelSize: 24
+                palette.buttonText: "white"
+                onClicked: settingsMenu.open()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Einstellungen")
+                Accessible.name: qsTr("Einstellungen")
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+                }
+                Menu {
+                    id: settingsMenu
+                    objectName: "settingsMenu"
+                    y: parent.height
+                    x: parent.width - width
+                    width: 300
+                    MenuItem {
+                        objectName: "settingFlow"
+                        height: Theme.control
+                        text: qsTr("Stromfluss anzeigen")
+                        checkable: true
+                        enabled: lab.settings !== null
+                        checked: lab.settings ? lab.settings.showCurrentFlow : true
+                        onTriggered: lab.settings.showCurrentFlow = checked
+                    }
+                    MenuItem {
+                        objectName: "settingMotion"
+                        height: Theme.control
+                        text: qsTr("Animationen reduzieren")
+                        checkable: true
+                        enabled: lab.settings !== null
+                        checked: lab.settings ? lab.settings.reduceMotion : false
+                        onTriggered: lab.settings.reduceMotion = checked
+                    }
+                    MenuItem {
+                        height: Theme.control
+                        visible: lab.settings !== null && lab.settings.splashAvailable
+                        text: qsTr("Startbildschirm zeigen")
+                        checkable: true
+                        checked: lab.settings ? lab.settings.showSplash : true
+                        onTriggered: lab.settings.showSplash = checked
+                    }
+                    MenuItem {
+                        height: Theme.control
+                        text: qsTr("Messgerät anzeigen")
+                        checkable: true
+                        checked: lab.controller.meterVisible
+                        onTriggered: lab.controller.meterVisible = checked
+                    }
+                    Menu {
+                        title: qsTr("Felder je Reihe")
+                        Repeater {
+                            model: [8, 10, 12]
+                            MenuItem {
+                                required property int modelData
+                                height: Theme.control
+                                text: qsTr("1–%1").arg(modelData)
+                                checkable: true
+                                checked: lab.columns === modelData
+                                onTriggered: lab.controller.setBoardColumns(modelData)
+                            }
+                        }
+                    }
+                    MenuSeparator {}
+                    MenuItem {
+                        height: Theme.control
+                        text: qsTr("Info")
+                        onTriggered: infoDialog.open()
+                    }
+                }
+            }
         }
 
         Row {
@@ -230,48 +309,71 @@ Item {
             anchors.leftMargin: Theme.margin
             spacing: 12
 
-            ToolButton {
-                id: experimentsButton
-                objectName: "experimentsButton"
-                text: "☰"
-                font.pixelSize: 24
-                width: Theme.control; height: Theme.control
-                onClicked: experimentMenu.open()
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Experimente")
-                Accessible.name: qsTr("Experimente")
-                Menu {
-                    id: experimentMenu
-                    objectName: "experimentMenu"
-                    y: parent.height
-                    Repeater {
-                        model: lab.controller.experiments
-                        MenuItem {
-                            required property var modelData
-                            height: Theme.control
-                            text: qsTr("Stufe %1: %2").arg(modelData.stage).arg(modelData.title)
-                                  + (modelData.destructive ? "  ⚠" : "")
-                            checkable: true
-                            checked: lab.controller.experimentId === modelData.id
-                            onTriggered: lab.controller.startExperiment(modelData.id)
-                        }
-                    }
-                    MenuSeparator {}
-                    MenuItem {
-                        height: Theme.control
-                        text: qsTr("Freies Labor")
-                        onTriggered: lab.controller.startFreeLab()
-                    }
-                }
-            }
-            Label {
+            // Experimentauswahl als Aufklappfeld: »Freies Labor« und die Experimente nach Stufen; zeigt den Titel
+            ComboBox {
+                id: experimentBox
+                objectName: "experimentBox"
                 anchors.verticalCenter: parent.verticalCenter
-                text: lab.controller.title
-                color: "white"
-                font.pixelSize: 18
+                width: 380
+                height: Theme.control
+                textRole: "text"
+                readonly property var entries: {
+                    let e = [{text: qsTr("Freies Labor"), id: ""}]
+                    const list = lab.controller.experiments
+                    for (let i = 0; i < list.length; ++i)
+                        e.push({text: qsTr("Stufe %1: %2").arg(list[i].stage).arg(list[i].title)
+                                      + (list[i].destructive ? "  ⚠" : ""), id: list[i].id})
+                    return e
+                }
+                model: entries
+                currentIndex: {
+                    if (lab.controller.freeLab) return 0
+                    for (let i = 1; i < entries.length; ++i)
+                        if (entries[i].id === lab.controller.experimentId) return i
+                    return -1
+                }
+                displayText: currentIndex >= 0 ? entries[currentIndex].text : lab.controller.title
+                onActivated: (index) => {
+                    if (index === 0) lab.controller.startFreeLab()
+                    else lab.controller.startExperiment(entries[index].id)
+                }
+                font.pixelSize: 16
                 font.bold: true
-                width: 340
-                elide: Text.ElideRight
+                indicator: Label {
+                    x: experimentBox.width - width - 12
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "▾"
+                    color: "white"
+                    font.pixelSize: 18
+                }
+                contentItem: Label {
+                    leftPadding: 12
+                    rightPadding: experimentBox.indicator.width + 16
+                    text: experimentBox.displayText
+                    color: "white"
+                    font: experimentBox.font
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    radius: 6
+                    color: experimentBox.pressed ? "#2A4A6E" : (experimentBox.hovered ? "#24425F" : "#1F3A57")
+                    border.color: "#7F93A8"
+                }
+                delegate: ItemDelegate {
+                    required property var modelData
+                    required property int index
+                    width: experimentBox.popup.width
+                    height: Theme.control
+                    text: modelData.text
+                    font.pixelSize: 15
+                    font.bold: index === experimentBox.currentIndex
+                    highlighted: experimentBox.highlightedIndex === index
+                }
+                popup.width: Math.max(width, 460)
+                ToolTip.visible: hovered && !pressed
+                ToolTip.text: qsTr("Experiment wählen")
+                Accessible.name: qsTr("Experiment wählen")
             }
             ToolButton {
                 objectName: "undoButton"

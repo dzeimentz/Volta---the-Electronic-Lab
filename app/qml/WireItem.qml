@@ -56,11 +56,11 @@ Shape {
 
     // Stromfluss: wandernde Punkte (docs/ui-spec.md); stehen still ohne Strom
     FrameAnimation {
-        running: root.visible && root.flowSpeed !== 0
+        running: root.visible && root.flowSpeed !== 0 && Theme.showCurrentFlow && !Theme.reduceMotion
         onTriggered: root.phase = (root.phase + root.flowSpeed * frameTime + 1) % 1
     }
     Repeater {
-        model: root.flowSpeed !== 0 ? root.dotCount : 0
+        model: root.flowSpeed !== 0 && Theme.showCurrentFlow ? root.dotCount : 0
         Rectangle {
             required property int index
             readonly property point p: root.pointAt((root.phase + index / root.dotCount) % 1)

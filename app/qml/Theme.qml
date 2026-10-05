@@ -29,6 +29,10 @@ QtObject {
         return "#808080"
     }
 
+    // Einstellungen der Darstellung (von Lab.qml aus AppSettings gebunden)
+    property bool reduceMotion: false   // Animationen reduzieren (docs/ui-spec.md)
+    property bool showCurrentFlow: true // Stromflusspunkte auf den Leitungen
+
     // Masse in dp (Qt Quick: geraeteunabhaengige Pixel)
     readonly property int fieldWidth: 72
     readonly property int fieldHeight: 56   // Kontaktfelder >= 56 dp

@@ -82,6 +82,8 @@ qt_add_qml_module(volta_ui
         src/lab_controller.cpp
         src/language_service.hpp
         src/language_service.cpp
+        src/app_settings.hpp
+        src/app_settings.cpp
 )
 target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2)
 # Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben

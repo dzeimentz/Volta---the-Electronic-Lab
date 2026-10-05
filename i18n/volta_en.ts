@@ -189,10 +189,6 @@
         <translation>Info</translation>
     </message>
     <message>
-        <source>Experimente</source>
-        <translation>Experiments</translation>
-    </message>
-    <message>
         <source>Stufe %1: %2</source>
         <translation>Level %1: %2</translation>
     </message>
@@ -223,6 +219,34 @@
     <message>
         <source>1–%1</source>
         <translation>1–%1</translation>
+    </message>
+    <message>
+        <source>Einstellungen</source>
+        <translation>Settings</translation>
+    </message>
+    <message>
+        <source>Stromfluss anzeigen</source>
+        <translation>Show current flow</translation>
+    </message>
+    <message>
+        <source>Animationen reduzieren</source>
+        <translation>Reduce animations</translation>
+    </message>
+    <message>
+        <source>Startbildschirm zeigen</source>
+        <translation>Show start screen</translation>
+    </message>
+    <message>
+        <source>Messgerät anzeigen</source>
+        <translation>Show meter</translation>
+    </message>
+    <message>
+        <source>Felder je Reihe</source>
+        <translation>Fields per row</translation>
+    </message>
+    <message>
+        <source>Experiment wählen</source>
+        <translation>Choose experiment</translation>
     </message>
     <message>
         <source>Felder je Reihe: %1</source>

@@ -53,6 +53,7 @@ class LabController : public QObject {
     // Gefuehrtes Experiment (Phase 1: Frage -> Aufbau -> Erfolg)
     Q_PROPERTY(QVariantList experiments READ experiments NOTIFY experimentChanged)
     Q_PROPERTY(QString experimentId READ experimentId NOTIFY experimentChanged)
+    Q_PROPERTY(bool freeLab READ freeLab NOTIFY experimentChanged)
     Q_PROPERTY(int phase READ phase NOTIFY flowChanged) // 0 freies Labor, 1 Frage, 2 Aufbau, 3 Erfolg
     Q_PROPERTY(bool destructive READ destructive NOTIFY experimentChanged)
     Q_PROPERTY(QString question READ question NOTIFY experimentChanged)
@@ -123,6 +124,7 @@ public:
 
     QVariantList experiments() const { return m_experimentList; }
     QString experimentId() const { return m_experiment.id; }
+    bool freeLab() const { return m_freeLab; }
     int phase() const { return static_cast<int>(m_flow.phase()); }
     bool destructive() const { return m_experiment.destructive; }
     QString question() const { return m_repo.text(m_experiment.questionKey); }

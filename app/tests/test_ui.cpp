@@ -9,6 +9,7 @@
 #include <QtTest>
 
 #include "lab_controller.hpp"
+#include "app_settings.hpp"
 #include "language_service.hpp"
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
@@ -22,6 +23,7 @@ private:
     std::unique_ptr<LabController> m_lab;
     std::unique_ptr<QQmlApplicationEngine> m_engine;
     std::unique_ptr<LanguageService> m_language;
+    std::unique_ptr<AppSettings> m_settings;
     QQuickWindow* m_window = nullptr;
 
     // Repeater-Elemente haengen im visuellen Baum (childItems), nicht zwingend im QObject-Baum
@@ -106,6 +108,8 @@ private slots:
         m_language = std::make_unique<LanguageService>(m_engine.get(), false); // ohne Speichern
         connect(m_language.get(), &LanguageService::languageChanged, m_lab.get(), &LabController::setContentLanguage);
         m_engine->rootContext()->setContextProperty(QStringLiteral("volta_languageService"), m_language.get());
+        m_settings = std::make_unique<AppSettings>(false); // ohne Speichern
+        m_engine->rootContext()->setContextProperty(QStringLiteral("volta_settings"), m_settings.get());
         m_engine->loadFromModule("Volta", "Main");
         QVERIFY(!m_engine->rootObjects().isEmpty());
         m_window = qobject_cast<QQuickWindow*>(m_engine->rootObjects().first());
@@ -349,9 +353,36 @@ private slots:
         QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("field_MESS:COM")) == nullptr);
     }
 
+    // Experimentauswahl als Aufklappfeld; Einstellungsmenue ganz rechts
+    void experimentBoxAndSettings() {
+        QObject* box = item(QStringLiteral("experimentBox"));
+        QVERIFY(box);
+        m_lab->startExperiment(QStringLiteral("volta1.1.2"));
+        QTRY_COMPARE(box->property("currentIndex").toInt(), 2); // 0 Freies Labor, 1 = 1.1, 2 = 1.2
+        QMetaObject::invokeMethod(box, "activated", Q_ARG(int, 0));
+        QTRY_VERIFY(m_lab->freeLab());
+        QCOMPARE(box->property("currentIndex").toInt(), 0);
+        QMetaObject::invokeMethod(box, "activated", Q_ARG(int, 1));
+        QTRY_COMPARE(m_lab->experimentId(), QStringLiteral("volta1.1.1"));
+        QVERIFY(!m_lab->freeLab());
+
+        QQuickItem* settingsButton = item(QStringLiteral("settingsButton"));
+        QVERIFY(settingsButton);
+        // ganz rechts in der Werkzeugleiste
+        QVERIFY(centerOf(settingsButton).x() > centerOf(item(QStringLiteral("infoButton"))).x());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(settingsButton));
+        QQuickItem* flow = nullptr;
+        QTRY_VERIFY((flow = item(QStringLiteral("settingFlow"))) != nullptr && flow->isVisible());
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(flow));
+        QTRY_VERIFY(!m_settings->showCurrentFlow());
+        m_settings->setShowCurrentFlow(true);
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_language.reset();
+        m_settings.reset();
         m_lab.reset();
     }
 };

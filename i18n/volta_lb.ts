@@ -189,10 +189,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Experimente</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Stufe %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,6 +218,34 @@
     </message>
     <message>
         <source>1–%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Einstellungen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stromfluss anzeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Animationen reduzieren</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Startbildschirm zeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Messgerät anzeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Felder je Reihe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Experiment wählen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

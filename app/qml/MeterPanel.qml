@@ -125,7 +125,7 @@ Rectangle {
                 transformOrigin: Item.Bottom
                 // 0 ... 1 Bereich -> -50 ... +50 Grad; Anschlag knapp darueber/darunter
                 rotation: -50 + Math.max(-0.04, Math.min(1.06, level)) * 100
-                Behavior on rotation { SpringAnimation { spring: 4; damping: 0.22; epsilon: 0.05 } }
+                Behavior on rotation { enabled: !Theme.reduceMotion; SpringAnimation { spring: 4; damping: 0.22; epsilon: 0.05 } }
             }
             Rectangle { width: 10; height: 10; radius: 5; color: "#333333"; x: parent.cx - 5; y: parent.cy - 5 }
         }
