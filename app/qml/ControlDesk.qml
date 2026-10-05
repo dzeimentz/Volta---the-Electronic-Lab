@@ -87,18 +87,14 @@ Rectangle {
         }
     }
 
-    // Lautsprecher (Klanganzeige mit Leuchtring folgt in Phase 4)
+    // Lautsprecher mit Leuchtring (Klanganzeige)
     Column {
         x: desk.speakerX - width / 2
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 6
-        Rectangle {
+        spacing: 2
+        SpeakerRing {
             anchors.horizontalCenter: parent.horizontalCenter
-            width: 56; height: 56; radius: 28
-            color: "#203650"
-            border.color: "#7F93A8"
-            border.width: 3
-            Text { anchors.centerIn: parent; text: "🔈"; font.pixelSize: 24 }
+            controller: desk.controller
         }
         Label { text: qsTr("Lautsprecher"); color: "white"; font.pixelSize: 12; anchors.horizontalCenter: parent.horizontalCenter }
     }

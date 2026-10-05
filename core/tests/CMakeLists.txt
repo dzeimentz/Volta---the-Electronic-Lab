@@ -26,6 +26,7 @@ add_executable(volta_core_tests
     components/test_switch_buzzer.cpp
     components/test_meter.cpp
     components/test_potentiometer.cpp
+    components/test_speaker.cpp
 )
 target_include_directories(volta_core_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(volta_core_tests PRIVATE volta::core Catch2::Catch2WithMain)

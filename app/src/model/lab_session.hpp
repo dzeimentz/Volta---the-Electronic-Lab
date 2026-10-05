@@ -85,6 +85,8 @@ public:
     void setMeterAnalog(bool analog);
     bool setMeterVisible(bool visible);
     bool replaceMeterFuse();
+    // Lautsprecher des Pults reparieren (Befehl, wie Reparieren eines Bauteils)
+    bool repairSpeaker();
     // Messwert eines Pultbauteils (z. B. desk_id::kMeter) aus dem aktuellen Schnappschuss
     const core::ComponentReading* deskReading(const std::string& deskId) const;
 

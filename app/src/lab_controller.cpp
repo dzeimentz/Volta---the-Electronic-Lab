@@ -418,6 +418,20 @@ void LabController::setMeterAnalog(bool analog) {
 
 bool LabController::replaceMeterFuse() { return result(m_session->replaceMeterFuse()); }
 
+bool LabController::repairSpeaker() { return result(m_session->repairSpeaker()); }
+
+QVariantMap LabController::speakerState() const {
+    QVariantMap m;
+    const core::ComponentReading* r = m_session->deskReading(model::desk_id::kSpeaker);
+    if (!r) return m;
+    m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
+    m.insert(QStringLiteral("level"), r->level);
+    m.insert(QStringLiteral("pulses"), r->displayValue);
+    m.insert(QStringLiteral("overloaded"), r->overloaded);
+    m.insert(QStringLiteral("destroyed"), r->destroyed);
+    return m;
+}
+
 QVariantMap LabController::meterState() {
     QVariantMap m;
     const core::ComponentReading* r = m_session->deskReading(model::desk_id::kMeter);

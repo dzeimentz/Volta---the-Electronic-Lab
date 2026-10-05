@@ -430,6 +430,29 @@ private slots:
         QVERIFY(r && (r->displayFlags & core::kDisplayFuseBlown));
     }
 
+    // Klanganzeige: Blinkmodul schaltet den Pult-Lautsprecher (Impulse unter 20 Hz); reparieren ist ein Befehl
+    void speakerPulsesFromBlinkModule() {
+        auto s = session();
+        model::Board b;
+        b.desk.mainSwitch = true;
+        b.modules.push_back({"BL1", "blinkmodul", 1});
+        b.wires.push_back({"L1", "P:+9V", "BL1.plus", "rot"});
+        b.wires.push_back({"L2", "BL1.minus", "P:0V", "schwarz"});
+        b.wires.push_back({"L3", "P:+9V", "P:LS1", "rot"});
+        b.parts.push_back({"R1", "widerstand", {{"a", "A1"}, {"b", "A2"}}, 100.0});
+        b.wires.push_back({"L4", "P:LS2", "A1", "blau"});
+        b.wires.push_back({"L5", "A2", "BL1.aus", "blau"});
+        s->loadBoard(b);
+        run(*s, 6.0);
+        const core::ComponentReading* r = s->deskReading(model::desk_id::kSpeaker);
+        QVERIFY(r);
+        QVERIFY2(r->displayValue >= 3.0, qPrintable(QString::number(r->displayValue))); // ca. 0,85 Hz
+        QVERIFY2(r->frequencyHz > 0.5 && r->frequencyHz < 1.5, qPrintable(QString::number(r->frequencyHz)));
+        QVERIFY(!r->destroyed);
+        QVERIFY(s->repairSpeaker());
+        QCOMPARE(s->undoStack().count(), 1);
+    }
+
     void boardColumnsAreACommand() {
         auto s = session();
         QCOMPARE(s->board().columns, 12);

@@ -51,6 +51,11 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   - Impulse unter 20 Hz -> kurzes Aufblinken je Impuls.
   - Skalenmarke wandert mit der Tonhoehe im Uhrzeigersinn (Farbfehlsichtigkeit).
   - Ab Stufe 3: langer Druck zeigt Frequenz in Hz. Bleibt im Klassenmodus aktiv.
+  - Umgesetzt (`SpeakerRing.qml`, Kernmodell `Speaker`): Tonhoehe aus dem Stromverlauf (Nulldurchgaenge), Staerke aus
+    dem Effektivwert des Wechselanteils, Impulse gezaehlt; reiner Gleichstrom bleibt stumm. Wegen der Schrittweite
+    1 ms sind Tonhoehen nur bis ca. 250 Hz aufloesbar; hoehere Toene liefern Verhaltensmodelle (Summer, Tonmodul).
+    Hz bei langem Druck im freien Labor und ab Stufe 3. Durchgebrannter Lautsprecher: antippen = reparieren (Befehl).
+    Tonausgabe ueber die Soundkarte folgt mit dem Audiodienst.
 - **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
   - Umgesetzt (aus Phase 4 vorgezogen, `MeterPanel.qml`): Geraet rechts neben der Grundplatte, ein-/ausblendbar ueber

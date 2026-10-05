@@ -11,6 +11,7 @@
 #include "volta/core/components/meter.hpp"
 #include "volta/core/components/motor.hpp"
 #include "volta/core/components/potentiometer.hpp"
+#include "volta/core/components/speaker.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/components/switch.hpp"
 #include "volta/core/components/transistor.hpp"
@@ -116,9 +117,9 @@ private:
         c.add<core::Potentiometer>(desk_id::kPot2, p2a, p2s, p2b, core::PotentiometerParams{}, d.p2);
         m_net.desk[desk_id::kSwitch] = c.componentCount();
         c.add<core::Switch>(desk_id::kSwitch, s1, s2, d.switchClosed);
-        // Lautsprecher: 8 Ohm, 0,5 W; Klanganzeige und Ton folgen mit dem Lautsprechermodell (Phase 4)
+        // Lautsprecher: 8 Ohm, 0,5 W, mit Auswertung fuer die Klanganzeige (Tonhoehe, Signalstaerke, Impulse)
         m_net.desk[desk_id::kSpeaker] = c.componentCount();
-        c.add<core::Resistor>(desk_id::kSpeaker, ls1, ls2, core::ResistorParams{8.0, 0.5});
+        c.add<core::Speaker>(desk_id::kSpeaker, ls1, ls2);
         m_net.desk[desk_id::kMeter] = c.componentCount();
         core::Meter& meter = c.add<core::Meter>(desk_id::kMeter, com, vo, amp);
         meter.setMode(d.meterMode);

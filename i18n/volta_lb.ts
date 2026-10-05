@@ -363,6 +363,29 @@
     </message>
 </context>
 <context>
+    <name>SpeakerRing</name>
+    <message>
+        <source>%1 Hz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stille</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lautsprecher kaputt – antippen zum Reparieren</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lautsprecher: Ton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lautsprecher: still</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Splash</name>
     <message>
         <source>Version %1</source>

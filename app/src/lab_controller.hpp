@@ -67,6 +67,8 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList further READ further NOTIFY experimentChanged)
     Q_PROPERTY(QString realLife READ realLife NOTIFY experimentChanged)
     Q_PROPERTY(QString nextExperimentId READ nextExperimentId NOTIFY experimentChanged)
+    // Zahlenwerte (z. B. Hz am Lautsprecher) ab Stufe 3 und im freien Labor (docs/ui-spec.md)
+    Q_PROPERTY(bool showNumbers READ showNumbers NOTIFY experimentChanged)
 
 public:
     explicit LabController(QString contentRoot, QObject* parent = nullptr);
@@ -135,6 +137,7 @@ public:
     QStringList further() const { return texts(m_experiment.furtherKeys); }
     QString realLife() const { return m_repo.text(m_experiment.realKey); }
     QString nextExperimentId() const;
+    bool showNumbers() const { return m_experiment.id.isEmpty() || m_experiment.stage >= 3; }
     Q_INVOKABLE double voltage(const QString& anchor) const;
     Q_INVOKABLE int voltageBars(const QString& anchor);
     // Zustand eines Bauteils: currentmA, level, overloaded, destroyed, tempC
@@ -169,6 +172,9 @@ public:
     // overrange, foreignVoltage, fuseBlown, valid
     Q_INVOKABLE QVariantMap meterState();
     Q_INVOKABLE bool replaceMeterFuse(); // Befehl
+    // Klanganzeige: frequencyHz, level 0..1, pulses (Zaehler), overloaded, destroyed
+    Q_INVOKABLE QVariantMap speakerState() const;
+    Q_INVOKABLE bool repairSpeaker(); // Befehl
 
     model::LabSession& session() { return *m_session; }
 

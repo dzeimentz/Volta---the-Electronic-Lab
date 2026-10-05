@@ -437,6 +437,11 @@ bool LabSession::replaceMeterFuse() {
                 {{desk_id::kMeter, core::ComponentState{}}});
 }
 
+bool LabSession::repairSpeaker() {
+    return push(QStringLiteral("Lautsprecher reparieren"), m_board, BoardCommand::NoMerge, {},
+                {{desk_id::kSpeaker, core::ComponentState{}}});
+}
+
 const core::ComponentReading* LabSession::deskReading(const std::string& deskId) const {
     const auto it = m_net.desk.find(deskId);
     if (!snapshotCurrent() || it == m_net.desk.end() || it->second >= m_snap.readings.size()) return nullptr;
