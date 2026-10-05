@@ -17,7 +17,7 @@ Item {
 
     Rectangle {
         anchors.centerIn: parent
-        width: drag.active ? 18 : 14
+        width: drag.active ? 16 : 11 // passt in den Lochabstand (Theme.socketPitch)
         height: width
         radius: width / 2
         color: handle.wireColor

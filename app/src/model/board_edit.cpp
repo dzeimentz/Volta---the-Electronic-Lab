@@ -117,6 +117,109 @@ std::string nextWireId(const Board& board) {
     return "L" + std::to_string(n);
 }
 
+bool withinBoard(const Board& board, const std::string& anchor) {
+    char row = 0;
+    int col = 0;
+    return !parseField(anchor, row, col) || col <= board.columns;
+}
+
+int highestUsedColumn(const Board& board) {
+    int used = 0;
+    auto note = [&used](const std::string& anchor) {
+        char row = 0;
+        int col = 0;
+        if (parseField(anchor, row, col)) used = std::max(used, col);
+    };
+    for (const auto& p : board.parts)
+        for (const auto& pin : p.pins) note(pin.second);
+    for (const auto& w : board.wires) {
+        note(w.from);
+        note(w.to);
+    }
+    return used;
+}
+
+int socketCount(const std::string& anchor) {
+    switch (classifyAnchor(anchor)) {
+    case AnchorKind::Field:
+    case AnchorKind::Desk:
+    case AnchorKind::MeterJack:
+        return kSocketsPerField;
+    default:
+        return 1;
+    }
+}
+
+namespace {
+
+// Spalte eines Felds der Grundplatte, 0 fuer andere Anschlusspunkte
+int columnOf(const std::string& anchor) {
+    char row = 0;
+    int col = 0;
+    return parseField(anchor, row, col) ? col : 0;
+}
+
+// Bevorzugte Loecher nach Richtung (-1 links, 0 Mitte, +1 rechts); fuer Bauteile nah am Partner, fuer Leitungen
+// von aussen
+std::vector<int> preference(int direction, bool wire) {
+    static_assert(kSocketsPerField == 5, "Vorzugsreihenfolgen sind fuer fuenf Steckplaetze festgelegt");
+    if (direction > 0) return wire ? std::vector<int>{4, 3, 2, 1, 0} : std::vector<int>{3, 4, 2, 1, 0};
+    if (direction < 0) return wire ? std::vector<int>{0, 1, 2, 3, 4} : std::vector<int>{1, 0, 2, 3, 4};
+    return {2, 1, 3, 0, 4};
+}
+
+int direction(const std::string& from, const std::string& to) {
+    const int a = columnOf(from);
+    const int b = columnOf(to);
+    if (a == 0 || b == 0 || a == b) return 0;
+    return b > a ? 1 : -1;
+}
+
+} // namespace
+
+SocketAssignment assignSockets(const Board& board) {
+    SocketAssignment out;
+    std::map<std::string, std::vector<int>> use; // Anschlusspunkt -> Belegung je Loch
+    auto take = [&use](const std::string& anchor, const std::vector<int>& order) {
+        const int n = socketCount(anchor);
+        if (n == 1) return 0;
+        std::vector<int>& u = use[anchor];
+        u.resize(static_cast<std::size_t>(n), 0);
+        int best = order.front();
+        for (int s : order) {
+            if (u[static_cast<std::size_t>(s)] == 0) {
+                best = s;
+                break;
+            }
+            if (u[static_cast<std::size_t>(s)] < u[static_cast<std::size_t>(best)]) best = s;
+        }
+        ++u[static_cast<std::size_t>(best)];
+        return best;
+    };
+
+    for (const auto& p : board.parts) {
+        std::vector<int>& sockets = out.partPins[p.id];
+        for (std::size_t i = 0; i < p.pins.size(); ++i) {
+            // Richtung zum Schwerpunkt der uebrigen Anschluesse (Traegerplatine: Mitte bleibt Mitte)
+            int sum = 0;
+            int cnt = 0;
+            for (std::size_t k = 0; k < p.pins.size(); ++k) {
+                if (k == i) continue;
+                sum += direction(p.pins[i].second, p.pins[k].second);
+                ++cnt;
+            }
+            const int dir = cnt == 0 || sum == 0 ? 0 : (sum > 0 ? 1 : -1);
+            sockets.push_back(take(p.pins[i].second, preference(dir, false)));
+        }
+    }
+    for (const auto& w : board.wires) {
+        const int a = take(w.from, preference(direction(w.from, w.to), true));
+        const int b = take(w.to, preference(direction(w.to, w.from), true));
+        out.wireEnds[w.id] = {a, b};
+    }
+    return out;
+}
+
 int usedSockets(const Board& board, const std::string& field, const std::string& ignoreId) {
     int n = 0;
     for (const auto& p : board.parts) {
@@ -144,6 +247,11 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
             error = part.id + ": Bauteile stecken nur auf Feldern der Grundplatte";
             return false;
         }
+        if (!withinBoard(board, pin.second)) {
+            error = part.id + ": Feld " + pin.second + " liegt ausserhalb der Grundplatte (1-" +
+                    std::to_string(board.columns) + ")";
+            return false;
+        }
         ++needed[pin.second];
     }
     if (needed.size() != part.pins.size()) {
@@ -167,7 +275,7 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
 bool canWire(const Board& board, const std::string& from, const std::string& to, std::string& error) {
     auto valid = [&board](const std::string& a) {
         const AnchorKind k = classifyAnchor(a);
-        if (k == AnchorKind::Invalid) return false;
+        if (k == AnchorKind::Invalid || !withinBoard(board, a)) return false;
         if (k != AnchorKind::ModulePin) return true;
         const std::string id = a.substr(0, a.find('.'));
         return std::any_of(board.modules.begin(), board.modules.end(), [&id](const auto& m) { return m.id == id; });

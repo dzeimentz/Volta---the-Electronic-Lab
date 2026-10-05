@@ -20,3 +20,5 @@ Auf Wunsch des Auftraggebers wurde die Grundplatte von Volta 1 auf **12 Spalten*
 Kontaktfeld (Grundplatte und Pultleiste) auf **fuenf Steckplaetze** erweitert: mehr Platz fuer groessere Aufbauten
 und Knoten mit vielen Abzweigungen. Die Modulleiste bleibt bei einem Steckplatz je Feld. Bestehende Bezeichner
 A1–E8 bleiben gueltig.
+Ergaenzt: Die Breite ist je Aufbau einstellbar (8, 10, 12 Spalten, Befehl), und Beine wie Leitungsenden stecken
+sichtbar in berechneten Loechern (docs/domain-model.md, Bauteile auf der Grundplatte). Leitungen bleiben unbegrenzt.

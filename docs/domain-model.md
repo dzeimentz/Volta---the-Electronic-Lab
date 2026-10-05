@@ -2,7 +2,10 @@
 
 ## Grundplatte und Kontaktfelder
 
-- Die Grundplatte besteht aus **Kontaktfeldern** in Zeilen und Spalten. Volta 1: Zeilen `A`–`E`, Spalten `1`–`8`.
+- Die Grundplatte besteht aus **Kontaktfeldern** in Zeilen und Spalten. Volta 1: Zeilen `A`–`E`, Spalten `1`–`12`.
+- **Breite einstellbar** (`Board::columns`): 8, 10 oder 12 Felder je Reihe ueber »−/+« in der Werkzeugleiste
+  (Befehl, rueckgaengig machbar). Verkleinern nur, wenn die wegfallenden Spalten frei sind; Spannungsanzeigen dort
+  entfallen. Felder rechts der eingestellten Breite sind fuer Bauteile und Leitungen ungueltig.
 - Jedes Feld hat **fuenf Steckplaetze**, die leitend verbunden sind. Elektrisch ist ein Feld **ein Knoten**.
 - Bezeichner: `<Zeile><Spalte>`, Regex `^[A-E](1[0-2]|[1-9])$` (Volta 1: 5 Zeilen x 12 Spalten). Die Koordinatenform ist bewusst eigenstaendig
   (das Vorbild nummeriert durchgehend).
@@ -16,8 +19,15 @@
 - Bauteile mit drei Anschluessen (Transistor) sitzen auf einer **Traegerplatine** mit Schaltzeichen und
   Anschlussbezeichnung (B, C, E), die drei Felder ueberspannt.
 - Gepolte Bauteile tragen Anschlussnamen: Diode/LED `anode`, `kathode`; Elko `plus`, `minus`; Transistor `b`, `c`, `e`.
-- Ein Steckplatz ist maximal einmal belegt; ein Feld hat damit hoechstens fuenf Bauteilbeine plus beliebig viele Leitungen
-  (Leitungen belegen keinen Steckplatz, sie enden am Feld).
+- Ein Feld hat hoechstens fuenf Bauteilbeine. Die fuenf Steckloecher liegen mittig in einer Reihe (0 links ... 4 rechts);
+  Beine und Leitungsenden stecken sichtbar in einem Loch. Die Belegung wird aus dem Aufbau berechnet
+  (`assignSockets`, deterministisch, Undo-sicher):
+  - Bauteilbeine zuerst, zur Seite des Partnerfelds: Partner rechts -> Loch 3, 4, 2, 1, 0; links -> 1, 0, 2, 3, 4;
+    senkrecht (gleiche Spalte) -> Mitte 2, 1, 3, 0, 4. Traegerplatine: aeussere Beine nach innen, mittleres Bein Mitte.
+  - Leitungsenden danach in freie Loecher: anderes Ende weiter rechts -> von aussen rechts (4, 3, ...), weiter links ->
+    von aussen links (0, 1, ...), sonst (Pult, Messgeraet, Modul, gleiche Spalte) Mitte zuerst.
+  - Leitungen sind nicht begrenzt: Sind alle Loecher belegt, teilt sich eine Leitung das am wenigsten belegte Loch.
+  - Pultfelder und Messgeraetebuchsen haben ebenfalls fuenf Loecher, Modulleiste und Modulanschluesse eines.
 
 ## Leitungen
 

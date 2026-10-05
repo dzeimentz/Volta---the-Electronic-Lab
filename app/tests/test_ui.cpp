@@ -246,6 +246,34 @@ private slots:
         QTRY_COMPARE(board().desk.switchClosed, before);
     }
 
+    // +/- in der Werkzeugleiste: 12 -> 10 -> 8 Felder je Reihe und zurueck (Befehl, rueckgaengig machbar)
+    void boardColumnsPlusMinus() {
+        m_lab->startFreeLab();
+        QTRY_VERIFY(board().parts.empty());
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("A11"), false, false)); // A11-A12
+        QQuickItem* minus = item(QStringLiteral("columnsMinus"));
+        QQuickItem* plus = item(QStringLiteral("columnsPlus"));
+        QVERIFY(minus && plus);
+        QVERIFY(!plus->isEnabled());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(minus));
+        QTRY_VERIFY(!m_lab->lastEditError().isEmpty()); // A11/A12 belegt: Hinweis statt Loeschen
+        QCOMPARE(board().columns, 12);
+        m_lab->undo();
+        QTRY_VERIFY(board().parts.empty());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(minus));
+        QTRY_COMPARE(board().columns, 10);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(minus));
+        QTRY_COMPARE(board().columns, 8);
+        QTRY_VERIFY(!minus->isEnabled());
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("field_A9")) == nullptr);
+        QVERIFY(item(QStringLiteral("field_E8")));
+        QTest::keyClick(m_window, Qt::Key_Z, Qt::ControlModifier);
+        QTRY_COMPARE(board().columns, 10);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(plus));
+        QTRY_COMPARE(board().columns, 12);
+        QTRY_VERIFY(item(QStringLiteral("field_E12")));
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_lab.reset();

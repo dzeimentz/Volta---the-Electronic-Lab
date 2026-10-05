@@ -2,6 +2,7 @@
 // Zusammenfassen beim Ziehen, Reparieren, Bedienhandlungen ausserhalb des Verlaufs.
 #include <QtTest>
 
+#include <algorithm>
 #include <cmath>
 
 #include "model/experiment_flow.hpp"
@@ -280,6 +281,61 @@ private slots:
         s->setCells(3); // 4,5 V wie vorgesehen
         run(*s, 3.0);
         QVERIFY(s->successReached());
+    }
+
+    // Steckloecher: Beine zur Seite des Partnerfelds, senkrecht in die Mitte, Leitungen in freie Loecher
+    void socketsFollowDirection() {
+        model::Board b;
+        b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 470.0});   // waagrecht
+        b.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});  // senkrecht
+        b.parts.push_back({"R2", "widerstand", {{"a", "B5"}, {"b", "B3"}}, 470.0});  // Partner links (umgedreht)
+        b.parts.push_back({"T1", "transistor_npn", {{"b", "E2"}, {"c", "E3"}, {"e", "E4"}}});
+        b.wires.push_back({"L1", "P:+9V", "B3", "rot"});
+        b.wires.push_back({"L2", "B4", "B8", "blau"});
+        b.wires.push_back({"L3", "A1", "B4", "gelb"}); // anderes Ende links
+        const model::SocketAssignment s = model::assignSockets(b);
+        QCOMPARE(s.partPins.at("R1"), (std::vector<int>{3, 1}));
+        QCOMPARE(s.partPins.at("D1"), (std::vector<int>{2, 2}));
+        QCOMPARE(s.partPins.at("R2"), (std::vector<int>{1, 4})); // B5 nach links: 1; B3 nach rechts: 3 belegt -> 4
+        QCOMPARE(s.partPins.at("T1"), (std::vector<int>{3, 2, 1}));
+        QCOMPARE(s.wireEnds.at("L1"), (std::pair<int, int>{2, 2}));
+        QCOMPARE(s.wireEnds.at("L2").first, 4); // B4: 1 (R1), 2 (D1) belegt; nach rechts von aussen
+        QCOMPARE(s.wireEnds.at("L3").second, 0); // B4: von links von aussen
+        // Volles Feld: Leitungen teilen sich ein Loch (keine Grenze fuer Leitungen)
+        model::Board full;
+        for (int i = 0; i < 7; ++i)
+            full.wires.push_back({"L" + std::to_string(i + 1), "P:+9V", "A" + std::to_string(i + 1), "rot"});
+        const model::SocketAssignment f = model::assignSockets(full);
+        std::vector<int> count(5, 0);
+        for (const auto& [id, ends] : f.wireEnds) ++count[static_cast<std::size_t>(ends.first)];
+        QCOMPARE(*std::min_element(count.begin(), count.end()), 1); // jedes Loch benutzt, dann geteilt
+        QCOMPARE(model::socketCount("M:3"), 1);
+        QCOMPARE(model::socketCount("P:S1"), 5);
+    }
+
+    void boardColumnsAreACommand() {
+        auto s = session();
+        QCOMPARE(s->board().columns, 12);
+        QVERIFY(!s->setColumns(9));
+        QVERIFY(!s->setColumns(14));
+        QVERIFY(s->addPart("widerstand", "A10", Orientation::Horizontal, Span::Short)); // A10-A11
+        QVERIFY(s->toggleVoltageDisplay("C12"));
+        QVERIFY(!s->setColumns(10)); // A11 belegt
+        QVERIFY(QString::fromStdString(s->lastError()).contains(QStringLiteral("11-12")));
+        QVERIFY(s->movePart("R1", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->setColumns(8));
+        QCOMPARE(s->board().columns, 8);
+        QVERIFY(s->board().voltageDisplays.empty()); // C12 entfaellt
+        // ausserhalb der Grundplatte: weder Bauteil noch Leitung
+        QVERIFY(!s->addPart("widerstand", "B8", Orientation::Horizontal, Span::Short)); // B8-B9
+        QVERIFY(!s->addWire("P:+9V", "A9", "rot"));
+        QVERIFY(s->addPart("widerstand", "B7", Orientation::Horizontal, Span::Short));
+        s->undoStack().undo(); // Bauteil
+        s->undoStack().undo(); // Breite
+        QCOMPARE(s->board().columns, 12);
+        QCOMPARE(s->board().voltageDisplays, std::vector<std::string>{"C12"});
+        s->undoStack().redo();
+        QCOMPARE(s->board().columns, 8);
     }
 
     void experimentFlow() {

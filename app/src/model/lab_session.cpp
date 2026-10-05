@@ -204,6 +204,22 @@ bool LabSession::fail(std::string message) {
     return false;
 }
 
+bool LabSession::setColumns(int columns) {
+    if (columns < kMinColumns || columns > kMaxColumns || (columns - kMinColumns) % kColumnStep != 0)
+        return fail("Grundplatte: 8, 10 oder 12 Felder je Reihe");
+    if (columns == m_board.columns) return true;
+    if (highestUsedColumn(m_board) > columns)
+        return fail("Felder " + std::to_string(columns + 1) + "-" + std::to_string(m_board.columns) +
+                    " sind noch belegt - erst Bauteile und Leitungen dort entfernen");
+    Board after = m_board;
+    after.columns = columns;
+    // Spannungsanzeigen auf wegfallenden Feldern entfallen (kommen mit Rueckgaengig zurueck)
+    after.voltageDisplays.erase(std::remove_if(after.voltageDisplays.begin(), after.voltageDisplays.end(),
+                                               [&after](const std::string& f) { return !withinBoard(after, f); }),
+                                after.voltageDisplays.end());
+    return push(QStringLiteral("Grundplatte 1-%1").arg(columns), std::move(after));
+}
+
 bool LabSession::replaceBoard(const Board& after, const QString& text) {
     Board b = after;
     b.desk = m_board.desk;
@@ -333,6 +349,7 @@ bool LabSession::setWireColor(const std::string& id, const std::string& color) {
 bool LabSession::toggleVoltageDisplay(const std::string& field) {
     const AnchorKind k = classifyAnchor(field);
     if (k != AnchorKind::Field && k != AnchorKind::Desk) return fail("Spannungsanzeige nur an Feldern");
+    if (!withinBoard(m_board, field)) return fail("Spannungsanzeige: Feld liegt ausserhalb der Grundplatte");
     Board after = m_board;
     auto& v = after.voltageDisplays;
     const auto it = std::find(v.begin(), v.end(), field);

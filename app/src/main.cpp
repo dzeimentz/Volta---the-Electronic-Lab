@@ -74,6 +74,10 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // Entwicklerhilfe: VOLTA_DEMO_COLUMNS=8|10|12 stellt die Breite der Grundplatte ein (wie +/- in der Werkzeugleiste)
+    if (const int columns = qEnvironmentVariableIntValue("VOLTA_DEMO_COLUMNS"); columns > 0)
+        QTimer::singleShot(400, &lab, [&lab, columns] { lab.setBoardColumns(columns); });
+
     const QString shot = qEnvironmentVariable("VOLTA_SCREENSHOT");
     if (!shot.isEmpty()) {
         if (qEnvironmentVariableIntValue("VOLTA_SCREENSHOT_MAINSWITCH") == 1)

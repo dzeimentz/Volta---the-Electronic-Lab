@@ -54,6 +54,7 @@ struct Board {
     std::vector<WirePlacement> wires;
     std::vector<ModulePlacement> modules;
     std::vector<std::string> voltageDisplays; // Felder mit eingeschalteter Spannungsanzeige (Aufbau, undo-faehig)
+    int columns = 12; // genutzte Spalten der Grundplatte: 8, 10 oder 12 (Aufbau, undo-faehig)
     DeskState desk;
 
     const PartPlacement* findPart(const std::string& id) const;

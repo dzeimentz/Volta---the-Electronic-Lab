@@ -1,6 +1,8 @@
 #pragma once
 
+#include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "board.hpp"
@@ -13,6 +15,15 @@ enum class Orientation { Horizontal, Vertical };
 enum class Span { Short = 1, Long = 2 }; // ein bzw. zwei Feldabstaende
 
 inline constexpr int kSocketsPerField = 5;
+// Einstellbare Breite der Grundplatte (Spalten je Reihe), Schritt 2
+inline constexpr int kMinColumns = 8;
+inline constexpr int kMaxColumns = 12;
+inline constexpr int kColumnStep = 2;
+
+// Liegt der Anschlusspunkt auf der genutzten Grundplatte? (Felder rechts von board.columns: nein; andere: ja)
+bool withinBoard(const Board& board, const std::string& anchor);
+// Groesste von Bauteilen oder Leitungen belegte Spalte (0: keine)
+int highestUsedColumn(const Board& board);
 
 // Felder, die ein Bauteil vom Startfeld aus belegt; leer, wenn es nicht auf die Grundplatte passt.
 // Zweipolig: Startfeld und Feld im Abstand span. Traegerplatine (drei Anschluesse): drei benachbarte Felder.
@@ -31,8 +42,25 @@ std::string nextWireId(const Board& board);
 bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& part, std::string& error,
               const std::string& ignoreId = {});
 
-// Belegte Steckplaetze eines Felds (Bauteilbeine; Leitungen belegen keinen Steckplatz)
+// Belegte Steckplaetze eines Felds durch Bauteilbeine (Grenze kSocketsPerField). Leitungen stecken zusaetzlich in
+// freien Steckplaetzen, begrenzen aber nicht (siehe assignSockets).
 int usedSockets(const Board& board, const std::string& field, const std::string& ignoreId = {});
+
+// Steckplatz (Loch) je Bauteilbein und Leitungsende: 0 = ganz links ... kSocketsPerField - 1 = ganz rechts;
+// Felder mit nur einem Steckplatz (Modulleiste, Modulanschluss) immer 0. Wird bei jeder Darstellung aus dem Aufbau
+// berechnet (kein gespeicherter Zustand, Undo-sicher) und ist deterministisch:
+// 1. Bauteilbeine in Aufbaureihenfolge. Bevorzugt die Seite zum Partnerfeld: Partner rechts -> Loch 3, 4, 2, 1, 0;
+//    links -> 1, 0, 2, 3, 4; gleiche Spalte (senkrecht) -> Mitte 2, 1, 3, 0, 4.
+// 2. Leitungsenden in Aufbaureihenfolge in freie Loecher: anderes Ende auf der Grundplatte weiter rechts -> von
+//    aussen rechts (4, 3, ...), weiter links -> von aussen links (0, 1, ...), sonst Mitte zuerst. Sind alle Loecher
+//    belegt, teilt sich die Leitung das am wenigsten belegte bevorzugte Loch.
+struct SocketAssignment {
+    std::map<std::string, std::vector<int>> partPins;    // Bauteil-ID -> Loch je Anschluss (Reihenfolge pins)
+    std::map<std::string, std::pair<int, int>> wireEnds; // Leitungs-ID -> Loch am Anfang (von), am Ende (nach)
+};
+SocketAssignment assignSockets(const Board& board);
+// Anzahl Steckplaetze eines Anschlusspunkts (Feld, Pultfeld, Buchse: kSocketsPerField; sonst 1)
+int socketCount(const std::string& anchor);
 
 // Prueft eine Leitung: beide Enden gueltige Anschlusspunkte, nicht dasselbe Feld.
 bool canWire(const Board& board, const std::string& from, const std::string& to, std::string& error);

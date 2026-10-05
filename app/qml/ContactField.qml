@@ -9,6 +9,7 @@ Rectangle {
     property bool showVoltage: false
     property int bars: 0
     property int sockets: 5 // Steckplaetze (Modulleiste: schmale Felder mit einem Steckplatz)
+    property int pitch: Theme.socketPitch // Lochabstand (Lab.socketPoint rechnet mit demselben Wert)
     property bool highlighted: false
 
     signal wireDragUpdated(point scenePos)
@@ -20,17 +21,19 @@ Rectangle {
     border.color: highlighted ? Theme.signalOrange : Theme.fieldOutline
     border.width: highlighted ? 4 : 1
 
-    // Steckplaetze links unten (rechts unten sitzt die Spannungsanzeige); schmale Pultfelder: mittig, enger
-    Grid {
-        readonly property bool narrow: root.width < 64
-        x: root.sockets === 1 || narrow ? (root.width - width) / 2 : 6
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        columns: root.sockets
-        spacing: narrow ? 3 : 4
-        Repeater {
-            model: root.sockets
-            Rectangle { width: 6; height: 6; radius: 3; color: Theme.fieldOutline }
+    // Steckloecher mittig im Feld (waagrecht und senkrecht); Bauteilbeine und Leitungen stecken genau hier
+    Repeater {
+        model: root.sockets
+        Rectangle {
+            required property int index
+            width: Theme.socketSize
+            height: width
+            radius: width / 2
+            x: root.width / 2 + (index - (root.sockets - 1) / 2) * root.pitch - width / 2
+            y: root.height / 2 - height / 2
+            color: "#6E6553"
+            border.color: "#4F4839"
+            border.width: 1
         }
     }
 
@@ -48,9 +51,9 @@ Rectangle {
         visible: root.showVoltage
         bars: root.bars
         anchors.right: parent.right
-        anchors.rightMargin: 5
+        anchors.rightMargin: 4
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 5
+        anchors.bottomMargin: 2 // unter der Lochreihe
     }
 
     property point lastScenePos

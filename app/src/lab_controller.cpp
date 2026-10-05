@@ -189,9 +189,15 @@ double LabController::wireCurrent(const QString& id) const {
     return snap.readings[it->second].currentA * 1e3;
 }
 
+bool LabController::setBoardColumns(int columns) { return result(m_session->setColumns(columns)); }
+
 QVariantList LabController::parts() const {
     QVariantList out;
+    const model::SocketAssignment sockets = model::assignSockets(m_session->board());
     for (const auto& p : m_session->board().parts) {
+        QVariantList pinSockets; // Loch je Anschluss (0 links ... 4 rechts)
+        if (const auto it = sockets.partPins.find(p.id); it != sockets.partPins.end())
+            for (int s : it->second) pinSockets << s;
         QStringList anchors;
         QStringList pinNames;
         for (const auto& [name, anchor] : p.pins) {
@@ -228,18 +234,25 @@ QVariantList LabController::parts() const {
                            {QStringLiteral("vertical"), vertical},
                            {QStringLiteral("longSpan"), longSpan},
                            {QStringLiteral("pins"), pinNames},
-                           {QStringLiteral("anchors"), anchors}};
+                           {QStringLiteral("anchors"), anchors},
+                           {QStringLiteral("sockets"), pinSockets}};
     }
     return out;
 }
 
 QVariantList LabController::wires() const {
     QVariantList out;
-    for (const auto& w : m_session->board().wires)
+    const model::SocketAssignment sockets = model::assignSockets(m_session->board());
+    for (const auto& w : m_session->board().wires) {
+        const auto it = sockets.wireEnds.find(w.id);
+        const std::pair<int, int> ends = it != sockets.wireEnds.end() ? it->second : std::pair<int, int>{2, 2};
         out << QVariantMap{{QStringLiteral("id"), qs(w.id)},
                            {QStringLiteral("from"), qs(w.from)},
                            {QStringLiteral("to"), qs(w.to)},
+                           {QStringLiteral("fromSocket"), ends.first},
+                           {QStringLiteral("toSocket"), ends.second},
                            {QStringLiteral("color"), qs(w.color)}};
+    }
     return out;
 }
 

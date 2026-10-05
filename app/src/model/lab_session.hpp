@@ -66,6 +66,8 @@ public:
     bool removeWire(const std::string& id);
     bool setWireColor(const std::string& id, const std::string& color);
     bool toggleVoltageDisplay(const std::string& field);
+    // Breite der Grundplatte (8, 10, 12 Spalten). Verkleinern nur, wenn die wegfallenden Spalten frei sind.
+    bool setColumns(int columns);
     // Ganzer Aufbau auf einmal (z. B. Musteraufbau als Loesungshilfe); Pultstellung bleibt
     bool replaceBoard(const Board& after, const QString& text);
 

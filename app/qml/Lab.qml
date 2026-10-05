@@ -13,7 +13,7 @@ Item {
     readonly property var deskNames: ["P:+9V", "P:0V", "P:P1a", "P:P1s", "P:P1b", "P:P2a", "P:P2s", "P:P2b",
                                       "P:S1", "P:S2", "P:LS1", "P:LS2", "MESS:COM", "MESS:VOHM", "MESS:A"]
     readonly property var rows: ["A", "B", "C", "D", "E"]
-    readonly property int columns: 12
+    readonly property int columns: controller.boardColumns // 8, 10 oder 12 (+/- in der Werkzeugleiste)
     readonly property int slots: 16
     // Pult (Bedienelemente), Gruppenlinien, Pultleiste, Grundplatte, Modulleiste von oben nach unten
     readonly property int deskPanelHeight: 128
@@ -52,6 +52,14 @@ Item {
         const c = parseInt(name.substring(1)) - 1
         return Qt.point(c * (Theme.fieldWidth + Theme.fieldGap) + Theme.fieldWidth / 2,
                         boardY + r * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldHeight / 2)
+    }
+
+    // Mittelpunkt eines Stecklochs (0 links ... 4 rechts); Felder mit einem Loch: Feldmitte
+    function socketPitch(name) { return deskNames.indexOf(name) >= 0 ? Theme.deskSocketPitch : Theme.socketPitch }
+    function socketPoint(name, index) {
+        const c = anchorPoint(name)
+        if (name.startsWith("M:") || index === undefined) return c
+        return Qt.point(c.x + (index - 2) * socketPitch(name), c.y)
     }
 
     // Anschlusspunkt unter einem Punkt (canvas-Koordinaten), Fangbereich Feld + 8 dp; "" wenn keiner
@@ -183,6 +191,43 @@ Item {
                 ToolTip.text: qsTr("Wiederholen: %1").arg(lab.controller.redoText)
                 Accessible.name: qsTr("Wiederholen")
             }
+            // Breite der Grundplatte: Felder je Reihe 8 / 10 / 12 (Befehl, rueckgaengig machbar)
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 2
+                ToolButton {
+                    objectName: "columnsMinus"
+                    text: "−"
+                    font.pixelSize: 24
+                    width: Theme.control; height: Theme.control
+                    enabled: lab.columns > 8
+                    onClicked: lab.controller.setBoardColumns(lab.columns - 2)
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Weniger Felder je Reihe")
+                    Accessible.name: qsTr("Weniger Felder je Reihe")
+                }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 52
+                    horizontalAlignment: Text.AlignHCenter
+                    text: qsTr("1–%1").arg(lab.columns)
+                    color: "white"
+                    font.pixelSize: 15
+                    font.bold: true
+                    Accessible.name: qsTr("Felder je Reihe: %1").arg(lab.columns)
+                }
+                ToolButton {
+                    objectName: "columnsPlus"
+                    text: "+"
+                    font.pixelSize: 24
+                    width: Theme.control; height: Theme.control
+                    enabled: lab.columns < 12
+                    onClicked: lab.controller.setBoardColumns(lab.columns + 2)
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Mehr Felder je Reihe")
+                    Accessible.name: qsTr("Mehr Felder je Reihe")
+                }
+            }
             // Farbe fuer neue Leitungen
             Row {
                 anchors.verticalCenter: parent.verticalCenter
@@ -296,6 +341,7 @@ Item {
                     label: lab.isBoardField(modelData) ? modelData
                          : modelData.startsWith("M:") ? "M" + modelData.substring(2) : lab.deskLabel(modelData)
                     sockets: modelData.startsWith("M:") ? 1 : 5
+                    pitch: lab.socketPitch(modelData)
                     width: lab.anchorSize(modelData).width
                     height: lab.anchorSize(modelData).height
                     x: lab.anchorPoint(modelData).x - width / 2
@@ -344,7 +390,7 @@ Item {
                     value: modelData.value
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id
-                    points: modelData.anchors.map(a => lab.anchorPoint(a))
+                    points: modelData.anchors.map((a, i) => lab.socketPoint(a, modelData.sockets[i]))
                     onTapped: {
                         lab.selectedPart = part.modelData.id
                         lab.selectedWire = ""
@@ -384,8 +430,8 @@ Item {
                     anchors.fill: parent
                     readonly property bool movingFrom: lab.moveWireId === modelData.id && lab.moveWireFromEnd
                     readonly property bool movingTo: lab.moveWireId === modelData.id && !lab.moveWireFromEnd
-                    readonly property point fromPoint: movingFrom ? lab.wirePreviewEnd : lab.anchorPoint(modelData.from)
-                    readonly property point toPoint: movingTo ? lab.wirePreviewEnd : lab.anchorPoint(modelData.to)
+                    readonly property point fromPoint: movingFrom ? lab.wirePreviewEnd : lab.socketPoint(modelData.from, modelData.fromSocket)
+                    readonly property point toPoint: movingTo ? lab.wirePreviewEnd : lab.socketPoint(modelData.to, modelData.toSocket)
 
                     WireItem {
                         id: wireShape

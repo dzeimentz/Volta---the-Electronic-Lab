@@ -10,7 +10,7 @@ Item {
     property real value: 0
     property bool closed: false
     property bool selected: false
-    property var points: []      // Mittelpunkte der Felder je Anschluss
+    property var points: []      // Steckloecher je Anschluss (Lab.socketPoint)
     property var partState: ({}) // partState() des LabController
 
     signal dragFinished(point delta)
@@ -61,11 +61,26 @@ Item {
         }
     }
 
+    // Eingesteckte Beinenden
+    Repeater {
+        model: root.points
+        Rectangle {
+            required property var modelData
+            width: 6; height: 6; radius: 3
+            x: modelData.x - 3
+            y: modelData.y - 3
+            color: "#5E5E5E"
+            border.color: "#2E2E2E"
+            border.width: 1
+        }
+    }
+
     // Koerper (Traegerplatine ueberspannt alle drei Felder)
     PartBody {
         id: body
         readonly property real span: Math.sqrt(Math.pow(root.b.x - root.a.x, 2) + Math.pow(root.b.y - root.a.y, 2))
-        width: root.points.length > 2 ? span + 40 : 72
+        // zweipolig: hoechstens 72, sonst zwischen die Loecher (kurz waagrecht: Loch 3 -> Loch 1 des Nachbarfelds)
+        width: root.points.length > 2 ? span + 40 : Math.max(44, Math.min(72, span - 6))
         height: 34
         x: root.cx - width / 2
         y: root.cy - height / 2

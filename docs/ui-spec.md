@@ -16,7 +16,7 @@
 
 ## Experimentansicht (Lab)
 - Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.
-- Werkzeugleiste: Rueckgaengig, Wiederholen, Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
+- Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen, Breite der Grundplatte »− 1–12 +« (8/10/12 Felder je Reihe), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
 
 ### Gesten und Eingaben

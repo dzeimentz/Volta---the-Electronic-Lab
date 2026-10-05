@@ -28,6 +28,7 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList wires READ wires NOTIFY boardChanged)
     Q_PROPERTY(QVariantList modules READ modules NOTIFY boardChanged)
     Q_PROPERTY(QStringList voltageFields READ voltageFields NOTIFY boardChanged)
+    Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 8, 10 oder 12 Felder je Reihe
     Q_PROPERTY(QVariantList catalogParts READ catalogParts CONSTANT)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
@@ -137,6 +138,8 @@ public:
     Q_INVOKABLE bool removeWire(const QString& id);
     Q_INVOKABLE bool setWireColor(const QString& id, const QString& color);
     Q_INVOKABLE bool toggleVoltageDisplay(const QString& field);
+    Q_INVOKABLE bool setBoardColumns(int columns); // Befehl; +/- in der Werkzeugleiste
+    int boardColumns() const { return m_session->board().columns; }
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
 

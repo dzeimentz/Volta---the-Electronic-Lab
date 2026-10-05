@@ -36,6 +36,10 @@ QtObject {
     readonly property int deskFieldWidth: 56
     readonly property int deskFieldGap: 12
     readonly property int slotWidth: 36
+    // Steckloecher: fuenf je Feld, mittig; Abstand von Lochmitte zu Lochmitte (Pultfelder sind schmaler)
+    readonly property int socketSize: 8
+    readonly property int socketPitch: 13
+    readonly property int deskSocketPitch: 10
     readonly property int slotGap: 8
     readonly property int control: 48       // Bedienelemente >= 48 dp
     readonly property int margin: 24
