@@ -58,10 +58,11 @@ private slots:
         // Motor nur mit langer Spannweite (Katalog)
         QVERIFY(!s->addPart("motor", "D1", Orientation::Horizontal, Span::Short));
         QVERIFY(s->addPart("motor", "D1", Orientation::Horizontal, Span::Long));
-        // Traegerplatine: drei benachbarte Felder in Lage-Reihenfolge
-        QVERIFY(s->addPart("transistor_npn", "E2", Orientation::Horizontal, Span::Short, &id));
-        QCOMPARE(pins(*s, id),
-                 (std::vector<std::pair<std::string, std::string>>{{"b", "E2"}, {"c", "E3"}, {"e", "E4"}}));
+        // Transistor auf 2-x-2-Platine: B | C oben, E | E unten; unterste Reihe passt nicht
+        QVERIFY(!s->addPart("transistor_npn", "E2", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addPart("transistor_npn", "D2", Orientation::Horizontal, Span::Short, &id));
+        QCOMPARE(pins(*s, id), (std::vector<std::pair<std::string, std::string>>{
+                                   {"b", "D2"}, {"c", "D3"}, {"e", "E2"}, {"e2", "E3"}}));
         QVERIFY(s->addPart("wechselschalter", "C6", Orientation::Vertical, Span::Short, &id));
         QCOMPARE(pins(*s, id), (std::vector<std::pair<std::string, std::string>>{
                                    {"mitte", "D6"}, {"a", "C6"}, {"b", "E6"}}));
@@ -95,10 +96,11 @@ private slots:
         s->undoStack().undo();
         s->undoStack().undo(); // Umdrehen zurueck
         QCOMPARE(pins(*s, "D1").front().second, std::string("B4"));
-        // Traegerplatine umdrehen: e links, b rechts
-        QVERIFY(s->addPart("transistor_npn", "E1", Orientation::Horizontal, Span::Short));
+        // 2-x-2-Platine umdrehen = halbe Drehung: E | E oben, C | B unten
+        QVERIFY(s->addPart("transistor_npn", "D1", Orientation::Horizontal, Span::Short));
         QVERIFY(s->flipPart("T1"));
-        QCOMPARE(pins(*s, "T1"), (std::vector<std::pair<std::string, std::string>>{{"b", "E3"}, {"c", "E2"}, {"e", "E1"}}));
+        QCOMPARE(pins(*s, "T1"), (std::vector<std::pair<std::string, std::string>>{
+                                     {"b", "E2"}, {"c", "E1"}, {"e", "D2"}, {"e2", "D1"}}));
     }
 
     void undoRedoAndMerging() {
@@ -289,7 +291,8 @@ private slots:
         b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 470.0});   // waagrecht
         b.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});  // senkrecht
         b.parts.push_back({"R2", "widerstand", {{"a", "B5"}, {"b", "B3"}}, 470.0});  // Partner links (umgedreht)
-        b.parts.push_back({"T1", "transistor_npn", {{"b", "E2"}, {"c", "E3"}, {"e", "E4"}}});
+        b.parts.push_back({"W1", "wechselschalter", {{"mitte", "E3"}, {"a", "E2"}, {"b", "E4"}}});
+        b.parts.push_back({"T1", "transistor_npn", {{"b", "C6"}, {"c", "C7"}, {"e", "D6"}, {"e2", "D7"}}});
         b.wires.push_back({"L1", "P:+9V", "B3", "rot"});
         b.wires.push_back({"L2", "B4", "B8", "blau"});
         b.wires.push_back({"L3", "A1", "B4", "gelb"}); // anderes Ende links
@@ -297,7 +300,8 @@ private slots:
         QCOMPARE(s.partPins.at("R1"), (std::vector<int>{3, 1}));
         QCOMPARE(s.partPins.at("D1"), (std::vector<int>{2, 2}));
         QCOMPARE(s.partPins.at("R2"), (std::vector<int>{1, 4})); // B5 nach links: 1; B3 nach rechts: 3 belegt -> 4
-        QCOMPARE(s.partPins.at("T1"), (std::vector<int>{3, 2, 1}));
+        QCOMPARE(s.partPins.at("W1"), (std::vector<int>{2, 3, 1})); // Mitte, aussen nach innen
+        QCOMPARE(s.partPins.at("T1"), (std::vector<int>{3, 1, 3, 1})); // Platine: zur Mitte des Blocks
         QCOMPARE(s.wireEnds.at("L1"), (std::pair<int, int>{2, 2}));
         QCOMPARE(s.wireEnds.at("L2").first, 4); // B4: 1 (R1), 2 (D1) belegt; nach rechts von aussen
         QCOMPARE(s.wireEnds.at("L3").second, 0); // B4: von links von aussen
@@ -311,6 +315,26 @@ private slots:
         QCOMPARE(*std::min_element(count.begin(), count.end()), 1); // jedes Loch benutzt, dann geteilt
         QCOMPARE(model::socketCount("M:3"), 1);
         QCOMPARE(model::socketCount("P:S1"), 5);
+    }
+
+    // 2-x-2-Platine: der zweite E-Fuss ist ueber die Leiterbahn mit E verbunden (Emitter nur ueber e2 an 0V)
+    void transistorSecondEmitterConducts() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("transistor_npn", "C3", Orientation::Horizontal, Span::Short)); // B C3, C C4, E D3, E2 D4
+        QVERIFY(s->addPart("widerstand", "B2", Orientation::Vertical, Span::Short, nullptr, 10e3)); // B2-C2
+        QVERIFY(s->addWire("C2", "C3", "gelb"));                                                  // Basiswiderstand
+        QVERIFY(s->addPart("widerstand", "A4", Orientation::Horizontal, Span::Short, nullptr, 470.0)); // A4-A5
+        QVERIFY(s->addPart("led_rot", "B4", Orientation::Vertical, Span::Short));                 // B4 -> C4
+        QVERIFY(s->addWire("A5", "B4", "rot"));
+        QVERIFY(s->addWire("P:+9V", "B2", "rot"));
+        QVERIFY(s->addWire("P:+9V", "A4", "rot"));
+        QVERIFY(s->addWire("D4", "P:0V", "schwarz")); // nur der zweite E-Fuss
+        run(*s, 0.2);
+        const core::ComponentReading* led = s->reading("D1");
+        QVERIFY(led);
+        QVERIFY2(led->currentA > 5e-3, qPrintable(QString::number(led->currentA)));
+        QVERIFY(std::fabs(s->voltage("D3") - s->voltage("D4")) < 1e-3); // Leiterbahn E <-> E2
     }
 
     void boardColumnsAreACommand() {

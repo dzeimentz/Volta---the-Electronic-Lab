@@ -14,6 +14,7 @@ Item {
     property bool destroyed: false
     property bool overloaded: false
     property bool selected: false
+    property var feet: [] // Fusspunkte relativ zum Koerper (quadratische Platine)
 
     implicitWidth: 72
     implicitHeight: 34
@@ -376,17 +377,51 @@ Item {
         }
     }
 
+    // Transistor auf quadratischer Platine (Eigenentwurf): Fuesse B | C oben, E | E unten; die beiden E-Fuesse
+    // verbindet eine Leiterbahn. In der Mitte das Gehaeuse mit flacher Seite und das Schaltzeichen-Kuerzel.
     Component {
         id: transistor
         Rectangle {
-            anchors.fill: parent; radius: 4
-            color: "#3E7C3A"; border.color: "#1F4A1C"
-            Row {
+            id: pcb
+            anchors.fill: parent; radius: 6
+            color: "#2F6B3A"; border.color: "#173D1E"; border.width: 2
+            readonly property var f: root.feet.length === 4 ? root.feet
+                                   : [Qt.point(16, 14), Qt.point(width - 16, 14),
+                                      Qt.point(16, height - 14), Qt.point(width - 16, height - 14)]
+            // Leiterbahnen: E <-> E sichtbar, B/C/E zum Gehaeuse
+            Repeater {
+                model: [[pcb.f[2], pcb.f[3]], [pcb.f[0], Qt.point(pcb.width / 2, pcb.height / 2)],
+                        [pcb.f[1], Qt.point(pcb.width / 2, pcb.height / 2)],
+                        [Qt.point((pcb.f[2].x + pcb.f[3].x) / 2, pcb.f[2].y), Qt.point(pcb.width / 2, pcb.height / 2)]]
+                Rectangle {
+                    required property var modelData
+                    readonly property real dx: modelData[1].x - modelData[0].x
+                    readonly property real dy: modelData[1].y - modelData[0].y
+                    x: modelData[0].x; y: modelData[0].y - height / 2
+                    width: Math.sqrt(dx * dx + dy * dy); height: 4
+                    transformOrigin: Item.Left
+                    rotation: Math.atan2(dy, dx) * 180 / Math.PI
+                    color: "#C9A24A"
+                }
+            }
+            // Gehaeuse (halbrund mit flacher Seite)
+            Rectangle {
                 anchors.centerIn: parent
-                spacing: parent.width / 5
-                Repeater {
-                    model: ["B", "C", "E"]
-                    Text { required property string modelData; text: modelData; font.pixelSize: 11; font.bold: true; color: "white" }
+                width: 26; height: 22; radius: 11
+                color: "#1E1E1E"; border.color: "#000000"
+                Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: parent.height / 2; color: "#1E1E1E" }
+                Text { anchors.centerIn: parent; text: "T"; color: "#E0E0E0"; font.pixelSize: 11; font.bold: true }
+            }
+            // Fussbezeichnung (Farbe nie allein: Buchstaben)
+            Repeater {
+                model: ["B", "C", "E", "E"]
+                Text {
+                    required property int index
+                    required property string modelData
+                    text: modelData
+                    font.pixelSize: 11; font.bold: true; color: "white"
+                    x: pcb.f[index].x + (index % 2 === 0 ? 7 : -7 - width)
+                    y: pcb.f[index].y + (index < 2 ? 4 : -4 - height)
                 }
             }
         }

@@ -16,14 +16,17 @@
 
 - Zweipolige Bauteile ueberbruecken zwei Felder, waagrecht oder senkrecht, mit Spannweite **kurz** (1 Feldabstand)
   oder **lang** (2 Feldabstaende). Ablegen zielt auf das ganze Feld; die App waehlt den freien Steckplatz.
-- Bauteile mit drei Anschluessen (Transistor) sitzen auf einer **Traegerplatine** mit Schaltzeichen und
-  Anschlussbezeichnung (B, C, E), die drei Felder ueberspannt.
-- Gepolte Bauteile tragen Anschlussnamen: Diode/LED `anode`, `kathode`; Elko `plus`, `minus`; Transistor `b`, `c`, `e`.
+- Der **Transistor** sitzt auf einer **quadratischen Platine** mit vier Fuessen ueber einem 2-x-2-Block von Feldern
+  (Katalog `spannweite: platine_2x2`, `lage: b, c, e, e2`): oben links B, oben rechts C, unten links E, unten rechts
+  ein zweiter E-Fuss (`e2`), der auf der Platine ueber eine sichtbare Leiterbahn mit E verbunden ist (Netzliste:
+  Leitung `<ID>.E2`). Startfeld ist das Feld oben links; »Umdrehen« dreht die Platine um 180°.
+- Der Wechselschalter sitzt auf einer **Traegerplatine** ueber drei Felder in einer Reihe (`spannweite: traeger`).
+- Gepolte Bauteile tragen Anschlussnamen: Diode/LED `anode`, `kathode`; Elko `plus`, `minus`; Transistor `b`, `c`, `e` (Platine zusaetzlich `e2`).
 - Ein Feld hat hoechstens fuenf Bauteilbeine. Die fuenf Steckloecher liegen mittig in einer Reihe (0 links ... 4 rechts);
   Beine und Leitungsenden stecken sichtbar in einem Loch. Die Belegung wird aus dem Aufbau berechnet
   (`assignSockets`, deterministisch, Undo-sicher):
   - Bauteilbeine zuerst, zur Seite des Partnerfelds: Partner rechts -> Loch 3, 4, 2, 1, 0; links -> 1, 0, 2, 3, 4;
-    senkrecht (gleiche Spalte) -> Mitte 2, 1, 3, 0, 4. Traegerplatine: aeussere Beine nach innen, mittleres Bein Mitte.
+    senkrecht (gleiche Spalte) -> Mitte 2, 1, 3, 0, 4. Traegerplatine: aeussere Beine nach innen, mittleres Bein Mitte; 2-x-2-Platine: Fuesse zur Mitte des Blocks.
   - Leitungsenden danach in freie Loecher: anderes Ende weiter rechts -> von aussen rechts (4, 3, ...), weiter links ->
     von aussen links (0, 1, ...), sonst (Pult, Messgeraet, Modul, gleiche Spalte) Mitte zuerst.
   - Leitungen sind nicht begrenzt: Sind alle Loecher belegt, teilt sich eine Leitung das am wenigsten belegte Loch.

@@ -32,6 +32,18 @@ Item {
         for (let i = 0; i < points.length; ++i) s += points[i].y
         return points.length > 0 ? s / points.length : 0
     }
+    // Quadratische Platine (Transistor, vier Fuesse im 2-x-2-Block): Umriss aus den Fusspunkten
+    readonly property bool square: points.length === 4
+    readonly property real spanX: {
+        let lo = 1e9, hi = -1e9
+        for (let i = 0; i < points.length; ++i) { lo = Math.min(lo, points[i].x); hi = Math.max(hi, points[i].x) }
+        return points.length > 0 ? hi - lo : 0
+    }
+    readonly property real spanY: {
+        let lo = 1e9, hi = -1e9
+        for (let i = 0; i < points.length; ++i) { lo = Math.min(lo, points[i].y); hi = Math.max(hi, points[i].y) }
+        return points.length > 0 ? hi - lo : 0
+    }
     readonly property bool destroyed: partState.destroyed === true
     readonly property bool overloaded: partState.overloaded === true
 
@@ -61,6 +73,27 @@ Item {
         }
     }
 
+    // Koerper (Traegerplatine ueberspannt alle drei Felder; quadratische Platine den 2-x-2-Block)
+    PartBody {
+        id: body
+        readonly property real span: Math.sqrt(Math.pow(root.b.x - root.a.x, 2) + Math.pow(root.b.y - root.a.y, 2))
+        // zweipolig: hoechstens 72, sonst zwischen die Loecher (kurz waagrecht: Loch 3 -> Loch 1 des Nachbarfelds)
+        width: root.square ? root.spanX + 26 : root.points.length > 2 ? span + 40 : Math.max(44, Math.min(72, span - 6))
+        height: root.square ? root.spanY + 22 : 34
+        x: root.cx - width / 2
+        y: root.cy - height / 2
+        rotation: root.square ? 0 : Math.atan2(root.b.y - root.a.y, root.b.x - root.a.x) * 180 / Math.PI
+        type: root.partType
+        // Fusspunkte relativ zum Koerper (Platine: Beschriftung an den Fuessen)
+        feet: root.points.map(pt => Qt.point(pt.x - x, pt.y - y))
+        value: root.value
+        level: root.partState.level || 0
+        closed: root.closed
+        destroyed: root.destroyed
+        overloaded: root.overloaded
+        selected: root.selected
+    }
+
     // Eingesteckte Beinenden
     Repeater {
         model: root.points
@@ -73,25 +106,6 @@ Item {
             border.color: "#2E2E2E"
             border.width: 1
         }
-    }
-
-    // Koerper (Traegerplatine ueberspannt alle drei Felder)
-    PartBody {
-        id: body
-        readonly property real span: Math.sqrt(Math.pow(root.b.x - root.a.x, 2) + Math.pow(root.b.y - root.a.y, 2))
-        // zweipolig: hoechstens 72, sonst zwischen die Loecher (kurz waagrecht: Loch 3 -> Loch 1 des Nachbarfelds)
-        width: root.points.length > 2 ? span + 40 : Math.max(44, Math.min(72, span - 6))
-        height: 34
-        x: root.cx - width / 2
-        y: root.cy - height / 2
-        rotation: Math.atan2(root.b.y - root.a.y, root.b.x - root.a.x) * 180 / Math.PI
-        type: root.partType
-        value: root.value
-        level: root.partState.level || 0
-        closed: root.closed
-        destroyed: root.destroyed
-        overloaded: root.overloaded
-        selected: root.selected
     }
 
     Text {

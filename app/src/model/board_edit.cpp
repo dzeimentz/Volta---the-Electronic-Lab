@@ -23,8 +23,15 @@ bool allowsSpan(const CatalogEntry& e, const std::string& name) {
     return e.spans.empty() || std::find(e.spans.begin(), e.spans.end(), name) != e.spans.end();
 }
 
+// Quadratische Platine ueber 2 x 2 Feldern (Transistor: B | C oben, E | E unten)
+bool isSquareCarrier(const CatalogEntry& e) {
+    return std::find(e.spans.begin(), e.spans.end(), "platine_2x2") != e.spans.end();
+}
+
+// Traegerplatine ueber drei Felder in einer Reihe (Wechselschalter)
 bool isCarrier(const CatalogEntry& e) {
-    return std::find(e.spans.begin(), e.spans.end(), "traeger") != e.spans.end() || e.pins.size() == 3;
+    return !isSquareCarrier(e) &&
+           (std::find(e.spans.begin(), e.spans.end(), "traeger") != e.spans.end() || e.pins.size() == 3);
 }
 
 // Kennungs-Praefixe nach Bauteiltyp (Schaltzeichen-Konvention, kurz und eindeutig)
@@ -47,6 +54,11 @@ std::vector<std::string> footprint(const CatalogEntry& entry, const std::string&
     int col = 0;
     if (!parseField(startField, row, col)) return {};
     const BoardLayout& layout = BoardLayout::volta1();
+    if (isSquareCarrier(entry)) { // Lage fest: Startfeld oben links; Richtung und Spannweite ohne Bedeutung
+        if (row + 1 > layout.lastRow || col + 1 > layout.columns) return {};
+        return {fieldName(row, col), fieldName(row, col + 1), fieldName(static_cast<char>(row + 1), col),
+                fieldName(static_cast<char>(row + 1), col + 1)};
+    }
     const int steps = isCarrier(entry) ? 2 : static_cast<int>(span);
     const int count = isCarrier(entry) ? 3 : 2;
     std::vector<std::string> fields;
@@ -63,7 +75,7 @@ std::vector<std::string> footprint(const CatalogEntry& entry, const std::string&
 bool placePins(const CatalogEntry& entry, const std::string& startField, Orientation o, Span span,
                std::vector<std::pair<std::string, std::string>>& pins, std::string& error) {
     pins.clear();
-    if (!isCarrier(entry)) {
+    if (!isCarrier(entry) && !isSquareCarrier(entry)) {
         if (!allowsSpan(entry, span == Span::Short ? "kurz" : "lang")) {
             error = entry.type + ": Spannweite nicht moeglich";
             return false;

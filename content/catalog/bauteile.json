@@ -31,7 +31,7 @@
      "parameter": {"umax_V": 16}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_elko"},
     {"typ": "fotowiderstand", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "ldr",
      "parameter": {}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_fotowiderstand"},
-    {"typ": "transistor_npn", "anschluesse": ["b", "c", "e"], "spannweite": ["traeger"], "lage": ["b", "c", "e"], "modell": "bjt_npn",
+    {"typ": "transistor_npn", "anschluesse": ["b", "c", "e", "e2"], "spannweite": ["platine_2x2"], "lage": ["b", "c", "e", "e2"], "modell": "bjt_npn",
      "parameter": {"beta": 200}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_transistor"}
   ],
   "module": [

@@ -27,6 +27,7 @@ int highestUsedColumn(const Board& board);
 
 // Felder, die ein Bauteil vom Startfeld aus belegt; leer, wenn es nicht auf die Grundplatte passt.
 // Zweipolig: Startfeld und Feld im Abstand span. Traegerplatine (drei Anschluesse): drei benachbarte Felder.
+// Quadratische Platine ("platine_2x2", Transistor): Startfeld oben links und die drei Nachbarn im 2-x-2-Block.
 std::vector<std::string> footprint(const CatalogEntry& entry, const std::string& startField, Orientation o, Span span);
 
 // Anschlussbelegung aus der Lage (Katalogreihenfolge bzw. "lage" der Traegerplatine).
@@ -67,7 +68,7 @@ bool canWire(const Board& board, const std::string& from, const std::string& to,
 
 // Umgedreht: Felder in umgekehrter Reihenfolge der Lage (z. B. LED mit Anode unten bzw. rechts).
 bool isFlipped(const PartPlacement& part, const CatalogEntry& entry);
-// Kehrt die Feldzuordnung um (Anschluesse bleiben, Felder tauschen die Reihenfolge).
+// Kehrt die Feldzuordnung um (Anschluesse bleiben, Felder tauschen die Reihenfolge); 2-x-2-Platine: halbe Drehung.
 void flipPins(PartPlacement& part, const CatalogEntry& entry);
 
 PartPlacement* findPart(Board& board, const std::string& id);

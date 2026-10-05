@@ -11,8 +11,9 @@ struct CatalogEntry {
     std::string type;               // "led_rot"
     std::string model;              // Modellbezug im Kern: "led", "resistor", ...
     std::vector<std::string> pins;  // Anschlussnamen in Katalogreihenfolge
-    std::vector<std::string> spans; // "kurz", "lang" bzw. "traeger"
-    std::vector<std::string> layout; // Traegerplatine: Anschluesse in Lage-Reihenfolge (leer: wie pins)
+    std::vector<std::string> spans; // "kurz", "lang", "traeger" (3 Felder in Reihe) bzw. "platine_2x2"
+    std::vector<std::string> layout; // Traegerplatine: Anschluesse in Lage-Reihenfolge (leer: wie pins);
+                                     // platine_2x2: oben links, oben rechts, unten links, unten rechts
     std::map<std::string, double> params;
     int fromStage = 0;
 

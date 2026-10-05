@@ -24,7 +24,7 @@ struct BjtParams {
     double overloadFailS = 3.0;
 };
 
-// NPN-Transistor auf Traegerplatine (Katalogtyp `transistor_npn`), vereinfachtes Ebers-Moll-Modell
+// NPN-Transistor auf 2-x-2-Platine (Katalogtyp `transistor_npn`; zweiter E-Fuss als Leitung in der Netzliste), vereinfachtes Ebers-Moll-Modell
 // (Transportform, ohne Bahnwiderstaende und Early-Effekt, mit Ladungsspeicher Q = C*V + tau*I je Uebergang):
 //   Ic = Is*(e^(Vbe/Vt) - e^(Vbc/Vt)) - Is/BR*(e^(Vbc/Vt) - 1)
 //   Ib = Is/BF*(e^(Vbe/Vt) - 1) + Is/BR*(e^(Vbc/Vt) - 1)

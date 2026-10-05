@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
                                {"summer", "C1", false, false},     {"taster", "C6", false, false},
                                {"reedkontakt", "D1", false, false}, {"wechselschalter", "D4", false, false},
                                {"kondensator", "E1", false, false}, {"elko", "E3", false, false},
-                               {"diode_si", "E6", false, false},     {"transistor_npn", "B6", false, false},
+                               {"diode_si", "E6", false, false},     {"transistor_npn", "D9", false, false},
                                {"led_blau", "D7", true, false},      {"led_rot", "A7", true, false}};
             for (const auto& p : parts)
                 lab.addPart(QString::fromLatin1(p.type), QString::fromLatin1(p.field), p.vertical, p.longSpan);

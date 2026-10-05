@@ -164,6 +164,17 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
             span = abs(r1 - r2) + abs(c1 - c2)
             if (r1 != r2 and c1 != c2) or span not in (1, 2):
                 rep.error(where, f"Bauteil {pid}: nur waagrecht/senkrecht mit Spannweite 1 oder 2 Feldern")
+        if "platine_2x2" in spec.get("spannweite", []) and isinstance(felder, dict) and len(fields) == 4:
+            lage = spec.get("lage", spec["anschluesse"])
+            try:
+                (r0, c0) = (ord(felder[lage[0]][0]), int(felder[lage[0]][1:]))
+                expected = [(r0, c0), (r0, c0 + 1), (r0 + 1, c0), (r0 + 1, c0 + 1)]
+                got = [(ord(felder[k][0]), int(felder[k][1:])) for k in lage]
+                ok = got == expected or got == list(reversed(expected))  # auch umgedreht (halbe Drehung)
+            except (KeyError, ValueError, IndexError):
+                ok = False
+            if not ok:
+                rep.error(where, f"Bauteil {pid}: Platine braucht einen 2x2-Block in der Lage {lage}")
         if typ == "widerstand" and "wert" not in p:
             rep.error(where, f"Bauteil {pid}: Widerstand ohne 'wert'")
     for f, n in used_sockets.items():

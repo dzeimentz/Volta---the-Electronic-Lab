@@ -186,10 +186,12 @@ private:
             c.add<core::Capacitor>(p.id, n[0], n[1],
                                    core::CapacitorParams::electrolytic(p.value > 0.0 ? p.value : 100e-6,
                                                                        e->param("umax_V", 16.0)));
-        } else if (m == "bjt_npn" && n.size() == 3) {
+        } else if (m == "bjt_npn" && (n.size() == 3 || n.size() == 4)) {
             core::BjtParams bp;
             bp.betaF = e->param("beta", bp.betaF);
             c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
+            // 2-x-2-Platine: der vierte Fuss (e2) ist ueber eine Leiterbahn mit E verbunden
+            if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
         } else if (m == "potentiometer" && n.size() == 3) {
             core::PotentiometerParams pp;
             pp.ohm = p.value > 0.0 ? p.value : pp.ohm;

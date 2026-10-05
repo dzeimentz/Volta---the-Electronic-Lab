@@ -73,7 +73,7 @@
   "lex_kondensator": "Ein Kondensator speichert für kurze Zeit elektrische Ladung.",
   "lex_elko": "Ein Elko ist ein Kondensator mit Plus- und Minuspol. Falsch herum eingesteckt geht er kaputt.",
   "lex_fotowiderstand": "Ein Fotowiderstand lässt bei Licht mehr Strom durch als im Dunkeln.",
-  "lex_transistor": "Ein Transistor ist ein Schalter, den ein kleiner Strom steuert.",
+  "lex_transistor": "Ein Transistor ist ein Schalter, den ein kleiner Strom steuert. Er sitzt auf einer kleinen Platine mit vier Füßen: oben B und C, unten zweimal E – die beiden E-Füße sind auf der Platine verbunden.",
   "lex_blinkmodul": "Das Blinkmodul schaltet seinen Ausgang immer wieder ein und aus.",
   "lex_tonmodul": "Das Tonmodul erzeugt einen Ton, solange sein Eingang Strom bekommt."
 }
