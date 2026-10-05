@@ -1,7 +1,7 @@
 // Bauteilfach: Bauteile aus dem Fach auf die Grundplatte ziehen (docs/ui-spec.md, Gesten).
 // Zwei Spalten, damit alle Bauteile ohne Blaettern sichtbar sind (Ziehen gehoert dem Bauteil, nicht der Liste).
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 
 Rectangle {
     id: tray

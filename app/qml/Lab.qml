@@ -3,7 +3,7 @@
 // umsetzen; langer Druck oder Rechtsklick oeffnet Menues; Rueckgaengig/Wiederholen auch per Tastenkuerzel.
 // Alle Regeln (Spannweite, volle Felder ...) prueft das Modell; die Oberflaeche zeigt nur den Hinweis an.
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 
 Item {
     id: lab
@@ -118,6 +118,40 @@ Item {
             anchors.leftMargin: Theme.margin
             spacing: 12
 
+            ToolButton {
+                id: experimentsButton
+                objectName: "experimentsButton"
+                text: "☰"
+                font.pixelSize: 24
+                width: Theme.control; height: Theme.control
+                onClicked: experimentMenu.open()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Experimente")
+                Accessible.name: qsTr("Experimente")
+                Menu {
+                    id: experimentMenu
+                    objectName: "experimentMenu"
+                    y: parent.height
+                    Repeater {
+                        model: lab.controller.experiments
+                        MenuItem {
+                            required property var modelData
+                            height: Theme.control
+                            text: qsTr("Stufe %1: %2").arg(modelData.stage).arg(modelData.title)
+                                  + (modelData.destructive ? "  ⚠" : "")
+                            checkable: true
+                            checked: lab.controller.experimentId === modelData.id
+                            onTriggered: lab.controller.startExperiment(modelData.id)
+                        }
+                    }
+                    MenuSeparator {}
+                    MenuItem {
+                        height: Theme.control
+                        text: qsTr("Freies Labor")
+                        onTriggered: lab.controller.startFreeLab()
+                    }
+                }
+            }
             Label {
                 anchors.verticalCenter: parent.verticalCenter
                 text: lab.controller.title
@@ -180,6 +214,15 @@ Item {
         }
     }
 
+    ExperimentPanel {
+        id: experimentPanel
+        objectName: "experimentPanel"
+        controller: lab.controller
+        anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
+        width: lab.controller.phase > 0 ? 340 : 0
+        visible: width > 0
+    }
+
     PartTray {
         id: tray
         anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
@@ -199,7 +242,7 @@ Item {
 
     Rectangle {
         id: boardArea
-        anchors { left: tray.right; right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
+        anchors { left: tray.right; right: experimentPanel.left; top: toolbar.bottom; bottom: parent.bottom }
         color: Theme.board
         clip: true
 

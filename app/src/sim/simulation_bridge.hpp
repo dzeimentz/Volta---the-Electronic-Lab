@@ -36,6 +36,14 @@ struct StateOverride {
     core::ComponentState state;
 };
 
+// Beobachter, der im Simulations-Thread nach jedem Schritt laeuft (z. B. Erfolgspruefung eines Experiments).
+// Er gehoert zu einer Topologie und wird mit ihr gewechselt; afterStep darf nicht blockieren.
+class StepObserver {
+public:
+    virtual ~StepObserver() = default;
+    virtual void afterStep(const core::Simulator& sim) = 0;
+};
+
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.
 struct Snapshot {
     std::uint64_t topology = 0;
@@ -69,7 +77,9 @@ public:
     // Neue Topologie; Zustaende werden aus der bisherigen Schaltung uebernommen (gleiche Bauteilkennung),
     // danach gelten die Vorgaben in overrides. Verdraengt sie eine noch nicht uebernommene Topologie, bleiben deren
     // Vorgaben erhalten (die neuen gehen vor). Liefert die Topologie-Version.
-    std::uint64_t setCircuit(core::Circuit circuit, std::vector<StateOverride> overrides = {});
+    // observer (optional) laeuft ab dieser Topologie nach jedem Schritt.
+    std::uint64_t setCircuit(core::Circuit circuit, std::vector<StateOverride> overrides = {},
+                             std::shared_ptr<StepObserver> observer = {});
     void post(Action action);
     void setTimeScale(double scale); // Zeitraffer 1, 10, 100
     void setPaused(bool paused);
@@ -85,14 +95,17 @@ private:
     void applyPending();        // im Simulations-Thread
     void apply(const Action& a);
     void publish(double realtimeRatio);
+    void step();                // ein Simulationsschritt samt Beobachter
 
     core::Simulator m_sim; // nur im Simulations-Thread (bzw. synchron im Aufrufer)
     std::unordered_map<std::string, std::size_t> m_index;
     std::uint64_t m_activeTopology = 0;
+    std::shared_ptr<StepObserver> m_observer; // nur im Simulations-Thread
 
     std::mutex m_inMutex; // Eingaenge
     std::unique_ptr<core::Circuit> m_pendingCircuit;
     std::vector<StateOverride> m_pendingOverrides;
+    std::shared_ptr<StepObserver> m_pendingObserver;
     std::uint64_t m_pendingTopology = 0;
     std::uint64_t m_nextTopology = 0;
     std::vector<Action> m_actions;

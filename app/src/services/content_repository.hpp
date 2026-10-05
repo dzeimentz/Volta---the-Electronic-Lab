@@ -22,6 +22,16 @@ struct Experiment {
     QJsonObject success;        // "erfolg": zustandsbasierte Bedingungen (Rohform)
     model::SuccessCondition successCondition; // ... ausgewertet
     double maxHoldS = 0.0;      // laengste Haltedauer (dauer_s) in der Bedingung
+    int durationMin = 0;
+    // Forschungskreislauf (Textschluessel): Frage, Vermutungen, Schritte, Hilfen, Erklaerung ...
+    QString questionKey;
+    QStringList guessKeys;
+    QStringList stepKeys;
+    QStringList hintKeys;       // die letzte Hilfe ist die Loesung
+    QString explanationKey;
+    QString moreKey;
+    QStringList furtherKeys;
+    QString realKey;
 };
 
 // Laedt Inhaltspakete (JSON) und Bauteilkatalog aus einem Inhaltsverzeichnis. Kein Netzwerkzugriff.

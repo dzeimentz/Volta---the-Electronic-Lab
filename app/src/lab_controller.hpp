@@ -11,6 +11,7 @@
 
 #include <memory>
 
+#include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
 
@@ -43,6 +44,23 @@ class LabController : public QObject {
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
     Q_PROPERTY(double realtimeRatio READ realtimeRatio NOTIFY stateChanged)
     Q_PROPERTY(double batteryVolt READ batteryVolt NOTIFY deskChanged)
+    // Gefuehrtes Experiment (Phase 1: Frage -> Aufbau -> Erfolg)
+    Q_PROPERTY(QVariantList experiments READ experiments CONSTANT)
+    Q_PROPERTY(QString experimentId READ experimentId NOTIFY experimentChanged)
+    Q_PROPERTY(int phase READ phase NOTIFY flowChanged) // 0 freies Labor, 1 Frage, 2 Aufbau, 3 Erfolg
+    Q_PROPERTY(bool destructive READ destructive NOTIFY experimentChanged)
+    Q_PROPERTY(QString question READ question NOTIFY experimentChanged)
+    Q_PROPERTY(QStringList guesses READ guesses NOTIFY experimentChanged)
+    Q_PROPERTY(int guess READ guess NOTIFY flowChanged)
+    Q_PROPERTY(QStringList steps READ steps NOTIFY experimentChanged)
+    Q_PROPERTY(QStringList hints READ hints NOTIFY flowChanged) // bisher aufgedeckte Hilfen
+    Q_PROPERTY(bool moreHints READ moreHints NOTIFY flowChanged)
+    Q_PROPERTY(bool solutionShown READ solutionShown NOTIFY flowChanged)
+    Q_PROPERTY(QString explanation READ explanation NOTIFY experimentChanged)
+    Q_PROPERTY(QString moreKnowledge READ moreKnowledge NOTIFY experimentChanged)
+    Q_PROPERTY(QStringList further READ further NOTIFY experimentChanged)
+    Q_PROPERTY(QString realLife READ realLife NOTIFY experimentChanged)
+    Q_PROPERTY(QString nextExperimentId READ nextExperimentId NOTIFY experimentChanged)
 
 public:
     explicit LabController(QString contentRoot, QObject* parent = nullptr);
@@ -75,7 +93,31 @@ public:
     double realtimeRatio() const;
     double batteryVolt() const { return 1.5 * cells(); }
 
+    // Vorlage eines Experiments als Aufbau laden (ohne Ablauf; Entwicklerhilfen, Tests)
     Q_INVOKABLE bool loadExperiment(const QString& id);
+    // Gefuehrtes Experiment: leere Grundplatte, Pultstellung der Vorlage, Ablauf beginnt mit der Frage
+    Q_INVOKABLE bool startExperiment(const QString& id);
+    Q_INVOKABLE void startFreeLab();
+    Q_INVOKABLE void chooseGuess(int index);
+    Q_INVOKABLE void nextHint();
+    Q_INVOKABLE bool showTemplate(); // Musteraufbau (Befehl, rueckgaengig machbar) - erst nach der Loesungshilfe
+
+    QVariantList experiments() const { return m_experimentList; }
+    QString experimentId() const { return m_experiment.id; }
+    int phase() const { return static_cast<int>(m_flow.phase()); }
+    bool destructive() const { return m_experiment.destructive; }
+    QString question() const { return m_repo.text(m_experiment.questionKey); }
+    QStringList guesses() const { return texts(m_experiment.guessKeys); }
+    int guess() const { return m_flow.guess(); }
+    QStringList steps() const { return texts(m_experiment.stepKeys); }
+    QStringList hints() const { return texts(m_experiment.hintKeys.mid(0, m_flow.hintsShown())); }
+    bool moreHints() const { return m_flow.hintsShown() < m_flow.hintCount(); }
+    bool solutionShown() const { return m_flow.solutionShown(); }
+    QString explanation() const { return m_repo.text(m_experiment.explanationKey); }
+    QString moreKnowledge() const { return m_repo.text(m_experiment.moreKey); }
+    QStringList further() const { return texts(m_experiment.furtherKeys); }
+    QString realLife() const { return m_repo.text(m_experiment.realKey); }
+    QString nextExperimentId() const;
     Q_INVOKABLE double voltage(const QString& anchor) const;
     Q_INVOKABLE int voltageBars(const QString& anchor);
     // Zustand eines Bauteils: currentmA, level, overloaded, destroyed, tempC
@@ -113,14 +155,20 @@ signals:
     void stateChanged();
     void historyChanged();
     void editFailed();
+    void flowChanged();
 
 private:
     void onFrame();
     bool result(bool ok);
+    QStringList texts(const QStringList& keys) const;
 
     services::ContentRepository m_repo;
     std::unique_ptr<model::LabSession> m_session;
     QString m_title;
+    services::Experiment m_experiment;
+    model::ExperimentFlow m_flow;
+    QStringList m_experimentIds;
+    QVariantList m_experimentList;
     QStringList m_errors;
     QString m_lastEditError;
     double m_timeScale = 1.0;

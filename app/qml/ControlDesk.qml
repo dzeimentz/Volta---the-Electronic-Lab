@@ -2,7 +2,7 @@
 // Lichtring, Pultschalter S, Lautsprecher. Jedes Element sitzt ueber seinen Feldern der Pultleiste (Positionen von
 // Lab.qml). Alles hier sind Bedienhandlungen (kein Verlauf).
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 
 Rectangle {
     id: desk
@@ -33,14 +33,23 @@ Rectangle {
             onActivated: (index) => { desk.controller.cells = [2, 3, 6][index] }
             Accessible.name: qsTr("Batteriespannung")
         }
-        Switch {
-            objectName: "mainSwitch"
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
-            checked: desk.controller.mainSwitch
-            onToggled: desk.controller.mainSwitch = checked
-            text: checked ? qsTr("Ein") : qsTr("Aus")
-            palette.windowText: "white"
-            Accessible.name: qsTr("Hauptschalter")
+            spacing: 4
+            Switch {
+                objectName: "mainSwitch"
+                checked: desk.controller.mainSwitch
+                onToggled: desk.controller.mainSwitch = checked
+                Accessible.name: qsTr("Hauptschalter")
+            }
+            // Stellung auch als Text (Farbe nie allein)
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                text: desk.controller.mainSwitch ? qsTr("Ein") : qsTr("Aus")
+                color: "white"
+                font.pixelSize: 14
+                font.bold: true
+            }
         }
     }
 

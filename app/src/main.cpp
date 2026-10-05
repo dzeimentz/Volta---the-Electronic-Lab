@@ -1,4 +1,5 @@
 // Einstiegspunkt der Qt-Anwendung. Modell, Dienste und Lernpfad folgen gemaess docs/architecture.md.
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -18,8 +19,11 @@ int main(int argc, char* argv[]) {
     QGuiApplication::setApplicationName(QStringLiteral(VOLTA_APP_NAME));
     QGuiApplication::setApplicationVersion(QStringLiteral(VOLTA_VERSION));
 
-    // Inhaltspakete: in Phase 0 direkt aus dem Quellbaum; Einbettung als Ressource folgt mit der Paketierung.
-    volta::LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
+    // Inhaltspakete: zuerst neben der ausfuehrbaren Datei (Release-Ordner, tools/deploy_release.py), sonst aus dem
+    // Quellbaum. Die Einbettung als Ressource folgt mit der Paketierung (Phase 5).
+    const QString besideExe = QCoreApplication::applicationDirPath() + QStringLiteral("/content");
+    const bool deployed = QFileInfo::exists(besideExe + QStringLiteral("/catalog/bauteile.json"));
+    volta::LabController lab(deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR));
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("labController"), &lab);
@@ -55,11 +59,24 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
+    // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {
+        QTimer::singleShot(300, &lab, [&lab] {
+            lab.chooseGuess(1);
+            while (lab.moreHints()) lab.nextHint();
+            lab.showTemplate();
+            lab.setMainSwitch(true);
+        });
+    }
+
     const QString shot = qEnvironmentVariable("VOLTA_SCREENSHOT");
     if (!shot.isEmpty()) {
         if (qEnvironmentVariableIntValue("VOLTA_SCREENSHOT_MAINSWITCH") == 1)
             QTimer::singleShot(500, &lab, [&lab] { lab.setMainSwitch(true); });
-        QTimer::singleShot(3000, &app, [&engine, shot] {
+        bool okDelay = false;
+        const double delayS = qEnvironmentVariable("VOLTA_SCREENSHOT_S").toDouble(&okDelay);
+        QTimer::singleShot(okDelay ? static_cast<int>(delayS * 1000) : 3000, &app, [&engine, shot] {
             const auto roots = engine.rootObjects();
             if (auto* window = roots.isEmpty() ? nullptr : qobject_cast<QQuickWindow*>(roots.first()))
                 window->grabWindow().save(shot);

@@ -4,6 +4,7 @@
 
 #include <cmath>
 
+#include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
 
@@ -231,6 +232,74 @@ private slots:
         run(*s, 0.01);
         QCOMPARE(s->voltageBars("A1"), 4);
         QVERIFY(std::fabs(s->voltage("A1") - 3.0) < 0.01);
+    }
+
+    // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage
+    void successMatchesPartsByType() {
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY2(repo.loadExperiment(QStringLiteral("volta1.1.1"), exp), qPrintable(repo.lastError()));
+        auto s = session();
+        s->setCells(exp.templateBoard.desk.cells);
+        s->setSuccess(exp.successCondition, exp.templateBoard);
+        // zwei Laempchen, das erste (L1) wieder entfernt: das Kind arbeitet mit L2 auf anderen Feldern
+        QVERIFY(s->addPart("gluehlampe", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addPart("gluehlampe", "D5", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->removePart("L1"));
+        QVERIFY(s->addWire("P:+9V", "D5", "rot"));
+        s->setMainSwitch(true);
+        run(*s, 3.0);
+        QVERIFY(!s->successReached()); // Kreis offen
+        QVERIFY(s->addWire("D6", "P:0V", "schwarz"));
+        run(*s, 1.0);
+        QVERIFY(!s->successReached()); // Haltedauer 2 s noch nicht erreicht
+        run(*s, 1.5);
+        QVERIFY(s->successReached());
+        // Neue Bedingung: Ergebnis beginnt von vorn
+        s->setSuccess(exp.successCondition, exp.templateBoard);
+        QVERIFY(!s->successReached());
+        s->clearSuccess();
+        QVERIFY(!s->successActive());
+    }
+
+    // 6-V-Laempchen an 9 V: ueberlastet, gilt nicht als geloest (und brennt spaeter durch)
+    void lampAtNineVoltIsNoSuccess() {
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY(repo.loadExperiment(QStringLiteral("volta1.1.1"), exp));
+        auto s = session();
+        s->setSuccess(exp.successCondition, exp.templateBoard);
+        s->replaceBoard(exp.templateBoard, QStringLiteral("Musteraufbau"));
+        s->setCells(6);
+        s->setMainSwitch(true);
+        run(*s, 4.0);
+        QVERIFY(!s->successReached());
+        s->setCells(3); // 4,5 V wie vorgesehen
+        run(*s, 3.0);
+        QVERIFY(s->successReached());
+    }
+
+    void experimentFlow() {
+        model::ExperimentFlow f;
+        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::None);
+        QVERIFY(!f.reportSuccess());
+        f.start(3);
+        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::Question);
+        QVERIFY(!f.nextHint());      // Hilfen erst beim Aufbau
+        QVERIFY(!f.reportSuccess()); // Erfolg erst nach der Vermutung
+        QVERIFY(f.chooseGuess(1));
+        QCOMPARE(f.guess(), 1);
+        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::Build);
+        QVERIFY(f.nextHint() && f.nextHint());
+        QVERIFY(!f.solutionShown());
+        QVERIFY(f.nextHint());
+        QVERIFY(f.solutionShown());
+        QVERIFY(!f.nextHint());
+        QVERIFY(f.reportSuccess());
+        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::Success);
+        QVERIFY(!f.reportSuccess());
+        f.stop();
+        QCOMPARE(f.phase(), model::ExperimentFlow::Phase::None);
     }
 };
 

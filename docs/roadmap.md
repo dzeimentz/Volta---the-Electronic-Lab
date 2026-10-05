@@ -28,6 +28,15 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 | Qt-Lizenzweg fuer iPadOS | vor Phase 5b |
 | Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich | vor Phase 3 |
 
+## Phase 1 – Stand
+- 1.1–1.4 Grundplatte, Bauteilfach, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Stromfluss: erledigt.
+- 1.5 Bedienpult I (Batterie mit Zellenwahl und Hauptschalter, Drehregler P1/P2 mit Lichtring, Pultschalter S,
+  Gruppenlinien, Skalierung ins Fenster): erledigt.
+- 1.6 Drei gefuehrte Experimente der Stufe 1 (1.1 Stromkreis mit Gluehlaempchen, 1.2 Klingel mit Taster und Summer,
+  1.3 Motor am Pultschalter) mit einfachem Ablauf Frage -> Aufbau mit gestuften Hilfen und Musteraufbau -> Erfolg
+  mit Erklaerung; Erfolgspruefung im Simulations-Thread (`StepObserver`). Lokales Release: `tools/deploy_release.py`.
+- Offen: Android-Build (Kit fehlt auf dem Entwicklungsrechner), Erprobung mit Kindern, Begleitfigur.
+
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
 2. ~~Thermikmodell und Ereignisse; Robustheitstests.~~ erledigt, dazu: alle Bauteile der Stufen 1–4 inkl.

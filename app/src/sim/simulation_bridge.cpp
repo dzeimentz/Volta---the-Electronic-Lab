@@ -42,7 +42,8 @@ void SimulationBridge::stop() {
     if (m_thread.joinable()) m_thread.join();
 }
 
-std::uint64_t SimulationBridge::setCircuit(core::Circuit circuit, std::vector<StateOverride> overrides) {
+std::uint64_t SimulationBridge::setCircuit(core::Circuit circuit, std::vector<StateOverride> overrides,
+                                           std::shared_ptr<StepObserver> observer) {
     std::lock_guard<std::mutex> lock(m_inMutex);
     if (m_pendingCircuit && !m_pendingOverrides.empty()) {
         // Eine noch nicht uebernommene Topologie wird verdraengt: ihre Zustandsvorgaben (z. B. Undo) gelten weiter,
@@ -53,6 +54,7 @@ std::uint64_t SimulationBridge::setCircuit(core::Circuit circuit, std::vector<St
     }
     m_pendingCircuit = std::make_unique<core::Circuit>(std::move(circuit));
     m_pendingOverrides = std::move(overrides);
+    m_pendingObserver = std::move(observer);
     m_pendingTopology = ++m_nextTopology;
     return m_pendingTopology;
 }
@@ -72,12 +74,14 @@ void SimulationBridge::applyPending() {
     std::unique_ptr<core::Circuit> circuit;
     std::vector<StateOverride> overrides;
     std::uint64_t topology = 0;
+    std::shared_ptr<StepObserver> observer;
     {
         std::lock_guard<std::mutex> lock(m_inMutex);
         if (m_pendingCircuit) {
             circuit = std::move(m_pendingCircuit);
             overrides = std::move(m_pendingOverrides);
             topology = m_pendingTopology;
+            observer = std::move(m_pendingObserver);
             // Aktionen fuer die alte Topologie verfallen nicht: sie beziehen sich auf Kennungen
         }
         m_actionsWork.clear();
@@ -95,6 +99,7 @@ void SimulationBridge::applyPending() {
         m_index = std::move(index);
         m_back.lastStatus = m_sim.setCircuit(std::move(*circuit));
         m_activeTopology = topology;
+        m_observer = std::move(observer); // der alte Beobachter wird hier (ausserhalb des Schritts) freigegeben
         const std::size_t n = m_sim.circuit().componentCount();
         m_back.readings.reserve(n);
         m_back.states.reserve(n);
@@ -177,13 +182,18 @@ bool SimulationBridge::latest(Snapshot& out) {
     return true;
 }
 
+void SimulationBridge::step() {
+    const core::Status s = m_sim.step();
+    if (s != core::Status::Ok) m_back.lastStatus = s;
+    if (m_observer) m_observer->afterStep(m_sim);
+}
+
 void SimulationBridge::runFor(double seconds) {
     if (m_thread.joinable()) return;
     applyPending();
     const int steps = static_cast<int>(std::lround(seconds / core::kDefaultStepS));
     for (int i = 0; i < steps; ++i) {
-        const core::Status s = m_sim.step();
-        if (s != core::Status::Ok) m_back.lastStatus = s;
+        step();
     }
     publish(1.0);
 }
@@ -206,8 +216,7 @@ void SimulationBridge::loop() {
             const double t0 = m_sim.timeS();
             const auto budgetEnd = now + std::chrono::duration<double>(kMaxCatchUpS);
             while (owedS >= core::kDefaultStepS && Clock::now() < budgetEnd) {
-                const core::Status s = m_sim.step();
-                if (s != core::Status::Ok) m_back.lastStatus = s;
+                step();
                 owedS -= core::kDefaultStepS;
             }
             simWindow += m_sim.timeS() - t0;

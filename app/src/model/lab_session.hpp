@@ -3,7 +3,9 @@
 #include <QString>
 #include <QUndoStack>
 
+#include <atomic>
 #include <cstdint>
+#include <memory>
 #include <deque>
 #include <functional>
 #include <string>
@@ -15,6 +17,7 @@
 #include "catalog.hpp"
 #include "commands/board_command.hpp"
 #include "netlist_builder.hpp"
+#include "success.hpp"
 #include "sim/simulation_bridge.hpp"
 
 namespace volta::model {
@@ -63,6 +66,8 @@ public:
     bool removeWire(const std::string& id);
     bool setWireColor(const std::string& id, const std::string& color);
     bool toggleVoltageDisplay(const std::string& field);
+    // Ganzer Aufbau auf einmal (z. B. Musteraufbau als Loesungshilfe); Pultstellung bleibt
+    bool replaceBoard(const Board& after, const QString& text);
 
     // ---- Bedienhandlungen (kein Verlauf)
     void setMainSwitch(bool on);
@@ -71,6 +76,15 @@ public:
     void setDeskSwitch(bool closed);
     void setPot(int which, double position); // Pult-Drehregler 1/2
     void setMotorBlocked(const std::string& id, bool blocked);
+
+    // ---- Erfolgspruefung (laeuft im Simulations-Thread nach jedem Schritt)
+    // Bauteilbezuege der Bedingung beziehen sich auf die Vorlage; die Zuordnung zum Aufbau des Kindes erfolgt ueber
+    // den Typ (docs/content-format.md, Erfolgsbedingungen): gleiche Kennung und gleicher Typ, sonst die Bauteile
+    // dieses Typs in Reihenfolge. Jeder funktionierende Aufbau gilt.
+    void setSuccess(const SuccessCondition& condition, const Board& templateBoard);
+    void clearSuccess();
+    bool successActive() const { return m_success != nullptr; }
+    bool successReached() const;
 
     // Wird nach jeder Aenderung des Aufbaus aufgerufen (Oberflaeche aktualisieren)
     std::function<void()> onBoardChanged;
@@ -94,6 +108,9 @@ private:
     QUndoStack m_undo;
     std::string m_error;
     std::unordered_map<std::string, int> m_bars;
+    struct SuccessTracker;
+    std::shared_ptr<SuccessTracker> m_success;
+    Board m_successTemplate;
     // Bauteilkennungen der letzten Topologie-Versionen: Zustaende aus einem Schnappschuss einer aelteren Version
     // (Befehle ohne Simulationsfortschritt dazwischen) bleiben ueber die Kennung zuordenbar.
     std::deque<std::pair<std::uint64_t, std::vector<std::string>>> m_idHistory;

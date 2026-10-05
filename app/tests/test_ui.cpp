@@ -1,6 +1,7 @@
 // Oberflaechentests (Qt Quick, ohne sichtbares Fenster): echte Bedienung mit simulierter Maus und Tastatur
 // gegen die Experimentansicht. Prueft das Zusammenspiel QML <-> LabController <-> LabSession.
 #include <QQmlApplicationEngine>
+#include <algorithm>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickWindow>
@@ -35,6 +36,24 @@ private:
         return found;
     }
 
+    // Knopf in einer ScrollView: Neuanordnung abwarten, in den sichtbaren Bereich rollen, dann klicken
+    void clickInPanel(const QString& name) {
+        QQuickItem* it = item(name);
+        QVERIFY(it);
+        QTRY_VERIFY(it->isVisible());
+        QTest::qWait(80); // Spalte ordnet beim naechsten Bild neu an; Mitrollen des Experimentfelds (30 ms)
+        QQuickItem* flick = it->parentItem();
+        while (flick && !flick->inherits("QQuickFlickable")) flick = flick->parentItem();
+        QVERIFY(flick);
+        QQuickItem* content = flick->property("contentItem").value<QQuickItem*>();
+        const QPointF inContent = it->mapToItem(content, QPointF(0, 0));
+        const double viewTop = flick->property("contentY").toDouble();
+        if (inContent.y() < viewTop || inContent.y() + it->height() > viewTop + flick->height())
+            flick->setProperty("contentY", std::max(0.0, inContent.y() - 16));
+        QTest::qWait(20);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(it));
+    }
+
     QPoint centerOf(QQuickItem* it) const {
         return it->mapToScene(QPointF(it->width() / 2, it->height() / 2)).toPoint();
     }
@@ -53,6 +72,30 @@ private:
     const model::Board& board() const { return m_lab->session().board(); }
     const model::PartPlacement* part(const std::string& id) const { return board().findPart(id); }
 
+    // Gefuehrtes Experiment 1.1 ueber das Experimentfeld: Vermutung, Tipps bis zur Loesung, Musteraufbau, Erfolg
+    void experimentFlowInPanel() {
+        clickInPanel(QStringLiteral("guess_1"));
+        QTRY_COMPARE(m_lab->phase(), 2);
+        QCOMPARE(m_lab->guess(), 1);
+        for (int i = 0; i < 3; ++i) {
+            clickInPanel(QStringLiteral("hintButton"));
+            QTRY_COMPARE(m_lab->hints().size(), i + 1);
+        }
+        QVERIFY(m_lab->solutionShown());
+        clickInPanel(QStringLiteral("templateButton"));
+        QTRY_COMPARE(board().parts.size(), std::size_t(1));
+        QVERIFY(m_lab->canUndo()); // Musteraufbau ist ein Befehl
+        QQuickItem* mainSwitch = item(QStringLiteral("mainSwitch"));
+        QVERIFY(mainSwitch);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(mainSwitch));
+        QTRY_VERIFY(board().desk.mainSwitch);
+        QTRY_COMPARE_WITH_TIMEOUT(m_lab->phase(), 3, 10000); // Haltedauer 2 s in Echtzeit
+        clickInPanel(QStringLiteral("nextButton"));
+        QTRY_COMPARE(m_lab->experimentId(), QStringLiteral("volta1.1.2"));
+        QCOMPARE(m_lab->phase(), 1);
+        QVERIFY(!board().desk.mainSwitch);
+    }
+
 private slots:
     void initTestCase() {
         m_lab = std::make_unique<LabController>(QStringLiteral(VOLTA_CONTENT_DIR));
@@ -63,7 +106,14 @@ private slots:
         m_window = qobject_cast<QQuickWindow*>(m_engine->rootObjects().first());
         QVERIFY(m_window);
         QVERIFY(QTest::qWaitForWindowExposed(m_window));
-        QTRY_COMPARE(board().parts.size(), std::size_t(2)); // Vorlage 2.4 geladen
+        // Main startet das erste gefuehrte Experiment (leere Grundplatte, Ablauf bei der Frage)
+        QTRY_COMPARE(m_lab->phase(), 1);
+        QVERIFY(board().parts.empty());
+        experimentFlowInPanel();
+        // die folgenden Ablaeufe arbeiten mit der Vorlage von 2.4
+        QVERIFY(m_lab->loadExperiment(QStringLiteral("volta1.2.4")));
+        QTRY_COMPARE(board().parts.size(), std::size_t(2));
+        QCOMPARE(m_lab->phase(), 0);
     }
 
     void dragPartFromTray() {

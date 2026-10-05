@@ -27,6 +27,20 @@ LabController::LabController(QString contentRoot, QObject* parent)
     : QObject(parent), m_repo(std::move(contentRoot)) {
     m_session = std::make_unique<model::LabSession>(loadCatalog(m_repo, m_errors));
     m_repo.loadTexts(QStringLiteral("volta1"), QStringLiteral("de"));
+    m_experimentIds = m_repo.experimentIds(QStringLiteral("volta1"));
+    for (const QString& id : m_experimentIds) {
+        services::Experiment exp;
+        if (!m_repo.loadExperiment(id, exp)) {
+            m_errors << m_repo.lastError();
+            continue;
+        }
+        QVariantMap m;
+        m.insert(QStringLiteral("id"), id);
+        m.insert(QStringLiteral("title"), m_repo.text(exp.titleKey));
+        m.insert(QStringLiteral("stage"), exp.stage);
+        m.insert(QStringLiteral("destructive"), exp.destructive);
+        m_experimentList << m;
+    }
     m_session->onBoardChanged = [this] {
         m_errors.clear();
         for (const auto& e : m_session->netlist().errors) m_errors << qs(e);
@@ -53,16 +67,80 @@ bool LabController::loadExperiment(const QString& id) {
         return false;
     }
     m_title = m_repo.text(exp.titleKey);
+    m_flow.stop();
+    m_session->clearSuccess();
     m_session->loadBoard(exp.templateBoard);
+    m_experiment = std::move(exp);
     emit experimentChanged();
+    emit flowChanged();
     emit deskChanged();
     emit historyChanged();
     return true;
 }
 
+bool LabController::startExperiment(const QString& id) {
+    services::Experiment exp;
+    if (!m_repo.loadExperiment(id, exp)) {
+        m_errors = QStringList{m_repo.lastError()};
+        emit boardChanged();
+        return false;
+    }
+    m_title = m_repo.text(exp.titleKey);
+    model::Board start;
+    start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
+    start.desk.mainSwitch = false;
+    m_session->setSuccess(exp.successCondition, exp.templateBoard);
+    m_session->loadBoard(start);
+    m_flow.start(static_cast<int>(exp.hintKeys.size()));
+    m_experiment = std::move(exp);
+    emit experimentChanged();
+    emit flowChanged();
+    emit deskChanged();
+    emit historyChanged();
+    return true;
+}
+
+void LabController::startFreeLab() {
+    m_flow.stop();
+    m_experiment = services::Experiment{};
+    m_title = tr("Freies Labor");
+    m_session->clearSuccess();
+    m_session->loadBoard(model::Board{});
+    emit experimentChanged();
+    emit flowChanged();
+    emit deskChanged();
+    emit historyChanged();
+}
+
+void LabController::chooseGuess(int index) {
+    if (m_flow.chooseGuess(index)) emit flowChanged();
+}
+
+void LabController::nextHint() {
+    if (m_flow.nextHint()) emit flowChanged();
+}
+
+bool LabController::showTemplate() {
+    if (!m_flow.solutionShown() || m_flow.phase() != model::ExperimentFlow::Phase::Build) return false;
+    return result(m_session->replaceBoard(m_experiment.templateBoard, tr("Musteraufbau zeigen")));
+}
+
+QString LabController::nextExperimentId() const {
+    const qsizetype i = m_experimentIds.indexOf(m_experiment.id);
+    return i >= 0 && i + 1 < m_experimentIds.size() ? m_experimentIds.at(i + 1) : QString();
+}
+
+QStringList LabController::texts(const QStringList& keys) const {
+    QStringList out;
+    for (const QString& k : keys) out << m_repo.text(k);
+    return out;
+}
+
 void LabController::onFrame() {
     const double elapsed = m_clock.restart() / 1000.0;
     m_session->poll();
+    if (m_flow.phase() == model::ExperimentFlow::Phase::Build && m_session->successReached() && m_flow.reportSuccess())
+        emit flowChanged();
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
         m_sinceNotifyS = 0.0;

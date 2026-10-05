@@ -14,6 +14,85 @@ constexpr int kUndoLimit = 0;           // Sitzung: ganzer Verlauf (gespeichert 
 QString q(const std::string& s) { return QString::fromStdString(s); }
 } // namespace
 
+// Gemeinsamer Zustand der Erfolgspruefung; der Bewerter wird nur im Simulations-Thread benutzt.
+struct LabSession::SuccessTracker {
+    explicit SuccessTracker(SuccessCondition c) : eval(std::move(c)) {}
+    SuccessEvaluator eval;
+    std::atomic<bool> reached{false};
+};
+
+namespace {
+
+// Netzliste ohne Schaltung (nur Zuordnungen), mit den Kennungen der Vorlage als zusaetzliche Namen
+Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl) {
+    Netlist idx;
+    idx.nodes = net.nodes;
+    idx.parts = net.parts;
+    idx.desk = net.desk;
+    idx.modules = net.modules;
+    std::vector<std::string> taken;
+    auto isTaken = [&](const std::string& id) { return std::find(taken.begin(), taken.end(), id) != taken.end(); };
+    // 1. gleiche Kennung und gleicher Typ
+    std::vector<const PartPlacement*> open;
+    for (const auto& t : tmpl.parts) {
+        const PartPlacement* p = board.findPart(t.id);
+        if (p && p->type == t.type)
+            taken.push_back(p->id);
+        else
+            open.push_back(&t);
+    }
+    // 2. uebrige Vorlagenbauteile: naechstes freies Bauteil gleichen Typs
+    for (const PartPlacement* t : open) {
+        idx.parts.erase(t->id);
+        for (const auto& p : board.parts) {
+            if (p.type != t->type || isTaken(p.id)) continue;
+            const auto it = net.parts.find(p.id);
+            if (it == net.parts.end()) continue;
+            idx.parts[t->id] = it->second;
+            taken.push_back(p.id);
+            break;
+        }
+    }
+    return idx;
+}
+
+class SuccessObserver : public sim::StepObserver {
+public:
+    SuccessObserver(std::shared_ptr<void> keep, SuccessEvaluator* eval, std::atomic<bool>* reached, Netlist index)
+        : m_keep(std::move(keep)), m_eval(eval), m_reached(reached), m_index(std::move(index)) {}
+    void afterStep(const core::Simulator& sim) override {
+        if (m_first) {
+            m_eval->reset(); // neue Topologie: Haltedauern beginnen neu (Simulationszeit kann neu starten)
+            m_first = false;
+        }
+        m_eval->update(sim, m_index);
+        if (m_eval->reached()) m_reached->store(true);
+    }
+
+private:
+    std::shared_ptr<void> m_keep;
+    SuccessEvaluator* m_eval;
+    std::atomic<bool>* m_reached;
+    Netlist m_index;
+    bool m_first = true;
+};
+
+} // namespace
+
+void LabSession::setSuccess(const SuccessCondition& condition, const Board& templateBoard) {
+    m_success = std::make_shared<SuccessTracker>(condition);
+    m_successTemplate = templateBoard;
+    rebuild({});
+}
+
+void LabSession::clearSuccess() {
+    m_success.reset();
+    m_successTemplate = {};
+    rebuild({});
+}
+
+bool LabSession::successReached() const { return m_success && m_success->reached.load(); }
+
 LabSession::LabSession(Catalog catalog) : m_catalog(std::move(catalog)) {
     m_undo.setUndoLimit(kUndoLimit);
     rebuild({});
@@ -40,7 +119,11 @@ void LabSession::applyBoard(const Board& board, const std::vector<sim::StateOver
 
 void LabSession::rebuild(const std::vector<sim::StateOverride>& states) {
     m_net = buildNetlist(m_board, m_catalog);
-    m_topology = m_bridge.setCircuit(std::move(m_net.circuit), states);
+    std::shared_ptr<sim::StepObserver> observer;
+    if (m_success)
+        observer = std::make_shared<SuccessObserver>(m_success, &m_success->eval, &m_success->reached,
+                                                     successIndex(m_net, m_board, m_successTemplate));
+    m_topology = m_bridge.setCircuit(std::move(m_net.circuit), states, std::move(observer));
     m_idHistory.emplace_back(m_topology, m_net.componentIds);
     while (m_idHistory.size() > 32) m_idHistory.pop_front();
     if (!states.empty()) m_pendingStates.emplace_back(m_topology, states);
@@ -119,6 +202,12 @@ std::vector<sim::StateOverride> LabSession::captureStates() const {
 bool LabSession::fail(std::string message) {
     m_error = std::move(message);
     return false;
+}
+
+bool LabSession::replaceBoard(const Board& after, const QString& text) {
+    Board b = after;
+    b.desk = m_board.desk;
+    return push(text, std::move(b));
 }
 
 bool LabSession::push(const QString& text, Board after, int mergeId, const QString& key,

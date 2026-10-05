@@ -7,6 +7,7 @@
 #include <QJsonParseError>
 
 #include <algorithm>
+#include <cmath>
 
 namespace volta::services {
 
@@ -136,6 +137,24 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
         out.wires.push_back(std::move(w));
     }
     for (const QJsonValue& v : vorlage.value(QStringLiteral("anzeigen")).toArray()) out.voltageDisplays.push_back(str(v));
+    // Pultstellung zu Beginn (Hauptschalter bleibt aus: Einschalten ist Sache des Kindes)
+    const QJsonObject pult = vorlage.value(QStringLiteral("pult_stellung")).toObject();
+    if (pult.contains(QStringLiteral("batterie_V"))) {
+        const double u = pult.value(QStringLiteral("batterie_V")).toDouble();
+        if (std::abs(u - 3.0) < 1e-6)
+            out.desk.cells = 2;
+        else if (std::abs(u - 4.5) < 1e-6)
+            out.desk.cells = 3;
+        else if (std::abs(u - 9.0) < 1e-6)
+            out.desk.cells = 6;
+        else {
+            error = QStringLiteral("Vorlage: batterie_V muss 3, 4.5 oder 9 sein");
+            return false;
+        }
+    }
+    out.desk.switchClosed = pult.value(QStringLiteral("schalter")).toBool(false);
+    out.desk.p1 = pult.value(QStringLiteral("p1")).toDouble(0.5);
+    out.desk.p2 = pult.value(QStringLiteral("p2")).toDouble(0.5);
     for (const QJsonValue& v : vorlage.value(QStringLiteral("module")).toArray()) {
         const QJsonObject o = v.toObject();
         model::ModulePlacement m;
@@ -254,6 +273,20 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     out.destructive = o.value(QStringLiteral("zerstoerend")).toBool();
     out.titleKey = o.value(QStringLiteral("titel_key")).toString();
     out.success = o.value(QStringLiteral("erfolg")).toObject();
+    out.durationMin = o.value(QStringLiteral("dauer_min")).toInt();
+    auto keys = [&o](const char* name) {
+        QStringList l;
+        for (const QJsonValue& v : o.value(QLatin1String(name)).toArray()) l << v.toString();
+        return l;
+    };
+    out.questionKey = o.value(QStringLiteral("frage_key")).toString();
+    out.guessKeys = keys("vermutungen");
+    out.stepKeys = keys("schritte");
+    out.hintKeys = keys("hilfen");
+    out.explanationKey = o.value(QStringLiteral("erklaerung_key")).toString();
+    out.moreKey = o.value(QStringLiteral("mehr_wissen_key")).toString();
+    out.furtherKeys = keys("weiterforschen");
+    out.realKey = o.value(QStringLiteral("jetzt_in_echt_key")).toString();
     const QJsonObject vorlage = o.value(QStringLiteral("vorlage")).toObject();
     for (const QJsonValue& v : vorlage.value(QStringLiteral("anzeigen")).toArray()) out.shownVoltages << v.toString();
     QString error;

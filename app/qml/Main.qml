@@ -1,7 +1,7 @@
-// Hauptfenster. Phase 0: oeffnet direkt die Experimentansicht mit der Vorlage von Experiment 2.4.
+// Hauptfenster. Phase 1: oeffnet direkt das erste gefuehrte Experiment (Auswahl ueber die Werkzeugleiste).
 // Startseite (Dashboard), Lernpfad und Readme folgen in Phase 1-3 (docs/ui-spec.md).
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 import Volta
 
 ApplicationWindow {
@@ -17,6 +17,6 @@ ApplicationWindow {
     Lab {
         anchors.fill: parent
         controller: labController
-        Component.onCompleted: labController.loadExperiment("volta1.2.4")
+        Component.onCompleted: labController.startExperiment("volta1.1.1")
     }
 }
