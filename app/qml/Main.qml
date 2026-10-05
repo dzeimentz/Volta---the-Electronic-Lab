@@ -21,6 +21,12 @@ ApplicationWindow {
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
     Binding { target: labController; property: "unlockAll"; value: root.settings ? root.settings.unlockAll : false }
+    Binding { target: labController; property: "preferredColumns"; value: root.settings ? root.settings.boardColumns : 12 }
+    Binding { target: labController; property: "preferMeter"; value: root.settings ? root.settings.meterVisible : false }
+    Connections {
+        target: labController
+        function onColumnsChosen(columns) { if (root.settings) root.settings.boardColumns = columns }
+    }
     // Schriftgroesse in drei Stufen (A-/A+ oben rechts)
     Binding { target: Theme; property: "fontScale"; value: root.settings ? [0.8, 0.9, 1.0][root.settings.fontLevel] : 1.0 }
     font.pixelSize: Math.round(15 * Theme.fontScale)

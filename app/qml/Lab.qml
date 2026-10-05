@@ -121,10 +121,18 @@ Item {
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
-    property bool schematicVisible: false   // Schaltplan parallel zum Aufbau
+    property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
-    property string newWireColor: "rot"
+    property string newWireColor: settings ? settings.wireColor : "rot"
+    // Arbeitsumgebung merken (AppSettings)
+    onSchematicVisibleChanged: if (settings) settings.schematicVisible = schematicVisible
+    onNewWireColorChanged: if (settings) settings.wireColor = newWireColor
+    Connections {
+        target: lab.controller
+        // Messgeraet im freien Labor merken
+        function onDeskChanged() { if (lab.settings && lab.controller.freeLab) lab.settings.meterVisible = lab.controller.meterVisible }
+    }
     property string highlightAnchor: ""
     // Leitung ziehen (neu: wireFrom gesetzt) bzw. Ende umsetzen (moveWireId gesetzt)
     property string wireFrom: ""
@@ -446,6 +454,8 @@ Item {
         controller: lab.controller
         anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
         width: lab.controller.phase > 0 ? (collapsed ? Theme.control + 8 : 340) : 0
+        collapsed: lab.settings ? lab.settings.experimentPanelCollapsed : false
+        onCollapsedChanged: if (lab.settings) lab.settings.experimentPanelCollapsed = collapsed
         visible: width > 0
     }
 

@@ -38,6 +38,10 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList stages READ stages NOTIFY progressChanged)
     // Alle Bauteile und Stufen freigeben (Einstellung; spaeter hinter der Elternschranke)
     Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY progressChanged)
+    // Gespeicherte Arbeitsumgebung (AppSettings): Felder je Reihe fuer neue Aufbauten (sofern die Vorlage passt) und
+    // Messgeraet im freien Labor
+    Q_PROPERTY(int preferredColumns MEMBER m_preferredColumns)
+    Q_PROPERTY(bool preferMeter MEMBER m_preferMeter)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -237,6 +241,7 @@ signals:
     void flowChanged();
     void progressChanged();
     void journalChanged();
+    void columnsChosen(int columns); // vom Kind gewaehlte Breite (zum Merken in den Einstellungen)
 
 private:
     void onFrame();
@@ -255,6 +260,8 @@ private:
     services::ProgressStore m_progress;
     services::JournalStore m_journal;
     bool m_unlockAll = false;
+    int m_preferredColumns = 12;
+    bool m_preferMeter = false;
     int highestUnlockedStage() const;
     QString m_contentLanguage = QStringLiteral("de");
     bool m_freeLab = false;

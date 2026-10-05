@@ -1,29 +1,41 @@
 #include "app_settings.hpp"
 
 #include <QDir>
-
-#include <algorithm>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QStringList>
+
+#include <algorithm>
 
 namespace volta {
 
 namespace {
-QString settingsFile() {
+QString defaultFile() {
     const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     QDir().mkpath(dir);
     return dir + QStringLiteral("/einstellungen.ini");
 }
+const QStringList kWireColors{QStringLiteral("rot"), QStringLiteral("schwarz"), QStringLiteral("blau"),
+                              QStringLiteral("gelb"), QStringLiteral("gruen"), QStringLiteral("weiss")};
 } // namespace
 
-AppSettings::AppSettings(bool persist, QObject* parent) : QObject(parent), m_persist(persist) {
+AppSettings::AppSettings(bool persist, QString file, QObject* parent)
+    : QObject(parent), m_persist(persist), m_file(std::move(file)) {
     if (!m_persist) return;
-    const QSettings s(settingsFile(), QSettings::IniFormat);
+    if (m_file.isEmpty()) m_file = defaultFile();
+    const QSettings s(m_file, QSettings::IniFormat);
     m_showCurrentFlow = s.value(QStringLiteral("anzeige/stromfluss"), true).toBool();
     m_reduceMotion = s.value(QStringLiteral("anzeige/animationen_reduziert"), false).toBool();
     m_showSplash = s.value(QStringLiteral("anzeige/startbildschirm"), true).toBool();
     m_unlockAll = s.value(QStringLiteral("lernpfad/alles_frei"), false).toBool();
     m_fontLevel = std::clamp(s.value(QStringLiteral("anzeige/schriftgroesse"), 2).toInt(), 0, 2);
+    const int cols = s.value(QStringLiteral("labor/felder_je_reihe"), 12).toInt();
+    m_boardColumns = (cols == 8 || cols == 10 || cols == 12) ? cols : 12;
+    m_meterVisible = s.value(QStringLiteral("labor/messgeraet"), false).toBool();
+    const QString color = s.value(QStringLiteral("labor/leitungsfarbe"), QStringLiteral("rot")).toString();
+    m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("rot");
+    m_schematicVisible = s.value(QStringLiteral("labor/schaltplan"), false).toBool();
+    m_panelCollapsed = s.value(QStringLiteral("labor/experimentfeld_eingeklappt"), false).toBool();
 }
 
 bool AppSettings::splashAvailable() {
@@ -34,49 +46,22 @@ bool AppSettings::splashAvailable() {
 #endif
 }
 
-void AppSettings::save(const QString& key, bool value) {
+void AppSettings::save(const QString& key, const QVariant& value) {
     if (!m_persist) return;
-    QSettings s(settingsFile(), QSettings::IniFormat);
+    QSettings s(m_file, QSettings::IniFormat);
     s.setValue(key, value);
 }
 
-void AppSettings::setShowCurrentFlow(bool on) {
-    if (on == m_showCurrentFlow) return;
-    m_showCurrentFlow = on;
-    save(QStringLiteral("anzeige/stromfluss"), on);
-    emit changed();
+void AppSettings::setFontLevel(int level) { set(m_fontLevel, std::clamp(level, 0, 2), "anzeige/schriftgroesse"); }
+
+void AppSettings::setBoardColumns(int columns) {
+    if (columns != 8 && columns != 10 && columns != 12) return;
+    set(m_boardColumns, columns, "labor/felder_je_reihe");
 }
 
-void AppSettings::setReduceMotion(bool on) {
-    if (on == m_reduceMotion) return;
-    m_reduceMotion = on;
-    save(QStringLiteral("anzeige/animationen_reduziert"), on);
-    emit changed();
-}
-
-void AppSettings::setShowSplash(bool on) {
-    if (on == m_showSplash) return;
-    m_showSplash = on;
-    save(QStringLiteral("anzeige/startbildschirm"), on);
-    emit changed();
-}
-
-void AppSettings::setFontLevel(int level) {
-    level = std::clamp(level, 0, 2);
-    if (level == m_fontLevel) return;
-    m_fontLevel = level;
-    if (m_persist) {
-        QSettings s(settingsFile(), QSettings::IniFormat);
-        s.setValue(QStringLiteral("anzeige/schriftgroesse"), level);
-    }
-    emit changed();
-}
-
-void AppSettings::setUnlockAll(bool on) {
-    if (on == m_unlockAll) return;
-    m_unlockAll = on;
-    save(QStringLiteral("lernpfad/alles_frei"), on);
-    emit changed();
+void AppSettings::setWireColor(const QString& color) {
+    if (!kWireColors.contains(color)) return;
+    set(m_wireColor, color, "labor/leitungsfarbe");
 }
 
 } // namespace volta

@@ -25,6 +25,9 @@
 - Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen, Breite der Grundplatte »− 1–12 +« (8/10/12 Felder je Reihe), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
 - Links: **Experimentauswahl** als Aufklappfeld (»Freies Labor«, »Stufe n: Titel«); zeigt zugleich den Titel.
+- Gespeichert (`AppSettings`, `einstellungen.ini`): Sprache, Schriftgroesse, Stromfluss, Animationen, Startbildschirm,
+  Freigabe sowie die Arbeitsumgebung: Felder je Reihe (fuer neue Aufbauten, sofern die Vorlage passt), Messgeraet im
+  freien Labor, Leitungsfarbe, Schaltplan ein/aus, Experimentfeld eingeklappt.
 - Ganz rechts: **Einstellungen** (☰): Stromfluss anzeigen, Animationen reduzieren, Startbildschirm zeigen (Desktop),
   Messgeraet anzeigen, Felder je Reihe, Info. Lokal gespeichert (`AppSettings`, `einstellungen.ini`).
 - Oben rechts, links vom Flaggensymbol: **Schriftgroesse** »A− / A+« in drei Stufen (80 / 90 / 100 %, Vorgabe 100 %),

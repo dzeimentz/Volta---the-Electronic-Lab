@@ -552,6 +552,43 @@ private slots:
         QTRY_COMPARE(fieldCount(), 0);
     }
 
+    // Einstellungen bleiben ueber Neustarts erhalten (eigene Datei)
+    void settingsPersist() {
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+        const QString file = dir.filePath(QStringLiteral("einstellungen.ini"));
+        {
+            AppSettings s(true, file);
+            s.setFontLevel(0);
+            s.setBoardColumns(8);
+            s.setMeterVisible(true);
+            s.setWireColor(QStringLiteral("blau"));
+            s.setSchematicVisible(true);
+            s.setExperimentPanelCollapsed(true);
+            s.setBoardColumns(9);            // ungueltig: bleibt 8
+            s.setWireColor(QStringLiteral("pink")); // ungueltig: bleibt blau
+        }
+        AppSettings again(true, file);
+        QCOMPARE(again.fontLevel(), 0);
+        QCOMPARE(again.boardColumns(), 8);
+        QVERIFY(again.meterVisible());
+        QCOMPARE(again.wireColor(), QStringLiteral("blau"));
+        QVERIFY(again.schematicVisible());
+        QVERIFY(again.experimentPanelCollapsed());
+        // neue Aufbauten uebernehmen die gespeicherte Breite und das Messgeraet
+        m_settings->setUnlockAll(true);
+        m_settings->setBoardColumns(8);
+        m_settings->setMeterVisible(true);
+        QTRY_COMPARE(m_lab->property("preferredColumns").toInt(), 8);
+        m_lab->startFreeLab();
+        QCOMPARE(board().columns, 8);
+        QVERIFY(board().desk.meterVisible);
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.1.1"))); // Vorlage passt in 8 Spalten
+        QCOMPARE(board().columns, 8);
+        m_settings->setBoardColumns(12);
+        m_settings->setMeterVisible(false);
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_language.reset();

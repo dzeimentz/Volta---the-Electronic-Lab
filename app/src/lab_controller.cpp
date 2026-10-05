@@ -95,6 +95,8 @@ bool LabController::startExperiment(const QString& id) {
     start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
     start.desk.mainSwitch = false;
     start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
+    // gespeicherte Breite, wenn der Musteraufbau hineinpasst
+    start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
     m_session->setSuccess(exp.successCondition, exp.templateBoard);
     m_session->loadBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
@@ -325,7 +327,10 @@ void LabController::startFreeLab() {
     m_experiment = services::Experiment{};
     m_title = tr("Freies Labor");
     m_session->clearSuccess();
-    m_session->loadBoard(model::Board{});
+    model::Board empty;
+    empty.columns = m_preferredColumns;      // gespeicherte Breite
+    empty.desk.meterVisible = m_preferMeter; // Messgeraet wie zuletzt im freien Labor
+    m_session->loadBoard(empty);
     emit experimentChanged();
     emit flowChanged();
     emit deskChanged();
@@ -464,7 +469,11 @@ double LabController::wireCurrent(const QString& id) const {
 
 bool LabController::rotatePart(const QString& id) { return result(m_session->rotatePart(ss(id))); }
 
-bool LabController::setBoardColumns(int columns) { return result(m_session->setColumns(columns)); }
+bool LabController::setBoardColumns(int columns) {
+    if (!result(m_session->setColumns(columns))) return false;
+    emit columnsChosen(columns);
+    return true;
+}
 
 QVariantList LabController::parts() const {
     QVariantList out;
