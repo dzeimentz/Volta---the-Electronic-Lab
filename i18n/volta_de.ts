@@ -359,7 +359,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Leitungsfarbe %1</source>
+        <source>Schaltplan ausblenden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schaltplan zeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leitungsfarbe: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -489,6 +497,17 @@
     <name>PartTray</name>
     <message>
         <source>Bauteilfach</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SchematicView</name>
+    <message>
+        <source>Schaltplan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

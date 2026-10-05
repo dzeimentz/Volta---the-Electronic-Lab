@@ -162,6 +162,29 @@ int main(int argc, char* argv[]) {
             }
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_SCHEMATIC=1 baut LED mit Vorwiderstand (plus Parallelwiderstand) und zeigt den Schaltplan
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_SCHEMATIC") == 1)
+        QTimer::singleShot(400, &lab, [&lab, &engine] {
+            lab.setUnlockAll(true);
+            lab.startFreeLab();
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false);
+            lab.setPartValue(QStringLiteral("R1"), 470.0);
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("A3"), false, false);
+            lab.addPart(QStringLiteral("led_rot"), QStringLiteral("B4"), true, false);
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("A3"), QStringLiteral("B3"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("A4"), QStringLiteral("B4"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("C4"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.setMainSwitch(true);
+            const auto roots = engine.rootObjects();
+            if (roots.isEmpty()) return;
+            roots.first()->setProperty("inLab", true);
+            if (QObject* l = roots.first()->findChild<QObject*>(QStringLiteral("lab"))) {
+                l->setProperty("schematicVisible", true);
+                l->setProperty("selectedPart", QStringLiteral("R1"));
+            }
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

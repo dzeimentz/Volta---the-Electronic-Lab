@@ -121,6 +121,8 @@ Item {
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
+    property bool schematicVisible: false   // Schaltplan parallel zum Aufbau
+    property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
     property string newWireColor: "rot"
     property string highlightAnchor: ""
@@ -346,25 +348,72 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
-            // Farbe fuer neue Leitungen
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                Repeater {
-                    model: Texts.wireColors
-                    Item {
-                        id: chip
-                        required property string modelData
-                        width: Theme.control; height: Theme.control
-                        Rectangle {
-                            anchors.centerIn: parent
-                            width: 26; height: 26; radius: 13
-                            color: Theme.wireColor(chip.modelData)
-                            border.color: lab.newWireColor === chip.modelData ? Theme.solderAmber : "#5A6F85"
-                            border.width: lab.newWireColor === chip.modelData ? 4 : 1
+            // Schaltplan ein-/ausblenden (ab Stufe 2 und im freien Labor)
+            ToolButton {
+                objectName: "schematicToggle"
+                visible: lab.controller.schematicAvailable
+                width: Theme.control; height: Theme.control
+                checkable: true
+                checked: lab.schematicVisible
+                onClicked: lab.schematicVisible = !lab.schematicVisible
+                ToolTip.visible: hovered
+                ToolTip.text: lab.schematicVisible ? qsTr("Schaltplan ausblenden") : qsTr("Schaltplan zeigen")
+                Accessible.name: ToolTip.text
+                contentItem: Item {
+                    SchematicSymbol { anchors.centerIn: parent; width: 40; height: 20; type: "widerstand"; stroke: "white" }
+                }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
+            // Farbe fuer neue Leitungen: ein Knopf mit Auswahl (spart Platz in der Werkzeugleiste)
+            ToolButton {
+                id: wireColorButton
+                objectName: "wireColorButton"
+                width: Theme.control; height: Theme.control
+                onClicked: wireColorMenu.open()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Leitungsfarbe: %1").arg(Texts.colorName(lab.newWireColor))
+                Accessible.name: ToolTip.text
+                contentItem: Item {
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: 28; height: 28; radius: 14
+                        color: Theme.wireColor(lab.newWireColor)
+                        border.color: Theme.solderAmber
+                        border.width: 3
+                    }
+                }
+                background: Rectangle { radius: 6; color: parent.hovered ? "#2A4A6E" : "transparent" }
+                Menu {
+                    id: wireColorMenu
+                    y: parent.height
+                    Repeater {
+                        model: Texts.wireColors
+                        MenuItem {
+                            id: colorItem
+                            required property string modelData
+                            objectName: "wireColor_" + modelData
+                            height: Theme.control
+                            text: Texts.colorName(modelData)
+                            checkable: true
+                            checked: lab.newWireColor === modelData
+                            onTriggered: lab.newWireColor = modelData
+                            // Farbe nie allein: Name daneben
+                            contentItem: Row {
+                                spacing: 10
+                                leftPadding: 28
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 22; height: 22; radius: 11
+                                    color: Theme.wireColor(colorItem.modelData)
+                                    border.color: "#5A6F85"
+                                }
+                                Label { anchors.verticalCenter: parent.verticalCenter; text: colorItem.text; font.pixelSize: Math.round(15 * Theme.fontScale) }
+                            }
                         }
-                        TapHandler { onTapped: lab.newWireColor = chip.modelData }
-                        Accessible.role: Accessible.RadioButton
-                        Accessible.name: qsTr("Leitungsfarbe %1").arg(Texts.colorName(chip.modelData))
                     }
                 }
             }
@@ -387,6 +436,20 @@ Item {
         visible: width > 0
     }
 
+    SchematicView {
+        id: schematicPanel
+        objectName: "schematicPanel"
+        controller: lab.controller
+        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: parent.bottom }
+        readonly property bool shown: lab.schematicVisible && lab.controller.schematicAvailable
+        visible: shown
+        width: shown ? Math.round((lab.width - tray.width - experimentPanel.width) * 0.42) : 0
+        selectedPart: lab.selectedPart
+        onPartSelected: (id) => { lab.selectedPart = id; lab.selectedWire = "" }
+        onNodeSelected: (anchors) => lab.highlightFields = anchors
+        onVisibleChanged: if (!visible) lab.highlightFields = []
+    }
+
     PartTray {
         id: tray
         anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
@@ -406,7 +469,7 @@ Item {
 
     Rectangle {
         id: boardArea
-        anchors { left: tray.right; right: experimentPanel.left; top: toolbar.bottom; bottom: parent.bottom }
+        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: parent.bottom }
         color: Theme.board
         clip: true
 
@@ -479,6 +542,7 @@ Item {
                     y: lab.anchorPoint(modelData).y - height / 2
                     color: modelData.startsWith("MESS:") ? "#D9DEE6" : Theme.field
                     highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
+                                 || lab.highlightFields.indexOf(modelData) >= 0
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
 
                     onWireDragUpdated: (scenePos) => {

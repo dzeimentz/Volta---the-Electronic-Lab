@@ -14,6 +14,7 @@
 
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
+#include "model/schematic_layout.hpp"
 
 namespace volta {
 
@@ -240,6 +241,31 @@ QVariantMap LabController::nearestE(double ohm, int n) const {
     return {{QStringLiteral("value"), r.value},
             {QStringLiteral("deviation"), r.deviationPercent},
             {QStringLiteral("isMember"), r.isMember}};
+}
+
+QVariantMap LabController::schematic() const {
+    const model::Schematic s = model::buildSchematic(m_session->board(), m_session->catalog());
+    QVariantList nodes;
+    for (const auto& n : s.nodes) {
+        QStringList anchors;
+        for (const auto& a : n.anchors) anchors << qs(a);
+        nodes << QVariantMap{{QStringLiteral("label"), qs(n.label)},
+                             {QStringLiteral("x"), n.x},
+                             {QStringLiteral("y"), n.y},
+                             {QStringLiteral("anchors"), anchors}};
+    }
+    QVariantList elements;
+    for (const auto& e : s.elements) {
+        QVariantList idx;
+        for (int i : e.nodes) idx << i;
+        elements << QVariantMap{{QStringLiteral("id"), qs(e.id)},
+                                {QStringLiteral("type"), qs(e.type)},
+                                {QStringLiteral("nodes"), idx},
+                                {QStringLiteral("desk"), e.desk},
+                                {QStringLiteral("par"), e.parallelIndex},
+                                {QStringLiteral("parCount"), e.parallelCount}};
+    }
+    return {{QStringLiteral("nodes"), nodes}, {QStringLiteral("elements"), elements}, {QStringLiteral("layers"), s.layers}};
 }
 
 QVariantList LabController::lexicon() const {

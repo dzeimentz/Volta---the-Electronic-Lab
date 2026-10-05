@@ -17,6 +17,7 @@ add_library(volta_model STATIC
     src/model/board_edit.cpp
     src/model/netlist_builder.cpp
     src/model/success.cpp
+    src/model/schematic_layout.cpp
     src/services/content_repository.cpp
     src/services/progress_store.cpp
     src/services/journal_store.cpp
@@ -84,6 +85,7 @@ qt_add_qml_module(volta_ui
         qml/Home.qml
         qml/JournalView.qml
         qml/ToolboxPanel.qml
+        qml/SchematicView.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

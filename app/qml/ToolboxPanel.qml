@@ -15,6 +15,8 @@ Drawer {
     edge: Qt.RightEdge
     width: 430
     modal: false
+    interactive: false // nur ueber den Knopf: kein Wischen vom Rand (rechts liegen Experimentfeld und Schaltplan)
+    closePolicy: Popup.CloseOnEscape
     background: Rectangle { color: "#FFFDF7"; border.color: Theme.fieldOutline }
 
     // Farben nach IEC 60062: 0 schwarz ... 9 weiss, 10 gold, 11 silber

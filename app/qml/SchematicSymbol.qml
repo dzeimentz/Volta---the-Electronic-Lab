@@ -60,6 +60,18 @@ Item {
         case "transistor_npn": // Basis links, Kollektor oben, Emitter unten mit Pfeil nach aussen
             return {s: circle(34, 16, 14) + " M8 16 H28 M28 8 V24 M28 12 L40 4 V0 " + arrowLine(28, 20, 39, 27) + " M39 27 L40 32",
                     f: arrowHead(28, 20, 39, 27)}
+        case "batterie": // langer duenner Strich = Pluspol, kurzer dicker = Minuspol
+            return {s: "M0 16 H28 M36 16 H64 M28 4 V28", f: "M34 10 H38 V22 H34 Z", t: "+", tx: 22, ty: 6}
+        case "lautsprecher": // Rechteck mit Trichter
+            return {s: "M0 16 H22 M42 16 H64 M22 10 H30 V22 H22 Z M30 10 L38 3 V29 L30 22", f: ""}
+        case "pultschalter":
+            return {s: "M0 16 H22 M42 16 H64 M22 16 L44 8", f: ""}
+        case "potentiometer": // Widerstand mit Schleifer (Pfeil von unten)
+            return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z " + arrowLine(32, 32, 32, 23), f: arrowHead(32, 32, 32, 23)}
+        case "messgeraet":
+            return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
+        case "blinkmodul": case "tonmodul":
+            return {s: "M0 16 H14 M50 16 H64 M14 6 H50 V26 H14 Z", f: "", t: type === "blinkmodul" ? "BL" : "TON", tx: 32, ty: 16}
         default:
             return {s: "M0 16 H20 M44 16 H64 M20 8 H44 V24 H20 Z", f: ""}
         }

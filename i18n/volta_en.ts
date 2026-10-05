@@ -359,8 +359,16 @@
         <translation>Show meter</translation>
     </message>
     <message>
-        <source>Leitungsfarbe %1</source>
-        <translation>Wire colour %1</translation>
+        <source>Schaltplan ausblenden</source>
+        <translation>Hide circuit diagram</translation>
+    </message>
+    <message>
+        <source>Schaltplan zeigen</source>
+        <translation>Show circuit diagram</translation>
+    </message>
+    <message>
+        <source>Leitungsfarbe: %1</source>
+        <translation>Wire colour: %1</translation>
     </message>
     <message>
         <source>Zeit %1 s</source>
@@ -490,6 +498,17 @@
     <message>
         <source>Bauteilfach</source>
         <translation>Parts tray</translation>
+    </message>
+</context>
+<context>
+    <name>SchematicView</name>
+    <message>
+        <source>Schaltplan</source>
+        <translation>Circuit diagram</translation>
+    </message>
+    <message>
+        <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
+        <translation>As soon as you place parts and draw wires, the circuit diagram appears here.</translation>
     </message>
 </context>
 <context>

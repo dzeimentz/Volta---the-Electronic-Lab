@@ -1,5 +1,6 @@
 // Oberflaechentests (Qt Quick, ohne sichtbares Fenster): echte Bedienung mit simulierter Maus und Tastatur
 // gegen die Experimentansicht. Prueft das Zusammenspiel QML <-> LabController <-> LabSession.
+#include <QJSValue>
 #include <QQmlApplicationEngine>
 #include <QTemporaryDir>
 #include <algorithm>
@@ -504,6 +505,33 @@ private slots:
         QVERIFY(m_lab->canUndo());
         QMetaObject::invokeMethod(box, "close");
         QTRY_VERIFY(!box->property("opened").toBool());
+    }
+
+    // Schaltplan: einblenden, Bauteil im Plan antippen waehlt es auf der Grundplatte; Knoten hebt Felder hervor
+    void schematicView() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot")));
+        QVERIFY(m_lab->addWire(QStringLiteral("B4"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
+        QQuickItem* toggle = item(QStringLiteral("schematicToggle"));
+        QVERIFY(toggle && toggle->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(toggle));
+        QQuickItem* panel = item(QStringLiteral("schematicPanel"));
+        QTRY_VERIFY(panel->isVisible() && panel->width() > 100);
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("schem_R1"))));
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        QTRY_COMPARE(lab->property("selectedPart").toString(), QStringLiteral("R1"));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("node_0"))));
+        auto fieldCount = [lab] {
+            const QVariant v = lab->property("highlightFields");
+            return v.canConvert<QJSValue>() ? v.value<QJSValue>().toVariant().toList().size() : v.toList().size();
+        };
+        QTRY_VERIFY(fieldCount() > 0);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(toggle));
+        QTRY_VERIFY(!panel->isVisible());
+        QTRY_COMPARE(fieldCount(), 0);
     }
 
     void cleanupTestCase() {

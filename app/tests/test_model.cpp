@@ -7,6 +7,7 @@
 #include "model/anchor.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
+#include "model/schematic_layout.hpp"
 #include "model/netlist_builder.hpp"
 #include "services/content_repository.hpp"
 #include "volta/core/components/capacitor.hpp"
@@ -65,6 +66,45 @@ private slots:
         QCOMPARE(rc::decode({rc::kGold, 0, 1, rc::kGold}), 0.0); // gold ist keine Ziffer
         QCOMPARE(rc::tolerancePercent(rc::kGold), 5.0);
         QCOMPARE(rc::tolerancePercent(1), 1.0);
+    }
+
+    // Schaltplan: LED mit Vorwiderstand; Knoten mit Feldnamen, Pluspol oben, 0 V unten
+    void schematicLayout() {
+        model::Board b;
+        b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 470.0});
+        b.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});
+        b.parts.push_back({"R2", "widerstand", {{"a", "A3"}, {"b", "A4"}}, 470.0}); // parallel zu R1
+        b.wires.push_back({"L1", "P:+9V", "B3", "rot"});
+        b.wires.push_back({"L2", "C4", "P:0V", "schwarz"});
+        b.wires.push_back({"L3", "A3", "B3", "rot"});
+        b.wires.push_back({"L4", "A4", "B4", "rot"});
+        const model::Schematic s = model::buildSchematic(b, m_catalog);
+        QCOMPARE(s.nodes.size(), std::size_t(3)); // +9V/A3/B3, A4/B4, C4/0V
+        QCOMPARE(s.layers, 3);
+        auto nodeWith = [&](const std::string& a) {
+            for (std::size_t i = 0; i < s.nodes.size(); ++i)
+                for (const auto& x : s.nodes[i].anchors)
+                    if (x == a) return static_cast<int>(i);
+            return -1;
+        };
+        const int plus = nodeWith("P:+9V"), mid = nodeWith("B4"), gnd = nodeWith("P:0V");
+        QVERIFY(plus >= 0 && mid >= 0 && gnd >= 0);
+        QCOMPARE(nodeWith("A3"), plus);
+        QCOMPARE(nodeWith("C4"), gnd);
+        QCOMPARE(s.nodes[static_cast<std::size_t>(plus)].layer, 0);
+        QCOMPARE(s.nodes[static_cast<std::size_t>(mid)].layer, 1);
+        QCOMPARE(s.nodes[static_cast<std::size_t>(gnd)].layer, 2);
+        QVERIFY(s.nodes[static_cast<std::size_t>(plus)].label.find("+9V") != std::string::npos);
+        // Elemente: R1, D1, R2 und die Batterie
+        int parallel = 0;
+        bool battery = false;
+        for (const auto& e : s.elements) {
+            if (e.id == "PULT.B") battery = (e.nodes == std::vector<int>{plus, gnd});
+            if (e.id == "R1" || e.id == "R2") parallel += e.parallelCount;
+        }
+        QVERIFY(battery);
+        QCOMPARE(parallel, 4); // beide melden zwei parallele Zweipole
+        QVERIFY(model::buildSchematic(model::Board{}, m_catalog).nodes.empty());
     }
 
     void parseOhmInput() {

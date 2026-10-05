@@ -114,7 +114,13 @@ public:
     Q_INVOKABLE QVariantMap nearestE(double ohm, int n) const; // {value, deviation, isMember}
     // Lexikon: [{type, text}] aller Bauteile mit Lexikontext, in der Reihenfolge des Bauteilfachs
     Q_PROPERTY(QVariantList lexicon READ lexicon NOTIFY experimentChanged)
+    // Schaltplan des Aufbaus: {nodes: [{label, x, y, anchors}], elements: [{id, type, nodes, desk, par, parCount}]}
+    Q_PROPERTY(QVariantMap schematic READ schematic NOTIFY boardChanged)
+    // Schaltplanansicht verfuegbar: freies Labor, ab Stufe 2 oder alles freigegeben (Konzept 5.7)
+    Q_PROPERTY(bool schematicAvailable READ schematicAvailable NOTIFY progressChanged)
     QVariantList lexicon() const;
+    QVariantMap schematic() const;
+    bool schematicAvailable() const { return m_unlockAll || m_freeLab || m_experiment.stage >= 2; }
     QStringList errors() const { return m_errors; }
     QString lastEditError() const { return m_lastEditError; }
     bool canUndo() const;

@@ -359,8 +359,16 @@
         <translation>Afficher le multimètre</translation>
     </message>
     <message>
-        <source>Leitungsfarbe %1</source>
-        <translation>Couleur du fil %1</translation>
+        <source>Schaltplan ausblenden</source>
+        <translation>Masquer le schéma</translation>
+    </message>
+    <message>
+        <source>Schaltplan zeigen</source>
+        <translation>Afficher le schéma</translation>
+    </message>
+    <message>
+        <source>Leitungsfarbe: %1</source>
+        <translation>Couleur du fil : %1</translation>
     </message>
     <message>
         <source>Zeit %1 s</source>
@@ -490,6 +498,17 @@
     <message>
         <source>Bauteilfach</source>
         <translation>Boîte à composants</translation>
+    </message>
+</context>
+<context>
+    <name>SchematicView</name>
+    <message>
+        <source>Schaltplan</source>
+        <translation>Schéma</translation>
+    </message>
+    <message>
+        <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
+        <translation>Dès que tu places des composants et tires des fils, le schéma apparaît ici.</translation>
     </message>
 </context>
 <context>

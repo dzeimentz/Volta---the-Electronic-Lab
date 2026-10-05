@@ -99,6 +99,11 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
 - Wassermodell als zuschaltbare Erklaerebene.
 - Schaltplanansicht ab Stufe 2 parallel; Knoten mit Feldnamen; wechselseitige Hervorhebung.
+  Umgesetzt (D4, `SchematicView.qml`, Anordnung in `model/schematic_layout`): Knoten = ueber Leitungen verbundene
+  Anschlusspunkte, beschriftet mit Feldnamen; Pluspol oben, 0 V unten, weitere Knoten in Ebenen nach dem Abstand vom
+  Pluspol; parallele Zweipole versetzt; Batterie als eigener Zweig links. Knopf in der Werkzeugleiste (freies Labor,
+  ab Stufe 2); Bauteil im Plan antippen waehlt es auf der Platte und umgekehrt; Knoten antippen hebt seine Felder hervor.
+- Leitungsfarbe: ein Knopf mit Auswahl (Farbe mit Namen) statt sechs Farbknoepfen.
 
 ## Werkzeugkasten (Seitenleiste)
 - Farbcode und E-Reihen (E6, E12, E24; ab Volta 2 E48, E96; Kondensatorcodes ab Volta 2).
