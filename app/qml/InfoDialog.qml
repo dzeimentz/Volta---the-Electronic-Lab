@@ -100,21 +100,23 @@ Popup {
             Line { text: qsTr("Prüfung: Catch2 und Qt Test") }
 
             Heading { text: qsTr("Hersteller") }
-            // Firmenlogo (app/resources/brand/dc_logo.png), sonst Schriftzug
+            // Firmenlogo (app/resources/brand/dc_logo.png, mit eigenem Hintergrund), sonst Schriftzug
+            Image {
+                visible: info.app.hasLogo
+                source: info.app.hasLogo ? "qrc:/brand/dc_logo.png" : ""
+                width: Math.min(parent.width, 300)
+                height: sourceSize.width > 0 ? width * sourceSize.height / sourceSize.width : 0
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                mipmap: true
+            }
             Rectangle {
+                visible: !info.app.hasLogo
                 width: Math.min(parent.width, 300)
                 height: 64
                 radius: 6
                 color: "#14243A"
-                Image {
-                    anchors.fill: parent
-                    anchors.margins: 4
-                    visible: info.app.hasLogo
-                    source: info.app.hasLogo ? "qrc:/brand/dc_logo.png" : ""
-                    fillMode: Image.PreserveAspectFit
-                }
                 Column {
-                    visible: !info.app.hasLogo
                     anchors.centerIn: parent
                     Label { text: "DC SOFTWARE ENGINEERING"; color: "#2E8BEA"; font.pixelSize: 17; font.bold: true; font.letterSpacing: 1 }
                     Label {
@@ -124,7 +126,7 @@ Popup {
                     }
                 }
             }
-            Line { text: "DC Software Engineering"; font.bold: true }
+            Line { text: "DC Software Engineering, Irrel (DE)"; font.bold: true }
             Line { text: "Daniel Zeimentz" }
             Line { text: qsTr("E-Mail: %1").arg("info@dc-software-engineering.com") }
             Line { text: qsTr("Web: %1").arg("www.dc-software-engineering.com") }

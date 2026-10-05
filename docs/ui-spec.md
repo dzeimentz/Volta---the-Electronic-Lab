@@ -87,7 +87,8 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - »Supportangaben kopieren« und vorbereitete Support-E-Mail (ohne Namen, Profile, Inhalte).
 - Stand Phase 1 (`InfoDialog.qml`): Produkt, Version, Plattformen (diese Ausgabe und vorgesehene), verwendete Technik
   (Qt-Version zur Laufzeit, Uebersetzer), Hersteller mit Logo (`app/resources/brand/dc_logo.png`, sonst Schriftzug),
-  Name, E-Mail und Web als Text (keine Links ohne Elternschranke), Datenschutz. Offen: Anschrift, Lizenztexte,
+  Firmenangabe »DC Software Engineering, Irrel (DE)«, Name, E-Mail und Web als Text (keine Links ohne
+  Elternschranke), Datenschutz. Offen: vollstaendige Anschrift (Anbieterkennzeichnung vor Phase 3), Lizenztexte,
   Supportangaben.
 
 ## Elternschranke
