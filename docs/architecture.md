@@ -79,11 +79,12 @@ entstehen alle Baende (Volta 1–3, Zuse 1) als eigene Apps und alle Plattformen
 
 ## Threads und Datenfluss
 
-Stand Phase 0: `LabController` (`app/src/lab_controller.*`) simuliert im UI-Thread ueber einen Timer in Echtzeit
-und stellt QML Anschlusspotentiale, Spannungsbalken und Bauteilzustaende bereit. Die unten beschriebene Entkopplung
-ueber `SimulationBridge` folgt in Phase 1; bis dahin ist der direkte Zugriff des `LabController` auf den Simulator
-die einzige Abweichung von app/CLAUDE.md. Inhaltspakete werden in Phase 0 direkt aus `content/` im Quellbaum
-gelesen (`VOLTA_CONTENT_DIR`); die Einbettung als Qt-Ressource folgt mit der Paketierung.
+Umsetzung: `sim::SimulationBridge` (`app/src/sim/simulation_bridge.*`, Qt-frei, `std::thread`). Der
+`LabController` uebergibt neue Netzlisten (die neueste gewinnt; Zustandsuebernahme ueber die Bauteilkennung im
+Simulations-Thread, optionale Zustandsvorgaben fuer Undo) und Bedienhandlungen (`sim::Action`) und holt je Bild den
+neuesten `sim::Snapshot` (Potentiale, Messwerte, Bauteilzustaende, Ereignisse). Ein Schnappschuss gilt nur, wenn
+seine Topologie-Version zur aktuellen Netzliste passt. Inhaltspakete werden bis zur Paketierung direkt aus `content/`
+im Quellbaum gelesen (`VOLTA_CONTENT_DIR`).
 
 ```
  UI-Thread (QML, Modell)                 Simulations-Thread (core)

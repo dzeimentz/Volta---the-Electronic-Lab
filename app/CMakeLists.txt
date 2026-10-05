@@ -17,9 +17,11 @@ add_library(volta_model STATIC
     src/model/netlist_builder.cpp
     src/model/success.cpp
     src/services/content_repository.cpp
+    src/sim/simulation_bridge.cpp
 )
 target_include_directories(volta_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(volta_model PUBLIC volta::core Qt6::Core)
+find_package(Threads REQUIRED)
+target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Threads::Threads)
 
 qt_add_executable(volta_app
     src/main.cpp

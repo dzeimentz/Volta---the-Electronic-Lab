@@ -16,13 +16,13 @@
 #include "model/catalog.hpp"
 #include "model/netlist_builder.hpp"
 #include "services/content_repository.hpp"
-#include "volta/core/simulator.hpp"
+#include "sim/simulation_bridge.hpp"
 
 namespace volta {
 
-// Verbindet Aufbau (Board), Netzliste und Simulator mit der Oberflaeche (Lab.qml).
-// Phase-0-Geruest: Die Simulation laeuft im UI-Thread ueber einen Timer in Echtzeit (1-ms-Schritte, aufgeholt je
-// Bild). Die Entkopplung ueber SimulationBridge in einem eigenen Thread (docs/architecture.md) folgt in Phase 1.
+// Verbindet Aufbau (Board), Netzliste und Simulation mit der Oberflaeche (Lab.qml). Die Simulation laeuft in der
+// SimulationBridge in einem eigenen Thread; der Controller holt je Bild den neuesten Schnappschuss und verwendet ihn
+// nur, wenn er zur aktuellen Netzliste (Topologie-Version) passt.
 class LabController : public QObject {
     Q_OBJECT
     QML_NAMED_ELEMENT(LabController)
@@ -35,6 +35,8 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(bool mainSwitch READ mainSwitch WRITE setMainSwitch NOTIFY deskChanged)
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
+    Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
+    Q_PROPERTY(double realtimeRatio READ realtimeRatio NOTIFY stateChanged)
     Q_PROPERTY(double batteryVolt READ batteryVolt NOTIFY deskChanged)
 
 public:
@@ -48,7 +50,10 @@ public:
     QStringList errors() const { return m_errors; }
     bool mainSwitch() const { return m_board.desk.mainSwitch; }
     void setMainSwitch(bool on);
-    double simTime() const { return m_sim.timeS(); }
+    double simTime() const { return m_snap.timeS; }
+    double timeScale() const { return m_timeScale; }
+    void setTimeScale(double scale);
+    double realtimeRatio() const { return m_snap.realtimeRatio; }
     double batteryVolt() const { return 1.5 * m_board.desk.cells; }
 
     Q_INVOKABLE bool loadExperiment(const QString& id);
@@ -59,9 +64,6 @@ public:
     // Zustand eines Bauteils: currentmA, level, overloaded, destroyed, tempC
     Q_INVOKABLE QVariantMap partState(const QString& id) const;
 
-    // Fuer Tests und Werkzeuge: Simulation um seconds vorruecken (ohne Echtzeitbindung)
-    void advance(double seconds);
-    const core::Simulator& simulator() const { return m_sim; }
     const model::Netlist& netlist() const { return m_net; }
 
 signals:
@@ -73,20 +75,22 @@ signals:
 private:
     void rebuild();
     void onFrame();
-    void applyDesk();
+    bool snapshotCurrent() const { return m_snap.valid && m_snap.topology == m_topology; }
 
     services::ContentRepository m_repo;
     model::Catalog m_catalog;
     model::Board m_board;
-    model::Netlist m_net;
-    core::Simulator m_sim;
+    model::Netlist m_net;          // Zuordnungen der aktuellen Topologie (die Schaltung selbst gehoert der Bruecke)
+    sim::SimulationBridge m_bridge;
+    sim::Snapshot m_snap;
+    std::uint64_t m_topology = 0;
+    double m_timeScale = 1.0;
     QString m_title;
     QStringList m_voltageFields;
     QStringList m_errors;
     QHash<QString, int> m_bars; // zuletzt angezeigte Balkenzahl je Feld (Hysterese)
     QTimer m_timer;
     QElapsedTimer m_clock;
-    double m_lagS = 0.0;
     double m_sinceNotifyS = 0.0;
 };
 

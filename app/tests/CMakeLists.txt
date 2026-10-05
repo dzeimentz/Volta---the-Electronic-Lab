@@ -17,3 +17,4 @@ endfunction()
 
 volta_qt_test(volta_model_tests test_model.cpp)
 volta_qt_test(volta_content_smoke_tests test_content_smoke.cpp)
+volta_qt_test(volta_bridge_tests test_bridge.cpp)

@@ -3,15 +3,13 @@
 #include <algorithm>
 #include <cmath>
 
-#include "volta/core/components/switch.hpp"
 
 namespace volta {
 
 namespace {
-constexpr int kFrameMs = 16;                  // ca. 60 Bilder je Sekunde
-constexpr double kNotifyS = 0.1;              // Anzeigen mit ca. 10 Hz aktualisieren
-constexpr double kMaxCatchUpS = 0.05;         // hoechstens 50 Schritte je Bild aufholen
-constexpr double kBarHysteresis = 0.02;       // 2 % der Batteriespannung
+constexpr int kFrameMs = 16;            // ca. 60 Bilder je Sekunde
+constexpr double kNotifyS = 0.1;        // Anzeigen mit ca. 10 Hz aktualisieren
+constexpr double kBarHysteresis = 0.02; // 2 % der Batteriespannung
 
 QString qs(const std::string& s) { return QString::fromStdString(s); }
 } // namespace
@@ -24,6 +22,7 @@ LabController::LabController(QString contentRoot, QObject* parent)
     m_timer.start(kFrameMs);
     m_clock.start();
     rebuild();
+    m_bridge.start();
 }
 
 bool LabController::loadExperiment(const QString& id) {
@@ -44,44 +43,35 @@ bool LabController::loadExperiment(const QString& id) {
 
 void LabController::rebuild() {
     model::Netlist next = model::buildNetlist(m_board, m_catalog);
-    // Zustand (Ladung, Temperatur, zerstoert ...) ueber den Topologiewechsel retten
-    model::transferStates(m_sim.circuit(), next.circuit);
     m_errors.clear();
     for (const auto& e : next.errors) m_errors << qs(e);
     m_net = std::move(next);
-    const core::Status st = m_sim.setCircuit(std::move(m_net.circuit));
-    if (st != core::Status::Ok && st != core::Status::NotConverged)
-        m_errors << QStringLiteral("Simulation: Netzliste nicht verwendbar");
+    // Zustaende (Ladung, Temperatur, zerstoert ...) uebernimmt die Bruecke im Simulations-Thread
+    m_topology = m_bridge.setCircuit(std::move(m_net.circuit));
     emit boardChanged();
-    emit stateChanged();
-}
-
-void LabController::applyDesk() {
-    // Bedienhandlungen wirken direkt auf die Bauteile des Simulators (kein Topologiewechsel)
-    const auto it = m_net.desk.find(model::desk_id::kMainSwitch);
-    if (it != m_net.desk.end())
-        static_cast<core::Switch&>(m_sim.circuit().component(it->second)).setClosed(m_board.desk.mainSwitch);
 }
 
 void LabController::setMainSwitch(bool on) {
     if (m_board.desk.mainSwitch == on) return;
     m_board.desk.mainSwitch = on;
-    applyDesk();
+    m_bridge.post({model::desk_id::kMainSwitch, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
     emit deskChanged();
 }
 
-void LabController::advance(double seconds) {
-    const int steps = static_cast<int>(std::lround(seconds / core::kDefaultStepS));
-    for (int i = 0; i < steps; ++i) m_sim.step();
-    emit stateChanged();
+void LabController::setTimeScale(double scale) {
+    if (scale == m_timeScale) return;
+    m_timeScale = scale;
+    m_bridge.setTimeScale(scale);
+    emit deskChanged();
 }
 
 void LabController::onFrame() {
     const double elapsed = m_clock.restart() / 1000.0;
-    m_lagS = std::min(m_lagS + elapsed, kMaxCatchUpS);
-    while (m_lagS >= core::kDefaultStepS) {
-        m_sim.step();
-        m_lagS -= core::kDefaultStepS;
+    m_bridge.latest(m_snap);
+    static const QString invalid = QStringLiteral("Simulation: Netzliste nicht verwendbar");
+    if (m_snap.lastStatus == core::Status::InvalidCircuit && !m_errors.contains(invalid)) {
+        m_errors << invalid;
+        emit boardChanged();
     }
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
@@ -92,8 +82,8 @@ void LabController::onFrame() {
 
 double LabController::voltage(const QString& anchor) const {
     core::NodeId n = 0;
-    if (!m_net.nodeOf(anchor.toStdString(), n)) return 0.0;
-    return m_sim.probe().voltage(n);
+    if (!snapshotCurrent() || !m_net.nodeOf(anchor.toStdString(), n) || n >= m_snap.nodeVolt.size()) return 0.0;
+    return m_snap.nodeVolt[n];
 }
 
 int LabController::voltageBars(const QString& anchor) {
@@ -128,8 +118,8 @@ int LabController::voltageBars(const QString& anchor) {
 QVariantMap LabController::partState(const QString& id) const {
     QVariantMap m;
     const auto it = m_net.parts.find(id.toStdString());
-    if (it == m_net.parts.end() || it->second >= m_sim.probe().readings.size()) return m;
-    const core::ComponentReading& r = m_sim.probe().readings[it->second];
+    if (!snapshotCurrent() || it == m_net.parts.end() || it->second >= m_snap.readings.size()) return m;
+    const core::ComponentReading& r = m_snap.readings[it->second];
     m.insert(QStringLiteral("currentmA"), r.currentA * 1e3);
     m.insert(QStringLiteral("level"), r.level);
     m.insert(QStringLiteral("overloaded"), r.overloaded);
