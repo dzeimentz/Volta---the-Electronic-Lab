@@ -53,6 +53,12 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   - Ab Stufe 3: langer Druck zeigt Frequenz in Hz. Bleibt im Klassenmodus aktiv.
 - **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
+  - Umgesetzt (aus Phase 4 vorgezogen, `MeterPanel.qml`): Geraet rechts neben der Grundplatte, ein-/ausblendbar ueber
+    »V A Ω« in der Werkzeugleiste (Ausblenden nicht, solange Leitungen an den Buchsen stecken; Buchsen nur
+    eingeblendet steckbar). Drehschalter V / A / Ω, Umschalter digital/analog. Analog nur im V-Bereich (der Kern
+    liefert den Zeigerausschlag fuer V mit selbsttaetiger Bereichswahl 1/3/10/30 V). Anzeige mit Vorsatz
+    (mV/V, µA/mA/A, Ω/kΩ/MΩ, `model/meter_display.hpp`), »OL«, »U !« mit »Spannung abschalten!«, durchgebrannte
+    Sicherung mit »Sicherung tauschen« (Befehl).
 - **Pultleiste**: Felder mit fuenf Steckplaetzen und Bezeichnung; Gruppenlinien mit Schaltzeichen
   (Batterie, P1, P2, Schalter, Lautsprecher). Tippen auf Schaltzeichen hebt Gruppe und Pultelement hervor.
 

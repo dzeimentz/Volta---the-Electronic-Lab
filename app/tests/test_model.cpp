@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "model/anchor.hpp"
+#include "model/meter_display.hpp"
 #include "model/netlist_builder.hpp"
 #include "services/content_repository.hpp"
 #include "volta/core/components/capacitor.hpp"
@@ -42,6 +43,30 @@ private:
     }
 
 private slots:
+    // Anzeige des Messgeraets: drei gueltige Stellen, passender Vorsatz
+    void meterDisplayFormat() {
+        using core::MeterMode;
+        auto f = [](MeterMode m, double v) {
+            const model::MeterText t = model::formatMeter(m, v);
+            return t.value + " " + t.unit;
+        };
+        QCOMPARE(f(MeterMode::Volt, 9.0), std::string("9.00 V"));
+        QCOMPARE(f(MeterMode::Volt, 12.34), std::string("12.3 V"));
+        QCOMPARE(f(MeterMode::Volt, 0.4503), std::string("450 mV"));
+        QCOMPARE(f(MeterMode::Volt, 0.9998), std::string("1.00 V")); // Rundung wechselt den Vorsatz
+        QCOMPARE(f(MeterMode::Volt, -4.5), std::string("-4.50 V"));
+        QCOMPARE(f(MeterMode::Volt, 0.0), std::string("0.00 V"));
+        QCOMPARE(f(MeterMode::Volt, -1e-9), std::string("0.00 mV"));
+        QCOMPARE(f(MeterMode::Ampere, 0.0192), std::string("19.2 mA"));
+        QCOMPARE(f(MeterMode::Ampere, 0.25), std::string("250 mA"));
+        QCOMPARE(f(MeterMode::Ampere, 5e-6), std::string("5.00 \u00B5A"));
+        QCOMPARE(f(MeterMode::Ampere, 0.0), std::string("0.00 mA"));
+        QCOMPARE(f(MeterMode::Ohm, 470.0), std::string("470 \u03A9"));
+        QCOMPARE(f(MeterMode::Ohm, 1000.0), std::string("1.00 k\u03A9"));
+        QCOMPARE(f(MeterMode::Ohm, 2.2e6), std::string("2.20 M\u03A9"));
+        QCOMPARE(f(MeterMode::Ohm, 0.5), std::string("0.50 \u03A9"));
+    }
+
     void initTestCase() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY2(repo.loadCatalog(m_catalog), qPrintable(repo.lastError()));

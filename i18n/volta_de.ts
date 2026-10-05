@@ -233,15 +233,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Messgerät ausblenden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Messgerät einblenden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Leitungsfarbe %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Zeit %1 s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Messgerät</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -282,6 +286,65 @@
     </message>
     <message>
         <source>Leitung löschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MeterPanel</name>
+    <message>
+        <source>Messgerät</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sicherung durchgebrannt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Messbereich überschritten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sicherung durchgebrannt!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spannung abschalten!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zu viel Spannung für den Zeiger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Messart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spannung messen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strom messen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widerstand messen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>digital</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zeigeranzeige</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>analog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sicherung tauschen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -233,16 +233,20 @@
         <translation>Plus de cases par rangée</translation>
     </message>
     <message>
+        <source>Messgerät ausblenden</source>
+        <translation>Masquer le multimètre</translation>
+    </message>
+    <message>
+        <source>Messgerät einblenden</source>
+        <translation>Afficher le multimètre</translation>
+    </message>
+    <message>
         <source>Leitungsfarbe %1</source>
         <translation>Couleur du fil %1</translation>
     </message>
     <message>
         <source>Zeit %1 s</source>
         <translation>Temps %1 s</translation>
-    </message>
-    <message>
-        <source>Messgerät</source>
-        <translation>Multimètre</translation>
     </message>
     <message>
         <source>Spannungsanzeige ein/aus</source>
@@ -283,6 +287,65 @@
     <message>
         <source>Leitung löschen</source>
         <translation>Supprimer le fil</translation>
+    </message>
+</context>
+<context>
+    <name>MeterPanel</name>
+    <message>
+        <source>Messgerät</source>
+        <translation>Multimètre</translation>
+    </message>
+    <message>
+        <source>Sicherung durchgebrannt</source>
+        <translation>Fusible grillé</translation>
+    </message>
+    <message>
+        <source>Messbereich überschritten</source>
+        <translation>Hors de la plage de mesure</translation>
+    </message>
+    <message>
+        <source>Sicherung durchgebrannt!</source>
+        <translation>Fusible grillé !</translation>
+    </message>
+    <message>
+        <source>Spannung abschalten!</source>
+        <translation>Coupe la tension !</translation>
+    </message>
+    <message>
+        <source>Zu viel Spannung für den Zeiger</source>
+        <translation>Trop de tension pour l&apos;aiguille</translation>
+    </message>
+    <message>
+        <source>Messart</source>
+        <translation>Type de mesure</translation>
+    </message>
+    <message>
+        <source>Spannung messen</source>
+        <translation>Mesurer la tension</translation>
+    </message>
+    <message>
+        <source>Strom messen</source>
+        <translation>Mesurer le courant</translation>
+    </message>
+    <message>
+        <source>Widerstand messen</source>
+        <translation>Mesurer la résistance</translation>
+    </message>
+    <message>
+        <source>digital</source>
+        <translation>numérique</translation>
+    </message>
+    <message>
+        <source>Zeigeranzeige</source>
+        <translation>Affichage à aiguille</translation>
+    </message>
+    <message>
+        <source>analog</source>
+        <translation>analogique</translation>
+    </message>
+    <message>
+        <source>Sicherung tauschen</source>
+        <translation>Changer le fusible</translation>
     </message>
 </context>
 <context>

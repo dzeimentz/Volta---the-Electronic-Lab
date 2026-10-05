@@ -114,6 +114,10 @@ void LabSession::applyBoard(const Board& board, const std::vector<sim::StateOver
     const DeskState desk = m_board.desk; // Bedienhandlungen gehoeren nicht zum Verlauf
     m_board = board;
     m_board.desk = desk;
+    // Leitung an einer Messbuchse (z. B. durch Rueckgaengig): Messgeraet sichtbar machen
+    for (const auto& w : m_board.wires)
+        if (classifyAnchor(w.from) == AnchorKind::MeterJack || classifyAnchor(w.to) == AnchorKind::MeterJack)
+            m_board.desk.meterVisible = true;
     rebuild(states);
 }
 
@@ -405,6 +409,38 @@ void LabSession::setPot(int which, double position) {
 
 void LabSession::setMotorBlocked(const std::string& id, bool blocked) {
     m_bridge.post({id, sim::Action::Type::SetMotorBlocked, blocked ? 1.0 : 0.0});
+}
+
+void LabSession::setMeterMode(core::MeterMode mode) {
+    m_board.desk.meterMode = mode;
+    m_bridge.post({desk_id::kMeter, sim::Action::Type::SetMeterMode, static_cast<double>(mode)});
+}
+
+void LabSession::setMeterAnalog(bool analog) {
+    m_board.desk.meterAnalog = analog;
+    m_bridge.post({desk_id::kMeter, sim::Action::Type::SetMeterAnalog, analog ? 1.0 : 0.0});
+}
+
+bool LabSession::setMeterVisible(bool visible) {
+    if (!visible) {
+        for (const auto& w : m_board.wires)
+            if (classifyAnchor(w.from) == AnchorKind::MeterJack || classifyAnchor(w.to) == AnchorKind::MeterJack)
+                return fail("Erst die Leitungen vom Messgeraet abziehen");
+    }
+    m_board.desk.meterVisible = visible;
+    return true;
+}
+
+bool LabSession::replaceMeterFuse() {
+    // neue Sicherung = Messgeraet im Grundzustand (Befehl im Verlauf, wie Reparieren)
+    return push(QStringLiteral("Sicherung tauschen"), m_board, BoardCommand::NoMerge, {},
+                {{desk_id::kMeter, core::ComponentState{}}});
+}
+
+const core::ComponentReading* LabSession::deskReading(const std::string& deskId) const {
+    const auto it = m_net.desk.find(deskId);
+    if (!snapshotCurrent() || it == m_net.desk.end() || it->second >= m_snap.readings.size()) return nullptr;
+    return &m_snap.readings[it->second];
 }
 
 } // namespace volta::model

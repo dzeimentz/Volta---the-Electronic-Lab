@@ -233,16 +233,20 @@
         <translation>More fields per row</translation>
     </message>
     <message>
+        <source>Messgerät ausblenden</source>
+        <translation>Hide meter</translation>
+    </message>
+    <message>
+        <source>Messgerät einblenden</source>
+        <translation>Show meter</translation>
+    </message>
+    <message>
         <source>Leitungsfarbe %1</source>
         <translation>Wire colour %1</translation>
     </message>
     <message>
         <source>Zeit %1 s</source>
         <translation>Time %1 s</translation>
-    </message>
-    <message>
-        <source>Messgerät</source>
-        <translation>Meter</translation>
     </message>
     <message>
         <source>Spannungsanzeige ein/aus</source>
@@ -283,6 +287,65 @@
     <message>
         <source>Leitung löschen</source>
         <translation>Delete wire</translation>
+    </message>
+</context>
+<context>
+    <name>MeterPanel</name>
+    <message>
+        <source>Messgerät</source>
+        <translation>Meter</translation>
+    </message>
+    <message>
+        <source>Sicherung durchgebrannt</source>
+        <translation>Fuse blown</translation>
+    </message>
+    <message>
+        <source>Messbereich überschritten</source>
+        <translation>Out of range</translation>
+    </message>
+    <message>
+        <source>Sicherung durchgebrannt!</source>
+        <translation>Fuse blown!</translation>
+    </message>
+    <message>
+        <source>Spannung abschalten!</source>
+        <translation>Switch off the voltage!</translation>
+    </message>
+    <message>
+        <source>Zu viel Spannung für den Zeiger</source>
+        <translation>Too much voltage for the needle</translation>
+    </message>
+    <message>
+        <source>Messart</source>
+        <translation>Measurement type</translation>
+    </message>
+    <message>
+        <source>Spannung messen</source>
+        <translation>Measure voltage</translation>
+    </message>
+    <message>
+        <source>Strom messen</source>
+        <translation>Measure current</translation>
+    </message>
+    <message>
+        <source>Widerstand messen</source>
+        <translation>Measure resistance</translation>
+    </message>
+    <message>
+        <source>digital</source>
+        <translation>digital</translation>
+    </message>
+    <message>
+        <source>Zeigeranzeige</source>
+        <translation>Needle display</translation>
+    </message>
+    <message>
+        <source>analog</source>
+        <translation>analogue</translation>
+    </message>
+    <message>
+        <source>Sicherung tauschen</source>
+        <translation>Replace fuse</translation>
     </message>
 </context>
 <context>

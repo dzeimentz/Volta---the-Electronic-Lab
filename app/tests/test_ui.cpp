@@ -326,6 +326,29 @@ private slots:
         QTRY_COMPARE(panel->width(), wide);
     }
 
+    // Messgeraet: ein-/ausblenden, Messart am Drehschalter, analog nur im V-Bereich
+    void meterPanelControls() {
+        m_lab->startFreeLab();
+        QVERIFY(!m_lab->meterVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterToggle"))));
+        QTRY_VERIFY(m_lab->meterVisible());
+        QTRY_VERIFY(item(QStringLiteral("field_MESS:COM")) != nullptr);
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterMode_1"))));
+        QTRY_COMPARE(m_lab->meterMode(), 1);
+        QVERIFY(!item(QStringLiteral("meterAnalog"))->isEnabled());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterMode_0"))));
+        QTRY_COMPARE(m_lab->meterMode(), 0);
+        QTRY_VERIFY(item(QStringLiteral("meterAnalog"))->isEnabled());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterAnalog"))));
+        QTRY_VERIFY(m_lab->meterAnalog());
+        m_lab->setMeterMode(2); // Ohm schaltet analog ab
+        QVERIFY(!m_lab->meterAnalog());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterToggle"))));
+        QTRY_VERIFY(!m_lab->meterVisible());
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("field_MESS:COM")) == nullptr);
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_language.reset();

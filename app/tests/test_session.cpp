@@ -367,6 +367,69 @@ private slots:
         QCOMPARE(a.partPins.at("T1"), (std::vector<int>{1, 1, 3, 3})); // Fuesse zur Blockmitte
     }
 
+    // Dreifach-Messgeraet ueber die Sitzung: V, A und Ohm messen ehrlich (Abweichung < 2 %)
+    void meterMeasures() {
+        auto s = session();
+        QVERIFY(!s->addWire("P:+9V", "MESS:VOHM", "rot")); // ausgeblendet: Buchsen nicht steckbar
+        QVERIFY(s->setMeterVisible(true));
+        s->setMainSwitch(true);
+        QVERIFY(s->addWire("P:+9V", "MESS:VOHM", "rot"));
+        QVERIFY(s->addWire("P:0V", "MESS:COM", "schwarz"));
+        run(*s, 0.05);
+        const core::ComponentReading* r = s->deskReading(model::desk_id::kMeter);
+        QVERIFY(r);
+        QVERIFY2(std::fabs(r->displayValue - 9.0) < 0.18, qPrintable(QString::number(r->displayValue)));
+        QVERIFY(!s->setMeterVisible(false)); // Leitungen stecken noch
+        // Strom durch 470 Ohm
+        QVERIFY(s->removeWire("L1"));
+        QVERIFY(s->addPart("widerstand", "B6", Orientation::Horizontal, Span::Short, nullptr, 470.0));
+        QVERIFY(s->addWire("P:+9V", "B6", "rot"));
+        QVERIFY(s->addWire("B7", "MESS:A", "rot"));
+        s->setMeterMode(core::MeterMode::Ampere);
+        run(*s, 0.05);
+        r = s->deskReading(model::desk_id::kMeter);
+        QVERIFY2(std::fabs(r->displayValue - 9.0 / 470.1) < 0.02 * 9.0 / 470.1, qPrintable(QString::number(r->displayValue)));
+        // Widerstand 470 Ohm (Batterie getrennt: nur Messquelle)
+        // Leitungen jetzt: L1 +9V-B6 (freie Kennung wiederverwendet), L2 0V-COM, L3 B7-A
+        QVERIFY(s->removeWire("L1"));
+        QVERIFY(s->removeWire("L3"));
+        QVERIFY(s->removeWire("L2"));
+        QVERIFY(s->addWire("B6", "MESS:VOHM", "rot"));
+        QVERIFY(s->addWire("B7", "MESS:COM", "schwarz"));
+        s->setMeterMode(core::MeterMode::Ohm);
+        run(*s, 0.05);
+        r = s->deskReading(model::desk_id::kMeter);
+        QVERIFY2(std::fabs(r->displayValue - 470.0) < 9.4, qPrintable(QString::number(r->displayValue)));
+        // abziehen, dann ausblenden; Rueckgaengig holt die Leitung und blendet wieder ein
+        QVERIFY(s->removeWire("L1"));
+        QVERIFY(s->removeWire("L2"));
+        QVERIFY(s->setMeterVisible(false));
+        s->undoStack().undo();
+        QVERIFY(s->board().desk.meterVisible);
+    }
+
+    // Sicherung: Kurzschluss ueber den A-Eingang brennt sie durch; tauschen ist ein Befehl
+    void meterFuseReplace() {
+        auto s = session();
+        QVERIFY(s->setMeterVisible(true));
+        s->setMainSwitch(true);
+        s->setMeterMode(core::MeterMode::Ampere);
+        QVERIFY(s->addWire("P:+9V", "MESS:A", "rot"));
+        QVERIFY(s->addWire("MESS:COM", "P:0V", "schwarz"));
+        run(*s, 0.1);
+        const core::ComponentReading* r = s->deskReading(model::desk_id::kMeter);
+        QVERIFY(r && (r->displayFlags & core::kDisplayFuseBlown));
+        QVERIFY(s->removeWire("L1"));
+        QVERIFY(s->replaceMeterFuse());
+        run(*s, 0.05);
+        r = s->deskReading(model::desk_id::kMeter);
+        QVERIFY(r && !(r->displayFlags & core::kDisplayFuseBlown));
+        s->undoStack().undo(); // Sicherung wieder durchgebrannt
+        run(*s, 0.05);
+        r = s->deskReading(model::desk_id::kMeter);
+        QVERIFY(r && (r->displayFlags & core::kDisplayFuseBlown));
+    }
+
     void boardColumnsAreACommand() {
         auto s = session();
         QCOMPARE(s->board().columns, 12);

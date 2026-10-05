@@ -79,6 +79,14 @@ public:
     void setDeskSwitch(bool closed);
     void setPot(int which, double position); // Pult-Drehregler 1/2
     void setMotorBlocked(const std::string& id, bool blocked);
+    // Dreifach-Messgeraet: Messart und Anzeigeart (Bedienhandlungen); Ein-/Ausblenden (nicht, solange Leitungen an
+    // den Buchsen stecken); Sicherung tauschen ist ein Befehl (wie Reparieren).
+    void setMeterMode(core::MeterMode mode);
+    void setMeterAnalog(bool analog);
+    bool setMeterVisible(bool visible);
+    bool replaceMeterFuse();
+    // Messwert eines Pultbauteils (z. B. desk_id::kMeter) aus dem aktuellen Schnappschuss
+    const core::ComponentReading* deskReading(const std::string& deskId) const;
 
     // ---- Erfolgspruefung (laeuft im Simulations-Thread nach jedem Schritt)
     // Bauteilbezuege der Bedingung beziehen sich auf die Vorlage; die Zuordnung zum Aufbau des Kindes erfolgt ueber

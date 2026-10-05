@@ -41,6 +41,10 @@ class LabController : public QObject {
     Q_PROPERTY(double pot1 READ pot1 WRITE setPot1 NOTIFY deskChanged)
     Q_PROPERTY(double pot2 READ pot2 WRITE setPot2 NOTIFY deskChanged)
     Q_PROPERTY(bool deskSwitch READ deskSwitch WRITE setDeskSwitch NOTIFY deskChanged)
+    // Dreifach-Messgeraet: 0 V, 1 A, 2 Ohm; analog nur im V-Bereich
+    Q_PROPERTY(bool meterVisible READ meterVisible WRITE setMeterVisible NOTIFY deskChanged)
+    Q_PROPERTY(int meterMode READ meterMode WRITE setMeterMode NOTIFY deskChanged)
+    Q_PROPERTY(bool meterAnalog READ meterAnalog WRITE setMeterAnalog NOTIFY deskChanged)
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
     Q_PROPERTY(bool showSimTime READ showSimTime CONSTANT) // Entwicklerhilfe VOLTA_SHOW_TIME=1
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
@@ -89,6 +93,12 @@ public:
     double pot2() const { return m_session->board().desk.p2; }
     void setPot2(double v) { setPot(2, v); }
     bool deskSwitch() const { return m_session->board().desk.switchClosed; }
+    bool meterVisible() const { return m_session->board().desk.meterVisible; }
+    void setMeterVisible(bool visible);
+    int meterMode() const { return static_cast<int>(m_session->board().desk.meterMode); }
+    void setMeterMode(int mode);
+    bool meterAnalog() const { return m_session->board().desk.meterAnalog; }
+    void setMeterAnalog(bool analog);
     double simTime() const;
     bool showSimTime() const { return qEnvironmentVariableIntValue("VOLTA_SHOW_TIME") == 1; }
     double timeScale() const { return m_timeScale; }
@@ -155,6 +165,10 @@ public:
     Q_INVOKABLE void setDeskSwitch(bool closed);
     Q_INVOKABLE void setPot(int which, double position);
     Q_INVOKABLE void setMotorBlocked(const QString& id, bool blocked);
+    // Anzeige des Messgeraets: text, unit (Dezimalzeichen der Sprache), level (Zeiger, analog V), rangeV,
+    // overrange, foreignVoltage, fuseBlown, valid
+    Q_INVOKABLE QVariantMap meterState();
+    Q_INVOKABLE bool replaceMeterFuse(); // Befehl
 
     model::LabSession& session() { return *m_session; }
 
@@ -188,6 +202,7 @@ private:
     QTimer m_timer;
     QElapsedTimer m_clock;
     double m_sinceNotifyS = 0.0;
+    double m_meterRangeV = 30.0; // zuletzt erkannter Analogbereich (fuer die Skala)
 };
 
 } // namespace volta

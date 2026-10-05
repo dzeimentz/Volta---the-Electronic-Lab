@@ -13,7 +13,7 @@ Item {
     // ------------------------------------------------------------------ Geometrie
     readonly property var deskNames: ["P:+9V", "P:0V", "P:P1a", "P:P1s", "P:P1b", "P:P2a", "P:P2s", "P:P2b",
                                       "P:S1", "P:S2", "P:LS1", "P:LS2"]
-    // Buchsen des Dreifach-Messgeraets: eigener Bereich rechts neben der Grundplatte (Zeilen B, C, D)
+    // Buchsen des Dreifach-Messgeraets: unten im Messgeraet rechts neben der Grundplatte (nur eingeblendet)
     readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
     readonly property int deskStripWidth: deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
     readonly property int meterX: boardWidth + Theme.fieldGap
@@ -28,7 +28,7 @@ Item {
     readonly property int boardWidth: columns * Theme.fieldWidth + (columns - 1) * Theme.fieldGap
     readonly property int moduleY: boardY + rows.length * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
     readonly property var allAnchors: {
-        let a = deskNames.concat(meterNames)
+        let a = controller.meterVisible ? deskNames.concat(meterNames) : deskNames.slice()
         for (let r = 0; r < rows.length; ++r)
             for (let c = 1; c <= columns; ++c) a.push(rows[r] + c)
         for (let m = 1; m <= slots; ++m) a.push("M:" + m)
@@ -48,8 +48,9 @@ Item {
     function anchorPoint(name) {
         const m = meterNames.indexOf(name)
         if (m >= 0)
-            return Qt.point(meterX + Theme.meterAreaWidth / 2,
-                            boardY + (m + 1) * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldHeight / 2)
+            return Qt.point(meterX + (Theme.meterAreaWidth - 3 * Theme.deskFieldWidth - 2 * Theme.deskFieldGap) / 2
+                            + Theme.deskFieldWidth / 2 + m * (Theme.deskFieldWidth + Theme.deskFieldGap),
+                            boardY + 4 * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldHeight / 2)
         let i = deskNames.indexOf(name)
         if (i >= 0)
             return Qt.point(i * (Theme.deskFieldWidth + Theme.deskFieldGap) + Theme.deskFieldWidth / 2,
@@ -331,6 +332,31 @@ Item {
                     Accessible.name: qsTr("Mehr Felder je Reihe")
                 }
             }
+            // Messgeraet ein-/ausblenden
+            ToolButton {
+                objectName: "meterToggle"
+                height: Theme.control
+                width: 72
+                checkable: true
+                checked: lab.controller.meterVisible
+                onClicked: lab.controller.meterVisible = !lab.controller.meterVisible
+                ToolTip.visible: hovered
+                ToolTip.text: lab.controller.meterVisible ? qsTr("Messgerät ausblenden") : qsTr("Messgerät einblenden")
+                Accessible.name: ToolTip.text
+                contentItem: Label {
+                    text: "V A Ω"
+                    color: "white"
+                    font.pixelSize: 15
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
             // Farbe fuer neue Leitungen
             Row {
                 anchors.verticalCenter: parent.verticalCenter
@@ -403,7 +429,8 @@ Item {
             objectName: "canvas"
             x: Theme.margin
             y: Theme.margin
-            width: Math.max(lab.meterX + Theme.meterAreaWidth, lab.deskStripWidth)
+            width: Math.max(lab.controller.meterVisible ? lab.meterX + Theme.meterAreaWidth : lab.boardWidth,
+                            lab.deskStripWidth)
             height: lab.moduleY + Theme.fieldHeight
             // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
             transformOrigin: Item.TopLeft
@@ -434,31 +461,15 @@ Item {
                 }
             }
 
-            // Messgeraet: Rahmen mit Titel um die drei Buchsen (Anzeige und Drehschalter folgen in Schritt B)
-            Rectangle {
-                objectName: "meterArea"
+            // Dreifach-Messgeraet (eingeblendet ueber die Werkzeugleiste); die Buchsen liegen unten darin
+            MeterPanel {
+                objectName: "meterPanel"
+                visible: lab.controller.meterVisible
+                controller: lab.controller
                 x: lab.meterX
-                y: lab.boardY - 4
+                y: lab.boardY - 6
                 width: Theme.meterAreaWidth
-                height: 4 * (Theme.fieldHeight + Theme.fieldGap) + 8 - Theme.fieldGap
-                radius: 10
-                color: "#E4E8EE"
-                border.color: "#9AA6B4"
-                GroupLine {
-                    y: 10
-                    fromX: 8
-                    toX: Theme.meterAreaWidth - 8
-                    symbol: "V A Ω"
-                    onTapped: lab.highlightGroup = lab.highlightGroup === "messgeraet" ? "" : "messgeraet"
-                }
-                Label {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    y: 38
-                    text: qsTr("Messgerät")
-                    font.pixelSize: 13
-                    font.bold: true
-                    color: Theme.navy
-                }
+                height: 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
             }
 
             // Alle Anschlusspunkte: Pultleiste, Messgeraet, Grundplatte, Modulleiste

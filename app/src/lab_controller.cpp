@@ -4,7 +4,13 @@
 #include <QFile>
 #include <QSysInfo>
 
+#include <QLocale>
+
+#include <algorithm>
+#include <cmath>
 #include <cstdlib>
+
+#include "model/meter_display.hpp"
 
 namespace volta {
 
@@ -392,6 +398,51 @@ void LabController::setPot(int which, double position) {
     m_session->setPot(which, position);
     emit deskChanged();
 }
+void LabController::setMeterVisible(bool visible) {
+    if (result(m_session->setMeterVisible(visible))) {
+        emit deskChanged();
+        emit boardChanged(); // Buchsen erscheinen bzw. verschwinden
+    }
+}
+
+void LabController::setMeterMode(int mode) {
+    m_session->setMeterMode(static_cast<core::MeterMode>(std::clamp(mode, 0, 2)));
+    if (mode != 0 && m_session->board().desk.meterAnalog) m_session->setMeterAnalog(false); // analog nur fuer V
+    emit deskChanged();
+}
+
+void LabController::setMeterAnalog(bool analog) {
+    m_session->setMeterAnalog(analog && m_session->board().desk.meterMode == core::MeterMode::Volt);
+    emit deskChanged();
+}
+
+bool LabController::replaceMeterFuse() { return result(m_session->replaceMeterFuse()); }
+
+QVariantMap LabController::meterState() {
+    QVariantMap m;
+    const core::ComponentReading* r = m_session->deskReading(model::desk_id::kMeter);
+    m.insert(QStringLiteral("valid"), r != nullptr);
+    if (!r) return m;
+    const auto mode = m_session->board().desk.meterMode;
+    const model::MeterText t = model::formatMeter(mode, r->displayValue);
+    QString value = QString::fromStdString(t.value);
+    value.replace(QLatin1Char('.'), QLocale().decimalPoint());
+    if (std::fabs(r->level) > 1e-9) {
+        // Bereich aus Messwert/Ausschlag; auf die Bereiche des Geraets runden (1, 3, 10, 30 V)
+        const double range = std::fabs(r->displayValue / r->level);
+        for (double cand : {1.0, 3.0, 10.0, 30.0})
+            if (std::fabs(range - cand) < 0.05 * cand) m_meterRangeV = cand;
+    }
+    m.insert(QStringLiteral("text"), value);
+    m.insert(QStringLiteral("unit"), QString::fromStdString(t.unit));
+    m.insert(QStringLiteral("level"), r->level);
+    m.insert(QStringLiteral("rangeV"), m_meterRangeV);
+    m.insert(QStringLiteral("overrange"), (r->displayFlags & core::kDisplayOverrange) != 0);
+    m.insert(QStringLiteral("foreignVoltage"), (r->displayFlags & core::kDisplayForeignVoltage) != 0);
+    m.insert(QStringLiteral("fuseBlown"), (r->displayFlags & core::kDisplayFuseBlown) != 0);
+    return m;
+}
+
 void LabController::setMotorBlocked(const QString& id, bool blocked) {
     m_session->setMotorBlocked(ss(id), blocked);
 }

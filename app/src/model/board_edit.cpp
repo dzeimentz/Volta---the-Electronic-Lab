@@ -288,6 +288,7 @@ bool canWire(const Board& board, const std::string& from, const std::string& to,
     auto valid = [&board](const std::string& a) {
         const AnchorKind k = classifyAnchor(a);
         if (k == AnchorKind::Invalid || !withinBoard(board, a)) return false;
+        if (k == AnchorKind::MeterJack && !board.desk.meterVisible) return false; // Messgeraet ausgeblendet
         if (k != AnchorKind::ModulePin) return true;
         const std::string id = a.substr(0, a.find('.'));
         return std::any_of(board.modules.begin(), board.modules.end(), [&id](const auto& m) { return m.id == id; });

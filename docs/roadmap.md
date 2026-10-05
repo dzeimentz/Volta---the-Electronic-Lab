@@ -35,6 +35,8 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 - 1.6 Drei gefuehrte Experimente der Stufe 1 (1.1 Stromkreis mit Gluehlaempchen, 1.2 Klingel mit Taster und Summer,
   1.3 Motor am Pultschalter) mit einfachem Ablauf Frage -> Aufbau mit gestuften Hilfen und Musteraufbau -> Erfolg
   mit Erklaerung; Erfolgspruefung im Simulations-Thread (`StepObserver`). Lokales Release: `tools/deploy_release.py`.
+- Nach Phase 1 vorgezogen: Sprachumschaltung DE/FR/EN (LU folgt) und Info oben rechts, Startbildschirm (Desktop),
+  Dreifach-Messgeraet bedienbar (Phase 4), Breite der Grundplatte 8/10/12, Transistor auf 2-x-2-Platine.
 - Offen: Android-Build (Kit fehlt auf dem Entwicklungsrechner), Erprobung mit Kindern, Begleitfigur.
 
 ## Naechste konkrete Schritte (Phase 0)

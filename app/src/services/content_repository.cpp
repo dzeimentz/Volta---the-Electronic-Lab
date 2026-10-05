@@ -137,6 +137,9 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
         out.wires.push_back(std::move(w));
     }
     for (const QJsonValue& v : vorlage.value(QStringLiteral("anzeigen")).toArray()) out.voltageDisplays.push_back(str(v));
+    // Messbuchsen in der Vorlage: Messgeraet eingeblendet
+    for (const auto& w : out.wires)
+        if (w.from.rfind("MESS:", 0) == 0 || w.to.rfind("MESS:", 0) == 0) out.desk.meterVisible = true;
     // Pultstellung zu Beginn (Hauptschalter bleibt aus: Einschalten ist Sache des Kindes)
     const QJsonObject pult = vorlage.value(QStringLiteral("pult_stellung")).toObject();
     if (pult.contains(QStringLiteral("batterie_V"))) {

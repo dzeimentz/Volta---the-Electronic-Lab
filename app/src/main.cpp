@@ -96,6 +96,34 @@ int main(int argc, char* argv[]) {
     if (const int columns = qEnvironmentVariableIntValue("VOLTA_DEMO_COLUMNS"); columns > 0)
         QTimer::singleShot(400, &lab, [&lab, columns] { lab.setBoardColumns(columns); });
 
+    // Entwicklerhilfe: VOLTA_DEMO_METER=v|analog|a|ohm baut eine Messung auf (Sichtpruefung des Messgeraets):
+    // Spannung der Batterie, Strom durch 470 Ohm, Widerstand 470 Ohm
+    const QString demoMeter = qEnvironmentVariable("VOLTA_DEMO_METER");
+    if (!demoMeter.isEmpty())
+        QTimer::singleShot(300, &lab, [&lab, demoMeter] {
+            lab.startFreeLab();
+            lab.setMeterVisible(true);
+            lab.setMainSwitch(true);
+            if (demoMeter == QLatin1String("v") || demoMeter == QLatin1String("analog")) {
+                lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("MESS:VOHM"), QStringLiteral("rot"));
+                lab.addWire(QStringLiteral("P:0V"), QStringLiteral("MESS:COM"), QStringLiteral("schwarz"));
+                lab.setMeterAnalog(demoMeter == QLatin1String("analog"));
+            } else {
+                lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B6"), false, false); // B6-B7, 470 Ohm
+                lab.setPartValue(QStringLiteral("R1"), 470.0);
+                if (demoMeter == QLatin1String("a")) {
+                    lab.setMeterMode(1);
+                    lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("B6"), QStringLiteral("rot"));
+                    lab.addWire(QStringLiteral("B7"), QStringLiteral("MESS:A"), QStringLiteral("rot"));
+                    lab.addWire(QStringLiteral("MESS:COM"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+                } else {
+                    lab.setMeterMode(2);
+                    lab.addWire(QStringLiteral("B6"), QStringLiteral("MESS:VOHM"), QStringLiteral("rot"));
+                    lab.addWire(QStringLiteral("B7"), QStringLiteral("MESS:COM"), QStringLiteral("schwarz"));
+                }
+            }
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

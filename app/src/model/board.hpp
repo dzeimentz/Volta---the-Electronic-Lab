@@ -45,6 +45,7 @@ struct DeskState {
     double p2 = 0.5;            // Drehregler P2
     core::MeterMode meterMode = core::MeterMode::Volt;
     bool meterAnalog = false;
+    bool meterVisible = false;  // Messgeraet eingeblendet (Bedienhandlung; Buchsen nur dann steckbar)
 };
 
 // Aufbau: alles, was das Kind gesteckt, gezogen und eingestellt hat. Die Netzliste fuer den Kern wird daraus bei
