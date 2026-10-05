@@ -3,13 +3,19 @@ find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Multimedi
 qt_standard_project_setup(REQUIRES 6.8)
 
 set(VOLTA_APP_NAME "Volta 1 - Das Elektronik-Labor")
+set(VOLTA_APP_SHORT_NAME "Volta 1") # Name unter dem Symbol (Android, iPadOS)
 if(VOLTA_EDITION STREQUAL "volta2")
     set(VOLTA_APP_NAME "Volta 2 - Das Elektronik-Labor")
+    set(VOLTA_APP_SHORT_NAME "Volta 2")
 elseif(VOLTA_EDITION STREQUAL "volta3")
     set(VOLTA_APP_NAME "Volta 3 - Das Elektronik-Labor")
+    set(VOLTA_APP_SHORT_NAME "Volta 3")
 elseif(VOLTA_EDITION STREQUAL "zuse1")
     set(VOLTA_APP_NAME "Zuse 1 - Computertechnik fuer Einsteiger")
+    set(VOLTA_APP_SHORT_NAME "Zuse 1")
 endif()
+# App-ID (Android-Paketname, iOS-Bundle-ID); vor der ersten Veroeffentlichung festlegen, danach unveraenderlich
+set(VOLTA_APP_ID "com.dcsoftwareengineering.${VOLTA_EDITION}" CACHE STRING "App-ID fuer Android und iOS")
 
 # Schaltungsmodell und Dienste: ohne Oberflaeche testbar (Qt Core fuer JSON)
 add_library(volta_model STATIC
@@ -69,6 +75,18 @@ set_target_properties(volta_app PROPERTIES
     MACOSX_BUNDLE ON
     QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android"
     QT_ANDROID_MIN_SDK_VERSION 26)
+
+# Android (docs/platforms.md): Manifest, Symbole und Startthema in packaging/android; Versionscode aus der
+# Projektversion (0.1.0 -> 100, 1.2.3 -> 10203)
+if(ANDROID)
+    math(EXPR VOLTA_VERSION_CODE
+         "${PROJECT_VERSION_MAJOR} * 10000 + ${PROJECT_VERSION_MINOR} * 100 + ${PROJECT_VERSION_PATCH}")
+    set_target_properties(volta_app PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "${VOLTA_APP_ID}"
+        QT_ANDROID_APP_NAME "${VOLTA_APP_SHORT_NAME}"
+        QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
+        QT_ANDROID_VERSION_CODE "${VOLTA_VERSION_CODE}")
+endif()
 
 target_compile_definitions(volta_app PRIVATE
     VOLTA_EDITION="${VOLTA_EDITION}"
