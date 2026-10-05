@@ -297,14 +297,14 @@ private slots:
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(fr));
         QTRY_COMPARE(m_language->language(), QStringLiteral("fr"));
         QCOMPARE(m_lab->title(), QStringLiteral("Comment allumer une ampoule ?"));
-        QCOMPARE(QCoreApplication::translate("Lab", "Experimente"), QStringLiteral("Expériences"));
+        QCOMPARE(QCoreApplication::translate("Lab", "Einstellungen"), QStringLiteral("Réglages"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral(","));
         QVERIFY(!m_language->setLanguage(QStringLiteral("lb")));
         QVERIFY(m_language->setLanguage(QStringLiteral("en")));
         QCOMPARE(m_lab->title(), QStringLiteral("How do you make a bulb light up?"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral("."));
         QVERIFY(m_language->setLanguage(QStringLiteral("de")));
-        QCOMPARE(QCoreApplication::translate("Lab", "Experimente"), QStringLiteral("Experimente"));
+        QCOMPARE(QCoreApplication::translate("Lab", "Einstellungen"), QStringLiteral("Einstellungen"));
         QCOMPARE(m_lab->title(), QStringLiteral("Wie bringst du ein Lämpchen zum Leuchten?"));
     }
 
