@@ -30,6 +30,31 @@ target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads:
 qt_add_executable(volta_app
     src/main.cpp
 )
+
+# Inhaltspakete als Qt-Ressource (:/content): auf Android und iOS immer, weil es dort keinen Ordner neben der
+# ausfuehrbaren Datei gibt; auf dem Desktop optional (-DVOLTA_EMBED_CONTENT=ON). Schemata und CLAUDE.md bleiben
+# draussen. main.cpp nimmt zuerst content/ neben der ausfuehrbaren Datei, dann :/content, dann den Quellbaum.
+if(ANDROID OR IOS)
+    set(_volta_embed_default ON)
+else()
+    set(_volta_embed_default OFF)
+endif()
+option(VOLTA_EMBED_CONTENT "Inhaltspakete als Qt-Ressource in die App einbetten" ${_volta_embed_default})
+file(GLOB_RECURSE VOLTA_CONTENT_FILES CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/content/*")
+list(FILTER VOLTA_CONTENT_FILES EXCLUDE REGEX "/content/(schema/|CLAUDE\\.md$)")
+function(volta_embed_content target)
+    # relative Pfade: qt_add_resources mit BASE ausserhalb des Quellverzeichnisses
+    set(_files "")
+    foreach(_f IN LISTS VOLTA_CONTENT_FILES)
+        file(RELATIVE_PATH _rel "${CMAKE_CURRENT_SOURCE_DIR}" "${_f}")
+        list(APPEND _files "${_rel}")
+    endforeach()
+    file(RELATIVE_PATH _base "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/content")
+    qt_add_resources(${target} "volta_content" PREFIX "/content" BASE "${_base}" FILES ${_files})
+endfunction()
+if(VOLTA_EMBED_CONTENT)
+    volta_embed_content(volta_app)
+endif()
 # App-Symbol (Quelle resources/icons/volta.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)
     # eigene Objektbibliothek ohne Include-Pfade: windres (MinGW) scheitert an Leerzeichen in Include-Pfaden

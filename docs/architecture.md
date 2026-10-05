@@ -85,8 +85,9 @@ Umsetzung: `sim::SimulationBridge` (`app/src/sim/simulation_bridge.*`, Qt-frei, 
 `LabController` uebergibt neue Netzlisten (die neueste gewinnt; Zustandsuebernahme ueber die Bauteilkennung im
 Simulations-Thread, optionale Zustandsvorgaben fuer Undo) und Bedienhandlungen (`sim::Action`) und holt je Bild den
 neuesten `sim::Snapshot` (Potentiale, Messwerte, Bauteilzustaende, Ereignisse). Ein Schnappschuss gilt nur, wenn
-seine Topologie-Version zur aktuellen Netzliste passt. Inhaltspakete werden bis zur Paketierung direkt aus `content/`
-im Quellbaum gelesen (`VOLTA_CONTENT_DIR`).
+seine Topologie-Version zur aktuellen Netzliste passt. Inhaltspakete liest `main.cpp` in dieser Reihenfolge: `content/` neben der
+ausfuehrbaren Datei (Desktop-Release), die eingebettete Qt-Ressource `:/content` (Android und iOS immer, Desktop mit
+`-DVOLTA_EMBED_CONTENT=ON`), sonst `content/` im Quellbaum (`VOLTA_CONTENT_DIR`, Entwicklung).
 
 ```
  UI-Thread (QML, Modell)                 Simulations-Thread (core)
