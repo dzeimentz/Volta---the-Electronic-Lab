@@ -51,6 +51,22 @@
 
 Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganzes Feld + 8 dp.
 
+Umgesetzt (Zoom/Verschieben, `Lab.qml`): zwei Finger (`PinchHandler`; der Punkt unter den Fingern bleibt stehen),
+Strg + Mausrad (Zoom am Zeiger), Mausrad bzw. Umschalt + Mausrad (Verschieben), mittlere Maustaste (Ziehen).
+Massstab zwischen »ganze Flaeche im Fenster« und 200 %. Ansicht zu Beginn: Desktop eingepasst; Touch (Android, iOS)
+in Originalgroesse, damit Kontaktfelder 56 dp hoch sind. Knopf ⤢ oben rechts in der Arbeitsflaeche: Touch wechselt
+zwischen Uebersicht (ganze Platte, Felder dann kleiner) und Originalgroesse, Desktop kehrt zum Einpassen zurueck.
+Offen: Leertaste + Ziehen, Tippen mit zwei/drei Fingern fuer Rueckgaengig/Wiederholen.
+
+### Tablet und Hochformat
+- Unter 1280 dp Breite (iPad, Hochformat) schmale Werkzeugleiste: Felder je Reihe und Messgeraet nur im
+  Einstellungsmenue, Leitungsfarbe als Knopf mit Aufklappfeld, Experimentauswahl schmaler. Das Experimentfeld startet
+  eingeklappt, oeffnet sich bei einem neuen Experiment und liegt aufgeklappt ueber der Grundplatte.
+- Hochformat (hoeher als breit): Bauteilfach als Leiste unter der Grundplatte.
+- Alle Ziele >= 48 dp, auch Menueeintraege und die Gruppenlinien (Fangbereich).
+- Sichtpruefung auf dem Desktop: `VOLTA_DEMO_TOUCH=1 VOLTA_DEMO_SIZE=800x1280` (Tablet hoch),
+  `VOLTA_DEMO_SIZE=1180x820` (iPad quer), jeweils mit `VOLTA_SCREENSHOT=bild.png`.
+
 ## Bedienpult
 - **Hauptschalter** fuer die Batterie.
 - **Drehregler mit Lichtring**: 16 Segmente auf 270°, Luecke unten; Segmente vom linken Anschlag bis zur Stellung

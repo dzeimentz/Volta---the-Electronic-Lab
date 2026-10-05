@@ -82,16 +82,22 @@ python3 tools/check_all.py
 #   VOLTA_DEMO_SOLVE=1 (loest das gefuehrte Experiment mit dem Musteraufbau), VOLTA_DEMO_COLUMNS=8|10|12,
 #   VOLTA_DEMO_LANG=fr|en (Sprache ohne Speichern), VOLTA_SHOW_TIME=1 (Simulationszeit), VOLTA_DEMO_INFO=1,
 #   VOLTA_DEMO_FONT=0|1|2 (Schriftstufe), VOLTA_NO_SPLASH=1 (ohne Startbildschirm), VOLTA_DEMO_METER=v|analog|a|ohm (Messaufbau; mit VOLTA_DEMO_ANALOG=1 als Zeiger)
+#   VOLTA_DEMO_TOUCH=1 (Touch-Oberflaeche wie Android/iOS), VOLTA_DEMO_SIZE=800x1280 (Fenstergroesse in dp, z. B. Hochformat)
 
 # Lokales Release (lauffaehiges Programm mit Qt-Laufzeit und Inhalten in Release/, nicht im Repository)
 python3 tools/deploy_release.py
 
-# App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
+# App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px), volta.ico sowie Android- (mipmap, adaptiv)
+# und iOS-Symbole (AppIcon, LaunchLogo) in packaging/ daraus neu erzeugen; --mobil nur Android/iOS
 python3 tools/make_icons.py
 
-# Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
+# Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT, JDK; docs/platforms.md)
 cmake --preset android-arm64
 cmake --build --preset android-arm64
+# App Bundle fuer Google Play (arm64-v8a + armeabi-v7a)
+cmake --preset android-aab && cmake --build --preset android-aab
+# iPadOS: nur auf macOS mit Xcode (QT_ROOT_IOS, QT_HOST_PATH), siehe docs/platforms.md
+cmake --preset ios
 ```
 
 Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach Aenderungen an `content/`:
