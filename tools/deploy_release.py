@@ -48,7 +48,11 @@ def main() -> int:
         print(f"{exe} fehlt nach dem Bauen.")
         return 1
     TARGET.mkdir(exist_ok=True)
-    shutil.copy2(exe, TARGET / exe_name)
+    try:
+        shutil.copy2(exe, TARGET / exe_name)
+    except PermissionError:
+        print(f"{TARGET / exe_name} ist in Benutzung - bitte Volta beenden und erneut aufrufen.")
+        return 1
     if IS_WINDOWS:
         deploy = shutil.which("windeployqt", path=env["PATH"]) or str(qt_root / "bin" / "windeployqt.exe")
         run([deploy, "--release", "--qmldir", str(ROOT / "app" / "qml"), "--no-translations",
