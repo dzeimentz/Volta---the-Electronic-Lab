@@ -5,7 +5,7 @@
      "parameter": {"u_nenn_V": 6.0, "i_nenn_mA": 50}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_gluehlampe"},
     {"typ": "taster", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "switch",
      "parameter": {}, "ab_band": "volta1", "ab_stufe": 1, "lexikon_key": "lex_taster"},
-    {"typ": "wechselschalter", "anschluesse": ["mitte", "a", "b"], "spannweite": ["traeger"], "modell": "changeover_switch",
+    {"typ": "wechselschalter", "anschluesse": ["mitte", "a", "b"], "spannweite": ["traeger"], "lage": ["a", "mitte", "b"], "modell": "changeover_switch",
      "parameter": {}, "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_wechselschalter"},
     {"typ": "reedkontakt", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "switch",
      "parameter": {}, "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_reedkontakt"},
@@ -31,7 +31,7 @@
      "parameter": {"umax_V": 16}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_elko"},
     {"typ": "fotowiderstand", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "ldr",
      "parameter": {}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_fotowiderstand"},
-    {"typ": "transistor_npn", "anschluesse": ["b", "c", "e"], "spannweite": ["traeger"], "modell": "bjt_npn",
+    {"typ": "transistor_npn", "anschluesse": ["b", "c", "e"], "spannweite": ["traeger"], "lage": ["b", "c", "e"], "modell": "bjt_npn",
      "parameter": {"beta": 200}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_transistor"}
   ],
   "module": [

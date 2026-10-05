@@ -53,6 +53,7 @@ struct Board {
     std::vector<PartPlacement> parts;
     std::vector<WirePlacement> wires;
     std::vector<ModulePlacement> modules;
+    std::vector<std::string> voltageDisplays; // Felder mit eingeschalteter Spannungsanzeige (Aufbau, undo-faehig)
     DeskState desk;
 
     const PartPlacement* findPart(const std::string& id) const;

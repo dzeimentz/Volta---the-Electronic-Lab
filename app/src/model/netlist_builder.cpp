@@ -252,6 +252,8 @@ private:
 Netlist buildNetlist(const Board& board, const Catalog& catalog) {
     Netlist net;
     Builder(board, catalog, net).run();
+    net.componentIds.reserve(net.circuit.componentCount());
+    for (std::size_t i = 0; i < net.circuit.componentCount(); ++i) net.componentIds.push_back(net.circuit.component(i).id());
     return net;
 }
 

@@ -44,6 +44,13 @@ void SimulationBridge::stop() {
 
 std::uint64_t SimulationBridge::setCircuit(core::Circuit circuit, std::vector<StateOverride> overrides) {
     std::lock_guard<std::mutex> lock(m_inMutex);
+    if (m_pendingCircuit && !m_pendingOverrides.empty()) {
+        // Eine noch nicht uebernommene Topologie wird verdraengt: ihre Zustandsvorgaben (z. B. Undo) gelten weiter,
+        // die neueren Vorgaben werden danach angewendet und haben damit Vorrang.
+        m_pendingOverrides.insert(m_pendingOverrides.end(), std::make_move_iterator(overrides.begin()),
+                                  std::make_move_iterator(overrides.end()));
+        overrides = std::move(m_pendingOverrides);
+    }
     m_pendingCircuit = std::make_unique<core::Circuit>(std::move(circuit));
     m_pendingOverrides = std::move(overrides);
     m_pendingTopology = ++m_nextTopology;

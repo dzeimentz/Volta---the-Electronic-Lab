@@ -65,6 +65,8 @@ bool ContentRepository::loadCatalog(model::Catalog& out) {
         e.model = str(o.value(QStringLiteral("modell")));
         e.fromStage = o.value(QStringLiteral("ab_stufe")).toInt();
         for (const QJsonValue& p : o.value(QStringLiteral("anschluesse")).toArray()) e.pins.push_back(str(p));
+        for (const QJsonValue& p : o.value(QStringLiteral("spannweite")).toArray()) e.spans.push_back(str(p));
+        for (const QJsonValue& p : o.value(QStringLiteral("lage")).toArray()) e.layout.push_back(str(p));
         const QJsonObject params = o.value(QStringLiteral("parameter")).toObject();
         for (auto it = params.begin(); it != params.end(); ++it)
             if (it.value().isDouble()) e.params[it.key().toStdString()] = it.value().toDouble();
@@ -133,6 +135,7 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
         w.color = o.contains(QStringLiteral("farbe")) ? str(o.value(QStringLiteral("farbe"))) : std::string("rot");
         out.wires.push_back(std::move(w));
     }
+    for (const QJsonValue& v : vorlage.value(QStringLiteral("anzeigen")).toArray()) out.voltageDisplays.push_back(str(v));
     for (const QJsonValue& v : vorlage.value(QStringLiteral("module")).toArray()) {
         const QJsonObject o = v.toObject();
         model::ModulePlacement m;

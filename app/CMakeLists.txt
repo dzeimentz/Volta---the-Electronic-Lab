@@ -14,14 +14,17 @@ endif()
 # Schaltungsmodell und Dienste: ohne Oberflaeche testbar (Qt Core fuer JSON)
 add_library(volta_model STATIC
     src/model/anchor.cpp
+    src/model/board_edit.cpp
     src/model/netlist_builder.cpp
     src/model/success.cpp
     src/services/content_repository.cpp
     src/sim/simulation_bridge.cpp
+    src/model/lab_session.cpp
+    src/model/commands/board_command.cpp
 )
 target_include_directories(volta_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 find_package(Threads REQUIRED)
-target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Threads::Threads)
+target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads::Threads)
 
 qt_add_executable(volta_app
     src/main.cpp

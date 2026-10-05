@@ -67,7 +67,8 @@ public:
     bool running() const { return m_thread.joinable(); }
 
     // Neue Topologie; Zustaende werden aus der bisherigen Schaltung uebernommen (gleiche Bauteilkennung),
-    // danach gelten die Vorgaben in overrides. Liefert die Topologie-Version.
+    // danach gelten die Vorgaben in overrides. Verdraengt sie eine noch nicht uebernommene Topologie, bleiben deren
+    // Vorgaben erhalten (die neuen gehen vor). Liefert die Topologie-Version.
     std::uint64_t setCircuit(core::Circuit circuit, std::vector<StateOverride> overrides = {});
     void post(Action action);
     void setTimeScale(double scale); // Zeitraffer 1, 10, 100

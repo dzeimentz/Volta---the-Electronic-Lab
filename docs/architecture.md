@@ -53,7 +53,9 @@ entstehen alle Baende (Volta 1–3, Zuse 1) als eigene Apps und alle Plattformen
   Topologiewechsel.
 - `Board` (`model/board.hpp`) – Aufbau: Bauteile mit Anschlussbelegung, Leitungen, Module, Pultzustand.
 - Anschlussbezeichner (`model/anchor.*`) – Kontaktfelder A1–E8, `P:…`, `MESS:…`, `M:n`, `<Modul-ID>.<Anschluss>`.
-- `CommandStack` auf Basis von `QUndoStack`; jede Aufbauaenderung ist ein `QUndoCommand` (siehe unten).
+- `LabSession` (`model/lab_session.*`) – Experimentsitzung ohne Oberflaeche: Aufbau, Netzliste, SimulationBridge,
+  `QUndoStack` mit `BoardCommand`, Bearbeitungsbefehle mit Platzierregeln (`model/board_edit.*`), Bedienhandlungen.
+  `LabController` ist die duenne QML-Anbindung darueber.
 - `SuccessEvaluator` – wertet Erfolgsbedingungen eines Experiments ueber den simulierten Zustand aus.
 - `Diagnostics` – Fehlersuche (offener Kreis, unbeschaltetes Bein, Verpolung, Kurzschluss, fehlender Vorwiderstand).
 - Alle fuer QML sichtbaren Typen als `QObject`/`QAbstractListModel` mit `QML_ELEMENT`.
@@ -97,7 +99,8 @@ im Quellbaum gelesen (`VOLTA_CONTENT_DIR`).
  Ereignisse     <---------------------- SimEvent                [Queue]
 ```
 
-- Der Simulator besitzt seine Daten exklusiv. Kommunikation nur ueber Kopien und lockfreie Queues.
+- Der Simulator besitzt seine Daten exklusiv. Kommunikation nur ueber Kopien; der Austausch geschieht unter kurzen
+  Sperren zwischen zwei Schritten, nie im Simulationsschritt.
 - Spannungsanzeigen werden mit ca. 10 Hz und Hysterese aktualisiert, digitale Messgeraeteanzeige mit ca. 3 Hz,
   Zeiger mit nachgebildeter Traegheit (Darstellung, nicht Simulation).
 - Keine Speicheranforderungen im Simulationsschritt; Matrizen werden bei Topologiewechsel neu angelegt.
@@ -108,9 +111,13 @@ im Quellbaum gelesen (`VOLTA_CONTENT_DIR`).
   ziehen/umsetzen/umfaerben/loeschen, Zwischenpunkt, Modul setzen/entfernen, Spannungsanzeige setzen, Reparieren,
   Uebernahme eines Werts aus dem Werkzeugkasten.
 - Nicht erfasst: Schalter, Taster, Drehregler, Hauptschalter, Eintraege im Forscherheft.
-- Jeder Befehl speichert vor der Ausfuehrung einen **Zustandsschnappschuss** der betroffenen Bauteile
-  (intakt/zerstoert, Temperatur, Kondensatorladung). Undo stellt Aufbau **und** Zustand her; danach wird das
-  Gleichgewicht neu berechnet (DC-Arbeitspunkt) und die Simulation fortgesetzt.
+- Umsetzung: `BoardCommand` speichert Aufbau vorher/nachher und den **Zustandsschnappschuss aller Bauteile** vor der
+  Ausfuehrung (intakt/zerstoert, Temperatur, Kondensatorladung, Drehzahl). Undo stellt Aufbau **und** Zustand her
+  (Zustandsvorgaben an die SimulationBridge); danach wird der Arbeitspunkt neu berechnet und die Simulation
+  fortgesetzt. Redo stellt den Aufbau her und uebernimmt die aktuellen Zustaende; Reparieren legt den Zustand
+  »neu« fest. Der Pultzustand (Bedienhandlungen) bleibt von Undo/Redo unberuehrt.
+- Zustaende werden ueber die Bauteilkennung zugeordnet, auch aus Schnappschuessen aelterer Topologie-Versionen;
+  noch nicht sichtbare Zustandsvorgaben (direkt nach Undo) fliessen in die naechste Sicherung ein.
 - Verlauf: alle Schritte der Sitzung; mit eigenen Schaltungen gespeichert werden die letzten 200.
 - Zusammenfassen: aufeinanderfolgende Verschiebungen desselben Objekts werden ueber `mergeWith` vereint.
 
