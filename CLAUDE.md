@@ -78,6 +78,11 @@ python3 tools/check_all.py
 #   export PATH="/c/Qt/Tools/mingw1310_64/bin:/c/Qt/6.11.0/mingw_64/bin:$PATH" QT_ROOT_DESKTOP="C:/Qt/6.11.0/mingw_64"
 #   beim ersten Konfigurieren zusaetzlich: -DCMAKE_CXX_COMPILER=g++
 # App mit Bildschirmfoto statt Bedienung (Sichtpruefung): VOLTA_SCREENSHOT=bild.png build/desktop-debug/app/volta1.exe
+#   weitere Entwicklerhilfen: VOLTA_SCREENSHOT_S=<s>, VOLTA_SCREENSHOT_MAINSWITCH=1, VOLTA_DEMO_GALLERY=1,
+#   VOLTA_DEMO_SOLVE=1 (loest das gefuehrte Experiment mit dem Musteraufbau)
+
+# Lokales Release (lauffaehiges Programm mit Qt-Laufzeit und Inhalten in Release/, nicht im Repository)
+python3 tools/deploy_release.py
 
 # Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
 cmake --preset android-arm64

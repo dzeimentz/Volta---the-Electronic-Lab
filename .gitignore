@@ -1,4 +1,6 @@
 build/
+# lokales Release (tools/deploy_release.py)
+Release/
 *.user
 *.autosave
 .qtcreator/
