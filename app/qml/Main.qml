@@ -1,6 +1,8 @@
-// Platzhalter fuer die Startseite (Dashboard). Siehe docs/ui-spec.md.
+// Hauptfenster. Phase 0: oeffnet direkt die Experimentansicht mit der Vorlage von Experiment 2.4.
+// Startseite (Dashboard), Lernpfad und Readme folgen in Phase 1-3 (docs/ui-spec.md).
 import QtQuick
 import QtQuick.Controls
+import Volta
 
 ApplicationWindow {
     id: root
@@ -10,12 +12,11 @@ ApplicationWindow {
     minimumHeight: 720
     visible: true
     title: Qt.application.name
-    color: "#F7F3EA"
+    color: Theme.board
 
-    Label {
-        anchors.centerIn: parent
-        text: qsTr("Volta - Das Elektronik-Labor")
-        font.pixelSize: 32
-        color: "#0A2540"
+    Lab {
+        anchors.fill: parent
+        controller: labController
+        Component.onCompleted: labController.loadExperiment("volta1.2.4")
     }
 }

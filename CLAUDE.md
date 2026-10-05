@@ -71,6 +71,11 @@ build/core-release/core/bench/volta_core_bench
 # Inhaltspakete pruefen (vor jedem Commit, der content/ beruehrt)
 python3 tools/validate_content.py
 
+# Windows-Entwicklungsrechner (Git Bash): MinGW aus der Qt-Installation, Qt 6.11
+#   export PATH="/c/Qt/Tools/mingw1310_64/bin:/c/Qt/6.11.0/mingw_64/bin:$PATH" QT_ROOT_DESKTOP="C:/Qt/6.11.0/mingw_64"
+#   beim ersten Konfigurieren zusaetzlich: -DCMAKE_CXX_COMPILER=g++
+# App mit Bildschirmfoto statt Bedienung (Sichtpruefung): VOLTA_SCREENSHOT=bild.png build/desktop-debug/app/volta1.exe
+
 # Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
 cmake --preset android-arm64
 cmake --build --preset android-arm64

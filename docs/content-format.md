@@ -68,6 +68,15 @@ content/
 | `erfolg` | ja | zustandsbasierte Bedingungen (siehe unten) |
 | `jetzt_in_echt_key` | ja | darf bei `zerstoerend: true` keinen zerstoerenden Nachbau beschreiben |
 
+### Vorlage: Bauteile, Module, Leitungen
+- Bauteil: `{"id", "typ", "felder", "wert"?, "geschlossen"?, "stellung"?}`. `felder` ist ein Array in der
+  Reihenfolge der Katalog-Anschluesse oder ein Objekt `{anschluss: feld}`. `wert` in Ohm bzw. Farad;
+  `geschlossen` fuer Schalter, Taster, Reedkontakt (Wechselschalter: Stellung B); `stellung` 0..1 fuer
+  Potentiometer.
+- Modul: `{"id": "BL1", "typ": "blinkmodul", "feld": 1}` – belegt die Felder der Modulleiste ab `M:<feld>` in der
+  Reihenfolge der Katalog-Anschluesse (Blinkmodul: `plus`, `minus`, `aus`, `takt`).
+- Leitung: `{"von", "nach", "farbe"?, "id"?}`; ohne `id` vergibt das Laden `L1`, `L2`, …
+
 ### Anschlussbezeichner
 - Kontaktfeld: `A1` … `E8`
 - Pultfeld: `P:+9V`, `P:0V`, `P:P1a`, `P:P1s`, `P:P1b`, `P:P2a`, `P:P2s`, `P:P2b`, `P:S1`, `P:S2`, `P:LS1`, `P:LS2`

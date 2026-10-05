@@ -46,14 +46,21 @@ entstehen alle Baende (Volta 1–3, Zuse 1) als eigene Apps und alle Plattformen
 - `Placement` – Bauteil auf Feldern (Spannweite kurz = 1 Feldabstand, lang = 2).
 - `Wire` – frei gezogene Leitung zwischen zwei Anschlusspunkten mit Farbe und optionalem Zwischenpunkt.
 - `ModuleInstance` – Modul in der Modulleiste; Teilschaltung oder Verhaltensmodell.
-- `NetlistBuilder` – fasst Felder und Leitungen zu Knoten zusammen (Union-Find) und erzeugt `core::Circuit`.
+- `NetlistBuilder` (`model/netlist_builder.*`) – bildet aus dem Aufbau (`Board`) und dem Bauteilkatalog die
+  `core::Circuit`: jeder benutzte Anschlusspunkt ist ein Knoten, Leitungen sind Bauteile (`core::Wire`, ADR-0007),
+  das Bedienpult ist immer bestueckt, Module werden ueber die Aufbaufunktionen des Kerns expandiert.
+  `transferStates` uebernimmt Bauteilzustaende (Ladung, Temperatur, zerstoert, Sicherung) bei jedem
+  Topologiewechsel.
+- `Board` (`model/board.hpp`) – Aufbau: Bauteile mit Anschlussbelegung, Leitungen, Module, Pultzustand.
+- Anschlussbezeichner (`model/anchor.*`) – Kontaktfelder A1–E8, `P:…`, `MESS:…`, `M:n`, `<Modul-ID>.<Anschluss>`.
 - `CommandStack` auf Basis von `QUndoStack`; jede Aufbauaenderung ist ein `QUndoCommand` (siehe unten).
 - `SuccessEvaluator` – wertet Erfolgsbedingungen eines Experiments ueber den simulierten Zustand aus.
 - `Diagnostics` – Fehlersuche (offener Kreis, unbeschaltetes Bein, Verpolung, Kurzschluss, fehlender Vorwiderstand).
 - Alle fuer QML sichtbaren Typen als `QObject`/`QAbstractListModel` mit `QML_ELEMENT`.
 
 ### app/src/services – Dienste
-- `ContentRepository` – laedt Inhaltspakete (JSON) und Kataloge, prueft Schema-Version.
+- `ContentRepository` (`services/content_repository.*`) – laedt Inhaltspakete (JSON) und Kataloge, prueft
+  Schema-Version, setzt Vorlagen in einen `Board` um, liefert Texte je Sprache.
 - `ProfileStore` – Forscherprofile (Symbol, Spitzname), Export/Import per Datei oder QR-Code.
 - `AutoSave` – sichert eigene Schaltungen und Forscherheft nach jeder Aenderung (atomar, Schreiben in Temp-Datei + Umbenennen).
 - `LanguageService` – Laufzeitumschaltung ueber `QTranslator`, Sprachcodes `de`, `fr`, `en`, `lb` (Anzeige »LU«).
@@ -71,6 +78,12 @@ entstehen alle Baende (Volta 1–3, Zuse 1) als eigene Apps und alle Plattformen
 - Eingabe ausschliesslich ueber Pointer Handlers (Finger, Stift, Maus gleichwertig).
 
 ## Threads und Datenfluss
+
+Stand Phase 0: `LabController` (`app/src/lab_controller.*`) simuliert im UI-Thread ueber einen Timer in Echtzeit
+und stellt QML Anschlusspotentiale, Spannungsbalken und Bauteilzustaende bereit. Die unten beschriebene Entkopplung
+ueber `SimulationBridge` folgt in Phase 1; bis dahin ist der direkte Zugriff des `LabController` auf den Simulator
+die einzige Abweichung von app/CLAUDE.md. Inhaltspakete werden in Phase 0 direkt aus `content/` im Quellbaum
+gelesen (`VOLTA_CONTENT_DIR`); die Einbettung als Qt-Ressource folgt mit der Paketierung.
 
 ```
  UI-Thread (QML, Modell)                 Simulations-Thread (core)

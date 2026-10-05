@@ -33,8 +33,9 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 2. ~~Thermikmodell und Ereignisse; Robustheitstests.~~ erledigt, dazu: alle Bauteile der Stufen 1–4 inkl.
    Transistor, Blinkmodul als Teilschaltung, Dreifach-Messgeraet, Referenztests 1–7, Zufallstest,
    Leistungsprogramm (siehe `docs/simulation-core.md`, `docs/testing.md`)
-3. `app/`: Qt-Projektgeruest, `Board`-Modell, `NetlistBuilder`, leere `Lab.qml` mit Grundplatte;
-   Grafikschicht aus VTS (`J:\VISUAL Technic STUDIO`) sichten und uebernehmen.
+3. ~~`app/`: Qt-Projektgeruest, `Board`-Modell, `NetlistBuilder`, `Lab.qml` mit Grundplatte.~~ erledigt:
+   Vorlage von Experiment 2.4 laeuft Ende-zu-Ende mit Spannungsanzeigen (Desktop, Qt 6.11). VTS enthaelt keine
+   uebertragbare Qt-Quick-Grafikschicht (ADR-0008); Leitungen sind Bauteile (ADR-0007).
 4. Inhaltsvalidator in CI; `ContentSmokeTest` simuliert jede Vorlage gegen ihre Erfolgsbedingung.
 
 Offen aus Phase 0 (Kern): Kalibrierung der Bauteilmodelle an realem Material; Leistungsmessung auf dem
