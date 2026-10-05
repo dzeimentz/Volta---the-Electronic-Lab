@@ -144,7 +144,7 @@ Item {
     Rectangle {
         id: toolbar
         anchors { left: parent.left; right: parent.right; top: parent.top }
-        height: Theme.control + 16
+        height: Theme.control + 8 // Knoepfe 48 dp (Touch), Symbole darin kleiner
         color: Theme.desk
 
         // Oben rechts: Sprache, Info, Einstellungen (gemeinsam mit der Startseite)
@@ -168,7 +168,7 @@ Item {
                 objectName: "homeButton"
                 width: Theme.control; height: Theme.control
                 text: "⌂"
-                font.pixelSize: Math.round((26) * Theme.fontScale)
+                font.pixelSize: 20
                 palette.buttonText: "white"
                 onClicked: lab.homeRequested()
                 ToolTip.visible: hovered
@@ -211,14 +211,14 @@ Item {
                     if (index === 0) lab.controller.startFreeLab()
                     else lab.controller.startExperiment(entries[index].id)
                 }
-                font.pixelSize: Math.round((16) * Theme.fontScale)
+                font.pixelSize: Math.round(14 * Theme.fontScale)
                 font.bold: true
                 indicator: Label {
                     x: experimentBox.width - width - 12
                     anchors.verticalCenter: parent.verticalCenter
                     text: "▾"
                     color: "white"
-                    font.pixelSize: Math.round((18) * Theme.fontScale)
+                    font.pixelSize: 14
                 }
                 contentItem: Label {
                     leftPadding: 12
@@ -252,7 +252,7 @@ Item {
             ToolButton {
                 objectName: "undoButton"
                 text: "↶"
-                font.pixelSize: Math.round((24) * Theme.fontScale)
+                font.pixelSize: 19
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canUndo
                 onClicked: lab.controller.undo()
@@ -263,7 +263,7 @@ Item {
             ToolButton {
                 objectName: "redoButton"
                 text: "↷"
-                font.pixelSize: Math.round((24) * Theme.fontScale)
+                font.pixelSize: 19
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canRedo
                 onClicked: lab.controller.redo()
@@ -278,7 +278,7 @@ Item {
                 ToolButton {
                     objectName: "columnsMinus"
                     text: "−"
-                    font.pixelSize: Math.round((24) * Theme.fontScale)
+                    font.pixelSize: 19
                     width: Theme.control; height: Theme.control
                     enabled: lab.columns > 8
                     onClicked: lab.controller.setBoardColumns(lab.columns - 2)
@@ -292,14 +292,14 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     text: qsTr("1–%1").arg(lab.columns)
                     color: "white"
-                    font.pixelSize: Math.round((15) * Theme.fontScale)
+                    font.pixelSize: 13
                     font.bold: true
                     Accessible.name: qsTr("Felder je Reihe: %1").arg(lab.columns)
                 }
                 ToolButton {
                     objectName: "columnsPlus"
                     text: "+"
-                    font.pixelSize: Math.round((24) * Theme.fontScale)
+                    font.pixelSize: 19
                     width: Theme.control; height: Theme.control
                     enabled: lab.columns < 12
                     onClicked: lab.controller.setBoardColumns(lab.columns + 2)
@@ -312,8 +312,15 @@ Item {
             ToolButton {
                 objectName: "toolboxButton"
                 width: Theme.control; height: Theme.control
-                text: "🧰"
-                font.pixelSize: 24
+                contentItem: Item {
+                    Image {
+                        anchors.centerIn: parent
+                        width: 26; height: 26
+                        sourceSize: Qt.size(64, 64)
+                        source: "qrc:/icons/toolbox_light_64.png"
+                        smooth: true
+                    }
+                }
                 onClicked: toolbox.opened ? toolbox.close() : toolbox.open()
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Werkzeugkasten")
@@ -327,7 +334,7 @@ Item {
             ToolButton {
                 objectName: "meterToggle"
                 height: Theme.control
-                width: 72
+                width: 60
                 checkable: true
                 checked: lab.controller.meterVisible
                 onClicked: lab.controller.meterVisible = !lab.controller.meterVisible
@@ -337,7 +344,7 @@ Item {
                 contentItem: Label {
                     text: "V A Ω"
                     color: "white"
-                    font.pixelSize: Math.round((15) * Theme.fontScale)
+                    font.pixelSize: 13
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -360,7 +367,7 @@ Item {
                 ToolTip.text: lab.schematicVisible ? qsTr("Schaltplan ausblenden") : qsTr("Schaltplan zeigen")
                 Accessible.name: ToolTip.text
                 contentItem: Item {
-                    SchematicSymbol { anchors.centerIn: parent; width: 40; height: 20; type: "widerstand"; stroke: "white" }
+                    SchematicSymbol { anchors.centerIn: parent; width: 30; height: 15; type: "widerstand"; stroke: "white" }
                 }
                 background: Rectangle {
                     radius: 6
@@ -380,7 +387,7 @@ Item {
                 contentItem: Item {
                     Rectangle {
                         anchors.centerIn: parent
-                        width: 28; height: 28; radius: 14
+                        width: 22; height: 22; radius: 11
                         color: Theme.wireColor(lab.newWireColor)
                         border.color: Theme.solderAmber
                         border.width: 3

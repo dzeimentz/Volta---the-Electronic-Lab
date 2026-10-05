@@ -31,7 +31,7 @@ Row {
                     text: parent.modelData.label
                     color: parent.enabled ? "white" : "#6F8399"
                     // feste Groesse: die Knoepfe selbst wachsen nicht mit
-                    font.pixelSize: parent.modelData.step < 0 ? 15 : 19
+                    font.pixelSize: parent.modelData.step < 0 ? 13 : 16
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -60,7 +60,7 @@ Row {
         contentItem: Item {
             Image {
                 anchors.centerIn: parent
-                width: 32; height: 32
+                width: 26; height: 26
                 sourceSize: Qt.size(64, 64)
                 source: bar.languageService ? "qrc:/flags/" + bar.languageService.language + ".svg" : ""
             }
@@ -116,11 +116,11 @@ Row {
         contentItem: Item {
             Rectangle {
                 anchors.centerIn: parent
-                width: 30; height: 30; radius: 15
+                width: 24; height: 24; radius: 12
                 color: "transparent"
                 border.color: "white"
                 border.width: 2
-                Label { anchors.centerIn: parent; text: "i"; color: "white"; font.pixelSize: Math.round((18) * Theme.fontScale); font.bold: true; font.italic: true }
+                Label { anchors.centerIn: parent; text: "i"; color: "white"; font.pixelSize: 15; font.bold: true; font.italic: true }
             }
         }
     }
@@ -129,7 +129,7 @@ Row {
         objectName: "settingsButton"
         width: Theme.control; height: Theme.control
         text: "☰"
-        font.pixelSize: Math.round((24) * Theme.fontScale)
+        font.pixelSize: 20
         palette.buttonText: "white"
         onClicked: settingsMenu.open()
         ToolTip.visible: hovered

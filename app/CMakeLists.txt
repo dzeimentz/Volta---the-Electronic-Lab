@@ -97,7 +97,9 @@ qt_add_qml_module(volta_ui
 target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2)
 # Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben
 qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE resources/icons FILES
-    resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png)
+    resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png
+    resources/icons/toolbox_light_64.png resources/icons/toolbox_light_128.png
+    resources/icons/toolbox_dark_64.png resources/icons/toolbox_dark_128.png)
 # Runde Flaggen der Anzeigesprachen (Werkzeugleiste oben rechts)
 qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
     resources/flags/de.svg resources/flags/fr.svg resources/flags/en.svg resources/flags/lb.svg)

@@ -20,7 +20,7 @@ Rectangle {
     Rectangle {
         id: header
         anchors { left: parent.left; right: parent.right; top: parent.top }
-        height: Theme.control + 16
+        height: Theme.control + 8
         color: Theme.desk
         Row {
             anchors.left: parent.left
