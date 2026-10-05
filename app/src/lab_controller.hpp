@@ -105,6 +105,16 @@ public:
     Q_INVOKABLE bool isDone(const QString& experimentId) const { return m_progress.isDone(experimentId); }
     Q_INVOKABLE bool isUnlocked(const QString& experimentId) const;
     Q_INVOKABLE void resetProgress();
+
+    // Werkzeugkasten (Konzept 5.7): Farbcode, E-Reihen, Bauteillexikon
+    Q_INVOKABLE QVariantMap colorCode(double ohm, int rings) const; // {valid, rings[], ohm, tolerance}
+    Q_INVOKABLE double decodeColors(const QVariantList& rings) const;
+    Q_INVOKABLE double parseOhm(const QString& text) const;
+    Q_INVOKABLE QVariantList eSeries(int n) const;
+    Q_INVOKABLE QVariantMap nearestE(double ohm, int n) const; // {value, deviation, isMember}
+    // Lexikon: [{type, text}] aller Bauteile mit Lexikontext, in der Reihenfolge des Bauteilfachs
+    Q_PROPERTY(QVariantList lexicon READ lexicon NOTIFY experimentChanged)
+    QVariantList lexicon() const;
     QStringList errors() const { return m_errors; }
     QString lastEditError() const { return m_lastEditError; }
     bool canUndo() const;

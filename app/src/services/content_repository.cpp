@@ -65,6 +65,7 @@ bool ContentRepository::loadCatalog(model::Catalog& out) {
         e.type = str(o.value(QStringLiteral("typ")));
         e.model = str(o.value(QStringLiteral("modell")));
         e.fromStage = o.value(QStringLiteral("ab_stufe")).toInt();
+        e.lexiconKey = str(o.value(QStringLiteral("lexikon_key")));
         for (const QJsonValue& p : o.value(QStringLiteral("anschluesse")).toArray()) e.pins.push_back(str(p));
         for (const QJsonValue& p : o.value(QStringLiteral("spannweite")).toArray()) e.spans.push_back(str(p));
         for (const QJsonValue& p : o.value(QStringLiteral("lage")).toArray()) e.layout.push_back(str(p));

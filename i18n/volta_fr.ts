@@ -347,6 +347,10 @@
         <translation>Plus de cases par rangée</translation>
     </message>
     <message>
+        <source>Werkzeugkasten</source>
+        <translation>Boîte à outils</translation>
+    </message>
+    <message>
         <source>Messgerät ausblenden</source>
         <translation>Masquer le multimètre</translation>
     </message>
@@ -607,6 +611,141 @@
     <message>
         <source>Weiß</source>
         <translation>Blanc</translation>
+    </message>
+</context>
+<context>
+    <name>ToolboxPanel</name>
+    <message>
+        <source>schwarz</source>
+        <translation>noir</translation>
+    </message>
+    <message>
+        <source>braun</source>
+        <translation>marron</translation>
+    </message>
+    <message>
+        <source>rot</source>
+        <translation>rouge</translation>
+    </message>
+    <message>
+        <source>orange</source>
+        <translation>orange</translation>
+    </message>
+    <message>
+        <source>gelb</source>
+        <translation>jaune</translation>
+    </message>
+    <message>
+        <source>grün</source>
+        <translation>vert</translation>
+    </message>
+    <message>
+        <source>blau</source>
+        <translation>bleu</translation>
+    </message>
+    <message>
+        <source>violett</source>
+        <translation>violet</translation>
+    </message>
+    <message>
+        <source>grau</source>
+        <translation>gris</translation>
+    </message>
+    <message>
+        <source>weiß</source>
+        <translation>blanc</translation>
+    </message>
+    <message>
+        <source>gold</source>
+        <translation>or</translation>
+    </message>
+    <message>
+        <source>silber</source>
+        <translation>argent</translation>
+    </message>
+    <message>
+        <source>Werkzeugkasten</source>
+        <translation>Boîte à outils</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <source>Farbcode</source>
+        <translation>Code couleur</translation>
+    </message>
+    <message>
+        <source>E-Reihen</source>
+        <translation>Séries E</translation>
+    </message>
+    <message>
+        <source>Lexikon</source>
+        <translation>Lexique</translation>
+    </message>
+    <message>
+        <source>4 Ringe</source>
+        <translation>4 anneaux</translation>
+    </message>
+    <message>
+        <source>5 Ringe</source>
+        <translation>5 anneaux</translation>
+    </message>
+    <message>
+        <source>Toleranz</source>
+        <translation>Tolérance</translation>
+    </message>
+    <message>
+        <source>Multiplikator</source>
+        <translation>Multiplicateur</translation>
+    </message>
+    <message>
+        <source>%1. Ziffer</source>
+        <translation>%1er chiffre</translation>
+    </message>
+    <message>
+        <source>Wert eingeben</source>
+        <translation>Saisir une valeur</translation>
+    </message>
+    <message>
+        <source>z. B. 4,7k</source>
+        <translation>p. ex. 4,7k</translation>
+    </message>
+    <message>
+        <source>Ringe zeigen</source>
+        <translation>Afficher les anneaux</translation>
+    </message>
+    <message>
+        <source>Diesen Wert kann ich nicht lesen. Versuche z. B. 470, 4,7k oder 2M2.</source>
+        <translation>Je ne peux pas lire cette valeur. Essaie p. ex. 470, 4,7k ou 2M2.</translation>
+    </message>
+    <message>
+        <source>Auf %1 übernehmen</source>
+        <translation>Appliquer à %1</translation>
+    </message>
+    <message>
+        <source>Erst einen Widerstand auswählen</source>
+        <translation>Choisis d&apos;abord une résistance</translation>
+    </message>
+    <message>
+        <source>%1 ist ein Normwert der Reihe E%2.</source>
+        <translation>%1 est une valeur normalisée de la série E%2.</translation>
+    </message>
+    <message>
+        <source>Nächster Normwert in E%1: %2</source>
+        <translation>Valeur normalisée la plus proche en E%1 : %2</translation>
+    </message>
+    <message>
+        <source>Abweichung: %1 %</source>
+        <translation>Écart : %1 %</translation>
+    </message>
+    <message>
+        <source>Normwert auf %1 übernehmen</source>
+        <translation>Appliquer la valeur normalisée à %1</translation>
+    </message>
+    <message>
+        <source>Widerstände gibt es nicht in jedem Wert, sondern in genormten Stufen. In der Reihe E12 hat jede Zehnerstufe 12 Werte.</source>
+        <translation>Les résistances n&apos;existent pas dans toutes les valeurs, mais en paliers normalisés. Dans la série E12, chaque décade compte 12 valeurs.</translation>
     </message>
 </context>
 <context>

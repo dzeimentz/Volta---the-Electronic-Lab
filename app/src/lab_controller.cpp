@@ -13,6 +13,7 @@
 #include <cstdlib>
 
 #include "model/meter_display.hpp"
+#include "model/resistor_code.hpp"
 
 namespace volta {
 
@@ -203,6 +204,51 @@ QVariantList LabController::trayParts() const {
         else if (guided ? m_experiment.freeParts.contains(type) : p.value(QStringLiteral("stage")).toInt() <= open)
             out << p;
     }
+    return out;
+}
+
+QVariantMap LabController::colorCode(double ohm, int rings) const {
+    const model::resistor_code::Code code = model::resistor_code::encode(ohm, rings);
+    QVariantList r;
+    for (int v : code.rings) r << v;
+    return {{QStringLiteral("valid"), code.valid},
+            {QStringLiteral("rings"), r},
+            {QStringLiteral("ohm"), code.ohm},
+            {QStringLiteral("tolerance"),
+             code.rings.empty() ? 0.0 : model::resistor_code::tolerancePercent(code.rings.back())}};
+}
+
+double LabController::decodeColors(const QVariantList& rings) const {
+    std::vector<int> r;
+    for (const QVariant& v : rings) r.push_back(v.toInt());
+    return model::resistor_code::decode(r);
+}
+
+double LabController::parseOhm(const QString& text) const {
+    // Ohm-Zeichen und Mikro entfernen sich als Nicht-ASCII selbst; Komma der Sprache gilt
+    return model::resistor_code::parseOhm(text.toStdString());
+}
+
+QVariantList LabController::eSeries(int n) const {
+    QVariantList out;
+    for (double v : model::resistor_code::eSeries(n)) out << v;
+    return out;
+}
+
+QVariantMap LabController::nearestE(double ohm, int n) const {
+    const model::resistor_code::Nearest r = model::resistor_code::nearest(ohm, n);
+    return {{QStringLiteral("value"), r.value},
+            {QStringLiteral("deviation"), r.deviationPercent},
+            {QStringLiteral("isMember"), r.isMember}};
+}
+
+QVariantList LabController::lexicon() const {
+    QVariantList out;
+    for (const auto& [type, e] : m_session->catalog().parts)
+        if (!e.lexiconKey.empty())
+            out << QVariantMap{{QStringLiteral("type"), qs(type)},
+                               {QStringLiteral("text"), m_repo.text(qs(e.lexiconKey))},
+                               {QStringLiteral("stage"), e.fromStage}};
     return out;
 }
 

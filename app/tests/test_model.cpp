@@ -6,6 +6,7 @@
 
 #include "model/anchor.hpp"
 #include "model/meter_display.hpp"
+#include "model/resistor_code.hpp"
 #include "model/netlist_builder.hpp"
 #include "services/content_repository.hpp"
 #include "volta/core/components/capacitor.hpp"
@@ -43,6 +44,62 @@ private:
     }
 
 private slots:
+    // Werkzeugkasten: Farbcode in beide Richtungen, E-Reihen mit naechstem Normwert
+    void resistorColorCode() {
+        namespace rc = model::resistor_code;
+        rc::Code c = rc::encode(470.0, 4); // gelb, violett, braun, gold
+        QVERIFY(c.valid);
+        QCOMPARE(c.rings, (std::vector<int>{4, 7, 1, rc::kGold}));
+        QCOMPARE(rc::decode(c.rings), 470.0);
+        c = rc::encode(4.7, 4); // gelb, violett, gold (x0,1)
+        QCOMPARE(c.rings, (std::vector<int>{4, 7, rc::kGold, rc::kGold}));
+        QVERIFY(std::fabs(rc::decode(c.rings) - 4.7) < 1e-12);
+        c = rc::encode(10e3, 5); // braun, schwarz, schwarz, rot, braun
+        QCOMPARE(c.rings, (std::vector<int>{1, 0, 0, 2, 1}));
+        QCOMPARE(rc::decode(c.rings), 10e3);
+        c = rc::encode(999.6, 4); // rundet auf 1,0 kOhm
+        QCOMPARE(c.rings, (std::vector<int>{1, 0, 2, rc::kGold}));
+        QCOMPARE(c.ohm, 1000.0);
+        QVERIFY(!rc::encode(0.0, 4).valid);
+        QVERIFY(!rc::encode(1e12, 4).valid);
+        QCOMPARE(rc::decode({rc::kGold, 0, 1, rc::kGold}), 0.0); // gold ist keine Ziffer
+        QCOMPARE(rc::tolerancePercent(rc::kGold), 5.0);
+        QCOMPARE(rc::tolerancePercent(1), 1.0);
+    }
+
+    void parseOhmInput() {
+        namespace rc = model::resistor_code;
+        QCOMPARE(rc::parseOhm("470"), 470.0);
+        QCOMPARE(rc::parseOhm("4,7k"), 4700.0);
+        QCOMPARE(rc::parseOhm("4.7 kOhm"), 4700.0);
+        QCOMPARE(rc::parseOhm("4k7"), 4700.0);
+        QCOMPARE(rc::parseOhm("470R"), 470.0);
+        QCOMPARE(rc::parseOhm("4R7"), 4.7);
+        QCOMPARE(rc::parseOhm("2M2"), 2.2e6);
+        QCOMPARE(rc::parseOhm("1 k\u03A9"), 1000.0);
+        QCOMPARE(rc::parseOhm(""), 0.0);
+        QCOMPARE(rc::parseOhm("abc"), 0.0);
+        QCOMPARE(rc::parseOhm("1.2.3"), 0.0);
+    }
+
+    void eSeriesNearest() {
+        namespace rc = model::resistor_code;
+        QCOMPARE(rc::eSeries(6).size(), std::size_t(6));
+        QCOMPARE(rc::eSeries(12).size(), std::size_t(12));
+        QCOMPARE(rc::eSeries(24).size(), std::size_t(24));
+        rc::Nearest n = rc::nearest(470.0, 12);
+        QVERIFY(n.isMember);
+        QCOMPARE(n.value, 470.0);
+        n = rc::nearest(500.0, 12); // 470 (-6 %) oder 560 (+12 %) -> 470
+        QCOMPARE(n.value, 470.0);
+        QVERIFY(std::fabs(n.deviationPercent - 6.383) < 0.01);
+        n = rc::nearest(950.0, 12); // naechste Dekade: 1 kOhm
+        QCOMPARE(n.value, 1000.0);
+        n = rc::nearest(500.0, 24); // 510 in E24
+        QCOMPARE(n.value, 510.0);
+        QVERIFY(!rc::nearest(0.0, 12).isMember);
+    }
+
     // Anzeige des Messgeraets: drei gueltige Stellen, passender Vorsatz
     void meterDisplayFormat() {
         using core::MeterMode;

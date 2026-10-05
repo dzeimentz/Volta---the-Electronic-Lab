@@ -149,6 +149,19 @@ int main(int argc, char* argv[]) {
             if (!engine.rootObjects().isEmpty()) engine.rootObjects().first()->setProperty("inJournal", true);
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_TOOLBOX=0|1|2 oeffnet den Werkzeugkasten (Farbcode, E-Reihen, Lexikon)
+    if (const QString tb = qEnvironmentVariable("VOLTA_DEMO_TOOLBOX"); !tb.isEmpty())
+        QTimer::singleShot(600, &engine, [&engine, tb] {
+            const auto roots = engine.rootObjects();
+            if (roots.isEmpty()) return;
+            roots.first()->setProperty("inLab", true);
+            if (QObject* box = roots.first()->findChild<QObject*>(QStringLiteral("toolbox"))) {
+                QMetaObject::invokeMethod(box, "open");
+                if (QObject* tabs = box->findChild<QObject*>(QStringLiteral("toolboxTabs")))
+                    tabs->setProperty("currentIndex", tb.toInt());
+            }
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

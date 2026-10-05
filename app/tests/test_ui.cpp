@@ -480,6 +480,32 @@ private slots:
         m_settings->setFontLevel(2);
     }
 
+    // Werkzeugkasten: Wert eingeben -> Ringe; auf den ausgewaehlten Widerstand uebernehmen (Befehl)
+    void toolboxColorCode() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false)); // R1, 1 kOhm
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("toolboxButton"))));
+        QObject* box = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("toolbox"));
+        QVERIFY(box);
+        QTRY_VERIFY(box->property("opened").toBool());
+        QQuickItem* input = item(QStringLiteral("colorInput"));
+        QVERIFY(input);
+        input->setProperty("text", QStringLiteral("4k7"));
+        QMetaObject::invokeMethod(item(QStringLiteral("colorShow")), "clicked");
+        QTRY_VERIFY(item(QStringLiteral("colorValue"))->property("text").toString().startsWith(QStringLiteral("4,7 k")));
+        QCOMPARE(m_lab->decodeColors({4, 7, 2, 10}), 4700.0);
+        // Widerstand auswaehlen (Lab.selectedPart) und uebernehmen
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        lab->setProperty("selectedPart", QStringLiteral("R1"));
+        QTRY_VERIFY(item(QStringLiteral("colorApply"))->isEnabled());
+        QMetaObject::invokeMethod(item(QStringLiteral("colorApply")), "clicked");
+        QTRY_COMPARE(board().findPart("R1")->value, 4700.0);
+        QVERIFY(m_lab->canUndo());
+        QMetaObject::invokeMethod(box, "close");
+        QTRY_VERIFY(!box->property("opened").toBool());
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_language.reset();

@@ -182,7 +182,7 @@ Item {
                 id: experimentBox
                 objectName: "experimentBox"
                 anchors.verticalCenter: parent.verticalCenter
-                width: 250 // laengere Titel werden gekuerzt; die Liste ist breiter
+                width: 200 // laengere Titel werden gekuerzt; die Liste ist breiter
                 height: Theme.control
                 textRole: "text"
                 readonly property var entries: {
@@ -304,6 +304,21 @@ Item {
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Mehr Felder je Reihe")
                     Accessible.name: qsTr("Mehr Felder je Reihe")
+                }
+            }
+            // Werkzeugkasten (Farbcode, E-Reihen, Lexikon)
+            ToolButton {
+                objectName: "toolboxButton"
+                width: Theme.control; height: Theme.control
+                text: "🧰"
+                font.pixelSize: 24
+                onClicked: toolbox.opened ? toolbox.close() : toolbox.open()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Werkzeugkasten")
+                Accessible.name: qsTr("Werkzeugkasten")
+                background: Rectangle {
+                    radius: 6
+                    color: toolbox.opened ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
                 }
             }
             // Messgeraet ein-/ausblenden
@@ -731,6 +746,20 @@ Item {
         }
     }
 
+
+    ToolboxPanel {
+        id: toolbox
+        objectName: "toolbox"
+        controller: lab.controller
+        y: toolbar.height
+        height: lab.height - toolbar.height
+        selectedPartId: lab.selectedPart
+        selectedPartType: {
+            const list = lab.controller.parts
+            for (let i = 0; i < list.length; ++i) if (list[i].id === lab.selectedPart) return list[i].type
+            return ""
+        }
+    }
 
     Toast {
         id: toast

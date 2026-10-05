@@ -19,6 +19,7 @@ struct CatalogEntry {
     // Auswahlvarianten ("varianten"), z. B. Gluehlampe 2,5 / 6 / 10 V; der Wert des Bauteils (PartPlacement::value)
     // waehlt die Variante ueber u_nenn_V. Leer: keine Auswahl.
     std::vector<std::map<std::string, double>> variants;
+    std::string lexiconKey; // "lexikon_key": Text im Bauteillexikon
     int fromStage = 0;
 
     double param(const std::string& key, double fallback) const {

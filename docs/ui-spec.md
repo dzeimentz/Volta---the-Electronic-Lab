@@ -106,6 +106,10 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Bauteillexikon, Zeitschreiber (ab Stufe 3), Fehlersuche (ab Stufe 2, antwortet mit einer Frage), Teileliste mit
   Aufbaukarte (PDF), Kennlinienschreiber (Volta 2).
 - »Uebernehmen« schreibt Werte auf ein ausgewaehltes Bauteil (Befehl, undo-faehig).
+- Umgesetzt (D3, `ToolboxPanel.qml`, Rechnen in `model/resistor_code.hpp`): Seitenleiste 🧰 mit Farbcode (4/5 Ringe,
+  Ring fuer Ring mit Farbname und Farbfeld, Eingabe wie »4,7k«/»4k7«/»2M2«), E-Reihen E6/E12/E24 als
+  logarithmischer Zahlenstrahl mit naechstem Normwert und Abweichung, Bauteillexikon mit Normsymbolen.
+  »Uebernehmen« auf den ausgewaehlten Widerstand. Formelrechner, Zeitschreiber, Fehlersuche, Teileliste folgen.
 
 ## Interaktives Readme
 - Rundgang beim ersten Start mit Begleitfigur; danach ueber das Fragezeichen.

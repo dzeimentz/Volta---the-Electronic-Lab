@@ -347,6 +347,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Werkzeugkasten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Messgerät ausblenden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -606,6 +610,141 @@
     </message>
     <message>
         <source>Weiß</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ToolboxPanel</name>
+    <message>
+        <source>schwarz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>braun</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>rot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>orange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>gelb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>grün</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>blau</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>violett</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>grau</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>weiß</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>gold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>silber</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Werkzeugkasten</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Farbcode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>E-Reihen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lexikon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>4 Ringe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>5 Ringe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toleranz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiplikator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1. Ziffer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wert eingeben</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>z. B. 4,7k</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ringe zeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diesen Wert kann ich nicht lesen. Versuche z. B. 470, 4,7k oder 2M2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auf %1 übernehmen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erst einen Widerstand auswählen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 ist ein Normwert der Reihe E%2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nächster Normwert in E%1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Abweichung: %1 %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Normwert auf %1 übernehmen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Widerstände gibt es nicht in jedem Wert, sondern in genormten Stufen. In der Reihe E12 hat jede Zehnerstufe 12 Werte.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

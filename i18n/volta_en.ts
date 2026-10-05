@@ -347,6 +347,10 @@
         <translation>More fields per row</translation>
     </message>
     <message>
+        <source>Werkzeugkasten</source>
+        <translation>Toolbox</translation>
+    </message>
+    <message>
         <source>Messgerät ausblenden</source>
         <translation>Hide meter</translation>
     </message>
@@ -607,6 +611,141 @@
     <message>
         <source>Weiß</source>
         <translation>White</translation>
+    </message>
+</context>
+<context>
+    <name>ToolboxPanel</name>
+    <message>
+        <source>schwarz</source>
+        <translation>black</translation>
+    </message>
+    <message>
+        <source>braun</source>
+        <translation>brown</translation>
+    </message>
+    <message>
+        <source>rot</source>
+        <translation>red</translation>
+    </message>
+    <message>
+        <source>orange</source>
+        <translation>orange</translation>
+    </message>
+    <message>
+        <source>gelb</source>
+        <translation>yellow</translation>
+    </message>
+    <message>
+        <source>grün</source>
+        <translation>green</translation>
+    </message>
+    <message>
+        <source>blau</source>
+        <translation>blue</translation>
+    </message>
+    <message>
+        <source>violett</source>
+        <translation>violet</translation>
+    </message>
+    <message>
+        <source>grau</source>
+        <translation>grey</translation>
+    </message>
+    <message>
+        <source>weiß</source>
+        <translation>white</translation>
+    </message>
+    <message>
+        <source>gold</source>
+        <translation>gold</translation>
+    </message>
+    <message>
+        <source>silber</source>
+        <translation>silver</translation>
+    </message>
+    <message>
+        <source>Werkzeugkasten</source>
+        <translation>Toolbox</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>Farbcode</source>
+        <translation>Colour code</translation>
+    </message>
+    <message>
+        <source>E-Reihen</source>
+        <translation>E series</translation>
+    </message>
+    <message>
+        <source>Lexikon</source>
+        <translation>Glossary</translation>
+    </message>
+    <message>
+        <source>4 Ringe</source>
+        <translation>4 bands</translation>
+    </message>
+    <message>
+        <source>5 Ringe</source>
+        <translation>5 bands</translation>
+    </message>
+    <message>
+        <source>Toleranz</source>
+        <translation>Tolerance</translation>
+    </message>
+    <message>
+        <source>Multiplikator</source>
+        <translation>Multiplier</translation>
+    </message>
+    <message>
+        <source>%1. Ziffer</source>
+        <translation>Digit %1</translation>
+    </message>
+    <message>
+        <source>Wert eingeben</source>
+        <translation>Enter a value</translation>
+    </message>
+    <message>
+        <source>z. B. 4,7k</source>
+        <translation>e.g. 4.7k</translation>
+    </message>
+    <message>
+        <source>Ringe zeigen</source>
+        <translation>Show bands</translation>
+    </message>
+    <message>
+        <source>Diesen Wert kann ich nicht lesen. Versuche z. B. 470, 4,7k oder 2M2.</source>
+        <translation>I can&apos;t read this value. Try e.g. 470, 4.7k or 2M2.</translation>
+    </message>
+    <message>
+        <source>Auf %1 übernehmen</source>
+        <translation>Apply to %1</translation>
+    </message>
+    <message>
+        <source>Erst einen Widerstand auswählen</source>
+        <translation>Select a resistor first</translation>
+    </message>
+    <message>
+        <source>%1 ist ein Normwert der Reihe E%2.</source>
+        <translation>%1 is a standard value of the E%2 series.</translation>
+    </message>
+    <message>
+        <source>Nächster Normwert in E%1: %2</source>
+        <translation>Nearest standard value in E%1: %2</translation>
+    </message>
+    <message>
+        <source>Abweichung: %1 %</source>
+        <translation>Deviation: %1 %</translation>
+    </message>
+    <message>
+        <source>Normwert auf %1 übernehmen</source>
+        <translation>Apply standard value to %1</translation>
+    </message>
+    <message>
+        <source>Widerstände gibt es nicht in jedem Wert, sondern in genormten Stufen. In der Reihe E12 hat jede Zehnerstufe 12 Werte.</source>
+        <translation>Resistors don&apos;t come in every value but in standard steps. In the E12 series each decade has 12 values.</translation>
     </message>
 </context>
 <context>

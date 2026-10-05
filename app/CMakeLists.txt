@@ -83,6 +83,7 @@ qt_add_qml_module(volta_ui
         qml/TopBarActions.qml
         qml/Home.qml
         qml/JournalView.qml
+        qml/ToolboxPanel.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp
