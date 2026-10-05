@@ -2,7 +2,9 @@
 // gegen die Experimentansicht. Prueft das Zusammenspiel QML <-> LabController <-> LabSession.
 #include <QQmlApplicationEngine>
 #include <QTemporaryDir>
+#include <QWheelEvent>
 #include <algorithm>
+#include <cmath>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickWindow>
@@ -455,6 +457,68 @@ private slots:
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(larger));
         QTRY_COMPARE(m_settings->fontLevel(), 1);
         m_settings->setFontLevel(2);
+    }
+
+    // Zoom und Verschieben (docs/ui-spec.md): Strg + Mausrad zoomt um den Zeiger, Leertaste + Ziehen verschiebt den
+    // Ausschnitt statt eine Leitung zu ziehen, der Knopf setzt die Ansicht zurueck (Desktop: eingepasst)
+    void zoomAndPanBoard() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        QQuickItem* canvas = item(QStringLiteral("canvas"));
+        QQuickItem* area = item(QStringLiteral("boardArea"));
+        QQuickItem* toggle = findItem(m_window->contentItem(), QStringLiteral("viewToggle"));
+        QVERIFY(canvas && area && toggle);
+        QTRY_VERIFY(area->isVisible());
+        const double fit = canvas->scale();
+        QVERIFY(fit > 0.0 && fit <= 1.0);
+        QVERIFY(!toggle->isVisible()); // eingepasst: nichts zurueckzusetzen
+
+        // Klick auf eine leere Stelle (unten rechts, eingepasst frei) gibt der Arbeitsflaeche den Tastaturfokus
+        QTest::mouseClick(m_window, Qt::LeftButton, {},
+                          area->mapToScene(QPointF(area->width() - 30, area->height() - 30)).toPoint());
+        const QPointF pos = area->mapToScene(QPointF(area->width() / 2, area->height() / 2));
+        const QPointF before = canvas->mapFromScene(pos);
+        QWheelEvent wheel(pos, m_window->mapToGlobal(pos), QPoint(), QPoint(0, 360), Qt::NoButton,
+                          Qt::ControlModifier, Qt::NoScrollPhase, false);
+        QGuiApplication::sendEvent(m_window, &wheel);
+        QTRY_VERIFY(canvas->scale() > fit * 1.3);
+        const QPointF after = canvas->mapFromScene(pos);
+        QVERIFY(std::abs(after.x() - before.x()) < 0.5 && std::abs(after.y() - before.y()) < 0.5);
+        QTRY_VERIFY(toggle->isVisible());
+
+        // Leertaste + Ziehen: verschiebt, legt keine Leitung an (Fokus kam mit dem Klick auf die leere Stelle)
+        const std::size_t wires = board().wires.size();
+        const double x0 = canvas->x();
+        QTest::keyPress(m_window, Qt::Key_Space);
+        const QPoint start = pos.toPoint();
+        drag(start, start - QPoint(100, 0));
+        QTest::keyRelease(m_window, Qt::Key_Space);
+        QTRY_VERIFY(canvas->x() < x0 - 50);
+        QCOMPARE(board().wires.size(), wires);
+
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(toggle));
+        QTRY_COMPARE(canvas->scale(), fit);
+        QTRY_VERIFY(!toggle->isVisible());
+    }
+
+    // Hochformat und schmale Fenster: Bauteilfach unten, Werkzeugleiste schmal; zurueck im Querformat wie vorher
+    void portraitLayout() {
+        m_window->setProperty("inLab", true);
+        QQuickItem* tray = item(QStringLiteral("partTray"));
+        QVERIFY(tray);
+        const QSize old = m_window->size();
+        m_window->setProperty("minimumWidth", 0);
+        m_window->setProperty("minimumHeight", 0);
+        m_window->resize(800, 1280);
+        QTRY_VERIFY(tray->y() > 1280 / 2);
+        QTRY_VERIFY(tray->width() > 700); // ganze Breite ausser dem eingeklappten Experimentfeld
+        QTRY_VERIFY(item(QStringLiteral("wireColorButton"))->isVisible());
+        QVERIFY(!findItem(m_window->contentItem(), QStringLiteral("meterToggle"))->isVisible());
+        QVERIFY(!findItem(m_window->contentItem(), QStringLiteral("columnsPlus"))->isVisible());
+        m_window->resize(old);
+        QTRY_VERIFY(tray->y() < 100);
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("meterToggle"))->isVisible());
+        QVERIFY(!findItem(m_window->contentItem(), QStringLiteral("wireColorButton"))->isVisible());
     }
 
     void cleanupTestCase() {

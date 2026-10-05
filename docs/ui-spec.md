@@ -52,11 +52,13 @@
 Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganzes Feld + 8 dp.
 
 Umgesetzt (Zoom/Verschieben, `Lab.qml`): zwei Finger (`PinchHandler`; der Punkt unter den Fingern bleibt stehen),
-Strg + Mausrad (Zoom am Zeiger), Mausrad bzw. Umschalt + Mausrad (Verschieben), mittlere Maustaste (Ziehen).
+Strg + Mausrad (Zoom am Zeiger), Mausrad bzw. Umschalt + Mausrad (Verschieben), Leertaste + Ziehen und mittlere
+Maustaste (Ausschnitt ziehen; die Leertaste wirkt, wenn die Arbeitsflaeche den Fokus hat, z. B. nach Klick ins Leere).
 Massstab zwischen »ganze Flaeche im Fenster« und 200 %. Ansicht zu Beginn: Desktop eingepasst; Touch (Android, iOS)
 in Originalgroesse, damit Kontaktfelder 56 dp hoch sind. Knopf ⤢ oben rechts in der Arbeitsflaeche: Touch wechselt
 zwischen Uebersicht (ganze Platte, Felder dann kleiner) und Originalgroesse, Desktop kehrt zum Einpassen zurueck.
-Offen: Leertaste + Ziehen, Tippen mit zwei/drei Fingern fuer Rueckgaengig/Wiederholen.
+Offen: Tippen mit zwei/drei Fingern fuer Rueckgaengig/Wiederholen (Pointer Handlers kennen kein Mehrfinger-Tippen;
+braucht eine eigene Erkennung und einen Geraetetest).
 
 ### Tablet und Hochformat
 - Unter 1280 dp Breite (iPad, Hochformat) schmale Werkzeugleiste: Felder je Reihe und Messgeraet nur im

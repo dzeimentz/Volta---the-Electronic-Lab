@@ -143,6 +143,7 @@ Item {
                                               (boardArea.height - 2 * Theme.margin) / canvas.height)
     readonly property real defaultScale: Theme.touchUi ? Math.max(fitScale, 1) : fitScale
     property bool autoView: true
+    property bool spaceHeld: false // Leertaste gedrueckt: Ziehen mit der Maus verschiebt den Ausschnitt
     property real userScale: 1
     property point userPos: Qt.point(Theme.margin, Theme.margin)
     readonly property real viewScale: autoView ? defaultScale
@@ -159,6 +160,12 @@ Item {
         const scale = Math.max(fitScale, Math.min(Theme.maxZoom, s))
         userPos = Qt.point(p.x - c.x * scale, p.y - c.y * scale)
         userScale = scale
+        autoView = false
+    }
+    // Ziehen mit der Maus: Flaeche ab der Startlage um die Verschiebung des Zeigers versetzen
+    function panTo(start, translation) {
+        userScale = canvas.scale
+        userPos = Qt.point(start.x + translation.x, start.y + translation.y)
         autoView = false
     }
     function panBy(dx, dy) {
@@ -504,6 +511,7 @@ Item {
 
     Rectangle {
         id: boardArea
+        objectName: "boardArea"
         anchors.left: lab.portrait ? parent.left : tray.right
         anchors.right: panelSlot.left
         anchors.top: toolbar.bottom
@@ -511,8 +519,39 @@ Item {
         color: Theme.board
         clip: true
 
-        // Tippen ins Leere hebt die Auswahl auf
-        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = "" } }
+        // Tippen ins Leere hebt die Auswahl auf (und gibt der Arbeitsflaeche den Tastaturfokus fuer die Leertaste)
+        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = ""; spaceKeys.forceActiveFocus() } }
+
+        // Leertaste + Ziehen (Desktop, docs/ui-spec.md): solange die Leertaste gehalten wird, liegt eine Ebene ueber
+        // der Arbeitsflaeche, die das Ziehen mit der Maus als Verschieben nimmt (Felder und Bauteile bleiben unberuehrt)
+        Item {
+            id: spaceKeys
+            objectName: "spaceKeys"
+            focus: true
+            Keys.onPressed: (event) => {
+                if (event.key === Qt.Key_Space) { if (!event.isAutoRepeat) lab.spaceHeld = true; event.accepted = true }
+            }
+            Keys.onReleased: (event) => {
+                if (event.key === Qt.Key_Space) { if (!event.isAutoRepeat) lab.spaceHeld = false; event.accepted = true }
+            }
+            onActiveFocusChanged: if (!activeFocus) lab.spaceHeld = false
+        }
+        Item {
+            objectName: "spacePanLayer"
+            anchors.fill: parent
+            z: 10
+            visible: lab.spaceHeld
+            HoverHandler { cursorShape: spacePan.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor }
+            DragHandler {
+                id: spacePan
+                target: null
+                grabPermissions: PointerHandler.CanTakeOverFromAnything // vor dem Ziehen einer Leitung
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                property point startPos
+                onActiveChanged: if (active) startPos = Qt.point(canvas.x, canvas.y)
+                onActiveTranslationChanged: if (active) lab.panTo(startPos, activeTranslation)
+            }
+        }
 
         // Zoom und Verschieben mit zwei Fingern: der Flaechenpunkt unter dem Mittelpunkt der Finger bleibt darunter
         PinchHandler {
@@ -559,11 +598,7 @@ Item {
             acceptedDevices: PointerDevice.Mouse
             property point startPos
             onActiveChanged: if (active) startPos = Qt.point(canvas.x, canvas.y)
-            onActiveTranslationChanged: if (active) {
-                lab.userScale = canvas.scale
-                lab.userPos = Qt.point(startPos.x + activeTranslation.x, startPos.y + activeTranslation.y)
-                lab.autoView = false
-            }
+            onActiveTranslationChanged: if (active) lab.panTo(startPos, activeTranslation)
         }
 
         Item {
