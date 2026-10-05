@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Startbildschirm ab Android 12 (SplashScreen des Systems): Navy, Motiv des App-Symbols ohne Grundflaeche -->
+<resources>
+    <style name="VoltaLaunchTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:statusBarColor">@color/volta_navy</item>
+        <item name="android:navigationBarColor">@color/volta_navy</item>
+        <item name="android:windowSplashScreenBackground">@color/volta_navy</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+    </style>
+</resources>

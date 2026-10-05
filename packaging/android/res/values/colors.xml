@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Farben aus app/qml/Theme.qml -->
+<resources>
+    <color name="volta_navy">#0A2540</color>
+</resources>
