@@ -454,6 +454,7 @@ Item {
         id: tray
         anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
         parts: lab.controller.trayParts
+        onLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.partName(type)).arg(stage))
         onDragUpdated: (type, scenePos) => {
             lab.trayType = type
             lab.trayPos = lab.toCanvas(scenePos)

@@ -375,6 +375,10 @@
         <translation>Temps %1 s</translation>
     </message>
     <message>
+        <source>%1 wird mit Stufe %2 freigeschaltet.</source>
+        <translation>%1 sera débloqué au niveau %2.</translation>
+    </message>
+    <message>
         <source>Spannungsanzeige ein/aus</source>
         <translation>Afficher/masquer la tension</translation>
     </message>
@@ -498,6 +502,10 @@
     <message>
         <source>Bauteilfach</source>
         <translation>Boîte à composants</translation>
+    </message>
+    <message>
+        <source>gesperrt bis Stufe %1</source>
+        <translation>verrouillé jusqu&apos;au niveau %1</translation>
     </message>
 </context>
 <context>
@@ -831,6 +839,10 @@
     <message>
         <source>Musteraufbau zeigen</source>
         <translation>Afficher le montage modèle</translation>
+    </message>
+    <message>
+        <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
+        <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
 </context>
 </TS>

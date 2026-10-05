@@ -199,13 +199,20 @@ QVariantList LabController::trayParts() const {
     const bool guided = !m_freeLab && !m_experiment.id.isEmpty() && m_flow.phase() != model::ExperimentFlow::Phase::None;
     const int open = highestUnlockedStage();
     for (const QVariant& v : all) {
-        const QVariantMap p = v.toMap();
+        QVariantMap p = v.toMap();
         const QString type = p.value(QStringLiteral("type")).toString();
-        if (m_unlockAll)
+        // Gefuehrtes Experiment: nur seine Bauteile. Freies Labor: alle, gesperrte sichtbar, aber nicht benutzbar.
+        const bool locked = !m_unlockAll && p.value(QStringLiteral("stage")).toInt() > open;
+        p.insert(QStringLiteral("locked"), locked);
+        if (m_unlockAll || !guided)
             out << p;
-        else if (guided ? m_experiment.freeParts.contains(type) : p.value(QStringLiteral("stage")).toInt() <= open)
+        else if (m_experiment.freeParts.contains(type))
             out << p;
     }
+    // freigeschaltete zuerst, gesperrte danach
+    std::stable_sort(out.begin(), out.end(), [](const QVariant& a, const QVariant& b) {
+        return !a.toMap().value(QStringLiteral("locked")).toBool() && b.toMap().value(QStringLiteral("locked")).toBool();
+    });
     return out;
 }
 
@@ -562,6 +569,15 @@ QVariantList LabController::catalogParts() const {
 // ------------------------------------------------------------------ Befehle
 
 bool LabController::addPart(const QString& type, const QString& start, bool vertical, bool longSpan) {
+    for (const QVariant& v : trayParts()) {
+        const QVariantMap p = v.toMap();
+        if (p.value(QStringLiteral("type")).toString() == type && p.value(QStringLiteral("locked")).toBool()) {
+            m_lastEditError = tr("Dieses Bauteil wird mit Stufe %1 freigeschaltet.")
+                                  .arg(p.value(QStringLiteral("stage")).toInt());
+            emit editFailed();
+            return false;
+        }
+    }
     return result(m_session->addPart(ss(type), ss(start), orient(vertical), spanOf(longSpan)));
 }
 bool LabController::movePart(const QString& id, const QString& start, bool vertical, bool longSpan) {

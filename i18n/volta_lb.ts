@@ -375,6 +375,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>%1 wird mit Stufe %2 freigeschaltet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Spannungsanzeige ein/aus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -497,6 +501,10 @@
     <name>PartTray</name>
     <message>
         <source>Bauteilfach</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>gesperrt bis Stufe %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -830,6 +838,10 @@
     </message>
     <message>
         <source>Musteraufbau zeigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

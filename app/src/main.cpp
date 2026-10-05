@@ -62,7 +62,10 @@ int main(int argc, char* argv[]) {
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");
     // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
-    for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS"})
+    // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
+    for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
+                             "VOLTA_DEMO_FREELAB"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
             engine.rootObjects().first()->setProperty("inLab", true);
 

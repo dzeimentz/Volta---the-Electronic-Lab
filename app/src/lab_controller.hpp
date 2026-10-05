@@ -32,7 +32,7 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList voltageFields READ voltageFields NOTIFY boardChanged)
     Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 8, 10 oder 12 Felder je Reihe
     Q_PROPERTY(QVariantList catalogParts READ catalogParts CONSTANT)
-    // Bauteilfach: im gefuehrten Experiment die freigegebenen Bauteile, im freien Labor die der offenen Stufen
+    // Bauteilfach: im gefuehrten Experiment die freigegebenen Bauteile, im freien Labor alle (locked: noch gesperrt)
     Q_PROPERTY(QVariantList trayParts READ trayParts NOTIFY progressChanged)
     // Lernpfad: [{number, title, question, unlocked, done, total, experiments: [{id, title, done, destructive}]}]
     Q_PROPERTY(QVariantList stages READ stages NOTIFY progressChanged)

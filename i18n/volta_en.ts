@@ -375,6 +375,10 @@
         <translation>Time %1 s</translation>
     </message>
     <message>
+        <source>%1 wird mit Stufe %2 freigeschaltet.</source>
+        <translation>%1 will be unlocked at level %2.</translation>
+    </message>
+    <message>
         <source>Spannungsanzeige ein/aus</source>
         <translation>Voltage display on/off</translation>
     </message>
@@ -498,6 +502,10 @@
     <message>
         <source>Bauteilfach</source>
         <translation>Parts tray</translation>
+    </message>
+    <message>
+        <source>gesperrt bis Stufe %1</source>
+        <translation>locked until level %1</translation>
     </message>
 </context>
 <context>
@@ -831,6 +839,10 @@
     <message>
         <source>Musteraufbau zeigen</source>
         <translation>Show sample build</translation>
+    </message>
+    <message>
+        <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
+        <translation>This part will be unlocked at level %1.</translation>
     </message>
 </context>
 </TS>

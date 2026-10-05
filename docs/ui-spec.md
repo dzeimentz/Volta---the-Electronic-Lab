@@ -17,8 +17,8 @@
   `content/<band>/stufen.json` (Titel, Leitfrage), Fortschritt je Stufe und Experimentkarten (geschafft: Haken).
   Freischaltung zur Reduktion: Stufen 0 und 1 offen, jede weitere, wenn alle Experimente der vorigen geschafft sind;
   Einstellung »Alle Bauteile freigeben« (bis zum Elternbereich). Fortschritt: `fortschritt.json` (nur ID und Datum,
-  `QSaveFile`). Bauteilfach im gefuehrten Experiment = `bauteile_frei`, im freien Labor die Bauteile der offenen
-  Stufen. ⌂ in der Werkzeugleiste fuehrt zur Startseite.
+  `QSaveFile`). Bauteilfach im gefuehrten Experiment = `bauteile_frei`, im freien Labor alle Bauteile, noch gesperrte
+  grau mit Schloss und Stufe (nicht ziehbar, Antippen zeigt einen Hinweis). ⌂ in der Werkzeugleiste fuehrt zur Startseite.
 
 ## Experimentansicht (Lab)
 - Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.

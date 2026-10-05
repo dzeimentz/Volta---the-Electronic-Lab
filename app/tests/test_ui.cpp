@@ -445,6 +445,16 @@ private slots:
         QTRY_VERIFY(!home->isVisible());
 
         m_settings->setUnlockAll(false);
+        // freies Labor: alle Bauteile sichtbar, gesperrte (z. B. Transistor, Stufe 4) nicht setzbar
+        m_lab->resetProgress();
+        QTRY_VERIFY(item(QStringLiteral("tray_transistor_npn")) != nullptr);
+        bool transistorLocked = false;
+        for (const QVariant& v : m_lab->trayParts())
+            if (v.toMap().value(QStringLiteral("type")).toString() == QStringLiteral("transistor_npn"))
+                transistorLocked = v.toMap().value(QStringLiteral("locked")).toBool();
+        QVERIFY(transistorLocked);
+        QVERIFY(!m_lab->addPart(QStringLiteral("transistor_npn"), QStringLiteral("B2"), false, false));
+        QVERIFY(m_lab->addPart(QStringLiteral("gluehlampe"), QStringLiteral("B2"), false, false));
         QTRY_VERIFY(!m_lab->unlockAll());
         QTemporaryDir dir;
         QVERIFY(dir.isValid());
