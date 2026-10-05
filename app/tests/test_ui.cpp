@@ -1,6 +1,7 @@
 // Oberflaechentests (Qt Quick, ohne sichtbares Fenster): echte Bedienung mit simulierter Maus und Tastatur
 // gegen die Experimentansicht. Prueft das Zusammenspiel QML <-> LabController <-> LabSession.
 #include <QQmlApplicationEngine>
+#include <QTemporaryDir>
 #include <algorithm>
 #include <QQmlContext>
 #include <QQuickItem>
@@ -11,6 +12,7 @@
 #include "lab_controller.hpp"
 #include "app_settings.hpp"
 #include "language_service.hpp"
+#include "services/progress_store.hpp"
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 
@@ -34,8 +36,17 @@ private:
         return nullptr;
     }
 
+    // Erstes sichtbares Element mit diesem Namen (Startseite und Labor teilen sich z. B. die Knoepfe oben rechts)
+    static QQuickItem* findVisible(QQuickItem* root, const QString& name) {
+        if (root->objectName() == name && root->isVisible()) return root;
+        for (QQuickItem* child : root->childItems())
+            if (QQuickItem* found = findVisible(child, name)) return found;
+        return nullptr;
+    }
+
     QQuickItem* item(const QString& name) const {
-        QQuickItem* found = findItem(m_window->contentItem(), name);
+        QQuickItem* found = findVisible(m_window->contentItem(), name);
+        if (!found) found = findItem(m_window->contentItem(), name);
         if (!found) qWarning() << "Element nicht gefunden:" << name;
         return found;
     }
@@ -115,13 +126,26 @@ private slots:
         m_window = qobject_cast<QQuickWindow*>(m_engine->rootObjects().first());
         QVERIFY(m_window);
         QVERIFY(QTest::qWaitForWindowExposed(m_window));
-        // Main startet das erste gefuehrte Experiment (leere Grundplatte, Ablauf bei der Frage)
+        // Start auf der Startseite: Lernpfad mit Stufe 1 offen, Stufe 2 gesperrt
+        QQuickItem* home = item(QStringLiteral("home"));
+        QVERIFY(home && home->isVisible());
+        QVERIFY(m_lab->isUnlocked(QStringLiteral("volta1.1.1")));
+        QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4")));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("card_volta1.1.1"))));
         QTRY_COMPARE(m_lab->phase(), 1);
+        QTRY_VERIFY(!home->isVisible());
         QVERIFY(board().parts.empty());
+        // Bauteilfach des Experiments: nur die freigegebenen Bauteile
+        QTRY_VERIFY(item(QStringLiteral("tray_gluehlampe")) != nullptr);
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("tray_motor")) == nullptr);
         experimentFlowInPanel();
-        // die folgenden Ablaeufe arbeiten mit der Vorlage von 2.4
+        QVERIFY(m_lab->isDone(QStringLiteral("volta1.1.1"))); // Lernpfad: geschafft
+        // die folgenden Ablaeufe arbeiten mit der Vorlage von 2.4 und allen Bauteilen
+        m_settings->setUnlockAll(true);
+        QTRY_VERIFY(m_lab->unlockAll());
         QVERIFY(m_lab->loadExperiment(QStringLiteral("volta1.2.4")));
         QTRY_COMPARE(board().parts.size(), std::size_t(2));
+        QTest::qWait(100); // Bauteilfach neu aufgebaut (alte Kacheln werden verzoegert geloescht)
         QCOMPARE(m_lab->phase(), 0);
     }
 
@@ -297,14 +321,14 @@ private slots:
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(fr));
         QTRY_COMPARE(m_language->language(), QStringLiteral("fr"));
         QCOMPARE(m_lab->title(), QStringLiteral("Comment allumer une ampoule ?"));
-        QCOMPARE(QCoreApplication::translate("Lab", "Einstellungen"), QStringLiteral("Réglages"));
+        QCOMPARE(QCoreApplication::translate("TopBarActions", "Einstellungen"), QStringLiteral("Réglages"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral(","));
         QVERIFY(!m_language->setLanguage(QStringLiteral("lb")));
         QVERIFY(m_language->setLanguage(QStringLiteral("en")));
         QCOMPARE(m_lab->title(), QStringLiteral("How do you make a bulb light up?"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral("."));
         QVERIFY(m_language->setLanguage(QStringLiteral("de")));
-        QCOMPARE(QCoreApplication::translate("Lab", "Einstellungen"), QStringLiteral("Einstellungen"));
+        QCOMPARE(QCoreApplication::translate("TopBarActions", "Einstellungen"), QStringLiteral("Einstellungen"));
         QCOMPARE(m_lab->title(), QStringLiteral("Wie bringst du ein Lämpchen zum Leuchten?"));
     }
 
@@ -377,6 +401,42 @@ private slots:
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(flow));
         QTRY_VERIFY(!m_settings->showCurrentFlow());
         m_settings->setShowCurrentFlow(true);
+    }
+
+    // Startseite: zurueck aus dem Labor, freies Labor; Freischaltung der Stufe 2 nach Stufe 1
+    void learningPathAndHome() {
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("homeButton"))));
+        QQuickItem* home = item(QStringLiteral("home"));
+        QTRY_VERIFY(home->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("tileFreeLab"))));
+        QTRY_VERIFY(m_lab->freeLab());
+        QTRY_VERIFY(!home->isVisible());
+
+        m_settings->setUnlockAll(false);
+        QTRY_VERIFY(!m_lab->unlockAll());
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+        const QString file = dir.filePath(QStringLiteral("fortschritt.json"));
+        {
+            services::ProgressStore store(file);
+            QVERIFY(store.markDone(QStringLiteral("volta1.1.1")));
+            QVERIFY(store.markDone(QStringLiteral("volta1.1.2")));
+        }
+        m_lab->useProgressFile(file);
+        QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4"))); // 1.3 fehlt noch
+        {
+            services::ProgressStore store(file);
+            QVERIFY(store.markDone(QStringLiteral("volta1.1.3")));
+        }
+        m_lab->useProgressFile(file);
+        QVERIFY(m_lab->isUnlocked(QStringLiteral("volta1.2.4")));
+        const QVariantList stages = m_lab->stages();
+        const QVariantMap s1 = stages.at(1).toMap();
+        QCOMPARE(s1.value(QStringLiteral("done")).toInt(), 3);
+        QVERIFY(stages.at(2).toMap().value(QStringLiteral("unlocked")).toBool());
+        QVERIFY(!stages.at(3).toMap().value(QStringLiteral("unlocked")).toBool());
+        m_lab->resetProgress();
+        QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4")));
     }
 
     void cleanupTestCase() {

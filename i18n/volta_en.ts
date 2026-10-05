@@ -108,6 +108,53 @@
     </message>
 </context>
 <context>
+    <name>Home</name>
+    <message>
+        <source>Freies Labor</source>
+        <translation>Free lab</translation>
+    </message>
+    <message>
+        <source>Eigene Ideen ausprobieren – mit allen freigeschalteten Bauteilen</source>
+        <translation>Try your own ideas – with all unlocked parts</translation>
+    </message>
+    <message>
+        <source>Forscherheft</source>
+        <translation>Research journal</translation>
+    </message>
+    <message>
+        <source>Deine Vermutungen und Beobachtungen – folgt</source>
+        <translation>Your guesses and observations – coming soon</translation>
+    </message>
+    <message>
+        <source>Lernpfad</source>
+        <translation>Learning path</translation>
+    </message>
+    <message>
+        <source>Stufe %1: %2</source>
+        <translation>Level %1: %2</translation>
+    </message>
+    <message>
+        <source>%1 von %2 geschafft</source>
+        <translation>%1 of %2 done</translation>
+    </message>
+    <message>
+        <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
+        <translation>Still locked – first complete the experiments of level %1.</translation>
+    </message>
+    <message>
+        <source>Experimente folgen.</source>
+        <translation>Experiments coming soon.</translation>
+    </message>
+    <message>
+        <source>Nur in der App!</source>
+        <translation>Only in the app!</translation>
+    </message>
+    <message>
+        <source>geschafft</source>
+        <translation>done</translation>
+    </message>
+</context>
+<context>
     <name>InfoDialog</name>
     <message>
         <source>Version %1</source>
@@ -177,24 +224,16 @@
 <context>
     <name>Lab</name>
     <message>
-        <source>Anzeigesprache wählen</source>
-        <translation>Choose language</translation>
-    </message>
-    <message>
-        <source>folgt</source>
-        <translation>coming soon</translation>
-    </message>
-    <message>
-        <source>Info</source>
-        <translation>Info</translation>
-    </message>
-    <message>
         <source>Stufe %1: %2</source>
         <translation>Level %1: %2</translation>
     </message>
     <message>
         <source>Freies Labor</source>
         <translation>Free lab</translation>
+    </message>
+    <message>
+        <source>Startseite</source>
+        <translation>Home</translation>
     </message>
     <message>
         <source>Rückgängig: %1</source>
@@ -219,30 +258,6 @@
     <message>
         <source>1–%1</source>
         <translation>1–%1</translation>
-    </message>
-    <message>
-        <source>Einstellungen</source>
-        <translation>Settings</translation>
-    </message>
-    <message>
-        <source>Stromfluss anzeigen</source>
-        <translation>Show current flow</translation>
-    </message>
-    <message>
-        <source>Animationen reduzieren</source>
-        <translation>Reduce animations</translation>
-    </message>
-    <message>
-        <source>Startbildschirm zeigen</source>
-        <translation>Show start screen</translation>
-    </message>
-    <message>
-        <source>Messgerät anzeigen</source>
-        <translation>Show meter</translation>
-    </message>
-    <message>
-        <source>Felder je Reihe</source>
-        <translation>Fields per row</translation>
     </message>
     <message>
         <source>Experiment wählen</source>
@@ -517,6 +532,53 @@
     <message>
         <source>Weiß</source>
         <translation>White</translation>
+    </message>
+</context>
+<context>
+    <name>TopBarActions</name>
+    <message>
+        <source>Anzeigesprache wählen</source>
+        <translation>Choose language</translation>
+    </message>
+    <message>
+        <source>folgt</source>
+        <translation>coming soon</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <source>Einstellungen</source>
+        <translation>Settings</translation>
+    </message>
+    <message>
+        <source>Stromfluss anzeigen</source>
+        <translation>Show current flow</translation>
+    </message>
+    <message>
+        <source>Animationen reduzieren</source>
+        <translation>Reduce animations</translation>
+    </message>
+    <message>
+        <source>Startbildschirm zeigen</source>
+        <translation>Show start screen</translation>
+    </message>
+    <message>
+        <source>Messgerät anzeigen</source>
+        <translation>Show meter</translation>
+    </message>
+    <message>
+        <source>Felder je Reihe</source>
+        <translation>Fields per row</translation>
+    </message>
+    <message>
+        <source>1–%1</source>
+        <translation>1–%1</translation>
+    </message>
+    <message>
+        <source>Alle Bauteile freigeben</source>
+        <translation>Unlock all parts</translation>
     </message>
 </context>
 <context>

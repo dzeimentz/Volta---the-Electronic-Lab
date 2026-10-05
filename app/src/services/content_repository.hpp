@@ -32,6 +32,14 @@ struct Experiment {
     QString moreKey;
     QStringList furtherKeys;
     QString realKey;
+    QStringList freeParts;      // "bauteile_frei": Bauteiltypen im Bauteilfach (und "leitung")
+};
+
+// Stufe des Lernpfads (content/<band>/stufen.json)
+struct Stage {
+    int number = 0;
+    QString titleKey;
+    QString questionKey;
 };
 
 // Laedt Inhaltspakete (JSON) und Bauteilkatalog aus einem Inhaltsverzeichnis. Kein Netzwerkzugriff.
@@ -47,6 +55,8 @@ public:
     QStringList bands() const;
     // IDs aller Experimente eines Bandes (z. B. "volta1.2.4"), sortiert
     QStringList experimentIds(const QString& band) const;
+    // Stufen eines Bandes; leer, wenn stufen.json fehlt
+    QList<Stage> stages(const QString& band);
     // Experiment nach id (z. B. "volta1.2.4") aus content/<band>/experiments/<stufe>.<nr>.json
     bool loadExperiment(const QString& id, Experiment& out);
     // Texte einer Sprache (z. B. "fr") fuer einen Band, Deutsch als Rueckfall; text() liefert den Schluessel, wenn

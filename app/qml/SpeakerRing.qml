@@ -34,6 +34,7 @@ Item {
         target: speaker.controller
         function onStateChanged() {
             const s = speaker.controller.speakerState()
+            if (s.pulses === undefined) return // keine gueltige Messung (z. B. direkt nach einem Topologiewechsel)
             // neuer Impuls unter 20 Hz: kurz aufblinken
             if (speaker.lastPulses >= 0 && s.pulses > speaker.lastPulses && (s.frequencyHz || 0) < 20) flash.restart()
             speaker.lastPulses = s.pulses

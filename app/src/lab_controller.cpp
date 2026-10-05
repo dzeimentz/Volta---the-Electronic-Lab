@@ -38,6 +38,7 @@ LabController::LabController(QString contentRoot, QObject* parent)
     m_session = std::make_unique<model::LabSession>(loadCatalog(m_repo, m_errors));
     m_repo.loadTexts(QStringLiteral("volta1"), QStringLiteral("de"));
     m_experimentIds = m_repo.experimentIds(QStringLiteral("volta1"));
+    m_stages = m_repo.stages(QStringLiteral("volta1"));
     rebuildExperimentList();
     m_session->onBoardChanged = [this] {
         m_errors.clear();
@@ -73,6 +74,7 @@ bool LabController::loadExperiment(const QString& id) {
     emit flowChanged();
     emit deskChanged();
     emit historyChanged();
+    emit progressChanged(); // Bauteilfach des Experiments
     return true;
 }
 
@@ -96,6 +98,7 @@ bool LabController::startExperiment(const QString& id) {
     emit flowChanged();
     emit deskChanged();
     emit historyChanged();
+    emit progressChanged(); // Bauteilfach des Experiments
     return true;
 }
 
@@ -116,10 +119,96 @@ void LabController::rebuildExperimentList() {
     }
 }
 
+void LabController::useProgressFile(const QString& path) {
+    m_progress = services::ProgressStore(path);
+    emit progressChanged();
+}
+
+void LabController::resetProgress() {
+    m_progress.reset();
+    emit progressChanged();
+}
+
+void LabController::setUnlockAll(bool on) {
+    if (on == m_unlockAll) return;
+    m_unlockAll = on;
+    emit progressChanged();
+}
+
+// Eine Stufe ist offen, wenn alle Experimente der vorigen Stufen erledigt sind (Stufe 0 und 1 immer offen).
+// Freischaltung dient der Reduktion, nicht der Belohnung (Konzept 5.5).
+int LabController::highestUnlockedStage() const {
+    if (m_unlockAll) return 99;
+    int open = 1;
+    for (const auto& st : m_stages) {
+        if (st.number < 1) continue;
+        if (st.number > open) break;
+        bool allDone = true;
+        for (const QVariant& v : m_experimentList) {
+            const QVariantMap e = v.toMap();
+            if (e.value(QStringLiteral("stage")).toInt() == st.number && !m_progress.isDone(e.value(QStringLiteral("id")).toString()))
+                allDone = false;
+        }
+        if (allDone) open = st.number + 1;
+    }
+    return open;
+}
+
+bool LabController::isUnlocked(const QString& experimentId) const {
+    for (const QVariant& v : m_experimentList) {
+        const QVariantMap e = v.toMap();
+        if (e.value(QStringLiteral("id")).toString() == experimentId)
+            return e.value(QStringLiteral("stage")).toInt() <= highestUnlockedStage();
+    }
+    return false;
+}
+
+QVariantList LabController::stages() const {
+    QVariantList out;
+    const int open = highestUnlockedStage();
+    for (const auto& st : m_stages) {
+        QVariantList exps;
+        int done = 0;
+        for (const QVariant& v : m_experimentList) {
+            QVariantMap e = v.toMap();
+            if (e.value(QStringLiteral("stage")).toInt() != st.number) continue;
+            const bool d = m_progress.isDone(e.value(QStringLiteral("id")).toString());
+            e.insert(QStringLiteral("done"), d);
+            if (d) ++done;
+            exps << e;
+        }
+        out << QVariantMap{{QStringLiteral("number"), st.number},
+                           {QStringLiteral("title"), m_repo.text(st.titleKey)},
+                           {QStringLiteral("question"), m_repo.text(st.questionKey)},
+                           {QStringLiteral("unlocked"), st.number <= open},
+                           {QStringLiteral("done"), done},
+                           {QStringLiteral("total"), static_cast<int>(exps.size())},
+                           {QStringLiteral("experiments"), exps}};
+    }
+    return out;
+}
+
+QVariantList LabController::trayParts() const {
+    const QVariantList all = catalogParts();
+    QVariantList out;
+    const bool guided = !m_freeLab && !m_experiment.id.isEmpty() && m_flow.phase() != model::ExperimentFlow::Phase::None;
+    const int open = highestUnlockedStage();
+    for (const QVariant& v : all) {
+        const QVariantMap p = v.toMap();
+        const QString type = p.value(QStringLiteral("type")).toString();
+        if (m_unlockAll)
+            out << p;
+        else if (guided ? m_experiment.freeParts.contains(type) : p.value(QStringLiteral("stage")).toInt() <= open)
+            out << p;
+    }
+    return out;
+}
+
 void LabController::setContentLanguage(const QString& code) {
     m_contentLanguage = code;
     m_repo.loadTexts(QStringLiteral("volta1"), code);
     rebuildExperimentList();
+    emit progressChanged();
     if (m_freeLab)
         m_title = tr("Freies Labor");
     else if (!m_experiment.titleKey.isEmpty())
@@ -158,6 +247,7 @@ void LabController::startFreeLab() {
     emit flowChanged();
     emit deskChanged();
     emit historyChanged();
+    emit progressChanged(); // Bauteilfach des freien Labors
 }
 
 void LabController::chooseGuess(int index) {
@@ -187,8 +277,11 @@ QStringList LabController::texts(const QStringList& keys) const {
 void LabController::onFrame() {
     const double elapsed = m_clock.restart() / 1000.0;
     m_session->poll();
-    if (m_flow.phase() == model::ExperimentFlow::Phase::Build && m_session->successReached() && m_flow.reportSuccess())
+    if (m_flow.phase() == model::ExperimentFlow::Phase::Build && m_session->successReached() && m_flow.reportSuccess()) {
+        m_progress.markDone(m_experiment.id); // Lernpfad: erledigt (bleibt erledigt)
         emit flowChanged();
+        emit progressChanged();
+    }
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
         m_sinceNotifyS = 0.0;

@@ -8,6 +8,9 @@
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
+#include "services/progress_store.hpp"
+
+#include <QTemporaryDir>
 
 using namespace volta;
 using model::Orientation;
@@ -475,6 +478,32 @@ private slots:
         QVERIFY2(r->level < 0.2, qPrintable(QString::number(r->level))); // 10-V-Lampe an 3 V: kaum Licht
         s->undoStack().undo();
         QCOMPARE(s->board().findPart("L1")->value, 2.5);
+    }
+
+    // Fortschritt: nur ID und Datum, bleibt nach Neustart erhalten, zuruecksetzbar
+    void progressStorePersists() {
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+        const QString file = dir.filePath(QStringLiteral("sub/fortschritt.json"));
+        {
+            services::ProgressStore p(file);
+            QVERIFY(!p.isDone(QStringLiteral("volta1.1.1")));
+            QVERIFY(p.markDone(QStringLiteral("volta1.1.1")));
+            QVERIFY(p.markDone(QStringLiteral("volta1.1.1"))); // zweimal: bleibt einmal erledigt
+        }
+        services::ProgressStore again(file);
+        QVERIFY(again.isDone(QStringLiteral("volta1.1.1")));
+        QCOMPARE(again.doneIds().size(), 1);
+        {
+            QFile f(file);
+            QVERIFY(f.open(QIODevice::ReadOnly));
+            const QByteArray json = f.readAll();
+            QVERIFY(json.contains("volta1.1.1") && json.contains("datum")); // keine weiteren Angaben
+        }
+        QVERIFY(again.reset());
+        QVERIFY(!services::ProgressStore(file).isDone(QStringLiteral("volta1.1.1")));
+        services::ProgressStore memory; // ohne Datei: nur im Speicher
+        QVERIFY(memory.markDone(QStringLiteral("x")));
     }
 
     void boardColumnsAreACommand() {

@@ -108,6 +108,53 @@
     </message>
 </context>
 <context>
+    <name>Home</name>
+    <message>
+        <source>Freies Labor</source>
+        <translation>Labo libre</translation>
+    </message>
+    <message>
+        <source>Eigene Ideen ausprobieren – mit allen freigeschalteten Bauteilen</source>
+        <translation>Essaie tes propres idées – avec tous les composants débloqués</translation>
+    </message>
+    <message>
+        <source>Forscherheft</source>
+        <translation>Carnet de recherche</translation>
+    </message>
+    <message>
+        <source>Deine Vermutungen und Beobachtungen – folgt</source>
+        <translation>Tes hypothèses et observations – bientôt</translation>
+    </message>
+    <message>
+        <source>Lernpfad</source>
+        <translation>Parcours</translation>
+    </message>
+    <message>
+        <source>Stufe %1: %2</source>
+        <translation>Niveau %1 : %2</translation>
+    </message>
+    <message>
+        <source>%1 von %2 geschafft</source>
+        <translation>%1 sur %2 réussies</translation>
+    </message>
+    <message>
+        <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
+        <translation>Encore verrouillé – réussis d&apos;abord les expériences du niveau %1.</translation>
+    </message>
+    <message>
+        <source>Experimente folgen.</source>
+        <translation>Les expériences arrivent bientôt.</translation>
+    </message>
+    <message>
+        <source>Nur in der App!</source>
+        <translation>Seulement dans l&apos;appli !</translation>
+    </message>
+    <message>
+        <source>geschafft</source>
+        <translation>réussi</translation>
+    </message>
+</context>
+<context>
     <name>InfoDialog</name>
     <message>
         <source>Version %1</source>
@@ -177,24 +224,16 @@
 <context>
     <name>Lab</name>
     <message>
-        <source>Anzeigesprache wählen</source>
-        <translation>Choisir la langue</translation>
-    </message>
-    <message>
-        <source>folgt</source>
-        <translation>bientôt</translation>
-    </message>
-    <message>
-        <source>Info</source>
-        <translation>Info</translation>
-    </message>
-    <message>
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
     <message>
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
+    </message>
+    <message>
+        <source>Startseite</source>
+        <translation>Accueil</translation>
     </message>
     <message>
         <source>Rückgängig: %1</source>
@@ -219,30 +258,6 @@
     <message>
         <source>1–%1</source>
         <translation>1–%1</translation>
-    </message>
-    <message>
-        <source>Einstellungen</source>
-        <translation>Réglages</translation>
-    </message>
-    <message>
-        <source>Stromfluss anzeigen</source>
-        <translation>Afficher le courant</translation>
-    </message>
-    <message>
-        <source>Animationen reduzieren</source>
-        <translation>Réduire les animations</translation>
-    </message>
-    <message>
-        <source>Startbildschirm zeigen</source>
-        <translation>Afficher l&apos;écran de démarrage</translation>
-    </message>
-    <message>
-        <source>Messgerät anzeigen</source>
-        <translation>Afficher le multimètre</translation>
-    </message>
-    <message>
-        <source>Felder je Reihe</source>
-        <translation>Cases par rangée</translation>
     </message>
     <message>
         <source>Experiment wählen</source>
@@ -517,6 +532,53 @@
     <message>
         <source>Weiß</source>
         <translation>Blanc</translation>
+    </message>
+</context>
+<context>
+    <name>TopBarActions</name>
+    <message>
+        <source>Anzeigesprache wählen</source>
+        <translation>Choisir la langue</translation>
+    </message>
+    <message>
+        <source>folgt</source>
+        <translation>bientôt</translation>
+    </message>
+    <message>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <source>Einstellungen</source>
+        <translation>Réglages</translation>
+    </message>
+    <message>
+        <source>Stromfluss anzeigen</source>
+        <translation>Afficher le courant</translation>
+    </message>
+    <message>
+        <source>Animationen reduzieren</source>
+        <translation>Réduire les animations</translation>
+    </message>
+    <message>
+        <source>Startbildschirm zeigen</source>
+        <translation>Afficher l&apos;écran de démarrage</translation>
+    </message>
+    <message>
+        <source>Messgerät anzeigen</source>
+        <translation>Afficher le multimètre</translation>
+    </message>
+    <message>
+        <source>Felder je Reihe</source>
+        <translation>Cases par rangée</translation>
+    </message>
+    <message>
+        <source>1–%1</source>
+        <translation>1–%1</translation>
+    </message>
+    <message>
+        <source>Alle Bauteile freigeben</source>
+        <translation>Débloquer tous les composants</translation>
     </message>
 </context>
 <context>

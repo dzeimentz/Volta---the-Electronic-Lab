@@ -20,6 +20,7 @@ AppSettings::AppSettings(bool persist, QObject* parent) : QObject(parent), m_per
     m_showCurrentFlow = s.value(QStringLiteral("anzeige/stromfluss"), true).toBool();
     m_reduceMotion = s.value(QStringLiteral("anzeige/animationen_reduziert"), false).toBool();
     m_showSplash = s.value(QStringLiteral("anzeige/startbildschirm"), true).toBool();
+    m_unlockAll = s.value(QStringLiteral("lernpfad/alles_frei"), false).toBool();
 }
 
 bool AppSettings::splashAvailable() {
@@ -54,6 +55,13 @@ void AppSettings::setShowSplash(bool on) {
     if (on == m_showSplash) return;
     m_showSplash = on;
     save(QStringLiteral("anzeige/startbildschirm"), on);
+    emit changed();
+}
+
+void AppSettings::setUnlockAll(bool on) {
+    if (on == m_unlockAll) return;
+    m_unlockAll = on;
+    save(QStringLiteral("lernpfad/alles_frei"), on);
     emit changed();
 }
 

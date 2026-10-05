@@ -297,6 +297,7 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     out.moreKey = o.value(QStringLiteral("mehr_wissen_key")).toString();
     out.furtherKeys = keys("weiterforschen");
     out.realKey = o.value(QStringLiteral("jetzt_in_echt_key")).toString();
+    out.freeParts = keys("bauteile_frei");
     const QJsonObject vorlage = o.value(QStringLiteral("vorlage")).toObject();
     for (const QJsonValue& v : vorlage.value(QStringLiteral("anzeigen")).toArray()) out.shownVoltages << v.toString();
     QString error;
@@ -310,6 +311,18 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     }
     out.maxHoldS = maxHold(out.successCondition);
     return true;
+}
+
+QList<Stage> ContentRepository::stages(const QString& band) {
+    QList<Stage> out;
+    QJsonObject o;
+    if (!readJson(QStringLiteral("%1/stufen.json").arg(band), o)) return out;
+    for (const QJsonValue& v : o.value(QStringLiteral("stufen")).toArray()) {
+        const QJsonObject s = v.toObject();
+        out.append({s.value(QStringLiteral("nr")).toInt(), s.value(QStringLiteral("titel_key")).toString(),
+                    s.value(QStringLiteral("frage_key")).toString()});
+    }
+    return out;
 }
 
 bool ContentRepository::loadTexts(const QString& band, const QString& language) {

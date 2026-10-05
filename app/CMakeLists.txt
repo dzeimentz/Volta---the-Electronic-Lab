@@ -18,6 +18,7 @@ add_library(volta_model STATIC
     src/model/netlist_builder.cpp
     src/model/success.cpp
     src/services/content_repository.cpp
+    src/services/progress_store.cpp
     src/sim/simulation_bridge.cpp
     src/model/lab_session.cpp
     src/model/commands/board_command.cpp
@@ -78,6 +79,8 @@ qt_add_qml_module(volta_ui
         qml/MeterPanel.qml
         qml/SpeakerRing.qml
         qml/SchematicSymbol.qml
+        qml/TopBarActions.qml
+        qml/Home.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

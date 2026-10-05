@@ -236,6 +236,18 @@ def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
     if pkg.get("band") != band:
         rep.error(f"content/{band}/paket.json", "Feld 'band' passt nicht zum Verzeichnis")
     used: set[str] = set(catalog["keys"])
+    stages_path = band_dir / "stufen.json"
+    if stages_path.exists():
+        stages = load_json(stages_path, rep) or {}
+        nrs = [st.get("nr") for st in stages.get("stufen", [])]
+        if nrs != sorted(set(nrs)) or any(not isinstance(n, int) for n in nrs):
+            rep.error(f"content/{band}/stufen.json", "Stufennummern muessen eindeutig und aufsteigend sein")
+        for st in stages.get("stufen", []):
+            for k in ("titel_key", "frage_key"):
+                if not isinstance(st.get(k), str) or not KEY.match(st[k]):
+                    rep.error(f"content/{band}/stufen.json", f"Stufe {st.get('nr')}: '{k}' fehlt oder ungueltig")
+                else:
+                    used.add(st[k])
     count = 0
     for path in sorted((band_dir / "experiments").glob("*.json")):
         exp = load_json(path, rep)

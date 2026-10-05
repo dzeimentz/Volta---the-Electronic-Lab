@@ -1,0 +1,29 @@
+{
+  "stufen": [
+    {
+      "nr": 0,
+      "titel_key": "stufe_0_titel",
+      "frage_key": "stufe_0_frage"
+    },
+    {
+      "nr": 1,
+      "titel_key": "stufe_1_titel",
+      "frage_key": "stufe_1_frage"
+    },
+    {
+      "nr": 2,
+      "titel_key": "stufe_2_titel",
+      "frage_key": "stufe_2_frage"
+    },
+    {
+      "nr": 3,
+      "titel_key": "stufe_3_titel",
+      "frage_key": "stufe_3_frage"
+    },
+    {
+      "nr": 4,
+      "titel_key": "stufe_4_titel",
+      "frage_key": "stufe_4_frage"
+    }
+  ]
+}

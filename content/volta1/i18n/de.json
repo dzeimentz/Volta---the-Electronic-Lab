@@ -75,5 +75,15 @@
   "lex_fotowiderstand": "Ein Fotowiderstand lässt bei Licht mehr Strom durch als im Dunkeln.",
   "lex_transistor": "Ein Transistor ist ein Schalter, den ein kleiner Strom steuert. Er sitzt auf einer kleinen Platine mit vier Füßen: oben B und C, unten zweimal E – die beiden E-Füße sind auf der Platine verbunden.",
   "lex_blinkmodul": "Das Blinkmodul schaltet seinen Ausgang immer wieder ein und aus.",
-  "lex_tonmodul": "Das Tonmodul erzeugt einen Ton, solange sein Eingang Strom bekommt."
+  "lex_tonmodul": "Das Tonmodul erzeugt einen Ton, solange sein Eingang Strom bekommt.",
+  "stufe_0_titel": "Auftakt",
+  "stufe_0_frage": "Wie bringe ich etwas zum Blinken?",
+  "stufe_1_titel": "Strom fließt im Kreis",
+  "stufe_1_frage": "Wann leuchtet das Lämpchen?",
+  "stufe_2_titel": "Mehrere Wege",
+  "stufe_2_frage": "Was passiert, wenn ich ein zweites Lämpchen einbaue?",
+  "stufe_3_titel": "Messen und verstehen",
+  "stufe_3_frage": "Wie viel Strom fließt eigentlich?",
+  "stufe_4_titel": "Kleine Elektronik",
+  "stufe_4_frage": "Wie kann ein Strom einen anderen steuern?"
 }

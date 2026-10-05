@@ -15,6 +15,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool showCurrentFlow READ showCurrentFlow WRITE setShowCurrentFlow NOTIFY changed)
     Q_PROPERTY(bool reduceMotion READ reduceMotion WRITE setReduceMotion NOTIFY changed)
     Q_PROPERTY(bool showSplash READ showSplash WRITE setShowSplash NOTIFY changed)
+    // Alle Bauteile und Stufen freigeben (spaeter hinter der Elternschranke, Phase 3)
+    Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY changed)
     Q_PROPERTY(bool splashAvailable READ splashAvailable CONSTANT) // nur Desktop-Ausgabe
 
 public:
@@ -27,6 +29,8 @@ public:
     bool showSplash() const { return m_showSplash; }
     void setShowSplash(bool on);
     static bool splashAvailable();
+    bool unlockAll() const { return m_unlockAll; }
+    void setUnlockAll(bool on);
 
 signals:
     void changed();
@@ -38,6 +42,7 @@ private:
     bool m_showCurrentFlow = true;
     bool m_reduceMotion = false;
     bool m_showSplash = true;
+    bool m_unlockAll = false;
 };
 
 } // namespace volta

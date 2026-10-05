@@ -75,5 +75,15 @@
   "lex_fotowiderstand": "A photoresistor lets more current through in light than in the dark.",
   "lex_transistor": "A transistor is a switch controlled by a small current. It sits on a small board with four feet: B and C at the top, E twice at the bottom – the two E feet are connected on the board.",
   "lex_blinkmodul": "The blinker module switches its output on and off again and again.",
-  "lex_tonmodul": "The tone module makes a sound as long as its input gets current."
+  "lex_tonmodul": "The tone module makes a sound as long as its input gets current.",
+  "stufe_0_titel": "Kick-off",
+  "stufe_0_frage": "How do I make something blink?",
+  "stufe_1_titel": "Current flows in a circle",
+  "stufe_1_frage": "When does the bulb light up?",
+  "stufe_2_titel": "Several paths",
+  "stufe_2_frage": "What happens if I add a second bulb?",
+  "stufe_3_titel": "Measure and understand",
+  "stufe_3_frage": "How much current is actually flowing?",
+  "stufe_4_titel": "Little electronics",
+  "stufe_4_frage": "How can one current control another?"
 }

@@ -75,5 +75,15 @@
   "lex_fotowiderstand": "Une photorésistance laisse passer plus de courant à la lumière que dans le noir.",
   "lex_transistor": "Un transistor est un interrupteur commandé par un petit courant. Il est posé sur une petite carte à quatre pattes : en haut B et C, en bas deux fois E – les deux pattes E sont reliées sur la carte.",
   "lex_blinkmodul": "Le module clignotant allume et éteint sa sortie encore et encore.",
-  "lex_tonmodul": "Le module sonore produit un son tant que son entrée reçoit du courant."
+  "lex_tonmodul": "Le module sonore produit un son tant que son entrée reçoit du courant.",
+  "stufe_0_titel": "Lancement",
+  "stufe_0_frage": "Comment faire clignoter quelque chose ?",
+  "stufe_1_titel": "Le courant circule en boucle",
+  "stufe_1_frage": "Quand l'ampoule s'allume-t-elle ?",
+  "stufe_2_titel": "Plusieurs chemins",
+  "stufe_2_frage": "Que se passe-t-il si j'ajoute une deuxième ampoule ?",
+  "stufe_3_titel": "Mesurer et comprendre",
+  "stufe_3_frage": "Combien de courant circule vraiment ?",
+  "stufe_4_titel": "Petite électronique",
+  "stufe_4_frage": "Comment un courant peut-il en commander un autre ?"
 }

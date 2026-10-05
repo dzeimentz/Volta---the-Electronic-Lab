@@ -14,6 +14,7 @@
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
+#include "services/progress_store.hpp"
 
 namespace volta {
 
@@ -30,6 +31,12 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList voltageFields READ voltageFields NOTIFY boardChanged)
     Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 8, 10 oder 12 Felder je Reihe
     Q_PROPERTY(QVariantList catalogParts READ catalogParts CONSTANT)
+    // Bauteilfach: im gefuehrten Experiment die freigegebenen Bauteile, im freien Labor die der offenen Stufen
+    Q_PROPERTY(QVariantList trayParts READ trayParts NOTIFY progressChanged)
+    // Lernpfad: [{number, title, question, unlocked, done, total, experiments: [{id, title, done, destructive}]}]
+    Q_PROPERTY(QVariantList stages READ stages NOTIFY progressChanged)
+    // Alle Bauteile und Stufen freigeben (Einstellung; spaeter hinter der Elternschranke)
+    Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY progressChanged)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -81,6 +88,15 @@ public:
     QVariantList modules() const;
     QStringList voltageFields() const;
     QVariantList catalogParts() const;
+    QVariantList trayParts() const;
+    QVariantList stages() const;
+    bool unlockAll() const { return m_unlockAll; }
+    void setUnlockAll(bool on);
+    // Fortschritt dauerhaft speichern (main.cpp; ohne Aufruf nur im Speicher, z. B. in Tests)
+    void useProgressFile(const QString& path);
+    Q_INVOKABLE bool isDone(const QString& experimentId) const { return m_progress.isDone(experimentId); }
+    Q_INVOKABLE bool isUnlocked(const QString& experimentId) const;
+    Q_INVOKABLE void resetProgress();
     QStringList errors() const { return m_errors; }
     QString lastEditError() const { return m_lastEditError; }
     bool canUndo() const;
@@ -188,6 +204,7 @@ signals:
     void historyChanged();
     void editFailed();
     void flowChanged();
+    void progressChanged();
 
 private:
     void onFrame();
@@ -202,6 +219,10 @@ private:
     model::ExperimentFlow m_flow;
     QStringList m_experimentIds;
     QVariantList m_experimentList;
+    QList<services::Stage> m_stages;
+    services::ProgressStore m_progress;
+    bool m_unlockAll = false;
+    int highestUnlockedStage() const;
     QString m_contentLanguage = QStringLiteral("de");
     bool m_freeLab = false;
     QStringList m_errors;

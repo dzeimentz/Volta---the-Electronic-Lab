@@ -10,6 +10,8 @@ Item {
     required property var controller
     property var languageService: null // Anzeigesprache (main.cpp); ohne: Knopf ausgeblendet
     property var settings: null        // Einstellungen (main.cpp); ohne: Grundwerte
+    signal homeRequested()  // zurueck zur Startseite
+    signal infoRequested()  // Info-Fenster (liegt im Hauptfenster)
     Binding { target: Theme; property: "reduceMotion"; value: lab.settings ? lab.settings.reduceMotion : false }
     Binding { target: Theme; property: "showCurrentFlow"; value: lab.settings ? lab.settings.showCurrentFlow : true }
 
@@ -143,171 +145,15 @@ Item {
         height: Theme.control + 16
         color: Theme.desk
 
-        // Oben rechts wie in Visual Technic Studio: Anzeigesprache (runde Flagge) und Info
-        Row {
+        // Oben rechts: Sprache, Info, Einstellungen (gemeinsam mit der Startseite)
+        TopBarActions {
             anchors.right: parent.right
             anchors.rightMargin: 12
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 6
-
-            ToolButton {
-                id: languageButton
-                objectName: "languageButton"
-                visible: lab.languageService !== null
-                width: Theme.control; height: Theme.control
-                onClicked: languageMenu.open()
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Anzeigesprache wählen")
-                Accessible.name: ToolTip.text
-                background: Rectangle { // wie VTS: ohne Flaeche, nur Hervorhebung beim Zeigen/Druecken
-                    radius: 6
-                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
-                }
-                contentItem: Item {
-                    Image {
-                        anchors.centerIn: parent
-                        width: 32; height: 32
-                        sourceSize: Qt.size(64, 64)
-                        source: lab.languageService ? "qrc:/flags/" + lab.languageService.language + ".svg" : ""
-                    }
-                }
-                Menu {
-                    id: languageMenu
-                    objectName: "languageMenu"
-                    y: parent.height
-                    x: parent.width - width
-                    Repeater {
-                        model: lab.languageService ? lab.languageService.languages : []
-                        MenuItem {
-                            id: langItem
-                            required property var modelData
-                            objectName: "language_" + modelData.code
-                            height: Theme.control
-                            enabled: modelData.available
-                            checkable: true
-                            checked: lab.languageService && lab.languageService.language === modelData.code
-                            // Flagge nie allein: Kuerzel und Eigenname; LU folgt (grau)
-                            text: modelData.short + "  " + modelData.name + (modelData.available ? "" : "  – " + qsTr("folgt"))
-                            contentItem: Row {
-                                spacing: 10
-                                leftPadding: 28
-                                Image {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    width: 24; height: 24
-                                    sourceSize: Qt.size(48, 48)
-                                    source: "qrc:/flags/" + langItem.modelData.code + ".svg"
-                                    opacity: langItem.enabled ? 1 : 0.35
-                                }
-                                Label {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: langItem.text
-                                    font.pixelSize: 15
-                                    color: langItem.enabled ? "#1E2B38" : "#9AA3AD"
-                                }
-                            }
-                            onTriggered: lab.languageService.setLanguage(modelData.code)
-                        }
-                    }
-                }
-            }
-            ToolButton {
-                objectName: "infoButton"
-                width: Theme.control; height: Theme.control
-                onClicked: infoDialog.open()
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Info")
-                Accessible.name: qsTr("Info")
-                background: Rectangle { // wie VTS: ohne Flaeche, nur Hervorhebung beim Zeigen/Druecken
-                    radius: 6
-                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
-                }
-                contentItem: Item {
-                    Rectangle {
-                        anchors.centerIn: parent
-                        width: 30; height: 30; radius: 15
-                        color: "transparent"
-                        border.color: "white"
-                        border.width: 2
-                        Label { anchors.centerIn: parent; text: "i"; color: "white"; font.pixelSize: 18; font.bold: true; font.italic: true }
-                    }
-                }
-            }
-            // Einstellungen (ganz rechts)
-            ToolButton {
-                objectName: "settingsButton"
-                width: Theme.control; height: Theme.control
-                text: "☰"
-                font.pixelSize: 24
-                palette.buttonText: "white"
-                onClicked: settingsMenu.open()
-                ToolTip.visible: hovered
-                ToolTip.text: qsTr("Einstellungen")
-                Accessible.name: qsTr("Einstellungen")
-                background: Rectangle {
-                    radius: 6
-                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
-                }
-                Menu {
-                    id: settingsMenu
-                    objectName: "settingsMenu"
-                    y: parent.height
-                    x: parent.width - width
-                    width: 300
-                    MenuItem {
-                        objectName: "settingFlow"
-                        height: Theme.control
-                        text: qsTr("Stromfluss anzeigen")
-                        checkable: true
-                        enabled: lab.settings !== null
-                        checked: lab.settings ? lab.settings.showCurrentFlow : true
-                        onTriggered: lab.settings.showCurrentFlow = checked
-                    }
-                    MenuItem {
-                        objectName: "settingMotion"
-                        height: Theme.control
-                        text: qsTr("Animationen reduzieren")
-                        checkable: true
-                        enabled: lab.settings !== null
-                        checked: lab.settings ? lab.settings.reduceMotion : false
-                        onTriggered: lab.settings.reduceMotion = checked
-                    }
-                    MenuItem {
-                        height: Theme.control
-                        visible: lab.settings !== null && lab.settings.splashAvailable
-                        text: qsTr("Startbildschirm zeigen")
-                        checkable: true
-                        checked: lab.settings ? lab.settings.showSplash : true
-                        onTriggered: lab.settings.showSplash = checked
-                    }
-                    MenuItem {
-                        height: Theme.control
-                        text: qsTr("Messgerät anzeigen")
-                        checkable: true
-                        checked: lab.controller.meterVisible
-                        onTriggered: lab.controller.meterVisible = checked
-                    }
-                    Menu {
-                        title: qsTr("Felder je Reihe")
-                        Repeater {
-                            model: [8, 10, 12]
-                            MenuItem {
-                                required property int modelData
-                                height: Theme.control
-                                text: qsTr("1–%1").arg(modelData)
-                                checkable: true
-                                checked: lab.columns === modelData
-                                onTriggered: lab.controller.setBoardColumns(modelData)
-                            }
-                        }
-                    }
-                    MenuSeparator {}
-                    MenuItem {
-                        height: Theme.control
-                        text: qsTr("Info")
-                        onTriggered: infoDialog.open()
-                    }
-                }
-            }
+            controller: lab.controller
+            languageService: lab.languageService
+            settings: lab.settings
+            onInfoRequested: lab.infoRequested()
         }
 
         Row {
@@ -316,7 +162,22 @@ Item {
             anchors.leftMargin: Theme.margin
             spacing: 12
 
-            // Experimentauswahl als Aufklappfeld: »Freies Labor« und die Experimente nach Stufen; zeigt den Titel
+            ToolButton {
+                objectName: "homeButton"
+                width: Theme.control; height: Theme.control
+                text: "⌂"
+                font.pixelSize: 26
+                palette.buttonText: "white"
+                onClicked: lab.homeRequested()
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Startseite")
+                Accessible.name: qsTr("Startseite")
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+                }
+            }
+            // Experimentauswahl als Aufklappfeld: »Freies Labor« und die freigeschalteten Experimente; zeigt den Titel
             ComboBox {
                 id: experimentBox
                 objectName: "experimentBox"
@@ -326,10 +187,14 @@ Item {
                 textRole: "text"
                 readonly property var entries: {
                     let e = [{text: qsTr("Freies Labor"), id: ""}]
-                    const list = lab.controller.experiments
-                    for (let i = 0; i < list.length; ++i)
-                        e.push({text: qsTr("Stufe %1: %2").arg(list[i].stage).arg(list[i].title)
-                                      + (list[i].destructive ? "  ⚠" : ""), id: list[i].id})
+                    const stages = lab.controller.stages
+                    for (let s = 0; s < stages.length; ++s) {
+                        if (!stages[s].unlocked) continue
+                        const list = stages[s].experiments
+                        for (let i = 0; i < list.length; ++i)
+                            e.push({text: qsTr("Stufe %1: %2").arg(list[i].stage).arg(list[i].title)
+                                          + (list[i].destructive ? "  ⚠" : ""), id: list[i].id})
+                    }
                     return e
                 }
                 model: entries
@@ -510,7 +375,7 @@ Item {
     PartTray {
         id: tray
         anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
-        parts: lab.controller.catalogParts
+        parts: lab.controller.trayParts
         onDragUpdated: (type, scenePos) => {
             lab.trayType = type
             lab.trayPos = lab.toCanvas(scenePos)
@@ -866,11 +731,6 @@ Item {
         }
     }
 
-    InfoDialog {
-        id: infoDialog
-        objectName: "infoDialog"
-        controller: lab.controller
-    }
 
     Toast {
         id: toast

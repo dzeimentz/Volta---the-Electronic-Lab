@@ -10,6 +10,7 @@ Pruefung: `python3 tools/validate_content.py`. Schema: `content/schema/experimen
 content/
   schema/experiment.schema.json
   catalog/bauteile.json          Bauteiltypen mit Anschluessen, Parametern, Freischaltstufe
+  <band>/stufen.json             Stufen des Lernpfads: nr, titel_key, frage_key (Leitfrage)
   volta1/
     paket.json                   Paketkopf: band, version, schema_version, sprachen
     experiments/<id>.json        ein Experiment je Datei, Dateiname = id ohne Bandpraefix

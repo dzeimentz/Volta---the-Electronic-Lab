@@ -30,6 +30,9 @@ int main(int argc, char* argv[]) {
     const QString besideExe = QCoreApplication::applicationDirPath() + QStringLiteral("/content");
     const bool deployed = QFileInfo::exists(besideExe + QStringLiteral("/catalog/bauteile.json"));
     volta::LabController lab(deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR));
+    // Fortschritt im Lernpfad lokal speichern; Entwicklerhilfen (VOLTA_SCREENSHOT ...) lassen ihn unberuehrt
+    if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty())
+        lab.useProgressFile(volta::services::ProgressStore::defaultFile());
 
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("labController"), &lab);
