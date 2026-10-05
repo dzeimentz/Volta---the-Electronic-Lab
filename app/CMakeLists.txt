@@ -15,6 +15,7 @@ endif()
 add_library(volta_model STATIC
     src/model/anchor.cpp
     src/model/netlist_builder.cpp
+    src/model/success.cpp
     src/services/content_repository.cpp
 )
 target_include_directories(volta_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

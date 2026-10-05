@@ -21,19 +21,26 @@
 - **Echtzeit** (`test_realtime.cpp`): ersetzter `operator new` zaehlt Speicheranforderungen in `step()` (muss 0 sein).
 
 ## Modell (Qt Test, `app/tests/`)
-- Netzlistenbildung aus Feldern und Leitungen (Union-Find).
+- `volta_model_tests`: Anschlussbezeichner, Katalog, Experimente laden, Netzlistenbildung (Leitungen als
+  Bauteile, ADR-0007), Experiment 2.4 Ende-zu-Ende, Pult, Messgeraet, Blinkmodul, Zustandsuebernahme.
 - Undo/Redo: jede Befehlsart, inkl. Wiederherstellung zerstoerter Bauteile und Kondensatorladung.
-- Erfolgspruefung: Experiment 2.4 mit Vorlage, mit alternativem Aufbau (2 × 220 Ω), ohne Widerstand (scheitert).
+- Erfolgspruefung (`volta_content_smoke_tests`): Bedingungsbaum `alle`/`eine`/`nicht`, Haltedauer `dauer_s`,
+  Feldspannung; Experiment 2.4 mit alternativem Aufbau (2 × 220 Ω) geloest, ohne Widerstand gescheitert.
 - Inhaltspakete laden, fehlende Schluessel, Schema-Version.
 
 ## Inhalte
 - `python3 tools/validate_content.py` in CI und vor jedem Commit mit Aenderungen in `content/`.
-- Jedes Experiment wird automatisch mit seiner Vorlage simuliert; die Erfolgsbedingung muss erfuellt werden
-  (Test `ContentSmokeTest`).
+- Jedes Experiment aller Baende wird automatisch mit seiner Vorlage (Hauptschalter ein) simuliert; die
+  Erfolgsbedingung muss innerhalb von laengster Haltedauer + 5 s erfuellt werden (`ContentSmokeTest` in
+  `volta_content_smoke_tests`). Bedingungen mit `rolle` folgen mit der Lernpfad-Engine (Phase 2).
 
 ## Manuell / mit Kindern
 - Ab Phase 1 Erprobung mit Kindern; Beobachtungsbogen in `docs/erprobung/`.
 - Pilot in der Arbeitsgemeinschaft ab Phase 3.
 
-## CI
-- Desktop-Build Linux und Windows, `ctest`, Inhaltspruefung; Android-Build als Artefakt.
+## Gesamtpruefung (lokal, statt CI)
+- `python3 tools/check_all.py` – Inhaltspakete, Kern (Debug), App mit Modell- und Inhaltstests (Debug);
+  `--quick` nur Inhalte und Kern, `--bench` zusaetzlich Release-Build mit Leistungsmessung. Rueckgabe 1 bei Fehlern.
+- Vor jedem Commit mindestens `--quick`, vor Abschluss einer Phase vollstaendig mit `--bench`.
+- Spaeter CI (sobald ein entferntes Repository besteht): dieselben Schritte fuer Linux und Windows, Android-Build als
+  Artefakt.

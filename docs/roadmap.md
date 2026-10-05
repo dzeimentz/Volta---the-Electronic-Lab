@@ -36,7 +36,9 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 3. ~~`app/`: Qt-Projektgeruest, `Board`-Modell, `NetlistBuilder`, `Lab.qml` mit Grundplatte.~~ erledigt:
    Vorlage von Experiment 2.4 laeuft Ende-zu-Ende mit Spannungsanzeigen (Desktop, Qt 6.11). VTS enthaelt keine
    uebertragbare Qt-Quick-Grafikschicht (ADR-0008); Leitungen sind Bauteile (ADR-0007).
-4. Inhaltsvalidator in CI; `ContentSmokeTest` simuliert jede Vorlage gegen ihre Erfolgsbedingung.
+4. ~~Inhaltsvalidator in CI; `ContentSmokeTest` simuliert jede Vorlage gegen ihre Erfolgsbedingung.~~ erledigt:
+   lokales Pruefskript `tools/check_all.py` statt CI (noch kein entferntes Repository); Bewerter fuer
+   Erfolgsbedingungen (`model/success.*`) steht auch dem Lernpfad zur Verfuegung.
 
 Offen aus Phase 0 (Kern): Kalibrierung der Bauteilmodelle an realem Material; Leistungsmessung auf dem
 Referenztablet (Desktop: schlechtester Einzelschritt ca. 8 ms beim Umkippen einer Kippstufe); Tonmodul als

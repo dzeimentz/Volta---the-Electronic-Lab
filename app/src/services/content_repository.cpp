@@ -6,6 +6,8 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 
+#include <algorithm>
+
 namespace volta::services {
 
 namespace {
@@ -30,6 +32,22 @@ bool ContentRepository::readJson(const QString& relativePath, QJsonObject& out) 
     }
     out = doc.object();
     return true;
+}
+
+QStringList ContentRepository::bands() const {
+    QStringList out;
+    const QDir root(m_root);
+    for (const QString& d : root.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name))
+        if (QFile::exists(root.filePath(d + QStringLiteral("/paket.json")))) out << d;
+    return out;
+}
+
+QStringList ContentRepository::experimentIds(const QString& band) const {
+    QStringList out;
+    const QDir dir(QDir(m_root).filePath(band + QStringLiteral("/experiments")));
+    for (const QString& f : dir.entryList({QStringLiteral("*.json")}, QDir::Files, QDir::Name))
+        out << band + QLatin1Char('.') + f.chopped(5);
+    return out;
 }
 
 bool ContentRepository::loadCatalog(model::Catalog& out) {
@@ -126,6 +144,97 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
     return true;
 }
 
+bool ContentRepository::parseSuccess(const QJsonObject& o, model::SuccessCondition& out, QString& error) {
+    using C = model::SuccessCondition;
+    out = C{};
+    auto listOf = [&](const QString& key, C::Kind kind) {
+        out.kind = kind;
+        const QJsonArray a = o.value(key).toArray();
+        if (a.isEmpty()) {
+            error = QStringLiteral("Erfolg: '%1' braucht eine nicht leere Liste").arg(key);
+            return false;
+        }
+        for (const QJsonValue& v : a) {
+            C child;
+            if (!parseSuccess(v.toObject(), child, error)) return false;
+            out.children.push_back(std::move(child));
+        }
+        return true;
+    };
+    if (o.contains(QStringLiteral("alle"))) return listOf(QStringLiteral("alle"), C::Kind::All);
+    if (o.contains(QStringLiteral("eine"))) return listOf(QStringLiteral("eine"), C::Kind::Any);
+    if (o.contains(QStringLiteral("nicht"))) {
+        out.kind = C::Kind::Not;
+        C child;
+        if (!parseSuccess(o.value(QStringLiteral("nicht")).toObject(), child, error)) return false;
+        out.children.push_back(std::move(child));
+        return true;
+    }
+    if (o.contains(QStringLiteral("rolle"))) {
+        error = QStringLiteral("Erfolg: 'rolle' wird erst mit der Lernpfad-Engine (Phase 2) unterstuetzt");
+        return false;
+    }
+    out.part = o.value(QStringLiteral("bauteil")).toString().toStdString();
+    out.field = o.value(QStringLiteral("feld")).toString().toStdString();
+    out.holdS = o.value(QStringLiteral("dauer_s")).toDouble(0.0);
+    if (o.contains(QStringLiteral("zustand"))) {
+        out.kind = C::Kind::State;
+        const QString z = o.value(QStringLiteral("zustand")).toString();
+        if (z == QStringLiteral("intakt")) out.state = C::State::Intact;
+        else if (z == QStringLiteral("ueberlastet")) out.state = C::State::Overloaded;
+        else if (z == QStringLiteral("zerstoert")) out.state = C::State::Destroyed;
+        else {
+            error = QStringLiteral("Erfolg: unbekannter Zustand '%1'").arg(z);
+            return false;
+        }
+        return true;
+    }
+    out.kind = C::Kind::Quantity;
+    const QString g = o.value(QStringLiteral("groesse")).toString();
+    if (g == QStringLiteral("strom_mA")) out.quantity = C::Quantity::CurrentMilliA;
+    else if (g == QStringLiteral("spannung_V")) out.quantity = C::Quantity::VoltageV;
+    else if (g == QStringLiteral("leistung_mW")) out.quantity = C::Quantity::PowerMilliW;
+    else if (g == QStringLiteral("helligkeit")) out.quantity = C::Quantity::Brightness;
+    else if (g == QStringLiteral("drehzahl")) out.quantity = C::Quantity::Rpm;
+    else if (g == QStringLiteral("frequenz_Hz")) out.quantity = C::Quantity::FrequencyHz;
+    else if (g == QStringLiteral("temperatur_C")) out.quantity = C::Quantity::TemperatureC;
+    else {
+        error = QStringLiteral("Erfolg: unbekannte Groesse '%1'").arg(g);
+        return false;
+    }
+    if (!out.field.empty() && out.quantity != C::Quantity::VoltageV) {
+        error = QStringLiteral("Erfolg: am Feld ist nur spannung_V moeglich");
+        return false;
+    }
+    const QJsonArray range = o.value(QStringLiteral("zwischen")).toArray();
+    if (range.size() == 2) {
+        out.hasMin = out.hasMax = true;
+        out.min = range.at(0).toDouble();
+        out.max = range.at(1).toDouble();
+    }
+    if (o.contains(QStringLiteral("min"))) {
+        out.hasMin = true;
+        out.min = o.value(QStringLiteral("min")).toDouble();
+    }
+    if (o.contains(QStringLiteral("max"))) {
+        out.hasMax = true;
+        out.max = o.value(QStringLiteral("max")).toDouble();
+    }
+    if (!out.hasMin && !out.hasMax) {
+        error = QStringLiteral("Erfolg: Groesse ohne 'zwischen', 'min' oder 'max'");
+        return false;
+    }
+    return true;
+}
+
+namespace {
+double maxHold(const model::SuccessCondition& c) {
+    double m = c.holdS;
+    for (const auto& ch : c.children) m = std::max(m, maxHold(ch));
+    return m;
+}
+} // namespace
+
 bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     const QStringList parts = id.split(QLatin1Char('.'));
     if (parts.size() != 3) {
@@ -149,6 +258,11 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
         m_error = QStringLiteral("%1: %2").arg(id, error);
         return false;
     }
+    if (!parseSuccess(out.success, out.successCondition, error)) {
+        m_error = QStringLiteral("%1: %2").arg(id, error);
+        return false;
+    }
+    out.maxHoldS = maxHold(out.successCondition);
     return true;
 }
 
