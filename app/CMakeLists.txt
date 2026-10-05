@@ -88,6 +88,25 @@ if(ANDROID)
         QT_ANDROID_VERSION_CODE "${VOLTA_VERSION_CODE}")
 endif()
 
+# iPadOS (Phase 5b, nur auf macOS mit Xcode): Info.plist, Symbole (Asset-Katalog) und Startbildschirm
+# (LaunchScreen.storyboard) aus packaging/ios
+if(IOS)
+    set(_ios "${PROJECT_SOURCE_DIR}/packaging/ios")
+    target_sources(volta_app PRIVATE "${_ios}/Assets.xcassets" "${_ios}/PrivacyInfo.xcprivacy")
+    set_source_files_properties("${_ios}/Assets.xcassets" "${_ios}/PrivacyInfo.xcprivacy"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(volta_app PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${_ios}/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
+        MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        QT_IOS_LAUNCH_SCREEN "${_ios}/LaunchScreen.storyboard"
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${VOLTA_APP_ID}"
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2" # nur iPad
+        XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+endif()
+
 target_compile_definitions(volta_app PRIVATE
     VOLTA_EDITION="${VOLTA_EDITION}"
     VOLTA_APP_NAME="${VOLTA_APP_NAME}"
