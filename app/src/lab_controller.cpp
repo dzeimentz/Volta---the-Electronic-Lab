@@ -189,6 +189,8 @@ double LabController::wireCurrent(const QString& id) const {
     return snap.readings[it->second].currentA * 1e3;
 }
 
+bool LabController::rotatePart(const QString& id) { return result(m_session->rotatePart(ss(id))); }
+
 bool LabController::setBoardColumns(int columns) { return result(m_session->setColumns(columns)); }
 
 QVariantList LabController::parts() const {

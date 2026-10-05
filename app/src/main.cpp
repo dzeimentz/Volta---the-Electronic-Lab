@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
                                       {"P:+9V", "C1"}, {"C2", "P:0V"}, {"P:+9V", "A7"}, {"B7", "P:0V"}};
             for (const auto& w : wires)
                 lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
+            lab.rotatePart(QStringLiteral("T1")); // Platine gedreht (B oben rechts, E oben links)
             lab.setPartClosed(QStringLiteral("RK1"), true);
             lab.setMainSwitch(true);
         });

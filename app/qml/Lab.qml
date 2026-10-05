@@ -524,7 +524,9 @@ Item {
         property var part: ({})
         MenuItem {
             text: qsTr("Drehen")
-            onTriggered: lab.controller.movePart(partMenu.part.id, partMenu.part.start, !partMenu.part.vertical,
+            onTriggered: partMenu.part.pins.length === 4
+                         ? lab.controller.rotatePart(partMenu.part.id) // Platine: 90 Grad im Uhrzeigersinn
+                         : lab.controller.movePart(partMenu.part.id, partMenu.part.start, !partMenu.part.vertical,
                                                  partMenu.part.longSpan)
         }
         MenuItem {

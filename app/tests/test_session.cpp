@@ -337,6 +337,36 @@ private slots:
         QVERIFY(std::fabs(s->voltage("D3") - s->voltage("D4")) < 1e-3); // Leiterbahn E <-> E2
     }
 
+    // 2-x-2-Platine drehen: 90 Grad im Uhrzeigersinn, Verschieben behaelt die Drehung, Rueckgaengig
+    void plateRotation() {
+        using Pins = std::vector<std::pair<std::string, std::string>>;
+        auto s = session();
+        QVERIFY(s->addPart("transistor_npn", "D1", Orientation::Horizontal, Span::Short));
+        const Pins start{{"b", "D1"}, {"c", "D2"}, {"e", "E1"}, {"e2", "E2"}};
+        QCOMPARE(pins(*s, "T1"), start);
+        QVERIFY(s->rotatePart("T1")); // B oben rechts, C unten rechts, E oben links, E2 unten links
+        QCOMPARE(pins(*s, "T1"), (Pins{{"b", "D2"}, {"c", "E2"}, {"e", "D1"}, {"e2", "E1"}}));
+        QVERIFY(s->movePart("T1", "B5", Orientation::Horizontal, Span::Short));
+        QCOMPARE(pins(*s, "T1"), (Pins{{"b", "B6"}, {"c", "C6"}, {"e", "B5"}, {"e2", "C5"}}));
+        QVERIFY(!s->movePart("T1", "E5", Orientation::Horizontal, Span::Short)); // unterste Reihe: passt nicht
+        QVERIFY(!s->movePart("T1", "A12", Orientation::Horizontal, Span::Short)); // rechter Rand
+        QVERIFY(s->rotatePart("T1") && s->rotatePart("T1") && s->rotatePart("T1"));
+        QCOMPARE(pins(*s, "T1"), (Pins{{"b", "B5"}, {"c", "B6"}, {"e", "C5"}, {"e2", "C6"}})); // viermal = Ausgang
+        s->undoStack().undo();
+        s->undoStack().undo();
+        s->undoStack().undo();
+        s->undoStack().undo(); // Verschieben
+        s->undoStack().undo(); // erste Drehung
+        QCOMPARE(pins(*s, "T1"), start);
+        // nur Platinen
+        QVERIFY(s->addPart("widerstand", "A5", Orientation::Horizontal, Span::Short));
+        QVERIFY(!s->rotatePart("R1"));
+        // gedreht weiterhin leitend: Emitter ueber e2 (jetzt unten links)
+        QVERIFY(s->rotatePart("T1"));
+        const model::SocketAssignment a = model::assignSockets(s->board());
+        QCOMPARE(a.partPins.at("T1"), (std::vector<int>{1, 1, 3, 3})); // Fuesse zur Blockmitte
+    }
+
     void boardColumnsAreACommand() {
         auto s = session();
         QCOMPARE(s->board().columns, 12);

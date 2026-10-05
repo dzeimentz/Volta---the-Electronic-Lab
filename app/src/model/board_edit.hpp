@@ -71,6 +71,15 @@ bool isFlipped(const PartPlacement& part, const CatalogEntry& entry);
 // Kehrt die Feldzuordnung um (Anschluesse bleiben, Felder tauschen die Reihenfolge); 2-x-2-Platine: halbe Drehung.
 void flipPins(PartPlacement& part, const CatalogEntry& entry);
 
+// Quadratische 2-x-2-Platine (Katalog "platine_2x2")?
+bool isSquarePlate(const CatalogEntry& entry);
+// Dreht eine 2-x-2-Platine um 90 Grad im Uhrzeigersinn; die vier Felder bleiben dieselben
+// (oben links -> oben rechts -> unten rechts -> unten links -> oben links).
+void rotatePlate(PartPlacement& part);
+// Verschiebt eine 2-x-2-Platine so, dass ihr Feld oben links startField ist; Drehung bleibt erhalten.
+// Liefert false, wenn ein Feld nicht mehr auf der Grundplatte liegt.
+bool translatePlate(PartPlacement& part, const std::string& startField);
+
 PartPlacement* findPart(Board& board, const std::string& id);
 WirePlacement* findWire(Board& board, const std::string& id);
 

@@ -19,7 +19,8 @@
 - Der **Transistor** sitzt auf einer **quadratischen Platine** mit vier Fuessen ueber einem 2-x-2-Block von Feldern
   (Katalog `spannweite: platine_2x2`, `lage: b, c, e, e2`): oben links B, oben rechts C, unten links E, unten rechts
   ein zweiter E-Fuss (`e2`), der auf der Platine ueber eine sichtbare Leiterbahn mit E verbunden ist (Netzliste:
-  Leitung `<ID>.E2`). Startfeld ist das Feld oben links; »Umdrehen« dreht die Platine um 180°.
+  Leitung `<ID>.E2`). Startfeld ist das Feld oben links; »Drehen« dreht die Platine um 90° im Uhrzeigersinn (Befehl), »Umdrehen« um
+  180°. Beim Verschieben bleibt die Drehung erhalten.
 - Der Wechselschalter sitzt auf einer **Traegerplatine** ueber drei Felder in einer Reihe (`spannweite: traeger`).
 - Gepolte Bauteile tragen Anschlussnamen: Diode/LED `anode`, `kathode`; Elko `plus`, `minus`; Transistor `b`, `c`, `e` (Platine zusaetzlich `e2`).
 - Ein Feld hat hoechstens fuenf Bauteilbeine. Die fuenf Steckloecher liegen mittig in einer Reihe (0 links ... 4 rechts);

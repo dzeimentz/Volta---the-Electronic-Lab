@@ -334,6 +334,57 @@ void flipPins(PartPlacement& part, const CatalogEntry& entry) {
             if (pin.first == order[k]) pin.second = fields[k];
 }
 
+bool isSquarePlate(const CatalogEntry& entry) { return isSquareCarrier(entry); }
+
+namespace {
+// Feld oben links eines Blocks (kleinste Zeile, kleinste Spalte)
+bool plateOrigin(const PartPlacement& part, char& row, int& col) {
+    row = 'Z';
+    col = 1000;
+    for (const auto& pin : part.pins) {
+        char r = 0;
+        int c = 0;
+        if (!parseField(pin.second, r, c)) return false;
+        row = std::min(row, r);
+        col = std::min(col, c);
+    }
+    return !part.pins.empty();
+}
+} // namespace
+
+void rotatePlate(PartPlacement& part) {
+    char r0 = 0;
+    int c0 = 0;
+    if (!plateOrigin(part, r0, c0)) return;
+    for (auto& pin : part.pins) {
+        char r = 0;
+        int c = 0;
+        parseField(pin.second, r, c);
+        const int dr = r - r0;
+        const int dc = c - c0;
+        // im Uhrzeigersinn: (Zeile, Spalte) -> (Spalte, 1 - Zeile) innerhalb des 2-x-2-Blocks
+        pin.second = fieldName(static_cast<char>(r0 + dc), c0 + (1 - dr));
+    }
+}
+
+bool translatePlate(PartPlacement& part, const std::string& startField) {
+    char r0 = 0;
+    int c0 = 0;
+    char rs = 0;
+    int cs = 0;
+    if (!plateOrigin(part, r0, c0) || !parseField(startField, rs, cs)) return false;
+    for (auto& pin : part.pins) {
+        char r = 0;
+        int c = 0;
+        parseField(pin.second, r, c);
+        const char nr = static_cast<char>(r - r0 + rs);
+        const int nc = c - c0 + cs;
+        pin.second = fieldName(nr, nc);
+        if (classifyAnchor(pin.second) != AnchorKind::Field) return false;
+    }
+    return true;
+}
+
 PartPlacement* findPart(Board& board, const std::string& id) {
     for (auto& p : board.parts)
         if (p.id == id) return &p;

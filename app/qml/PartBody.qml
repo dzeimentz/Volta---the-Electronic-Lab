@@ -392,7 +392,7 @@ Item {
             Repeater {
                 model: [[pcb.f[2], pcb.f[3]], [pcb.f[0], Qt.point(pcb.width / 2, pcb.height / 2)],
                         [pcb.f[1], Qt.point(pcb.width / 2, pcb.height / 2)],
-                        [Qt.point((pcb.f[2].x + pcb.f[3].x) / 2, pcb.f[2].y), Qt.point(pcb.width / 2, pcb.height / 2)]]
+                        [Qt.point((pcb.f[2].x + pcb.f[3].x) / 2, (pcb.f[2].y + pcb.f[3].y) / 2), Qt.point(pcb.width / 2, pcb.height / 2)]]
                 Rectangle {
                     required property var modelData
                     readonly property real dx: modelData[1].x - modelData[0].x
@@ -420,8 +420,9 @@ Item {
                     required property string modelData
                     text: modelData
                     font.pixelSize: 11; font.bold: true; color: "white"
-                    x: pcb.f[index].x + (index % 2 === 0 ? 7 : -7 - width)
-                    y: pcb.f[index].y + (index < 2 ? 4 : -4 - height)
+                    // neben dem Fuss, zur Platinenmitte hin (folgt der Drehung)
+                    x: pcb.f[index].x + (pcb.f[index].x < pcb.width / 2 ? 7 : -7 - width)
+                    y: pcb.f[index].y + (pcb.f[index].y < pcb.height / 2 ? 4 : -4 - height)
                 }
             }
         }
