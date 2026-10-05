@@ -69,6 +69,33 @@ private slots:
         QVERIFY(QString::fromStdString(s->lastError()).contains(QStringLiteral("voll")));
     }
 
+    void flipKeepsPolarityWhenMoving() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("widerstand", "B3", Orientation::Horizontal, Span::Short, nullptr, 470.0)); // B3-B4
+        QVERIFY(s->addPart("led_rot", "B4", Orientation::Vertical, Span::Short));     // Anode B4, Kathode C4
+        QVERIFY(s->addWire("P:+9V", "B3", "rot"));
+        QVERIFY(s->addWire("C4", "P:0V", "schwarz"));
+        run(*s, 0.05);
+        QVERIFY(s->reading("D1")->currentA > 14e-3);
+        QVERIFY(s->flipPart("D1")); // verpolt: leuchtet nicht
+        QCOMPARE(pins(*s, "D1"),
+                 (std::vector<std::pair<std::string, std::string>>{{"anode", "C4"}, {"kathode", "B4"}}));
+        run(*s, 0.05);
+        QVERIFY(std::fabs(s->reading("D1")->currentA) < 1e-6);
+        // Verschieben und Drehen behalten die Polung
+        QVERIFY(s->movePart("D1", "B6", Orientation::Horizontal, Span::Short));
+        QCOMPARE(pins(*s, "D1"),
+                 (std::vector<std::pair<std::string, std::string>>{{"anode", "B7"}, {"kathode", "B6"}}));
+        s->undoStack().undo();
+        s->undoStack().undo(); // Umdrehen zurueck
+        QCOMPARE(pins(*s, "D1").front().second, std::string("B4"));
+        // Traegerplatine umdrehen: e links, b rechts
+        QVERIFY(s->addPart("transistor_npn", "E1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->flipPart("T1"));
+        QCOMPARE(pins(*s, "T1"), (std::vector<std::pair<std::string, std::string>>{{"b", "E3"}, {"c", "E2"}, {"e", "E1"}}));
+    }
+
     void undoRedoAndMerging() {
         auto s = session();
         QVERIFY(s->addPart("widerstand", "B3", Orientation::Horizontal, Span::Short));

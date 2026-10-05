@@ -153,13 +153,25 @@ bool LabSession::movePart(const std::string& id, const std::string& startField, 
     const CatalogEntry* e = m_catalog.part(old->type);
     if (!e) return fail("unbekannter Bauteiltyp");
     PartPlacement moved = *old;
+    const bool flipped = isFlipped(*old, *e);
     std::string err;
-    if (!placePins(*e, startField, o, span, moved.pins, err) || !canPlace(m_board, m_catalog, moved, err, id))
-        return fail(err);
+    if (!placePins(*e, startField, o, span, moved.pins, err)) return fail(err);
+    if (flipped) flipPins(moved, *e); // Polung bleibt beim Verschieben und Drehen erhalten
+    if (!canPlace(m_board, m_catalog, moved, err, id)) return fail(err);
     if (moved.pins == old->pins) return true; // nichts zu tun
     Board after = m_board;
     *findPart(after, id) = moved;
     return push(QStringLiteral("%1 verschieben").arg(q(id)), std::move(after), BoardCommand::MergeMovePart, q(id));
+}
+
+bool LabSession::flipPart(const std::string& id) {
+    Board after = m_board;
+    PartPlacement* p = findPart(after, id);
+    if (!p) return fail("Bauteil " + id + " nicht gefunden");
+    const CatalogEntry* e = m_catalog.part(p->type);
+    if (!e) return fail("unbekannter Bauteiltyp");
+    flipPins(*p, *e);
+    return push(QStringLiteral("%1 umdrehen").arg(q(id)), std::move(after));
 }
 
 bool LabSession::removePart(const std::string& id) {

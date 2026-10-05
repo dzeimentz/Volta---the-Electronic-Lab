@@ -19,3 +19,8 @@ volta_qt_test(volta_model_tests test_model.cpp)
 volta_qt_test(volta_content_smoke_tests test_content_smoke.cpp)
 volta_qt_test(volta_bridge_tests test_bridge.cpp)
 volta_qt_test(volta_session_tests test_session.cpp)
+
+# Oberflaechentest: echte QML-Oberflaeche ohne sichtbares Fenster (offscreen)
+volta_qt_test(volta_ui_tests test_ui.cpp)
+target_link_libraries(volta_ui_tests PRIVATE volta_ui volta_uiplugin Qt6::Quick)
+set_tests_properties(volta_ui_tests PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QT_QUICK_BACKEND=software")

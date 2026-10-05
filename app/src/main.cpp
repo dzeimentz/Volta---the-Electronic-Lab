@@ -4,9 +4,12 @@
 #include <QQmlContext>
 #include <QQuickWindow>
 #include <QTimer>
+#include <QtQml/qqmlextensionplugin.h>
 
 #include "lab_controller.hpp"
 #include "volta/core/version.hpp"
+
+Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 
 int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);

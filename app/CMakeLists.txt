@@ -42,23 +42,29 @@ target_compile_definitions(volta_app PRIVATE
     VOLTA_VERSION="${PROJECT_VERSION}"
     VOLTA_CONTENT_DIR="${PROJECT_SOURCE_DIR}/content")
 
-set_source_files_properties(qml/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
-
-qt_add_qml_module(volta_app
+# Oberflaeche als statische QML-Bibliothek (URI Volta): von der App und von den Oberflaechentests genutzt
+set_source_files_properties(qml/Theme.qml qml/Texts.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+qt_add_library(volta_ui STATIC)
+qt_add_qml_module(volta_ui
     URI Volta
     VERSION 1.0
     QML_FILES
         qml/Main.qml
         qml/Theme.qml
+        qml/Texts.qml
         qml/Lab.qml
         qml/ContactField.qml
         qml/VoltageBars.qml
         qml/PartItem.qml
         qml/WireItem.qml
+        qml/WireEndHandle.qml
+        qml/PartTray.qml
+        qml/Toast.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp
 )
+target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2)
 
 # Uebersetzungen: qt_add_lrelease statt qt_add_translations, weil Letzteres (Qt 6.11) an Leerzeichen im
 # Quellpfad scheitert ("VOLTA Elektronik-Labor"). lupdate bei Bedarf von Hand: lupdate app -ts i18n/volta_de.ts
@@ -72,7 +78,7 @@ qt_add_lrelease(volta_app
 qt_add_resources(volta_app "translations" PREFIX "/i18n" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES ${volta_qm_files})
 
 target_link_libraries(volta_app PRIVATE
-    volta_model
+    volta_ui volta_uiplugin
     Qt6::Quick Qt6::QuickControls2 Qt6::Multimedia Qt6::TextToSpeech Qt6::Sensors Qt6::Svg)
 
 if(VOLTA_BUILD_TESTS)

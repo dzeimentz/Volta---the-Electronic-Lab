@@ -28,6 +28,13 @@
   Feldspannung; Experiment 2.4 mit alternativem Aufbau (2 × 220 Ω) geloest, ohne Widerstand gescheitert.
 - Inhaltspakete laden, fehlende Schluessel, Schema-Version.
 
+## Oberflaeche (Qt Quick, `app/tests/test_ui.cpp`)
+- `volta_ui_tests` laedt die echte QML-Oberflaeche ohne sichtbares Fenster (`QT_QPA_PLATFORM=offscreen`) und bedient
+  sie mit simulierter Maus und Tastatur: Bauteil aus dem Fach ziehen, Ablegen ausserhalb, Leitung ziehen, Bauteil
+  verschieben, Strg+Z/Strg+Y, Leitungsende umsetzen, Hinweis bei ungueltiger Aktion, Entf, Taster, Kontextmenue.
+- Elemente werden ueber `objectName` gefunden (`field_B3`, `part_R1`, `tray_led_rot`, `wireEnd_L1_von`).
+- Die Oberflaeche ist dafuer als statische QML-Bibliothek `volta_ui` (URI `Volta`) gebaut.
+
 ## Inhalte
 - `python3 tools/validate_content.py` in CI und vor jedem Commit mit Aenderungen in `content/`.
 - Jedes Experiment aller Baende wird automatisch mit seiner Vorlage (Hauptschalter ein) simuliert; die

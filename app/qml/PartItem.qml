@@ -1,5 +1,6 @@
-// Bauteil zwischen seinen Feldern (Phase-0-Geruest: schematische Darstellung; Gestaltung folgt in Phase 1).
+// Bauteil zwischen seinen Feldern (Gestaltung folgt in Schritt 1.4).
 // Zustand: ueberlastet = orange Glut, zerstoert = grau mit Kennzeichnung (Farbe nie allein: Text + Kontur).
+// Bedienung: ziehen zum Verschieben, Tippen waehlt aus (Taster: druecken schliesst), langer Druck/Rechtsklick Menue.
 import QtQuick
 
 Item {
@@ -7,8 +8,15 @@ Item {
     property string partId
     property string partType
     property real value: 0
+    property bool closed: false
+    property bool selected: false
     property var points: []      // Mittelpunkte der Felder je Anschluss
     property var partState: ({}) // partState() des LabController
+
+    signal dragFinished(point delta)
+    signal tapped()
+    signal pushed(bool down) // Taster gedrueckt/losgelassen
+    signal menuRequested(point scenePos)
 
     anchors.fill: parent
 
@@ -27,9 +35,13 @@ Item {
     readonly property bool destroyed: partState.destroyed === true
     readonly property bool overloaded: partState.overloaded === true
 
-    function valueText() {
-        if (partType === "widerstand") return value >= 1000 ? (value / 1000) + " kΩ" : value + " Ω"
-        return ""
+    // Darstellung (wandert beim Ziehen mit; der Griffbereich darunter bleibt stehen)
+    Item {
+    id: visual
+    anchors.fill: parent
+    transform: Translate {
+        x: bodyDrag.active ? bodyDrag.activeTranslation.x : 0
+        y: bodyDrag.active ? bodyDrag.activeTranslation.y : 0
     }
 
     // Beine
@@ -53,7 +65,7 @@ Item {
     Rectangle {
         id: body
         width: 64
-        height: 28
+        height: 32
         radius: 8
         x: root.cx - width / 2
         y: root.cy - height / 2
@@ -62,8 +74,8 @@ Item {
              : root.overloaded ? Theme.signalOrange
              : root.partType.startsWith("led") ? "#E8221B"
              : "#E9D7B0"
-        border.color: root.overloaded ? "#B23A00" : Theme.navy
-        border.width: root.overloaded ? 3 : 1
+        border.color: root.selected ? Theme.accent : (root.overloaded ? "#B23A00" : Theme.navy)
+        border.width: root.selected || root.overloaded ? 3 : 1
 
         // leuchtende LED: Helligkeit aus dem Strom (level = I / 20 mA)
         Rectangle {
@@ -79,8 +91,41 @@ Item {
         anchors.horizontalCenter: body.horizontalCenter
         y: body.y + body.height + 4
         text: root.destroyed ? qsTr("%1 kaputt").arg(root.partId)
-                             : root.partId + (root.valueText() ? " " + root.valueText() : "")
+                             : root.partId + (root.partType === "widerstand" ? " " + Texts.ohm(root.value) : "")
         font.pixelSize: 12
         color: Theme.navy
+    }
+    }
+
+    // Bedienung auf dem Koerper (Fangbereich mindestens 48 dp), ausserhalb der mitwandernden Darstellung
+    Item {
+        x: root.cx - width / 2
+        y: root.cy - height / 2
+        // nicht drehen (Verschiebung in Szenen-Richtung messen), sondern bei senkrechter Lage Masse tauschen
+        readonly property bool upright: Math.abs(Math.abs(body.rotation) - 90) < 45
+        width: Math.max(upright ? body.height : body.width, Theme.control)
+        height: Math.max(upright ? body.width : body.height, Theme.control)
+
+        DragHandler {
+            id: bodyDrag
+            target: null
+            // activeTranslation ist beim Deaktivieren schon zurueckgesetzt: letzte Verschiebung selbst merken
+            property point lastTranslation
+            onActiveTranslationChanged: if (active) lastTranslation = Qt.point(activeTranslation.x, activeTranslation.y)
+            onActiveChanged: if (!active) root.dragFinished(lastTranslation)
+        }
+        TapHandler {
+            id: tap
+            // exklusiver Griff: der Tipp gehoert dem Bauteil, nicht dem Hintergrund (der die Auswahl aufhebt);
+            // das Ziehen darf ihn dennoch uebernehmen
+            gesturePolicy: TapHandler.ReleaseWithinBounds
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onTapped: (eventPoint, button) => {
+                if (button === Qt.RightButton) root.menuRequested(eventPoint.scenePosition)
+                else root.tapped()
+            }
+            onLongPressed: root.menuRequested(point.scenePosition)
+            onPressedChanged: root.pushed(pressed)
+        }
     }
 }

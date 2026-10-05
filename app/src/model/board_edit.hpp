@@ -37,6 +37,11 @@ int usedSockets(const Board& board, const std::string& field, const std::string&
 // Prueft eine Leitung: beide Enden gueltige Anschlusspunkte, nicht dasselbe Feld.
 bool canWire(const Board& board, const std::string& from, const std::string& to, std::string& error);
 
+// Umgedreht: Felder in umgekehrter Reihenfolge der Lage (z. B. LED mit Anode unten bzw. rechts).
+bool isFlipped(const PartPlacement& part, const CatalogEntry& entry);
+// Kehrt die Feldzuordnung um (Anschluesse bleiben, Felder tauschen die Reihenfolge).
+void flipPins(PartPlacement& part, const CatalogEntry& entry);
+
 PartPlacement* findPart(Board& board, const std::string& id);
 WirePlacement* findWire(Board& board, const std::string& id);
 

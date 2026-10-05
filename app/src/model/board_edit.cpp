@@ -183,6 +183,37 @@ bool canWire(const Board& board, const std::string& from, const std::string& to,
     return true;
 }
 
+namespace {
+// Felder in Lage-Reihenfolge (Traegerplatine: "lage", sonst Katalogreihenfolge der Anschluesse)
+std::vector<std::string> fieldsInLayoutOrder(const PartPlacement& part, const CatalogEntry& entry) {
+    const auto& order = entry.layout.empty() ? entry.pins : entry.layout;
+    std::vector<std::string> fields;
+    for (const auto& name : order)
+        for (const auto& pin : part.pins)
+            if (pin.first == name) fields.push_back(pin.second);
+    return fields;
+}
+bool fieldBefore(const std::string& a, const std::string& b) {
+    if (a[0] != b[0]) return a[0] < b[0];
+    return std::stoi(a.substr(1)) < std::stoi(b.substr(1));
+}
+} // namespace
+
+bool isFlipped(const PartPlacement& part, const CatalogEntry& entry) {
+    const auto fields = fieldsInLayoutOrder(part, entry);
+    return fields.size() >= 2 && classifyAnchor(fields.front()) == AnchorKind::Field &&
+           classifyAnchor(fields.back()) == AnchorKind::Field && fieldBefore(fields.back(), fields.front());
+}
+
+void flipPins(PartPlacement& part, const CatalogEntry& entry) {
+    auto fields = fieldsInLayoutOrder(part, entry);
+    std::reverse(fields.begin(), fields.end());
+    const auto& order = entry.layout.empty() ? entry.pins : entry.layout;
+    for (std::size_t k = 0; k < order.size() && k < fields.size(); ++k)
+        for (auto& pin : part.pins)
+            if (pin.first == order[k]) pin.second = fields[k];
+}
+
 PartPlacement* findPart(Board& board, const std::string& id) {
     for (auto& p : board.parts)
         if (p.id == id) return &p;

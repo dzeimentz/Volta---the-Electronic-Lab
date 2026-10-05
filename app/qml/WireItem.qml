@@ -7,13 +7,14 @@ Shape {
     property point from
     property point to
     property color wireColor: "red"
+    property bool selected: false
 
     anchors.fill: parent
     preferredRendererType: Shape.CurveRenderer
 
     ShapePath {
-        strokeColor: Qt.darker(root.wireColor, 1.4)
-        strokeWidth: 7
+        strokeColor: root.selected ? Theme.signalOrange : Qt.darker(root.wireColor, 1.4)
+        strokeWidth: root.selected ? 10 : 7
         fillColor: "transparent"
         capStyle: ShapePath.RoundCap
         startX: root.from.x; startY: root.from.y

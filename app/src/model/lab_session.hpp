@@ -54,6 +54,7 @@ public:
                  std::string* newId = nullptr, double value = 0.0);
     bool movePart(const std::string& id, const std::string& startField, Orientation o, Span span);
     bool removePart(const std::string& id);
+    bool flipPart(const std::string& id); // umdrehen (Polung tauschen)
     bool setPartValue(const std::string& id, double value);
     bool repairPart(const std::string& id);
     bool addWire(const std::string& from, const std::string& to, const std::string& color,

@@ -1,5 +1,7 @@
 #include "lab_controller.hpp"
 
+#include <cstdlib>
+
 namespace volta {
 
 namespace {
@@ -88,6 +90,7 @@ int LabController::voltageBars(const QString& anchor) { return m_session->voltag
 
 QVariantMap LabController::partState(const QString& id) const {
     QVariantMap m;
+    if (const model::PartPlacement* p = m_session->board().findPart(ss(id))) m.insert(QStringLiteral("closed"), p->closed);
     const core::ComponentReading* r = m_session->reading(ss(id));
     if (!r) return m;
     m.insert(QStringLiteral("currentmA"), r->currentA * 1e3);
@@ -117,10 +120,35 @@ QVariantList LabController::parts() const {
             pinNames << qs(name);
             anchors << qs(anchor);
         }
+        // Lage aus den ersten beiden Feldern: gleiche Zeile = waagrecht; Abstand 2 = lange Spannweite
+        bool vertical = false;
+        bool longSpan = false;
+        if (p.pins.size() == 2) {
+            const std::string& a = p.pins[0].second;
+            const std::string& b = p.pins[1].second;
+            if (a.size() >= 2 && b.size() >= 2) {
+                vertical = a[0] != b[0];
+                const int d = vertical ? std::abs(b[0] - a[0]) : std::abs(std::stoi(b.substr(1)) - std::stoi(a.substr(1)));
+                longSpan = d == 2;
+            }
+        } else if (p.pins.size() == 3) {
+            vertical = p.pins[0].second[0] != p.pins[2].second[0];
+        }
+        // Startfeld = oberstes bzw. linkestes Feld (Bezug fuer Verschieben und Drehen)
+        std::string start;
+        for (const auto& pin : p.pins) {
+            const std::string& f = pin.second;
+            if (start.empty() || f[0] < start[0] ||
+                (f[0] == start[0] && f.size() > 1 && start.size() > 1 && std::stoi(f.substr(1)) < std::stoi(start.substr(1))))
+                start = f;
+        }
         out << QVariantMap{{QStringLiteral("id"), qs(p.id)},
                            {QStringLiteral("type"), qs(p.type)},
+                           {QStringLiteral("start"), qs(start)},
                            {QStringLiteral("value"), p.value},
                            {QStringLiteral("closed"), p.closed},
+                           {QStringLiteral("vertical"), vertical},
+                           {QStringLiteral("longSpan"), longSpan},
                            {QStringLiteral("pins"), pinNames},
                            {QStringLiteral("anchors"), anchors}};
     }
@@ -174,6 +202,7 @@ bool LabController::movePart(const QString& id, const QString& start, bool verti
     return result(m_session->movePart(ss(id), ss(start), orient(vertical), spanOf(longSpan)));
 }
 bool LabController::removePart(const QString& id) { return result(m_session->removePart(ss(id))); }
+bool LabController::flipPart(const QString& id) { return result(m_session->flipPart(ss(id))); }
 bool LabController::setPartValue(const QString& id, double v) { return result(m_session->setPartValue(ss(id), v)); }
 bool LabController::repairPart(const QString& id) { return result(m_session->repairPart(ss(id))); }
 bool LabController::addWire(const QString& from, const QString& to, const QString& color) {
@@ -215,8 +244,10 @@ void LabController::setTimeScale(double scale) {
     emit deskChanged();
 }
 void LabController::setPartClosed(const QString& id, bool closed) {
+    // Bedienhandlung: kein boardChanged (die Bauteile wuerden neu aufgebaut, ein gedrueckter Taster verloere den
+    // Griff); die Stellung erscheint ueber partState()
     m_session->setPartClosed(ss(id), closed);
-    emit boardChanged();
+    emit stateChanged();
 }
 void LabController::setDeskSwitch(bool closed) {
     m_session->setDeskSwitch(closed);

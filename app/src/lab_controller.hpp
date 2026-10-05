@@ -79,6 +79,7 @@ public:
     Q_INVOKABLE bool addPart(const QString& type, const QString& startField, bool vertical, bool longSpan);
     Q_INVOKABLE bool movePart(const QString& id, const QString& startField, bool vertical, bool longSpan);
     Q_INVOKABLE bool removePart(const QString& id);
+    Q_INVOKABLE bool flipPart(const QString& id);
     Q_INVOKABLE bool setPartValue(const QString& id, double value);
     Q_INVOKABLE bool repairPart(const QString& id);
     Q_INVOKABLE bool addWire(const QString& from, const QString& to, const QString& color);
