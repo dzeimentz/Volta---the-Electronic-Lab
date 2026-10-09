@@ -678,72 +678,78 @@
         <translation>Modules go into the module bar at the bottom.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="865" />
+        <location filename="../app/qml/Lab.qml" line="694" />
+        <source>Bauteil entfernen</source>
+        <translation>Remove part</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="884" />
         <source>Spannungsanzeige ein/aus</source>
         <translation>Voltage display on/off</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="875" />
+        <location filename="../app/qml/Lab.qml" line="894" />
         <source>Drehen</source>
         <translation>Rotate</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="882" />
+        <location filename="../app/qml/Lab.qml" line="901" />
         <source>Umdrehen (Polung)</source>
         <translation>Flip (polarity)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="886" />
+        <location filename="../app/qml/Lab.qml" line="905" />
         <source>Kurz stecken</source>
         <translation>Place short</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="886" />
+        <location filename="../app/qml/Lab.qml" line="905" />
         <source>Lang stecken</source>
         <translation>Place long</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="893" />
+        <location filename="../app/qml/Lab.qml" line="912" />
         <source>Wert</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="910" />
+        <location filename="../app/qml/Lab.qml" line="929" />
         <source>Nennspannung</source>
         <translation>Rated voltage</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="916" />
+        <location filename="../app/qml/Lab.qml" line="935" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="926" />
+        <location filename="../app/qml/Lab.qml" line="945" />
         <source>Reparieren</source>
         <translation>Repair</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="930" />
+        <location filename="../app/qml/Lab.qml" line="949" />
         <source>Entfernen</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="941" />
+        <location filename="../app/qml/Lab.qml" line="960" />
         <source>Blick hinein</source>
         <translation>Look inside</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="945" />
+        <location filename="../app/qml/Lab.qml" line="964" />
         <source>Herausnehmen</source>
         <translation>Take out</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="963" />
+        <location filename="../app/qml/Lab.qml" line="982" />
         <source>Farbe: %1</source>
         <translation>Colour: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="970" />
+        <location filename="../app/qml/Lab.qml" line="756" />
+        <location filename="../app/qml/Lab.qml" line="989" />
         <source>Leitung löschen</source>
         <translation>Delete wire</translation>
     </message>

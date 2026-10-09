@@ -685,6 +685,15 @@ Item {
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id
                     points: modelData.anchors.map((a, i) => lab.socketPoint(a, modelData.sockets[i]))
+                    // Loeschen-Knopf rechts oberhalb des ausgewaehlten Bauteils
+                    DeleteBadge {
+                        objectName: "deletePart_" + part.modelData.id
+                        visible: part.selected
+                        at: Qt.point(part.cx + 34, part.cy - 34)
+                        canvasScale: canvas.scale
+                        Accessible.name: qsTr("Bauteil entfernen")
+                        onClicked: { lab.controller.removePart(part.modelData.id); lab.selectedPart = "" }
+                    }
                     onTapped: {
                         lab.selectedPart = part.modelData.id
                         lab.selectedWire = ""
@@ -738,6 +747,15 @@ Item {
                             function onStateChanged() { wireShape.currentmA = lab.controller.wireCurrent(wire.modelData.id) }
                         }
                     }
+                    // Loeschen-Knopf in der Mitte der ausgewaehlten Leitung
+                    DeleteBadge {
+                        objectName: "deleteWire_" + wire.modelData.id
+                        visible: lab.selectedWire === wire.modelData.id && lab.moveWireId === ""
+                        at: wireShape.pointAt(0.5)
+                        canvasScale: canvas.scale
+                        Accessible.name: qsTr("Leitung löschen")
+                        onClicked: { lab.controller.removeWire(wire.modelData.id); lab.selectedWire = "" }
+                    }
                     Repeater {
                         model: [true, false] // Anfang, Ende
                         WireEndHandle {
@@ -758,6 +776,7 @@ Item {
                                 lab.highlightAnchor = ""
                                 if (target !== "") lab.controller.moveWireEnd(wire.modelData.id, endHandle.modelData, target)
                             }
+                            onTapped: { lab.selectedWire = wire.modelData.id; lab.selectedPart = ""; lab.selectedModule = "" }
                             onMenuRequested: (scenePos) => {
                                 lab.selectedWire = wire.modelData.id
                                 lab.selectedPart = ""

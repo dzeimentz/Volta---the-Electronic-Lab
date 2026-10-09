@@ -1,4 +1,5 @@
-// Greifbares Ende einer Leitung: ziehen zum Umsetzen, langer Druck oder Rechtsklick fuer das Leitungsmenue.
+// Greifbares Ende einer Leitung: ziehen zum Umsetzen, Antippen waehlt die Leitung (Loeschen-Knopf erscheint),
+// langer Druck oder Rechtsklick fuer das Leitungsmenue.
 // Fangbereich 48 dp (Bedienelemente >= 48 dp), sichtbar ist nur der Stecker.
 import QtQuick
 
@@ -9,6 +10,7 @@ Item {
     signal moved(point scenePos)
     signal released(point scenePos)
     signal menuRequested(point scenePos)
+    signal tapped()
 
     width: Theme.control
     height: Theme.control
@@ -34,7 +36,11 @@ Item {
     }
     TapHandler {
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+        gesturePolicy: TapHandler.ReleaseWithinBounds // Antippen gehoert der Leitung, nicht der Flaeche darunter
         onLongPressed: handle.menuRequested(point.scenePosition)
-        onTapped: (eventPoint, button) => { if (button === Qt.RightButton) handle.menuRequested(eventPoint.scenePosition) }
+        onTapped: (eventPoint, button) => {
+            if (button === Qt.RightButton) handle.menuRequested(eventPoint.scenePosition)
+            else handle.tapped()
+        }
     }
 }

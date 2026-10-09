@@ -239,6 +239,19 @@ int main(int argc, char* argv[]) {
                 l->setProperty("schematicVisible", true);
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_SELECT=<Bauteil-ID> bzw. VOLTA_DEMO_SELECT_WIRE=<Leitungs-ID> waehlt aus
+    // (Sichtpruefung der Loeschen-Knoepfe)
+    if (!qEnvironmentVariableIsEmpty("VOLTA_DEMO_SELECT") || !qEnvironmentVariableIsEmpty("VOLTA_DEMO_SELECT_WIRE"))
+        QTimer::singleShot(1200, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab"));
+            if (!l) return;
+            if (!qEnvironmentVariableIsEmpty("VOLTA_DEMO_SELECT"))
+                l->setProperty("selectedPart", qEnvironmentVariable("VOLTA_DEMO_SELECT"));
+            else
+                l->setProperty("selectedWire", qEnvironmentVariable("VOLTA_DEMO_SELECT_WIRE"));
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

@@ -175,3 +175,8 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Kennzeichnung rechts neben dem Symbol (Kennung, Wert bzw. Nennspannung); Feldnamen klein an der Knotenleitung,
   abschaltbar (Knopf »Feldnamen«). Mindestens 0,75-fach gezeichnet, groessere Plaene lassen sich verschieben.
 - Antippen eines Bauteils waehlt es auf der Grundplatte; Antippen einer Knotenleitung hebt sie und ihre Felder hervor.
+
+## Loeschen
+- Bauteil antippen bzw. Leitungsende antippen waehlt aus (orange); ein runder Papierkorb-Knopf (48 dp, rot mit
+  weissem Rand) erscheint rechts oberhalb des Bauteils bzw. in der Mitte der Leitung. Weiterhin: langer Druck oder
+  Rechtsklick (Menue »Entfernen« / »Leitung löschen«), Entf- bzw. Ruecktaste; alles rueckgaengig machbar.

@@ -416,6 +416,29 @@ private slots:
         QTRY_VERIFY(!item(QStringLiteral("field_A1"))->property("target").toBool());
     }
 
+    // Loeschen ohne Menue: Leitungsende antippen -> Knopf auf der Leitung; Bauteil antippen -> Knopf daneben
+    void deleteBadges() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("C5"), false, false));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C5"), QStringLiteral("rot")));
+        QTest::qWait(100);
+        QQuickItem* end = item(QStringLiteral("wireEnd_L1_nach"));
+        QVERIFY(end);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(end));
+        QQuickItem* badge = nullptr;
+        QTRY_VERIFY((badge = item(QStringLiteral("deleteWire_L1"))) != nullptr && badge->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
+        QTRY_VERIFY(board().wires.empty());
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        lab->setProperty("selectedPart", QStringLiteral("R1")); // wie Antippen des Bauteils
+        QTRY_VERIFY((badge = item(QStringLiteral("deletePart_R1"))) != nullptr && badge->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
+        QTRY_VERIFY(board().parts.empty());
+        m_lab->undo(); // rueckgaengig machbar
+        QTRY_COMPARE(board().parts.size(), std::size_t(1));
+    }
+
     // Experimentauswahl als Aufklappfeld; Einstellungsmenue ganz rechts
     void experimentBoxAndSettings() {
         QObject* box = item(QStringLiteral("experimentBox"));
