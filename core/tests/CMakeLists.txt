@@ -20,6 +20,7 @@ add_executable(volta_core_tests
     components/test_capacitor.cpp
     test_thermal.cpp
     test_blink_module.cpp
+    test_tone_module.cpp
     test_fuzz.cpp
     components/test_transistor.cpp
     components/test_lamp_motor.cpp

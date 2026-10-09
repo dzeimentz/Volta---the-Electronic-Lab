@@ -21,6 +21,7 @@ add_library(volta_core STATIC
     src/components/potentiometer.cpp
     src/components/speaker.cpp
     src/modules/blink_module.cpp
+    src/modules/tone_module.cpp
 )
 add_library(volta::core ALIAS volta_core)
 
