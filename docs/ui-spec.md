@@ -163,3 +163,15 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 ## Farben (Markenwerte DC Software Engineering)
 - Engineering Navy #0A2540, Pult #1A3A5C, Akzent #2E7DBE, Signal Orange #FF6B1A, Solder Amber #FFB07A,
   Spannungsbalken #8EE68A mit Kontur #3E8E3A, Grundplatte #F7F3EA, Felder #CFC5AE.
+
+## Schaltplanansicht (DIN EN 61082-1, Schaltzeichen DIN EN 60617)
+- Automatisch aus dem Aufbau (`model/schematic_layout`): jeder Knoten eine waagrechte Leitung in eigener Zeile
+  (+9V oben, 0V unten, dazwischen nach Abstand vom Pluspol), jedes Bauteil senkrecht in eigener Spalte; Batterie
+  links, dann in Signalrichtung Schalter, Regler, passive Bauteile, Module/Transistor, Verbraucher, Lautsprecher.
+- Nur rechte Winkel; Verbindungspunkt an jeder Abzweigung; Kreuzungen ohne Punkt sind keine Verbindung.
+- Mehrpolige Bauteile: Transistor C oben, E unten, B links; Potentiometer mit Schleifer seitlich; Wechselschalter
+  senkrecht (Mitte oben bzw. unten); Module und Messgeraet als Block (Plus oben, Minus unten, Eingaenge links,
+  Ausgaenge rechts, Anschlussnamen innen). Offene Anschluesse als kurzer Stummel.
+- Kennzeichnung rechts neben dem Symbol (Kennung, Wert bzw. Nennspannung); Feldnamen klein an der Knotenleitung,
+  abschaltbar (Knopf »Feldnamen«). Mindestens 0,75-fach gezeichnet, groessere Plaene lassen sich verschieben.
+- Antippen eines Bauteils waehlt es auf der Grundplatte; Antippen einer Knotenleitung hebt sie und ihre Felder hervor.

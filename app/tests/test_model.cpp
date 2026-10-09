@@ -108,6 +108,49 @@ private slots:
         QVERIFY(battery);
         QCOMPARE(parallel, 4); // beide melden zwei parallele Zweipole
         QVERIFY(model::buildSchematic(model::Board{}, m_catalog).nodes.empty());
+
+        // DIN EN 61082-1: nur waagrechte und senkrechte Leitungen; Pluspol oben, 0 V unten; Batterie links
+        for (const auto& l : s.lines)
+            QVERIFY(std::fabs(l.x1 - l.x2) < 1e-9 || std::fabs(l.y1 - l.y2) < 1e-9);
+        QVERIFY(s.nodes[static_cast<std::size_t>(plus)].y < s.nodes[static_cast<std::size_t>(mid)].y);
+        QVERIFY(s.nodes[static_cast<std::size_t>(mid)].y < s.nodes[static_cast<std::size_t>(gnd)].y);
+        double batteryX = 1e9, minX = 1e9;
+        for (const auto& e : s.elements) {
+            minX = std::min(minX, e.x);
+            if (e.id == "PULT.B") batteryX = e.x;
+        }
+        QCOMPARE(batteryX, minX);
+        // R1 und R2 parallel zwischen +9V und B4: Abzweigungen an beiden Knoten mit Verbindungspunkt
+        int plusDots = 0, midDots = 0;
+        for (const auto& d : s.dots) {
+            plusDots += d.node == plus;
+            midDots += d.node == mid;
+        }
+        QVERIFY(plusDots >= 1);
+        QVERIFY(midDots >= 1);
+        // jede Leitung endet auf ihrem Knoten oder an einem Bauteil: Knotenleitungen liegen auf ihrer Zeile
+        for (const auto& l : s.lines)
+            if (std::fabs(l.y1 - l.y2) < 1e-9 && l.node >= 0 && std::fabs(l.x2 - l.x1) > 1.0)
+                QCOMPARE(l.y1, s.nodes[static_cast<std::size_t>(l.node)].y);
+
+        // Modul als Block: Plus oben, Minus unten, Ausgang rechts, Takt links; Ein- und Ausgaenge mit eigener Leitung
+        model::Board m;
+        m.modules.push_back({"BL1", "blinkmodul", 1});
+        m.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 470.0});
+        m.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});
+        m.wires.push_back({"L1", "P:+9V", "BL1.plus", "rot"});
+        m.wires.push_back({"L2", "BL1.minus", "P:0V", "schwarz"});
+        m.wires.push_back({"L3", "P:+9V", "B3", "rot"});
+        m.wires.push_back({"L4", "C4", "BL1.aus", "blau"});
+        const model::Schematic sm = model::buildSchematic(m, m_catalog);
+        const model::SchematicElement* bl = nullptr;
+        for (const auto& e : sm.elements)
+            if (e.id == "BL1") bl = &e;
+        QVERIFY(bl && bl->block);
+        QCOMPARE(bl->pinLabels.size(), std::size_t(4));
+        for (const auto& l : sm.lines)
+            QVERIFY(std::fabs(l.x1 - l.x2) < 1e-9 || std::fabs(l.y1 - l.y2) < 1e-9);
+        QVERIFY(sm.width > 0.0 && sm.height > 0.0);
     }
 
     void parseOhmInput() {

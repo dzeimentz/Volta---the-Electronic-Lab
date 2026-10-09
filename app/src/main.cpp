@@ -231,6 +231,14 @@ int main(int argc, char* argv[]) {
             if (dlg) QMetaObject::invokeMethod(dlg, "show", Q_ARG(QVariant, inside), Q_ARG(QVariant, type));
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_PLAN=1 blendet den Schaltplan ein (z. B. mit VOLTA_DEMO_SOLVE und VOLTA_DEMO_EXP)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_PLAN") == 1)
+        QTimer::singleShot(800, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab")))
+                l->setProperty("schematicVisible", true);
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

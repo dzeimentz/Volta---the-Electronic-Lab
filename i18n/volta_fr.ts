@@ -1130,14 +1130,40 @@
 <context>
     <name>SchematicView</name>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="28" />
+        <location filename="../app/qml/SchematicView.qml" line="27" />
+        <location filename="../app/qml/SchematicView.qml" line="37" />
+        <source>%1 V</source>
+        <translation>%1 V</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="44" />
         <source>Schaltplan</source>
         <translation>Schéma</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="39" />
+        <location filename="../app/qml/SchematicView.qml" line="59" />
+        <source>Feldnamen</source>
+        <translation>Noms des cases</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="61" />
+        <source>Feldnamen ausblenden</source>
+        <translation>Masquer les noms des cases</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="61" />
+        <source>Feldnamen zeigen</source>
+        <translation>Afficher les noms des cases</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="69" />
         <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation>Dès que tu places des composants et tires des fils, le schéma apparaît ici.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="178" />
+        <source>Messgerät</source>
+        <translation>Multimètre</translation>
     </message>
 </context>
 <context>
@@ -1563,23 +1589,23 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="323" />
-        <location filename="../app/src/lab_controller.cpp" line="353" />
+        <location filename="../app/src/lab_controller.cpp" line="356" />
+        <location filename="../app/src/lab_controller.cpp" line="386" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="425" />
+        <location filename="../app/src/lab_controller.cpp" line="458" />
         <source>Musteraufbau zeigen</source>
         <translation>Afficher le montage modèle</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="771" />
+        <location filename="../app/src/lab_controller.cpp" line="804" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="798" />
+        <location filename="../app/src/lab_controller.cpp" line="831" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
     </message>

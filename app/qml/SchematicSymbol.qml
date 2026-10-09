@@ -39,7 +39,7 @@ Item {
         case "motor": // Kreis mit M
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "M", tx: 32, ty: 16}
         case "summer": // Halbkreis auf der Grundlinie
-            return {s: "M0 24 H64 M20 24 A12 12 0 0 1 44 24", f: ""}
+            return {s: "M0 16 H64 M20 16 A12 12 0 0 1 44 16", f: ""}
         case "taster": // Schliesser mit Druckknopf (Wirkverbindung gestrichelt)
             return {s: "M0 16 H22 M42 16 H64 M22 16 L44 8 M27 2 H37 M32 2 V4.5 M32 7 V9.5 M32 12 V13", f: ""}
         case "reedkontakt": // Schliesser im Schutzrohr

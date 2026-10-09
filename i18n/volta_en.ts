@@ -1130,14 +1130,40 @@
 <context>
     <name>SchematicView</name>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="28" />
+        <location filename="../app/qml/SchematicView.qml" line="27" />
+        <location filename="../app/qml/SchematicView.qml" line="37" />
+        <source>%1 V</source>
+        <translation>%1 V</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="44" />
         <source>Schaltplan</source>
         <translation>Circuit diagram</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="39" />
+        <location filename="../app/qml/SchematicView.qml" line="59" />
+        <source>Feldnamen</source>
+        <translation>Field names</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="61" />
+        <source>Feldnamen ausblenden</source>
+        <translation>Hide field names</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="61" />
+        <source>Feldnamen zeigen</source>
+        <translation>Show field names</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="69" />
         <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation>As soon as you place parts and draw wires, the circuit diagram appears here.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="178" />
+        <source>Messgerät</source>
+        <translation>Meter</translation>
     </message>
 </context>
 <context>
@@ -1563,23 +1589,23 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="323" />
-        <location filename="../app/src/lab_controller.cpp" line="353" />
+        <location filename="../app/src/lab_controller.cpp" line="356" />
+        <location filename="../app/src/lab_controller.cpp" line="386" />
         <source>Freies Labor</source>
         <translation>Free lab</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="425" />
+        <location filename="../app/src/lab_controller.cpp" line="458" />
         <source>Musteraufbau zeigen</source>
         <translation>Show sample build</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="771" />
+        <location filename="../app/src/lab_controller.cpp" line="804" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>This part will be unlocked at level %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="798" />
+        <location filename="../app/src/lab_controller.cpp" line="831" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module is unlocked at level %1.</translation>
     </message>

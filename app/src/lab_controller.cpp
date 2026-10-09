@@ -280,27 +280,60 @@ QVariantMap LabController::nearestE(double ohm, int n) const {
 
 QVariantMap LabController::schematic() const {
     const model::Schematic s = model::buildSchematic(m_session->board(), m_session->catalog());
+    // Rastereinheiten (model/schematic_layout) -> Bildpunkte der Zeichnung: 1 Einheit = 32 (halbe Symbolbreite)
+    constexpr double k = 32.0;
+    std::vector<QString> paths(s.nodes.size());
+    for (const auto& l : s.lines)
+        if (l.node >= 0 && static_cast<std::size_t>(l.node) < paths.size())
+            paths[static_cast<std::size_t>(l.node)] += QStringLiteral("M%1 %2 L%3 %4 ")
+                                                           .arg(l.x1 * k).arg(l.y1 * k).arg(l.x2 * k).arg(l.y2 * k);
     QVariantList nodes;
-    for (const auto& n : s.nodes) {
+    for (std::size_t i = 0; i < s.nodes.size(); ++i) {
+        const auto& n = s.nodes[i];
         QStringList anchors;
         for (const auto& a : n.anchors) anchors << qs(a);
         nodes << QVariantMap{{QStringLiteral("label"), qs(n.label)},
-                             {QStringLiteral("x"), n.x},
-                             {QStringLiteral("y"), n.y},
-                             {QStringLiteral("anchors"), anchors}};
+                             {QStringLiteral("anchors"), anchors},
+                             {QStringLiteral("drawn"), n.drawn},
+                             {QStringLiteral("x"), n.x1 * k},
+                             {QStringLiteral("x2"), n.x2 * k},
+                             {QStringLiteral("y"), n.y * k},
+                             {QStringLiteral("path"), paths[i]}};
     }
     QVariantList elements;
     for (const auto& e : s.elements) {
         QVariantList idx;
         for (int i : e.nodes) idx << i;
+        QVariantList pinLabels;
+        for (const auto& p : e.pinLabels)
+            pinLabels << QVariantMap{{QStringLiteral("text"), qs(p.text)},
+                                     {QStringLiteral("x"), p.x * k},
+                                     {QStringLiteral("y"), p.y * k}};
         elements << QVariantMap{{QStringLiteral("id"), qs(e.id)},
                                 {QStringLiteral("type"), qs(e.type)},
                                 {QStringLiteral("nodes"), idx},
                                 {QStringLiteral("desk"), e.desk},
-                                {QStringLiteral("par"), e.parallelIndex},
-                                {QStringLiteral("parCount"), e.parallelCount}};
+                                {QStringLiteral("module"), e.module},
+                                {QStringLiteral("value"), e.value},
+                                {QStringLiteral("x"), e.x * k},
+                                {QStringLiteral("y"), e.y * k},
+                                {QStringLiteral("rotation"), e.rotation},
+                                {QStringLiteral("block"), e.block},
+                                {QStringLiteral("w"), e.w * k},
+                                {QStringLiteral("h"), e.h * k},
+                                {QStringLiteral("labelX"), e.labelX * k},
+                                {QStringLiteral("labelY"), e.labelY * k},
+                                {QStringLiteral("pinLabels"), pinLabels}};
     }
-    return {{QStringLiteral("nodes"), nodes}, {QStringLiteral("elements"), elements}, {QStringLiteral("layers"), s.layers}};
+    QVariantList dots;
+    for (const auto& d : s.dots)
+        dots << QVariantMap{{QStringLiteral("x"), d.x * k}, {QStringLiteral("y"), d.y * k}, {QStringLiteral("node"), d.node}};
+    return {{QStringLiteral("nodes"), nodes},
+            {QStringLiteral("elements"), elements},
+            {QStringLiteral("dots"), dots},
+            {QStringLiteral("width"), s.width * k},
+            {QStringLiteral("height"), s.height * k},
+            {QStringLiteral("layers"), s.layers}};
 }
 
 QVariantList LabController::lexicon() const {
