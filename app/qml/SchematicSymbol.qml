@@ -62,8 +62,8 @@ Item {
                     f: arrowHead(28, 20, 39, 27)}
         case "batterie": // langer duenner Strich = Pluspol, kurzer dicker = Minuspol
             return {s: "M0 16 H28 M36 16 H64 M28 4 V28", f: "M34 10 H38 V22 H34 Z", t: "+", tx: 22, ty: 6}
-        case "lautsprecher": // Rechteck mit Trichter
-            return {s: "M0 16 H22 M42 16 H64 M22 10 H30 V22 H22 Z M30 10 L38 3 V29 L30 22", f: ""}
+        case "lautsprecher": // Magnet (Rechteck) mit beiden Spulenanschluessen, Trichter seitlich (DIN EN 60617)
+            return {s: "M0 16 H24 M40 16 H64 M24 12 H40 V20 H24 Z M26 12 L20 2 H44 L38 12", f: ""}
         case "pultschalter":
             return {s: "M0 16 H22 M42 16 H64 M22 16 L44 8", f: ""}
         case "potentiometer": // Widerstand mit Schleifer (Pfeil von unten)
