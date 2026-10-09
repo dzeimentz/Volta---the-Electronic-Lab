@@ -73,29 +73,29 @@ std::vector<std::string> footprint(const CatalogEntry& entry, const std::string&
 }
 
 bool placePins(const CatalogEntry& entry, const std::string& startField, Orientation o, Span span,
-               std::vector<std::pair<std::string, std::string>>& pins, std::string& error) {
+               std::vector<std::pair<std::string, std::string>>& pins, Message& error) {
     pins.clear();
     if (!isCarrier(entry) && !isSquareCarrier(entry)) {
         if (!allowsSpan(entry, span == Span::Short ? "kurz" : "lang")) {
-            error = entry.type + ": Spannweite nicht moeglich";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "So weit lassen sich die Beine dieses Bauteils nicht spreizen."));
             return false;
         }
     }
     const auto fields = footprint(entry, startField, o, span);
     if (fields.empty()) {
-        error = entry.type + ": passt nicht auf die Grundplatte";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Das Bauteil passt dort nicht auf die Grundplatte."));
         return false;
     }
     const auto& order = entry.layout.empty() ? entry.pins : entry.layout;
     if (order.size() != fields.size()) {
-        error = entry.type + ": Anschlusszahl passt nicht zur Lage";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Die Anschlüsse passen nicht zur Lage des Bauteils."));
         return false;
     }
     // Belegung in Katalogreihenfolge der Anschluesse
     for (const auto& pinName : entry.pins) {
         const auto pos = std::find(order.begin(), order.end(), pinName) - order.begin();
         if (pos >= static_cast<long>(fields.size())) {
-            error = entry.type + ": Anschluss '" + pinName + "' fehlt in der Lage";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Anschluss %1 fehlt in der Lage des Bauteils."), {pinName});
             return false;
         }
         pins.emplace_back(pinName, fields[static_cast<std::size_t>(pos)]);
@@ -242,49 +242,48 @@ int usedSockets(const Board& board, const std::string& field, const std::string&
     return n;
 }
 
-bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& part, std::string& error,
+bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& part, Message& error,
               const std::string& ignoreId) {
     const CatalogEntry* e = catalog.part(part.type);
     if (!e) {
-        error = "unbekannter Bauteiltyp '" + part.type + "'";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Unbekanntes Bauteil „%1“."), {part.type});
         return false;
     }
     if (part.pins.size() != e->pins.size()) {
-        error = part.id + ": Anschluesse unvollstaendig";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "%1: Die Anschlüsse sind unvollständig."), {part.id});
         return false;
     }
     std::map<std::string, int> needed;
     for (const auto& pin : part.pins) {
         if (classifyAnchor(pin.second) != AnchorKind::Field) {
-            error = part.id + ": Bauteile stecken nur auf Feldern der Grundplatte";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Bauteile stecken nur auf Feldern der Grundplatte."));
             return false;
         }
         if (!withinBoard(board, pin.second)) {
-            error = part.id + ": Feld " + pin.second + " liegt ausserhalb der Grundplatte (1-" +
-                    std::to_string(board.columns) + ")";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Feld %1 liegt außerhalb der Grundplatte (Felder 1–%2)."), {pin.second, std::to_string(board.columns)});
             return false;
         }
         ++needed[pin.second];
     }
     if (needed.size() != part.pins.size()) {
-        error = part.id + ": zwei Beine im selben Feld";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Zwei Beine dürfen nicht im selben Feld stecken."));
         return false;
     }
     for (const auto& [field, count] : needed) {
         if (usedSockets(board, field, ignoreId.empty() ? part.id : ignoreId) + count > kSocketsPerField) {
-            error = "Feld " + field + " ist voll";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Feld %1 ist voll."), {field});
             return false;
         }
     }
     for (const auto& p : board.parts)
         if (p.id == part.id && p.id != ignoreId) {
-            error = "Kennung " + part.id + " schon vergeben";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Die Kennung %1 ist schon vergeben."), {part.id});
             return false;
         }
     return true;
 }
 
-bool canWire(const Board& board, const std::string& from, const std::string& to, std::string& error) {
+bool canWire(const Board& board, const std::string& from, const std::string& to, Message& error) {
     auto valid = [&board](const std::string& a) {
         const AnchorKind k = classifyAnchor(a);
         if (k == AnchorKind::Invalid || !withinBoard(board, a)) return false;
@@ -294,11 +293,11 @@ bool canWire(const Board& board, const std::string& from, const std::string& to,
         return std::any_of(board.modules.begin(), board.modules.end(), [&id](const auto& m) { return m.id == id; });
     };
     if (!valid(from) || !valid(to)) {
-        error = "Leitung: ungueltiger Anschlusspunkt";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Dort kann keine Leitung stecken."));
         return false;
     }
     if (from == to) {
-        error = "Leitung: Anfang und Ende im selben Feld";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Anfang und Ende der Leitung liegen im selben Feld."));
         return false;
     }
     return true;
@@ -386,16 +385,16 @@ bool translatePlate(PartPlacement& part, const std::string& startField) {
     return true;
 }
 
-bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, std::string& error,
+bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, Message& error,
                     const std::string& ignoreId) {
     const ModuleEntry* e = catalog.module(module.type);
     if (!e || e->pins.empty()) {
-        error = "unbekanntes Modul '" + module.type + "'";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Unbekanntes Modul „%1“."), {module.type});
         return false;
     }
     const int width = static_cast<int>(e->pins.size());
     if (module.slot < 1 || module.slot + width - 1 > kModuleSlots) {
-        error = "Modul passt dort nicht in die Modulleiste";
+        error = msg(QT_TRANSLATE_NOOP("Meldung", "Das Modul passt dort nicht in die Modulleiste."));
         return false;
     }
     for (const auto& m : board.modules) {
@@ -403,7 +402,7 @@ bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlac
         const ModuleEntry* o = catalog.module(m.type);
         const int ow = o ? static_cast<int>(o->pins.size()) : 1;
         if (module.slot <= m.slot + ow - 1 && m.slot <= module.slot + width - 1) {
-            error = "Dort steckt schon ein Modul";
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Dort steckt schon ein Modul."));
             return false;
         }
     }

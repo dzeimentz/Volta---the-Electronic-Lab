@@ -609,7 +609,7 @@ private slots:
         QVERIFY(s->addPart("widerstand", "A10", Orientation::Horizontal, Span::Short)); // A10-A11
         QVERIFY(s->toggleVoltageDisplay("C12"));
         QVERIFY(!s->setColumns(10)); // A11 belegt
-        QVERIFY(QString::fromStdString(s->lastError()).contains(QStringLiteral("11-12")));
+        QVERIFY(QString::fromStdString(s->lastError()).contains(QStringLiteral("11–12")));
         QVERIFY(s->movePart("R1", "A1", Orientation::Horizontal, Span::Short));
         QVERIFY(s->setColumns(8));
         QCOMPARE(s->board().columns, 8);

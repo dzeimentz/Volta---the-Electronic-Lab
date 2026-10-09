@@ -1,5 +1,7 @@
 #include "lab_session.hpp"
 
+#include <QCoreApplication>
+
 #include <algorithm>
 #include <cmath>
 
@@ -226,25 +228,24 @@ std::vector<sim::StateOverride> LabSession::captureStates() const {
     return out;
 }
 
-bool LabSession::fail(std::string message) {
+bool LabSession::fail(Message message) {
     m_error = std::move(message);
     return false;
 }
 
 bool LabSession::setColumns(int columns) {
     if (columns < kMinColumns || columns > kMaxColumns || (columns - kMinColumns) % kColumnStep != 0)
-        return fail("Grundplatte: 8, 10 oder 12 Felder je Reihe");
+        return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.")));
     if (columns == m_board.columns) return true;
     if (highestUsedColumn(m_board) > columns)
-        return fail("Felder " + std::to_string(columns + 1) + "-" + std::to_string(m_board.columns) +
-                    " sind noch belegt - erst Bauteile und Leitungen dort entfernen");
+        return fail(msg(QT_TRANSLATE_NOOP("Meldung", "In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus."), {std::to_string(columns + 1), std::to_string(m_board.columns)}));
     Board after = m_board;
     after.columns = columns;
     // Spannungsanzeigen auf wegfallenden Feldern entfallen (kommen mit Rueckgaengig zurueck)
     after.voltageDisplays.erase(std::remove_if(after.voltageDisplays.begin(), after.voltageDisplays.end(),
                                                [&after](const std::string& f) { return !withinBoard(after, f); }),
                                 after.voltageDisplays.end());
-    return push(QStringLiteral("Grundplatte 1-%1").arg(columns), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "Grundplatte 1–%1").arg(columns), std::move(after));
 }
 
 bool LabSession::replaceBoard(const Board& after, const QString& text) {
@@ -255,7 +256,7 @@ bool LabSession::replaceBoard(const Board& after, const QString& text) {
 
 bool LabSession::push(const QString& text, Board after, int mergeId, const QString& key,
                       std::vector<sim::StateOverride> statesAfter) {
-    m_error.clear();
+    m_error = {};
     m_undo.push(new BoardCommand(*this, text, m_board, std::move(after), captureStates(), std::move(statesAfter),
                                  mergeId, key));
     return true;
@@ -266,7 +267,7 @@ bool LabSession::push(const QString& text, Board after, int mergeId, const QStri
 bool LabSession::addPart(const std::string& type, const std::string& startField, Orientation o, Span span,
                          std::string* newId, double value) {
     const CatalogEntry* e = m_catalog.part(type);
-    if (!e) return fail("unbekannter Bauteiltyp '" + type + "'");
+    if (!e) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Unbekanntes Bauteil „%1“."), {type}));
     PartPlacement p;
     p.id = nextPartId(m_board, type);
     p.type = type;
@@ -274,24 +275,24 @@ bool LabSession::addPart(const std::string& type, const std::string& startField,
     if (!(value > 0.0))
         if (const CatalogEntry* ce = m_catalog.part(type); ce && !ce->variants.empty())
             p.value = ce->param("u_nenn_V", 0.0); // Gluehlampe: Nennspannung der Vorgabe
-    std::string err;
+    Message err;
     if (!placePins(*e, startField, o, span, p.pins, err) || !canPlace(m_board, m_catalog, p, err)) return fail(err);
     Board after = m_board;
     after.parts.push_back(p);
     if (newId) *newId = p.id;
-    return push(QStringLiteral("%1 setzen").arg(q(p.id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 setzen").arg(q(p.id)), std::move(after));
 }
 
 bool LabSession::movePart(const std::string& id, const std::string& startField, Orientation o, Span span) {
     const PartPlacement* old = m_board.findPart(id);
-    if (!old) return fail("Bauteil " + id + " nicht gefunden");
+    if (!old) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));
     const CatalogEntry* e = m_catalog.part(old->type);
-    if (!e) return fail("unbekannter Bauteiltyp");
+    if (!e) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Unbekanntes Bauteil „%1“."), {id}));
     PartPlacement moved = *old;
-    std::string err;
+    Message err;
     if (isSquarePlate(*e)) {
         // 2-x-2-Platine: als Ganzes verschieben, Drehung bleibt erhalten
-        if (!translatePlate(moved, startField)) return fail(old->type + ": passt nicht auf die Grundplatte");
+        if (!translatePlate(moved, startField)) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Das Bauteil passt dort nicht auf die Grundplatte.")));
     } else {
         const bool flipped = isFlipped(*old, *e);
         if (!placePins(*e, startField, o, span, moved.pins, err)) return fail(err);
@@ -301,58 +302,58 @@ bool LabSession::movePart(const std::string& id, const std::string& startField, 
     if (moved.pins == old->pins) return true; // nichts zu tun
     Board after = m_board;
     *findPart(after, id) = moved;
-    return push(QStringLiteral("%1 verschieben").arg(q(id)), std::move(after), BoardCommand::MergeMovePart, q(id));
+    return push(QCoreApplication::translate("Befehl", "%1 verschieben").arg(q(id)), std::move(after), BoardCommand::MergeMovePart, q(id));
 }
 
 bool LabSession::flipPart(const std::string& id) {
     Board after = m_board;
     PartPlacement* p = findPart(after, id);
-    if (!p) return fail("Bauteil " + id + " nicht gefunden");
+    if (!p) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));
     const CatalogEntry* e = m_catalog.part(p->type);
-    if (!e) return fail("unbekannter Bauteiltyp");
+    if (!e) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Unbekanntes Bauteil „%1“."), {id}));
     flipPins(*p, *e);
-    return push(QStringLiteral("%1 umdrehen").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 umdrehen").arg(q(id)), std::move(after));
 }
 
 bool LabSession::rotatePart(const std::string& id) {
     Board after = m_board;
     PartPlacement* p = findPart(after, id);
-    if (!p) return fail("Bauteil " + id + " nicht gefunden");
+    if (!p) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));
     const CatalogEntry* e = m_catalog.part(p->type);
-    if (!e || !isSquarePlate(*e)) return fail(id + ": nur Platinen lassen sich so drehen");
+    if (!e || !isSquarePlate(*e)) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Nur Platinen lassen sich so drehen.")));
     rotatePlate(*p);
-    return push(QStringLiteral("%1 drehen").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 drehen").arg(q(id)), std::move(after));
 }
 
 bool LabSession::removePart(const std::string& id) {
     Board after = m_board;
     const auto it = std::find_if(after.parts.begin(), after.parts.end(), [&id](const auto& p) { return p.id == id; });
-    if (it == after.parts.end()) return fail("Bauteil " + id + " nicht gefunden");
+    if (it == after.parts.end()) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));
     after.parts.erase(it);
-    return push(QStringLiteral("%1 entfernen").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 entfernen").arg(q(id)), std::move(after));
 }
 
 bool LabSession::setPartValue(const std::string& id, double value) {
-    if (!(value > 0.0) || !std::isfinite(value)) return fail("ungueltiger Wert");
+    if (!(value > 0.0) || !std::isfinite(value)) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Dieser Wert geht nicht.")));
     Board after = m_board;
     PartPlacement* p = findPart(after, id);
-    if (!p) return fail("Bauteil " + id + " nicht gefunden");
+    if (!p) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));
     if (const CatalogEntry* ce = m_catalog.part(p->type); ce && !ce->variants.empty()) {
         bool offered = false;
         for (const auto& v : ce->variants)
             if (const auto it = v.find("u_nenn_V"); it != v.end() && std::abs(it->second - value) < 1e-9) offered = true;
-        if (!offered) return fail(p->type + ": diese Nennspannung gibt es nicht");
+        if (!offered) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Diese Nennspannung gibt es nicht.")));
     }
     if (p->value == value) return true;
     p->value = value;
-    return push(QStringLiteral("Wert von %1 aendern").arg(q(id)), std::move(after), BoardCommand::MergePartValue,
+    return push(QCoreApplication::translate("Befehl", "Wert von %1 ändern").arg(q(id)), std::move(after), BoardCommand::MergePartValue,
                 q(id));
 }
 
 bool LabSession::repairPart(const std::string& id) {
-    if (!m_board.findPart(id)) return fail("Bauteil " + id + " nicht gefunden");
+    if (!m_board.findPart(id)) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));
     // Reparieren = neues, kaltes, ungeladenes Bauteil an derselben Stelle (Befehl im Verlauf)
-    return push(QStringLiteral("%1 reparieren").arg(q(id)), m_board, BoardCommand::NoMerge, {},
+    return push(QCoreApplication::translate("Befehl", "%1 reparieren").arg(q(id)), m_board, BoardCommand::NoMerge, {},
                 {{id, core::ComponentState{}}});
 }
 
@@ -360,22 +361,22 @@ bool LabSession::repairPart(const std::string& id) {
 
 bool LabSession::addModule(const std::string& type, int slot, std::string* newId) {
     ModulePlacement m{nextModuleId(m_board, type), type, slot};
-    std::string err;
+    Message err;
     if (!canPlaceModule(m_board, m_catalog, m, err)) return fail(err);
     Board after = m_board;
     after.modules.push_back(m);
     if (newId) *newId = m.id;
-    return push(QStringLiteral("%1 einsetzen").arg(q(m.id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 einsetzen").arg(q(m.id)), std::move(after));
 }
 
 bool LabSession::moveModule(const std::string& id, int slot) {
     Board after = m_board;
     ModulePlacement* m = findModule(after, id);
-    if (!m) return fail("Modul " + id + " nicht gefunden");
+    if (!m) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Modul %1 nicht gefunden."), {id}));
     if (m->slot == slot) return true;
     ModulePlacement moved = *m;
     moved.slot = slot;
-    std::string err;
+    Message err;
     if (!canPlaceModule(m_board, m_catalog, moved, err, id)) return fail(err);
     // Leitungen auf den Feldern unter dem Modul wandern mit (Leitungen an "<ID>.<Anschluss>" ohnehin)
     const ModuleEntry* e = m_catalog.module(m->type);
@@ -389,14 +390,14 @@ bool LabSession::moveModule(const std::string& id, int slot) {
         }
     }
     m->slot = slot;
-    return push(QStringLiteral("%1 verschieben").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 verschieben").arg(q(id)), std::move(after));
 }
 
 bool LabSession::removeModule(const std::string& id) {
     Board after = m_board;
     const auto it =
         std::find_if(after.modules.begin(), after.modules.end(), [&id](const auto& m) { return m.id == id; });
-    if (it == after.modules.end()) return fail("Modul " + id + " nicht gefunden");
+    if (it == after.modules.end()) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Modul %1 nicht gefunden."), {id}));
     // Leitungen an Modulanschluessen bleiben auf dem Feld der Leiste liegen
     for (auto& w : after.wires)
         for (std::string* end : {&w.from, &w.to})
@@ -405,60 +406,60 @@ bool LabSession::removeModule(const std::string& id) {
                 if (!slot.empty()) *end = slot;
             }
     after.modules.erase(it);
-    return push(QStringLiteral("%1 herausnehmen").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "%1 herausnehmen").arg(q(id)), std::move(after));
 }
 
 bool LabSession::addWire(const std::string& from, const std::string& to, const std::string& color,
                          std::string* newId) {
-    std::string err;
+    Message err;
     if (!canWire(m_board, from, to, err)) return fail(err);
     Board after = m_board;
     WirePlacement w{nextWireId(m_board), from, to, color.empty() ? "rot" : color};
     if (newId) *newId = w.id;
     after.wires.push_back(w);
-    return push(QStringLiteral("Leitung %1 ziehen").arg(q(w.id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "Leitung %1 ziehen").arg(q(w.id)), std::move(after));
 }
 
 bool LabSession::moveWireEnd(const std::string& id, bool fromEnd, const std::string& anchor) {
     Board after = m_board;
     WirePlacement* w = findWire(after, id);
-    if (!w) return fail("Leitung " + id + " nicht gefunden");
+    if (!w) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Leitung %1 nicht gefunden."), {id}));
     std::string& end = fromEnd ? w->from : w->to;
     if (end == anchor) return true;
     end = anchor;
-    std::string err;
+    Message err;
     if (!canWire(m_board, w->from, w->to, err)) return fail(err);
-    return push(QStringLiteral("Leitung %1 umsetzen").arg(q(id)), std::move(after), BoardCommand::MergeMoveWireEnd,
+    return push(QCoreApplication::translate("Befehl", "Leitung %1 umsetzen").arg(q(id)), std::move(after), BoardCommand::MergeMoveWireEnd,
                 q(id + (fromEnd ? ":von" : ":nach")));
 }
 
 bool LabSession::removeWire(const std::string& id) {
     Board after = m_board;
     const auto it = std::find_if(after.wires.begin(), after.wires.end(), [&id](const auto& w) { return w.id == id; });
-    if (it == after.wires.end()) return fail("Leitung " + id + " nicht gefunden");
+    if (it == after.wires.end()) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Leitung %1 nicht gefunden."), {id}));
     after.wires.erase(it);
-    return push(QStringLiteral("Leitung %1 loeschen").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "Leitung %1 löschen").arg(q(id)), std::move(after));
 }
 
 bool LabSession::setWireColor(const std::string& id, const std::string& color) {
     Board after = m_board;
     WirePlacement* w = findWire(after, id);
-    if (!w) return fail("Leitung " + id + " nicht gefunden");
+    if (!w) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Leitung %1 nicht gefunden."), {id}));
     if (w->color == color) return true;
     w->color = color;
-    return push(QStringLiteral("Leitung %1 umfaerben").arg(q(id)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "Leitung %1 umfärben").arg(q(id)), std::move(after));
 }
 
 bool LabSession::toggleVoltageDisplay(const std::string& field) {
     const AnchorKind k = classifyAnchor(field);
-    if (k != AnchorKind::Field && k != AnchorKind::Desk) return fail("Spannungsanzeige nur an Feldern");
-    if (!withinBoard(m_board, field)) return fail("Spannungsanzeige: Feld liegt ausserhalb der Grundplatte");
+    if (k != AnchorKind::Field && k != AnchorKind::Desk) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Die Spannungsanzeige gibt es nur an Feldern.")));
+    if (!withinBoard(m_board, field)) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Dieses Feld liegt außerhalb der Grundplatte.")));
     Board after = m_board;
     auto& v = after.voltageDisplays;
     const auto it = std::find(v.begin(), v.end(), field);
     if (it == v.end()) v.push_back(field);
     else v.erase(it);
-    return push(QStringLiteral("Spannungsanzeige %1").arg(q(field)), std::move(after));
+    return push(QCoreApplication::translate("Befehl", "Spannungsanzeige %1").arg(q(field)), std::move(after));
 }
 
 // ------------------------------------------------------------------ Bedienhandlungen
@@ -509,7 +510,7 @@ bool LabSession::setMeterVisible(bool visible) {
     if (!visible) {
         for (const auto& w : m_board.wires)
             if (classifyAnchor(w.from) == AnchorKind::MeterJack || classifyAnchor(w.to) == AnchorKind::MeterJack)
-                return fail("Erst die Leitungen vom Messgeraet abziehen");
+                return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Zieh zuerst die Leitungen vom Messgerät ab.")));
     }
     m_board.desk.meterVisible = visible;
     return true;
@@ -517,12 +518,12 @@ bool LabSession::setMeterVisible(bool visible) {
 
 bool LabSession::replaceMeterFuse() {
     // neue Sicherung = Messgeraet im Grundzustand (Befehl im Verlauf, wie Reparieren)
-    return push(QStringLiteral("Sicherung tauschen"), m_board, BoardCommand::NoMerge, {},
+    return push(QCoreApplication::translate("Befehl", "Sicherung tauschen"), m_board, BoardCommand::NoMerge, {},
                 {{desk_id::kMeter, core::ComponentState{}}});
 }
 
 bool LabSession::repairSpeaker() {
-    return push(QStringLiteral("Lautsprecher reparieren"), m_board, BoardCommand::NoMerge, {},
+    return push(QCoreApplication::translate("Befehl", "Lautsprecher reparieren"), m_board, BoardCommand::NoMerge, {},
                 {{desk_id::kSpeaker, core::ComponentState{}}});
 }
 

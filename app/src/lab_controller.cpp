@@ -475,7 +475,11 @@ void LabController::updateAudio() {
 
 bool LabController::result(bool ok) {
     if (!ok) {
-        m_lastEditError = qs(m_session->lastError());
+        // Meldung in der Anzeigesprache (Quelltext und Platzhalter aus dem Modell)
+        const model::Message& m = m_session->lastMessage();
+        QString text = m.empty() ? QString() : QCoreApplication::translate("Meldung", m.source);
+        for (const auto& a : m.args) text = text.arg(qs(a));
+        m_lastEditError = text;
         emit editFailed();
     }
     return ok;

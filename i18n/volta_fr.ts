@@ -2,6 +2,95 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr">
 <context>
+    <name>Befehl</name>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="248" />
+        <source>Grundplatte 1–%1</source>
+        <translation>Plaque de base 1–%1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="283" />
+        <source>%1 setzen</source>
+        <translation>Placer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="305" />
+        <location filename="../app/src/model/lab_session.cpp" line="393" />
+        <source>%1 verschieben</source>
+        <translation>Déplacer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="315" />
+        <source>%1 umdrehen</source>
+        <translation>Retourner %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="325" />
+        <source>%1 drehen</source>
+        <translation>Tourner %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="333" />
+        <source>%1 entfernen</source>
+        <translation>Retirer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="349" />
+        <source>Wert von %1 ändern</source>
+        <translation>Changer la valeur de %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="356" />
+        <source>%1 reparieren</source>
+        <translation>Réparer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="369" />
+        <source>%1 einsetzen</source>
+        <translation>Insérer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="409" />
+        <source>%1 herausnehmen</source>
+        <translation>Retirer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="420" />
+        <source>Leitung %1 ziehen</source>
+        <translation>Tirer le fil %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="432" />
+        <source>Leitung %1 umsetzen</source>
+        <translation>Déplacer le fil %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="441" />
+        <source>Leitung %1 löschen</source>
+        <translation>Supprimer le fil %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="450" />
+        <source>Leitung %1 umfärben</source>
+        <translation>Changer la couleur du fil %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="462" />
+        <source>Spannungsanzeige %1</source>
+        <translation>Affichage de tension %1</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="521" />
+        <source>Sicherung tauschen</source>
+        <translation>Changer le fusible</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="526" />
+        <source>Lautsprecher reparieren</source>
+        <translation>Réparer le haut-parleur</translation>
+    </message>
+</context>
+<context>
     <name>ControlDesk</name>
     <message>
         <location filename="../app/qml/ControlDesk.qml" line="26" />
@@ -657,6 +746,156 @@
         <location filename="../app/qml/Lab.qml" line="970" />
         <source>Leitung löschen</source>
         <translation>Supprimer le fil</translation>
+    </message>
+</context>
+<context>
+    <name>Meldung</name>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="80" />
+        <source>So weit lassen sich die Beine dieses Bauteils nicht spreizen.</source>
+        <translation>On ne peut pas écarter autant les pattes de ce composant.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="86" />
+        <location filename="../app/src/model/lab_session.cpp" line="295" />
+        <source>Das Bauteil passt dort nicht auf die Grundplatte.</source>
+        <translation>Le composant ne tient pas à cet endroit sur la plaque.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="91" />
+        <source>Die Anschlüsse passen nicht zur Lage des Bauteils.</source>
+        <translation>Les bornes ne correspondent pas à la position du composant.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="98" />
+        <source>Anschluss %1 fehlt in der Lage des Bauteils.</source>
+        <translation>La borne %1 manque dans la position du composant.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="249" />
+        <location filename="../app/src/model/lab_session.cpp" line="270" />
+        <location filename="../app/src/model/lab_session.cpp" line="290" />
+        <location filename="../app/src/model/lab_session.cpp" line="313" />
+        <source>Unbekanntes Bauteil „%1“.</source>
+        <translation>Composant inconnu « %1 ».</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="253" />
+        <source>%1: Die Anschlüsse sind unvollständig.</source>
+        <translation>%1 : les bornes sont incomplètes.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="259" />
+        <source>Bauteile stecken nur auf Feldern der Grundplatte.</source>
+        <translation>Les composants se placent uniquement sur les cases de la plaque.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="263" />
+        <source>Feld %1 liegt außerhalb der Grundplatte (Felder 1–%2).</source>
+        <translation>La case %1 est en dehors de la plaque (cases 1–%2).</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="269" />
+        <source>Zwei Beine dürfen nicht im selben Feld stecken.</source>
+        <translation>Deux pattes ne peuvent pas être dans la même case.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="274" />
+        <source>Feld %1 ist voll.</source>
+        <translation>La case %1 est pleine.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="280" />
+        <source>Die Kennung %1 ist schon vergeben.</source>
+        <translation>L'identifiant %1 est déjà pris.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="296" />
+        <source>Dort kann keine Leitung stecken.</source>
+        <translation>Aucun fil ne peut aller là.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="300" />
+        <source>Anfang und Ende der Leitung liegen im selben Feld.</source>
+        <translation>Le début et la fin du fil sont dans la même case.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="392" />
+        <source>Unbekanntes Modul „%1“.</source>
+        <translation>Module inconnu « %1 ».</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="397" />
+        <source>Das Modul passt dort nicht in die Modulleiste.</source>
+        <translation>Le module ne tient pas à cet endroit dans la barre des modules.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="405" />
+        <source>Dort steckt schon ein Modul.</source>
+        <translation>Il y a déjà un module à cet endroit.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="238" />
+        <source>Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.</source>
+        <translation>La plaque a 8, 10 ou 12 cases par rangée.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="241" />
+        <source>In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
+        <translation>Il y a encore quelque chose dans les cases %1–%2. Retire d'abord les composants et les fils.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="288" />
+        <location filename="../app/src/model/lab_session.cpp" line="311" />
+        <location filename="../app/src/model/lab_session.cpp" line="321" />
+        <location filename="../app/src/model/lab_session.cpp" line="331" />
+        <location filename="../app/src/model/lab_session.cpp" line="340" />
+        <location filename="../app/src/model/lab_session.cpp" line="354" />
+        <source>Bauteil %1 nicht gefunden.</source>
+        <translation>Composant %1 introuvable.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="323" />
+        <source>Nur Platinen lassen sich so drehen.</source>
+        <translation>Seules les petites cartes peuvent être tournées ainsi.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="337" />
+        <source>Dieser Wert geht nicht.</source>
+        <translation>Cette valeur n'est pas possible.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="345" />
+        <source>Diese Nennspannung gibt es nicht.</source>
+        <translation>Cette tension nominale n'existe pas.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="375" />
+        <location filename="../app/src/model/lab_session.cpp" line="400" />
+        <source>Modul %1 nicht gefunden.</source>
+        <translation>Module %1 introuvable.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="426" />
+        <location filename="../app/src/model/lab_session.cpp" line="439" />
+        <location filename="../app/src/model/lab_session.cpp" line="447" />
+        <source>Leitung %1 nicht gefunden.</source>
+        <translation>Fil %1 introuvable.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="455" />
+        <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
+        <translation>L'affichage de tension n'existe que sur les cases.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="456" />
+        <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
+        <translation>Cette case est en dehors de la plaque.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="513" />
+        <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
+        <translation>Débranche d'abord les fils du multimètre.</translation>
     </message>
 </context>
 <context>
@@ -1335,12 +1574,12 @@
         <translation>Afficher le montage modèle</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="767" />
+        <location filename="../app/src/lab_controller.cpp" line="771" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="794" />
+        <location filename="../app/src/lab_controller.cpp" line="798" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
     </message>

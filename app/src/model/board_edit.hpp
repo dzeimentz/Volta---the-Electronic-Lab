@@ -7,6 +7,7 @@
 
 #include "board.hpp"
 #include "catalog.hpp"
+#include "edit_message.hpp"
 
 namespace volta::model {
 
@@ -32,7 +33,7 @@ std::vector<std::string> footprint(const CatalogEntry& entry, const std::string&
 
 // Anschlussbelegung aus der Lage (Katalogreihenfolge bzw. "lage" der Traegerplatine).
 bool placePins(const CatalogEntry& entry, const std::string& startField, Orientation o, Span span,
-               std::vector<std::pair<std::string, std::string>>& pins, std::string& error);
+               std::vector<std::pair<std::string, std::string>>& pins, Message& error);
 
 // Freie Kennung fuer einen neuen Bauteiltyp, z. B. "R3" (Praefix nach Typ, kleinste freie Nummer).
 std::string nextPartId(const Board& board, const std::string& type);
@@ -40,7 +41,7 @@ std::string nextWireId(const Board& board);
 
 // Prueft, ob ein Bauteil gesetzt werden kann: Typ bekannt, Anschluesse auf gueltigen Feldern, Spannweite erlaubt,
 // Steckplaetze frei (hoechstens fuenf Beine je Feld). ignoreId: bei Verschieben das Bauteil selbst nicht mitzaehlen.
-bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& part, std::string& error,
+bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& part, Message& error,
               const std::string& ignoreId = {});
 
 // Belegte Steckplaetze eines Felds durch Bauteilbeine (Grenze kSocketsPerField). Leitungen stecken zusaetzlich in
@@ -64,7 +65,7 @@ SocketAssignment assignSockets(const Board& board);
 int socketCount(const std::string& anchor);
 
 // Prueft eine Leitung: beide Enden gueltige Anschlusspunkte, nicht dasselbe Feld.
-bool canWire(const Board& board, const std::string& from, const std::string& to, std::string& error);
+bool canWire(const Board& board, const std::string& from, const std::string& to, Message& error);
 
 // Umgedreht: Felder in umgekehrter Reihenfolge der Lage (z. B. LED mit Anode unten bzw. rechts).
 bool isFlipped(const PartPlacement& part, const CatalogEntry& entry);
@@ -85,7 +86,7 @@ bool translatePlate(PartPlacement& part, const std::string& startField);
 inline constexpr int kModuleSlots = 16;
 // Prueft, ob ein Modul ab seinem Startfeld in die Modulleiste passt: Typ bekannt, alle Anschluesse innerhalb der
 // Leiste, kein anderes Modul im Bereich. ignoreId: beim Verschieben das Modul selbst nicht mitzaehlen.
-bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, std::string& error,
+bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, Message& error,
                     const std::string& ignoreId = {});
 // Freie Kennung fuer ein neues Modul, z. B. "BL1" (Blinkmodul), "TM2" (Tonmodul)
 std::string nextModuleId(const Board& board, const std::string& type);

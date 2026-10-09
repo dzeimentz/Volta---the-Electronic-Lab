@@ -338,6 +338,12 @@ private slots:
         QVERIFY(m_language->setLanguage(QStringLiteral("en")));
         QCOMPARE(m_lab->title(), QStringLiteral("How do you make a bulb light up?"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral("."));
+        // Meldungen des Modells und Befehlsnamen in der Anzeigesprache
+        QVERIFY(!m_lab->addPart(QStringLiteral("gluehlampe"), QStringLiteral("E12"), true, false));
+        QCOMPARE(m_lab->lastEditError(), QStringLiteral("The part doesn't fit on the board there."));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C7"), QStringLiteral("rot")));
+        QVERIFY2(m_lab->undoText().startsWith(QStringLiteral("Draw wire")), qPrintable(m_lab->undoText()));
+        m_lab->undo();
         QVERIFY(m_language->setLanguage(QStringLiteral("de")));
         QCOMPARE(QCoreApplication::translate("TopBarActions", "Einstellungen"), QStringLiteral("Einstellungen"));
         QCOMPARE(m_lab->title(), QStringLiteral("Wie bringst du ein Lämpchen zum Leuchten?"));

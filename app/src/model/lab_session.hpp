@@ -41,7 +41,9 @@ public:
     const Netlist& netlist() const { return m_net; }
     sim::SimulationBridge& bridge() { return m_bridge; }
     QUndoStack& undoStack() { return m_undo; }
-    const std::string& lastError() const { return m_error; }
+    // Letzte Meldung einer abgelehnten Aenderung: deutscher Text bzw. Meldung zum Uebersetzen
+    std::string lastError() const { return m_error.text(); }
+    const Message& lastMessage() const { return m_error; }
 
     // ---- Simulation
     bool poll(); // neuesten Schnappschuss holen; true, wenn neu
@@ -122,7 +124,7 @@ private:
     std::vector<sim::StateOverride> captureStates() const;
     bool push(const QString& text, Board after, int mergeId = BoardCommand::NoMerge, const QString& key = {},
               std::vector<sim::StateOverride> statesAfter = {});
-    bool fail(std::string message);
+    bool fail(Message message);
 
     Catalog m_catalog;
     Board m_board;
@@ -131,7 +133,7 @@ private:
     sim::Snapshot m_snap;
     std::uint64_t m_topology = 0;
     QUndoStack m_undo;
-    std::string m_error;
+    Message m_error;
     std::unordered_map<std::string, int> m_bars;
     struct SuccessTracker;
     std::shared_ptr<SuccessTracker> m_success;

@@ -2,6 +2,95 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de">
 <context>
+    <name>Befehl</name>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="248"/>
+        <source>Grundplatte 1–%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="283"/>
+        <source>%1 setzen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="305"/>
+        <location filename="../app/src/model/lab_session.cpp" line="393"/>
+        <source>%1 verschieben</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="315"/>
+        <source>%1 umdrehen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="325"/>
+        <source>%1 drehen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="333"/>
+        <source>%1 entfernen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="349"/>
+        <source>Wert von %1 ändern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="356"/>
+        <source>%1 reparieren</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="369"/>
+        <source>%1 einsetzen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="409"/>
+        <source>%1 herausnehmen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="420"/>
+        <source>Leitung %1 ziehen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="432"/>
+        <source>Leitung %1 umsetzen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="441"/>
+        <source>Leitung %1 löschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="450"/>
+        <source>Leitung %1 umfärben</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="462"/>
+        <source>Spannungsanzeige %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="521"/>
+        <source>Sicherung tauschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="526"/>
+        <source>Lautsprecher reparieren</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ControlDesk</name>
     <message>
         <location filename="../app/qml/ControlDesk.qml" line="26"/>
@@ -656,6 +745,156 @@
     <message>
         <location filename="../app/qml/Lab.qml" line="970"/>
         <source>Leitung löschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Meldung</name>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="80"/>
+        <source>So weit lassen sich die Beine dieses Bauteils nicht spreizen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="86"/>
+        <location filename="../app/src/model/lab_session.cpp" line="295"/>
+        <source>Das Bauteil passt dort nicht auf die Grundplatte.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="91"/>
+        <source>Die Anschlüsse passen nicht zur Lage des Bauteils.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="98"/>
+        <source>Anschluss %1 fehlt in der Lage des Bauteils.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="249"/>
+        <location filename="../app/src/model/lab_session.cpp" line="270"/>
+        <location filename="../app/src/model/lab_session.cpp" line="290"/>
+        <location filename="../app/src/model/lab_session.cpp" line="313"/>
+        <source>Unbekanntes Bauteil „%1“.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="253"/>
+        <source>%1: Die Anschlüsse sind unvollständig.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="259"/>
+        <source>Bauteile stecken nur auf Feldern der Grundplatte.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="263"/>
+        <source>Feld %1 liegt außerhalb der Grundplatte (Felder 1–%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="269"/>
+        <source>Zwei Beine dürfen nicht im selben Feld stecken.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="274"/>
+        <source>Feld %1 ist voll.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="280"/>
+        <source>Die Kennung %1 ist schon vergeben.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="296"/>
+        <source>Dort kann keine Leitung stecken.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="300"/>
+        <source>Anfang und Ende der Leitung liegen im selben Feld.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="392"/>
+        <source>Unbekanntes Modul „%1“.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="397"/>
+        <source>Das Modul passt dort nicht in die Modulleiste.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="405"/>
+        <source>Dort steckt schon ein Modul.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="238"/>
+        <source>Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="241"/>
+        <source>In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="288"/>
+        <location filename="../app/src/model/lab_session.cpp" line="311"/>
+        <location filename="../app/src/model/lab_session.cpp" line="321"/>
+        <location filename="../app/src/model/lab_session.cpp" line="331"/>
+        <location filename="../app/src/model/lab_session.cpp" line="340"/>
+        <location filename="../app/src/model/lab_session.cpp" line="354"/>
+        <source>Bauteil %1 nicht gefunden.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="323"/>
+        <source>Nur Platinen lassen sich so drehen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="337"/>
+        <source>Dieser Wert geht nicht.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="345"/>
+        <source>Diese Nennspannung gibt es nicht.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="375"/>
+        <location filename="../app/src/model/lab_session.cpp" line="400"/>
+        <source>Modul %1 nicht gefunden.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="426"/>
+        <location filename="../app/src/model/lab_session.cpp" line="439"/>
+        <location filename="../app/src/model/lab_session.cpp" line="447"/>
+        <source>Leitung %1 nicht gefunden.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="455"/>
+        <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="456"/>
+        <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="513"/>
+        <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1335,12 +1574,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="767"/>
+        <location filename="../app/src/lab_controller.cpp" line="771"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="794"/>
+        <location filename="../app/src/lab_controller.cpp" line="798"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
