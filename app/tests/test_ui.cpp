@@ -421,15 +421,29 @@ private slots:
         m_settings->setUnlockAll(true);
         m_lab->startFreeLab();
         QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("C5"), false, false));
-        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C5"), QStringLiteral("rot")));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C5"), QStringLiteral("gruen")));
         QTest::qWait(100);
         QQuickItem* end = item(QStringLiteral("wireEnd_L1_nach"));
         QVERIFY(end);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(end));
         QQuickItem* badge = nullptr;
         QTRY_VERIFY((badge = item(QStringLiteral("deleteWire_L1"))) != nullptr && badge->isVisible());
+        // Farbautomatik: Leitung von +9V ist rot, obwohl Rot nicht gewaehlt sein muss; Farbknopf oeffnet die Auswahl
+        QCOMPARE(board().wires[0].color, std::string("rot"));
+        QQuickItem* colorBadge = item(QStringLiteral("colorWire_L1"));
+        QVERIFY(colorBadge && colorBadge->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(colorBadge));
+        QObject* menu = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("wireMenu"));
+        QTRY_VERIFY(menu && menu->property("opened").toBool());
+        QVERIFY(m_lab->setWireColor(QStringLiteral("L1"), QStringLiteral("blau")));
+        QMetaObject::invokeMethod(menu, "close");
+        QCOMPARE(board().wires[0].color, std::string("blau"));
+        QTRY_VERIFY((badge = item(QStringLiteral("deleteWire_L1"))) != nullptr && badge->isVisible());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
         QTRY_VERIFY(board().wires.empty());
+        QVERIFY(m_lab->addWire(QStringLiteral("C6"), QStringLiteral("P:0V"), QStringLiteral("gelb")));
+        QCOMPARE(board().wires.back().color, std::string("schwarz"));
+        QVERIFY(m_lab->removeWire(QString::fromStdString(board().wires.back().id)));
         QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
         lab->setProperty("selectedPart", QStringLiteral("R1")); // wie Antippen des Bauteils
         QTRY_VERIFY((badge = item(QStringLiteral("deletePart_R1"))) != nullptr && badge->isVisible());

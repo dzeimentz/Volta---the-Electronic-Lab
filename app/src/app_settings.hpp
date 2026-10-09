@@ -28,6 +28,7 @@ class AppSettings : public QObject {
     Q_PROPERTY(int boardColumns READ boardColumns WRITE setBoardColumns NOTIFY changed) // 8, 10, 12
     Q_PROPERTY(bool meterVisible READ meterVisible WRITE setMeterVisible NOTIFY changed) // im freien Labor
     Q_PROPERTY(QString wireColor READ wireColor WRITE setWireColor NOTIFY changed)
+    Q_PROPERTY(bool autoWireColor READ autoWireColor WRITE setAutoWireColor NOTIFY changed) // Plus rot, Minus schwarz
     Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY changed)
     Q_PROPERTY(bool experimentPanelCollapsed READ experimentPanelCollapsed WRITE setExperimentPanelCollapsed NOTIFY changed)
 
@@ -53,6 +54,8 @@ public:
     bool meterVisible() const { return m_meterVisible; }
     void setMeterVisible(bool on) { set(m_meterVisible, on, "labor/messgeraet"); }
     QString wireColor() const { return m_wireColor; }
+    bool autoWireColor() const { return m_autoWireColor; }
+    void setAutoWireColor(bool on) { set(m_autoWireColor, on, "labor/leitungsfarbe_automatisch"); }
     void setWireColor(const QString& color);
     bool schematicVisible() const { return m_schematicVisible; }
     void setSchematicVisible(bool on) { set(m_schematicVisible, on, "labor/schaltplan"); }
@@ -83,6 +86,7 @@ private:
     int m_boardColumns = 12;
     bool m_meterVisible = false;
     QString m_wireColor = QStringLiteral("rot");
+    bool m_autoWireColor = true;
     bool m_schematicVisible = false;
     bool m_panelCollapsed = false;
 };

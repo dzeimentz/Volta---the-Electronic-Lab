@@ -65,7 +65,8 @@ public:
     bool repairPart(const std::string& id);
     bool addWire(const std::string& from, const std::string& to, const std::string& color,
                  std::string* newId = nullptr);
-    bool moveWireEnd(const std::string& id, bool fromEnd, const std::string& anchor);
+    // autoColor: Farbautomatik (poleColor), sofern die Farbe nicht von Hand gewaehlt wurde
+    bool moveWireEnd(const std::string& id, bool fromEnd, const std::string& anchor, bool autoColor = false);
     bool removeWire(const std::string& id);
     bool setWireColor(const std::string& id, const std::string& color);
     bool toggleVoltageDisplay(const std::string& field);

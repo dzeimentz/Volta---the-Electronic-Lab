@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "model/board_edit.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
@@ -456,6 +457,30 @@ private slots:
         QVERIFY(!r->destroyed);
         QVERIFY(s->repairSpeaker());
         QCOMPARE(s->undoStack().count(), 1);
+    }
+
+    // Farbautomatik: am Pluspol rot, am Minuspol schwarz (auch ueber Leitungen verbunden); von Hand gewaehlte Farbe bleibt
+    void wirePoleColors() {
+        model::Board b;
+        b.wires.push_back({"L1", "P:+9V", "A1", "gelb"});
+        b.wires.push_back({"L2", "C3", "P:0V", "blau"});
+        QCOMPARE(model::poleColor(b, "P:+9V", "B2"), std::string("rot"));
+        QCOMPARE(model::poleColor(b, "B2", "P:0V"), std::string("schwarz"));
+        QCOMPARE(model::poleColor(b, "A1", "B5"), std::string("rot"));     // A1 haengt am Pluspol
+        QCOMPARE(model::poleColor(b, "B5", "C3"), std::string("schwarz")); // C3 haengt am Minuspol
+        QCOMPARE(model::poleColor(b, "B5", "B6"), std::string());          // kein Pol: gewaehlte Farbe
+        QCOMPARE(model::poleColor(b, "A1", "C3"), std::string());          // beide Pole (Kurzschluss)
+        QCOMPARE(model::poleColor(b, "A1", "B5", "L1"), std::string());    // L1 nicht mitgezaehlt
+
+        auto s = session();
+        QVERIFY(s->addWire("B2", "B5", "gruen"));
+        QVERIFY(s->moveWireEnd("L1", true, "P:+9V", true)); // Ende an den Pluspol umgesetzt: rot
+        QCOMPARE(s->board().wires[0].color, std::string("rot"));
+        QVERIFY(s->setWireColor("L1", "gelb")); // von Hand: bleibt
+        QVERIFY(s->board().wires[0].colorFixed);
+        QVERIFY(s->moveWireEnd("L1", false, "P:0V", false));
+        QVERIFY(s->moveWireEnd("L1", false, "C7", true));
+        QCOMPARE(s->board().wires[0].color, std::string("gelb"));
     }
 
     // Modulfach: Module setzen, verschieben, herausnehmen sind Befehle; Leitungen folgen dem Modul

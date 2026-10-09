@@ -420,7 +420,7 @@ bool LabSession::addWire(const std::string& from, const std::string& to, const s
     return push(QCoreApplication::translate("Befehl", "Leitung %1 ziehen").arg(q(w.id)), std::move(after));
 }
 
-bool LabSession::moveWireEnd(const std::string& id, bool fromEnd, const std::string& anchor) {
+bool LabSession::moveWireEnd(const std::string& id, bool fromEnd, const std::string& anchor, bool autoColor) {
     Board after = m_board;
     WirePlacement* w = findWire(after, id);
     if (!w) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Leitung %1 nicht gefunden."), {id}));
@@ -429,6 +429,10 @@ bool LabSession::moveWireEnd(const std::string& id, bool fromEnd, const std::str
     end = anchor;
     Message err;
     if (!canWire(m_board, w->from, w->to, err)) return fail(err);
+    if (autoColor && !w->colorFixed) {
+        const std::string c = poleColor(m_board, w->from, w->to, id);
+        if (!c.empty()) w->color = c;
+    }
     return push(QCoreApplication::translate("Befehl", "Leitung %1 umsetzen").arg(q(id)), std::move(after), BoardCommand::MergeMoveWireEnd,
                 q(id + (fromEnd ? ":von" : ":nach")));
 }
@@ -445,8 +449,9 @@ bool LabSession::setWireColor(const std::string& id, const std::string& color) {
     Board after = m_board;
     WirePlacement* w = findWire(after, id);
     if (!w) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Leitung %1 nicht gefunden."), {id}));
-    if (w->color == color) return true;
+    if (w->color == color && w->colorFixed) return true;
     w->color = color;
+    w->colorFixed = true; // von Hand gewaehlt
     return push(QCoreApplication::translate("Befehl", "Leitung %1 umfärben").arg(q(id)), std::move(after));
 }
 

@@ -164,6 +164,15 @@ Row {
                 onTriggered: bar.settings.soundOn = checked
             }
             MenuItem {
+                objectName: "settingAutoWireColor"
+                height: Theme.control
+                text: qsTr("Leitungsfarbe automatisch (Plus rot, Minus schwarz)")
+                checkable: true
+                enabled: bar.settings !== null
+                checked: bar.settings ? bar.settings.autoWireColor : true
+                onTriggered: bar.settings.autoWireColor = checked
+            }
+            MenuItem {
                 objectName: "settingMotion"
                 height: Theme.control
                 text: qsTr("Animationen reduzieren")

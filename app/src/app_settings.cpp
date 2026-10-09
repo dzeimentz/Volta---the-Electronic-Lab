@@ -35,6 +35,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_meterVisible = s.value(QStringLiteral("labor/messgeraet"), false).toBool();
     const QString color = s.value(QStringLiteral("labor/leitungsfarbe"), QStringLiteral("rot")).toString();
     m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("rot");
+    m_autoWireColor = s.value(QStringLiteral("labor/leitungsfarbe_automatisch"), true).toBool();
     m_schematicVisible = s.value(QStringLiteral("labor/schaltplan"), false).toBool();
     m_panelCollapsed = s.value(QStringLiteral("labor/experimentfeld_eingeklappt"), false).toBool();
 }

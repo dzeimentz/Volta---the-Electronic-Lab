@@ -27,6 +27,7 @@ struct WirePlacement {
     std::string from;
     std::string to;
     std::string color = "rot";
+    bool colorFixed = false; // Farbe von Hand gewaehlt: die Farbautomatik aendert sie nicht mehr
 };
 
 // Modul in der Modulleiste; belegt die Felder slot .. slot + Anzahl Anschluesse - 1.

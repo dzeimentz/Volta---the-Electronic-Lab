@@ -60,32 +60,32 @@
         <translation>Draw wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="432" />
+        <location filename="../app/src/model/lab_session.cpp" line="436" />
         <source>Leitung %1 umsetzen</source>
         <translation>Move wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="441" />
+        <location filename="../app/src/model/lab_session.cpp" line="445" />
         <source>Leitung %1 löschen</source>
         <translation>Delete wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="450" />
+        <location filename="../app/src/model/lab_session.cpp" line="455" />
         <source>Leitung %1 umfärben</source>
         <translation>Recolour wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="462" />
+        <location filename="../app/src/model/lab_session.cpp" line="467" />
         <source>Spannungsanzeige %1</source>
         <translation>Voltage display %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="521" />
+        <location filename="../app/src/model/lab_session.cpp" line="526" />
         <source>Sicherung tauschen</source>
         <translation>Replace fuse</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="526" />
+        <location filename="../app/src/model/lab_session.cpp" line="531" />
         <source>Lautsprecher reparieren</source>
         <translation>Repair loudspeaker</translation>
     </message>
@@ -683,73 +683,78 @@
         <translation>Remove part</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="884" />
+        <location filename="../app/qml/Lab.qml" line="768" />
+        <source>Farbe ändern: %1</source>
+        <translation>Change colour: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="927" />
         <source>Spannungsanzeige ein/aus</source>
         <translation>Voltage display on/off</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="894" />
+        <location filename="../app/qml/Lab.qml" line="937" />
         <source>Drehen</source>
         <translation>Rotate</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="901" />
+        <location filename="../app/qml/Lab.qml" line="944" />
         <source>Umdrehen (Polung)</source>
         <translation>Flip (polarity)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="905" />
+        <location filename="../app/qml/Lab.qml" line="948" />
         <source>Kurz stecken</source>
         <translation>Place short</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="905" />
+        <location filename="../app/qml/Lab.qml" line="948" />
         <source>Lang stecken</source>
         <translation>Place long</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="912" />
+        <location filename="../app/qml/Lab.qml" line="955" />
         <source>Wert</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="929" />
+        <location filename="../app/qml/Lab.qml" line="972" />
         <source>Nennspannung</source>
         <translation>Rated voltage</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="935" />
+        <location filename="../app/qml/Lab.qml" line="978" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="945" />
+        <location filename="../app/qml/Lab.qml" line="988" />
         <source>Reparieren</source>
         <translation>Repair</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="949" />
+        <location filename="../app/qml/Lab.qml" line="992" />
         <source>Entfernen</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="960" />
+        <location filename="../app/qml/Lab.qml" line="1003" />
         <source>Blick hinein</source>
         <translation>Look inside</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="964" />
+        <location filename="../app/qml/Lab.qml" line="1007" />
         <source>Herausnehmen</source>
         <translation>Take out</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="982" />
+        <location filename="../app/qml/Lab.qml" line="1028" />
         <source>Farbe: %1</source>
         <translation>Colour: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="756" />
-        <location filename="../app/qml/Lab.qml" line="989" />
+        <location filename="../app/qml/Lab.qml" line="798" />
+        <location filename="../app/qml/Lab.qml" line="1037" />
         <source>Leitung löschen</source>
         <translation>Delete wire</translation>
     </message>
@@ -826,17 +831,17 @@
         <translation>Start and end of the wire are in the same field.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="392" />
+        <location filename="../app/src/model/board_edit.cpp" line="420" />
         <source>Unbekanntes Modul „%1“.</source>
         <translation>Unknown module "%1".</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="397" />
+        <location filename="../app/src/model/board_edit.cpp" line="425" />
         <source>Das Modul passt dort nicht in die Modulleiste.</source>
         <translation>The module doesn't fit into the module bar there.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="405" />
+        <location filename="../app/src/model/board_edit.cpp" line="433" />
         <source>Dort steckt schon ein Modul.</source>
         <translation>There is already a module there.</translation>
     </message>
@@ -883,23 +888,23 @@
     </message>
     <message>
         <location filename="../app/src/model/lab_session.cpp" line="426" />
-        <location filename="../app/src/model/lab_session.cpp" line="439" />
-        <location filename="../app/src/model/lab_session.cpp" line="447" />
+        <location filename="../app/src/model/lab_session.cpp" line="443" />
+        <location filename="../app/src/model/lab_session.cpp" line="451" />
         <source>Leitung %1 nicht gefunden.</source>
         <translation>Wire %1 not found.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="455" />
+        <location filename="../app/src/model/lab_session.cpp" line="460" />
         <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
         <translation>The voltage display is only available on fields.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="456" />
+        <location filename="../app/src/model/lab_session.cpp" line="461" />
         <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
         <translation>This field is outside the base board.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="513" />
+        <location filename="../app/src/model/lab_session.cpp" line="518" />
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation>First unplug the wires from the meter.</translation>
     </message>
@@ -1541,7 +1546,7 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="110" />
         <location filename="../app/qml/TopBarActions.qml" line="111" />
-        <location filename="../app/qml/TopBarActions.qml" line="216" />
+        <location filename="../app/qml/TopBarActions.qml" line="225" />
         <source>Info</source>
         <translation>Info</translation>
     </message>
@@ -1563,31 +1568,36 @@
     </message>
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="169" />
+        <source>Leitungsfarbe automatisch (Plus rot, Minus schwarz)</source>
+        <translation>Automatic wire colour (plus red, minus black)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TopBarActions.qml" line="178" />
         <source>Animationen reduzieren</source>
         <translation>Reduce animations</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="178" />
+        <location filename="../app/qml/TopBarActions.qml" line="187" />
         <source>Startbildschirm zeigen</source>
         <translation>Show start screen</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="185" />
+        <location filename="../app/qml/TopBarActions.qml" line="194" />
         <source>Messgerät anzeigen</source>
         <translation>Show meter</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="191" />
+        <location filename="../app/qml/TopBarActions.qml" line="200" />
         <source>Felder je Reihe</source>
         <translation>Fields per row</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="197" />
+        <location filename="../app/qml/TopBarActions.qml" line="206" />
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="207" />
+        <location filename="../app/qml/TopBarActions.qml" line="216" />
         <source>Alle Bauteile freigeben</source>
         <translation>Unlock all parts</translation>
     </message>

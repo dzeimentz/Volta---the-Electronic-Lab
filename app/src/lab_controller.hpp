@@ -47,6 +47,8 @@ class LabController : public QObject {
     // Messgeraet im freien Labor
     Q_PROPERTY(int preferredColumns MEMBER m_preferredColumns)
     Q_PROPERTY(bool preferMeter MEMBER m_preferMeter)
+    // Farbautomatik fuer neue Leitungen: am Pluspol rot, am Minuspol schwarz (Einstellung)
+    Q_PROPERTY(bool autoWireColor MEMBER m_autoWireColor)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -290,6 +292,7 @@ private:
     services::JournalStore m_journal;
     bool m_unlockAll = false;
     bool m_guideActive = false;
+    bool m_autoWireColor = true;
     services::AudioService* m_audio = nullptr;
     double m_lastPulses = -1.0; // Impulszaehler des Pult-Lautsprechers (Knacken bei neuem Impuls)
     void updateAudio();

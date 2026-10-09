@@ -747,7 +747,49 @@ Item {
                             function onStateChanged() { wireShape.currentmA = lab.controller.wireCurrent(wire.modelData.id) }
                         }
                     }
-                    // Loeschen-Knopf in der Mitte der ausgewaehlten Leitung
+                    // Farbknopf (oeffnet die Farbauswahl) und Loeschen-Knopf an der ausgewaehlten Leitung
+                    ToolButton {
+                        id: colorBadge
+                        objectName: "colorWire_" + wire.modelData.id
+                        visible: lab.selectedWire === wire.modelData.id && lab.moveWireId === ""
+                        readonly property point at: wireShape.pointAt(0.5)
+                        width: Theme.control; height: Theme.control
+                        x: at.x - width / 2 - Theme.control / canvas.scale
+                        y: at.y - height / 2
+                        scale: 1 / Math.max(0.3, canvas.scale)
+                        z: 50
+                        onClicked: {
+                            wireMenu.wireId = wire.modelData.id
+                            wireMenu.wireColor = wire.modelData.color
+                            wireMenu.popup(canvas, at.x, at.y + 24 / canvas.scale)
+                        }
+                        ToolTip.visible: hovered
+                        ToolTip.text: Accessible.name
+                        Accessible.name: qsTr("Farbe ändern: %1").arg(Texts.colorName(wire.modelData.color))
+                        // weiss mit Farbpunkt der Leitung (deutlich anders als der rote Papierkorb)
+                        background: Rectangle {
+                            radius: width / 2
+                            color: colorBadge.down ? "#E3ECF5" : "white"
+                            border.color: Theme.navy
+                            border.width: 2
+                        }
+                        contentItem: Item {
+                            Rectangle {
+                                anchors.centerIn: parent
+                                width: 26; height: 26; radius: 13
+                                color: Theme.wireColor(wire.modelData.color)
+                                border.color: Theme.solderAmber
+                                border.width: 3
+                            }
+                            Label {
+                                anchors.right: parent.right
+                                anchors.bottom: parent.bottom
+                                text: "▾"
+                                font.pixelSize: 14
+                                color: Theme.navy
+                            }
+                        }
+                    }
                     DeleteBadge {
                         objectName: "deleteWire_" + wire.modelData.id
                         visible: lab.selectedWire === wire.modelData.id && lab.moveWireId === ""
@@ -781,6 +823,7 @@ Item {
                                 lab.selectedWire = wire.modelData.id
                                 lab.selectedPart = ""
                                 wireMenu.wireId = wire.modelData.id
+                                wireMenu.wireColor = wire.modelData.color
                                 const p = lab.toCanvas(scenePos)
                                 wireMenu.popup(canvas, p.x, p.y)
                             }
@@ -974,12 +1017,17 @@ Item {
 
     Menu {
         id: wireMenu
+        objectName: "wireMenu"
         property string wireId
+        property string wireColor
         Instantiator {
             model: Texts.wireColors
             delegate: MenuItem {
                 required property string modelData
+                objectName: "wireMenuColor_" + modelData
                 text: qsTr("Farbe: %1").arg(Texts.colorName(modelData))
+                checkable: true
+                checked: wireMenu.wireColor === modelData
                 onTriggered: lab.controller.setWireColor(wireMenu.wireId, modelData)
             }
             onObjectAdded: (index, object) => wireMenu.insertItem(index, object)

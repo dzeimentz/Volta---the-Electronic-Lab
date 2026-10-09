@@ -844,10 +844,13 @@ bool LabController::flipPart(const QString& id) { return result(m_session->flipP
 bool LabController::setPartValue(const QString& id, double v) { return result(m_session->setPartValue(ss(id), v)); }
 bool LabController::repairPart(const QString& id) { return result(m_session->repairPart(ss(id))); }
 bool LabController::addWire(const QString& from, const QString& to, const QString& color) {
-    return result(m_session->addWire(ss(from), ss(to), ss(color)));
+    std::string c = ss(color);
+    if (m_autoWireColor)
+        if (const std::string pole = model::poleColor(m_session->board(), ss(from), ss(to)); !pole.empty()) c = pole;
+    return result(m_session->addWire(ss(from), ss(to), c));
 }
 bool LabController::moveWireEnd(const QString& id, bool fromEnd, const QString& anchor) {
-    return result(m_session->moveWireEnd(ss(id), fromEnd, ss(anchor)));
+    return result(m_session->moveWireEnd(ss(id), fromEnd, ss(anchor), m_autoWireColor));
 }
 bool LabController::removeWire(const QString& id) { return result(m_session->removeWire(ss(id))); }
 bool LabController::setWireColor(const QString& id, const QString& color) {

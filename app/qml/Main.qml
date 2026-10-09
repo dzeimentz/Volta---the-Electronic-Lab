@@ -29,6 +29,7 @@ ApplicationWindow {
     Binding { target: root.speech; when: root.speech !== null && root.languageService !== null; property: "language"; value: root.languageService ? root.languageService.language : "de" }
     Binding { target: labController; property: "preferredColumns"; value: root.settings ? root.settings.boardColumns : 12 }
     Binding { target: labController; property: "preferMeter"; value: root.settings ? root.settings.meterVisible : false }
+    Binding { target: labController; property: "autoWireColor"; value: root.settings ? root.settings.autoWireColor : true }
     Connections {
         target: labController
         function onColumnsChosen(columns) { if (root.settings) root.settings.boardColumns = columns }

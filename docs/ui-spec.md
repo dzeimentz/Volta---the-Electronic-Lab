@@ -180,3 +180,11 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Bauteil antippen bzw. Leitungsende antippen waehlt aus (orange); ein runder Papierkorb-Knopf (48 dp, rot mit
   weissem Rand) erscheint rechts oberhalb des Bauteils bzw. in der Mitte der Leitung. Weiterhin: langer Druck oder
   Rechtsklick (Menue »Entfernen« / »Leitung löschen«), Entf- bzw. Ruecktaste; alles rueckgaengig machbar.
+
+## Leitungsfarben
+- Farbautomatik (Einstellung »Leitungsfarbe automatisch«, Vorgabe an): Eine neue Leitung, deren Ende am Pluspol liegt
+  (P:+9V oder ueber Leitungen damit verbunden), wird rot; am Minuspol (P:0V) schwarz (`model::poleColor`). Alle
+  anderen bekommen die in der Werkzeugleiste gewaehlte Farbe. Beim Umsetzen eines Endes gilt die Regel erneut.
+- Nachtraeglich aendern: Leitung waehlen (Ende antippen) -> weisser Farbknopf mit Farbpunkt neben dem Papierkorb
+  oeffnet die Farbauswahl (aktuelle Farbe mit Haken); ebenso ueber das Leitungsmenue. Eine von Hand gewaehlte Farbe
+  (`WirePlacement::colorFixed`) aendert die Automatik nicht mehr.

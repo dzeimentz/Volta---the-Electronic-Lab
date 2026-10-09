@@ -64,6 +64,13 @@ SocketAssignment assignSockets(const Board& board);
 // Anzahl Steckplaetze eines Anschlusspunkts (Feld, Pultfeld, Buchse: kSocketsPerField; sonst 1)
 int socketCount(const std::string& anchor);
 
+// Farbautomatik (Konvention wie in der Elektrotechnik): Liegt ein Ende der Leitung am Pluspol der Batterie - direkt
+// (P:+9V) oder ueber andere Leitungen damit verbunden -, ist sie "rot"; am Minuspol (P:0V) "schwarz"; sonst "" (die
+// gewaehlte Farbe gilt). Beruehrt sie beide Pole (Kurzschluss), ebenfalls "". ignoreWire: diese Leitung nicht
+// mitzaehlen (beim Umsetzen eines Endes).
+std::string poleColor(const Board& board, const std::string& from, const std::string& to,
+                      const std::string& ignoreWire = {});
+
 // Prueft eine Leitung: beide Enden gueltige Anschlusspunkte, nicht dasselbe Feld.
 bool canWire(const Board& board, const std::string& from, const std::string& to, Message& error);
 

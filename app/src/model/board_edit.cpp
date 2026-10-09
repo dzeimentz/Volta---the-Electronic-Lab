@@ -385,6 +385,34 @@ bool translatePlate(PartPlacement& part, const std::string& startField) {
     return true;
 }
 
+std::string poleColor(const Board& board, const std::string& from, const std::string& to,
+                      const std::string& ignoreWire) {
+    // Felder, die ueber Leitungen mit dem Pol verbunden sind (Bauteile leiten hier nicht: nur "direkt" verbunden)
+    auto reach = [&](const std::string& pole) {
+        std::set<std::string> seen{pole};
+        bool grew = true;
+        while (grew) {
+            grew = false;
+            for (const auto& w : board.wires) {
+                if (w.id == ignoreWire) continue;
+                const bool a = seen.count(w.from) > 0, b = seen.count(w.to) > 0;
+                if (a != b) {
+                    seen.insert(a ? w.to : w.from);
+                    grew = true;
+                }
+            }
+        }
+        return seen;
+    };
+    const auto plus = reach(kPlusAnchor);
+    const auto minus = reach(kGroundAnchor);
+    const bool toPlus = plus.count(from) || plus.count(to);
+    const bool toMinus = minus.count(from) || minus.count(to);
+    if (toPlus && !toMinus) return "rot";
+    if (toMinus && !toPlus) return "schwarz";
+    return {};
+}
+
 bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, Message& error,
                     const std::string& ignoreId) {
     const ModuleEntry* e = catalog.module(module.type);
