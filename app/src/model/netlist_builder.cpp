@@ -239,7 +239,15 @@ private:
         }
         if (m.type == "blinkmodul" && n.size() == 4) {
             // Katalog: plus, minus, aus, takt
-            m_net.modules[m.id] = core::addBlinkModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});
+            const core::SubcircuitRange r = core::addBlinkModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});
+            m_net.modules[m.id] = r;
+            for (std::size_t i = r.first; i < r.first + r.count; ++i)
+                if (m_net.circuit.component(i).id() == m.id + ".T3") m_net.moduleMain[m.id] = i;
+        } else if (m.type == "tonmodul" && n.size() == 4) {
+            // Katalog: plus, minus, ein, aus
+            const core::SubcircuitRange r = core::addToneModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
         } else {
             m_net.errors.push_back("Modul " + m.id + ": '" + m.type + "' noch nicht im Simulationskern");
         }

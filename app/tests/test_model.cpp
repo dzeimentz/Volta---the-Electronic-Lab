@@ -322,7 +322,7 @@ private slots:
         board.parts.push_back({"R1", "widerstand", {{"a", "Z9"}, {"b", "A2"}}, 100.0});
         board.parts.push_back({"F1", "fotowiderstand", {{"a", "A1"}, {"b", "A2"}}});
         board.wires.push_back({"L1", "A1", "BL9.aus", "rot"});
-        board.modules.push_back({"TM1", "tonmodul", 5});
+        board.modules.push_back({"XM1", "gibt_es_nicht", 5});
         const model::Netlist net = model::buildNetlist(board, m_catalog);
         QCOMPARE(net.errors.size(), std::size_t(5));
         // gueltige Teile werden trotzdem aufgebaut: die Schaltung bleibt simulierbar

@@ -458,6 +458,99 @@ private slots:
         QCOMPARE(s->undoStack().count(), 1);
     }
 
+    // Modulfach: Module setzen, verschieben, herausnehmen sind Befehle; Leitungen folgen dem Modul
+    void moduleCommands() {
+        auto s = session();
+        std::string id;
+        QVERIFY(s->addModule("blinkmodul", 1, &id));
+        QCOMPARE(id, std::string("BL1"));
+        QVERIFY(!s->addModule("tonmodul", 3)); // ueberlappt BL1 (M1-M4)
+        QVERIFY(QString::fromStdString(s->lastError()).contains(QStringLiteral("Modul")));
+        QVERIFY(!s->addModule("tonmodul", 14)); // M14-M17 passt nicht
+        QVERIFY(!s->addModule("gibtsnicht", 6));
+        QVERIFY(s->addModule("tonmodul", 6, &id));
+        QCOMPARE(id, std::string("TM1"));
+        QVERIFY(s->addWire("P:+9V", "BL1.plus", "rot")); // ueber den Anschlussnamen
+        QVERIFY(s->addWire("M:2", "P:0V", "schwarz"));   // ueber das Feld der Leiste (BL1.minus)
+        QCOMPARE(model::moduleSlotOf(s->board(), m_catalog, "BL1.plus"), std::string("M:1"));
+        QVERIFY(s->netlist().ok());
+
+        QVERIFY(!s->moveModule("BL1", 5)); // trifft TM1
+        QVERIFY(s->moveModule("BL1", 11));
+        QCOMPARE(s->board().wires[1].from, std::string("M:12")); // Leitung auf dem Feld wandert mit
+        QCOMPARE(model::moduleSlotOf(s->board(), m_catalog, "BL1.plus"), std::string("M:11"));
+        s->undoStack().undo();
+        QCOMPARE(s->board().wires[1].from, std::string("M:2"));
+        QCOMPARE(s->board().modules[0].slot, 1);
+
+        // Herausnehmen: die Leitung an BL1.plus bleibt auf dem Feld M:1 liegen; Netzliste bleibt gueltig
+        QVERIFY(s->removeModule("BL1"));
+        QCOMPARE(s->board().modules.size(), std::size_t(1));
+        QCOMPARE(s->board().wires[0].to, std::string("M:1"));
+        QVERIFY(s->netlist().ok());
+        s->undoStack().undo();
+        QCOMPARE(s->board().wires[0].to, std::string("BL1.plus"));
+        QCOMPARE(s->board().modules.size(), std::size_t(2));
+    }
+
+    // Tonmodul: Taster an ein startet die Melodie; der Lautsprecher am Ausgang zeigt den Ton (Klanganzeige)
+    void toneModuleDrivesSpeaker() {
+        auto s = session();
+        QVERIFY(s->addModule("tonmodul", 1));
+        QVERIFY(s->addWire("P:+9V", "TM1.plus", "rot"));
+        QVERIFY(s->addWire("TM1.minus", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:+9V", "P:LS1", "rot"));
+        QVERIFY(s->addWire("P:LS2", "TM1.aus", "blau"));
+        QVERIFY(s->addPart("taster", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "TM1.ein", "gelb"));
+        QVERIFY(s->netlist().ok());
+        s->setMainSwitch(true);
+        run(*s, 0.3);
+        core::ComponentReading ls;
+        QVERIFY(s->speakerReading(ls));
+        QCOMPARE(ls.frequencyHz, 0.0); // still
+        const core::ComponentReading* tm = s->moduleReading("TM1");
+        QVERIFY(tm && tm->displayValue < 0.0);
+
+        s->setPartClosed("S1", true); // Taster gedrueckt (Bedienhandlung)
+        run(*s, 0.1);
+        tm = s->moduleReading("TM1");
+        QVERIFY(tm && tm->frequencyHz > 500.0);
+        QVERIFY(s->speakerReading(ls));
+        QCOMPARE(ls.frequencyHz, tm->frequencyHz);
+        QVERIFY2(ls.level > 0.3 && ls.level < 0.6, qPrintable(QString::number(ls.level))); // ca. 43 mA / 100 mA
+        s->setPartClosed("S1", false);
+        run(*s, 0.1);
+        QVERIFY(s->speakerReading(ls));
+        QCOMPARE(ls.frequencyHz, 0.0);
+    }
+
+    // Erfolgsbedingung auf ein Modul der Vorlage: Zuordnung ueber den Typ (das Kind setzt das Modul selbst)
+    void successMatchesModulesByType() {
+        model::SuccessCondition c;
+        c.kind = model::SuccessCondition::Kind::Quantity;
+        c.part = "TM1";
+        c.quantity = model::SuccessCondition::Quantity::FrequencyHz;
+        c.hasMin = true;
+        c.min = 100.0;
+        c.holdS = 0.2;
+        model::Board tmpl;
+        tmpl.modules.push_back({"TM1", "tonmodul", 1});
+        auto s = session();
+        s->setSuccess(c, tmpl);
+        QVERIFY(s->addModule("blinkmodul", 1));
+        QVERIFY(s->addModule("tonmodul", 6));  // TM1
+        QVERIFY(s->addModule("tonmodul", 12)); // TM2
+        QVERIFY(s->removeModule("TM1"));       // das Kind arbeitet mit TM2
+        QVERIFY(s->addWire("P:+9V", "TM2.plus", "rot"));
+        QVERIFY(s->addWire("TM2.minus", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:+9V", "TM2.ein", "gelb"));
+        s->setMainSwitch(true);
+        run(*s, 0.5);
+        QVERIFY(s->successReached());
+    }
+
     // Gluehlampe: Nennspannung 2,5 / 6 / 10 V waehlbar (Befehl); die Variante bestimmt das Modell
     void lampVariants() {
         auto s = session();

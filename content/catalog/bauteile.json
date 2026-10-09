@@ -39,7 +39,7 @@
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",
      "ab_band": "volta1", "ab_stufe": 0, "lexikon_key": "lex_blinkmodul"},
-    {"typ": "tonmodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "teilschaltung",
+    {"typ": "tonmodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "verhaltensmodell",
      "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_tonmodul"}
   ]
 }

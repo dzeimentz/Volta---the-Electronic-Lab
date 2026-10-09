@@ -34,6 +34,8 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList catalogParts READ catalogParts CONSTANT)
     // Bauteilfach: im gefuehrten Experiment die freigegebenen Bauteile, im freien Labor alle (locked: noch gesperrt)
     Q_PROPERTY(QVariantList trayParts READ trayParts NOTIFY progressChanged)
+    // Modulfach: [{type, kind, stage, pins[], locked}]; im gefuehrten Experiment die Module seiner Vorlage
+    Q_PROPERTY(QVariantList trayModules READ trayModules NOTIFY progressChanged)
     // Lernpfad: [{number, title, question, unlocked, done, total, experiments: [{id, title, done, destructive}]}]
     Q_PROPERTY(QVariantList stages READ stages NOTIFY progressChanged)
     // Alle Bauteile und Stufen freigeben (Einstellung; spaeter hinter der Elternschranke)
@@ -101,6 +103,7 @@ public:
     QStringList voltageFields() const;
     QVariantList catalogParts() const;
     QVariantList trayParts() const;
+    QVariantList trayModules() const;
     QVariantList stages() const;
     bool unlockAll() const { return m_unlockAll; }
     void setUnlockAll(bool on);
@@ -195,6 +198,11 @@ public:
     Q_INVOKABLE int voltageBars(const QString& anchor);
     // Zustand eines Bauteils: currentmA, level, overloaded, destroyed, tempC
     Q_INVOKABLE QVariantMap partState(const QString& id) const;
+    // Zustand eines Moduls fuer die Darstellung: active (Ausgang ein bzw. spielt), frequencyHz, level, note
+    Q_INVOKABLE QVariantMap moduleState(const QString& id) const;
+    // »Blick hinein«: {type, behavioral, items: [{name, kind, currentmA, voltV, on}], supplyV, inV, outmA, note,
+    // frequencyHz, playing}. Teilschaltung: Messwerte der inneren Bauteile; Verhaltensmodell: Ein- und Ausgaenge.
+    Q_INVOKABLE QVariantMap moduleInside(const QString& id) const;
     // Strom einer Leitung in mA (Stromflussdarstellung)
     Q_INVOKABLE double wireCurrent(const QString& id) const;
 
@@ -212,6 +220,10 @@ public:
     Q_INVOKABLE bool setWireColor(const QString& id, const QString& color);
     Q_INVOKABLE bool toggleVoltageDisplay(const QString& field);
     Q_INVOKABLE bool setBoardColumns(int columns); // Befehl; +/- in der Werkzeugleiste
+    // Module (Befehle). slotAnchor: Feld der Modulleiste, auf dem der erste Anschluss liegt ("M:3")
+    Q_INVOKABLE bool addModule(const QString& type, const QString& slotAnchor);
+    Q_INVOKABLE bool moveModule(const QString& id, const QString& slotAnchor);
+    Q_INVOKABLE bool removeModule(const QString& id);
     int boardColumns() const { return m_session->board().columns; }
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();

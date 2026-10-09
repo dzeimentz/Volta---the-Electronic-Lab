@@ -386,9 +386,70 @@ bool translatePlate(PartPlacement& part, const std::string& startField) {
     return true;
 }
 
+bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, std::string& error,
+                    const std::string& ignoreId) {
+    const ModuleEntry* e = catalog.module(module.type);
+    if (!e || e->pins.empty()) {
+        error = "unbekanntes Modul '" + module.type + "'";
+        return false;
+    }
+    const int width = static_cast<int>(e->pins.size());
+    if (module.slot < 1 || module.slot + width - 1 > kModuleSlots) {
+        error = "Modul passt dort nicht in die Modulleiste";
+        return false;
+    }
+    for (const auto& m : board.modules) {
+        if (m.id == ignoreId) continue;
+        const ModuleEntry* o = catalog.module(m.type);
+        const int ow = o ? static_cast<int>(o->pins.size()) : 1;
+        if (module.slot <= m.slot + ow - 1 && m.slot <= module.slot + width - 1) {
+            error = "Dort steckt schon ein Modul";
+            return false;
+        }
+    }
+    return true;
+}
+
+std::string nextModuleId(const Board& board, const std::string& type) {
+    const std::string prefix = type == "blinkmodul" ? "BL" : (type == "tonmodul" ? "TM" : "MOD");
+    std::set<int> used;
+    for (const auto& m : board.modules) {
+        if (m.id.size() > prefix.size() && m.id.compare(0, prefix.size(), prefix) == 0) {
+            const std::string rest = m.id.substr(prefix.size());
+            if (std::all_of(rest.begin(), rest.end(), [](char ch) { return ch >= '0' && ch <= '9'; }))
+                used.insert(std::stoi(rest));
+        }
+    }
+    int n = 1;
+    while (used.count(n)) ++n;
+    return prefix + std::to_string(n);
+}
+
+std::string moduleSlotOf(const Board& board, const Catalog& catalog, const std::string& modulePin) {
+    const auto dot = modulePin.find('.');
+    if (dot == std::string::npos) return {};
+    const std::string id = modulePin.substr(0, dot);
+    const std::string pin = modulePin.substr(dot + 1);
+    for (const auto& m : board.modules) {
+        if (m.id != id) continue;
+        const ModuleEntry* e = catalog.module(m.type);
+        if (!e) return {};
+        const auto it = std::find(e->pins.begin(), e->pins.end(), pin);
+        if (it == e->pins.end()) return {};
+        return moduleSlot(m.slot + static_cast<int>(it - e->pins.begin()));
+    }
+    return {};
+}
+
 PartPlacement* findPart(Board& board, const std::string& id) {
     for (auto& p : board.parts)
         if (p.id == id) return &p;
+    return nullptr;
+}
+
+ModulePlacement* findModule(Board& board, const std::string& id) {
+    for (auto& m : board.modules)
+        if (m.id == id) return &m;
     return nullptr;
 }
 

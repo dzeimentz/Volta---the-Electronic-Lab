@@ -92,6 +92,24 @@ Item {
         return ""
     }
 
+    // Feld der Modulleiste unter einem Punkt ("" wenn keins)
+    function slotAt(p) {
+        for (let m = 1; m <= slots; ++m) {
+            const c = anchorPoint("M:" + m)
+            if (Math.abs(p.x - c.x) <= Theme.slotWidth / 2 + Theme.slotGap / 2 && Math.abs(p.y - c.y) <= Theme.fieldHeight / 2 + 40)
+                return "M:" + m
+        }
+        return ""
+    }
+    // Anschlussname des Moduls auf einem Feld der Modulleiste ("" wenn frei)
+    function modulePinAt(slotName) {
+        const n = parseInt(slotName.substring(2))
+        const list = controller.modules
+        for (let i = 0; i < list.length; ++i)
+            if (n >= list[i].slot && n < list[i].slot + list[i].width) return list[i].pins[n - list[i].slot] || ""
+        return ""
+    }
+
     function catalogEntry(type) {
         const list = controller.catalogParts
         for (let i = 0; i < list.length; ++i) if (list[i].type === type) return list[i]
@@ -121,6 +139,7 @@ Item {
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
+    property string selectedModule: ""
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
@@ -139,6 +158,8 @@ Item {
     property string moveWireId: ""
     property bool moveWireFromEnd: false
     property point wirePreviewEnd
+    // Modul aus dem Modulfach
+    property string trayModule: ""
     // Bauteil aus dem Fach
     property string trayType: ""
     property point trayPos
@@ -489,6 +510,20 @@ Item {
             lab.highlightAnchor = ""
             if (field !== "") lab.controller.addPart(type, field, false, type === "motor")
         }
+        modules: lab.controller.trayModules
+        onModuleLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.moduleName(type)).arg(stage))
+        onModuleDragUpdated: (type, scenePos) => {
+            lab.trayModule = type
+            lab.trayPos = lab.toCanvas(scenePos)
+            lab.highlightAnchor = lab.slotAt(lab.trayPos)
+        }
+        onModuleDragFinished: (type, scenePos) => {
+            const slot = lab.slotAt(lab.toCanvas(scenePos))
+            lab.trayModule = ""
+            lab.highlightAnchor = ""
+            if (slot !== "") lab.controller.addModule(type, slot)
+            else toast.show(qsTr("Module gehören in die Modulleiste unten."))
+        }
     }
 
     Rectangle {
@@ -498,7 +533,7 @@ Item {
         clip: true
 
         // Tippen ins Leere hebt die Auswahl auf
-        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = "" } }
+        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = ""; lab.selectedModule = "" } }
 
         Item {
             id: canvas
@@ -507,7 +542,7 @@ Item {
             y: Theme.margin
             width: Math.max(lab.controller.meterVisible ? lab.meterX + Theme.meterAreaWidth : lab.boardWidth,
                             lab.deskStripWidth)
-            height: lab.moduleY + Theme.fieldHeight
+            height: lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
             // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
             transformOrigin: Item.TopLeft
             scale: Math.min(1, (boardArea.width - 2 * Theme.margin) / width, (boardArea.height - 2 * Theme.margin) / height)
@@ -548,6 +583,38 @@ Item {
                 height: 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
             }
 
+            // Module in der Modulleiste (unter den Feldern, die sie belegen)
+            Repeater {
+                model: lab.controller.modules
+                ModuleItem {
+                    id: moduleItem
+                    required property var modelData
+                    objectName: "module_" + modelData.id
+                    controller: lab.controller
+                    moduleId: modelData.id
+                    moduleType: modelData.type
+                    slotCount: modelData.width
+                    selected: lab.selectedModule === modelData.id
+                    x: lab.anchorPoint("M:" + modelData.slot).x - Theme.slotWidth / 2 - 6
+                    y: lab.moduleY - 6
+                    onTapped: { lab.selectedModule = modelData.id; lab.selectedPart = ""; lab.selectedWire = "" }
+                    onInsideRequested: moduleInside.show(modelData.id, modelData.type)
+                    onMenuRequested: (scenePos) => {
+                        lab.selectedModule = modelData.id
+                        moduleMenu.moduleId = modelData.id
+                        moduleMenu.moduleType = modelData.type
+                        const p = lab.toCanvas(scenePos)
+                        moduleMenu.popup(canvas, p.x, p.y)
+                    }
+                    onDragFinished: (delta) => {
+                        const p = lab.anchorPoint("M:" + moduleItem.modelData.slot)
+                        const target = lab.slotAt(Qt.point(p.x + delta.x, p.y))
+                        if (target !== "" && target !== "M:" + moduleItem.modelData.slot)
+                            lab.controller.moveModule(moduleItem.modelData.id, target)
+                    }
+                }
+            }
+
             // Alle Anschlusspunkte: Pultleiste, Messgeraet, Grundplatte, Modulleiste
             Repeater {
                 model: lab.allAnchors
@@ -556,7 +623,10 @@ Item {
                     required property string modelData
                     objectName: "field_" + modelData
                     anchorName: modelData
+                    // Modulleiste: unter einem Modul der Anschlussname, sonst die Feldnummer
+                    readonly property string modulePin: modelData.startsWith("M:") ? lab.modulePinAt(modelData) : ""
                     label: lab.isBoardField(modelData) ? modelData
+                         : modulePin !== "" ? Texts.pinName(modulePin)
                          : modelData.startsWith("M:") ? "M" + modelData.substring(2) : lab.deskLabel(modelData)
                     sockets: modelData.startsWith("M:") ? 1 : 5
                     pitch: lab.socketPitch(modelData)
@@ -704,6 +774,18 @@ Item {
                 opacity: 0.7
             }
 
+            // Vorschau: Modul aus dem Modulfach
+            Rectangle {
+                visible: lab.trayModule !== ""
+                width: 4 * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap; height: 32; radius: 8
+                x: lab.trayPos.x - Theme.slotWidth / 2
+                y: lab.trayPos.y - height / 2
+                color: "#D8CCE8"
+                opacity: 0.85
+                border.color: Theme.navy
+                Label { anchors.centerIn: parent; text: Texts.moduleName(lab.trayModule); font.pixelSize: Math.round((11) * Theme.fontScale) }
+            }
+
             // Vorschau: Bauteil aus dem Fach
             Rectangle {
                 visible: lab.trayType !== ""
@@ -803,6 +885,27 @@ Item {
     }
 
     Menu {
+        id: moduleMenu
+        objectName: "moduleMenu"
+        property string moduleId
+        property string moduleType
+        MenuItem {
+            text: qsTr("Blick hinein")
+            onTriggered: moduleInside.show(moduleMenu.moduleId, moduleMenu.moduleType)
+        }
+        MenuItem {
+            text: qsTr("Herausnehmen")
+            onTriggered: { lab.controller.removeModule(moduleMenu.moduleId); lab.selectedModule = "" }
+        }
+    }
+
+    ModuleInside {
+        id: moduleInside
+        objectName: "moduleInside"
+        controller: lab.controller
+    }
+
+    Menu {
         id: wireMenu
         property string wireId
         Instantiator {
@@ -829,8 +932,10 @@ Item {
         onActivated: {
             if (lab.selectedPart !== "") lab.controller.removePart(lab.selectedPart)
             else if (lab.selectedWire !== "") lab.controller.removeWire(lab.selectedWire)
+            else if (lab.selectedModule !== "") lab.controller.removeModule(lab.selectedModule)
             lab.selectedPart = ""
             lab.selectedWire = ""
+            lab.selectedModule = ""
         }
     }
 

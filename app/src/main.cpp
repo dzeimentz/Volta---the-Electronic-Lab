@@ -101,8 +101,11 @@ int main(int argc, char* argv[]) {
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {
-        QTimer::singleShot(300, &lab, [&lab] {
-            lab.startExperiment(QStringLiteral("volta1.1.1"));
+        // VOLTA_DEMO_EXP=<id> waehlt das Experiment (Standard volta1.1.1)
+        const QString exp = qEnvironmentVariable("VOLTA_DEMO_EXP", QStringLiteral("volta1.1.1"));
+        QTimer::singleShot(300, &lab, [&lab, exp] {
+            lab.setUnlockAll(true);
+            lab.startExperiment(exp);
             lab.chooseGuess(1);
             while (lab.moreHints()) lab.nextHint();
             lab.showTemplate();
@@ -186,6 +189,18 @@ int main(int argc, char* argv[]) {
                 l->setProperty("schematicVisible", true);
                 l->setProperty("selectedPart", QStringLiteral("R1"));
             }
+        });
+
+    // Entwicklerhilfe: VOLTA_DEMO_INSIDE=<Modul-ID> oeffnet »Blick hinein« (mit VOLTA_DEMO_SOLVE und VOLTA_DEMO_EXP)
+    if (const QString inside = qEnvironmentVariable("VOLTA_DEMO_INSIDE"); !inside.isEmpty())
+        QTimer::singleShot(1500, &engine, [&engine, &lab, inside] {
+            const auto roots = engine.rootObjects();
+            QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("moduleInside"));
+            QString type;
+            for (const QVariant& v : lab.modules())
+                if (v.toMap().value(QStringLiteral("id")).toString() == inside)
+                    type = v.toMap().value(QStringLiteral("type")).toString();
+            if (dlg) QMetaObject::invokeMethod(dlg, "show", Q_ARG(QVariant, inside), Q_ARG(QVariant, type));
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)

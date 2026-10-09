@@ -30,6 +30,7 @@ Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl) 
     idx.parts = net.parts;
     idx.desk = net.desk;
     idx.modules = net.modules;
+    idx.moduleMain = net.moduleMain;
     std::vector<std::string> taken;
     auto isTaken = [&](const std::string& id) { return std::find(taken.begin(), taken.end(), id) != taken.end(); };
     // 1. gleiche Kennung und gleicher Typ
@@ -41,6 +42,28 @@ Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl) 
         else
             open.push_back(&t);
     }
+    // Module: gleiche Kennung und gleicher Typ, sonst das naechste freie Modul gleichen Typs; ihre Messwerte
+    // (moduleMain) sind in Bedingungen wie Bauteile ansprechbar
+    std::vector<std::string> takenModules;
+    for (const auto& t : tmpl.modules) {
+        std::string match;
+        for (const auto& m : board.modules)
+            if (m.id == t.id && m.type == t.type) match = m.id;
+        if (match.empty())
+            for (const auto& m : board.modules)
+                if (m.type == t.type &&
+                    std::find(takenModules.begin(), takenModules.end(), m.id) == takenModules.end()) {
+                    match = m.id;
+                    break;
+                }
+        if (match.empty()) continue;
+        takenModules.push_back(match);
+        const auto it = net.moduleMain.find(match);
+        if (it != net.moduleMain.end()) idx.parts[t.id] = it->second;
+    }
+    for (const auto& m : board.modules) // eigene Module des Kindes unter ihrer Kennung
+        if (const auto it = net.moduleMain.find(m.id); it != net.moduleMain.end() && !idx.parts.count(m.id))
+            idx.parts[m.id] = it->second;
     // 2. uebrige Vorlagenbauteile: naechstes freies Bauteil gleichen Typs
     for (const PartPlacement* t : open) {
         idx.parts.erase(t->id);
@@ -333,6 +356,58 @@ bool LabSession::repairPart(const std::string& id) {
                 {{id, core::ComponentState{}}});
 }
 
+// ------------------------------------------------------------------ Module
+
+bool LabSession::addModule(const std::string& type, int slot, std::string* newId) {
+    ModulePlacement m{nextModuleId(m_board, type), type, slot};
+    std::string err;
+    if (!canPlaceModule(m_board, m_catalog, m, err)) return fail(err);
+    Board after = m_board;
+    after.modules.push_back(m);
+    if (newId) *newId = m.id;
+    return push(QStringLiteral("%1 einsetzen").arg(q(m.id)), std::move(after));
+}
+
+bool LabSession::moveModule(const std::string& id, int slot) {
+    Board after = m_board;
+    ModulePlacement* m = findModule(after, id);
+    if (!m) return fail("Modul " + id + " nicht gefunden");
+    if (m->slot == slot) return true;
+    ModulePlacement moved = *m;
+    moved.slot = slot;
+    std::string err;
+    if (!canPlaceModule(m_board, m_catalog, moved, err, id)) return fail(err);
+    // Leitungen auf den Feldern unter dem Modul wandern mit (Leitungen an "<ID>.<Anschluss>" ohnehin)
+    const ModuleEntry* e = m_catalog.module(m->type);
+    const int width = e ? static_cast<int>(e->pins.size()) : 1;
+    const int delta = slot - m->slot;
+    for (auto& w : after.wires) {
+        for (std::string* end : {&w.from, &w.to}) {
+            if (classifyAnchor(*end) != AnchorKind::ModuleSlot) continue;
+            const int n = std::stoi(end->substr(2));
+            if (n >= m->slot && n < m->slot + width) *end = moduleSlot(n + delta);
+        }
+    }
+    m->slot = slot;
+    return push(QStringLiteral("%1 verschieben").arg(q(id)), std::move(after));
+}
+
+bool LabSession::removeModule(const std::string& id) {
+    Board after = m_board;
+    const auto it =
+        std::find_if(after.modules.begin(), after.modules.end(), [&id](const auto& m) { return m.id == id; });
+    if (it == after.modules.end()) return fail("Modul " + id + " nicht gefunden");
+    // Leitungen an Modulanschluessen bleiben auf dem Feld der Leiste liegen
+    for (auto& w : after.wires)
+        for (std::string* end : {&w.from, &w.to})
+            if (end->compare(0, id.size() + 1, id + ".") == 0) {
+                const std::string slot = moduleSlotOf(m_board, m_catalog, *end);
+                if (!slot.empty()) *end = slot;
+            }
+    after.modules.erase(it);
+    return push(QStringLiteral("%1 herausnehmen").arg(q(id)), std::move(after));
+}
+
 bool LabSession::addWire(const std::string& from, const std::string& to, const std::string& color,
                          std::string* newId) {
     std::string err;
@@ -449,6 +524,34 @@ bool LabSession::replaceMeterFuse() {
 bool LabSession::repairSpeaker() {
     return push(QStringLiteral("Lautsprecher reparieren"), m_board, BoardCommand::NoMerge, {},
                 {{desk_id::kSpeaker, core::ComponentState{}}});
+}
+
+const core::ComponentReading* LabSession::moduleReading(const std::string& moduleId) const {
+    const auto it = m_net.moduleMain.find(moduleId);
+    if (!snapshotCurrent() || it == m_net.moduleMain.end() || it->second >= m_snap.readings.size()) return nullptr;
+    return &m_snap.readings[it->second];
+}
+
+bool LabSession::speakerReading(core::ComponentReading& out) const {
+    const core::ComponentReading* r = deskReading(desk_id::kSpeaker);
+    if (!r) return false;
+    out = *r;
+    constexpr double kMinA = 2e-3;         // kleinster Strom, der als Ton zaehlt
+    constexpr double kFullScaleA = 0.1;    // wie core::SpeakerParams::fullScaleA
+    constexpr double kSameCurrent = 0.2;   // Stroeme gelten als derselbe Strom (Reihenschaltung)
+    const double iLs = std::fabs(r->currentA);
+    if (r->destroyed || iLs < kMinA) return true;
+    for (const auto& m : m_board.modules) {
+        if (m.type != "tonmodul") continue;
+        const core::ComponentReading* t = moduleReading(m.id);
+        if (!t || t->frequencyHz <= 0.0) continue;
+        const double iOut = std::fabs(t->currentA);
+        if (iOut < kMinA || std::fabs(iOut - iLs) > kSameCurrent * iOut) continue;
+        out.frequencyHz = t->frequencyHz;
+        out.level = std::clamp(iLs / kFullScaleA, 0.0, 1.0);
+        break;
+    }
+    return true;
 }
 
 const core::ComponentReading* LabSession::deskReading(const std::string& deskId) const {

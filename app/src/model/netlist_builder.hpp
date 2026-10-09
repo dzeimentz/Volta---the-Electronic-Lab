@@ -9,6 +9,7 @@
 #include "catalog.hpp"
 #include "volta/core/circuit.hpp"
 #include "volta/core/modules/blink_module.hpp"
+#include "volta/core/modules/tone_module.hpp"
 
 namespace volta::model {
 
@@ -30,6 +31,9 @@ struct Netlist {
     std::map<std::string, std::size_t> parts;        // Bauteil-ID -> Index im Circuit
     std::map<std::string, std::size_t> wires;        // Leitungs-ID -> Index im Circuit
     std::map<std::string, core::SubcircuitRange> modules;
+    // Modul-ID -> Bauteil mit den Messwerten des Moduls (Erfolgsbedingungen, Anzeige): Tonmodul das Verhaltensmodell,
+    // Blinkmodul der Ausgangstransistor
+    std::map<std::string, std::size_t> moduleMain;
     std::map<std::string, std::size_t> desk;         // desk_id -> Index im Circuit
     std::vector<std::string> componentIds;           // Kennung je Index im Circuit (Zustandsschnappschuesse)
     std::vector<std::string> errors;                 // unbekannte Typen, ungueltige Anschlusspunkte ...

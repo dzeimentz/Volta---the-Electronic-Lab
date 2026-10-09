@@ -80,7 +80,20 @@ void rotatePlate(PartPlacement& part);
 // Liefert false, wenn ein Feld nicht mehr auf der Grundplatte liegt.
 bool translatePlate(PartPlacement& part, const std::string& startField);
 
+// ---- Module in der Modulleiste (docs/domain-model.md, Modulleiste)
+// Anzahl der Felder der Modulleiste (M:1 .. M:kModuleSlots)
+inline constexpr int kModuleSlots = 16;
+// Prueft, ob ein Modul ab seinem Startfeld in die Modulleiste passt: Typ bekannt, alle Anschluesse innerhalb der
+// Leiste, kein anderes Modul im Bereich. ignoreId: beim Verschieben das Modul selbst nicht mitzaehlen.
+bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, std::string& error,
+                    const std::string& ignoreId = {});
+// Freie Kennung fuer ein neues Modul, z. B. "BL1" (Blinkmodul), "TM2" (Tonmodul)
+std::string nextModuleId(const Board& board, const std::string& type);
+// Feld der Modulleiste unter einem Modulanschluss ("BL1.aus" -> "M:3"); "" wenn es Modul oder Anschluss nicht gibt
+std::string moduleSlotOf(const Board& board, const Catalog& catalog, const std::string& modulePin);
+
 PartPlacement* findPart(Board& board, const std::string& id);
+ModulePlacement* findModule(Board& board, const std::string& id);
 WirePlacement* findWire(Board& board, const std::string& id);
 
 } // namespace volta::model

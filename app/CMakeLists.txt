@@ -86,6 +86,8 @@ qt_add_qml_module(volta_ui
         qml/JournalView.qml
         qml/ToolboxPanel.qml
         qml/SchematicView.qml
+        qml/ModuleItem.qml
+        qml/ModuleInside.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

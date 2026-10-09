@@ -67,6 +67,11 @@ public:
     bool removeWire(const std::string& id);
     bool setWireColor(const std::string& id, const std::string& color);
     bool toggleVoltageDisplay(const std::string& field);
+    // Module in der Modulleiste (Modulfach). slot: erstes belegtes Feld M:<slot>. Leitungen an den Feldern unter dem
+    // Modul wandern beim Verschieben mit; beim Entfernen bleiben sie auf den Feldern der Leiste liegen.
+    bool addModule(const std::string& type, int slot, std::string* newId = nullptr);
+    bool moveModule(const std::string& id, int slot);
+    bool removeModule(const std::string& id);
     // Breite der Grundplatte (8, 10, 12 Spalten). Verkleinern nur, wenn die wegfallenden Spalten frei sind.
     bool setColumns(int columns);
     // Ganzer Aufbau auf einmal (z. B. Musteraufbau als Loesungshilfe); Pultstellung bleibt
@@ -89,6 +94,13 @@ public:
     bool repairSpeaker();
     // Messwert eines Pultbauteils (z. B. desk_id::kMeter) aus dem aktuellen Schnappschuss
     const core::ComponentReading* deskReading(const std::string& deskId) const;
+    // Messwerte eines Moduls (Netlist::moduleMain) aus dem aktuellen Schnappschuss
+    const core::ComponentReading* moduleReading(const std::string& moduleId) const;
+    // Lautsprecher des Pults fuer die Klanganzeige. Treibt ein Tonmodul den Lautsprecher (derselbe Strom fliesst
+    // durch Lautsprecher und Ausgang des Moduls, Abweichung hoechstens 20 %), uebernimmt die Anzeige dessen Ton:
+    // Die Endstufe schaltet in Wirklichkeit im Tontakt, die Simulation rechnet mit dem Mittelwert (Verhaltensmodell).
+    // Signalstaerke: Wechselanteil einer Rechteckschwingung mit 50 % Tastverhaeltnis = Mittelwert des Stroms.
+    bool speakerReading(core::ComponentReading& out) const;
 
     // ---- Erfolgspruefung (laeuft im Simulations-Thread nach jedem Schritt)
     // Bauteilbezuege der Bedingung beziehen sich auf die Vorlage; die Zuordnung zum Aufbau des Kindes erfolgt ueber

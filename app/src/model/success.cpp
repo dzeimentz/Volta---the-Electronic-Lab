@@ -79,10 +79,15 @@ bool SuccessEvaluator::evaluate(Node& node, const core::Simulator& sim, const Ne
 
     bool raw = false;
     if (!c.part.empty()) {
-        const auto it = net.parts.find(c.part);
-        if (it == net.parts.end() || it->second >= sim.probe().readings.size())
+        // Bauteil oder Modul (Messwerte des Moduls: Netlist::moduleMain)
+        std::size_t index = sim.probe().readings.size();
+        if (const auto p = net.parts.find(c.part); p != net.parts.end())
+            index = p->second;
+        else if (const auto m = net.moduleMain.find(c.part); m != net.moduleMain.end())
+            index = m->second;
+        if (index >= sim.probe().readings.size())
             return fail("Erfolgsbedingung: Bauteil '" + c.part + "' nicht im Aufbau");
-        const core::ComponentReading& r = sim.probe().readings[it->second];
+        const core::ComponentReading& r = sim.probe().readings[index];
         if (c.kind == Kind::State) {
             switch (c.state) {
             case SuccessCondition::State::Intact: raw = !r.destroyed && !r.overloaded; break;
@@ -99,7 +104,7 @@ bool SuccessEvaluator::evaluate(Node& node, const core::Simulator& sim, const Ne
             case SuccessCondition::Quantity::FrequencyHz: v = r.frequencyHz; break;
             case SuccessCondition::Quantity::TemperatureC: v = r.tempK - 273.15; break;
             case SuccessCondition::Quantity::Rpm: {
-                const auto* motor = dynamic_cast<const core::Motor*>(&sim.circuit().component(it->second));
+                const auto* motor = dynamic_cast<const core::Motor*>(&sim.circuit().component(index));
                 v = motor ? std::fabs(motor->rpm()) : 0.0;
                 break;
             }

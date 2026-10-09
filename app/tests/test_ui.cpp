@@ -468,7 +468,7 @@ private slots:
         QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4"))); // Stufe 1 noch nicht ganz geschafft
         {
             services::ProgressStore store(file); // alle uebrigen Experimente der Stufe 1
-            for (int nr = 3; nr <= 7; ++nr) QVERIFY(store.markDone(QStringLiteral("volta1.1.%1").arg(nr)));
+            for (int nr = 3; nr <= 10; ++nr) QVERIFY(store.markDone(QStringLiteral("volta1.1.%1").arg(nr)));
         }
         m_lab->useProgressFile(file);
         QVERIFY(m_lab->isUnlocked(QStringLiteral("volta1.2.4")));

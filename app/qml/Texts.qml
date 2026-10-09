@@ -25,6 +25,26 @@ QtObject {
         return type
     }
 
+    function moduleName(type) {
+        switch (type) {
+        case "blinkmodul": return qsTr("Blinkmodul")
+        case "tonmodul": return qsTr("Tonmodul")
+        }
+        return type
+    }
+
+    // Anschlussname eines Moduls auf dem Feld der Modulleiste (kurz)
+    function pinName(pin) {
+        switch (pin) {
+        case "plus": return "+"
+        case "minus": return "−"
+        case "aus": return qsTr("aus")
+        case "ein": return qsTr("ein")
+        case "takt": return qsTr("Takt")
+        }
+        return pin
+    }
+
     function colorName(c) {
         switch (c) {
         case "rot": return qsTr("Rot")

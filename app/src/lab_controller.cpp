@@ -218,6 +218,25 @@ QVariantList LabController::trayParts() const {
     return out;
 }
 
+QVariantList LabController::trayModules() const {
+    QVariantList out;
+    const bool guided = !m_freeLab && !m_experiment.id.isEmpty() && m_flow.phase() != model::ExperimentFlow::Phase::None;
+    const int open = highestUnlockedStage();
+    for (const auto& [type, e] : m_session->catalog().modules) {
+        bool inExperiment = false;
+        for (const auto& m : m_experiment.templateBoard.modules) inExperiment = inExperiment || m.type == type;
+        if (guided && !m_unlockAll && !inExperiment) continue;
+        QStringList pins;
+        for (const auto& p : e.pins) pins << qs(p);
+        out << QVariantMap{{QStringLiteral("type"), qs(type)},
+                           {QStringLiteral("kind"), qs(e.kind)},
+                           {QStringLiteral("stage"), e.fromStage},
+                           {QStringLiteral("pins"), pins},
+                           {QStringLiteral("locked"), !m_unlockAll && e.fromStage > open}};
+    }
+    return out;
+}
+
 QVariantMap LabController::colorCode(double ohm, int rings) const {
     const model::resistor_code::Code code = model::resistor_code::encode(ohm, rings);
     QVariantList r;
@@ -459,6 +478,69 @@ QVariantMap LabController::partState(const QString& id) const {
     return m;
 }
 
+QVariantMap LabController::moduleState(const QString& id) const {
+    QVariantMap m;
+    const std::string mid = ss(id);
+    const core::ComponentReading* r = m_session->moduleReading(mid);
+    if (!r) return m;
+    std::string type;
+    for (const auto& mod : m_session->board().modules)
+        if (mod.id == mid) type = mod.type;
+    if (type == "tonmodul") {
+        m.insert(QStringLiteral("active"), r->frequencyHz > 0.0 || r->displayValue >= 0.0);
+        m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
+        m.insert(QStringLiteral("level"), r->level);
+        m.insert(QStringLiteral("note"), static_cast<int>(r->displayValue));
+    } else {
+        // Blinkmodul: Ausgangstransistor leitet (Kollektorstrom ueber 1 mA)
+        m.insert(QStringLiteral("active"), std::fabs(r->terminalCurrentA[1]) > 1e-3);
+    }
+    return m;
+}
+
+QVariantMap LabController::moduleInside(const QString& id) const {
+    QVariantMap m;
+    const std::string mid = ss(id);
+    std::string type;
+    for (const auto& mod : m_session->board().modules)
+        if (mod.id == mid) type = mod.type;
+    m.insert(QStringLiteral("type"), qs(type));
+    const model::ModuleEntry* e = m_session->catalog().module(type);
+    m.insert(QStringLiteral("behavioral"), e && e->kind == "verhaltensmodell");
+    const auto& net = m_session->netlist();
+    const auto range = net.modules.find(mid);
+    const auto& snap = m_session->snapshot();
+    if (range == net.modules.end() || !m_session->snapshotCurrent()) return m;
+    if (type == "tonmodul") {
+        if (const core::ComponentReading* r = m_session->moduleReading(mid)) {
+            m.insert(QStringLiteral("supplyV"), r->voltV);
+            m.insert(QStringLiteral("outmA"), r->currentA * 1e3);
+            m.insert(QStringLiteral("note"), static_cast<int>(r->displayValue));
+            m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
+            m.insert(QStringLiteral("playing"), r->displayValue >= 0.0);
+            m.insert(QStringLiteral("inV"), m_session->voltage(mid + ".ein") - m_session->voltage(mid + ".minus"));
+        }
+        return m;
+    }
+    // Teilschaltung: Messwerte der inneren Bauteile (Kennung "<Modul>.<Name>")
+    QVariantList items;
+    for (std::size_t i = range->second.first; i < range->second.first + range->second.count; ++i) {
+        if (i >= snap.readings.size() || i >= net.componentIds.size()) break;
+        const core::ComponentReading& r = snap.readings[i];
+        const std::string& cid = net.componentIds[i];
+        const QString name = qs(cid.substr(cid.find('.') + 1));
+        const bool transistor = name.startsWith(QLatin1Char('T'));
+        // Transistor: Kollektorstrom (Anschluss 1); sonst Strom am Anschluss 0
+        const double i_mA = (transistor ? r.terminalCurrentA[1] : r.currentA) * 1e3;
+        items << QVariantMap{{QStringLiteral("name"), name},
+                             {QStringLiteral("currentmA"), i_mA},
+                             {QStringLiteral("voltV"), r.voltV},
+                             {QStringLiteral("on"), transistor && std::fabs(i_mA) > 1.0}};
+    }
+    m.insert(QStringLiteral("items"), items);
+    return m;
+}
+
 double LabController::wireCurrent(const QString& id) const {
     const auto& net = m_session->netlist();
     const auto it = net.wires.find(ss(id));
@@ -530,9 +612,14 @@ QVariantList LabController::wires() const {
     for (const auto& w : m_session->board().wires) {
         const auto it = sockets.wireEnds.find(w.id);
         const std::pair<int, int> ends = it != sockets.wireEnds.end() ? it->second : std::pair<int, int>{2, 2};
+        // Modulanschluss ("BL1.aus") auf dem Feld der Modulleiste darstellen
+        auto shown = [this](const std::string& a) {
+            const std::string slot = model::moduleSlotOf(m_session->board(), m_session->catalog(), a);
+            return qs(slot.empty() ? a : slot);
+        };
         out << QVariantMap{{QStringLiteral("id"), qs(w.id)},
-                           {QStringLiteral("from"), qs(w.from)},
-                           {QStringLiteral("to"), qs(w.to)},
+                           {QStringLiteral("from"), shown(w.from)},
+                           {QStringLiteral("to"), shown(w.to)},
                            {QStringLiteral("fromSocket"), ends.first},
                            {QStringLiteral("toSocket"), ends.second},
                            {QStringLiteral("color"), qs(w.color)}};
@@ -544,10 +631,15 @@ QVariantList LabController::modules() const {
     QVariantList out;
     for (const auto& m : m_session->board().modules) {
         const model::ModuleEntry* e = m_session->catalog().module(m.type);
+        QStringList pins;
+        if (e)
+            for (const auto& p : e->pins) pins << qs(p);
         out << QVariantMap{{QStringLiteral("id"), qs(m.id)},
                            {QStringLiteral("type"), qs(m.type)},
                            {QStringLiteral("slot"), m.slot},
-                           {QStringLiteral("width"), e ? static_cast<int>(e->pins.size()) : 1}};
+                           {QStringLiteral("width"), e ? static_cast<int>(e->pins.size()) : 1},
+                           {QStringLiteral("pins"), pins},
+                           {QStringLiteral("behavioral"), e && e->kind == "verhaltensmodell"}};
     }
     return out;
 }
@@ -593,6 +685,33 @@ bool LabController::movePart(const QString& id, const QString& start, bool verti
     return result(m_session->movePart(ss(id), ss(start), orient(vertical), spanOf(longSpan)));
 }
 bool LabController::removePart(const QString& id) { return result(m_session->removePart(ss(id))); }
+
+namespace {
+// "M:3" -> 3; 0 bei anderem Anschlusspunkt
+int slotNumber(const QString& anchor) {
+    if (!anchor.startsWith(QLatin1String("M:"))) return 0;
+    bool ok = false;
+    const int n = anchor.mid(2).toInt(&ok);
+    return ok ? n : 0;
+}
+} // namespace
+
+bool LabController::addModule(const QString& type, const QString& slotAnchor) {
+    for (const QVariant& v : trayModules()) {
+        const QVariantMap p = v.toMap();
+        if (p.value(QStringLiteral("type")).toString() == type && p.value(QStringLiteral("locked")).toBool()) {
+            m_lastEditError = tr("Dieses Modul wird mit Stufe %1 freigeschaltet.")
+                                  .arg(p.value(QStringLiteral("stage")).toInt());
+            emit editFailed();
+            return false;
+        }
+    }
+    return result(m_session->addModule(ss(type), slotNumber(slotAnchor)));
+}
+bool LabController::moveModule(const QString& id, const QString& slotAnchor) {
+    return result(m_session->moveModule(ss(id), slotNumber(slotAnchor)));
+}
+bool LabController::removeModule(const QString& id) { return result(m_session->removeModule(ss(id))); }
 bool LabController::flipPart(const QString& id) { return result(m_session->flipPart(ss(id))); }
 bool LabController::setPartValue(const QString& id, double v) { return result(m_session->setPartValue(ss(id), v)); }
 bool LabController::repairPart(const QString& id) { return result(m_session->repairPart(ss(id))); }
@@ -671,8 +790,9 @@ bool LabController::repairSpeaker() { return result(m_session->repairSpeaker());
 
 QVariantMap LabController::speakerState() const {
     QVariantMap m;
-    const core::ComponentReading* r = m_session->deskReading(model::desk_id::kSpeaker);
-    if (!r) return m;
+    core::ComponentReading reading;
+    if (!m_session->speakerReading(reading)) return m;
+    const core::ComponentReading* r = &reading;
     m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
     m.insert(QStringLiteral("level"), r->level);
     m.insert(QStringLiteral("pulses"), r->displayValue);
