@@ -12,6 +12,7 @@ Item {
     property bool selected: false
     property var points: []      // Steckloecher je Anschluss (Lab.socketPoint)
     property var partState: ({}) // partState() des LabController
+    property bool movable: true  // Steckmodus: verschiebbar; Betrieb: fest (Taster, Schalter bleiben bedienbar)
 
     signal dragFinished(point delta)
     signal tapped()
@@ -133,6 +134,7 @@ Item {
 
         DragHandler {
             id: bodyDrag
+            enabled: root.movable
             target: null
             // activeTranslation ist beim Deaktivieren schon zurueckgesetzt: letzte Verschiebung selbst merken
             property point lastTranslation

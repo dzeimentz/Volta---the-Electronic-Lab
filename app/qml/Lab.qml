@@ -143,6 +143,15 @@ Item {
     // Aufbauhilfe sichtbar (Aufbauphase, vom Kind eingeschaltet)
     readonly property bool guideVisible: controller.guideActive && controller.phase === 2
     property string selectedModule: ""
+    // Steck- und Betriebsmodus (docs/ui-spec.md): Betrieb = Hauptschalter ein. Im Betrieb sind Bauteile, Leitungen
+    // und Module fest; Taster, Schalter und Regler bleiben bedienbar. Wer im Betrieb umbauen will (aus dem Fach
+    // ziehen, Leitung ziehen, aendernde Menueaktion, Rueckgaengig), schaltet damit automatisch aus: Steckmodus.
+    readonly property bool operating: controller.mainSwitch
+    function beginEdit() {
+        if (!controller.mainSwitch) return
+        controller.mainSwitch = false
+        toast.show(qsTr("Strom aus – Steckmodus. Zum Testen den Hauptschalter wieder einschalten."))
+    }
     // Aktionen (Farbe, Drehen, Loeschen ...) gibt es nur ueber das Kontextmenue: langer Druck bzw. Rechtsklick.
     // Beim ersten Auswaehlen einmal darauf hinweisen (Antippen selbst loest nie etwas Unumkehrbares aus).
     property bool menuHintShown: false
@@ -295,13 +304,41 @@ Item {
                 ToolTip.text: qsTr("Experiment wählen")
                 Accessible.name: qsTr("Experiment wählen")
             }
+            // Modus: ✋ Stecken / ⚡ Betrieb (Symbol und Text, Farbe nie allein); schaltet den Hauptschalter
+            ToolButton {
+                id: modeButton
+                objectName: "modeButton"
+                anchors.verticalCenter: parent.verticalCenter
+                height: Theme.control
+                width: 118
+                onClicked: lab.controller.mainSwitch = !lab.controller.mainSwitch
+                ToolTip.visible: hovered
+                ToolTip.text: lab.operating ? qsTr("Betrieb: Schaltung testen. Antippen schaltet aus und wechselt in den Steckmodus.")
+                                            : qsTr("Steckmodus: aufbauen und ändern. Antippen schaltet ein und wechselt in den Betrieb.")
+                Accessible.name: lab.operating ? qsTr("Betrieb") : qsTr("Stecken")
+                contentItem: Label {
+                    text: lab.operating ? "⚡ " + qsTr("Betrieb") : "✋ " + qsTr("Stecken")
+                    color: lab.operating ? Theme.navy : "white"
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+                background: Rectangle {
+                    radius: 6
+                    color: lab.operating ? Theme.solderAmber : (modeButton.hovered ? "#2A4A6E" : "#1F3A57")
+                    border.color: lab.operating ? "#FFE08A" : "#7F93A8"
+                    border.width: 2
+                }
+            }
             ToolButton {
                 objectName: "undoButton"
                 text: "↶"
                 font.pixelSize: 19
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canUndo
-                onClicked: lab.controller.undo()
+                onClicked: { lab.beginEdit(); lab.controller.undo() }
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Rückgängig: %1").arg(lab.controller.undoText)
                 Accessible.name: qsTr("Rückgängig")
@@ -312,7 +349,7 @@ Item {
                 font.pixelSize: 19
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canRedo
-                onClicked: lab.controller.redo()
+                onClicked: { lab.beginEdit(); lab.controller.redo() }
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Wiederholen: %1").arg(lab.controller.redoText)
                 Accessible.name: qsTr("Wiederholen")
@@ -327,7 +364,7 @@ Item {
                     font.pixelSize: 19
                     width: Theme.control; height: Theme.control
                     enabled: lab.columns > 8
-                    onClicked: lab.controller.setBoardColumns(lab.columns - 2)
+                    onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns - 2) }
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Weniger Felder je Reihe")
                     Accessible.name: qsTr("Weniger Felder je Reihe")
@@ -348,7 +385,7 @@ Item {
                     font.pixelSize: 19
                     width: Theme.control; height: Theme.control
                     enabled: lab.columns < 12
-                    onClicked: lab.controller.setBoardColumns(lab.columns + 2)
+                    onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns + 2) }
                     ToolTip.visible: hovered
                     ToolTip.text: qsTr("Mehr Felder je Reihe")
                     Accessible.name: qsTr("Mehr Felder je Reihe")
@@ -512,6 +549,7 @@ Item {
         parts: lab.controller.trayParts
         onLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.partName(type)).arg(stage))
         onDragUpdated: (type, scenePos) => {
+            lab.beginEdit()
             lab.trayType = type
             lab.trayPos = lab.toCanvas(scenePos)
             lab.highlightAnchor = lab.anchorAt(lab.trayPos, true)
@@ -525,6 +563,7 @@ Item {
         modules: lab.controller.trayModules
         onModuleLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.moduleName(type)).arg(stage))
         onModuleDragUpdated: (type, scenePos) => {
+            lab.beginEdit()
             lab.trayModule = type
             lab.trayPos = lab.toCanvas(scenePos)
             lab.highlightAnchor = lab.slotAt(lab.trayPos)
@@ -607,6 +646,7 @@ Item {
                     moduleType: modelData.type
                     slotCount: modelData.width
                     selected: lab.selectedModule === modelData.id
+                    movable: !lab.operating
                     x: lab.anchorPoint("M:" + modelData.slot).x - Theme.slotWidth / 2 - 6
                     y: lab.moduleY - 6
                     onTapped: { lab.selectedModule = modelData.id; lab.selectedPart = ""; lab.selectedWire = "" }
@@ -653,6 +693,7 @@ Item {
                     target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
 
                     onWireDragUpdated: (scenePos) => {
+                        lab.beginEdit()
                         lab.wireFrom = field.modelData
                         lab.wirePreviewEnd = lab.toCanvas(scenePos)
                         const target = lab.anchorAt(lab.wirePreviewEnd, false)
@@ -692,6 +733,7 @@ Item {
                     value: modelData.type === "gluehlampe" ? lab.lampVolt(modelData) : modelData.value
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id
+                    movable: !lab.operating
                     points: modelData.anchors.map((a, i) => lab.socketPoint(a, modelData.sockets[i]))
                     onTapped: {
                         lab.selectedPart = part.modelData.id
@@ -753,6 +795,7 @@ Item {
                             id: endHandle
                             required property bool modelData
                             objectName: "wireEnd_" + wire.modelData.id + (modelData ? "_von" : "_nach")
+                            movable: !lab.operating
                             at: modelData ? wire.fromPoint : wire.toPoint
                             wireColor: Theme.wireColor(wire.modelData.color)
                             onMoved: (scenePos) => {
@@ -889,20 +932,24 @@ Item {
         property var part: ({})
         MenuItem {
             text: qsTr("Drehen")
-            onTriggered: partMenu.part.pins.length === 4
-                         ? lab.controller.rotatePart(partMenu.part.id) // Platine: 90 Grad im Uhrzeigersinn
-                         : lab.controller.movePart(partMenu.part.id, partMenu.part.start, !partMenu.part.vertical,
-                                                 partMenu.part.longSpan)
+            onTriggered: {
+                lab.beginEdit()
+                if (partMenu.part.pins.length === 4) lab.controller.rotatePart(partMenu.part.id) // Platine: 90 Grad
+                else lab.controller.movePart(partMenu.part.id, partMenu.part.start, !partMenu.part.vertical,
+                                             partMenu.part.longSpan)
+            }
         }
         MenuItem {
             text: qsTr("Umdrehen (Polung)")
-            onTriggered: lab.controller.flipPart(partMenu.part.id)
+            onTriggered: { lab.beginEdit(); lab.controller.flipPart(partMenu.part.id) }
         }
         MenuItem {
             text: partMenu.part.longSpan ? qsTr("Kurz stecken") : qsTr("Lang stecken")
             enabled: partMenu.part.anchors !== undefined && partMenu.part.anchors.length === 2
-            onTriggered: lab.controller.movePart(partMenu.part.id, partMenu.part.start, partMenu.part.vertical,
-                                                 !partMenu.part.longSpan)
+            onTriggered: {
+                lab.beginEdit()
+                lab.controller.movePart(partMenu.part.id, partMenu.part.start, partMenu.part.vertical, !partMenu.part.longSpan)
+            }
         }
         Menu {
             id: valueMenu
@@ -915,7 +962,7 @@ Item {
                     text: Texts.ohm(modelData)
                     checkable: true
                     checked: partMenu.part.value === modelData
-                    onTriggered: lab.controller.setPartValue(partMenu.part.id, modelData)
+                    onTriggered: { lab.beginEdit(); lab.controller.setPartValue(partMenu.part.id, modelData) }
                 }
                 onObjectAdded: (index, object) => valueMenu.insertItem(index, object)
                 onObjectRemoved: (index, object) => valueMenu.removeItem(object)
@@ -932,7 +979,7 @@ Item {
                     text: qsTr("%1 V").arg(Number(modelData).toLocaleString(Qt.locale(), "f", modelData % 1 === 0 ? 0 : 1))
                     checkable: true
                     checked: Math.abs(lab.lampVolt(partMenu.part) - modelData) < 1e-9
-                    onTriggered: lab.controller.setPartValue(partMenu.part.id, modelData)
+                    onTriggered: { lab.beginEdit(); lab.controller.setPartValue(partMenu.part.id, modelData) }
                 }
                 onObjectAdded: (index, object) => voltMenu.insertItem(index, object)
                 onObjectRemoved: (index, object) => voltMenu.removeItem(object)
@@ -940,13 +987,13 @@ Item {
         }
         MenuItem {
             text: qsTr("Reparieren")
-            onTriggered: lab.controller.repairPart(partMenu.part.id)
+            onTriggered: { lab.beginEdit(); lab.controller.repairPart(partMenu.part.id) }
         }
         MenuSeparator {}
         MenuItem {
             objectName: "partMenuRemove"
             text: "🗑 " + qsTr("Entfernen")
-            onTriggered: { lab.controller.removePart(partMenu.part.id); lab.selectedPart = "" }
+            onTriggered: { lab.beginEdit(); lab.controller.removePart(partMenu.part.id); lab.selectedPart = "" }
         }
     }
 
@@ -961,7 +1008,7 @@ Item {
         }
         MenuItem {
             text: qsTr("Herausnehmen")
-            onTriggered: { lab.controller.removeModule(moduleMenu.moduleId); lab.selectedModule = "" }
+            onTriggered: { lab.beginEdit(); lab.controller.removeModule(moduleMenu.moduleId); lab.selectedModule = "" }
         }
     }
 
@@ -993,16 +1040,17 @@ Item {
         MenuItem {
             objectName: "wireMenuRemove"
             text: "🗑 " + qsTr("Leitung löschen")
-            onTriggered: { lab.controller.removeWire(wireMenu.wireId); lab.selectedWire = "" }
+            onTriggered: { lab.beginEdit(); lab.controller.removeWire(wireMenu.wireId); lab.selectedWire = "" }
         }
     }
 
     // ------------------------------------------------------------------ Tastenkuerzel
-    Shortcut { sequences: [StandardKey.Undo]; onActivated: lab.controller.undo() }
-    Shortcut { sequences: ["Ctrl+Y", "Ctrl+Shift+Z"]; onActivated: lab.controller.redo() } // docs/ui-spec.md
+    Shortcut { sequences: [StandardKey.Undo]; onActivated: { lab.beginEdit(); lab.controller.undo() } }
+    Shortcut { sequences: ["Ctrl+Y", "Ctrl+Shift+Z"]; onActivated: { lab.beginEdit(); lab.controller.redo() } } // docs/ui-spec.md
     Shortcut {
         sequences: [StandardKey.Delete, "Backspace"]
         onActivated: {
+            if (lab.selectedPart !== "" || lab.selectedWire !== "" || lab.selectedModule !== "") lab.beginEdit()
             if (lab.selectedPart !== "") lab.controller.removePart(lab.selectedPart)
             else if (lab.selectedWire !== "") lab.controller.removeWire(lab.selectedWire)
             else if (lab.selectedModule !== "") lab.controller.removeModule(lab.selectedModule)

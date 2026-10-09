@@ -190,3 +190,13 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Nachtraeglich aendern: langer Druck bzw. Rechtsklick auf ein Leitungsende -> Leitungsmenue mit den Farben (aktuelle
   mit Haken). Eine von Hand gewaehlte Farbe
   (`WirePlacement::colorFixed`) aendert die Automatik nicht mehr.
+
+## Steck- und Betriebsmodus
+- Der Modus folgt dem Hauptschalter: aus = »✋ Stecken« (aufbauen, aendern, loeschen), ein = »⚡ Betrieb«
+  (Schaltung testen). Anzeige und Umschalten ueber den Modusknopf neben der Experimentauswahl (Symbol und Text).
+- Im Betrieb sind Bauteile, Leitungsenden und Module fest; Taster, Schalter, Reedkontakt, Wechselschalter, Pult und
+  Regler bleiben bedienbar, ebenso Beobachtendes (Blick hinein, Spannungsanzeige, Schaltplan, Messgeraet).
+- Automatischer Wechsel: Wer im Betrieb umbauen will - Bauteil oder Modul aus dem Fach ziehen, Leitung aus einem
+  Feld ziehen, aendernde Menueaktion, Entfernen-Taste, Rueckgaengig/Wiederholen, Felder je Reihe -, schaltet damit den
+  Strom aus und ist im Steckmodus (Hinweis »Strom aus – Steckmodus …«). Wie beim echten Basteln: erst ausschalten,
+  dann umbauen.

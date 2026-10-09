@@ -11,6 +11,7 @@ Item {
     property string moduleType
     property int slotCount: 4
     property bool selected: false
+    property bool movable: true // Steckmodus: verschiebbar
     property var moduleState: ({})
     readonly property int bodyHeight: Theme.control + 8
     readonly property bool active: moduleState.active === true
@@ -107,6 +108,7 @@ Item {
 
         DragHandler {
             id: bodyDrag
+            enabled: mod.movable
             target: null
             yAxis.enabled: false
             onActiveChanged: if (!active) mod.dragFinished(Qt.point(translation.x, 0))

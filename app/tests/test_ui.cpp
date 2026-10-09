@@ -193,6 +193,30 @@ private slots:
         QCOMPARE(w.to, std::string("A5"));
     }
 
+    // Steck- und Betriebsmodus: Hauptschalter ein = Betrieb (Teile fest); Leitung ziehen schaltet automatisch aus
+    void operatingAndPlugMode() {
+        QQuickItem* mode = item(QStringLiteral("modeButton"));
+        QVERIFY(mode);
+        QVERIFY(!m_lab->mainSwitch());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(mode));
+        QTRY_VERIFY(m_lab->mainSwitch()); // Knopf schaltet ein: Betrieb
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        QVERIFY(lab->property("operating").toBool());
+        // ein Bauteil ist im Betrieb nicht verschiebbar
+        QQuickItem* anyPart = nullptr;
+        for (QQuickItem* it : m_window->contentItem()->findChildren<QQuickItem*>())
+            if (it->objectName().startsWith(QStringLiteral("part_")) && it->isVisible()) anyPart = it;
+        if (anyPart) QVERIFY(!anyPart->property("movable").toBool());
+        // Leitung ziehen: Strom aus, Steckmodus, Leitung entsteht trotzdem
+        const std::size_t before = board().wires.size();
+        drag(centerOf(item(QStringLiteral("field_E1"))), centerOf(item(QStringLiteral("field_E4"))));
+        QTRY_COMPARE(board().wires.size(), before + 1);
+        QVERIFY(!m_lab->mainSwitch());
+        QVERIFY(!lab->property("operating").toBool());
+        if (anyPart) QVERIFY(anyPart->property("movable").toBool());
+        m_lab->undo();
+    }
+
     void movePartByDragging() {
         QQuickItem* d2 = item(QStringLiteral("field_D2"));
         QQuickItem* d3 = item(QStringLiteral("field_D3"));

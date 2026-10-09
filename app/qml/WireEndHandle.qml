@@ -7,6 +7,7 @@ Item {
     id: handle
     property point at
     property color wireColor
+    property bool movable: true // Steckmodus: Ende umsetzbar
     signal moved(point scenePos)
     signal released(point scenePos)
     signal menuRequested(point scenePos)
@@ -30,6 +31,7 @@ Item {
     property point lastScenePos
     DragHandler {
         id: drag
+        enabled: handle.movable
         target: null
         onCentroidChanged: if (active) { handle.lastScenePos = centroid.scenePosition; handle.moved(handle.lastScenePos) }
         onActiveChanged: if (!active) handle.released(handle.lastScenePos)
