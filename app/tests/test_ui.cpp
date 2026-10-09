@@ -388,6 +388,28 @@ private slots:
         QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("field_MESS:COM")) == nullptr);
     }
 
+    // Aufbauhilfe: Knopf im Experimentfeld, Geisterbild und Zielfelder folgen dem Aufbau
+    void buildGuideInPanel() {
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.1.1")));
+        m_lab->chooseGuess(0);
+        QTRY_COMPARE(m_lab->phase(), 2);
+        clickInPanel(QStringLiteral("guideButton"));
+        QTRY_VERIFY(m_lab->guideActive());
+        QCOMPARE(m_lab->guideStep().value(QStringLiteral("kind")).toString(), QStringLiteral("bauteil"));
+        QTRY_VERIFY(item(QStringLiteral("guideGhostPart"))->isVisible());
+        QTRY_VERIFY(item(QStringLiteral("field_A1"))->property("target").toBool());
+        // Lampe wie in der Vorlage gesteckt: weiter zur ersten Leitung
+        QVERIFY(m_lab->addPart(QStringLiteral("gluehlampe"), QStringLiteral("A1"), false, false));
+        QTRY_COMPARE(m_lab->guideStep().value(QStringLiteral("kind")).toString(), QStringLiteral("leitung"));
+        QTRY_VERIFY(item(QStringLiteral("guideGhostWire"))->isVisible());
+        QVERIFY(!item(QStringLiteral("guideGhostPart"))->isVisible());
+        const QString text = item(QStringLiteral("guideText"))->property("text").toString();
+        QVERIFY2(text.contains(QStringLiteral("+9V")), qPrintable(text));
+        clickInPanel(QStringLiteral("guideButton"));
+        QTRY_VERIFY(!m_lab->guideActive());
+        QTRY_VERIFY(!item(QStringLiteral("field_A1"))->property("target").toBool());
+    }
+
     // Experimentauswahl als Aufklappfeld; Einstellungsmenue ganz rechts
     void experimentBoxAndSettings() {
         QObject* box = item(QStringLiteral("experimentBox"));

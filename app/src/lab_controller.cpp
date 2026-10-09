@@ -12,6 +12,7 @@
 #include <cmath>
 #include <cstdlib>
 
+#include "model/build_guide.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
@@ -52,6 +53,10 @@ LabController::LabController(QString contentRoot, QObject* parent)
     connect(&m_session->undoStack(), &QUndoStack::indexChanged, this, &LabController::historyChanged);
     connect(&m_session->undoStack(), &QUndoStack::cleanChanged, this, &LabController::historyChanged);
     connect(&m_timer, &QTimer::timeout, this, &LabController::onFrame);
+    // Aufbauhilfe folgt jeder Aenderung von Aufbau, Pult, Experiment und Ablauf
+    for (auto sig : {&LabController::boardChanged, &LabController::deskChanged, &LabController::experimentChanged,
+                     &LabController::flowChanged})
+        connect(this, sig, this, &LabController::guideChanged);
     m_timer.start(kFrameMs);
     m_clock.start();
     m_session->bridge().start();
@@ -475,6 +480,69 @@ QVariantMap LabController::partState(const QString& id) const {
     m.insert(QStringLiteral("overloaded"), r->overloaded);
     m.insert(QStringLiteral("destroyed"), r->destroyed);
     m.insert(QStringLiteral("tempC"), r->tempK - 273.15);
+    return m;
+}
+
+void LabController::setGuideActive(bool on) {
+    if (m_guideActive == on) return;
+    m_guideActive = on;
+    emit guideChanged();
+}
+
+namespace {
+// Anschlusspunkt fuer Texte: "P:+9V" -> "+9V", "M:3" -> "M3", "MESS:VOHM" -> "V/Ohm"
+QString anchorLabel(const std::string& a) {
+    QString s = QString::fromStdString(a);
+    if (s.startsWith(QLatin1String("P:"))) return s.mid(2);
+    if (s.startsWith(QLatin1String("M:"))) return QStringLiteral("M") + s.mid(2);
+    if (s.startsWith(QLatin1String("MESS:"))) return s.mid(5).replace(QLatin1String("VOHM"), QStringLiteral("V/Ω"));
+    return s;
+}
+} // namespace
+
+QVariantMap LabController::guideStep() const {
+    QVariantMap m;
+    if (!m_guideActive || m_freeLab || m_experiment.id.isEmpty()) return m;
+    const auto steps = model::buildGuide(m_experiment.templateBoard, m_session->catalog());
+    const std::size_t i = model::currentStep(steps, m_session->board(), m_session->catalog());
+    m.insert(QStringLiteral("index"), static_cast<int>(i));
+    m.insert(QStringLiteral("count"), static_cast<int>(steps.size()));
+    if (i >= steps.size()) {
+        m.insert(QStringLiteral("kind"), QStringLiteral("fertig"));
+        return m;
+    }
+    const model::GuideStep& s = steps[i];
+    static const char* kinds[] = {"modul", "bauteil", "leitung", "hauptschalter"};
+    m.insert(QStringLiteral("kind"), QString::fromLatin1(kinds[static_cast<int>(s.kind)]));
+    m.insert(QStringLiteral("id"), qs(s.id));
+    m.insert(QStringLiteral("type"), qs(s.type));
+    m.insert(QStringLiteral("value"), s.value);
+    m.insert(QStringLiteral("from"), qs(s.from));
+    m.insert(QStringLiteral("to"), qs(s.to));
+    m.insert(QStringLiteral("color"), qs(s.color));
+    QVariantList pins;
+    for (const auto& [name, field] : s.pins)
+        pins << QVariantMap{{QStringLiteral("name"), qs(name)}, {QStringLiteral("field"), qs(field)}};
+    m.insert(QStringLiteral("pins"), pins);
+    QStringList targets, labels;
+    for (const auto& t : s.targets) {
+        targets << qs(t);
+        QString label = anchorLabel(t);
+        // Feld der Modulleiste: Anschlussname des Moduls dazu, z. B. "M3 (ein)"
+        if (t.rfind("M:", 0) == 0) {
+            const int n = std::atoi(t.c_str() + 2);
+            for (const auto& mod : m_session->board().modules) {
+                const model::ModuleEntry* e = m_session->catalog().module(mod.type);
+                if (!e || n < mod.slot || n >= mod.slot + static_cast<int>(e->pins.size())) continue;
+                const std::string& pin = e->pins[static_cast<std::size_t>(n - mod.slot)];
+                label += QStringLiteral(" (%1)").arg(pin == "plus" ? QStringLiteral("+")
+                                                     : pin == "minus" ? QStringLiteral("−") : qs(pin));
+            }
+        }
+        labels << label;
+    }
+    m.insert(QStringLiteral("targets"), targets);
+    m.insert(QStringLiteral("labels"), labels);
     return m;
 }
 

@@ -139,6 +139,8 @@ Item {
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
+    // Aufbauhilfe sichtbar (Aufbauphase, vom Kind eingeschaltet)
+    readonly property bool guideVisible: controller.guideActive && controller.phase === 2
     property string selectedModule: ""
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
@@ -638,6 +640,7 @@ Item {
                     highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
                                  || lab.highlightFields.indexOf(modelData) >= 0
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
+                    target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
 
                     onWireDragUpdated: (scenePos) => {
                         lab.wireFrom = field.modelData
@@ -762,6 +765,49 @@ Item {
                             }
                         }
                     }
+                }
+            }
+
+            // Aufbauhilfe: das naechste Teil schemenhaft an seinem Platz (nimmt keine Eingaben an)
+            PartItem {
+                objectName: "guideGhostPart"
+                readonly property var step: lab.controller.guideStep
+                visible: lab.guideVisible && step.kind === "bauteil"
+                enabled: false
+                opacity: 0.45
+                partId: ""
+                partType: step.type || ""
+                value: step.value || 0
+                points: visible ? step.pins.map(p => lab.socketPoint(p.field, 2)) : []
+            }
+            WireItem {
+                objectName: "guideGhostWire"
+                readonly property var step: lab.controller.guideStep
+                visible: lab.guideVisible && step.kind === "leitung"
+                from: visible ? lab.anchorPoint(step.from) : Qt.point(0, 0)
+                to: visible ? lab.anchorPoint(step.to) : Qt.point(0, 0)
+                wireColor: Theme.wireColor(step.color || "rot")
+                opacity: 0.45
+            }
+            Rectangle {
+                readonly property var step: lab.controller.guideStep
+                readonly property var slots: step.targets || []
+                visible: lab.guideVisible && step.kind === "modul" && slots.length > 0
+                x: visible ? lab.anchorPoint(slots[0]).x - Theme.slotWidth / 2 - 6 : 0
+                y: lab.moduleY - 6
+                width: slots.length * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap + 12
+                height: Theme.fieldHeight + 6 + Theme.control + 8
+                radius: 8
+                color: "#556A4C8C"
+                border.color: "#1E7BE0"
+                border.width: 2
+                Label {
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 14
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: Texts.moduleName(parent.step.type || "")
+                    color: "white"
+                    font.bold: true
                 }
             }
 

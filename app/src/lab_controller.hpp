@@ -89,6 +89,11 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList further READ further NOTIFY experimentChanged)
     Q_PROPERTY(QString realLife READ realLife NOTIFY experimentChanged)
     Q_PROPERTY(QString nextExperimentId READ nextExperimentId NOTIFY experimentChanged)
+    // Schritt-fuer-Schritt-Aufbauhilfe (model::GuideStep): eingeschaltet vom Kind; guideStep beschreibt den ersten
+    // offenen Schritt: {index, count, kind ("modul", "bauteil", "leitung", "hauptschalter", "fertig"), id, type,
+    // value, pins: [{name, field}], from, to, color, targets[], labels[] (Feldnamen fuer den Text)}
+    Q_PROPERTY(bool guideActive READ guideActive WRITE setGuideActive NOTIFY guideChanged)
+    Q_PROPERTY(QVariantMap guideStep READ guideStep NOTIFY guideChanged)
     // Zahlenwerte (z. B. Hz am Lautsprecher) ab Stufe 3 und im freien Labor (docs/ui-spec.md)
     Q_PROPERTY(bool showNumbers READ showNumbers NOTIFY experimentChanged)
 
@@ -241,6 +246,10 @@ public:
     Q_INVOKABLE QVariantMap speakerState() const;
     Q_INVOKABLE bool repairSpeaker(); // Befehl
 
+    bool guideActive() const { return m_guideActive; }
+    void setGuideActive(bool on);
+    QVariantMap guideStep() const;
+
     model::LabSession& session() { return *m_session; }
 
 signals:
@@ -254,6 +263,7 @@ signals:
     void progressChanged();
     void journalChanged();
     void columnsChosen(int columns); // vom Kind gewaehlte Breite (zum Merken in den Einstellungen)
+    void guideChanged();
 
 private:
     void onFrame();
@@ -272,6 +282,7 @@ private:
     services::ProgressStore m_progress;
     services::JournalStore m_journal;
     bool m_unlockAll = false;
+    bool m_guideActive = false;
     int m_preferredColumns = 12;
     bool m_preferMeter = false;
     int highestUnlockedStage() const;

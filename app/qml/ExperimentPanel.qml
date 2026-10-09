@@ -7,6 +7,44 @@ Rectangle {
     id: panel
     required property var controller
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
+
+    // Text eines Schritts der Aufbauhilfe (LabController::guideStep)
+    function guideText(s) {
+        if (!s || s.kind === undefined) return ""
+        const pinField = (name) => {
+            const list = s.pins || []
+            for (let i = 0; i < list.length; ++i) if (list[i].name === name) return list[i].field
+            return ""
+        }
+        switch (s.kind) {
+        case "fertig":
+            return qsTr("Jetzt ist alles an seinem Platz. Probiere aus, was passiert!")
+        case "hauptschalter":
+            return qsTr("Schalte den Hauptschalter der Batterie ein.")
+        case "modul":
+            return qsTr("Setze das %1 ab Feld %2 in die Modulleiste.").arg(Texts.moduleName(s.type)).arg(s.labels[0])
+        case "leitung":
+            return qsTr("Ziehe eine Leitung von %1 nach %2.").arg(s.labels[0]).arg(s.labels[1])
+        case "bauteil": {
+            const fields = (s.pins || []).map(p => p.field)
+            let t = fields.length === 3
+                ? qsTr("Stecke %1 auf %2, %3 und %4.").arg(Texts.partName(s.type)).arg(fields[0]).arg(fields[1]).arg(fields[2])
+                : fields.length === 4
+                ? qsTr("Stecke %1 auf %2, %3, %4 und %5.").arg(Texts.partName(s.type)).arg(fields[0]).arg(fields[1]).arg(fields[2]).arg(fields[3])
+                : qsTr("Stecke %1 auf %2 und %3.").arg(Texts.partName(s.type)).arg(fields[0]).arg(fields[fields.length - 1])
+            if (s.type.startsWith("led_")) t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
+            else if (s.type.startsWith("diode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
+            else if (s.type === "summer") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))
+            else if (s.type === "transistor_npn") t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
+            else if (s.type === "wechselschalter") t += " " + qsTr("Die Mitte kommt an %1.").arg(pinField("mitte"))
+            if (s.type === "widerstand" && s.value > 0) t += " " + qsTr("Wert: %1.").arg(Texts.ohm(s.value))
+            if (s.type === "gluehlampe" && s.value > 0)
+                t += " " + qsTr("Nennspannung: %1 V.").arg(Number(s.value).toLocaleString(Qt.locale(), "f", s.value % 1 === 0 ? 0 : 1))
+            return t
+        }
+        }
+        return ""
+    }
     property bool collapsed: false // eingeklappt: nur der Knopf zum Aufklappen (mehr Platz fuer die Grundplatte)
 
     color: "#FFFDF7"
@@ -168,6 +206,51 @@ Rectangle {
                         Label { anchors.centerIn: parent; text: index + 1; color: "white"; font.bold: true }
                     }
                     Body { width: parent.width - 36; text: modelData }
+                }
+            }
+            // Schritt-fuer-Schritt-Aufbauhilfe: das naechste Teil schemenhaft auf der Grundplatte, Zielfelder leuchten
+            WideButton {
+                objectName: "guideButton"
+                visible: panel.phase === 2
+                text: panel.controller.guideActive ? qsTr("Schritt-für-Schritt-Hilfe ausblenden")
+                                                   : qsTr("Schritt für Schritt bauen")
+                onClicked: panel.controller.guideActive = !panel.controller.guideActive
+            }
+            Rectangle {
+                id: guideCard
+                objectName: "guideCard"
+                readonly property var step: panel.controller.guideStep
+                visible: panel.phase === 2 && panel.controller.guideActive && step.kind !== undefined
+                width: parent.width
+                height: guideColumn.implicitHeight + 20
+                radius: 8
+                color: "#E3F0FF"
+                border.color: Theme.accent
+                border.width: 2
+                Column {
+                    id: guideColumn
+                    x: 10; y: 10
+                    width: parent.width - 20
+                    spacing: 6
+                    Label {
+                        text: guideCard.step.kind === "fertig" ? "✓ " + qsTr("Alles gesteckt")
+                              : qsTr("Schritt %1 von %2").arg((guideCard.step.index || 0) + 1).arg(guideCard.step.count || 0)
+                        font.bold: true
+                        color: Theme.navy
+                        font.pixelSize: Math.round(14 * Theme.fontScale)
+                    }
+                    Body {
+                        objectName: "guideText"
+                        width: parent.width
+                        text: panel.guideText(guideCard.step)
+                    }
+                    Body {
+                        visible: guideCard.step.kind !== "fertig" && guideCard.step.kind !== "hauptschalter"
+                        width: parent.width
+                        text: qsTr("Die blinkenden Felder zeigen, wohin es gehört.")
+                        color: "#4A5866"
+                        font.pixelSize: Math.round(13 * Theme.fontScale)
+                    }
                 }
             }
             Repeater {

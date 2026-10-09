@@ -11,6 +11,7 @@ Rectangle {
     property int sockets: 5 // Steckplaetze (Modulleiste: schmale Felder mit einem Steckplatz)
     property int pitch: Theme.socketPitch // Lochabstand (Lab.socketPoint rechnet mit demselben Wert)
     property bool highlighted: false
+    property bool target: false // Zielfeld der Schritt-fuer-Schritt-Aufbauhilfe
 
     signal wireDragUpdated(point scenePos)
     signal wireDragFinished(point scenePos)
@@ -45,6 +46,32 @@ Rectangle {
         font.pixelSize: Math.round((13) * Theme.fontScale)
         font.bold: true
         color: Theme.navy
+    }
+
+    // Zielfeld: blauer, pulsierender Rahmen und Pfeil (bei reduzierter Bewegung ruhig)
+    Rectangle {
+        visible: root.target
+        anchors.fill: parent
+        anchors.margins: -5
+        radius: root.radius + 4
+        color: "transparent"
+        border.color: "#1E7BE0"
+        border.width: 4
+        SequentialAnimation on opacity {
+            running: root.target && !Theme.reduceMotion
+            loops: Animation.Infinite
+            NumberAnimation { from: 1; to: 0.25; duration: 550 }
+            NumberAnimation { from: 0.25; to: 1; duration: 550 }
+        }
+    }
+    Text {
+        visible: root.target
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.top
+        anchors.bottomMargin: 2
+        text: "▼"
+        color: "#1E7BE0"
+        font.pixelSize: 14
     }
 
     VoltageBars {

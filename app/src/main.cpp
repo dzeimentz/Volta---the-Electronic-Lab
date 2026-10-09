@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
-                             "VOLTA_DEMO_FREELAB"})
+                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
             engine.rootObjects().first()->setProperty("inLab", true);
 
@@ -110,6 +110,21 @@ int main(int argc, char* argv[]) {
             while (lab.moreHints()) lab.nextHint();
             lab.showTemplate();
             lab.setMainSwitch(true);
+        });
+    }
+
+    // Entwicklerhilfe: VOLTA_DEMO_GUIDE=1 startet das Experiment VOLTA_DEMO_EXP mit eingeschalteter Aufbauhilfe
+    // (Sichtpruefung von Zielfeldern und Geisterbild); VOLTA_DEMO_GUIDE_ADD=<Typ>@<Feld> steckt vorher ein Bauteil
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GUIDE") == 1) {
+        const QString exp = qEnvironmentVariable("VOLTA_DEMO_EXP", QStringLiteral("volta1.1.1"));
+        const QString add = qEnvironmentVariable("VOLTA_DEMO_GUIDE_ADD");
+        QTimer::singleShot(300, &lab, [&lab, exp, add] {
+            lab.setUnlockAll(true);
+            lab.startExperiment(exp);
+            lab.chooseGuess(0);
+            lab.setGuideActive(true);
+            if (add.contains(QLatin1Char('@')))
+                lab.addPart(add.section(QLatin1Char('@'), 0, 0), add.section(QLatin1Char('@'), 1, 1), false, false);
         });
     }
 

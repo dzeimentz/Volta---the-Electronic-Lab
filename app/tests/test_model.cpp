@@ -5,6 +5,7 @@
 #include <cmath>
 
 #include "model/anchor.hpp"
+#include "model/build_guide.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
@@ -314,6 +315,46 @@ private slots:
             on = now;
         }
         QVERIFY2(edges >= 4, qPrintable(QString::number(edges)));
+    }
+
+    // Aufbauhilfe: Schritte aus der Vorlage, erledigt ohne Reihenfolgezwang, Richtung ungepolter Bauteile egal
+    void buildGuideSteps() {
+        model::Board tmpl;
+        tmpl.modules.push_back({"TM1", "tonmodul", 1});
+        tmpl.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 470.0});
+        tmpl.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});
+        tmpl.wires.push_back({"L1", "P:+9V", "B3", "rot"});
+        tmpl.wires.push_back({"L2", "C4", "TM1.aus", "blau"});
+        const auto steps = model::buildGuide(tmpl, m_catalog);
+        QCOMPARE(steps.size(), std::size_t(6)); // Modul, 2 Bauteile, 2 Leitungen, Hauptschalter
+        QCOMPARE(steps[0].kind, model::GuideStep::Kind::Module);
+        QCOMPARE(steps[0].targets, (std::vector<std::string>{"M:1", "M:2", "M:3", "M:4"}));
+        QCOMPARE(steps[4].to, std::string("M:4")); // Modulanschluss als Feld der Leiste
+        QCOMPARE(steps[5].kind, model::GuideStep::Kind::MainSwitch);
+
+        model::Board b;
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(0));
+        b.modules.push_back({"TM1", "tonmodul", 1});
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(1));
+        // Widerstand andersherum, aber mit falschem Wert: noch offen; mit 470 Ohm erledigt
+        b.parts.push_back({"R7", "widerstand", {{"a", "B4"}, {"b", "B3"}}, 1000.0});
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(1));
+        b.parts.back().value = 470.0;
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(2));
+        // LED verkehrt herum: zaehlt nicht
+        b.parts.push_back({"D1", "led_rot", {{"anode", "C4"}, {"kathode", "B4"}}});
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(2));
+        b.parts.back().pins = {{"anode", "B4"}, {"kathode", "C4"}};
+        // Leitungen in anderer Reihenfolge und Richtung; zweite Leitung ueber das Feld der Leiste
+        b.wires.push_back({"L5", "M:4", "C4", "blau"});
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(3));
+        b.wires.push_back({"L6", "B3", "P:+9V", "gelb"});
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(5));
+        b.desk.mainSwitch = true;
+        QCOMPARE(model::currentStep(steps, b, m_catalog), steps.size());
+        // Rueckschritt: Bauteil entfernt -> dieser Schritt ist wieder dran
+        b.parts.erase(b.parts.begin());
+        QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(1));
     }
 
     void errorsAreReported() {

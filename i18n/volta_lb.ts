@@ -49,132 +49,227 @@
 <context>
     <name>ExperimentPanel</name>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="74"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="21"/>
+        <source>Jetzt ist alles an seinem Platz. Probiere aus, was passiert!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="23"/>
+        <source>Schalte den Hauptschalter der Batterie ein.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="25"/>
+        <source>Setze das %1 ab Feld %2 in die Modulleiste.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="27"/>
+        <source>Ziehe eine Leitung von %1 nach %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="31"/>
+        <source>Stecke %1 auf %2, %3 und %4.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="33"/>
+        <source>Stecke %1 auf %2, %3, %4 und %5.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="34"/>
+        <source>Stecke %1 auf %2 und %3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="35"/>
+        <source>Das lange Bein kommt an %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="36"/>
+        <source>Der Strich auf der Diode zeigt nach %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="37"/>
+        <source>Plus kommt an %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="38"/>
+        <source>B kommt an %1, C an %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="39"/>
+        <source>Die Mitte kommt an %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="40"/>
+        <source>Wert: %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="42"/>
+        <source>Nennspannung: %1 V.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="112"/>
         <source>Experiment aufklappen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="74"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="112"/>
         <source>Experiment einklappen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="83"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="121"/>
         <source>Experiment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="103"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="141"/>
         <source>Frage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="103"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="141"/>
         <source>Aufbau</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="104"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="142"/>
         <source>Geschafft! Was hast du beobachtet?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="104"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="142"/>
         <source>Erklärung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="131"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="169"/>
         <source>Nur in der App!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="139"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="177"/>
         <source>Was vermutest du?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="154"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="192"/>
         <source>Deine Vermutung: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="194"/>
-        <source>Ich brauche einen Tipp</source>
+        <location filename="../app/qml/ExperimentPanel.qml" line="215"/>
+        <source>Schritt-für-Schritt-Hilfe ausblenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="195"/>
-        <source>Noch ein Tipp</source>
+        <location filename="../app/qml/ExperimentPanel.qml" line="216"/>
+        <source>Schritt für Schritt bauen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="201"/>
-        <source>Musteraufbau einsetzen</source>
+        <location filename="../app/qml/ExperimentPanel.qml" line="236"/>
+        <source>Alles gesteckt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="232"/>
-        <source>Deine Vermutung hat gestimmt!</source>
+        <location filename="../app/qml/ExperimentPanel.qml" line="237"/>
+        <source>Schritt %1 von %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="233"/>
-        <source>Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="234"/>
-        <source>Jetzt weißt du es!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="239"/>
-        <source>Deine Beobachtung: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="244"/>
-        <source>Mehr wissen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="246"/>
-        <source>Weiterforschen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="263"/>
-        <source>Was hast du beim Weiterforschen herausgefunden?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="265"/>
-        <source>Notiz für das Forscherheft</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="271"/>
-        <source>Ins Forscherheft schreiben</source>
+        <location filename="../app/qml/ExperimentPanel.qml" line="250"/>
+        <source>Die blinkenden Felder zeigen, wohin es gehört.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ExperimentPanel.qml" line="277"/>
+        <source>Ich brauche einen Tipp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="278"/>
+        <source>Noch ein Tipp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="284"/>
+        <source>Musteraufbau einsetzen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="315"/>
+        <source>Deine Vermutung hat gestimmt!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="316"/>
+        <source>Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="317"/>
+        <source>Jetzt weißt du es!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="322"/>
+        <source>Deine Beobachtung: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="327"/>
+        <source>Mehr wissen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="329"/>
+        <source>Weiterforschen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="346"/>
+        <source>Was hast du beim Weiterforschen herausgefunden?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="348"/>
+        <source>Notiz für das Forscherheft</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="354"/>
+        <source>Ins Forscherheft schreiben</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="360"/>
         <source>Im Forscherheft gespeichert.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="280"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="363"/>
         <source>Jetzt in echt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="285"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="368"/>
         <source>Nächstes Experiment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="285"/>
+        <location filename="../app/qml/ExperimentPanel.qml" line="368"/>
         <source>Freies Labor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -371,183 +466,183 @@
 <context>
     <name>Lab</name>
     <message>
-        <location filename="../app/qml/Lab.qml" line="232"/>
+        <location filename="../app/qml/Lab.qml" line="234"/>
         <source>Stufe %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="226"/>
+        <location filename="../app/qml/Lab.qml" line="228"/>
         <source>Freies Labor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="210"/>
-        <location filename="../app/qml/Lab.qml" line="211"/>
+        <location filename="../app/qml/Lab.qml" line="212"/>
+        <location filename="../app/qml/Lab.qml" line="213"/>
         <source>Startseite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="295"/>
+        <location filename="../app/qml/Lab.qml" line="297"/>
         <source>Rückgängig: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="296"/>
+        <location filename="../app/qml/Lab.qml" line="298"/>
         <source>Rückgängig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="306"/>
+        <location filename="../app/qml/Lab.qml" line="308"/>
         <source>Wiederholen: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="307"/>
+        <location filename="../app/qml/Lab.qml" line="309"/>
         <source>Wiederholen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="321"/>
-        <location filename="../app/qml/Lab.qml" line="322"/>
+        <location filename="../app/qml/Lab.qml" line="323"/>
+        <location filename="../app/qml/Lab.qml" line="324"/>
         <source>Weniger Felder je Reihe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="328"/>
+        <location filename="../app/qml/Lab.qml" line="330"/>
         <source>1–%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="284"/>
-        <location filename="../app/qml/Lab.qml" line="285"/>
+        <location filename="../app/qml/Lab.qml" line="286"/>
+        <location filename="../app/qml/Lab.qml" line="287"/>
         <source>Experiment wählen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="332"/>
+        <location filename="../app/qml/Lab.qml" line="334"/>
         <source>Felder je Reihe: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="342"/>
-        <location filename="../app/qml/Lab.qml" line="343"/>
+        <location filename="../app/qml/Lab.qml" line="344"/>
+        <location filename="../app/qml/Lab.qml" line="345"/>
         <source>Mehr Felder je Reihe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="361"/>
-        <location filename="../app/qml/Lab.qml" line="362"/>
+        <location filename="../app/qml/Lab.qml" line="363"/>
+        <location filename="../app/qml/Lab.qml" line="364"/>
         <source>Werkzeugkasten</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="377"/>
+        <location filename="../app/qml/Lab.qml" line="379"/>
         <source>Messgerät ausblenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="377"/>
+        <location filename="../app/qml/Lab.qml" line="379"/>
         <source>Messgerät einblenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="402"/>
+        <location filename="../app/qml/Lab.qml" line="404"/>
         <source>Schaltplan ausblenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="402"/>
+        <location filename="../app/qml/Lab.qml" line="404"/>
         <source>Schaltplan zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="420"/>
+        <location filename="../app/qml/Lab.qml" line="422"/>
         <source>Leitungsfarbe: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="465"/>
+        <location filename="../app/qml/Lab.qml" line="467"/>
         <source>Zeit %1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="501"/>
-        <location filename="../app/qml/Lab.qml" line="514"/>
+        <location filename="../app/qml/Lab.qml" line="503"/>
+        <location filename="../app/qml/Lab.qml" line="516"/>
         <source>%1 wird mit Stufe %2 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="525"/>
+        <location filename="../app/qml/Lab.qml" line="527"/>
         <source>Module gehören in die Modulleiste unten.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="817"/>
+        <location filename="../app/qml/Lab.qml" line="863"/>
         <source>Spannungsanzeige ein/aus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="827"/>
+        <location filename="../app/qml/Lab.qml" line="873"/>
         <source>Drehen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="834"/>
+        <location filename="../app/qml/Lab.qml" line="880"/>
         <source>Umdrehen (Polung)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="838"/>
+        <location filename="../app/qml/Lab.qml" line="884"/>
         <source>Kurz stecken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="838"/>
+        <location filename="../app/qml/Lab.qml" line="884"/>
         <source>Lang stecken</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="845"/>
+        <location filename="../app/qml/Lab.qml" line="891"/>
         <source>Wert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="862"/>
+        <location filename="../app/qml/Lab.qml" line="908"/>
         <source>Nennspannung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="868"/>
+        <location filename="../app/qml/Lab.qml" line="914"/>
         <source>%1 V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="878"/>
+        <location filename="../app/qml/Lab.qml" line="924"/>
         <source>Reparieren</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="882"/>
+        <location filename="../app/qml/Lab.qml" line="928"/>
         <source>Entfernen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="893"/>
+        <location filename="../app/qml/Lab.qml" line="939"/>
         <source>Blick hinein</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="897"/>
+        <location filename="../app/qml/Lab.qml" line="943"/>
         <source>Herausnehmen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="915"/>
+        <location filename="../app/qml/Lab.qml" line="961"/>
         <source>Farbe: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="922"/>
+        <location filename="../app/qml/Lab.qml" line="968"/>
         <source>Leitung löschen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1212,23 +1307,23 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="317"/>
-        <location filename="../app/src/lab_controller.cpp" line="347"/>
+        <location filename="../app/src/lab_controller.cpp" line="322"/>
+        <location filename="../app/src/lab_controller.cpp" line="352"/>
         <source>Freies Labor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="419"/>
+        <location filename="../app/src/lab_controller.cpp" line="424"/>
         <source>Musteraufbau zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="676"/>
+        <location filename="../app/src/lab_controller.cpp" line="744"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="703"/>
+        <location filename="../app/src/lab_controller.cpp" line="771"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>

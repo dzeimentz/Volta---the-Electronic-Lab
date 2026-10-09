@@ -88,6 +88,16 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 
+## Schritt-fuer-Schritt-Aufbauhilfe (Phase 2)
+- Im Experimentfeld (Aufbau) Knopf »Schritt für Schritt bauen«: Die Vorlage wird in Schritte zerlegt (Module,
+  Bauteile, Leitungen in Vorlagenreihenfolge, zuletzt der Hauptschalter; `model/build_guide`). Angezeigt wird immer
+  der erste offene Schritt: Text mit Feldnamen (bei gepolten Bauteilen mit Hinweis auf langes Bein, Strich, Plus
+  bzw. B/C; Wert bzw. Nennspannung), das Teil schemenhaft an seinem Platz und die Zielfelder mit blauem,
+  pulsierendem Rahmen und Pfeil (bei reduzierter Bewegung ruhig).
+- Erledigt ist ein Schritt, sobald das Teil an derselben Stelle steckt (ungepolte Bauteile in beliebiger Richtung,
+  Leitungen in beiden Richtungen, Modulanschluss = Feld der Leiste); keine Reihenfolgepflicht, Entfernen holt den
+  Schritt zurueck. Ob das Experiment gelingt, entscheidet weiter die Erfolgsbedingung, nicht die Aehnlichkeit.
+
 ## Forschungskreislauf und Forscherheft (D2)
 - Experimentfeld: 1 Frage mit Vermutung (wird ohne Wertung ins Forscherheft geschrieben) -> 2 Aufbau mit Schritten
   und gestuften Hilfen -> 3 nach dem Erfolg »Was hast du beobachtet?« (Auswahl) -> 4 Vergleich mit der Vermutung

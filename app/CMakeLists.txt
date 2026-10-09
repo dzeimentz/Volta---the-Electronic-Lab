@@ -17,6 +17,7 @@ add_library(volta_model STATIC
     src/model/board_edit.cpp
     src/model/netlist_builder.cpp
     src/model/success.cpp
+    src/model/build_guide.cpp
     src/model/schematic_layout.cpp
     src/services/content_repository.cpp
     src/services/progress_store.cpp
