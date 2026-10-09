@@ -24,6 +24,7 @@ add_library(volta_core STATIC
     src/components/magnet.cpp
     src/modules/blink_module.cpp
     src/modules/tone_module.cpp
+    src/modules/timer_module.cpp
 )
 add_library(volta::core ALIAS volta_core)
 

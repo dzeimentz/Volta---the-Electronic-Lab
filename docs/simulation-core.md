@@ -134,6 +134,8 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
 - **Elektromagnet** (`Electromagnet`): 100 Ohm, Feldstaerke ~ Strom (level = I / 90 mA, mit Vorzeichen), 1 W.
 - **Relais** (`Relay`, 2-x-2-Platine): Spule 180 Ohm (a-b), Schliesser com-no 0,05 Ohm / 1 A; zieht an ab 30 mA nach
   8 ms, faellt ab unter 12 mA nach 4 ms (Hysterese).
+- **Feuchtesonde** (`MoistureProbe`, Stufe 4): trocken 20 MOhm, nass 20 kOhm (Leitungswasser), logarithmisch
+  dazwischen; Naesse als Bedienhandlung (Wassertropfen), nass werden tau 0,2 s, trocknen tau 4 s.
 - Vereinfachung: Spulen ohne Induktivitaet (L/R von wenigen ms ist bei 1 ms Schrittweite kaum sichtbar); die
   Abschaltspannung und die Freilaufdiode behandelt Volta 2. Im Elternbereich offengelegt.
 
@@ -156,6 +158,10 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
     Treibt die Endstufe den Pult-Lautsprecher (gleicher Strom in Lautsprecher und Ausgang, Abweichung hoechstens
     20 %), uebernimmt die Klanganzeige den Ton (`LabSession::speakerReading`). Im »Blick hinein« und im
     Elternbereich offengelegt; als Teilschaltung erst ab Volta 2 mit Audioschrittweite.
+  - Zeitmodul (`addTimerModule`, Stufe 4): monostabile Kippstufe aus drei NPN, R_zeit 47 kOhm, Elko 100 uF;
+    ein Impuls an `start` schaltet den Ausgang (offener Kollektor `aus`) fuer ca. ln2 * R * C = 3,2 s ein.
+  - Verstaerkermodul (`addAmplifierModule`, Stufe 4): Darlington-Stufe (Treiber aus `plus`, Endstufe an `aus`),
+    Eingang 10 kOhm; ca. 7 uA am Eingang schalten 15 mA am Ausgang.
 - **Makromodell** (ab Volta 2): Operationsverstaerker mit Aussteuergrenzen, Anstiegsrate, GBW.
 - **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
   Abstimmung und Antenne. Im Elternbereich als solches offengelegt.

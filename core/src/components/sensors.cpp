@@ -146,4 +146,65 @@ void Thermistor::restoreState(const ComponentState& state) noexcept {
     m_g = 1.0 / resistanceAt(m_tempK);
 }
 
+// ------------------------------------------------------------------ Feuchtesonde
+
+MoistureProbe::MoistureProbe(std::string id, NodeId a, NodeId b, MoistureProbeParams params, double wetness)
+    : ComponentModel(std::move(id), {a, b}), m_params(params) {
+    m_params.dryOhm = sane(m_params.dryOhm, 2.0e7);
+    m_params.wetOhm = sane(m_params.wetOhm, 2.0e4);
+    m_params.wetTauS = sane(m_params.wetTauS, 0.2);
+    m_params.dryTauS = sane(m_params.dryTauS, 4.0);
+    setWetness(wetness);
+    m_wet = m_target;
+    m_g = conductanceFor(m_wet);
+}
+
+void MoistureProbe::setWetness(double wetness) noexcept {
+    m_target = std::isfinite(wetness) ? std::clamp(wetness, 0.0, 1.0) : 0.0;
+}
+
+double MoistureProbe::conductanceFor(double wet) const noexcept {
+    // logarithmisch zwischen trocken und nass
+    const double logR = std::log(m_params.dryOhm) + wet * (std::log(m_params.wetOhm) - std::log(m_params.dryOhm));
+    return 1.0 / std::exp(logR);
+}
+
+void MoistureProbe::beginSolve(const StampContext& /*ctx*/) noexcept { m_g = conductanceFor(m_wet); }
+
+void MoistureProbe::stamp(MnaSystem& sys, const StampContext& /*ctx*/) const noexcept {
+    sys.stampConductance(terminal(0), terminal(1), m_g);
+}
+
+double MoistureProbe::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
+    const double i = (x.voltage(terminal(0)) - x.voltage(terminal(1))) * m_g;
+    return t == 0 ? i : -i;
+}
+
+void MoistureProbe::updateState(const SolutionView& /*x*/, double dtS) noexcept {
+    if (dtS <= 0.0) {
+        m_wet = m_target;
+        return;
+    }
+    const double tau = m_target > m_wet ? m_params.wetTauS : m_params.dryTauS;
+    m_wet = m_target + (m_wet - m_target) * std::exp(-dtS / tau);
+}
+
+ComponentReading MoistureProbe::read(const SolutionView& x) const noexcept {
+    ComponentReading r = ComponentModel::read(x);
+    r.level = m_wet;            // Naesse 0..1 fuer die Darstellung
+    r.displayValue = 1.0 / m_g; // aktueller Widerstand in Ohm
+    return r;
+}
+
+ComponentState MoistureProbe::saveState() const noexcept {
+    ComponentState s = ComponentModel::saveState();
+    s.internal[0] = m_wet;
+    return s;
+}
+
+void MoistureProbe::restoreState(const ComponentState& state) noexcept {
+    ComponentModel::restoreState(state);
+    if (std::isfinite(state.internal[0])) m_wet = std::clamp(state.internal[0], 0.0, 1.0);
+}
+
 } // namespace volta::core

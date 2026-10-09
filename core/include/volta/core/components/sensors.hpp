@@ -81,4 +81,39 @@ private:
     double m_lastPowerW = 0.0;
 };
 
+// Feuchtesonde (Katalogtyp `feuchtesonde`): zwei blanke Kontakte; trocken praktisch offen (20 MOhm), nass leitet das
+// Wasser (Leitungswasser zwischen zwei Kontakten im Abstand weniger Millimeter: ca. 20 kOhm). Zwischenwerte
+// logarithmisch. Die Naesse (0..1) ist eine Bedienhandlung (Wassertropfen); die Sonde wird schnell nass
+// (tau 0,2 s) und trocknet langsam (tau 4 s).
+struct MoistureProbeParams {
+    double dryOhm = 2.0e7;
+    double wetOhm = 2.0e4;
+    double wetTauS = 0.2;
+    double dryTauS = 4.0;
+};
+
+class MoistureProbe final : public ComponentModel {
+public:
+    MoistureProbe(std::string id, NodeId a, NodeId b, MoistureProbeParams params = {}, double wetness = 0.0);
+
+    void setWetness(double wetness) noexcept; // Bedienhandlung 0..1
+    double wetness() const noexcept { return m_wet; }
+    double resistanceOhm() const noexcept { return 1.0 / m_g; }
+
+    void beginSolve(const StampContext& ctx) noexcept override;
+    void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
+    double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
+    void updateState(const SolutionView& x, double dtS) noexcept override;
+    ComponentReading read(const SolutionView& x) const noexcept override;
+    ComponentState saveState() const noexcept override;
+    void restoreState(const ComponentState& state) noexcept override;
+
+private:
+    double conductanceFor(double wet) const noexcept;
+    MoistureProbeParams m_params;
+    double m_target = 0.0;
+    double m_wet = 0.0;
+    double m_g = 5e-8;
+};
+
 } // namespace volta::core
