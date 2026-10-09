@@ -561,6 +561,81 @@ private slots:
         QCOMPARE(s->board().modules.size(), std::size_t(2));
     }
 
+    // Stufe 4: Wassertropfen macht die Feuchtesonde nass (Bedienhandlung, Wirkung ueber den Abstand)
+    void waterToolWetsProbe() {
+        auto s = session();
+        QVERIFY(s->addPart("feuchtesonde", "B1", Orientation::Horizontal, Span::Long)); // B1-B3, Mitte Spalte 2
+        const model::PartPlacement* probe = s->board().findPart("F1");
+        QVERIFY(probe);
+        QCOMPARE(model::wetnessAt(s->board(), *probe), 0.0);
+        s->placeTool("wasser", 3.0, 1.0); // ein Feld daneben: 1 / (1 + (1/0,6)^2) = 0,265
+        QVERIFY(std::fabs(model::wetnessAt(s->board(), *probe) - 0.2647) < 1e-3);
+        s->placeTool("wasser", 2.0, 1.0); // direkt darauf
+        QCOMPARE(model::wetnessAt(s->board(), *probe), 1.0);
+
+        // Simulation: Sonde in Reihe mit 1 kOhm an 9 V; nass ca. 20 kOhm -> ca. 0,43 mA, trocken fast nichts
+        QVERIFY(s->addWire("P:+9V", "B1", "rot"));
+        QVERIFY(s->addPart("widerstand", "B3", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->setPartValue("R1", 1000.0));
+        QVERIFY(s->addWire("B4", "P:0V", "schwarz"));
+        s->setMainSwitch(true);
+        run(*s, 2.0);
+        const double wetmA = s->reading("F1")->currentA * 1e3;
+        s->removeTool("wasser");
+        run(*s, 20.0); // trocknet langsam (tau 4 s)
+        const double drymA = s->reading("F1")->currentA * 1e3;
+        QVERIFY2(wetmA > 0.35 && wetmA < 0.5 && drymA < 0.01, qPrintable(QStringLiteral("%1 / %2").arg(wetmA).arg(drymA)));
+    }
+
+    // Stufe 4: Zeitmodul haelt den Ausgang nach einem kurzen Startimpuls ca. 3,2 s eingeschaltet
+    void timerModuleHoldsOutput() {
+        auto s = session();
+        QVERIFY(s->addModule("zeitmodul", 1));
+        QVERIFY(s->addWire("P:+9V", "ZM1.plus", "rot"));
+        QVERIFY(s->addWire("ZM1.minus", "P:0V", "schwarz"));
+        QVERIFY(s->addPart("taster", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "ZM1.start", "gelb"));
+        QVERIFY(s->addPart("widerstand", "B3", Orientation::Horizontal, Span::Short)); // Last 1 kOhm
+        QVERIFY(s->setPartValue("R1", 1000.0));
+        QVERIFY(s->addWire("P:+9V", "B3", "rot"));
+        QVERIFY(s->addWire("B4", "ZM1.aus", "blau"));
+        QVERIFY(s->netlist().ok());
+        s->setMainSwitch(true);
+        run(*s, 1.0);
+        QVERIFY(s->reading("R1")->currentA < 0.5e-3); // Ruhe: aus
+        s->setPartClosed("S1", true);
+        run(*s, 0.1);
+        s->setPartClosed("S1", false);
+        run(*s, 1.0);
+        QVERIFY(s->reading("R1")->currentA > 7e-3); // haelt nach dem Loslassen
+        QVERIFY(s->moduleReading("ZM1"));           // Hauptbauteil T3 (Ausgangstransistor)
+        run(*s, 4.0);
+        QVERIFY(s->reading("R1")->currentA < 0.5e-3); // nach ca. 3,2 s wieder aus
+    }
+
+    // Stufe 4: Verstaerkermodul (Darlington) schaltet schon mit wenigen Mikroampere am Eingang
+    void amplifierModuleIsSensitive() {
+        auto s = session();
+        QVERIFY(s->addModule("verstaerkermodul", 1));
+        QVERIFY(s->addWire("P:+9V", "VM1.plus", "rot"));
+        QVERIFY(s->addWire("VM1.minus", "P:0V", "schwarz"));
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short)); // Eingang ueber 1 MOhm
+        QVERIFY(s->setPartValue("R1", 1.0e6));
+        QVERIFY(s->addWire("A2", "VM1.ein", "gelb"));
+        QVERIFY(s->addPart("widerstand", "B3", Orientation::Horizontal, Span::Short)); // Last 1 kOhm
+        QVERIFY(s->setPartValue("R2", 1000.0));
+        QVERIFY(s->addWire("P:+9V", "B3", "rot"));
+        QVERIFY(s->addWire("B4", "VM1.aus", "blau"));
+        s->setMainSwitch(true);
+        run(*s, 0.2);
+        QVERIFY(s->reading("R2")->currentA < 0.1e-3); // Eingang offen: aus
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));      // ca. 8 uA in den Eingang
+        s->setMainSwitch(true);
+        run(*s, 0.2);
+        QVERIFY2(s->reading("R2")->currentA > 7e-3, qPrintable(QString::number(s->reading("R2")->currentA)));
+    }
+
     // Tonmodul: Taster an ein startet die Melodie; der Lautsprecher am Ausgang zeigt den Ton (Klanganzeige)
     void toneModuleDrivesSpeaker() {
         auto s = session();

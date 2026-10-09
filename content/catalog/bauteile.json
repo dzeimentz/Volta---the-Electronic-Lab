@@ -37,6 +37,10 @@
      "parameter": {"r25_ohm": 10000, "b_K": 3950}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_heissleiter"},
     {"typ": "elektromagnet", "anschluesse": ["a", "b"], "spannweite": ["lang"], "modell": "electromagnet",
      "parameter": {"r_ohm": 100}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_elektromagnet"},
+    {"typ": "feuchtesonde", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "moisture",
+     "parameter": {"r_trocken_ohm": 20000000, "r_nass_ohm": 20000}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_feuchtesonde"},
+    {"typ": "piezo", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "buzzer",
+     "parameter": {"f_Hz": 3200, "r_ohm": 1500, "u_min_V": 2.0}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_piezo"},
     {"typ": "relais", "anschluesse": ["a", "b", "com", "no"], "spannweite": ["platine_2x2"], "lage": ["a", "b", "com", "no"], "modell": "relay",
      "parameter": {"r_spule_ohm": 180}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_relais"},
     {"typ": "transistor_npn", "anschluesse": ["b", "c", "e", "e2"], "spannweite": ["platine_2x2"], "lage": ["b", "c", "e", "e2"], "modell": "bjt_npn",
@@ -46,6 +50,10 @@
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",
      "ab_band": "volta1", "ab_stufe": 0, "lexikon_key": "lex_blinkmodul"},
     {"typ": "tonmodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "verhaltensmodell",
-     "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_tonmodul"}
+     "ab_band": "volta1", "ab_stufe": 2, "lexikon_key": "lex_tonmodul"},
+    {"typ": "zeitmodul", "anschluesse": ["plus", "minus", "start", "aus"], "breite": 4, "art": "teilschaltung",
+     "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_zeitmodul"},
+    {"typ": "verstaerkermodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "teilschaltung",
+     "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_verstaerkermodul"}
   ]
 }

@@ -39,7 +39,10 @@
 - `python3 tools/validate_content.py` in CI und vor jedem Commit mit Aenderungen in `content/`.
 - Jedes Experiment aller Baende wird automatisch mit seiner Vorlage (Hauptschalter ein) simuliert; die
   Erfolgsbedingung muss innerhalb von laengster Haltedauer + 5 s erfuellt werden (`ContentSmokeTest` in
-  `volta_content_smoke_tests`). Bedingungen mit `rolle` folgen mit der Lernpfad-Engine (Phase 2).
+  `volta_content_smoke_tests`). Gedrueckte Taster der Vorlage drueckt der Test wie ein Kind erst 0,5 s nach dem
+  Einschalten (Zeitmodul: der Elko laedt sich vorher auf). Gegenprobe: Vorlagen mit Fotowiderstand, Heissleiter oder
+  Feuchtesonde duerfen ohne ihre Werkzeuge (bzw. bei hellem Raum) nicht erfolgreich sein.
+  Bedingungen mit `rolle` folgen mit der Lernpfad-Engine (Phase 2).
 
 ## Manuell / mit Kindern
 - Ab Phase 1 Erprobung mit Kindern; Beobachtungsbogen in `docs/erprobung/`.

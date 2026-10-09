@@ -25,7 +25,8 @@ struct Action {
         SetMeterMode,    // Messgeraet: value = 0 V, 1 A, 2 Ohm
         SetMeterAnalog,  // Messgeraet: value != 0 analog
         SetIlluminance,  // Fotowiderstand: value = Beleuchtungsstaerke in lx
-        SetAmbient       // Heissleiter: value = Lufttemperatur am Bauteil in K
+        SetAmbient,      // Heissleiter: value = Lufttemperatur am Bauteil in K
+        SetWetness       // Feuchtesonde: value = Naesse 0..1
     };
     std::string componentId;
     Type type = Type::SetSwitch;

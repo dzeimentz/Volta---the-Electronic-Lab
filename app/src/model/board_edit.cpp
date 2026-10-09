@@ -41,7 +41,8 @@ std::string prefixFor(const std::string& type) {
         {"schalter", "S"},    {"reedkontakt", "RK"},  {"wechselschalter", "W"}, {"motor", "M"},
         {"summer", "SU"},     {"kondensator", "C"},   {"elko", "C"},           {"transistor_npn", "T"},
         {"diode_si", "D"},    {"diode_ge", "D"},      {"fotowiderstand", "LDR"},
-        {"heissleiter", "NTC"}, {"elektromagnet", "EM"}, {"relais", "K"}};
+        {"heissleiter", "NTC"}, {"elektromagnet", "EM"}, {"relais", "K"},
+        {"feuchtesonde", "F"},  {"piezo", "PZ"}};
     const auto it = prefixes.find(type);
     if (it != prefixes.end()) return it->second;
     if (type.rfind("led_", 0) == 0) return "D";
@@ -439,7 +440,8 @@ bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlac
 }
 
 std::string nextModuleId(const Board& board, const std::string& type) {
-    const std::string prefix = type == "blinkmodul" ? "BL" : (type == "tonmodul" ? "TM" : "MOD");
+    const std::string prefix = type == "blinkmodul" ? "BL" : type == "tonmodul" ? "TM" : type == "zeitmodul" ? "ZM"
+                             : type == "verstaerkermodul" ? "VM" : "MOD";
     std::set<int> used;
     for (const auto& m : board.modules) {
         if (m.id.size() > prefix.size() && m.id.compare(0, prefix.size(), prefix) == 0) {

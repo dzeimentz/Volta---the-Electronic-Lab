@@ -85,6 +85,8 @@ Item {
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
             case "relais": return relay
+            case "piezo": return piezo
+            case "feuchtesonde": return probe
             }
             return root.isLed ? led : generic
         }
@@ -549,6 +551,53 @@ Item {
                     x: rpcb.f[index].x + (rpcb.f[index].x < rpcb.width / 2 ? 7 : -7 - width)
                     y: rpcb.f[index].y + (rpcb.f[index].y < rpcb.height / 2 ? 4 : -4 - height)
                 }
+            }
+        }
+    }
+
+    // Piezo-Schallgeber: schwarze Scheibe mit Plus-Zeichen, Schallringe beim Toenen
+    Component {
+        id: piezo
+        Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.height * 0.95; height: width; radius: width / 2
+                color: "#1E1E1E"; border.color: "#000000"
+                Rectangle { anchors.centerIn: parent; width: 6; height: 6; radius: 3; color: "#555555" }
+                Text { x: 3; y: 1; text: "+"; color: "white"; font.bold: true; font.pixelSize: Math.round(11 * Theme.fontScale) }
+            }
+            Repeater {
+                model: root.level > 0.05 && !root.destroyed ? 2 : 0
+                Rectangle {
+                    required property int index
+                    anchors.centerIn: parent
+                    width: parent.height * (1.25 + 0.3 * index); height: width; radius: width / 2
+                    color: "transparent"; border.color: "#E8A33B"; border.width: 2
+                    opacity: 0.7 - 0.25 * index
+                }
+            }
+        }
+    }
+
+    // Feuchtesonde: Platinchen mit zwei Kammzinken; nass: Wasserfilm dazwischen (Wassertropfen zusaetzlich)
+    Component {
+        id: probe
+        Rectangle {
+            radius: 4
+            color: "#2F6B3A"; border.color: "#173D1E"
+            Rectangle { x: parent.width * 0.2; y: 4; width: 4; height: parent.height - 8; color: "#D9B44A" }
+            Rectangle { x: parent.width * 0.8 - 4; y: 4; width: 4; height: parent.height - 8; color: "#D9B44A" }
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * 0.6; height: parent.height * 0.7; radius: 6
+                color: "#5AA9E6"
+                opacity: 0.75 * root.level
+            }
+            Text {
+                visible: root.level > 0.3
+                anchors.centerIn: parent
+                text: "💧"
+                font.pixelSize: 14
             }
         }
     }

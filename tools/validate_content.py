@@ -218,7 +218,7 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
     if "raumlicht" in pult and pult["raumlicht"] not in ("hell", "daemmerung", "dunkel"):
         rep.error(where, "pult_stellung: raumlicht muss hell, daemmerung oder dunkel sein")
     for t in tpl.get("werkzeuge", []) or []:
-        if t.get("typ") not in ("taschenlampe", "foehn") or not FIELD.match(str(t.get("feld", ""))):
+        if t.get("typ") not in ("taschenlampe", "foehn", "wasser") or not FIELD.match(str(t.get("feld", ""))):
             rep.error(where, f"Werkzeug ungueltig: {t}")
     for a in tpl.get("anzeigen", []):
         if not ANCHOR.match(str(a)):

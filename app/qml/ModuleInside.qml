@@ -90,6 +90,10 @@ Popup {
                 color: "#1E2B38"
                 text: inside.moduleType === "tonmodul"
                       ? qsTr("Ein Ton schwingt Hunderte Male in jeder Sekunde – zu schnell, um jede Schwingung einzeln nachzurechnen. Darum arbeitet das Tonmodul in Volta mit einem Verhaltensmodell: An seinen Anschlüssen verhält es sich wie der echte Baustein, und den Ton spielt es direkt ab.")
+                      : inside.moduleType === "zeitmodul"
+                      ? qsTr("Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.")
+                      : inside.moduleType === "verstaerkermodul"
+                      ? qsTr("Im Verstärkermodul arbeiten zwei Transistoren hintereinander: Der winzige Eingangsstrom steuert T1, und der rund 200-mal größere Strom von T1 steuert T2. Zusammen verstärken sie etwa 40 000-fach. Was du hier siehst, wird gerade gerechnet.")
                       : qsTr("Im Blinkmodul arbeiten zwei Transistoren gegeneinander: Immer leitet einer, der andere sperrt. Die Kondensatoren laden sich langsam um und kippen die Schaltung hin und her. Ein dritter Transistor schaltet den Ausgang. Was du hier siehst, wird gerade gerechnet.")
             }
 
@@ -238,6 +242,42 @@ Popup {
                     Trans { colX: 100; colY: 200; name: "T1"; mirrored: true }
                     Trans { colX: 460; colY: 200; name: "T2" }
                     Trans { colX: 620; colY: 220; name: "T3" }
+                }
+            }
+
+            // ---------------------------------------------------------- Teilschaltung: Bauteilliste mit Live-Werten
+            Column {
+                visible: inside.moduleType === "zeitmodul" || inside.moduleType === "verstaerkermodul"
+                width: parent.width
+                spacing: 4
+                Repeater {
+                    model: inside.info.items || []
+                    Rectangle {
+                        required property var modelData
+                        readonly property bool transistor: modelData.name.startsWith("T")
+                        readonly property bool cap: modelData.name === "C"
+                        width: parent.width; height: 34; radius: 6
+                        color: transistor && modelData.on ? "#E3F4E5" : "white"
+                        border.color: transistor && modelData.on ? "#2E7D32" : Theme.fieldOutline
+                        Row {
+                            x: 10; anchors.verticalCenter: parent.verticalCenter
+                            spacing: 12
+                            SchematicSymbol {
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: 44; height: 22
+                                type: parent.parent.transistor ? "transistor_npn" : parent.parent.cap ? "elko" : "widerstand"
+                            }
+                            Label { anchors.verticalCenter: parent.verticalCenter; width: 70; text: modelData.name; font.bold: true; color: Theme.navy }
+                            Label {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: parent.parent.transistor ? (modelData.on ? qsTr("leitet") : qsTr("sperrt")) + " · " + qsTr("%1 mA").arg(inside.num(Math.abs(modelData.currentmA), 2))
+                                    : parent.parent.cap ? qsTr("%1 V").arg(inside.num(modelData.voltV, 2))
+                                    : qsTr("%1 mA").arg(inside.num(Math.abs(modelData.currentmA), 3))
+                                color: parent.parent.transistor && modelData.on ? "#1B5E20" : "#3E5266"
+                                font.bold: parent.parent.transistor && modelData.on
+                            }
+                        }
+                    }
                 }
             }
 

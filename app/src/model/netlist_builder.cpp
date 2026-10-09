@@ -184,6 +184,8 @@ private:
         } else if (m == "buzzer" && n.size() == 2) {
             core::BuzzerParams bp;
             bp.frequencyHz = e->param("f_Hz", bp.frequencyHz);
+            bp.resistanceOhm = e->param("r_ohm", bp.resistanceOhm); // Piezo: wenig Strom
+            bp.vMinV = e->param("u_min_V", bp.vMinV);
             c.add<core::Buzzer>(p.id, n[0], n[1], bp);
         } else if (m == "capacitor" && n.size() == 2) {
             c.add<core::Capacitor>(p.id, n[0], n[1], core::CapacitorParams::film(p.value > 0.0 ? p.value : 100e-9));
@@ -208,6 +210,11 @@ private:
             tp.r25Ohm = e->param("r25_ohm", tp.r25Ohm);
             tp.betaK = e->param("b_K", tp.betaK);
             c.add<core::Thermistor>(p.id, n[0], n[1], tp, airTemperatureAt(m_board, p));
+        } else if (m == "moisture" && n.size() == 2) {
+            core::MoistureProbeParams mp;
+            mp.dryOhm = e->param("r_trocken_ohm", mp.dryOhm);
+            mp.wetOhm = e->param("r_nass_ohm", mp.wetOhm);
+            c.add<core::MoistureProbe>(p.id, n[0], n[1], mp, wetnessAt(m_board, p));
         } else if (m == "electromagnet" && n.size() == 2) {
             core::ElectromagnetParams ep;
             ep.ohm = e->param("r_ohm", ep.ohm);
@@ -265,6 +272,18 @@ private:
             m_net.modules[m.id] = r;
             for (std::size_t i = r.first; i < r.first + r.count; ++i)
                 if (m_net.circuit.component(i).id() == m.id + ".T3") m_net.moduleMain[m.id] = i;
+        } else if (m.type == "zeitmodul" && n.size() == 4) {
+            // Katalog: plus, minus, start, aus
+            const core::SubcircuitRange r = core::addTimerModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});
+            m_net.modules[m.id] = r;
+            for (std::size_t i = r.first; i < r.first + r.count; ++i)
+                if (m_net.circuit.component(i).id() == m.id + ".T3") m_net.moduleMain[m.id] = i;
+        } else if (m.type == "verstaerkermodul" && n.size() == 4) {
+            // Katalog: plus, minus, ein, aus
+            const core::SubcircuitRange r = core::addAmplifierModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});
+            m_net.modules[m.id] = r;
+            for (std::size_t i = r.first; i < r.first + r.count; ++i)
+                if (m_net.circuit.component(i).id() == m.id + ".T2") m_net.moduleMain[m.id] = i;
         } else if (m.type == "tonmodul" && n.size() == 4) {
             // Katalog: plus, minus, ein, aus
             const core::SubcircuitRange r = core::addToneModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});

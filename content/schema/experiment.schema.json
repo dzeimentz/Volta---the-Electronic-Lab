@@ -31,7 +31,7 @@
         "leitungen": {"type": "array", "items": {"$ref": "#/$defs/wire"}},
         "anzeigen": {"type": "array", "items": {"$ref": "#/$defs/anchor"}},
         "werkzeuge": {"type": "array", "items": {"type": "object", "required": ["typ", "feld"], "additionalProperties": false,
-          "properties": {"typ": {"enum": ["taschenlampe", "foehn"]}, "feld": {"$ref": "#/$defs/field"}, "an": {"type": "boolean"}}}},
+          "properties": {"typ": {"enum": ["taschenlampe", "foehn", "wasser"]}, "feld": {"$ref": "#/$defs/field"}, "an": {"type": "boolean"}}}},
         "pult_stellung": {
           "type": "object",
           "additionalProperties": false,

@@ -24,6 +24,8 @@ QtObject {
         case "heissleiter": return qsTr("Heißleiter")
         case "elektromagnet": return qsTr("Elektromagnet")
         case "relais": return qsTr("Relais")
+        case "feuchtesonde": return qsTr("Feuchtesonde")
+        case "piezo": return qsTr("Piezo-Schallgeber")
         }
         return type
     }
@@ -32,6 +34,8 @@ QtObject {
         switch (type) {
         case "blinkmodul": return qsTr("Blinkmodul")
         case "tonmodul": return qsTr("Tonmodul")
+        case "zeitmodul": return qsTr("Zeitmodul")
+        case "verstaerkermodul": return qsTr("Verstärkermodul")
         }
         return type
     }
@@ -44,6 +48,7 @@ QtObject {
         case "aus": return qsTr("aus")
         case "ein": return qsTr("ein")
         case "takt": return qsTr("Takt")
+        case "start": return qsTr("Start")
         }
         return pin
     }

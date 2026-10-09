@@ -20,6 +20,8 @@ inline constexpr double kDryerRiseK = 60.0;
 inline constexpr double kDryerReach = 0.7;
 inline constexpr const char* kToolFlashlight = "taschenlampe";
 inline constexpr const char* kToolDryer = "foehn";
+inline constexpr const char* kToolWater = "wasser";
+inline constexpr double kWaterReach = 0.6; // Wassertropfen: nass direkt darunter, ein Feld weiter kaum
 
 // Mitte eines Bauteils in Feldeinheiten; false, wenn es nicht auf Feldern der Grundplatte steckt
 bool partCenter(const PartPlacement& part, double& col, double& row);
@@ -27,5 +29,7 @@ bool partCenter(const PartPlacement& part, double& col, double& row);
 double illuminanceAt(const Board& board, const PartPlacement& part);
 // Lufttemperatur am Bauteil in K
 double airTemperatureAt(const Board& board, const PartPlacement& part);
+// Naesse am Bauteil 0..1 (Wassertropfen; d0 = 0,6: direkt darunter nass, ein Feld weiter ca. 0,26)
+double wetnessAt(const Board& board, const PartPlacement& part);
 
 } // namespace volta::model

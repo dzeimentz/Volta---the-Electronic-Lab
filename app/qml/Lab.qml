@@ -129,10 +129,11 @@ Item {
     readonly property bool environmentAvailable: {
         const tray = controller.trayParts
         for (let i = 0; i < tray.length; ++i)
-            if ((tray[i].type === "fotowiderstand" || tray[i].type === "heissleiter") && !tray[i].locked) return true
+            if ((tray[i].type === "fotowiderstand" || tray[i].type === "heissleiter" || tray[i].type === "feuchtesonde")
+                    && !tray[i].locked) return true
         const parts = controller.parts
         for (let k = 0; k < parts.length; ++k)
-            if (parts[k].type === "fotowiderstand" || parts[k].type === "heissleiter") return true
+            if (parts[k].type === "fotowiderstand" || parts[k].type === "heissleiter" || parts[k].type === "feuchtesonde") return true
         return controller.tools.length > 0 || controller.roomLight !== 2
     }
 
@@ -968,7 +969,7 @@ Item {
                     readonly property point at: lab.toolPoint(modelData.col, modelData.row)
                     toolType: modelData.type
                     on: modelData.on
-                    reach: (modelData.type === "taschenlampe" ? 1.2 : 1.5) * (Theme.fieldWidth + Theme.fieldGap)
+                    reach: (modelData.type === "taschenlampe" ? 1.2 : modelData.type === "wasser" ? 0.8 : 1.5) * (Theme.fieldWidth + Theme.fieldGap)
                     x: at.x - width / 2
                     y: at.y - height / 2
                     z: 20
@@ -1009,8 +1010,8 @@ Item {
             // unten mittig, wie die Werkzeuggruppen in Visual Technic Studio
             anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 4 }
             z: 30
-            title: qsTr("Licht und Wärme")
-            count: 3
+            title: qsTr("Licht, Wärme, Wasser")
+            count: 4
                 Button {
                     objectName: "roomLightButton"
                     height: Theme.control
@@ -1023,7 +1024,7 @@ Item {
                     font.pixelSize: Math.round(13 * Theme.fontScale)
                 }
                 Repeater {
-                    model: ["taschenlampe", "foehn"]
+                    model: ["taschenlampe", "foehn", "wasser"]
                     Rectangle {
                         id: envTile
                         required property string modelData
@@ -1036,10 +1037,10 @@ Item {
                         Row {
                             anchors.centerIn: parent
                             spacing: 6
-                            Text { anchors.verticalCenter: parent.verticalCenter; text: envTile.modelData === "taschenlampe" ? "🔦" : "♨"; font.pixelSize: 20; color: "#B23A10" }
+                            Text { anchors.verticalCenter: parent.verticalCenter; text: envTile.modelData === "taschenlampe" ? "🔦" : envTile.modelData === "wasser" ? "💧" : "♨"; font.pixelSize: 20; color: "#B23A10" }
                             Label {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: envTile.modelData === "taschenlampe" ? qsTr("Taschenlampe") : qsTr("Föhn")
+                                text: envTile.modelData === "taschenlampe" ? qsTr("Taschenlampe") : envTile.modelData === "wasser" ? qsTr("Wassertropfen") : qsTr("Föhn")
                                 font.pixelSize: Math.round(12 * Theme.fontScale)
                                 color: Theme.navy
                             }
@@ -1063,7 +1064,7 @@ Item {
                                 else lab.controller.setToolOn(envTile.modelData, !t.on)
                             }
                         }
-                        Accessible.name: (modelData === "taschenlampe" ? qsTr("Taschenlampe") : qsTr("Föhn"))
+                        Accessible.name: (modelData === "taschenlampe" ? qsTr("Taschenlampe") : modelData === "wasser" ? qsTr("Wassertropfen") : qsTr("Föhn"))
                     }
                 }
         }

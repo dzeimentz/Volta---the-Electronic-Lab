@@ -15,7 +15,8 @@ Item {
     property var moduleState: ({})
     readonly property int bodyHeight: Theme.control + 8
     readonly property bool active: moduleState.active === true
-    readonly property color plate: moduleType === "tonmodul" ? "#6A4C8C" : "#2F6F8F"
+    readonly property color plate: moduleType === "tonmodul" ? "#6A4C8C" : moduleType === "zeitmodul" ? "#7A5A1E"
+                                 : moduleType === "verstaerkermodul" ? "#2E6B4A" : "#2F6F8F"
 
     signal tapped()
     signal insideRequested()

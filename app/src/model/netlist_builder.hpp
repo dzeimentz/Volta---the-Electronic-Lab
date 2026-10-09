@@ -9,6 +9,7 @@
 #include "catalog.hpp"
 #include "volta/core/circuit.hpp"
 #include "volta/core/modules/blink_module.hpp"
+#include "volta/core/modules/timer_module.hpp"
 #include "volta/core/modules/tone_module.hpp"
 
 namespace volta::model {

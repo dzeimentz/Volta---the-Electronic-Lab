@@ -44,6 +44,10 @@ double illuminanceAt(const Board& board, const PartPlacement& part) {
     return kRoomLux[room] + toolEffect(board, part, kToolFlashlight, kFlashLux, kFlashReach);
 }
 
+double wetnessAt(const Board& board, const PartPlacement& part) {
+    return std::min(1.0, toolEffect(board, part, kToolWater, 1.0, kWaterReach));
+}
+
 double airTemperatureAt(const Board& board, const PartPlacement& part) {
     return core::kAmbientK + std::min(kDryerRiseK, toolEffect(board, part, kToolDryer, kDryerRiseK, kDryerReach));
 }

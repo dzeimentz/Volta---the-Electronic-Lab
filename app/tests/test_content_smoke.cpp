@@ -9,6 +9,7 @@
 #include "model/netlist_builder.hpp"
 #include "model/success.hpp"
 #include "services/content_repository.hpp"
+#include "volta/core/components/switch.hpp"
 #include "volta/core/simulator.hpp"
 
 using namespace volta;
@@ -34,15 +35,31 @@ model::Board ledBoard(double r) {
     return b;
 }
 
+// Wie ein Kind drueckt der Test gedrueckte Taster der Vorlage erst kurz nach dem Einschalten (Zeitmodul: der Elko
+// muss sich vorher aufladen koennen)
+constexpr double kPressAfterS = 0.5;
+
 // Simuliert bis zu maxS; liefert die Zeit, zu der der Bewerter erstmals erfuellt ist (oder -1)
 double timeToSuccess(const model::Board& board, const model::Catalog& cat, model::SuccessEvaluator& eval, double maxS,
                      std::vector<std::string>* buildErrors = nullptr) {
-    model::Netlist net = model::buildNetlist(board, cat);
+    model::Board start = board;
+    std::vector<std::string> pressed;
+    for (auto& p : start.parts)
+        if (p.type == "taster" && p.closed) {
+            p.closed = false;
+            pressed.push_back(p.id);
+        }
+    model::Netlist net = model::buildNetlist(start, cat);
     if (buildErrors) *buildErrors = net.errors;
     core::Simulator sim;
     if (sim.setCircuit(std::move(net.circuit)) != core::Status::Ok) return -1.0;
     const int steps = static_cast<int>(std::lround(maxS / core::kDefaultStepS));
+    const int pressStep = static_cast<int>(std::lround(kPressAfterS / core::kDefaultStepS));
     for (int i = 0; i < steps; ++i) {
+        if (i == pressStep)
+            for (const auto& id : pressed)
+                if (auto* sw = dynamic_cast<core::Switch*>(&sim.circuit().component(net.parts.at(id))))
+                    sw->setClosed(true);
         sim.step();
         eval.update(sim, net);
         if (eval.reached()) return sim.timeS();
@@ -160,6 +177,30 @@ private slots:
         QVERIFY2(t > 0.0, qPrintable(QStringLiteral("%1: Vorlage erreicht ihre Erfolgsbedingung nicht in %2 s")
                                          .arg(id)
                                          .arg(limit)));
+    }
+
+    // Gegenprobe fuer Sensor-Experimente: Ohne die Werkzeuge der Vorlage (bzw. bei hellem Raum, wenn die Vorlage nur
+    // das Raumlicht verdunkelt) darf die Erfolgsbedingung nicht erfuellt sein - die Schaltung reagiert wirklich
+    void sensorTemplatesNeedTheirEnvironment_data() { everyTemplateReachesItsSuccess_data(); }
+
+    void sensorTemplatesNeedTheirEnvironment() {
+        QFETCH(QString, id);
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY2(repo.loadExperiment(id, exp), qPrintable(repo.lastError()));
+        model::Board board = exp.templateBoard;
+        bool hasSensor = false;
+        for (const auto& p : board.parts)
+            if (p.type == "fotowiderstand" || p.type == "heissleiter" || p.type == "feuchtesonde") hasSensor = true;
+        if (!hasSensor) QSKIP("kein Sensor");
+        if (!board.desk.tools.empty()) board.desk.tools.clear();
+        else if (board.desk.roomLight < 2) board.desk.roomLight = 2;
+        else QSKIP("Vorlage ohne eigene Umgebung");
+        board.desk.mainSwitch = true;
+        model::SuccessEvaluator eval(exp.successCondition);
+        const double limit = std::min(exp.maxHoldS + 5.0, 60.0);
+        QVERIFY2(timeToSuccess(board, m_catalog, eval, limit) < 0.0,
+                 qPrintable(QStringLiteral("%1: Erfolg auch ohne Werkzeug bzw. Raumlicht").arg(id)));
     }
 };
 

@@ -17,6 +17,7 @@ Item {
     width: Theme.control + 8
     height: Theme.control + 8
     readonly property bool flash: toolType === "taschenlampe"
+    readonly property bool water: toolType === "wasser"
 
     transform: Translate {
         x: drag.active ? drag.activeTranslation.x : 0
@@ -30,7 +31,7 @@ Item {
             required property real modelData
             anchors.centerIn: parent
             width: tool.reach * 2 * modelData; height: width; radius: width / 2
-            color: tool.flash ? "#FFF3A0" : "#FF8C3A"
+            color: tool.flash ? "#FFF3A0" : tool.water ? "#5AA9E6" : "#FF8C3A"
             opacity: 0.15
         }
     }
@@ -38,13 +39,13 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: width / 2
-        color: tool.on ? (tool.flash ? "#FFE58A" : "#FFB27A") : "#C9CED4"
+        color: tool.on ? (tool.flash ? "#FFE58A" : tool.water ? "#BFE0F7" : "#FFB27A") : "#C9CED4"
         border.color: Theme.navy
         border.width: 2
         Text {
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -5
-            text: tool.flash ? "🔦" : "♨"
+            text: tool.flash ? "🔦" : tool.water ? "💧" : "♨"
             font.pixelSize: 24
             color: tool.flash ? "#2E3B4A" : "#B23A10"
         }
@@ -61,7 +62,7 @@ Item {
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.bottom
-        text: tool.flash ? qsTr("Taschenlampe") : qsTr("Föhn")
+        text: tool.flash ? qsTr("Taschenlampe") : tool.water ? qsTr("Wassertropfen") : qsTr("Föhn")
         font.pixelSize: Math.round(11 * Theme.fontScale)
         font.bold: true
         color: Theme.navy
@@ -84,5 +85,5 @@ Item {
             else tool.toggled()
         }
     }
-    Accessible.name: (flash ? qsTr("Taschenlampe") : qsTr("Föhn")) + ", " + (on ? qsTr("an") : qsTr("aus"))
+    Accessible.name: (flash ? qsTr("Taschenlampe") : water ? qsTr("Wassertropfen") : qsTr("Föhn")) + ", " + (on ? qsTr("an") : qsTr("aus"))
 }

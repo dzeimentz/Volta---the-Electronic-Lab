@@ -141,6 +141,9 @@ void SimulationBridge::apply(const Action& a) {
     case Action::Type::SetAmbient:
         if (auto* t = dynamic_cast<core::Thermistor*>(&c)) t->setAmbient(a.value);
         break;
+    case Action::Type::SetWetness:
+        if (auto* f = dynamic_cast<core::MoistureProbe*>(&c)) f->setWetness(a.value);
+        break;
     }
 }
 

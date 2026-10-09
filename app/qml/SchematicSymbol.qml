@@ -76,8 +76,13 @@ Item {
             return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z " + arrowLine(32, 32, 32, 23), f: arrowHead(32, 32, 32, 23)}
         case "messgeraet":
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
-        case "blinkmodul": case "tonmodul":
-            return {s: "M0 16 H14 M50 16 H64 M14 6 H50 V26 H14 Z", f: "", t: type === "blinkmodul" ? "BL" : "TON", tx: 32, ty: 16}
+        case "blinkmodul": case "tonmodul": case "zeitmodul": case "verstaerkermodul":
+            return {s: "M0 16 H14 M50 16 H64 M14 6 H50 V26 H14 Z", f: "",
+                    t: type === "blinkmodul" ? "BL" : type === "tonmodul" ? "TON" : type === "zeitmodul" ? "ZEIT" : "VST", tx: 32, ty: 16}
+        case "feuchtesonde": // zwei Elektroden mit Tropfen dazwischen
+            return {s: "M0 16 H24 M40 16 H64 M24 6 V26 M40 6 V26 M32 9 Q36 15 32 19 Q28 15 32 9 Z", f: ""}
+        case "piezo": // Piezo-Schallgeber: Kristallplatte zwischen zwei Belaegen (DIN EN 60617) mit Schallzeichen
+            return {s: "M0 16 H22 M42 16 H64 M22 6 V26 M42 6 V26 M26 8 H38 V24 H26 Z M46 4 Q52 8 46 12", f: "", t: "+", tx: 15, ty: 6}
         default:
             return {s: "M0 16 H20 M44 16 H64 M20 8 H44 V24 H20 Z", f: ""}
         }
