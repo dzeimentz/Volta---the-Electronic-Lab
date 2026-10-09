@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QtQml/qqmlextensionplugin.h>
 
+#include "services/audio_service.hpp"
+#include "services/speech_service.hpp"
 #include "lab_controller.hpp"
 #include "app_settings.hpp"
 #include "language_service.hpp"
@@ -16,6 +18,10 @@
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 
 int main(int argc, char* argv[]) {
+#ifdef Q_OS_WIN
+    // Tonausgabe ueber das Windows-eigene Backend (ohne FFmpeg, docs/adr/0009-tonausgabe-und-vorlesen.md)
+    if (qEnvironmentVariableIsEmpty("QT_MEDIA_BACKEND")) qputenv("QT_MEDIA_BACKEND", "windows");
+#endif
     QGuiApplication app(argc, argv);
     QGuiApplication::setOrganizationName(QStringLiteral("DC Software Engineering"));
     QGuiApplication::setOrganizationDomain(QStringLiteral("dc-software-engineering.com"));
@@ -53,6 +59,13 @@ int main(int argc, char* argv[]) {
     volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty());
     if (!demoFont.isEmpty()) settings.setFontLevel(demoFont.toInt());
     engine.rootContext()->setContextProperty(QStringLiteral("volta_settings"), &settings);
+    // Tonausgabe und Vorlesen (Bildschirmfoto-Entwicklerhilfe: still)
+    volta::services::AudioService audio;
+    if (!qEnvironmentVariableIsEmpty("VOLTA_SCREENSHOT")) audio.setSuppressed(true);
+    lab.setAudio(&audio);
+    volta::services::SpeechService speech;
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_audio"), &audio);
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_speech"), &speech);
     // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux); abschaltbar in den Einstellungen
     // oder mit VOLTA_NO_SPLASH=1
     const bool splash = volta::AppSettings::splashAvailable() && settings.showSplash() &&

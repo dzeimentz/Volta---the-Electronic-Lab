@@ -88,6 +88,13 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 
+## Ton und Vorlesen (Phase 2, ADR-0009)
+- Tonausgabe: Pult-Lautsprecher mit seinem Ton (auch vom Tonmodul) und Summer auf der Grundplatte klingen ueber die
+  Soundkarte; Impulse unter 20 Hz knacken kurz. Nur im Labor; Einstellung »Ton über Lautsprecher« im Menue.
+- Vorlesen: Knopf 🔊 oben rechts im Experimentfeld liest die aktuelle Phase vor (Frage mit Vermutungen, Aufbau mit
+  Schritten und Aufbauhilfe, Beobachtungen, Erklaerung); ⏹ beendet. Nur sichtbar, wenn eine Systemstimme fuer
+  die Anzeigesprache vorhanden ist (LU: spaeter eigene Aufnahmen).
+
 ## Schritt-fuer-Schritt-Aufbauhilfe (Phase 2)
 - Im Experimentfeld (Aufbau) Knopf »Schritt für Schritt bauen«: Die Vorlage wird in Schritte zerlegt (Module,
   Bauteile, Leitungen in Vorlagenreihenfolge, zuletzt der Hauptschalter; `model/build_guide`). Angezeigt wird immer

@@ -155,6 +155,15 @@ Row {
                 onTriggered: bar.settings.showCurrentFlow = checked
             }
             MenuItem {
+                objectName: "settingSound"
+                height: Theme.control
+                text: qsTr("Ton über Lautsprecher")
+                checkable: true
+                enabled: bar.settings !== null
+                checked: bar.settings ? bar.settings.soundOn : true
+                onTriggered: bar.settings.soundOn = checked
+            }
+            MenuItem {
                 objectName: "settingMotion"
                 height: Theme.control
                 text: qsTr("Animationen reduzieren")

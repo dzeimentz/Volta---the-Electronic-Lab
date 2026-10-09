@@ -16,11 +16,17 @@ ApplicationWindow {
 
     readonly property var languageService: typeof volta_languageService !== "undefined" ? volta_languageService : null
     readonly property var settings: typeof volta_settings !== "undefined" ? volta_settings : null
+    readonly property var audio: typeof volta_audio !== "undefined" ? volta_audio : null
+    readonly property var speech: typeof volta_speech !== "undefined" ? volta_speech : null
     property bool inLab: false
     property bool inJournal: false
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
     Binding { target: labController; property: "unlockAll"; value: root.settings ? root.settings.unlockAll : false }
+    // Ton nur im Labor und wenn eingeschaltet; Vorlesen in der Anzeigesprache
+    Binding { target: root.audio; when: root.audio !== null; property: "enabled"; value: root.settings ? root.settings.soundOn : true }
+    Binding { target: root.audio; when: root.audio !== null; property: "active"; value: root.inLab }
+    Binding { target: root.speech; when: root.speech !== null && root.languageService !== null; property: "language"; value: root.languageService ? root.languageService.language : "de" }
     Binding { target: labController; property: "preferredColumns"; value: root.settings ? root.settings.boardColumns : 12 }
     Binding { target: labController; property: "preferMeter"; value: root.settings ? root.settings.meterVisible : false }
     Connections {
@@ -51,7 +57,8 @@ ApplicationWindow {
         controller: labController
         languageService: root.languageService
         settings: root.settings
-        onHomeRequested: root.inLab = false
+        speech: root.speech
+        onHomeRequested: { root.inLab = false; if (root.speech) root.speech.stop() }
         onInfoRequested: infoDialog.open()
     }
 

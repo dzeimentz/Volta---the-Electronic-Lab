@@ -18,6 +18,7 @@ add_library(volta_model STATIC
     src/model/netlist_builder.cpp
     src/model/success.cpp
     src/model/build_guide.cpp
+    src/model/tone_synth.cpp
     src/model/schematic_layout.cpp
     src/services/content_repository.cpp
     src/services/progress_store.cpp
@@ -96,8 +97,12 @@ qt_add_qml_module(volta_ui
         src/language_service.cpp
         src/app_settings.hpp
         src/app_settings.cpp
+        src/services/audio_service.hpp
+        src/services/audio_service.cpp
+        src/services/speech_service.hpp
+        src/services/speech_service.cpp
 )
-target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2 Qt6::Multimedia Qt6::TextToSpeech)
 # Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben
 qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE resources/icons FILES
     resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png

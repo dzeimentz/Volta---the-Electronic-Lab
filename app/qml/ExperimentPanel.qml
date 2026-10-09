@@ -6,6 +6,7 @@ import QtQuick.Controls.Basic
 Rectangle {
     id: panel
     required property var controller
+    property var speech: null // SpeechService; Knopf nur, wenn eine Stimme fuer die Sprache da ist
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
 
     // Text eines Schritts der Aufbauhilfe (LabController::guideStep)
@@ -96,6 +97,38 @@ Rectangle {
         if (panel.phase !== panel.lastPhase) { f.contentY = 0; noteSaved.visible = false }
         else f.contentY = Math.max(0, f.contentHeight - f.height)
         panel.lastPhase = panel.phase
+    }
+
+    // Text der aktuellen Phase zum Vorlesen
+    function speechText() {
+        const c = controller
+        const list = (items) => items.map((t, i) => (i + 1) + ". " + t).join(". ")
+        if (phase === 1) return c.question + " " + list(c.guesses)
+        if (phase === 2) {
+            let t = qsTr("Aufbau") + ". " + list(c.steps)
+            if (c.guideActive) t += ". " + guideText(c.guideStep)
+            if (c.hints.length > 0) t += ". " + c.hints[c.hints.length - 1]
+            return t
+        }
+        if (phase === 3) return qsTr("Geschafft! Was hast du beobachtet?") + " " + list(c.observations)
+        if (phase === 4) return c.explanation + (c.realLife !== "" ? " " + c.realLife : "")
+        return ""
+    }
+    onPhaseChanged: if (speech) speech.stop()
+
+    // Vorlesen (oben rechts im Feld)
+    ToolButton {
+        objectName: "speakButton"
+        visible: !panel.collapsed && panel.speech !== null && panel.speech.available && panel.phase > 0
+        x: parent.width - width - 4
+        y: 4
+        width: Theme.control; height: Theme.control
+        text: panel.speech && panel.speech.speaking ? "⏹" : "🔊"
+        font.pixelSize: 20
+        onClicked: panel.speech.speaking ? panel.speech.stop() : panel.speech.say(panel.speechText())
+        ToolTip.visible: hovered
+        ToolTip.text: panel.speech && panel.speech.speaking ? qsTr("Vorlesen beenden") : qsTr("Vorlesen")
+        Accessible.name: ToolTip.text
     }
 
     // Ein-/Ausklappen (oben links im Feld)

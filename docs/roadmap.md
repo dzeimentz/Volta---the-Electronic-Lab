@@ -51,7 +51,9 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
   Pult-Lautsprecher mit seinem Ton anzeigt; »Blick hinein«: Blinkmodul als Schaltplan mit laufender Simulation,
   Tonmodul als Blockbild mit Erklaerung des Verhaltensmodells. Erfolgsbedingungen koennen Module ansprechen.
 - Schritt-fuer-Schritt-Aufbauhilfe mit Geisterbild und hervorgehobenen Zielfeldern: erledigt.
-- Offen in Phase 2: Vorlesen (Systemstimme), Tonausgabe ueber die Soundkarte, LU-Texte, muttersprachliche Pruefung FR/EN.
+- Tonausgabe ueber die Soundkarte (Pult-Lautsprecher, Summer, Knacken je Impuls) und Vorlesen ueber die
+  Systemstimme (DE/FR/EN): erledigt (ADR-0009).
+- Offen in Phase 2: Meldungen des Modells uebersetzbar, LU-Texte, muttersprachliche Pruefung FR/EN.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

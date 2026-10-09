@@ -27,6 +27,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_showCurrentFlow = s.value(QStringLiteral("anzeige/stromfluss"), true).toBool();
     m_reduceMotion = s.value(QStringLiteral("anzeige/animationen_reduziert"), false).toBool();
     m_showSplash = s.value(QStringLiteral("anzeige/startbildschirm"), true).toBool();
+    m_soundOn = s.value(QStringLiteral("anzeige/ton"), true).toBool();
     m_unlockAll = s.value(QStringLiteral("lernpfad/alles_frei"), false).toBool();
     m_fontLevel = std::clamp(s.value(QStringLiteral("anzeige/schriftgroesse"), 2).toInt(), 0, 2);
     const int cols = s.value(QStringLiteral("labor/felder_je_reihe"), 12).toInt();

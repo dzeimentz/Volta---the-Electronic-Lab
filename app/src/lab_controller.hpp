@@ -18,6 +18,9 @@
 #include "services/progress_store.hpp"
 
 namespace volta {
+namespace services {
+class AudioService;
+}
 
 // QML-Anbindung einer Experimentsitzung (model::LabSession): Aufbau, Anzeigen, Befehle mit Rueckgaengig/Wiederholen
 // und Bedienhandlungen. Keine Fachlogik: alles Weitere liegt in LabSession (ohne Oberflaeche testbar).
@@ -251,6 +254,8 @@ public:
     QVariantMap guideStep() const;
 
     model::LabSession& session() { return *m_session; }
+    // Tonausgabe (main.cpp); ohne Dienst (Tests) bleibt es still
+    void setAudio(services::AudioService* audio) { m_audio = audio; }
 
 signals:
     void experimentChanged();
@@ -283,6 +288,9 @@ private:
     services::JournalStore m_journal;
     bool m_unlockAll = false;
     bool m_guideActive = false;
+    services::AudioService* m_audio = nullptr;
+    double m_lastPulses = -1.0; // Impulszaehler des Pult-Lautsprechers (Knacken bei neuem Impuls)
+    void updateAudio();
     int m_preferredColumns = 12;
     bool m_preferMeter = false;
     int highestUnlockedStage() const;

@@ -2,10 +2,12 @@
 // dem Simulationskern (docs/testing.md, Modell).
 #include <QtTest>
 
+#include <algorithm>
 #include <cmath>
 
 #include "model/anchor.hpp"
 #include "model/build_guide.hpp"
+#include "model/tone_synth.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
@@ -355,6 +357,40 @@ private slots:
         // Rueckschritt: Bauteil entfernt -> dieser Schritt ist wieder dran
         b.parts.erase(b.parts.begin());
         QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(1));
+    }
+
+    // Klangerzeuger: Tonhoehe aus den Nulldurchgaengen, Aussteuerung begrenzt, Stille ohne Stimmen, kein Knacken
+    void toneSynth() {
+        model::ToneSynth synth(48000);
+        std::vector<std::int16_t> buf(48000);
+        synth.render(buf.data(), buf.size());
+        QVERIFY(std::all_of(buf.begin(), buf.end(), [](std::int16_t v) { return v == 0; })); // still
+        synth.setVoices({{440.0, 1.0}});
+        synth.render(buf.data(), buf.size()); // 1 s
+        int rising = 0, peak = 0, maxStep = 0;
+        for (std::size_t i = 4800; i < buf.size(); ++i) { // nach dem Einschwingen
+            if (buf[i - 1] < 0 && buf[i] >= 0) ++rising;
+            peak = std::max(peak, std::abs(static_cast<int>(buf[i])));
+        }
+        QVERIFY2(std::abs(rising - 396) <= 2, qPrintable(QString::number(rising))); // 440 Hz * 0,9 s
+        QVERIFY(peak > 2000);
+        QVERIFY(peak <= static_cast<int>(model::ToneSynth::kHeadroom * 32767) + 1);
+        // vier laute Stimmen: weich begrenzt, nie ueber dem Kopfraum
+        synth.setVoices({{300.0, 1.0}, {450.0, 1.0}, {700.0, 1.0}, {2400.0, 1.0}});
+        synth.click(1.0);
+        synth.render(buf.data(), buf.size());
+        for (std::int16_t v : buf) QVERIFY(std::abs(static_cast<int>(v)) <= model::ToneSynth::kHeadroom * 32767 + 1);
+        // Ausschalten gleitet aus: keine Spruenge groesser als im laufenden Ton
+        synth.setVoices({{440.0, 1.0}});
+        synth.render(buf.data(), buf.size());
+        for (std::size_t i = 1; i < buf.size(); ++i) maxStep = std::max(maxStep, std::abs(buf[i] - buf[i - 1]));
+        synth.setVoices({});
+        std::vector<std::int16_t> tail(4800);
+        synth.render(tail.data(), tail.size());
+        int tailStep = std::abs(tail[0] - buf.back());
+        for (std::size_t i = 1; i < tail.size(); ++i) tailStep = std::max(tailStep, std::abs(tail[i] - tail[i - 1]));
+        QVERIFY(tailStep <= maxStep);
+        QVERIFY(std::abs(static_cast<int>(tail.back())) < 50); // nach 100 ms praktisch still
     }
 
     void errorsAreReported() {

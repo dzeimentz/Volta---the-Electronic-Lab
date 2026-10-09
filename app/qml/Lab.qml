@@ -10,6 +10,7 @@ Item {
     required property var controller
     property var languageService: null // Anzeigesprache (main.cpp); ohne: Knopf ausgeblendet
     property var settings: null        // Einstellungen (main.cpp); ohne: Grundwerte
+    property var speech: null          // Vorlesen (main.cpp); ohne: kein Vorlese-Knopf
     signal homeRequested()  // zurueck zur Startseite
     signal infoRequested()  // Info-Fenster (liegt im Hauptfenster)
     Binding { target: Theme; property: "reduceMotion"; value: lab.settings ? lab.settings.reduceMotion : false }
@@ -475,6 +476,7 @@ Item {
         id: experimentPanel
         objectName: "experimentPanel"
         controller: lab.controller
+        speech: lab.speech
         anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
         width: lab.controller.phase > 0 ? (collapsed ? Theme.control + 8 : 340) : 0
         collapsed: lab.settings ? lab.settings.experimentPanelCollapsed : false

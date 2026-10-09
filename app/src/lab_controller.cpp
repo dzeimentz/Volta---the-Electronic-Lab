@@ -13,6 +13,7 @@
 #include <cstdlib>
 
 #include "model/build_guide.hpp"
+#include "services/audio_service.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
@@ -443,11 +444,33 @@ void LabController::onFrame() {
         emit flowChanged();
         emit progressChanged();
     }
+    updateAudio();
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
         m_sinceNotifyS = 0.0;
         emit stateChanged();
     }
+}
+
+// Tonausgabe: Pult-Lautsprecher (Ton oder Knacken je Impuls) und Summer auf der Grundplatte
+void LabController::updateAudio() {
+    if (!m_audio) return;
+    std::vector<model::SynthVoice> voices;
+    core::ComponentReading ls;
+    if (m_session->speakerReading(ls) && !ls.destroyed) {
+        if (ls.frequencyHz >= 20.0 && ls.level > 0.02)
+            voices.push_back({ls.frequencyHz, ls.level});
+        else if (m_lastPulses >= 0.0 && ls.displayValue > m_lastPulses)
+            m_audio->click(0.7);
+        m_lastPulses = ls.displayValue;
+    }
+    for (const auto& p : m_session->board().parts) {
+        if (p.type != "summer") continue;
+        const core::ComponentReading* r = m_session->reading(p.id);
+        if (r && !r->destroyed && r->frequencyHz > 0.0 && r->level > 0.02)
+            voices.push_back({r->frequencyHz, 0.6 * r->level});
+    }
+    m_audio->setVoices(voices);
 }
 
 bool LabController::result(bool ok) {

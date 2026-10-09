@@ -18,6 +18,7 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool showCurrentFlow READ showCurrentFlow WRITE setShowCurrentFlow NOTIFY changed)
     Q_PROPERTY(bool reduceMotion READ reduceMotion WRITE setReduceMotion NOTIFY changed)
     Q_PROPERTY(bool showSplash READ showSplash WRITE setShowSplash NOTIFY changed)
+    Q_PROPERTY(bool soundOn READ soundOn WRITE setSoundOn NOTIFY changed) // Tonausgabe ueber die Soundkarte
     // Alle Bauteile und Stufen freigeben (spaeter hinter der Elternschranke, Phase 3)
     Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY changed)
     // Schriftgroesse in drei Stufen: 0 klein (80 %), 1 mittel (90 %), 2 gross (100 %, Vorgabe)
@@ -41,6 +42,8 @@ public:
     bool showSplash() const { return m_showSplash; }
     void setShowSplash(bool on) { set(m_showSplash, on, "anzeige/startbildschirm"); }
     static bool splashAvailable();
+    bool soundOn() const { return m_soundOn; }
+    void setSoundOn(bool on) { set(m_soundOn, on, "anzeige/ton"); }
     bool unlockAll() const { return m_unlockAll; }
     void setUnlockAll(bool on) { set(m_unlockAll, on, "lernpfad/alles_frei"); }
     int fontLevel() const { return m_fontLevel; }
@@ -74,6 +77,7 @@ private:
     bool m_showCurrentFlow = true;
     bool m_reduceMotion = false;
     bool m_showSplash = true;
+    bool m_soundOn = true;
     bool m_unlockAll = false;
     int m_fontLevel = 2;
     int m_boardColumns = 12;

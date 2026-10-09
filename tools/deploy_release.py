@@ -60,6 +60,14 @@ def main() -> int:
              # nicht benoetigt: Netzwerkinformation, QML-Debugger (kein Netz, docs/privacy-safety.md)
              "--skip-plugin-types", "networkinformation,qmltooling,tls",
              str(TARGET / exe_name)], env)
+        # Tonausgabe ueber das Windows-Backend: FFmpeg-Plugin und -Bibliotheken (koennten Netzprotokolle) und das
+        # Test-Plugin der Sprachausgabe werden nicht ausgeliefert (docs/adr/0009-tonausgabe-und-vorlesen.md)
+        unwanted = [TARGET / "multimedia" / "ffmpegmediaplugin.dll", TARGET / "texttospeech" / "qtexttospeech_mock.dll"]
+        for pattern in ("avcodec-*.dll", "avformat-*.dll", "avutil-*.dll", "swresample-*.dll", "swscale-*.dll"):
+            unwanted += list(TARGET.glob(pattern))
+        for f in unwanted:
+            if f.exists():
+                f.unlink()
     content = TARGET / "content"
     if content.exists():
         shutil.rmtree(content)
