@@ -1,0 +1,134 @@
+{
+  "id": "volta1.4.12",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_12_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "relais",
+    "gluehlampe",
+    "leitung"
+  ],
+  "frage_key": "exp_4_12_frage",
+  "vermutungen": [
+    "exp_4_12_v1",
+    "exp_4_12_v2",
+    "exp_4_12_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_12_b1",
+    "exp_4_12_b2",
+    "exp_4_12_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A3",
+          "B3"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "K1",
+        "typ": "relais",
+        "felder": {
+          "a": "C3",
+          "b": "C4",
+          "com": "D3",
+          "no": "D4"
+        }
+      },
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "E4",
+          "E5"
+        ],
+        "wert": 10
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A3",
+        "farbe": "rot"
+      },
+      {
+        "von": "B3",
+        "nach": "C3",
+        "farbe": "rot"
+      },
+      {
+        "von": "C4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "D3",
+        "farbe": "rot"
+      },
+      {
+        "von": "D4",
+        "nach": "C3",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D4",
+        "nach": "E4",
+        "farbe": "rot"
+      },
+      {
+        "von": "E5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_4_12_s1",
+    "exp_4_12_s2",
+    "exp_4_12_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "K1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_12_h1",
+    "exp_4_12_h2",
+    "exp_4_12_loesung"
+  ],
+  "erklaerung_key": "exp_4_12_erklaerung",
+  "mehr_wissen_key": "exp_4_12_mehr",
+  "weiterforschen": [
+    "exp_4_12_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_12_echt"
+}

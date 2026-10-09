@@ -1,0 +1,129 @@
+{
+  "id": "volta1.4.2",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_2_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "transistor_npn",
+    "leitung"
+  ],
+  "frage_key": "exp_4_2_frage",
+  "vermutungen": [
+    "exp_4_2_v1",
+    "exp_4_2_v2",
+    "exp_4_2_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_2_b1",
+    "exp_4_2_b2",
+    "exp_4_2_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B2",
+          "B3"
+        ],
+        "wert": 100000
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B3",
+          "c": "B4",
+          "e": "C3",
+          "e2": "C4"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 220
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "B2",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A5",
+        "farbe": "rot"
+      },
+      {
+        "von": "A6",
+        "nach": "MESS:A",
+        "farbe": "blau"
+      },
+      {
+        "von": "MESS:COM",
+        "nach": "B4",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": [],
+    "pult_stellung": {
+      "messart": "A"
+    }
+  },
+  "schritte": [
+    "exp_4_2_s1",
+    "exp_4_2_s2",
+    "exp_4_2_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "MESS",
+        "groesse": "anzeige",
+        "zwischen": [
+          0.01,
+          0.025
+        ],
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_2_h1",
+    "exp_4_2_h2",
+    "exp_4_2_loesung"
+  ],
+  "erklaerung_key": "exp_4_2_erklaerung",
+  "mehr_wissen_key": "exp_4_2_mehr",
+  "weiterforschen": [
+    "exp_4_2_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_2_echt"
+}

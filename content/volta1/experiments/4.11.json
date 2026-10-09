@@ -1,0 +1,131 @@
+{
+  "id": "volta1.4.11",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_11_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "reedkontakt",
+    "leitung"
+  ],
+  "frage_key": "exp_4_11_frage",
+  "vermutungen": [
+    "exp_4_11_v1",
+    "exp_4_11_v2",
+    "exp_4_11_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_11_b1",
+    "exp_4_11_b2",
+    "exp_4_11_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "RK1",
+        "typ": "reedkontakt",
+        "felder": [
+          "A2",
+          "A3"
+        ],
+        "geschlossen": false
+      }
+    ],
+    "module": [
+      {
+        "id": "TM1",
+        "typ": "tonmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "TM1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "TM1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "TM1.ein",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "P:LS1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "TM1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_4_11_s1",
+    "exp_4_11_s2",
+    "exp_4_11_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "TM1",
+        "groesse": "frequenz_Hz",
+        "min": 100,
+        "dauer_s": 0.5
+      },
+      {
+        "bauteil": "TM1",
+        "groesse": "strom_mA",
+        "min": 20,
+        "dauer_s": 0.5
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_11_h1",
+    "exp_4_11_h2",
+    "exp_4_11_loesung"
+  ],
+  "erklaerung_key": "exp_4_11_erklaerung",
+  "mehr_wissen_key": "exp_4_11_mehr",
+  "weiterforschen": [
+    "exp_4_11_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_11_echt"
+}

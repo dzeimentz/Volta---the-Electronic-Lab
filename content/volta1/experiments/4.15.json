@@ -1,0 +1,153 @@
+{
+  "id": "volta1.4.15",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_15_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "feuchtesonde",
+    "widerstand",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp_4_15_frage",
+  "vermutungen": [
+    "exp_4_15_v1",
+    "exp_4_15_v2",
+    "exp_4_15_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_15_b1",
+    "exp_4_15_b2",
+    "exp_4_15_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "F1",
+        "typ": "feuchtesonde",
+        "felder": [
+          "C1",
+          "C3"
+        ]
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B6",
+          "B7"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B7",
+          "kathode": "C7"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "VM1",
+        "typ": "verstaerkermodul",
+        "feld": 1
+      },
+      {
+        "id": "BL1",
+        "typ": "blinkmodul",
+        "feld": 6
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "VM1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "VM1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "C1",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "VM1.ein",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "BL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "BL1.minus",
+        "nach": "VM1.aus",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B6",
+        "farbe": "rot"
+      },
+      {
+        "von": "C7",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": [],
+    "werkzeuge": [
+      {
+        "typ": "wasser",
+        "feld": "C2"
+      }
+    ]
+  },
+  "schritte": [
+    "exp_4_15_s1",
+    "exp_4_15_s2",
+    "exp_4_15_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "min": 5,
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_15_h1",
+    "exp_4_15_h2",
+    "exp_4_15_loesung"
+  ],
+  "erklaerung_key": "exp_4_15_erklaerung",
+  "mehr_wissen_key": "exp_4_15_mehr",
+  "weiterforschen": [
+    "exp_4_15_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_15_echt"
+}

@@ -1,0 +1,157 @@
+{
+  "id": "volta1.4.9",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_9_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "elko",
+    "widerstand",
+    "transistor_npn",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp_4_9_frage",
+  "vermutungen": [
+    "exp_4_9_v1",
+    "exp_4_9_v2",
+    "exp_4_9_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_9_b1",
+    "exp_4_9_b2",
+    "exp_4_9_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "A2",
+          "minus": "A3"
+        },
+        "wert": 0.001
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B2",
+          "B3"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B3",
+          "c": "B4",
+          "e": "C3",
+          "e2": "C4"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A6",
+          "kathode": "B6"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "B2",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A5",
+        "farbe": "rot"
+      },
+      {
+        "von": "B6",
+        "nach": "B4",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_4_9_s1",
+    "exp_4_9_s2",
+    "exp_4_9_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "min": 5,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_9_h1",
+    "exp_4_9_h2",
+    "exp_4_9_loesung"
+  ],
+  "erklaerung_key": "exp_4_9_erklaerung",
+  "mehr_wissen_key": "exp_4_9_mehr",
+  "weiterforschen": [
+    "exp_4_9_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_9_echt"
+}

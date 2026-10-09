@@ -1,0 +1,123 @@
+{
+  "id": "volta1.4.14",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_14_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "motor",
+    "leitung"
+  ],
+  "frage_key": "exp_4_14_frage",
+  "vermutungen": [
+    "exp_4_14_v1",
+    "exp_4_14_v2",
+    "exp_4_14_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_14_b1",
+    "exp_4_14_b2",
+    "exp_4_14_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "M1",
+        "typ": "motor",
+        "felder": [
+          "B3",
+          "B5"
+        ]
+      }
+    ],
+    "module": [
+      {
+        "id": "ZM1",
+        "typ": "zeitmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "ZM1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "ZM1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "ZM1.start",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "B5",
+        "nach": "ZM1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_4_14_s1",
+    "exp_4_14_s2",
+    "exp_4_14_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "M1",
+        "groesse": "drehzahl",
+        "min": 500,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "M1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_14_h1",
+    "exp_4_14_h2",
+    "exp_4_14_loesung"
+  ],
+  "erklaerung_key": "exp_4_14_erklaerung",
+  "mehr_wissen_key": "exp_4_14_mehr",
+  "weiterforschen": [
+    "exp_4_14_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_14_echt"
+}

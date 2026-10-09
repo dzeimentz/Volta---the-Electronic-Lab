@@ -1,0 +1,138 @@
+{
+  "id": "volta1.4.5",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_5_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "heissleiter",
+    "widerstand",
+    "transistor_npn",
+    "piezo",
+    "leitung"
+  ],
+  "frage_key": "exp_4_5_frage",
+  "vermutungen": [
+    "exp_4_5_v1",
+    "exp_4_5_v2",
+    "exp_4_5_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_5_b1",
+    "exp_4_5_b2",
+    "exp_4_5_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "NTC1",
+        "typ": "heissleiter",
+        "felder": [
+          "B1",
+          "B3"
+        ]
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "C3"
+        ],
+        "wert": 680
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B5",
+          "c": "B6",
+          "e": "C5",
+          "e2": "C6"
+        }
+      },
+      {
+        "id": "PZ1",
+        "typ": "piezo",
+        "felder": {
+          "plus": "A6",
+          "minus": "B6"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "B1",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B3",
+        "nach": "B5",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A6",
+        "farbe": "rot"
+      }
+    ],
+    "anzeigen": [],
+    "werkzeuge": [
+      {
+        "typ": "foehn",
+        "feld": "B2"
+      }
+    ]
+  },
+  "schritte": [
+    "exp_4_5_s1",
+    "exp_4_5_s2",
+    "exp_4_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "PZ1",
+        "groesse": "frequenz_Hz",
+        "min": 1000,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "PZ1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_5_h1",
+    "exp_4_5_h2",
+    "exp_4_5_loesung"
+  ],
+  "erklaerung_key": "exp_4_5_erklaerung",
+  "mehr_wissen_key": "exp_4_5_mehr",
+  "weiterforschen": [
+    "exp_4_5_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_5_echt"
+}

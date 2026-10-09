@@ -64,8 +64,12 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
   Fotowiderstand, Heissleiter, Kondensator laden/entladen, Elektromagnet, Relais); insgesamt 46.
   Erfolgsbedingungen koennen die Anzeige des Messgeraets pruefen (`MESS` / `anzeige`).
 - Formelrechner mit Rechenblaettern der Stufen 3 und 4 und Rechenmodus: erledigt.
-- Offen: Stufe 4 (Piezo, Feuchtesonde, Zeit- und Verstaerkermodul, ca. 15
-  Experimente), Fehlersuche, Teileliste.
+- Stufe 4: Piezo-Schallgeber, Feuchtesonde (Wassertropfen als Werkzeug), Zeitmodul (monostabile Kippstufe,
+  ca. 3,2 s) und Verstaerkermodul (Darlington) in Kern und App; 15 Experimente (4.1–4.15: Transistor als Schalter
+  und Verstaerker, Daemmerungsschalter, Lichtschalter, Waerme- und Wassermelder, Treppenhauslicht, Zeitschalter
+  und Wechselblinker aus Einzelteilen, Tueralarm, Selbsthaltung, Darlington, Nachlauf, Module im Verbund);
+  insgesamt 61. ContentSmokeTest mit Gegenprobe fuer Sensor-Experimente.
+- Offen: Fehlersuche, Teileliste.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

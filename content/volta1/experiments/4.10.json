@@ -1,0 +1,215 @@
+{
+  "id": "volta1.4.10",
+  "band": "volta1",
+  "stufe": 4,
+  "kapitel": 1,
+  "titel_key": "exp_4_10_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "elko",
+    "transistor_npn",
+    "led_rot",
+    "led_gruen",
+    "leitung"
+  ],
+  "frage_key": "exp_4_10_frage",
+  "vermutungen": [
+    "exp_4_10_v1",
+    "exp_4_10_v2",
+    "exp_4_10_v3"
+  ],
+  "beobachtungen": [
+    "exp_4_10_b1",
+    "exp_4_10_b2",
+    "exp_4_10_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "A3"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A3",
+          "kathode": "B3"
+        }
+      },
+      {
+        "id": "RB1",
+        "typ": "widerstand",
+        "felder": [
+          "B1",
+          "B2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B2",
+          "c": "B3",
+          "e": "C2",
+          "e2": "C3"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A8",
+          "A9"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D2",
+        "typ": "led_gruen",
+        "felder": {
+          "anode": "A8",
+          "kathode": "B8"
+        }
+      },
+      {
+        "id": "RB2",
+        "typ": "widerstand",
+        "felder": [
+          "B6",
+          "B7"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "T2",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B7",
+          "c": "B8",
+          "e": "C7",
+          "e2": "C8"
+        }
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "D3",
+          "minus": "D4"
+        }
+      },
+      {
+        "id": "C2",
+        "typ": "elko",
+        "felder": {
+          "plus": "E8",
+          "minus": "E7"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A2",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B1",
+        "farbe": "rot"
+      },
+      {
+        "von": "C2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A9",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B6",
+        "farbe": "rot"
+      },
+      {
+        "von": "C7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B3",
+        "nach": "D3",
+        "farbe": "blau"
+      },
+      {
+        "von": "D4",
+        "nach": "B7",
+        "farbe": "gelb"
+      },
+      {
+        "von": "B8",
+        "nach": "E8",
+        "farbe": "blau"
+      },
+      {
+        "von": "E7",
+        "nach": "B2",
+        "farbe": "gelb"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_4_10_s1",
+    "exp_4_10_s2",
+    "exp_4_10_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "min": 5,
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "T2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_4_10_h1",
+    "exp_4_10_h2",
+    "exp_4_10_loesung"
+  ],
+  "erklaerung_key": "exp_4_10_erklaerung",
+  "mehr_wissen_key": "exp_4_10_mehr",
+  "weiterforschen": [
+    "exp_4_10_w1"
+  ],
+  "jetzt_in_echt_key": "exp_4_10_echt"
+}
