@@ -306,6 +306,16 @@ int main(int argc, char* argv[]) {
                 l->setProperty("selectedWire", qEnvironmentVariable("VOLTA_DEMO_SELECT_WIRE"));
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_FLYOUT=1 klappt die Werkzeugleiste »Licht und Waerme« aus (Sichtpruefung)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_FLYOUT") == 1)
+        QTimer::singleShot(1500, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* b = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("environmentBar"))) {
+                b->setProperty("collapseDelay", 60000);
+                QMetaObject::invokeMethod(b, "poke");
+            }
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_INFO=1 oeffnet das Info-Fenster (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_INFO") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

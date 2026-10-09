@@ -63,7 +63,8 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 - Stufe 3: 15 Experimente (3.1–3.15: Spannung, Strom, Widerstand messen, Ohmsches Gesetz, Spannungsteiler,
   Fotowiderstand, Heissleiter, Kondensator laden/entladen, Elektromagnet, Relais); insgesamt 46.
   Erfolgsbedingungen koennen die Anzeige des Messgeraets pruefen (`MESS` / `anzeige`).
-- Offen: Formelrechner (Rechenblaetter), Stufe 4 (Piezo, Feuchtesonde, Zeit- und Verstaerkermodul, ca. 15
+- Formelrechner mit Rechenblaettern der Stufen 3 und 4 und Rechenmodus: erledigt.
+- Offen: Stufe 4 (Piezo, Feuchtesonde, Zeit- und Verstaerkermodul, ca. 15
   Experimente), Fehlersuche, Teileliste.
 
 ## Naechste konkrete Schritte (Phase 0)

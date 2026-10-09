@@ -376,6 +376,200 @@
     </message>
 </context>
 <context>
+    <name>FormulaCalculator</name>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="21" />
+        <source>Ohmsches Gesetz</source>
+        <translation>Loi d'Ohm</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="22" />
+        <source>Vorwiderstand LED</source>
+        <translation>Résistance de LED</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="23" />
+        <source>Reihe und parallel</source>
+        <translation>Série et parallèle</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="24" />
+        <source>Leistung</source>
+        <translation>Puissance</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="25" />
+        <source>Spannungsteiler</source>
+        <translation>Diviseur de tension</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="26" />
+        <source>Zeitkonstante</source>
+        <translation>Constante de temps</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="27" />
+        <source>Kippstufe</source>
+        <translation>Multivibrateur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="28" />
+        <source>Rechner</source>
+        <translation>Calculatrice</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="94" />
+        <source>Der Formelrechner wird mit Stufe 3 freigeschaltet.</source>
+        <translation>La calculatrice de formules sera débloquée au niveau 3.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="129" />
+        <source>Trage zwei Größen ein, lass die gesuchte leer.</source>
+        <translation>Entre deux grandeurs, laisse vide celle que tu cherches.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="163" />
+        <source>U = R · I = %1 · %2</source>
+        <translation>U = R · I = %1 · %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="164" />
+        <source>R = U ÷ I = %1 ÷ %2</source>
+        <translation>R = U ÷ I = %1 ÷ %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="165" />
+        <source>I = U ÷ R = %1 ÷ %2</source>
+        <translation>I = U ÷ R = %1 ÷ %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="179" />
+        <source>rot</source>
+        <translation>rouge</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="179" />
+        <source>gelb</source>
+        <translation>jaune</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="179" />
+        <source>grün</source>
+        <translation>vert</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="179" />
+        <source>blau</source>
+        <translation>bleu</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="194" />
+        <source>R = %1 → Normwert %2</source>
+        <translation>R = %1 → valeur normalisée %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="195" />
+        <source>R = (Ub − Uf) ÷ I = (%1 − %2) ÷ %3. Mit %4 fließen %5, der Widerstand wird mit %6 belastet.</source>
+        <translation>R = (Ub − Uf) ÷ I = (%1 − %2) ÷ %3. Avec %4, il passe %5 et la résistance dissipe %6.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="198" />
+        <source>Achtung: mehr als 0,25 W – der Widerstand würde zu heiß.</source>
+        <translation>Attention : plus de 0,25 W – la résistance deviendrait trop chaude.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="205" />
+        <source>Normwert auf %1 übernehmen</source>
+        <translation>Appliquer la valeur normalisée à %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="205" />
+        <source>Erst einen Widerstand auswählen</source>
+        <translation>Choisis d'abord une résistance</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="215" />
+        <source>Zwei oder drei Widerstände: hintereinander (Reihe) und nebeneinander (parallel).</source>
+        <translation>Deux ou trois résistances : l'une après l'autre (série) et côte à côte (parallèle).</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="218" />
+        <location filename="../app/qml/FormulaCalculator.qml" line="234" />
+        <source>leer</source>
+        <translation>vide</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="221" />
+        <source>Reihe: %1 · parallel: %2</source>
+        <translation>Série : %1 · parallèle : %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="222" />
+        <source>Reihe: R = R1 + R2 + … · parallel: 1/R = 1/R1 + 1/R2 + … (parallel immer kleiner als der kleinste)</source>
+        <translation>Série : R = R1 + R2 + … · parallèle : 1/R = 1/R1 + 1/R2 + … (en parallèle toujours plus petite que la plus petite)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="231" />
+        <source>Zwei der drei Größen genügen.</source>
+        <translation>Deux des trois grandeurs suffisent.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="239" />
+        <source>P = U · I</source>
+        <translation>P = U · I</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="240" />
+        <source>P = I · I · R</source>
+        <translation>P = I · I · R</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="240" />
+        <source>P = U · U ÷ R</source>
+        <translation>P = U · U ÷ R</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="241" />
+        <source>mehr als 0,25 W: zu viel für die Widerstände im Kasten.</source>
+        <translation>plus de 0,25 W : trop pour les résistances du coffret.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="256" />
+        <source>Ua = Ue · R2 ÷ (R1 + R2) = %1 · %2 ÷ %3 (ohne Last)</source>
+        <translation>Ua = Ue · R2 ÷ (R1 + R2) = %1 · %2 ÷ %3 (sans charge)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="272" />
+        <source>τ = R · C. Nach τ ist der Kondensator zu 63 % geladen, nach 5 τ = %1 praktisch voll.</source>
+        <translation>τ = R · C. Après τ, le condensateur est chargé à 63 % ; après 5 τ = %1, il est pratiquement plein.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="309" />
+        <source>Symmetrische Kippstufe: beide Hälften mit gleichem R und C.</source>
+        <translation>Multivibrateur symétrique : les deux moitiés avec le même R et C.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="314" />
+        <source>f = %1 (alle %2 ein Blink)</source>
+        <translation>f = %1 (un clignotement toutes les %2)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="315" />
+        <source>Jede Hälfte dauert 0,69 · R · C = %1; f = 1 ÷ (2 · 0,69 · R · C)</source>
+        <translation>Chaque moitié dure 0,69 · R · C = %1 ; f = 1 ÷ (2 · 0,69 · R · C)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="337" />
+        <source>Eingabe prüfen</source>
+        <translation>Vérifie la saisie</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="365" />
+        <source>Vorsätze: p = billionstel, n = milliardstel, µ = millionstel, m = tausendstel, k = tausend, M = Million.</source>
+        <translation>Préfixes : p = billionième, n = milliardième, µ = millionième, m = millième, k = mille, M = million.</translation>
+    </message>
+</context>
+<context>
     <name>Home</name>
     <message>
         <location filename="../app/qml/Home.qml" line="102" />
@@ -720,134 +914,134 @@
         <translation>Les modules se placent dans la barre des modules en bas.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1011" />
+        <location filename="../app/qml/Lab.qml" line="1012" />
         <source>Licht und Wärme</source>
         <translation>Lumière et chaleur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1020" />
+        <location filename="../app/qml/Lab.qml" line="1019" />
         <source>Raum hell</source>
         <translation>Pièce éclairée</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1020" />
+        <location filename="../app/qml/Lab.qml" line="1019" />
         <source>Dämmerung</source>
         <translation>Crépuscule</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1020" />
+        <location filename="../app/qml/Lab.qml" line="1019" />
         <source>Dunkel</source>
         <translation>Sombre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1023" />
+        <location filename="../app/qml/Lab.qml" line="1022" />
         <source>Raumlicht umschalten</source>
         <translation>Changer la lumière de la pièce</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1043" />
-        <location filename="../app/qml/Lab.qml" line="1067" />
+        <location filename="../app/qml/Lab.qml" line="1042" />
+        <location filename="../app/qml/Lab.qml" line="1066" />
         <source>Taschenlampe</source>
         <translation>Lampe de poche</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1043" />
-        <location filename="../app/qml/Lab.qml" line="1067" />
+        <location filename="../app/qml/Lab.qml" line="1042" />
+        <location filename="../app/qml/Lab.qml" line="1066" />
         <source>Föhn</source>
         <translation>Sèche-cheveux</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1087" />
+        <location filename="../app/qml/Lab.qml" line="1086" />
         <source>Spannungsanzeige ein/aus</source>
         <translation>Afficher/masquer la tension</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1098" />
+        <location filename="../app/qml/Lab.qml" line="1097" />
         <source>Zeitschreiber Kanal %1: Messgerät</source>
         <translation>Enregistreur voie %1 : multimètre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1099" />
+        <location filename="../app/qml/Lab.qml" line="1098" />
         <source>Zeitschreiber Kanal %1: hier messen</source>
         <translation>Enregistreur voie %1 : mesurer ici</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1113" />
+        <location filename="../app/qml/Lab.qml" line="1112" />
         <source>Drehen</source>
         <translation>Tourner</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1122" />
+        <location filename="../app/qml/Lab.qml" line="1121" />
         <source>Umdrehen (Polung)</source>
         <translation>Retourner (polarité)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1126" />
+        <location filename="../app/qml/Lab.qml" line="1125" />
         <source>Kurz stecken</source>
         <translation>Placer court</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1126" />
+        <location filename="../app/qml/Lab.qml" line="1125" />
         <source>Lang stecken</source>
         <translation>Placer long</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1135" />
+        <location filename="../app/qml/Lab.qml" line="1134" />
         <source>Wert</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1152" />
+        <location filename="../app/qml/Lab.qml" line="1151" />
         <source>Nennspannung</source>
         <translation>Tension nominale</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1158" />
+        <location filename="../app/qml/Lab.qml" line="1157" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1168" />
+        <location filename="../app/qml/Lab.qml" line="1167" />
         <source>Reparieren</source>
         <translation>Réparer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1174" />
+        <location filename="../app/qml/Lab.qml" line="1173" />
         <source>Entfernen</source>
         <translation>Retirer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1185" />
+        <location filename="../app/qml/Lab.qml" line="1184" />
         <source>Blick hinein</source>
         <translation>Regard à l'intérieur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1189" />
+        <location filename="../app/qml/Lab.qml" line="1188" />
         <source>Herausnehmen</source>
         <translation>Retirer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1206" />
+        <location filename="../app/qml/Lab.qml" line="1205" />
         <source>Ausschalten</source>
         <translation>Éteindre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1206" />
+        <location filename="../app/qml/Lab.qml" line="1205" />
         <source>Einschalten</source>
         <translation>Allumer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1210" />
+        <location filename="../app/qml/Lab.qml" line="1209" />
         <source>Wegräumen</source>
         <translation>Ranger</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1225" />
+        <location filename="../app/qml/Lab.qml" line="1224" />
         <source>Farbe: %1</source>
         <translation>Couleur : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1236" />
+        <location filename="../app/qml/Lab.qml" line="1235" />
         <source>Leitung löschen</source>
         <translation>Supprimer le fil</translation>
     </message>
@@ -1633,84 +1827,89 @@
         <translation>Lexique</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="129" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="98" />
+        <source>Rechner</source>
+        <translation>Calculatrice</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ToolboxPanel.qml" line="130" />
         <source>4 Ringe</source>
         <translation>4 anneaux</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="130" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="131" />
         <source>5 Ringe</source>
         <translation>5 anneaux</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="188" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="189" />
         <source>Toleranz</source>
         <translation>Tolérance</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="188" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="189" />
         <source>Multiplikator</source>
         <translation>Multiplicateur</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="189" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="190" />
         <source>%1. Ziffer</source>
         <translation>%1er chiffre</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="215" />
-        <location filename="../app/qml/ToolboxPanel.qml" line="302" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="216" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="303" />
         <source>Wert eingeben</source>
         <translation>Saisir une valeur</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="223" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="224" />
         <source>z. B. 4,7k</source>
         <translation>p. ex. 4,7k</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="230" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="231" />
         <source>Ringe zeigen</source>
         <translation>Afficher les anneaux</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="234" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="235" />
         <source>Diesen Wert kann ich nicht lesen. Versuche z. B. 470, 4,7k oder 2M2.</source>
         <translation>Je ne peux pas lire cette valeur. Essaie p. ex. 470, 4,7k ou 2M2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="237" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="238" />
         <source>Auf %1 übernehmen</source>
         <translation>Appliquer à %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="237" />
-        <location filename="../app/qml/ToolboxPanel.qml" line="351" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="238" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="352" />
         <source>Erst einen Widerstand auswählen</source>
         <translation>Choisis d'abord une résistance</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="339" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="340" />
         <source>%1 ist ein Normwert der Reihe E%2.</source>
         <translation>%1 est une valeur normalisée de la série E%2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="340" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="341" />
         <source>Nächster Normwert in E%1: %2</source>
         <translation>Valeur normalisée la plus proche en E%1 : %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="344" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="345" />
         <source>Abweichung: %1 %</source>
         <translation>Écart : %1 %</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="351" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="352" />
         <source>Normwert auf %1 übernehmen</source>
         <translation>Appliquer la valeur normalisée à %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ToolboxPanel.qml" line="356" />
+        <location filename="../app/qml/ToolboxPanel.qml" line="357" />
         <source>Widerstände gibt es nicht in jedem Wert, sondern in genormten Stufen. In der Reihe E12 hat jede Zehnerstufe 12 Werte.</source>
         <translation>Les résistances n'existent pas dans toutes les valeurs, mais en paliers normalisés. Dans la série E12, chaque décade compte 12 valeurs.</translation>
     </message>
@@ -1799,23 +1998,23 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="360" />
-        <location filename="../app/src/lab_controller.cpp" line="394" />
+        <location filename="../app/src/lab_controller.cpp" line="420" />
+        <location filename="../app/src/lab_controller.cpp" line="454" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="466" />
+        <location filename="../app/src/lab_controller.cpp" line="526" />
         <source>Musteraufbau zeigen</source>
         <translation>Afficher le montage modèle</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="897" />
+        <location filename="../app/src/lab_controller.cpp" line="957" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="924" />
+        <location filename="../app/src/lab_controller.cpp" line="984" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
     </message>

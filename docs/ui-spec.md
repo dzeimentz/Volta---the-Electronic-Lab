@@ -202,10 +202,11 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   dann umbauen.
 
 ## Licht und Waerme (Stufe 3, Variante B: Werkzeuge)
-- Automatisch ausklappende Werkzeugleiste »Licht und Wärme« unten links (`FlyoutBar`, wie eine Taskleiste mit
-  automatischem Ausblenden; sichtbar, sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt sind):
-  eingeklappt ein Griff mit Kurzsymbolen (Raumlicht, liegende Werkzeuge), ausgeklappt per Maus darueber oder
-  Antippen, klappt nach dem Verlassen bzw. 4 s ohne Beruehrung wieder ein (nicht waehrend des Ziehens). Inhalt:
+- Ausklappende Werkzeuggruppe »Licht und Wärme« unten mittig (`FlyoutBar`, Bedienmuster wie in Visual Technic Studio;
+  sichtbar, sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt sind): eingeklappt eine dunkle Pille
+  »Licht und Wärme ▴ 3«, bei Mausberuehrung oder Antippen klappt darueber die Werkzeugleiste aus; sie schliesst,
+  wenn der Zeiger sie verlaesst (Touch: 4 s ohne Beruehrung), nicht waehrend des Ziehens. Weitere Gruppen lassen
+  sich nebeneinander setzen. Inhalt:
   Raumlicht umschalten (☀ hell 300 lx / ⛅ Daemmerung 20 lx / 🌙 dunkel 0,5 lx; die Arbeitsflaeche wird
   entsprechend gedaempft), Taschenlampe und Foehn auf die Grundplatte ziehen oder antippen (legt sie in die Mitte).
 - Auf der Grundplatte: frei verschiebbar, Antippen schaltet ein/aus, langer Druck bzw. Rechtsklick: Ein-/Ausschalten,
@@ -223,3 +224,12 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Kanal 2 blau gestrichelt; das Feld traegt das Schild K1 bzw. K2; Kanal-Schild in der Kopfzeile mit aktuellem Wert.
 - Zeitfenster 2 / 10 / 30 s, Anhalten/Weiter, Loeschen; Skala Spannung 0 .. Batteriespannung, sonst automatisch.
   Zeitachse = Simulationszeit (laeuft bei Aufbauaenderungen lueckenlos weiter).
+
+## Formelrechner (Werkzeugkasten, Reiter »Rechner«, ab Stufe 3)
+- Rechenblaetter mit Rechenweg in einer Zeile (`model/formula`): Ohmsches Gesetz (Dreieck, die gesuchte Groesse
+  hervorgehoben; zwei Groessen eintragen, die dritte leer), Vorwiderstand fuer Leuchtdioden (Farbe waehlbar,
+  naechstgroesserer E12-Normwert, Strom und Leistung damit, Warnung ueber 0,25 W, Uebernehmen auf den ausgewaehlten
+  Widerstand), Reihe und parallel, Leistung; ab Stufe 4 Spannungsteiler, Zeitkonstante (mit Ladekurve, Marke bei
+  63 %), Kippstufe (Blinkfrequenz). Gesperrte Blaetter mit Schloss.
+- Eingaben mit Vorsatz: 4,7k, 4k7, 470m, 100µ (auch 100u), 2,2 MΩ, 15 mA; ungueltig: rot umrandet.
+- Rechenmodus mit Tastenfeld (Ziffern, Komma, + − × ÷, Klammern, Vorsaetze p n µ m k M).

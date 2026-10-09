@@ -95,6 +95,7 @@ Drawer {
             TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control }
             TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control }
             TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control }
+            TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control }
         }
 
         StackLayout {
@@ -392,6 +393,14 @@ Drawer {
                         }
                     }
                 }
+            }
+
+            // ------------------------------------------------------------ Formelrechner (ab Stufe 3)
+            FormulaCalculator {
+                objectName: "formulaCalculator"
+                controller: box.controller
+                canApply: box.canApply
+                selectedPartId: box.selectedPartId
             }
         }
     }

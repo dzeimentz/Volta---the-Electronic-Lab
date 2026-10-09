@@ -133,6 +133,15 @@ public:
     Q_INVOKABLE double parseOhm(const QString& text) const;
     Q_INVOKABLE QVariantList eSeries(int n) const;
     Q_INVOKABLE QVariantMap nearestE(double ohm, int n) const; // {value, deviation, isMember}
+    // Formelrechner (model/formula.hpp): Eingabe mit Vorsatz -> {ok, value}; Wert -> Text mit Vorsatz und Einheit
+    // (Dezimalzeichen der Sprache); Rechenmodus -> {ok, value}; Rechenblatt -> Ergebniswerte (siehe .cpp)
+    Q_INVOKABLE QVariantMap formulaParse(const QString& text) const;
+    Q_INVOKABLE QString formulaFormat(double value, const QString& unit) const;
+    Q_INVOKABLE QVariantMap formulaEval(const QString& expression) const;
+    Q_INVOKABLE QVariantMap formulaSheet(const QString& sheet, const QVariantMap& in) const;
+    // hoechste freigeschaltete Stufe (alles freigegeben: 99) - z. B. fuer die Rechenblaetter ab Stufe 3/4
+    Q_PROPERTY(int unlockedStage READ unlockedStage NOTIFY progressChanged)
+    int unlockedStage() const { return highestUnlockedStage(); }
     // Lexikon: [{type, text}] aller Bauteile mit Lexikontext, in der Reihenfolge des Bauteilfachs
     Q_PROPERTY(QVariantList lexicon READ lexicon NOTIFY experimentChanged)
     // Schaltplan des Aufbaus nach DIN EN 61082-1 (model/schematic_layout), in Bildpunkten der Zeichnung:

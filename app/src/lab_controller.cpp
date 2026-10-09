@@ -13,6 +13,7 @@
 #include <cstdlib>
 
 #include "model/build_guide.hpp"
+#include "model/formula.hpp"
 #include "services/audio_service.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
@@ -243,6 +244,65 @@ QVariantList LabController::trayModules() const {
                            {QStringLiteral("stage"), e.fromStage},
                            {QStringLiteral("pins"), pins},
                            {QStringLiteral("locked"), !m_unlockAll && e.fromStage > open}};
+    }
+    return out;
+}
+
+// ------------------------------------------------------------------ Formelrechner
+
+QVariantMap LabController::formulaParse(const QString& text) const {
+    bool ok = false;
+    const double v = model::formula::parse(ss(text.trimmed()), ok);
+    return {{QStringLiteral("ok"), ok}, {QStringLiteral("value"), v}};
+}
+
+QString LabController::formulaFormat(double value, const QString& unit) const {
+    QString s = qs(model::formula::format(value, ss(unit)));
+    return s.replace(QLatin1Char('.'), QLocale().decimalPoint());
+}
+
+QVariantMap LabController::formulaEval(const QString& expression) const {
+    bool ok = false;
+    const double v = model::formula::evaluate(ss(expression.trimmed()), ok);
+    return {{QStringLiteral("ok"), ok}, {QStringLiteral("value"), v}};
+}
+
+QVariantMap LabController::formulaSheet(const QString& sheet, const QVariantMap& in) const {
+    namespace f = model::formula;
+    auto num = [&in](const char* k) { return in.value(QString::fromLatin1(k)).toDouble(); };
+    QVariantMap out;
+    if (sheet == QLatin1String("ohm")) {
+        double u = num("U"), r = num("R"), i = num("I");
+        const bool ok = f::ohm(u, r, i);
+        out = {{QStringLiteral("ok"), ok}, {QStringLiteral("U"), u}, {QStringLiteral("R"), r}, {QStringLiteral("I"), i}};
+    } else if (sheet == QLatin1String("led")) {
+        const f::LedResistor r = f::ledResistor(num("Ub"), num("Uf"), num("I"));
+        out = {{QStringLiteral("ok"), r.ok},           {QStringLiteral("R"), r.ohm},
+               {QStringLiteral("norm"), r.normOhm},    {QStringLiteral("normI"), r.normA},
+               {QStringLiteral("P"), r.powerW},        {QStringLiteral("tooHot"), r.tooHot}};
+    } else if (sheet == QLatin1String("network")) {
+        std::vector<double> rs;
+        for (const char* k : {"R1", "R2", "R3"})
+            if (num(k) > 0.0) rs.push_back(num(k));
+        out = {{QStringLiteral("ok"), rs.size() >= 2},
+               {QStringLiteral("series"), f::series(rs)},
+               {QStringLiteral("parallel"), f::parallel(rs)}};
+    } else if (sheet == QLatin1String("power")) {
+        double p = 0.0;
+        const bool ok = f::power(num("U"), num("I"), num("R"), p);
+        out = {{QStringLiteral("ok"), ok}, {QStringLiteral("P"), p}, {QStringLiteral("tooHot"), p > 0.25}};
+    } else if (sheet == QLatin1String("divider")) {
+        const double ua = f::divider(num("Ue"), num("R1"), num("R2"));
+        out = {{QStringLiteral("ok"), num("R1") + num("R2") > 0.0 && num("Ue") > 0.0}, {QStringLiteral("Ua"), ua}};
+    } else if (sheet == QLatin1String("tau")) {
+        const double tau = f::timeConstant(num("R"), num("C"));
+        QVariantList curve; // Ladekurve 0 .. 5 tau in 50 Punkten (Anteil 0..1)
+        for (int k = 0; k <= 50; ++k) curve << f::chargeAt(tau, tau * 5.0 * k / 50.0);
+        out = {{QStringLiteral("ok"), tau > 0.0}, {QStringLiteral("tau"), tau}, {QStringLiteral("curve"), curve}};
+    } else if (sheet == QLatin1String("astable")) {
+        const double hz = f::astableHz(num("R"), num("C"));
+        out = {{QStringLiteral("ok"), hz > 0.0}, {QStringLiteral("f"), hz}, {QStringLiteral("T"), hz > 0.0 ? 1.0 / hz : 0.0},
+               {QStringLiteral("half"), std::log(2.0) * num("R") * num("C")}};
     }
     return out;
 }

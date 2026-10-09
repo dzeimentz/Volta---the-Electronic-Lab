@@ -7,6 +7,7 @@
 
 #include "model/anchor.hpp"
 #include "model/build_guide.hpp"
+#include "model/formula.hpp"
 #include "model/recorder.hpp"
 #include "model/tone_synth.hpp"
 #include "model/meter_display.hpp"
@@ -468,6 +469,65 @@ private slots:
         r.clear();
         QVERIFY(r.samples().empty());
         QVERIFY(!r.series(0, 10).any);
+    }
+
+    // Formelrechner: Eingabe mit Vorsatz, Ausgabe mit Vorsatz, Rechenmodus, Rechenblaetter
+    void formulaCalculator() {
+        namespace f = model::formula;
+        bool ok = false;
+        auto approx = [](double a, double b) { return std::fabs(a - b) <= 1e-9 * std::max(1.0, std::fabs(b)); };
+        QVERIFY(approx(f::parse("4,7k", ok), 4700.0) && ok);
+        QVERIFY(approx(f::parse("4k7", ok), 4700.0) && ok);
+        QVERIFY(approx(f::parse("470m", ok), 0.47) && ok);
+        QVERIFY(approx(f::parse("100\xC2\xB5", ok), 1e-4) && ok); // 100µ
+        QVERIFY(approx(f::parse("100u", ok), 1e-4) && ok);
+        QVERIFY(approx(f::parse("2,2 M\xCE\xA9", ok), 2.2e6) && ok); // 2,2 MΩ
+        QVERIFY(approx(f::parse("15 mA", ok), 0.015) && ok);
+        QVERIFY(approx(f::parse("9 V", ok), 9.0) && ok);
+        f::parse("abc", ok);
+        QVERIFY(!ok);
+        f::parse("1,2,3", ok);
+        QVERIFY(!ok);
+        QCOMPARE(f::format(4700.0, "\xCE\xA9"), std::string("4.7 k\xCE\xA9"));
+        QCOMPARE(f::format(0.015, "A"), std::string("15 mA"));
+        QCOMPARE(f::format(1e-4, "F"), std::string("100 \xC2\xB5" "F"));
+        QCOMPARE(f::format(0.693, "s"), std::string("693 ms"));
+        QCOMPARE(f::format(9.0, "V"), std::string("9 V"));
+        QCOMPARE(f::format(1000.0, "\xCE\xA9"), std::string("1 k\xCE\xA9"));
+        // Rechenmodus
+        QVERIFY(approx(f::evaluate("4,7k \xC3\x97 2m", ok), 9.4) && ok); // ×
+        QVERIFY(approx(f::evaluate("(1k + 1k) / 2", ok), 1000.0) && ok);
+        QVERIFY(approx(f::evaluate("9 \xC3\xB7 1k", ok), 0.009) && ok); // ÷
+        QVERIFY(approx(f::evaluate("-3 + 5", ok), 2.0) && ok);
+        f::evaluate("1 / 0", ok);
+        QVERIFY(!ok);
+        f::evaluate("(1 + 2", ok);
+        QVERIFY(!ok);
+        // Ohmsches Gesetz: genau eine Groesse fehlt
+        double u = 9.0, r = 1000.0, i = 0.0;
+        QVERIFY(f::ohm(u, r, i) && approx(i, 0.009));
+        u = 0.0; r = 470.0; i = 0.015;
+        QVERIFY(f::ohm(u, r, i) && approx(u, 7.05));
+        u = 9.0; r = 0.0; i = 0.0;
+        QVERIFY(!f::ohm(u, r, i));
+        // Vorwiderstand: (9 - 1,9) / 15 mA = 473 Ohm -> naechstgroesserer E12-Wert 560 Ohm
+        const auto led = f::ledResistor(9.0, 1.9, 0.015);
+        QVERIFY(led.ok && approx(led.ohm, 7.1 / 0.015));
+        QCOMPARE(led.normOhm, 560.0);
+        QVERIFY(led.normA < 0.015 && !led.tooHot);
+        QVERIFY(f::ledResistor(9.0, 1.9, 0.2).tooHot); // 200 mA: 35 Ohm, 1,4 W
+        QVERIFY(!f::ledResistor(1.5, 1.9, 0.01).ok);
+        // Reihe, parallel, Leistung, Teiler, Zeitkonstante, Kippstufe
+        QCOMPARE(f::series({1000.0, 1000.0, 470.0}), 2470.0);
+        QVERIFY(approx(f::parallel({1000.0, 1000.0}), 500.0));
+        double p = 0.0;
+        QVERIFY(f::power(9.0, 0.02, 0.0, p) && approx(p, 0.18));
+        QVERIFY(f::power(0.0, 0.1, 100.0, p) && approx(p, 1.0));
+        QVERIFY(approx(f::divider(9.0, 2000.0, 1000.0), 3.0));
+        QVERIFY(approx(f::timeConstant(10000.0, 100e-6), 1.0));
+        QVERIFY(std::fabs(f::chargeAt(1.0, 1.0) - 0.632) < 0.001);
+        // Blinkmodul-Kippstufe: RB 22 kOhm, C 22 uF -> ca. 1,49 Hz (ideal, ohne Basis-Emitter-Spannung)
+        QVERIFY(std::fabs(f::astableHz(22000.0, 22e-6) - 1.0 / (2.0 * std::log(2.0) * 0.484)) < 1e-6);
     }
 
     void errorsAreReported() {

@@ -1006,12 +1006,11 @@ Item {
             id: environmentBar
             objectName: "environmentBar"
             visible: lab.environmentAvailable
-            anchors { left: parent.left; bottom: parent.bottom; margins: Theme.margin }
+            // unten mittig, wie die Werkzeuggruppen in Visual Technic Studio
+            anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 4 }
             z: 30
             title: qsTr("Licht und Wärme")
-            // Griff zeigt den Zustand: Raumlicht und eingeschaltete Werkzeuge
-            handleText: (lab.controller.roomLight === 2 ? "☀" : lab.controller.roomLight === 1 ? "⛅" : "🌙")
-                        + (lab.toolOf("taschenlampe") ? " 🔦" : "") + (lab.toolOf("foehn") ? " ♨" : "")
+            count: 3
                 Button {
                     objectName: "roomLightButton"
                     height: Theme.control
