@@ -13,6 +13,7 @@
 
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
+#include "model/recorder.hpp"
 #include "services/content_repository.hpp"
 #include "services/journal_store.hpp"
 #include "services/progress_store.hpp"
@@ -140,9 +141,25 @@ public:
     Q_PROPERTY(QVariantMap schematic READ schematic NOTIFY boardChanged)
     // Schaltplanansicht verfuegbar: freies Labor, ab Stufe 2 oder alles freigegeben (Konzept 5.7)
     Q_PROPERTY(bool schematicAvailable READ schematicAvailable NOTIFY progressChanged)
+    // Zeitschreiber (model::Recorder): ab Stufe 3, im freien Labor oder alles freigegeben; Kanaele ["B4", "MESS", ""]
+    Q_PROPERTY(bool recorderAvailable READ recorderAvailable NOTIFY progressChanged)
+    Q_PROPERTY(QStringList recorderChannels READ recorderChannels NOTIFY recorderChanged)
+    Q_PROPERTY(double recorderWindow READ recorderWindow WRITE setRecorderWindow NOTIFY recorderChanged)
+    Q_PROPERTY(bool recorderPaused READ recorderPaused WRITE setRecorderPaused NOTIFY recorderChanged)
     QVariantList lexicon() const;
     QVariantMap schematic() const;
     bool schematicAvailable() const { return m_unlockAll || m_freeLab || m_experiment.stage >= 2; }
+    bool recorderAvailable() const { return m_unlockAll || m_freeLab || m_experiment.stage >= 3; }
+    QStringList recorderChannels() const;
+    double recorderWindow() const { return m_recorder.window(); }
+    void setRecorderWindow(double seconds);
+    bool recorderPaused() const { return m_recorder.paused(); }
+    void setRecorderPaused(bool paused);
+    // Kanal 0/1 an einen Anschlusspunkt ("B4") bzw. das Messgeraet ("MESS") anschliessen; "" trennt
+    Q_INVOKABLE void setRecorderChannel(int channel, const QString& source);
+    Q_INVOKABLE void clearRecorder();
+    // Darstellung: {window, channels: [{source, unit, points: [t0, v0, t1, v1, ...], min, max, any, last}]}
+    Q_INVOKABLE QVariantMap recorderData(int maxPoints) const;
     QStringList errors() const { return m_errors; }
     QString lastEditError() const { return m_lastEditError; }
     bool canUndo() const;
@@ -282,6 +299,7 @@ signals:
     void journalChanged();
     void columnsChosen(int columns); // vom Kind gewaehlte Breite (zum Merken in den Einstellungen)
     void guideChanged();
+    void recorderChanged();
 
 private:
     void onFrame();
@@ -301,6 +319,8 @@ private:
     services::JournalStore m_journal;
     bool m_unlockAll = false;
     bool m_guideActive = false;
+    model::Recorder m_recorder;
+    void sampleRecorder();
     bool m_autoWireColor = true;
     services::AudioService* m_audio = nullptr;
     double m_lastPulses = -1.0; // Impulszaehler des Pult-Lautsprechers (Knacken bei neuem Impuls)

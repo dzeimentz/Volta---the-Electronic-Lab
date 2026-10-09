@@ -186,6 +186,7 @@ Item {
         toast.show(qsTr("Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …)."))
     }
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
+    property bool recorderVisible: false // Zeitschreiber unter der Arbeitsflaeche
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
     property string newWireColor: settings ? settings.wireColor : "rot"
@@ -483,6 +484,25 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
+            // Zeitschreiber ein-/ausblenden (ab Stufe 3 und im freien Labor)
+            ToolButton {
+                objectName: "recorderToggle"
+                visible: lab.controller.recorderAvailable
+                width: Theme.control; height: Theme.control
+                checkable: true
+                checked: lab.recorderVisible
+                onClicked: lab.recorderVisible = !lab.recorderVisible
+                text: "📈"
+                font.pixelSize: 18
+                ToolTip.visible: hovered
+                ToolTip.text: lab.recorderVisible ? qsTr("Zeitschreiber ausblenden") : qsTr("Zeitschreiber zeigen")
+                Accessible.name: ToolTip.text
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
             // Farbe fuer neue Leitungen: ein Knopf mit Auswahl (spart Platz in der Werkzeugleiste)
             ToolButton {
                 id: wireColorButton
@@ -558,7 +578,7 @@ Item {
         id: schematicPanel
         objectName: "schematicPanel"
         controller: lab.controller
-        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: parent.bottom }
+        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: recorderPanel.top }
         readonly property bool shown: lab.schematicVisible && lab.controller.schematicAvailable
         visible: shown
         width: shown ? Math.round((lab.width - tray.width - experimentPanel.width) * 0.5) : 0
@@ -602,9 +622,20 @@ Item {
         }
     }
 
+    RecorderPanel {
+        id: recorderPanel
+        objectName: "recorderPanel"
+        controller: lab.controller
+        readonly property bool shown: lab.recorderVisible && lab.controller.recorderAvailable
+        visible: shown
+        anchors { left: tray.right; right: experimentPanel.left; bottom: parent.bottom }
+        height: shown ? Math.max(170, Math.min(240, lab.height * 0.28)) : 0
+        onCloseRequested: lab.recorderVisible = false
+    }
+
     Rectangle {
         id: boardArea
-        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: parent.bottom }
+        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: recorderPanel.top }
         color: Theme.board
         clip: true
 
@@ -715,6 +746,7 @@ Item {
                     highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
                                  || lab.highlightFields.indexOf(modelData) >= 0
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
+                    recorderChannel: lab.controller.recorderChannels.indexOf(modelData.startsWith("MESS:") ? "MESS" : modelData)
                     target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
 
                     onWireDragUpdated: (scenePos) => {
@@ -967,22 +999,19 @@ Item {
             }
         }
 
-        // Werkzeugfeld (unten links): Raumlicht umschalten, Taschenlampe und Foehn auf die Grundplatte ziehen oder
-        // antippen (legt sie in die Mitte); Bedienhandlungen, auch im Betrieb
-        Rectangle {
+        // Werkzeugleiste fuer Licht und Waerme (unten links, klappt automatisch aus und ein): Raumlicht umschalten,
+        // Taschenlampe und Foehn auf die Grundplatte ziehen oder antippen (legt sie in die Mitte); Bedienhandlungen,
+        // auch im Betrieb. Weitere Werkzeuge kommen als weitere Kinder dazu.
+        FlyoutBar {
+            id: environmentBar
             objectName: "environmentBar"
             visible: lab.environmentAvailable
             anchors { left: parent.left; bottom: parent.bottom; margins: Theme.margin }
-            width: envRow.implicitWidth + 16
-            height: envRow.implicitHeight + 12
-            radius: 10
-            color: "#EEF6FBFF"
-            border.color: Theme.fieldOutline
             z: 30
-            Row {
-                id: envRow
-                x: 8; y: 6
-                spacing: 8
+            title: qsTr("Licht und Wärme")
+            // Griff zeigt den Zustand: Raumlicht und eingeschaltete Werkzeuge
+            handleText: (lab.controller.roomLight === 2 ? "☀" : lab.controller.roomLight === 1 ? "⛅" : "🌙")
+                        + (lab.toolOf("taschenlampe") ? " 🔦" : "") + (lab.toolOf("foehn") ? " ♨" : "")
                 Button {
                     objectName: "roomLightButton"
                     height: Theme.control
@@ -1022,6 +1051,7 @@ Item {
                             target: null
                             onCentroidChanged: if (active) envTile.lastScenePos = centroid.scenePosition
                             onActiveChanged: {
+                                environmentBar.busy = active // waehrend des Ziehens offen bleiben
                                 if (active) return
                                 const c = lab.toolCell(lab.toCanvas(envTile.lastScenePos))
                                 lab.controller.placeTool(envTile.modelData, c.x, c.y)
@@ -1037,7 +1067,6 @@ Item {
                         Accessible.name: (modelData === "taschenlampe" ? qsTr("Taschenlampe") : qsTr("Föhn"))
                     }
                 }
-            }
         }
 
         // Fehler der Netzliste (Entwicklung)
@@ -1056,7 +1085,23 @@ Item {
         property string anchorName
         MenuItem {
             text: qsTr("Spannungsanzeige ein/aus")
+            enabled: !fieldMenu.anchorName.startsWith("MESS:")
             onTriggered: lab.controller.toggleVoltageDisplay(fieldMenu.anchorName)
+        }
+        // Zeitschreiber: Feld (Spannung gegen 0 V) bzw. Messgeraet (seine Anzeige) auf Kanal 1 oder 2
+        Repeater {
+            model: lab.controller.recorderAvailable ? 2 : 0
+            MenuItem {
+                required property int index
+                objectName: "recordChannel_" + index
+                text: fieldMenu.anchorName.startsWith("MESS:")
+                      ? qsTr("Zeitschreiber Kanal %1: Messgerät").arg(index + 1)
+                      : qsTr("Zeitschreiber Kanal %1: hier messen").arg(index + 1)
+                onTriggered: {
+                    lab.controller.setRecorderChannel(index, fieldMenu.anchorName.startsWith("MESS:") ? "MESS" : fieldMenu.anchorName)
+                    lab.recorderVisible = true
+                }
+            }
         }
     }
 

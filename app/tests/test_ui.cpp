@@ -671,6 +671,35 @@ private slots:
         m_settings->setMeterVisible(false);
     }
 
+    // Zeitschreiber: Kanal ueber den Controller, Feld bekommt das Schild, Daten kommen an; Leiste fuer Licht und
+    // Waerme klappt beim Antippen aus und von selbst wieder ein
+    void recorderAndFlyout() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->recorderAvailable());
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("D7"), QStringLiteral("rot")));
+        m_lab->setRecorderChannel(0, QStringLiteral("D7"));
+        QTRY_COMPARE(item(QStringLiteral("field_D7"))->property("recorderChannel").toInt(), 0);
+        m_lab->setMainSwitch(true);
+        auto last = [this] {
+            const QVariantMap ch0 = m_lab->recorderData(50).value(QStringLiteral("channels")).toList().at(0).toMap();
+            return ch0.value(QStringLiteral("any")).toBool() ? ch0.value(QStringLiteral("last")).toDouble() : -1.0;
+        };
+        QTRY_VERIFY(last() > 8.0); // +9V
+        m_lab->setMainSwitch(false);
+        // Leiste fuer Licht und Waerme (Fotowiderstand verfuegbar): eingeklappt, Antippen klappt aus
+        QQuickItem* bar = item(QStringLiteral("environmentBar"));
+        QVERIFY(bar && bar->isVisible());
+        QVERIFY(!bar->property("expanded").toBool());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("flyoutHandle"))));
+        QTRY_VERIFY(bar->property("expanded").toBool());
+        QTRY_VERIFY(item(QStringLiteral("roomLightButton"))->isVisible());
+        bar->setProperty("collapseDelay", 50);
+        QTest::mouseMove(m_window, centerOf(item(QStringLiteral("field_A6")))); // Maus weg von der Leiste
+        QTRY_VERIFY(!bar->property("expanded").toBool()); // klappt von selbst ein
+        m_lab->setRecorderChannel(0, QString());
+    }
+
     void cleanupTestCase() {
         m_engine.reset();
         m_language.reset();

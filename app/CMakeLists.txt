@@ -20,6 +20,7 @@ add_library(volta_model STATIC
     src/model/build_guide.cpp
     src/model/tone_synth.cpp
     src/model/environment.cpp
+    src/model/recorder.cpp
     src/model/schematic_layout.cpp
     src/services/content_repository.cpp
     src/services/progress_store.cpp
@@ -92,6 +93,8 @@ qt_add_qml_module(volta_ui
         qml/ModuleItem.qml
         qml/ModuleInside.qml
         qml/ToolToken.qml
+        qml/RecorderPanel.qml
+        qml/FlyoutBar.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

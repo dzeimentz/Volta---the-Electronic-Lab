@@ -7,6 +7,7 @@
 
 #include "model/anchor.hpp"
 #include "model/build_guide.hpp"
+#include "model/recorder.hpp"
 #include "model/tone_synth.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
@@ -434,6 +435,39 @@ private slots:
         for (std::size_t i = 1; i < tail.size(); ++i) tailStep = std::max(tailStep, std::abs(tail[i] - tail[i - 1]));
         QVERIFY(tailStep <= maxStep);
         QVERIFY(std::abs(static_cast<int>(tail.back())) < 50); // nach 100 ms praktisch still
+    }
+
+    // Zeitschreiber: Fenster, lueckenlose Zeit bei Neustart der Simulation, Ausduennen, Pause, Kanaele
+    void recorder() {
+        model::Recorder r;
+        QVERIFY(!r.active());
+        r.push(0.1, {1.0, 2.0}, {true, true});
+        QVERIFY(r.samples().empty()); // ohne Kanal keine Aufzeichnung
+        r.setChannel(0, "B4");
+        r.setWindow(2.0);
+        for (int i = 0; i <= 300; ++i) r.push(i * 0.01, {i * 0.01, 0.0}, {true, true}); // 0..3 s, Wert = Zeit
+        QCOMPARE(r.samples().back().has[1], false); // Kanal 2 aus
+        auto s = r.series(0, 1000);
+        QVERIFY(s.any);
+        QVERIFY(std::fabs(s.points.front().first) < 0.011);        // Fensteranfang
+        QVERIFY(std::fabs(s.points.back().first - 2.0) < 1e-9);    // Fensterende
+        QVERIFY(std::fabs(s.min - 1.0) < 0.011 && std::fabs(s.max - 3.0) < 1e-9);
+        // Ausduennen: hoechstens maxPoints (+1 fuer den letzten Punkt)
+        QVERIFY(r.series(0, 20).points.size() <= 21);
+        QCOMPARE(r.series(0, 20).points.back().second, 3.0);
+        // neue Netzliste: Simulationszeit beginnt bei 0, die Aufzeichnung laeuft weiter
+        r.push(0.01, {5.0, 0.0}, {true, false});
+        QVERIFY(r.now() > 3.0);
+        QCOMPARE(r.series(0, 1000).points.back().second, 5.0);
+        // Pause: Zeit laeuft, aber keine neuen Punkte
+        const std::size_t before = r.samples().size();
+        r.setPaused(true);
+        r.push(0.5, {7.0, 0.0}, {true, false});
+        QCOMPARE(r.samples().size(), before);
+        r.setPaused(false);
+        r.clear();
+        QVERIFY(r.samples().empty());
+        QVERIFY(!r.series(0, 10).any);
     }
 
     void errorsAreReported() {

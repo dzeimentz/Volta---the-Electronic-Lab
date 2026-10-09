@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
-                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE", "VOLTA_DEMO_SENSORS"})
+                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE", "VOLTA_DEMO_SENSORS", "VOLTA_DEMO_RECORDER"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
             engine.rootObjects().first()->setProperty("inLab", true);
 
@@ -169,6 +169,30 @@ int main(int argc, char* argv[]) {
             lab.placeTool(QStringLiteral("taschenlampe"), 2.5, 0.6);
             lab.placeTool(QStringLiteral("foehn"), 2.5, 2.6);
             lab.setMainSwitch(true);
+        });
+
+    // Entwicklerhilfe: VOLTA_DEMO_RECORDER=1 laedt einen Elko (100 uF) ueber 10 kOhm und zeichnet die Spannung am
+    // Elko (Kanal 1) und den Ladestrom ueber das Messgeraet (Kanal 2) mit dem Zeitschreiber auf
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_RECORDER") == 1)
+        QTimer::singleShot(300, &lab, [&lab, &engine] {
+            lab.setUnlockAll(true);
+            lab.startFreeLab();
+            lab.setBoardColumns(12);
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false);
+            lab.setPartValue(QStringLiteral("R1"), 10000.0);
+            lab.addPart(QStringLiteral("elko"), QStringLiteral("B4"), true, false);
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot"));
+            lab.setMeterVisible(true);
+            lab.setMeterMode(1);
+            lab.addWire(QStringLiteral("C4"), QStringLiteral("MESS:A"), QStringLiteral("blau"));
+            lab.addWire(QStringLiteral("MESS:COM"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.setRecorderChannel(0, QStringLiteral("B4"));
+            lab.setRecorderChannel(1, QStringLiteral("MESS"));
+            lab.setRecorderWindow(10);
+            lab.setMainSwitch(true);
+            const auto roots = engine.rootObjects();
+            if (QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab")))
+                l->setProperty("recorderVisible", true);
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_COLUMNS=8|10|12 stellt die Breite der Grundplatte ein (wie +/- in der Werkzeugleiste)

@@ -90,6 +90,10 @@ bool LabController::loadExperiment(const QString& id) {
 
 bool LabController::startExperiment(const QString& id) {
     m_freeLab = false;
+    // neuer Aufbau: Zeitschreiber leer und ohne Kanaele
+    m_recorder.clear();
+    for (std::size_t c = 0; c < model::Recorder::kChannels; ++c) m_recorder.setChannel(c, {});
+    emit recorderChanged();
     services::Experiment exp;
     if (!m_repo.loadExperiment(id, exp)) {
         m_errors = QStringList{m_repo.lastError()};
@@ -381,6 +385,10 @@ QVariantMap LabController::appInfo() const {
 
 void LabController::startFreeLab() {
     m_freeLab = true;
+    // neuer Aufbau: Zeitschreiber leer und ohne Kanaele
+    m_recorder.clear();
+    for (std::size_t c = 0; c < model::Recorder::kChannels; ++c) m_recorder.setChannel(c, {});
+    emit recorderChanged();
     m_flow.stop();
     m_experiment = services::Experiment{};
     m_title = tr("Freies Labor");
@@ -478,11 +486,96 @@ void LabController::onFrame() {
         emit progressChanged();
     }
     updateAudio();
+    sampleRecorder();
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
         m_sinceNotifyS = 0.0;
         emit stateChanged();
     }
+}
+
+// ------------------------------------------------------------------ Zeitschreiber
+
+QStringList LabController::recorderChannels() const {
+    QStringList out;
+    for (std::size_t c = 0; c < model::Recorder::kChannels; ++c) out << qs(m_recorder.channel(c).source);
+    return out;
+}
+
+void LabController::setRecorderWindow(double seconds) {
+    m_recorder.setWindow(seconds);
+    emit recorderChanged();
+}
+
+void LabController::setRecorderPaused(bool paused) {
+    m_recorder.setPaused(paused);
+    emit recorderChanged();
+}
+
+void LabController::setRecorderChannel(int channel, const QString& source) {
+    if (channel < 0 || channel >= static_cast<int>(model::Recorder::kChannels)) return;
+    m_recorder.setChannel(static_cast<std::size_t>(channel), ss(source));
+    emit recorderChanged();
+}
+
+void LabController::clearRecorder() {
+    m_recorder.clear();
+    emit recorderChanged();
+}
+
+namespace {
+// Einheit der Anzeige des Messgeraets und Umrechnung (Strom in mA)
+QString meterUnit(core::MeterMode mode) {
+    return mode == core::MeterMode::Ampere ? QStringLiteral("mA") : mode == core::MeterMode::Ohm ? QStringLiteral("Ω")
+                                                                                                  : QStringLiteral("V");
+}
+} // namespace
+
+void LabController::sampleRecorder() {
+    if (!m_recorder.active() || !m_session->snapshotCurrent()) return;
+    std::array<double, model::Recorder::kChannels> v{};
+    std::array<bool, model::Recorder::kChannels> has{};
+    for (std::size_t c = 0; c < model::Recorder::kChannels; ++c) {
+        const std::string& src = m_recorder.channel(c).source;
+        if (src.empty()) continue;
+        if (src == "MESS") {
+            const core::ComponentReading* r = m_session->deskReading(model::desk_id::kMeter);
+            if (!r || !m_session->board().desk.meterVisible) continue;
+            const bool amp = m_session->board().desk.meterMode == core::MeterMode::Ampere;
+            v[c] = r->displayValue * (amp ? 1e3 : 1.0);
+            has[c] = true;
+        } else {
+            core::NodeId n = 0;
+            if (!m_session->netlist().nodeOf(src, n)) { // Feld ohne Verbindung: 0 V
+                v[c] = 0.0;
+                has[c] = true;
+                continue;
+            }
+            v[c] = m_session->voltage(src);
+            has[c] = true;
+        }
+    }
+    m_recorder.push(m_session->snapshot().timeS, v, has);
+}
+
+QVariantMap LabController::recorderData(int maxPoints) const {
+    QVariantList channels;
+    for (std::size_t c = 0; c < model::Recorder::kChannels; ++c) {
+        const auto s = m_recorder.series(c, static_cast<std::size_t>(std::max(maxPoints, 2)));
+        QVariantList pts;
+        pts.reserve(static_cast<int>(s.points.size() * 2));
+        for (const auto& [t, v] : s.points) pts << t << v;
+        const std::string& src = m_recorder.channel(c).source;
+        channels << QVariantMap{{QStringLiteral("source"), qs(src)},
+                                {QStringLiteral("unit"), src == "MESS" ? meterUnit(m_session->board().desk.meterMode)
+                                                                       : QStringLiteral("V")},
+                                {QStringLiteral("points"), pts},
+                                {QStringLiteral("min"), s.min},
+                                {QStringLiteral("max"), s.max},
+                                {QStringLiteral("any"), s.any},
+                                {QStringLiteral("last"), s.points.empty() ? 0.0 : s.points.back().second}};
+    }
+    return {{QStringLiteral("window"), m_recorder.window()}, {QStringLiteral("channels"), channels}};
 }
 
 // Tonausgabe: Pult-Lautsprecher (Ton oder Knacken je Impuls) und Summer auf der Grundplatte

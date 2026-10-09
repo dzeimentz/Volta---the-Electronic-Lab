@@ -12,6 +12,7 @@ Rectangle {
     property int pitch: Theme.socketPitch // Lochabstand (Lab.socketPoint rechnet mit demselben Wert)
     property bool highlighted: false
     property bool target: false // Zielfeld der Schritt-fuer-Schritt-Aufbauhilfe
+    property int recorderChannel: -1 // Zeitschreiber: Kanal 0/1 haengt an diesem Feld
 
     signal wireDragUpdated(point scenePos)
     signal wireDragFinished(point scenePos)
@@ -72,6 +73,18 @@ Rectangle {
         text: "▼"
         color: "#1E7BE0"
         font.pixelSize: 14
+    }
+
+    // Zeitschreiber-Schild (Text und Farbe)
+    Rectangle {
+        visible: root.recorderChannel >= 0
+        anchors.left: parent.left
+        anchors.leftMargin: 2
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 2
+        width: 22; height: 14; radius: 4
+        color: root.recorderChannel === 0 ? "#D32F2F" : "#1E5FC2"
+        Text { anchors.centerIn: parent; text: "K" + (root.recorderChannel + 1); color: "white"; font.pixelSize: 9; font.bold: true }
     }
 
     VoltageBars {

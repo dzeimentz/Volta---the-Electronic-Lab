@@ -202,8 +202,11 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   dann umbauen.
 
 ## Licht und Waerme (Stufe 3, Variante B: Werkzeuge)
-- Werkzeugfeld unten links auf der Arbeitsflaeche (sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt
-  sind): Raumlicht umschalten (☀ hell 300 lx / ⛅ Daemmerung 20 lx / 🌙 dunkel 0,5 lx; die Arbeitsflaeche wird
+- Automatisch ausklappende Werkzeugleiste »Licht und Wärme« unten links (`FlyoutBar`, wie eine Taskleiste mit
+  automatischem Ausblenden; sichtbar, sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt sind):
+  eingeklappt ein Griff mit Kurzsymbolen (Raumlicht, liegende Werkzeuge), ausgeklappt per Maus darueber oder
+  Antippen, klappt nach dem Verlassen bzw. 4 s ohne Beruehrung wieder ein (nicht waehrend des Ziehens). Inhalt:
+  Raumlicht umschalten (☀ hell 300 lx / ⛅ Daemmerung 20 lx / 🌙 dunkel 0,5 lx; die Arbeitsflaeche wird
   entsprechend gedaempft), Taschenlampe und Foehn auf die Grundplatte ziehen oder antippen (legt sie in die Mitte).
 - Auf der Grundplatte: frei verschiebbar, Antippen schaltet ein/aus, langer Druck bzw. Rechtsklick: Ein-/Ausschalten,
   Wegraeumen. Ein Schein zeigt die Reichweite; die Wirkung nimmt mit dem Abstand ab (`model/environment.hpp`):
@@ -211,3 +214,12 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Neue Bauteile der Stufe 3: Fotowiderstand (Lichtschein je nach Helligkeit), Heissleiter (Perle, die bei Waerme rot
   wird; Temperatur an der Beschriftung), Elektromagnet (Bueroklammer wird angezogen, Feldlinien), Relais auf
   2-x-2-Platine (A | B Spule oben, COM | NO Schliesser unten; Kontaktzunge zeigt die Stellung).
+
+## Zeitschreiber (Stufe 3)
+- Knopf 📈 in der Werkzeugleiste (ab Stufe 3, freies Labor, alles freigegeben) blendet einen Streifen unter der
+  Arbeitsflaeche ein (`RecorderPanel`, Modell `model::Recorder`).
+- Zwei Kanaele: im Feld-Menue (langer Druck bzw. Rechtsklick) »Zeitschreiber Kanal 1/2: hier messen« (Spannung des
+  Felds gegen 0 V) bzw. an den Buchsen des Messgeraets dessen Anzeige (V, mA oder Ω). Kanal 1 rot durchgezogen,
+  Kanal 2 blau gestrichelt; das Feld traegt das Schild K1 bzw. K2; Kanal-Schild in der Kopfzeile mit aktuellem Wert.
+- Zeitfenster 2 / 10 / 30 s, Anhalten/Weiter, Loeschen; Skala Spannung 0 .. Batteriespannung, sonst automatisch.
+  Zeitachse = Simulationszeit (laeuft bei Aufbauaenderungen lueckenlos weiter).
