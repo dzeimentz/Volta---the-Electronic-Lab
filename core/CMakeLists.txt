@@ -20,6 +20,8 @@ add_library(volta_core STATIC
     src/components/meter.cpp
     src/components/potentiometer.cpp
     src/components/speaker.cpp
+    src/components/sensors.cpp
+    src/components/magnet.cpp
     src/modules/blink_module.cpp
     src/modules/tone_module.cpp
 )

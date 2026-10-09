@@ -124,6 +124,19 @@ Zwischen Dauergrenzwert und Zerstoerung liegt bewusst ein Bereich, in dem das Ba
 ueberlastet gilt (z. B. LED bei 40 mA). Die Oberflaeche zeigt ihn deutlich an (Gluehen), damit kein Kind
 eine dauerhafte Ueberlast fuer unbedenklich haelt.
 
+## Sensoren und Magnete (Stufe 3)
+- **Fotowiderstand** (`Photoresistor`): Leitwert = 1/R_dunkel + (E/10 lx)^gamma / R10 (R10 = 10 kOhm, gamma 0,7,
+  R_dunkel 1 MOhm, wie GL5528). Beleuchtungsstaerke E ist eine Bedienhandlung (Raumlicht, Taschenlampe); das
+  Bauteil folgt ihr traege (heller tau 30 ms, dunkler 100 ms). Belastbarkeit 0,1 W.
+- **Heissleiter** (`Thermistor`): R(T) = R25 * exp(B (1/T - 1/298,15 K)), R25 = 10 kOhm, B = 3950 K. Temperatur aus
+  dem Waermemodell mit der Luft am Bauteil als Umgebung (Bedienhandlung: Raum bzw. Foehn), tau 4 s, Eigenerwaermung
+  150 K/W.
+- **Elektromagnet** (`Electromagnet`): 100 Ohm, Feldstaerke ~ Strom (level = I / 90 mA, mit Vorzeichen), 1 W.
+- **Relais** (`Relay`, 2-x-2-Platine): Spule 180 Ohm (a-b), Schliesser com-no 0,05 Ohm / 1 A; zieht an ab 30 mA nach
+  8 ms, faellt ab unter 12 mA nach 4 ms (Hysterese).
+- Vereinfachung: Spulen ohne Induktivitaet (L/R von wenigen ms ist bei 1 ms Schrittweite kaum sichtbar); die
+  Abschaltspannung und die Freilaufdiode behandelt Volta 2. Im Elternbereich offengelegt.
+
 ## Module
 
 - **Teilschaltung**: Modul ist eine Unterschaltung aus Katalogbauteilen, wird beim Netzlistenaufbau expandiert

@@ -47,11 +47,12 @@ void ComponentModel::restoreState(const ComponentState& state) noexcept {
     m_overloaded = false;
 }
 
-void ComponentModel::integrateThermal(double powerW, double dtS, const ThermalParams& p) noexcept {
+void ComponentModel::integrateThermal(double powerW, double dtS, const ThermalParams& p, double ambientK) noexcept {
     if (!(p.rthKPerW > 0.0) || !(p.cthJPerK > 0.0) || !(dtS > 0.0)) return;
     if (!std::isfinite(powerW)) powerW = 0.0;
     const double tau = p.rthKPerW * p.cthJPerK;
-    const double steady = kAmbientK + std::max(powerW, 0.0) * p.rthKPerW;
+    if (!std::isfinite(ambientK)) ambientK = kAmbientK;
+    const double steady = ambientK + std::max(powerW, 0.0) * p.rthKPerW;
     m_tempK = steady + (m_tempK - steady) * std::exp(-dtS / tau);
 }
 

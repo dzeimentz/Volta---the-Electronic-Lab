@@ -156,7 +156,8 @@ public:
 
 protected:
     // Exakte Loesung von Cth*dT/dt = P - (T - Tamb)/Rth ueber dtS (stabil fuer jede Schrittweite).
-    void integrateThermal(double powerW, double dtS, const ThermalParams& p) noexcept;
+    // ambientK: Umgebung des Bauteils (Vorgabe Raumtemperatur; Heissleiter: vom Foehn erwaermt)
+    void integrateThermal(double powerW, double dtS, const ThermalParams& p, double ambientK = kAmbientK) noexcept;
     // Merkt die Zerstoerung vor (einmalig) und meldet SimEventType::Destroyed. Elektrisch wirksam (m_destroyed)
     // wird sie erst im naechsten Loesungsvorgang, damit die Messwerte des laufenden Schritts zum Stempel passen.
     void destroy(EventQueue& events, std::size_t index, double timeS) noexcept;

@@ -109,9 +109,9 @@ ComponentReading Meter::read(const SolutionView& x) const noexcept {
         value = terminalCurrent(x, 2);
         if (m_analog) {
             double range = m_params.analogRangesA.back();
-            for (double r : m_params.analogRangesA)
-                if (std::fabs(value) <= r) {
-                    range = r;
+            for (double candidate : m_params.analogRangesA)
+                if (std::fabs(value) <= candidate) {
+                    range = candidate;
                     break;
                 }
             if (std::fabs(value) > m_params.analogRangesA.back()) flags |= kDisplayOverrange;
