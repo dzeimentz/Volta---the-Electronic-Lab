@@ -81,7 +81,9 @@ bool SuccessEvaluator::evaluate(Node& node, const core::Simulator& sim, const Ne
     if (!c.part.empty()) {
         // Bauteil oder Modul (Messwerte des Moduls: Netlist::moduleMain)
         std::size_t index = sim.probe().readings.size();
-        if (const auto p = net.parts.find(c.part); p != net.parts.end())
+        if (c.part == "MESS") { // Dreifach-Messgeraet des Pults
+            if (const auto d = net.desk.find(desk_id::kMeter); d != net.desk.end()) index = d->second;
+        } else if (const auto p = net.parts.find(c.part); p != net.parts.end())
             index = p->second;
         else if (const auto m = net.moduleMain.find(c.part); m != net.moduleMain.end())
             index = m->second;
@@ -103,6 +105,7 @@ bool SuccessEvaluator::evaluate(Node& node, const core::Simulator& sim, const Ne
             case SuccessCondition::Quantity::Brightness: v = r.level; break;
             case SuccessCondition::Quantity::FrequencyHz: v = r.frequencyHz; break;
             case SuccessCondition::Quantity::TemperatureC: v = r.tempK - 273.15; break;
+            case SuccessCondition::Quantity::Display: v = std::fabs(r.displayValue); break;
             case SuccessCondition::Quantity::Rpm: {
                 const auto* motor = dynamic_cast<const core::Motor*>(&sim.circuit().component(index));
                 v = motor ? std::fabs(motor->rpm()) : 0.0;

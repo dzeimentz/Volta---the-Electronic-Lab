@@ -13,7 +13,8 @@ namespace volta::model {
 // Zustand geprueft, nie ueber den Vergleich mit der Vorlage: jeder funktionierende Aufbau gilt.
 struct SuccessCondition {
     enum class Kind { All, Any, Not, Quantity, State };
-    enum class Quantity { CurrentMilliA, VoltageV, PowerMilliW, Brightness, Rpm, FrequencyHz, TemperatureC };
+    // Display: Anzeige des Messgeraets (bauteil "MESS") in V, A bzw. Ohm je nach Messart, Betrag
+    enum class Quantity { CurrentMilliA, VoltageV, PowerMilliW, Brightness, Rpm, FrequencyHz, TemperatureC, Display };
     enum class State { Intact, Overloaded, Destroyed };
 
     Kind kind = Kind::All;

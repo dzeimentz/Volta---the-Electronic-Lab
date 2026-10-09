@@ -1,0 +1,95 @@
+{
+  "id": "volta1.3.11",
+  "band": "volta1",
+  "stufe": 3,
+  "kapitel": 1,
+  "titel_key": "exp_3_11_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "heissleiter",
+    "leitung"
+  ],
+  "frage_key": "exp_3_11_frage",
+  "vermutungen": [
+    "exp_3_11_v1",
+    "exp_3_11_v2",
+    "exp_3_11_v3"
+  ],
+  "beobachtungen": [
+    "exp_3_11_b1",
+    "exp_3_11_b2",
+    "exp_3_11_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "NTC1",
+        "typ": "heissleiter",
+        "felder": [
+          "C1",
+          "C3"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "C1",
+        "nach": "MESS:VOHM",
+        "farbe": "rot"
+      },
+      {
+        "von": "MESS:COM",
+        "nach": "C3",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": [],
+    "pult_stellung": {
+      "messart": "Ohm"
+    },
+    "werkzeuge": [
+      {
+        "typ": "foehn",
+        "feld": "C2"
+      }
+    ]
+  },
+  "schritte": [
+    "exp_3_11_s1",
+    "exp_3_11_s2",
+    "exp_3_11_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "MESS",
+        "groesse": "anzeige",
+        "zwischen": [
+          100,
+          5000
+        ],
+        "dauer_s": 1
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_3_11_h1",
+    "exp_3_11_h2",
+    "exp_3_11_loesung"
+  ],
+  "erklaerung_key": "exp_3_11_erklaerung",
+  "mehr_wissen_key": "exp_3_11_mehr",
+  "weiterforschen": [
+    "exp_3_11_w1"
+  ],
+  "jetzt_in_echt_key": "exp_3_11_echt"
+}

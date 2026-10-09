@@ -1,0 +1,115 @@
+{
+  "id": "volta1.3.8",
+  "band": "volta1",
+  "stufe": 3,
+  "kapitel": 1,
+  "titel_key": "exp_3_8_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "fotowiderstand",
+    "widerstand",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp_3_8_frage",
+  "vermutungen": [
+    "exp_3_8_v1",
+    "exp_3_8_v2",
+    "exp_3_8_v3"
+  ],
+  "beobachtungen": [
+    "exp_3_8_b1",
+    "exp_3_8_b2",
+    "exp_3_8_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "LDR1",
+        "typ": "fotowiderstand",
+        "felder": [
+          "A1",
+          "A3"
+        ]
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A3",
+          "A4"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A4",
+          "kathode": "B4"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": [],
+    "pult_stellung": {
+      "raumlicht": "dunkel"
+    },
+    "werkzeuge": [
+      {
+        "typ": "taschenlampe",
+        "feld": "A2"
+      }
+    ]
+  },
+  "schritte": [
+    "exp_3_8_s1",
+    "exp_3_8_s2",
+    "exp_3_8_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "min": 5,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_3_8_h1",
+    "exp_3_8_h2",
+    "exp_3_8_loesung"
+  ],
+  "erklaerung_key": "exp_3_8_erklaerung",
+  "mehr_wissen_key": "exp_3_8_mehr",
+  "weiterforschen": [
+    "exp_3_8_w1"
+  ],
+  "jetzt_in_echt_key": "exp_3_8_echt"
+}

@@ -1,0 +1,127 @@
+{
+  "id": "volta1.3.13",
+  "band": "volta1",
+  "stufe": 3,
+  "kapitel": 1,
+  "titel_key": "exp_3_13_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "elko",
+    "widerstand",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp_3_13_frage",
+  "vermutungen": [
+    "exp_3_13_v1",
+    "exp_3_13_v2",
+    "exp_3_13_v3"
+  ],
+  "beobachtungen": [
+    "exp_3_13_b1",
+    "exp_3_13_b2",
+    "exp_3_13_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "A2",
+          "minus": "A3"
+        },
+        "wert": 0.001
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B2",
+          "B3"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B3",
+          "kathode": "C3"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "B2",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_3_13_s1",
+    "exp_3_13_s2",
+    "exp_3_13_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "min": 2,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "C1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_3_13_h1",
+    "exp_3_13_h2",
+    "exp_3_13_loesung"
+  ],
+  "erklaerung_key": "exp_3_13_erklaerung",
+  "mehr_wissen_key": "exp_3_13_mehr",
+  "weiterforschen": [
+    "exp_3_13_w1"
+  ],
+  "jetzt_in_echt_key": "exp_3_13_echt"
+}

@@ -25,7 +25,7 @@ ANCHOR = re.compile(
 KEY = re.compile(r"^[a-z][a-z0-9_]*$")
 EXP_ID = re.compile(r"^(volta1|volta2|volta3|zuse1)\.[0-9]+\.[0-9]+$")
 COLORS = {"rot", "schwarz", "blau", "gelb", "gruen", "weiss"}
-QUANTITIES = {"strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C"}
+QUANTITIES = {"strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C", "anzeige"}
 STATES = {"intakt", "ueberlastet", "zerstoert"}
 REQUIRED = ["id", "band", "stufe", "titel_key", "zerstoerend", "bauteile_frei", "frage_key",
             "vermutungen", "vorlage", "erfolg", "hilfen", "erklaerung_key", "jetzt_in_echt_key"]
@@ -81,7 +81,12 @@ def check_condition(cond, where: str, part_ids: set[str], rep: Report) -> None:
         check_condition(cond["nicht"], f"{where}.nicht", part_ids, rep)
         return
     ref = cond.get("bauteil")
-    if ref is not None and ref not in part_ids:
+    if ref == "MESS":  # Dreifach-Messgeraet des Pults: nur seine Anzeige
+        if cond.get("groesse") not in (None, "anzeige"):
+            rep.error(where, "Messgeraet (MESS): nur 'anzeige' pruefbar")
+    elif cond.get("groesse") == "anzeige":
+        rep.error(where, "'anzeige' gibt es nur am Messgeraet (bauteil 'MESS')")
+    if ref is not None and ref != "MESS" and ref not in part_ids:
         rep.error(where, f"Bauteil '{ref}' ist nicht in der Vorlage")
     if "feld" in cond and not ANCHOR.match(str(cond["feld"])):
         rep.error(where, f"ungueltiges Feld '{cond['feld']}'")
@@ -201,13 +206,20 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
             rep.error(where, f"Leitung {i}: unbekannte Farbe '{w['farbe']}'")
     pult = tpl.get("pult_stellung", {}) or {}
     for k in pult:
-        if k not in ("batterie_V", "schalter", "p1", "p2"):
+        if k not in ("batterie_V", "schalter", "p1", "p2", "messart", "raumlicht"):
             rep.error(where, f"pult_stellung: unbekannter Schluessel '{k}'")
     if "batterie_V" in pult and pult["batterie_V"] not in (3, 4.5, 9):
         rep.error(where, "pult_stellung: batterie_V muss 3, 4.5 oder 9 sein")
     for k in ("p1", "p2"):
         if k in pult and not (isinstance(pult[k], (int, float)) and 0 <= pult[k] <= 1):
             rep.error(where, f"pult_stellung: {k} muss zwischen 0 und 1 liegen")
+    if "messart" in pult and pult["messart"] not in ("V", "A", "Ohm"):
+        rep.error(where, "pult_stellung: messart muss V, A oder Ohm sein")
+    if "raumlicht" in pult and pult["raumlicht"] not in ("hell", "daemmerung", "dunkel"):
+        rep.error(where, "pult_stellung: raumlicht muss hell, daemmerung oder dunkel sein")
+    for t in tpl.get("werkzeuge", []) or []:
+        if t.get("typ") not in ("taschenlampe", "foehn") or not FIELD.match(str(t.get("feld", ""))):
+            rep.error(where, f"Werkzeug ungueltig: {t}")
     for a in tpl.get("anzeigen", []):
         if not ANCHOR.match(str(a)):
             rep.error(where, f"Spannungsanzeige an ungueltigem Feld '{a}'")

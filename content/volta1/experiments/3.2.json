@@ -1,0 +1,111 @@
+{
+  "id": "volta1.3.2",
+  "band": "volta1",
+  "stufe": 3,
+  "kapitel": 1,
+  "titel_key": "exp_3_2_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "gluehlampe",
+    "leitung"
+  ],
+  "frage_key": "exp_3_2_frage",
+  "vermutungen": [
+    "exp_3_2_v1",
+    "exp_3_2_v2",
+    "exp_3_2_v3"
+  ],
+  "beobachtungen": [
+    "exp_3_2_b1",
+    "exp_3_2_b2",
+    "exp_3_2_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      },
+      {
+        "id": "L2",
+        "typ": "gluehlampe",
+        "felder": [
+          "A2",
+          "A3"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "MESS:VOHM",
+        "farbe": "rot"
+      },
+      {
+        "von": "MESS:COM",
+        "nach": "A2",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": [],
+    "pult_stellung": {
+      "messart": "V"
+    }
+  },
+  "schritte": [
+    "exp_3_2_s1",
+    "exp_3_2_s2",
+    "exp_3_2_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "MESS",
+        "groesse": "anzeige",
+        "zwischen": [
+          4.0,
+          5.0
+        ],
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_3_2_h1",
+    "exp_3_2_h2",
+    "exp_3_2_loesung"
+  ],
+  "erklaerung_key": "exp_3_2_erklaerung",
+  "mehr_wissen_key": "exp_3_2_mehr",
+  "weiterforschen": [
+    "exp_3_2_w1"
+  ],
+  "jetzt_in_echt_key": "exp_3_2_echt"
+}

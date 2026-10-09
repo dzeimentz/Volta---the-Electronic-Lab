@@ -111,6 +111,11 @@ dieses denselben Typ hat; sonst als das naechste noch nicht zugeordnete Bauteil 
 Aufbaus). Die Pruefung laeuft im Simulations-Thread nach jedem Schritt; nach einer Aufbauaenderung beginnen die
 Haltedauern (`dauer_s`) neu. `rolle` (Funktion statt Typ) folgt mit der Lernpfad-Engine in Phase 2.
 
+Messgeraet in Bedingungen: `{"bauteil": "MESS", "groesse": "anzeige", "zwischen": [8.5, 9.1]}` prueft die Anzeige
+des Dreifach-Messgeraets (Betrag, in V, A bzw. Ohm je nach Messart) - so laesst sich pruefen, ob richtig gemessen
+wird. Vorlage: `pult_stellung` kennt zusaetzlich `messart` ("V", "A", "Ohm") und `raumlicht` ("hell", "daemmerung",
+"dunkel"); `werkzeuge` legt Taschenlampe bzw. Foehn bereit: `[{"typ": "taschenlampe", "feld": "B3", "an": true}]`.
+
 Module in Bedingungen: `bauteil` darf auch eine Modulkennung der Vorlage sein (z. B. `TM1`); gemessen werden die
 Werte des Moduls (Tonmodul: `frequenz_Hz` = aktueller Ton, `strom_mA` = Strom in den Ausgang `aus`; Blinkmodul:
 Ausgangstransistor). Zuordnung wie bei Bauteilen ueber Kennung und Typ.

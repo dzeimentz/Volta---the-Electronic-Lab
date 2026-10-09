@@ -1,0 +1,99 @@
+{
+  "id": "volta1.3.6",
+  "band": "volta1",
+  "stufe": 3,
+  "kapitel": 1,
+  "titel_key": "exp_3_6_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "leitung"
+  ],
+  "frage_key": "exp_3_6_frage",
+  "vermutungen": [
+    "exp_3_6_v1",
+    "exp_3_6_v2",
+    "exp_3_6_v3"
+  ],
+  "beobachtungen": [
+    "exp_3_6_b1",
+    "exp_3_6_b2",
+    "exp_3_6_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B4"
+        ],
+        "wert": 1000
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "B4",
+        "nach": "MESS:A",
+        "farbe": "blau"
+      },
+      {
+        "von": "MESS:COM",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": [],
+    "pult_stellung": {
+      "messart": "A"
+    }
+  },
+  "schritte": [
+    "exp_3_6_s1",
+    "exp_3_6_s2",
+    "exp_3_6_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "MESS",
+        "groesse": "anzeige",
+        "zwischen": [
+          0.0085,
+          0.0095
+        ],
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "R1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_3_6_h1",
+    "exp_3_6_h2",
+    "exp_3_6_loesung"
+  ],
+  "erklaerung_key": "exp_3_6_erklaerung",
+  "mehr_wissen_key": "exp_3_6_mehr",
+  "weiterforschen": [
+    "exp_3_6_w1"
+  ],
+  "jetzt_in_echt_key": "exp_3_6_echt"
+}

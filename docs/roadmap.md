@@ -56,6 +56,16 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 - Meldungen des Modells und Befehlsnamen (Rueckgaengig) uebersetzbar: erledigt.
 - Offen in Phase 2: LU-Texte, muttersprachliche Pruefung FR/EN.
 
+## Phase 4 – Stand (Stufen 3–4)
+- Bauteile der Stufe 3 im Kern: Fotowiderstand, Heissleiter, Elektromagnet, Relais (Referenztests); Licht und
+  Waerme als Bedienhandlungen (Raumlicht, Taschenlampe, Foehn; ausklappende Werkzeugleiste).
+- Zeitschreiber mit zwei Kanaelen (Feldspannung oder Messgeraet).
+- Stufe 3: 15 Experimente (3.1–3.15: Spannung, Strom, Widerstand messen, Ohmsches Gesetz, Spannungsteiler,
+  Fotowiderstand, Heissleiter, Kondensator laden/entladen, Elektromagnet, Relais); insgesamt 46.
+  Erfolgsbedingungen koennen die Anzeige des Messgeraets pruefen (`MESS` / `anzeige`).
+- Offen: Formelrechner (Rechenblaetter), Stufe 4 (Piezo, Feuchtesonde, Zeit- und Verstaerkermodul, ca. 15
+  Experimente), Fehlersuche, Teileliste.
+
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
 2. ~~Thermikmodell und Ereignisse; Robustheitstests.~~ erledigt, dazu: alle Bauteile der Stufen 1–4 inkl.

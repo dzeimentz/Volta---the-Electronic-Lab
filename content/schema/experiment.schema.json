@@ -30,6 +30,8 @@
         "module": {"type": "array", "items": {"$ref": "#/$defs/module"}},
         "leitungen": {"type": "array", "items": {"$ref": "#/$defs/wire"}},
         "anzeigen": {"type": "array", "items": {"$ref": "#/$defs/anchor"}},
+        "werkzeuge": {"type": "array", "items": {"type": "object", "required": ["typ", "feld"], "additionalProperties": false,
+          "properties": {"typ": {"enum": ["taschenlampe", "foehn"]}, "feld": {"$ref": "#/$defs/field"}, "an": {"type": "boolean"}}}},
         "pult_stellung": {
           "type": "object",
           "additionalProperties": false,
@@ -37,7 +39,9 @@
             "batterie_V": {"enum": [3, 4.5, 9]},
             "schalter": {"type": "boolean"},
             "p1": {"type": "number", "minimum": 0, "maximum": 1},
-            "p2": {"type": "number", "minimum": 0, "maximum": 1}
+            "p2": {"type": "number", "minimum": 0, "maximum": 1},
+            "messart": {"enum": ["V", "A", "Ohm"]},
+            "raumlicht": {"enum": ["hell", "daemmerung", "dunkel"]}
           }
         }
       }
@@ -98,7 +102,7 @@
         {"required": ["nicht"], "properties": {"nicht": {"$ref": "#/$defs/condition"}}},
         {"required": ["groesse"], "properties": {
           "bauteil": {"type": "string"}, "rolle": {"type": "string"}, "feld": {"$ref": "#/$defs/anchor"},
-          "groesse": {"enum": ["strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C"]},
+          "groesse": {"enum": ["strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C", "anzeige"]},
           "zwischen": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
           "min": {"type": "number"}, "max": {"type": "number"}, "dauer_s": {"type": "number", "minimum": 0}}},
         {"required": ["zustand"], "properties": {

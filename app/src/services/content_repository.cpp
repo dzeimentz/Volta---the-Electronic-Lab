@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 
 namespace volta::services {
 
@@ -173,6 +174,25 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
     out.desk.switchClosed = pult.value(QStringLiteral("schalter")).toBool(false);
     out.desk.p1 = pult.value(QStringLiteral("p1")).toDouble(0.5);
     out.desk.p2 = pult.value(QStringLiteral("p2")).toDouble(0.5);
+    // Messart des Messgeraets: "V", "A", "Ohm"
+    const QString mode = pult.value(QStringLiteral("messart")).toString();
+    if (mode == QStringLiteral("A")) out.desk.meterMode = core::MeterMode::Ampere;
+    else if (mode == QStringLiteral("Ohm")) out.desk.meterMode = core::MeterMode::Ohm;
+    // Raumlicht: "hell" (Vorgabe), "daemmerung", "dunkel"
+    const QString light = pult.value(QStringLiteral("raumlicht")).toString();
+    out.desk.roomLight = light == QStringLiteral("dunkel") ? 0 : light == QStringLiteral("daemmerung") ? 1 : 2;
+    // Werkzeuge, die bereitliegen: [{"typ": "taschenlampe"|"foehn", "feld": "B3", "an": true}]
+    for (const QJsonValue& v : vorlage.value(QStringLiteral("werkzeuge")).toArray()) {
+        const QJsonObject o = v.toObject();
+        const std::string f = str(o.value(QStringLiteral("feld")));
+        if (f.size() < 2) continue;
+        model::ToolPlacement t;
+        t.type = str(o.value(QStringLiteral("typ")));
+        t.row = f[0] - 'A';
+        t.col = std::atof(f.c_str() + 1);
+        t.on = o.value(QStringLiteral("an")).toBool(true);
+        out.desk.tools.push_back(t);
+    }
     for (const QJsonValue& v : vorlage.value(QStringLiteral("module")).toArray()) {
         const QJsonObject o = v.toObject();
         model::ModulePlacement m;
@@ -238,6 +258,7 @@ bool ContentRepository::parseSuccess(const QJsonObject& o, model::SuccessConditi
     else if (g == QStringLiteral("drehzahl")) out.quantity = C::Quantity::Rpm;
     else if (g == QStringLiteral("frequenz_Hz")) out.quantity = C::Quantity::FrequencyHz;
     else if (g == QStringLiteral("temperatur_C")) out.quantity = C::Quantity::TemperatureC;
+    else if (g == QStringLiteral("anzeige")) out.quantity = C::Quantity::Display;
     else {
         error = QStringLiteral("Erfolg: unbekannte Groesse '%1'").arg(g);
         return false;
