@@ -111,6 +111,10 @@ dieses denselben Typ hat; sonst als das naechste noch nicht zugeordnete Bauteil 
 Aufbaus). Die Pruefung laeuft im Simulations-Thread nach jedem Schritt; nach einer Aufbauaenderung beginnen die
 Haltedauern (`dauer_s`) neu. `rolle` (Funktion statt Typ) folgt mit der Lernpfad-Engine in Phase 2.
 
+Module in Bedingungen: `bauteil` darf auch eine Modulkennung der Vorlage sein (z. B. `TM1`); gemessen werden die
+Werte des Moduls (Tonmodul: `frequenz_Hz` = aktueller Ton, `strom_mA` = Strom in den Ausgang `aus`; Blinkmodul:
+Ausgangstransistor). Zuordnung wie bei Bauteilen ueber Kennung und Typ.
+
 ## Bauteilkatalog (`catalog/bauteile.json`)
 
 ```json

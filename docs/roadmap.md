@@ -44,10 +44,14 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 - D2 Forschungskreislauf mit Beobachtung, Vergleich mit der Vermutung und Forscherheft: erledigt.
 - D3 Werkzeugkasten: Farbcode, E-Reihen, Bauteillexikon: erledigt (Formelrechner, Zeitschreiber, Fehlersuche folgen).
 - D4 Schaltplanansicht mit wechselseitiger Hervorhebung: erledigt.
-- D5 Experimente: 20 (Auftakt 0.1; Stufe 1: 1.1–1.7; Stufe 2: 2.1–2.12), jede Vorlage im ContentSmokeTest
-  gegen ihre Erfolgsbedingung simuliert; Texte DE, FR und EN (FR/EN Entwurf). Ziel fuer Version 1.0: etwa 30.
-- Offen in Phase 2: Vorlesen (Systemstimme), Tonmodul mit »Blick hinein«, Schritt-fuer-Schritt-Aufbauhilfe mit
-  hervorgehobenen Zielfeldern, Modulfach, weitere Experimente (u. a. Leiter/Nichtleiter, Tonmodul), LU-Texte.
+- D5 Experimente: 31 (Auftakt 0.1; Stufe 1: 1.1–1.10; Stufe 2: 2.1–2.20), jede Vorlage im ContentSmokeTest
+  gegen ihre Erfolgsbedingung simuliert; Texte DE, FR und EN (FR/EN Entwurf).
+- Module: Modulleiste mit dargestellten Modulen (Anschlussnamen auf den Feldern), Modulfach zum Einsetzen,
+  Verschieben und Herausnehmen (Befehle); Tonmodul als Verhaltensmodell (`core/modules/tone_module`), das den
+  Pult-Lautsprecher mit seinem Ton anzeigt; »Blick hinein«: Blinkmodul als Schaltplan mit laufender Simulation,
+  Tonmodul als Blockbild mit Erklaerung des Verhaltensmodells. Erfolgsbedingungen koennen Module ansprechen.
+- Offen in Phase 2: Vorlesen (Systemstimme), Schritt-fuer-Schritt-Aufbauhilfe mit hervorgehobenen Zielfeldern,
+  Tonausgabe ueber die Soundkarte, LU-Texte, muttersprachliche Pruefung FR/EN.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
@@ -62,5 +66,5 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
    Erfolgsbedingungen (`model/success.*`) steht auch dem Lernpfad zur Verfuegung.
 
 Offen aus Phase 0 (Kern): Kalibrierung der Bauteilmodelle an realem Material; Leistungsmessung auf dem
-Referenztablet (Desktop: schlechtester Einzelschritt ca. 8 ms beim Umkippen einer Kippstufe); Tonmodul als
-Verhaltensmodell; Nennspannung der Katalog-Gluehlampe (6 V brennt an 9 V nach ca. 5 s durch).
+Referenztablet (Desktop: schlechtester Einzelschritt ca. 8 ms beim Umkippen einer Kippstufe); ~~Tonmodul als
+Verhaltensmodell~~ (erledigt in Phase 2); Nennspannung der Katalog-Gluehlampe (6 V brennt an 9 V nach ca. 5 s durch).

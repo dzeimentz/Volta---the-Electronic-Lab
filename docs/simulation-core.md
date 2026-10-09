@@ -135,9 +135,14 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
     beschleunigt (4,7 kΩ: ca. 1,1 Hz). Die Basen schwingen beim Umkippen bis ca. −8 V; der reale
     Basis-Emitter-Durchbruch (BC547 meist 8–9 V) wird nicht nachgebildet und verkuerzt real die Halbperiode
     nur wenig. Bei »Blick hinein« und im Elternbereich erwaehnen.
-  - Tonmodul: Ein Ton im Hoerbereich ist mit 1 ms Schrittweite nicht als Schwingung simulierbar. In Volta 1 wird
-    es deshalb als Verhaltensmodell umgesetzt (Ton aus Eingangsspannung, wie der Summer) und im Elternbereich
-    als solches offengelegt; als Teilschaltung erst ab Volta 2 mit Audioschrittweite.
+  - Tonmodul (`addToneModule`, Klasse `ToneModule`): Ein Ton im Hoerbereich ist mit 1 ms Schrittweite nicht als
+    Schwingung simulierbar. In Volta 1 deshalb ein Verhaltensmodell: Ersatzschaltbild aus Ruhestrom (4,7 kΩ
+    plus–minus), Eingang (100 kΩ ein–minus, Schwelle 1,5 V mit Hysterese bis 1,0 V, Versorgung ab 3 V) und Endstufe
+    (aus–minus, 100 Ω einschliesslich Schutzwiderstand, gerechnet mit dem Mittelwert bei 50 % Tastverhaeltnis, in
+    Melodiepausen gesperrt). Die Melodie (8 Toene zu 0,2 s, eigene Tonfolge) liefert das Modell als Frequenz.
+    Treibt die Endstufe den Pult-Lautsprecher (gleicher Strom in Lautsprecher und Ausgang, Abweichung hoechstens
+    20 %), uebernimmt die Klanganzeige den Ton (`LabSession::speakerReading`). Im »Blick hinein« und im
+    Elternbereich offengelegt; als Teilschaltung erst ab Volta 2 mit Audioschrittweite.
 - **Makromodell** (ab Volta 2): Operationsverstaerker mit Aussteuergrenzen, Anstiegsrate, GBW.
 - **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
   Abstimmung und Antenne. Im Elternbereich als solches offengelegt.

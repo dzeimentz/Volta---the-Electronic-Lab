@@ -1,0 +1,129 @@
+{
+  "id": "volta1.1.9",
+  "band": "volta1",
+  "stufe": 1,
+  "kapitel": 1,
+  "titel_key": "exp_1_9_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "summer",
+    "gluehlampe",
+    "leitung"
+  ],
+  "frage_key": "exp_1_9_frage",
+  "vermutungen": [
+    "exp_1_9_v1",
+    "exp_1_9_v2",
+    "exp_1_9_v3"
+  ],
+  "beobachtungen": [
+    "exp_1_9_b1",
+    "exp_1_9_b2",
+    "exp_1_9_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "pult_stellung": {
+      "batterie_V": 4.5
+    },
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "SU1",
+        "typ": "summer",
+        "felder": {
+          "plus": "A2",
+          "minus": "A3"
+        }
+      },
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "B2",
+          "B3"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "B2",
+        "farbe": "rot"
+      },
+      {
+        "von": "B3",
+        "nach": "A3",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_1_9_s1",
+    "exp_1_9_s2",
+    "exp_1_9_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "SU1",
+        "groesse": "frequenz_Hz",
+        "min": 1000,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "L1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "SU1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_1_9_h1",
+    "exp_1_9_h2",
+    "exp_1_9_loesung"
+  ],
+  "erklaerung_key": "exp_1_9_erklaerung",
+  "mehr_wissen_key": "exp_1_9_mehr",
+  "weiterforschen": [
+    "exp_1_9_w1"
+  ],
+  "jetzt_in_echt_key": "exp_1_9_echt"
+}

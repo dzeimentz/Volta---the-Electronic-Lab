@@ -1,0 +1,125 @@
+{
+  "id": "volta1.1.8",
+  "band": "volta1",
+  "stufe": 1,
+  "kapitel": 1,
+  "titel_key": "exp_1_8_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "gluehlampe",
+    "motor",
+    "leitung"
+  ],
+  "frage_key": "exp_1_8_frage",
+  "vermutungen": [
+    "exp_1_8_v1",
+    "exp_1_8_v2",
+    "exp_1_8_v3"
+  ],
+  "beobachtungen": [
+    "exp_1_8_b1",
+    "exp_1_8_b2",
+    "exp_1_8_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "pult_stellung": {
+      "batterie_V": 4.5,
+      "schalter": true
+    },
+    "bauteile": [
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "B1",
+          "B2"
+        ]
+      },
+      {
+        "id": "M1",
+        "typ": "motor",
+        "felder": [
+          "C1",
+          "C3"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "P:S1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:S2",
+        "nach": "B1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B1",
+        "nach": "C1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_1_8_s1",
+    "exp_1_8_s2",
+    "exp_1_8_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 2
+      },
+      {
+        "bauteil": "M1",
+        "groesse": "drehzahl",
+        "min": 500,
+        "dauer_s": 2
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "M1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_1_8_h1",
+    "exp_1_8_h2",
+    "exp_1_8_loesung"
+  ],
+  "erklaerung_key": "exp_1_8_erklaerung",
+  "mehr_wissen_key": "exp_1_8_mehr",
+  "weiterforschen": [
+    "exp_1_8_w1"
+  ],
+  "jetzt_in_echt_key": "exp_1_8_echt"
+}

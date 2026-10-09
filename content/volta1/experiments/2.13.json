@@ -1,0 +1,116 @@
+{
+  "id": "volta1.2.13",
+  "band": "volta1",
+  "stufe": 2,
+  "kapitel": 1,
+  "titel_key": "exp_2_13_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "leitung"
+  ],
+  "frage_key": "exp_2_13_frage",
+  "vermutungen": [
+    "exp_2_13_v1",
+    "exp_2_13_v2",
+    "exp_2_13_v3"
+  ],
+  "beobachtungen": [
+    "exp_2_13_b1",
+    "exp_2_13_b2",
+    "exp_2_13_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      }
+    ],
+    "module": [
+      {
+        "id": "TM1",
+        "typ": "tonmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "TM1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "TM1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "TM1.ein",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "P:LS1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "TM1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_2_13_s1",
+    "exp_2_13_s2",
+    "exp_2_13_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "TM1",
+        "groesse": "frequenz_Hz",
+        "min": 100,
+        "dauer_s": 0.5
+      },
+      {
+        "bauteil": "TM1",
+        "groesse": "strom_mA",
+        "min": 20,
+        "dauer_s": 0.5
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_2_13_h1",
+    "exp_2_13_h2",
+    "exp_2_13_loesung"
+  ],
+  "erklaerung_key": "exp_2_13_erklaerung",
+  "mehr_wissen_key": "exp_2_13_mehr",
+  "weiterforschen": [
+    "exp_2_13_w1"
+  ],
+  "jetzt_in_echt_key": "exp_2_13_echt"
+}

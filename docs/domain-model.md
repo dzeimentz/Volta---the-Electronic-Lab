@@ -63,6 +63,12 @@
 - Schmale Felder `M1`–`M16` am unteren Rand; Bezeichner `M:<n>`.
 - Ein Modul belegt einen zusammenhaengenden Bereich; seine Anschluesse tragen Namen (z. B. Blinkmodul `+`, `-`,
   `takt`, `aus`). Adressierung im Inhaltspaket: `<Modul-ID>.<Anschluss>`.
+- Das Kind setzt Module aus dem Modulfach ein (Startfeld = erster Anschluss), verschiebt sie entlang der Leiste
+  und nimmt sie heraus; alles sind Befehle. Kennungen `BL<n>` (Blinkmodul), `TM<n>` (Tonmodul). Leitungen an den
+  Feldern unter einem Modul wandern beim Verschieben mit; beim Herausnehmen bleiben Leitungen an
+  `<Modul-ID>.<Anschluss>` auf dem Feld `M:<n>` der Leiste liegen. Ein Modul belegt kein Feld doppelt.
+- Tonmodul (`plus`, `minus`, `ein`, `aus`): spielt eine kurze Melodie, solange `ein` gegen `minus` mindestens
+  1,5 V hat (Versorgung ab 3 V); Endstufe mit offenem Kollektor an `aus` (Lautsprecher von `plus` nach `aus`).
 
 ## Dreifach-Messgeraet
 

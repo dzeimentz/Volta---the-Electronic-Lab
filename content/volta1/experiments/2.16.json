@@ -1,0 +1,141 @@
+{
+  "id": "volta1.2.16",
+  "band": "volta1",
+  "stufe": 2,
+  "kapitel": 1,
+  "titel_key": "exp_2_16_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp_2_16_frage",
+  "vermutungen": [
+    "exp_2_16_v1",
+    "exp_2_16_v2",
+    "exp_2_16_v3"
+  ],
+  "beobachtungen": [
+    "exp_2_16_b1",
+    "exp_2_16_b2",
+    "exp_2_16_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B4"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B4",
+          "kathode": "C4"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 4700
+      }
+    ],
+    "module": [
+      {
+        "id": "BL1",
+        "typ": "blinkmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "BL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "BL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "C4",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "BL1.takt",
+        "farbe": "gelb"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_2_16_s1",
+    "exp_2_16_s2",
+    "exp_2_16_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "zwischen": [
+          5,
+          25
+        ],
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "R2",
+        "groesse": "strom_mA",
+        "min": 0.1,
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_2_16_h1",
+    "exp_2_16_h2",
+    "exp_2_16_loesung"
+  ],
+  "erklaerung_key": "exp_2_16_erklaerung",
+  "mehr_wissen_key": "exp_2_16_mehr",
+  "weiterforschen": [
+    "exp_2_16_w1"
+  ],
+  "jetzt_in_echt_key": "exp_2_16_echt"
+}

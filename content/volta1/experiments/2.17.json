@@ -1,0 +1,145 @@
+{
+  "id": "volta1.2.17",
+  "band": "volta1",
+  "stufe": 2,
+  "kapitel": 1,
+  "titel_key": "exp_2_17_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "led_rot",
+    "summer",
+    "leitung"
+  ],
+  "frage_key": "exp_2_17_frage",
+  "vermutungen": [
+    "exp_2_17_v1",
+    "exp_2_17_v2",
+    "exp_2_17_v3"
+  ],
+  "beobachtungen": [
+    "exp_2_17_b1",
+    "exp_2_17_b2",
+    "exp_2_17_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_1",
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B4"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B4",
+          "kathode": "C4"
+        }
+      },
+      {
+        "id": "SU1",
+        "typ": "summer",
+        "felder": {
+          "plus": "D2",
+          "minus": "D3"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "BL1",
+        "typ": "blinkmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "BL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "BL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "C4",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "D2",
+        "farbe": "rot"
+      },
+      {
+        "von": "D3",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp_2_17_s1",
+    "exp_2_17_s2",
+    "exp_2_17_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "zwischen": [
+          5,
+          25
+        ],
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "SU1",
+        "groesse": "frequenz_Hz",
+        "min": 1000,
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "SU1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp_2_17_h1",
+    "exp_2_17_h2",
+    "exp_2_17_loesung"
+  ],
+  "erklaerung_key": "exp_2_17_erklaerung",
+  "mehr_wissen_key": "exp_2_17_mehr",
+  "weiterforschen": [
+    "exp_2_17_w1"
+  ],
+  "jetzt_in_echt_key": "exp_2_17_echt"
+}
