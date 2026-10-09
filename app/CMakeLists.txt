@@ -90,7 +90,6 @@ qt_add_qml_module(volta_ui
         qml/SchematicView.qml
         qml/ModuleItem.qml
         qml/ModuleInside.qml
-        qml/DeleteBadge.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

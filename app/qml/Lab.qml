@@ -143,6 +143,14 @@ Item {
     // Aufbauhilfe sichtbar (Aufbauphase, vom Kind eingeschaltet)
     readonly property bool guideVisible: controller.guideActive && controller.phase === 2
     property string selectedModule: ""
+    // Aktionen (Farbe, Drehen, Loeschen ...) gibt es nur ueber das Kontextmenue: langer Druck bzw. Rechtsklick.
+    // Beim ersten Auswaehlen einmal darauf hinweisen (Antippen selbst loest nie etwas Unumkehrbares aus).
+    property bool menuHintShown: false
+    function showMenuHint() {
+        if (menuHintShown) return
+        menuHintShown = true
+        toast.show(qsTr("Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …)."))
+    }
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
@@ -685,18 +693,10 @@ Item {
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id
                     points: modelData.anchors.map((a, i) => lab.socketPoint(a, modelData.sockets[i]))
-                    // Loeschen-Knopf rechts oberhalb des ausgewaehlten Bauteils
-                    DeleteBadge {
-                        objectName: "deletePart_" + part.modelData.id
-                        visible: part.selected
-                        at: Qt.point(part.cx + 34, part.cy - 34)
-                        canvasScale: canvas.scale
-                        Accessible.name: qsTr("Bauteil entfernen")
-                        onClicked: { lab.controller.removePart(part.modelData.id); lab.selectedPart = "" }
-                    }
                     onTapped: {
                         lab.selectedPart = part.modelData.id
                         lab.selectedWire = ""
+                        lab.showMenuHint()
                         // Reedkontakt und Wechselschalter: Tippen schaltet um (Bedienhandlung)
                         if (part.modelData.type === "reedkontakt" || part.modelData.type === "wechselschalter")
                             lab.controller.setPartClosed(part.modelData.id, part.partState.closed !== true)
@@ -747,57 +747,6 @@ Item {
                             function onStateChanged() { wireShape.currentmA = lab.controller.wireCurrent(wire.modelData.id) }
                         }
                     }
-                    // Farbknopf (oeffnet die Farbauswahl) und Loeschen-Knopf an der ausgewaehlten Leitung
-                    ToolButton {
-                        id: colorBadge
-                        objectName: "colorWire_" + wire.modelData.id
-                        visible: lab.selectedWire === wire.modelData.id && lab.moveWireId === ""
-                        readonly property point at: wireShape.pointAt(0.5)
-                        width: Theme.control; height: Theme.control
-                        x: at.x - width / 2 - Theme.control / canvas.scale
-                        y: at.y - height / 2
-                        scale: 1 / Math.max(0.3, canvas.scale)
-                        z: 50
-                        onClicked: {
-                            wireMenu.wireId = wire.modelData.id
-                            wireMenu.wireColor = wire.modelData.color
-                            wireMenu.popup(canvas, at.x, at.y + 24 / canvas.scale)
-                        }
-                        ToolTip.visible: hovered
-                        ToolTip.text: Accessible.name
-                        Accessible.name: qsTr("Farbe ändern: %1").arg(Texts.colorName(wire.modelData.color))
-                        // weiss mit Farbpunkt der Leitung (deutlich anders als der rote Papierkorb)
-                        background: Rectangle {
-                            radius: width / 2
-                            color: colorBadge.down ? "#E3ECF5" : "white"
-                            border.color: Theme.navy
-                            border.width: 2
-                        }
-                        contentItem: Item {
-                            Rectangle {
-                                anchors.centerIn: parent
-                                width: 26; height: 26; radius: 13
-                                color: Theme.wireColor(wire.modelData.color)
-                                border.color: Theme.solderAmber
-                                border.width: 3
-                            }
-                            Label {
-                                anchors.right: parent.right
-                                anchors.bottom: parent.bottom
-                                text: "▾"
-                                font.pixelSize: 14
-                                color: Theme.navy
-                            }
-                        }
-                    }
-                    DeleteBadge {
-                        objectName: "deleteWire_" + wire.modelData.id
-                        visible: lab.selectedWire === wire.modelData.id && lab.moveWireId === ""
-                        at: wireShape.pointAt(0.5)
-                        canvasScale: canvas.scale
-                        Accessible.name: qsTr("Leitung löschen")
-                        onClicked: { lab.controller.removeWire(wire.modelData.id); lab.selectedWire = "" }
-                    }
                     Repeater {
                         model: [true, false] // Anfang, Ende
                         WireEndHandle {
@@ -818,7 +767,12 @@ Item {
                                 lab.highlightAnchor = ""
                                 if (target !== "") lab.controller.moveWireEnd(wire.modelData.id, endHandle.modelData, target)
                             }
-                            onTapped: { lab.selectedWire = wire.modelData.id; lab.selectedPart = ""; lab.selectedModule = "" }
+                            onTapped: {
+                                lab.selectedWire = wire.modelData.id
+                                lab.selectedPart = ""
+                                lab.selectedModule = ""
+                                lab.showMenuHint()
+                            }
                             onMenuRequested: (scenePos) => {
                                 lab.selectedWire = wire.modelData.id
                                 lab.selectedPart = ""
@@ -988,8 +942,10 @@ Item {
             text: qsTr("Reparieren")
             onTriggered: lab.controller.repairPart(partMenu.part.id)
         }
+        MenuSeparator {}
         MenuItem {
-            text: qsTr("Entfernen")
+            objectName: "partMenuRemove"
+            text: "🗑 " + qsTr("Entfernen")
             onTriggered: { lab.controller.removePart(partMenu.part.id); lab.selectedPart = "" }
         }
     }
@@ -1033,8 +989,10 @@ Item {
             onObjectAdded: (index, object) => wireMenu.insertItem(index, object)
             onObjectRemoved: (index, object) => wireMenu.removeItem(object)
         }
+        MenuSeparator {}
         MenuItem {
-            text: qsTr("Leitung löschen")
+            objectName: "wireMenuRemove"
+            text: "🗑 " + qsTr("Leitung löschen")
             onTriggered: { lab.controller.removeWire(wireMenu.wireId); lab.selectedWire = "" }
         }
     }

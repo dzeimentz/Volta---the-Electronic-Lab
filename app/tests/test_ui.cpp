@@ -416,41 +416,34 @@ private slots:
         QTRY_VERIFY(!item(QStringLiteral("field_A1"))->property("target").toBool());
     }
 
-    // Loeschen ohne Menue: Leitungsende antippen -> Knopf auf der Leitung; Bauteil antippen -> Knopf daneben
-    void deleteBadges() {
+    // Antippen waehlt nur aus (nichts wird geloescht); Rechtsklick bzw. langer Druck oeffnet das Leitungsmenue mit
+    // Farben und abgesetztem Loeschen. Farbautomatik: Leitung von +9V rot, nach 0V schwarz.
+    void wireContextMenu() {
         m_settings->setUnlockAll(true);
         m_lab->startFreeLab();
         QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("C5"), false, false));
         QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C5"), QStringLiteral("gruen")));
+        QCOMPARE(board().wires[0].color, std::string("rot"));
         QTest::qWait(100);
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        QObject* menu = lab->findChild<QObject*>(QStringLiteral("wireMenu"));
+        QVERIFY(menu);
         QQuickItem* end = item(QStringLiteral("wireEnd_L1_nach"));
         QVERIFY(end);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(end));
-        QQuickItem* badge = nullptr;
-        QTRY_VERIFY((badge = item(QStringLiteral("deleteWire_L1"))) != nullptr && badge->isVisible());
-        // Farbautomatik: Leitung von +9V ist rot, obwohl Rot nicht gewaehlt sein muss; Farbknopf oeffnet die Auswahl
-        QCOMPARE(board().wires[0].color, std::string("rot"));
-        QQuickItem* colorBadge = item(QStringLiteral("colorWire_L1"));
-        QVERIFY(colorBadge && colorBadge->isVisible());
-        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(colorBadge));
-        QObject* menu = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("wireMenu"));
-        QTRY_VERIFY(menu && menu->property("opened").toBool());
-        QVERIFY(m_lab->setWireColor(QStringLiteral("L1"), QStringLiteral("blau")));
+        QTRY_COMPARE(lab->property("selectedWire").toString(), QStringLiteral("L1"));
+        QTest::qWait(50);
+        QVERIFY(!menu->property("opened").toBool()); // Antippen: kein Menue
+        QCOMPARE(board().wires.size(), std::size_t(1));
+        QTest::mouseClick(m_window, Qt::RightButton, {}, centerOf(end));
+        QTRY_VERIFY(menu->property("opened").toBool());
+        QCOMPARE(menu->property("wireColor").toString(), QStringLiteral("rot"));
         QMetaObject::invokeMethod(menu, "close");
-        QCOMPARE(board().wires[0].color, std::string("blau"));
-        QTRY_VERIFY((badge = item(QStringLiteral("deleteWire_L1"))) != nullptr && badge->isVisible());
-        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
-        QTRY_VERIFY(board().wires.empty());
+        QVERIFY(m_lab->setWireColor(QStringLiteral("L1"), QStringLiteral("blau"))); // wie Auswahl im Menue
+        QVERIFY(board().wires[0].colorFixed);
+        QVERIFY(m_lab->removeWire(QStringLiteral("L1")));
         QVERIFY(m_lab->addWire(QStringLiteral("C6"), QStringLiteral("P:0V"), QStringLiteral("gelb")));
         QCOMPARE(board().wires.back().color, std::string("schwarz"));
-        QVERIFY(m_lab->removeWire(QString::fromStdString(board().wires.back().id)));
-        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
-        lab->setProperty("selectedPart", QStringLiteral("R1")); // wie Antippen des Bauteils
-        QTRY_VERIFY((badge = item(QStringLiteral("deletePart_R1"))) != nullptr && badge->isVisible());
-        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
-        QTRY_VERIFY(board().parts.empty());
-        m_lab->undo(); // rueckgaengig machbar
-        QTRY_COMPARE(board().parts.size(), std::size_t(1));
     }
 
     // Experimentauswahl als Aufklappfeld; Einstellungsmenue ganz rechts
