@@ -87,6 +87,12 @@ public:
     void setDeskSwitch(bool closed);
     void setPot(int which, double position); // Pult-Drehregler 1/2
     void setMotorBlocked(const std::string& id, bool blocked);
+    // Umgebung (model/environment.hpp): Raumlicht 0 dunkel / 1 Daemmerung / 2 hell; Taschenlampe und Foehn legen,
+    // verschieben, ein-/ausschalten, wegraeumen (je Werkzeug hoechstens eines). Bedienhandlungen.
+    void setRoomLight(int level);
+    void placeTool(const std::string& type, double col, double row);
+    void setToolOn(const std::string& type, bool on);
+    void removeTool(const std::string& type);
     // Dreifach-Messgeraet: Messart und Anzeigeart (Bedienhandlungen); Ein-/Ausblenden (nicht, solange Leitungen an
     // den Buchsen stecken); Sicherung tauschen ist ein Befehl (wie Reparieren).
     void setMeterMode(core::MeterMode mode);
@@ -122,6 +128,7 @@ public:
 
 private:
     void rebuild(const std::vector<sim::StateOverride>& states);
+    void postEnvironment(); // Licht und Waerme an alle Fotowiderstaende und Heissleiter
     std::vector<sim::StateOverride> captureStates() const;
     bool push(const QString& text, Board after, int mergeId = BoardCommand::NoMerge, const QString& key = {},
               std::vector<sim::StateOverride> statesAfter = {});

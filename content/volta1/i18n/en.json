@@ -580,5 +580,8 @@
   "exp_2_20_erklaerung": "A red LED starts to light at just under 2 V, a blue one needs about 3 V. Side by side both get the same voltage, and the red one holds it at 2 V. That's not enough for the blue one: all the current takes the easier path through the red one.",
   "exp_2_20_mehr": "That's why in circuits each LED gets its own resistor, especially with different colours.",
   "exp_2_20_w1": "Give the blue LED its own resistor. Do both light up now?",
-  "exp_2_20_echt": "In devices with coloured indicators each LED has its own series resistor – otherwise only one colour would light up."
+  "exp_2_20_echt": "In devices with coloured indicators each LED has its own series resistor – otherwise only one colour would light up.",
+  "lex_heissleiter": "A thermistor (NTC) conducts better when it gets warm: its resistance falls as the temperature rises.",
+  "lex_elektromagnet": "A coil of wire on an iron core. When current flows it becomes a magnet – without current the magnet is off.",
+  "lex_relais": "A relay is a switch worked by an electromagnet: a small current through the coil (A, B) closes the contact (COM, NO) for another circuit."
 }

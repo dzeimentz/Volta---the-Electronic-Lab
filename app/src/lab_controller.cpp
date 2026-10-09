@@ -953,6 +953,36 @@ QVariantMap LabController::meterState() {
     return m;
 }
 
+void LabController::setRoomLight(int level) {
+    m_session->setRoomLight(level);
+    emit deskChanged();
+}
+
+QVariantList LabController::tools() const {
+    QVariantList out;
+    for (const auto& t : m_session->board().desk.tools)
+        out << QVariantMap{{QStringLiteral("type"), qs(t.type)},
+                           {QStringLiteral("col"), t.col},
+                           {QStringLiteral("row"), t.row},
+                           {QStringLiteral("on"), t.on}};
+    return out;
+}
+
+void LabController::placeTool(const QString& type, double col, double row) {
+    m_session->placeTool(ss(type), col, row);
+    emit deskChanged();
+}
+
+void LabController::setToolOn(const QString& type, bool on) {
+    m_session->setToolOn(ss(type), on);
+    emit deskChanged();
+}
+
+void LabController::removeTool(const QString& type) {
+    m_session->removeTool(ss(type));
+    emit deskChanged();
+}
+
 void LabController::setMotorBlocked(const QString& id, bool blocked) {
     m_session->setMotorBlocked(ss(id), blocked);
 }

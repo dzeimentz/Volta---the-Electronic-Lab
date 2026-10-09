@@ -81,6 +81,10 @@ Item {
             case "elko": return electrolytic
             case "diode_si": case "diode_ge": return diode
             case "transistor_npn": return transistor
+            case "fotowiderstand": return photo
+            case "heissleiter": return thermistor
+            case "elektromagnet": return magnet
+            case "relais": return relay
             }
             return root.isLed ? led : generic
         }
@@ -423,6 +427,127 @@ Item {
                     // neben dem Fuss, zur Platinenmitte hin (folgt der Drehung)
                     x: pcb.f[index].x + (pcb.f[index].x < pcb.width / 2 ? 7 : -7 - width)
                     y: pcb.f[index].y + (pcb.f[index].y < pcb.height / 2 ? 4 : -4 - height)
+                }
+            }
+        }
+    }
+
+    // Fotowiderstand: runde Scheibe mit maeanderfoermiger Leiterbahn; Lichtschein je nach Helligkeit am Bauteil
+    Component {
+        id: photo
+        Item {
+            Rectangle { // Lichtschein (level: Beleuchtung 0..1, logarithmisch)
+                anchors.centerIn: parent
+                width: parent.height * 1.7; height: width; radius: width / 2
+                color: "#FFF3A0"
+                opacity: 0.15 + 0.6 * root.level
+                visible: root.level > 0.2
+            }
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.height * 0.95; height: width; radius: width / 2
+                color: "#D9A45B"; border.color: "#7A5420"; border.width: 2
+                Shape {
+                    anchors.fill: parent
+                    preferredRendererType: Shape.CurveRenderer
+                    ShapePath {
+                        strokeColor: "#A3241B"; strokeWidth: 2; fillColor: "transparent"
+                        PathSvg { path: "M8 9 H24 V13 H8 V17 H24 V21 H8 V25 H24" }
+                    }
+                }
+            }
+        }
+    }
+
+    // Heissleiter: Perle aus Lack (blau), wird bei Erwaermung rot (zusaetzlich das Zeichen ϑ)
+    Component {
+        id: thermistor
+        Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.height * 0.9; height: parent.height * 0.75; radius: height / 2
+                color: Qt.rgba(0.17 + 0.75 * root.level, 0.38 - 0.25 * root.level, 0.75 - 0.6 * root.level, 1)
+                border.color: "#1E2B38"
+                Text { anchors.centerIn: parent; text: "ϑ"; color: "white"; font.pixelSize: Math.round(14 * Theme.fontScale); font.bold: true }
+            }
+        }
+    }
+
+    // Elektromagnet: Kupferwicklung auf Eisenkern; eine Bueroklammer wird angezogen, sobald das Feld stark genug ist
+    Component {
+        id: magnet
+        Item {
+            id: em
+            readonly property bool pulls: Math.abs(root.level) > 0.3 && !root.destroyed
+            Rectangle { // Eisenkern
+                anchors.centerIn: parent
+                width: parent.width * 0.9; height: parent.height * 0.3
+                color: "#7D8792"; border.color: "#3E4955"
+            }
+            Row { // Wicklung
+                anchors.centerIn: parent
+                spacing: 1
+                Repeater {
+                    model: 9
+                    Rectangle { width: 4; height: em.height * 0.8; radius: 2; color: "#C8742A"; border.color: "#7A4012" }
+                }
+            }
+            // Feldlinien bei Strom
+            Repeater {
+                model: em.pulls ? 2 : 0
+                Rectangle {
+                    required property int index
+                    anchors.centerIn: parent
+                    width: em.width * (0.95 + 0.25 * index); height: em.height * (1.3 + 0.5 * index)
+                    radius: height / 2
+                    color: "transparent"; border.color: "#5A8FD6"; border.width: 1
+                    opacity: 0.6
+                }
+            }
+            Text { // Bueroklammer (angezogen: am Kern)
+                text: "📎"
+                font.pixelSize: 14
+                y: em.pulls ? -12 : -24
+                x: em.width / 2 - 7
+                Behavior on y { enabled: !Theme.reduceMotion; NumberAnimation { duration: 120 } }
+            }
+        }
+    }
+
+    // Relais auf quadratischer Platine: Fuesse A | B (Spule) oben, COM | NO (Schliesser) unten; Gehaeuse mit
+    // sichtbarem Kontakt (geschlossen/offen, zusaetzlich Text)
+    Component {
+        id: relay
+        Rectangle {
+            id: rpcb
+            anchors.fill: parent; radius: 6
+            color: "#2F6B3A"; border.color: "#173D1E"; border.width: 2
+            readonly property var f: root.feet.length === 4 ? root.feet
+                                   : [Qt.point(16, 14), Qt.point(width - 16, 14),
+                                      Qt.point(16, height - 14), Qt.point(width - 16, height - 14)]
+            readonly property bool on: root.level > 0.5 && !root.destroyed
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * 0.55; height: parent.height * 0.55; radius: 4
+                color: "#2C5FA8"; border.color: "#16345E"
+                Text { anchors.horizontalCenter: parent.horizontalCenter; y: 2; text: "K"; color: "white"; font.bold: true; font.pixelSize: Math.round(11 * Theme.fontScale) }
+                Rectangle { // Kontaktzunge
+                    width: parent.width * 0.5; height: 3; color: "#F2D16B"
+                    x: parent.width * 0.25; y: parent.height * 0.7
+                    transformOrigin: Item.Left
+                    rotation: rpcb.on ? 0 : -25
+                    Behavior on rotation { enabled: !Theme.reduceMotion; NumberAnimation { duration: 60 } }
+                }
+            }
+            Repeater {
+                model: ["A", "B", "COM", "NO"]
+                Text {
+                    required property int index
+                    required property string modelData
+                    text: modelData
+                    font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: "white"
+                    x: rpcb.f[index].x + (rpcb.f[index].x < rpcb.width / 2 ? 7 : -7 - width)
+                    y: rpcb.f[index].y + (rpcb.f[index].y < rpcb.height / 2 ? 4 : -4 - height)
                 }
             }
         }

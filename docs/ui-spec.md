@@ -200,3 +200,14 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Feld ziehen, aendernde Menueaktion, Entfernen-Taste, Rueckgaengig/Wiederholen, Felder je Reihe -, schaltet damit den
   Strom aus und ist im Steckmodus (Hinweis »Strom aus – Steckmodus …«). Wie beim echten Basteln: erst ausschalten,
   dann umbauen.
+
+## Licht und Waerme (Stufe 3, Variante B: Werkzeuge)
+- Werkzeugfeld unten links auf der Arbeitsflaeche (sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt
+  sind): Raumlicht umschalten (☀ hell 300 lx / ⛅ Daemmerung 20 lx / 🌙 dunkel 0,5 lx; die Arbeitsflaeche wird
+  entsprechend gedaempft), Taschenlampe und Foehn auf die Grundplatte ziehen oder antippen (legt sie in die Mitte).
+- Auf der Grundplatte: frei verschiebbar, Antippen schaltet ein/aus, langer Druck bzw. Rechtsklick: Ein-/Ausschalten,
+  Wegraeumen. Ein Schein zeigt die Reichweite; die Wirkung nimmt mit dem Abstand ab (`model/environment.hpp`):
+  Taschenlampe bis 5000 lx direkt darueber, Foehn bis 80 Grad C. Bedienhandlungen (kein Verlauf), auch im Betrieb.
+- Neue Bauteile der Stufe 3: Fotowiderstand (Lichtschein je nach Helligkeit), Heissleiter (Perle, die bei Waerme rot
+  wird; Temperatur an der Beschriftung), Elektromagnet (Bueroklammer wird angezogen, Feldlinien), Relais auf
+  2-x-2-Platine (A | B Spule oben, COM | NO Schliesser unten; Kontaktzunge zeigt die Stellung).

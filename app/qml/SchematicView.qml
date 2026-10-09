@@ -175,7 +175,8 @@ Rectangle {
                         border.width: el.selected ? 3 : 2
                         Label {
                             anchors.centerIn: parent
-                            text: el.modelData.module ? Texts.moduleName(el.modelData.type) : qsTr("Messgerät")
+                            text: el.modelData.module ? Texts.moduleName(el.modelData.type)
+                                  : el.modelData.type === "messgeraet" ? qsTr("Messgerät") : Texts.partName(el.modelData.type)
                             font.pixelSize: 10
                             font.bold: true
                             color: el.ink

@@ -440,11 +440,11 @@ private slots:
         model::Board board;
         board.parts.push_back({"X1", "gibt_es_nicht", {{"a", "A1"}, {"b", "A2"}}});
         board.parts.push_back({"R1", "widerstand", {{"a", "Z9"}, {"b", "A2"}}, 100.0});
-        board.parts.push_back({"F1", "fotowiderstand", {{"a", "A1"}, {"b", "A2"}}});
+        board.parts.push_back({"F1", "fotowiderstand", {{"a", "A1"}, {"b", "A2"}}}); // seit Stufe 3 simuliert
         board.wires.push_back({"L1", "A1", "BL9.aus", "rot"});
         board.modules.push_back({"XM1", "gibt_es_nicht", 5});
         const model::Netlist net = model::buildNetlist(board, m_catalog);
-        QCOMPARE(net.errors.size(), std::size_t(5));
+        QCOMPARE(net.errors.size(), std::size_t(4));
         // gueltige Teile werden trotzdem aufgebaut: die Schaltung bleibt simulierbar
         core::Simulator sim;
         model::Netlist copy = model::buildNetlist(board, m_catalog);

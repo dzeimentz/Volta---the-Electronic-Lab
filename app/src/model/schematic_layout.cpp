@@ -116,7 +116,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
     // a liegt unter b (nur wenn beide gezeichnet)
     auto below = [&](std::size_t a, std::size_t b) { return has(a) && has(b) && row(a) > row(b) + kEps; };
     const std::string& t = e.type;
-    if (e.module || t == "messgeraet") {
+    if (e.module || t == "messgeraet" || t == "relais") {
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
@@ -126,14 +126,16 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
         for (std::size_t k = 0; k < e.nodes.size(); ++k) {
             const std::string n = k < pinNames.size() ? pinNames[k] : std::string();
             PinGeo& p = g.pins[k];
-            p.label = n == "plus" ? "+" : n == "minus" ? "−" : n == "VOHM" ? "V/Ω" : n;
-            if (n == "plus" || n == "VOHM") {
+            p.label = n == "plus" ? "+" : n == "minus" ? "−" : n == "VOHM" ? "V/Ω" : t == "relais" ? (n == "com" ? "COM" : n == "no" ? "NO" : n == "a" ? "A" : "B") : n;
+            const bool relayTop = t == "relais" && n == "a", relayBottom = t == "relais" && n == "b";
+            const bool relayRight = t == "relais" && n == "no";
+            if (n == "plus" || n == "VOHM" || relayTop) {
                 p.y = -g.h / 2;
                 p.exit = Exit::Up;
-            } else if (n == "minus" || n == "COM") {
+            } else if (n == "minus" || n == "COM" || relayBottom) {
                 p.y = g.h / 2;
                 p.exit = Exit::Down;
-            } else if (n == "aus" || n == "A") {
+            } else if (n == "aus" || n == "A" || relayRight) {
                 right.push_back(k);
             } else {
                 left.push_back(k);

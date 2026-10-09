@@ -37,6 +37,15 @@ struct ModulePlacement {
     int slot = 1;
 };
 
+// Werkzeug auf der Grundplatte (Taschenlampe, Foehn): Lage in Feldeinheiten (col 1..12, row 0..4 = A..E),
+// ein- oder ausgeschaltet. Bedienhandlung (model/environment.hpp).
+struct ToolPlacement {
+    std::string type; // "taschenlampe", "foehn"
+    double col = 1.0;
+    double row = 0.0;
+    bool on = true;
+};
+
 // Zustand des Bedienpults (Bedienhandlungen, nicht Teil des Undo-Verlaufs).
 struct DeskState {
     int cells = 6;              // 2 / 3 / 6 Zellen = 3 / 4,5 / 9 V
@@ -47,6 +56,8 @@ struct DeskState {
     core::MeterMode meterMode = core::MeterMode::Volt;
     bool meterAnalog = false;
     bool meterVisible = false;  // Messgeraet eingeblendet (Bedienhandlung; Buchsen nur dann steckbar)
+    int roomLight = 2;          // Raumlicht: 0 dunkel, 1 Daemmerung, 2 hell
+    std::vector<ToolPlacement> tools;
 };
 
 // Aufbau: alles, was das Kind gesteckt, gezogen und eingestellt hat. Die Netzliste fuer den Kern wird daraus bei

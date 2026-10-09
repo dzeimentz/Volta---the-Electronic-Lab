@@ -69,6 +69,9 @@ class LabController : public QObject {
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
     Q_PROPERTY(double realtimeRatio READ realtimeRatio NOTIFY stateChanged)
     Q_PROPERTY(double batteryVolt READ batteryVolt NOTIFY deskChanged)
+    // Umgebung: Raumlicht 0 dunkel / 1 Daemmerung / 2 hell; Werkzeuge [{type, col, row, on}] auf der Grundplatte
+    Q_PROPERTY(int roomLight READ roomLight WRITE setRoomLight NOTIFY deskChanged)
+    Q_PROPERTY(QVariantList tools READ tools NOTIFY deskChanged)
     // Gefuehrtes Experiment (Phase 1: Frage -> Aufbau -> Erfolg)
     Q_PROPERTY(QVariantList experiments READ experiments NOTIFY experimentChanged)
     Q_PROPERTY(QString experimentId READ experimentId NOTIFY experimentChanged)
@@ -245,6 +248,12 @@ public:
     Q_INVOKABLE void setDeskSwitch(bool closed);
     Q_INVOKABLE void setPot(int which, double position);
     Q_INVOKABLE void setMotorBlocked(const QString& id, bool blocked);
+    int roomLight() const { return m_session->board().desk.roomLight; }
+    void setRoomLight(int level);
+    QVariantList tools() const;
+    Q_INVOKABLE void placeTool(const QString& type, double col, double row);
+    Q_INVOKABLE void setToolOn(const QString& type, bool on);
+    Q_INVOKABLE void removeTool(const QString& type);
     // Anzeige des Messgeraets: text, unit (Dezimalzeichen der Sprache), level (Zeiger), range, mode,
     // overrange, foreignVoltage, fuseBlown, valid
     Q_INVOKABLE QVariantMap meterState();

@@ -3,6 +3,9 @@
 #include <unordered_map>
 
 #include "anchor.hpp"
+#include "environment.hpp"
+#include "volta/core/components/magnet.hpp"
+#include "volta/core/components/sensors.hpp"
 #include "volta/core/components/battery.hpp"
 #include "volta/core/components/buzzer.hpp"
 #include "volta/core/components/capacitor.hpp"
@@ -194,6 +197,25 @@ private:
             c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
             // 2-x-2-Platine: der vierte Fuss (e2) ist ueber eine Leiterbahn mit E verbunden
             if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
+        } else if (m == "ldr" && n.size() == 2) {
+            core::PhotoresistorParams lp;
+            lp.r10Ohm = e->param("r10_ohm", lp.r10Ohm);
+            lp.gamma = e->param("gamma", lp.gamma);
+            lp.darkOhm = e->param("r_dunkel_ohm", lp.darkOhm);
+            c.add<core::Photoresistor>(p.id, n[0], n[1], lp, illuminanceAt(m_board, p));
+        } else if (m == "ntc" && n.size() == 2) {
+            core::ThermistorParams tp;
+            tp.r25Ohm = e->param("r25_ohm", tp.r25Ohm);
+            tp.betaK = e->param("b_K", tp.betaK);
+            c.add<core::Thermistor>(p.id, n[0], n[1], tp, airTemperatureAt(m_board, p));
+        } else if (m == "electromagnet" && n.size() == 2) {
+            core::ElectromagnetParams ep;
+            ep.ohm = e->param("r_ohm", ep.ohm);
+            c.add<core::Electromagnet>(p.id, n[0], n[1], ep);
+        } else if (m == "relay" && n.size() == 4) {
+            core::RelayParams rp;
+            rp.coilOhm = e->param("r_spule_ohm", rp.coilOhm);
+            c.add<core::Relay>(p.id, n[0], n[1], n[2], n[3], rp);
         } else if (m == "potentiometer" && n.size() == 3) {
             core::PotentiometerParams pp;
             pp.ohm = p.value > 0.0 ? p.value : pp.ohm;

@@ -580,5 +580,8 @@
   "exp_2_20_erklaerung": "Une LED rouge commence déjà à briller à un peu moins de 2 V, une bleue a besoin d'environ 3 V. Côte à côte, les deux ont la même tension, et la rouge la maintient à 2 V. Ce n'est pas assez pour la bleue : tout le courant prend le chemin le plus facile, à travers la rouge.",
   "exp_2_20_mehr": "C'est pourquoi, dans les circuits, chaque LED a sa propre résistance, surtout quand les couleurs sont différentes.",
   "exp_2_20_w1": "Donne à la LED bleue sa propre résistance. Les deux brillent-elles maintenant ?",
-  "exp_2_20_echt": "Dans les appareils à voyants de couleur, chaque LED a sa propre résistance, sinon une seule couleur brillerait."
+  "exp_2_20_echt": "Dans les appareils à voyants de couleur, chaque LED a sa propre résistance, sinon une seule couleur brillerait.",
+  "lex_heissleiter": "Une thermistance CTN conduit mieux quand elle chauffe : sa résistance diminue avec la température.",
+  "lex_elektromagnet": "Une bobine de fil sur un noyau de fer. Quand le courant passe, elle devient un aimant – sans courant, l'aimant s'arrête.",
+  "lex_relais": "Un relais est un interrupteur actionné par un électroaimant : un petit courant dans la bobine (A, B) ferme le contact (COM, NO) d'un autre circuit."
 }

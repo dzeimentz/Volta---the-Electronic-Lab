@@ -580,5 +580,8 @@
   "exp_2_20_erklaerung": "Eine rote Leuchtdiode beginnt schon bei knapp 2 V zu leuchten, eine blaue braucht etwa 3 V. Nebeneinander liegt an beiden dieselbe Spannung, und die rote hält sie bei 2 V fest. Für die blaue reicht das nicht. Der ganze Strom nimmt den leichteren Weg durch die rote.",
   "exp_2_20_mehr": "Darum bekommt in Schaltungen jede Leuchtdiode ihren eigenen Widerstand, besonders bei verschiedenen Farben.",
   "exp_2_20_w1": "Gib der blauen Leuchtdiode einen eigenen Widerstand. Leuchten jetzt beide?",
-  "exp_2_20_echt": "In Geräten mit bunten Anzeigen hat jede Leuchtdiode ihren eigenen Vorwiderstand, sonst würde nur eine Farbe leuchten."
+  "exp_2_20_echt": "In Geräten mit bunten Anzeigen hat jede Leuchtdiode ihren eigenen Vorwiderstand, sonst würde nur eine Farbe leuchten.",
+  "lex_heissleiter": "Ein Heißleiter leitet besser, wenn er warm wird: Sein Widerstand sinkt mit der Temperatur.",
+  "lex_elektromagnet": "Eine Spule aus Draht auf einem Eisenkern. Fließt Strom, wird sie zum Magneten – ohne Strom ist der Magnet aus.",
+  "lex_relais": "Ein Relais ist ein Schalter, den ein Elektromagnet betätigt: Ein kleiner Strom durch die Spule (A, B) schließt den Kontakt (COM, NO) für einen anderen Stromkreis."
 }

@@ -111,6 +111,31 @@ Item {
         return ""
     }
 
+    // Werkzeuge (Taschenlampe, Foehn): Feldeinheiten (col 1..12, row 0..4 = A..E) <-> Arbeitsflaeche
+    function toolPoint(col, row) {
+        return Qt.point((col - 1) * (Theme.fieldWidth + Theme.fieldGap) + Theme.fieldWidth / 2,
+                        boardY + row * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldHeight / 2)
+    }
+    function toolCell(p) {
+        return Qt.point((p.x - Theme.fieldWidth / 2) / (Theme.fieldWidth + Theme.fieldGap) + 1,
+                        (p.y - boardY - Theme.fieldHeight / 2) / (Theme.fieldHeight + Theme.fieldGap))
+    }
+    function toolOf(type) {
+        const list = controller.tools
+        for (let i = 0; i < list.length; ++i) if (list[i].type === type) return list[i]
+        return null
+    }
+    // Licht und Waerme gibt es, sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt sind
+    readonly property bool environmentAvailable: {
+        const tray = controller.trayParts
+        for (let i = 0; i < tray.length; ++i)
+            if ((tray[i].type === "fotowiderstand" || tray[i].type === "heissleiter") && !tray[i].locked) return true
+        const parts = controller.parts
+        for (let k = 0; k < parts.length; ++k)
+            if (parts[k].type === "fotowiderstand" || parts[k].type === "heissleiter") return true
+        return controller.tools.length > 0 || controller.roomLight !== 2
+    }
+
     function catalogEntry(type) {
         const list = controller.catalogParts
         for (let i = 0; i < list.length; ++i) if (list[i].type === type) return list[i]
@@ -893,6 +918,42 @@ Item {
                 Label { anchors.centerIn: parent; text: Texts.moduleName(lab.trayModule); font.pixelSize: Math.round((11) * Theme.fontScale) }
             }
 
+            // Raumlicht: gedaempfte Arbeitsflaeche bei Daemmerung und Dunkelheit (zusaetzlich die Anzeige im Werkzeugfeld)
+            Rectangle {
+                x: -Theme.margin; y: lab.boardY - Theme.fieldGap
+                width: canvas.width + 2 * Theme.margin
+                height: canvas.height - y + Theme.margin
+                color: "#0B1A2A"
+                opacity: lab.controller.roomLight === 0 ? 0.45 : lab.controller.roomLight === 1 ? 0.2 : 0
+                Behavior on opacity { enabled: !Theme.reduceMotion; NumberAnimation { duration: 250 } }
+            }
+            // Werkzeuge auf der Grundplatte
+            Repeater {
+                model: lab.controller.tools
+                ToolToken {
+                    required property var modelData
+                    objectName: "tool_" + modelData.type
+                    readonly property point at: lab.toolPoint(modelData.col, modelData.row)
+                    toolType: modelData.type
+                    on: modelData.on
+                    reach: (modelData.type === "taschenlampe" ? 1.2 : 1.5) * (Theme.fieldWidth + Theme.fieldGap)
+                    x: at.x - width / 2
+                    y: at.y - height / 2
+                    z: 20
+                    onMoved: (delta) => {
+                        const c = lab.toolCell(Qt.point(at.x + delta.x, at.y + delta.y))
+                        lab.controller.placeTool(modelData.type, c.x, c.y)
+                    }
+                    onToggled: lab.controller.setToolOn(modelData.type, !modelData.on)
+                    onMenuRequested: (scenePos) => {
+                        toolMenu.toolType = modelData.type
+                        toolMenu.toolOn = modelData.on
+                        const p = lab.toCanvas(scenePos)
+                        toolMenu.popup(canvas, p.x, p.y)
+                    }
+                }
+            }
+
             // Vorschau: Bauteil aus dem Fach
             Rectangle {
                 visible: lab.trayType !== ""
@@ -903,6 +964,79 @@ Item {
                 opacity: 0.8
                 border.color: Theme.navy
                 Label { anchors.centerIn: parent; text: Texts.partName(lab.trayType); font.pixelSize: Math.round((10) * Theme.fontScale) }
+            }
+        }
+
+        // Werkzeugfeld (unten links): Raumlicht umschalten, Taschenlampe und Foehn auf die Grundplatte ziehen oder
+        // antippen (legt sie in die Mitte); Bedienhandlungen, auch im Betrieb
+        Rectangle {
+            objectName: "environmentBar"
+            visible: lab.environmentAvailable
+            anchors { left: parent.left; bottom: parent.bottom; margins: Theme.margin }
+            width: envRow.implicitWidth + 16
+            height: envRow.implicitHeight + 12
+            radius: 10
+            color: "#EEF6FBFF"
+            border.color: Theme.fieldOutline
+            z: 30
+            Row {
+                id: envRow
+                x: 8; y: 6
+                spacing: 8
+                Button {
+                    objectName: "roomLightButton"
+                    height: Theme.control
+                    width: 132
+                    readonly property int level: lab.controller.roomLight
+                    text: level === 2 ? "☀ " + qsTr("Raum hell") : level === 1 ? "⛅ " + qsTr("Dämmerung") : "🌙 " + qsTr("Dunkel")
+                    onClicked: lab.controller.roomLight = (level + 2) % 3 // hell -> Daemmerung -> dunkel -> hell
+                    ToolTip.visible: hovered
+                    ToolTip.text: qsTr("Raumlicht umschalten")
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                }
+                Repeater {
+                    model: ["taschenlampe", "foehn"]
+                    Rectangle {
+                        id: envTile
+                        required property string modelData
+                        objectName: "envTool_" + modelData
+                        width: 112; height: Theme.control
+                        radius: 8
+                        readonly property bool placed: lab.toolOf(modelData) !== null
+                        color: envDrag.active ? Theme.solderAmber : (placed ? "#D5DCE3" : "#FFF6DD")
+                        border.color: Theme.navy
+                        Row {
+                            anchors.centerIn: parent
+                            spacing: 6
+                            Text { anchors.verticalCenter: parent.verticalCenter; text: envTile.modelData === "taschenlampe" ? "🔦" : "♨"; font.pixelSize: 20; color: "#B23A10" }
+                            Label {
+                                anchors.verticalCenter: parent.verticalCenter
+                                text: envTile.modelData === "taschenlampe" ? qsTr("Taschenlampe") : qsTr("Föhn")
+                                font.pixelSize: Math.round(12 * Theme.fontScale)
+                                color: Theme.navy
+                            }
+                        }
+                        property point lastScenePos
+                        DragHandler {
+                            id: envDrag
+                            target: null
+                            onCentroidChanged: if (active) envTile.lastScenePos = centroid.scenePosition
+                            onActiveChanged: {
+                                if (active) return
+                                const c = lab.toolCell(lab.toCanvas(envTile.lastScenePos))
+                                lab.controller.placeTool(envTile.modelData, c.x, c.y)
+                            }
+                        }
+                        TapHandler {
+                            onTapped: {
+                                const t = lab.toolOf(envTile.modelData)
+                                if (t === null) lab.controller.placeTool(envTile.modelData, Math.max(1, lab.columns / 2), 2)
+                                else lab.controller.setToolOn(envTile.modelData, !t.on)
+                            }
+                        }
+                        Accessible.name: (modelData === "taschenlampe" ? qsTr("Taschenlampe") : qsTr("Föhn"))
+                    }
+                }
             }
         }
 
@@ -1016,6 +1150,21 @@ Item {
         id: moduleInside
         objectName: "moduleInside"
         controller: lab.controller
+    }
+
+    Menu {
+        id: toolMenu
+        objectName: "toolMenu"
+        property string toolType
+        property bool toolOn
+        MenuItem {
+            text: toolMenu.toolOn ? qsTr("Ausschalten") : qsTr("Einschalten")
+            onTriggered: lab.controller.setToolOn(toolMenu.toolType, !toolMenu.toolOn)
+        }
+        MenuItem {
+            text: qsTr("Wegräumen")
+            onTriggered: lab.controller.removeTool(toolMenu.toolType)
+        }
     }
 
     Menu {

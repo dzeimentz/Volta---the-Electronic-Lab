@@ -34,6 +34,12 @@ Item {
         case "fotowiderstand":
             return {s: "M0 16 H18 M46 16 H64 M18 12 H46 V22 H18 Z " + arrowLine(8, 0, 18, 9) + " " + arrowLine(16, 0, 26, 9),
                     f: arrowHead(8, 0, 18, 9) + " " + arrowHead(16, 0, 26, 9)}
+        case "heissleiter": // Widerstand mit Kennlinien-Schraegstrich (nichtlinear, temperaturabhaengig) und -t
+            return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z M12 28 L44 4 H50", f: "", t: "−ϑ", tx: 54, ty: 26}
+        case "elektromagnet": // Spule (Wicklung als Boegen) mit Eisenkern (Strich darueber)
+            return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H50", f: ""}
+        case "relais": // Antrieb (Rechteck) und Schliesser, Wirkverbindung gestrichelt
+            return {s: "M0 16 H6 M22 16 H26 M6 9 H22 V23 H6 Z M26 16 H40 M40 16 L54 8 M54 16 H64 M14 9 V7 M14 5 V3 M14 3 H20 M24 3 H30 M34 3 H40 M44 3 H47 V10", f: ""}
         case "gluehlampe": // Kreis mit Kreuz
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12) + " M23.5 7.5 L40.5 24.5 M40.5 7.5 L23.5 24.5", f: ""}
         case "motor": // Kreis mit M

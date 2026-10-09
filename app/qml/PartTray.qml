@@ -33,13 +33,13 @@ Rectangle {
         spacing: 6
 
         Repeater {
-            model: tray.parts.filter(p => p.model !== "ldr")
+            model: tray.parts
             delegate: Rectangle {
                 id: entry
                 required property var modelData
                 objectName: "tray_" + modelData.type
                 width: 92
-                height: 60
+                height: 54
                 radius: 8
                 readonly property bool locked: modelData.locked === true
                 color: locked ? "#8E9AA8" : (drag.active ? Theme.solderAmber : "#E9D7B0")
@@ -123,7 +123,7 @@ Rectangle {
                 required property var modelData
                 objectName: "trayModule_" + modelData.type
                 width: 92
-                height: 60
+                height: 54
                 radius: 8
                 readonly property bool locked: modelData.locked === true
                 color: locked ? "#8E9AA8" : (modDrag.active ? Theme.solderAmber : "#D8CCE8")

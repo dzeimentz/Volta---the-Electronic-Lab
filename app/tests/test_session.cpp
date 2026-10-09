@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "model/board_edit.hpp"
+#include "model/environment.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "services/content_repository.hpp"
@@ -481,6 +482,48 @@ private slots:
         QVERIFY(s->moveWireEnd("L1", false, "P:0V", false));
         QVERIFY(s->moveWireEnd("L1", false, "C7", true));
         QCOMPARE(s->board().wires[0].color, std::string("gelb"));
+    }
+
+    // Stufe 3: Taschenlampe und Foehn wirken ueber den Abstand auf Fotowiderstand und Heissleiter (Bedienhandlungen)
+    void lightAndHeatTools() {
+        auto s = session();
+        QVERIFY(s->addPart("fotowiderstand", "B3", Orientation::Horizontal, Span::Short)); // Mitte bei Spalte 3,5 / B
+        QVERIFY(s->addPart("heissleiter", "D3", Orientation::Horizontal, Span::Short));
+        const model::PartPlacement* ldr = s->board().findPart("LDR1");
+        const model::PartPlacement* ntc = s->board().findPart("NTC1");
+        QVERIFY(ldr && ntc);
+        QCOMPARE(model::illuminanceAt(s->board(), *ldr), 300.0); // Raumlicht hell
+        s->setRoomLight(0);
+        QCOMPARE(model::illuminanceAt(s->board(), *ldr), 0.5);
+        s->placeTool("taschenlampe", 3.5, 1.0); // direkt darueber
+        QVERIFY(std::fabs(model::illuminanceAt(s->board(), *ldr) - 5000.5) < 1e-6);
+        s->placeTool("taschenlampe", 4.5, 1.0); // ein Feld weiter: 5000 / (1 + 2^2) = 1000 lx
+        QVERIFY(std::fabs(model::illuminanceAt(s->board(), *ldr) - 1000.5) < 1e-6);
+        s->setToolOn("taschenlampe", false);
+        QCOMPARE(model::illuminanceAt(s->board(), *ldr), 0.5);
+        QCOMPARE(model::airTemperatureAt(s->board(), *ntc), core::kAmbientK);
+        s->placeTool("foehn", 3.5, 3.0);
+        QVERIFY(std::fabs(model::airTemperatureAt(s->board(), *ntc) - (core::kAmbientK + 60.0)) < 1e-6);
+        QCOMPARE(s->board().desk.tools.size(), std::size_t(2));
+
+        // Wirkung in der Simulation: Fotowiderstand in Reihe mit 1 kOhm an 9 V
+        QVERIFY(s->addWire("P:+9V", "B3", "rot"));
+        QVERIFY(s->addPart("widerstand", "B4", Orientation::Horizontal, Span::Long)); // B4-B6
+        QVERIFY(s->addWire("B6", "P:0V", "schwarz"));
+        s->setMainSwitch(true);
+        run(*s, 0.5);
+        const double darkmA = s->reading("LDR1")->currentA * 1e3;
+        s->setToolOn("taschenlampe", true);
+        run(*s, 0.5);
+        const double brightmA = s->reading("LDR1")->currentA * 1e3;
+        // dunkel (0,5 lx): ca. 75 kOhm -> 0,12 mA; Taschenlampe ein Feld weiter (1000 lx): ca. 0,4 kOhm -> 6,4 mA
+        QVERIFY2(darkmA < 0.2 && brightmA > 5.0, qPrintable(QStringLiteral("%1 / %2").arg(darkmA).arg(brightmA)));
+        // Heissleiter erwaermt sich vor dem Foehn
+        run(*s, 6.0);
+        QVERIFY(s->reading("NTC1")->tempK > core::kAmbientK + 35.0);
+        s->removeTool("foehn");
+        QCOMPARE(s->board().desk.tools.size(), std::size_t(1));
+        QCOMPARE(s->undoStack().count(), 5); // nur die Aufbauaenderungen (3 Bauteile, 2 Leitungen) sind Befehle
     }
 
     // Modulfach: Module setzen, verschieben, herausnehmen sind Befehle; Leitungen folgen dem Modul

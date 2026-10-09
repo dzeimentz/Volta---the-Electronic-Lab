@@ -23,7 +23,9 @@ struct Action {
         SetCells,        // Batterie: value = Zellenzahl
         SetMotorBlocked, // Motor: value != 0 blockiert
         SetMeterMode,    // Messgeraet: value = 0 V, 1 A, 2 Ohm
-        SetMeterAnalog   // Messgeraet: value != 0 analog
+        SetMeterAnalog,  // Messgeraet: value != 0 analog
+        SetIlluminance,  // Fotowiderstand: value = Beleuchtungsstaerke in lx
+        SetAmbient       // Heissleiter: value = Lufttemperatur am Bauteil in K
     };
     std::string componentId;
     Type type = Type::SetSwitch;

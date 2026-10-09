@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
-                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE"})
+                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE", "VOLTA_DEMO_SENSORS"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
             engine.rootObjects().first()->setProperty("inLab", true);
 
@@ -140,6 +140,36 @@ int main(int argc, char* argv[]) {
                 lab.addPart(add.section(QLatin1Char('@'), 0, 0), add.section(QLatin1Char('@'), 1, 1), false, false);
         });
     }
+
+    // Entwicklerhilfe: VOLTA_DEMO_SENSORS=1 zeigt die Bauteile der Stufe 3 im Betrieb: Fotowiderstand mit LED unter
+    // der Taschenlampe, Heissleiter vor dem Foehn, Elektromagnet, Relais mit Lampe; Raumlicht Daemmerung
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_SENSORS") == 1)
+        QTimer::singleShot(300, &lab, [&lab] {
+            lab.setUnlockAll(true);
+            lab.startFreeLab();
+            lab.setBoardColumns(12);
+            lab.addPart(QStringLiteral("fotowiderstand"), QStringLiteral("A2"), false, false);
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("A3"), false, false);
+            lab.setPartValue(QStringLiteral("R1"), 470.0);
+            lab.addPart(QStringLiteral("led_rot"), QStringLiteral("A4"), true, false);
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("A2"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("B4"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.addPart(QStringLiteral("heissleiter"), QStringLiteral("C2"), false, false);
+            lab.addPart(QStringLiteral("elektromagnet"), QStringLiteral("E2"), false, true);
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("E2"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("E4"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.addPart(QStringLiteral("relais"), QStringLiteral("C8"), false, false);
+            lab.addPart(QStringLiteral("gluehlampe"), QStringLiteral("A10"), false, false);
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("C8"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("C9"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("D8"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("D9"), QStringLiteral("A10"), QStringLiteral("gelb"));
+            lab.addWire(QStringLiteral("A11"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.setRoomLight(1);
+            lab.placeTool(QStringLiteral("taschenlampe"), 2.5, 0.6);
+            lab.placeTool(QStringLiteral("foehn"), 2.5, 2.6);
+            lab.setMainSwitch(true);
+        });
 
     // Entwicklerhilfe: VOLTA_DEMO_COLUMNS=8|10|12 stellt die Breite der Grundplatte ein (wie +/- in der Werkzeugleiste)
     if (const int columns = qEnvironmentVariableIntValue("VOLTA_DEMO_COLUMNS"); columns > 0)

@@ -21,6 +21,9 @@ QtObject {
         case "elko": return qsTr("Elko")
         case "fotowiderstand": return qsTr("Fotowiderstand")
         case "transistor_npn": return qsTr("Transistor")
+        case "heissleiter": return qsTr("Heißleiter")
+        case "elektromagnet": return qsTr("Elektromagnet")
+        case "relais": return qsTr("Relais")
         }
         return type
     }
