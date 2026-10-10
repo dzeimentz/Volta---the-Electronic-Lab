@@ -153,7 +153,8 @@ Item {
                 if (button === Qt.RightButton) root.menuRequested(eventPoint.scenePosition)
                 else root.tapped()
             }
-            onLongPressed: root.menuRequested(point.scenePosition)
+            // im Betrieb haelt ein langer Druck den Taster gedrueckt; das Menue bleibt dann beim Rechtsklick
+            onLongPressed: if (root.movable) root.menuRequested(point.scenePosition)
             onPressedChanged: root.pushed(pressed)
         }
     }

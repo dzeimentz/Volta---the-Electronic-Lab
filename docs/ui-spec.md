@@ -22,9 +22,12 @@
 
 ## Experimentansicht (Lab)
 - Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.
-- Bauteil- und Modulfach teilen sich die Seitenleiste: Der Knopf »Bauteilfach-Modulfach« oben schaltet um, das
+- Bauteil- und Modulfach teilen sich die Seitenleiste: Der Knopf »Bauteilfach | Modulfach« oben schaltet um, das
   gewaehlte Fach ist fett und unterstrichen. Ohne Module bleibt es beim Bauteilfach. Die Aufbauhilfe schaltet auf das
   Fach um, das ihr naechster Schritt braucht.
+- Ziehen aus dem Fach: Das Bauteil erscheint schemenhaft an dem Platz, an dem es landen wuerde, und alle Felder, die
+  es belegt, sind hervorgehoben (z. B. A1 und A2). Passt es dort nicht, bleibt nur das Namensschild am Finger.
+- Im Betrieb oeffnet ein langer Druck auf ein Bauteil kein Menue (ein Taster bleibt gedrueckt); Rechtsklick weiterhin.
 - Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen, Breite der Grundplatte »− 1–12 +« (8/10/12 Felder je Reihe), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
 - Links: **Experimentauswahl** als Aufklappfeld (»Freies Labor«, »Stufe n: Titel«); zeigt zugleich den Titel.

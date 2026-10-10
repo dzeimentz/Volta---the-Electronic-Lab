@@ -35,10 +35,14 @@ Rectangle {
             border.color: heading.enabled ? "#66FFFFFF" : "transparent"
             border.width: heading.activeFocus ? 3 : 1
         }
-        contentItem: Row {
-            spacing: 0
+        contentItem: Item {
+          implicitHeight: trayRow.implicitHeight
+          Row {
+            id: trayRow
+            anchors.centerIn: parent
+            spacing: 6
             Repeater {
-                model: [qsTr("Bauteilfach"), "-", qsTr("Modulfach")]
+                model: [qsTr("Bauteilfach"), "|", qsTr("Modulfach")]
                 Label {
                     required property int index
                     required property string modelData
@@ -52,6 +56,7 @@ Rectangle {
                     font.underline: chosen && tray.hasModules
                 }
             }
+          }
         }
         Accessible.name: tray.showModules ? qsTr("Modulfach, umschalten auf Bauteilfach")
                                           : qsTr("Bauteilfach, umschalten auf Modulfach")

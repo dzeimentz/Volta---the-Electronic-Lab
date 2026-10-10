@@ -58,6 +58,10 @@ public:
     bool addPart(const std::string& type, const std::string& startField, Orientation o, Span span,
                  std::string* newId = nullptr, double value = 0.0);
     bool movePart(const std::string& id, const std::string& startField, Orientation o, Span span);
+    // Vorschau beim Ziehen aus dem Fach (kein Befehl): Anschluesse, die das Bauteil belegen wuerde (pins leer, wenn es
+    // nicht auf die Grundplatte passt); true, wenn es dort auch gesteckt werden darf
+    bool previewPart(const std::string& type, const std::string& startField, Orientation o, Span span,
+                     std::vector<std::pair<std::string, std::string>>& pins) const;
     bool removePart(const std::string& id);
     bool flipPart(const std::string& id); // umdrehen (Polung tauschen)
     bool rotatePart(const std::string& id); // 2-x-2-Platine um 90 Grad im Uhrzeigersinn drehen

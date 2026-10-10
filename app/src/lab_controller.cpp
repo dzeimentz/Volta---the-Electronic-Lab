@@ -978,6 +978,18 @@ bool LabController::addPart(const QString& type, const QString& start, bool vert
     }
     return result(m_session->addPart(ss(type), ss(start), orient(vertical), spanOf(longSpan)));
 }
+QVariantMap LabController::partPreview(const QString& type, const QString& start, bool vertical, bool longSpan) const {
+    std::vector<std::pair<std::string, std::string>> pins;
+    const bool ok = m_session->previewPart(ss(type), ss(start), orient(vertical), spanOf(longSpan), pins);
+    QVariantList list;
+    QStringList fields;
+    for (const auto& [name, field] : pins) {
+        list << QVariantMap{{QStringLiteral("name"), qs(name)}, {QStringLiteral("field"), qs(field)}};
+        if (!fields.contains(qs(field))) fields << qs(field);
+    }
+    return {{QStringLiteral("pins"), list}, {QStringLiteral("fields"), fields}, {QStringLiteral("ok"), ok}};
+}
+
 bool LabController::movePart(const QString& id, const QString& start, bool vertical, bool longSpan) {
     return result(m_session->movePart(ss(id), ss(start), orient(vertical), spanOf(longSpan)));
 }

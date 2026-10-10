@@ -296,6 +296,20 @@ bool LabSession::addPart(const std::string& type, const std::string& startField,
     return push(QCoreApplication::translate("Befehl", "%1 setzen").arg(q(p.id)), std::move(after));
 }
 
+bool LabSession::previewPart(const std::string& type, const std::string& startField, Orientation o, Span span,
+                             std::vector<std::pair<std::string, std::string>>& pins) const {
+    pins.clear();
+    const CatalogEntry* e = m_catalog.part(type);
+    if (!e) return false;
+    PartPlacement p;
+    p.id = nextPartId(m_board, type);
+    p.type = type;
+    Message err;
+    if (!placePins(*e, startField, o, span, p.pins, err)) return false;
+    pins = p.pins;
+    return canPlace(m_board, m_catalog, p, err);
+}
+
 bool LabSession::movePart(const std::string& id, const std::string& startField, Orientation o, Span span) {
     const PartPlacement* old = m_board.findPart(id);
     if (!old) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Bauteil %1 nicht gefunden."), {id}));

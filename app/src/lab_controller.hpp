@@ -256,6 +256,8 @@ public:
 
     // Befehle (Verlauf). vertical/longSpan: Lage des Bauteils ab dem Startfeld.
     Q_INVOKABLE bool addPart(const QString& type, const QString& startField, bool vertical, bool longSpan);
+    // Steckvorschau beim Ziehen aus dem Fach: {pins: [{name, field}], fields: [...], ok}
+    Q_INVOKABLE QVariantMap partPreview(const QString& type, const QString& startField, bool vertical, bool longSpan) const;
     Q_INVOKABLE bool movePart(const QString& id, const QString& startField, bool vertical, bool longSpan);
     Q_INVOKABLE bool removePart(const QString& id);
     Q_INVOKABLE bool flipPart(const QString& id);

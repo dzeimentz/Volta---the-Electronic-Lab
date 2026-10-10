@@ -569,6 +569,23 @@ private slots:
         QCOMPARE(s->board().modules.size(), std::size_t(2));
     }
 
+    // Steckvorschau beim Ziehen aus dem Fach: alle Felder des Bauteils, ohne Befehl
+    void previewShowsAllFields() {
+        auto s = session();
+        std::vector<std::pair<std::string, std::string>> pins;
+        QVERIFY(s->previewPart("widerstand", "A1", Orientation::Horizontal, Span::Short, pins));
+        QCOMPARE(pins.size(), std::size_t(2));
+        QCOMPARE(pins[0].second, std::string("A1"));
+        QCOMPARE(pins[1].second, std::string("A2"));
+        QVERIFY(s->previewPart("transistor_npn", "B3", Orientation::Horizontal, Span::Short, pins));
+        QCOMPARE(pins.size(), std::size_t(4)); // 2-x-2-Platine
+        QVERIFY(s->previewPart("motor", "C4", Orientation::Horizontal, Span::Long, pins));
+        QCOMPARE(pins.back().second, std::string("C6"));
+        QVERIFY(!s->previewPart("widerstand", "A12", Orientation::Horizontal, Span::Short, pins)); // ragt hinaus
+        QVERIFY(pins.empty());
+        QCOMPARE(s->undoStack().count(), 0);
+    }
+
     // Stufe 4: Wassertropfen macht die Feuchtesonde nass (Bedienhandlung, Wirkung ueber den Abstand)
     void waterToolWetsProbe() {
         auto s = session();

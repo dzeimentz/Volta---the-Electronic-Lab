@@ -209,6 +209,7 @@ Item {
     property string trayModule: ""
     // Bauteil aus dem Fach
     property string trayType: ""
+    property var trayPreview: ({}) // Steckvorschau: alle Felder, die das gezogene Bauteil belegen wuerde
     property point trayPos
 
     Connections {
@@ -607,12 +608,15 @@ Item {
             lab.beginEdit()
             lab.trayType = type
             lab.trayPos = lab.toCanvas(scenePos)
-            lab.highlightAnchor = lab.anchorAt(lab.trayPos, true)
+            const start = lab.anchorAt(lab.trayPos, true)
+            lab.highlightAnchor = start
+            lab.trayPreview = start !== "" ? lab.controller.partPreview(type, start, false, type === "motor") : ({})
         }
         onDragFinished: (type, scenePos) => {
             const field = lab.anchorAt(lab.toCanvas(scenePos), true)
             lab.trayType = ""
             lab.highlightAnchor = ""
+            lab.trayPreview = ({})
             if (field !== "") lab.controller.addPart(type, field, false, type === "motor")
         }
         modules: lab.controller.trayModules
@@ -755,6 +759,7 @@ Item {
                     color: modelData.startsWith("MESS:") ? "#D9DEE6" : Theme.field
                     highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
                                  || lab.highlightFields.indexOf(modelData) >= 0
+                                 || (lab.trayPreview.fields || []).indexOf(modelData) >= 0
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
                     recorderChannel: lab.controller.recorderChannels.indexOf(modelData.startsWith("MESS:") ? "MESS" : modelData)
                     target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
@@ -996,9 +1001,18 @@ Item {
                 }
             }
 
-            // Vorschau: Bauteil aus dem Fach
+            // Vorschau: Bauteil aus dem Fach schemenhaft an dem Platz, an dem es landen wuerde (alle Felder sichtbar)
+            PartItem {
+                objectName: "trayGhostPart"
+                visible: lab.trayType !== "" && lab.trayPreview.ok === true
+                enabled: false
+                opacity: 0.6
+                partId: ""
+                partType: lab.trayType
+                points: visible ? lab.trayPreview.pins.map(p => lab.socketPoint(p.field, 2)) : []
+            }
             Rectangle {
-                visible: lab.trayType !== ""
+                visible: lab.trayType !== "" && lab.trayPreview.ok !== true
                 width: 64; height: 32; radius: 8
                 x: lab.trayPos.x - width / 2
                 y: lab.trayPos.y - height / 2

@@ -171,8 +171,18 @@ private slots:
         QQuickItem* tile = item(QStringLiteral("tray_led_gruen"));
         QQuickItem* field = item(QStringLiteral("field_D2"));
         QVERIFY(tile && field);
-        drag(centerOf(tile), centerOf(field));
+        // waehrend des Ziehens: Schemen an Ort und Stelle, beide Felder hervorgehoben
+        const QPoint from = centerOf(tile), to = centerOf(field);
+        QTest::mousePress(m_window, Qt::LeftButton, {}, from);
+        for (int i = 1; i <= 10; ++i) QTest::mouseMove(m_window, from + (to - from) * i / 10, 10);
+        QQuickItem* ghost = item(QStringLiteral("trayGhostPart"));
+        QTRY_VERIFY(ghost && ghost->isVisible());
+        QTRY_VERIFY(item(QStringLiteral("field_D3"))->property("highlighted").toBool());
+        QVERIFY(item(QStringLiteral("field_D2"))->property("highlighted").toBool());
+        QVERIFY(!item(QStringLiteral("field_D4"))->property("highlighted").toBool());
+        QTest::mouseRelease(m_window, Qt::LeftButton, {}, to, 10);
         QTRY_COMPARE(board().parts.size(), std::size_t(3));
+        QVERIFY(!ghost->isVisible());
         const model::PartPlacement* led = part("D2");
         QVERIFY(led);
         QCOMPARE(led->type, std::string("led_gruen"));
