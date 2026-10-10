@@ -105,7 +105,14 @@ private:
         QVERIFY(mainSwitch);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(mainSwitch));
         QTRY_VERIFY(board().desk.mainSwitch);
-        QTRY_COMPARE_WITH_TIMEOUT(m_lab->phase(), 3, 10000); // Haltedauer 2 s in Echtzeit; dann Beobachtung
+        QVERIFY(m_lab->buildComplete());
+        QQuickItem* finish = item(QStringLiteral("finishButton"));
+        QVERIFY(finish && !finish->isEnabled()); // grau, bis die Schaltung funktioniert
+        QTRY_VERIFY_WITH_TIMEOUT(m_lab->canFinish(), 10000); // Haltedauer 2 s in Echtzeit
+        QTRY_VERIFY(finish->isEnabled());
+        QCOMPARE(m_lab->phase(), 2); // kein automatischer Abschluss
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(finish)); // fest unten im Feld, nicht im Rollbereich
+        QTRY_COMPARE(m_lab->phase(), 3); // Beobachtung
         clickInPanel(QStringLiteral("observation_0"));            // »mit zwei Leitungen hat es geleuchtet«
         QTRY_COMPARE(m_lab->phase(), 4);
         QCOMPARE(m_lab->comparison(), 1); // Vermutung »zwei Leitungen« passt
@@ -530,6 +537,16 @@ private slots:
         // freies Labor: alle Bauteile sichtbar, gesperrte (z. B. Transistor, Stufe 4) nicht setzbar
         m_lab->resetProgress();
         QTRY_VERIFY(item(QStringLiteral("tray_transistor_npn")) != nullptr);
+        // Umschalter Bauteilfach / Modulfach: immer nur ein Fach sichtbar
+        QQuickItem* trayToggle = item(QStringLiteral("trayToggle"));
+        QVERIFY(trayToggle && trayToggle->isEnabled());
+        QVERIFY(item(QStringLiteral("tray_widerstand"))->isVisible());
+        QVERIFY(!item(QStringLiteral("trayModule_blinkmodul"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(trayToggle));
+        QTRY_VERIFY(item(QStringLiteral("trayModule_blinkmodul"))->isVisible());
+        QVERIFY(!item(QStringLiteral("tray_widerstand"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(trayToggle));
+        QTRY_VERIFY(item(QStringLiteral("tray_widerstand"))->isVisible());
         bool transistorLocked = false;
         for (const QVariant& v : m_lab->trayParts())
             if (v.toMap().value(QStringLiteral("type")).toString() == QStringLiteral("transistor_npn"))

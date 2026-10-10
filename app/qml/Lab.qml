@@ -593,6 +593,15 @@ Item {
         id: tray
         anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
         parts: lab.controller.trayParts
+        // Aufbauhilfe: das Fach zeigt, was der naechste Schritt braucht
+        Connections {
+            target: lab.controller
+            function onGuideChanged() {
+                const k = lab.controller.guideStep.kind
+                if (k === "modul") tray.showModules = tray.hasModules
+                else if (k === "bauteil") tray.showModules = false
+            }
+        }
         onLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.partName(type)).arg(stage))
         onDragUpdated: (type, scenePos) => {
             lab.beginEdit()

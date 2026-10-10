@@ -526,6 +526,26 @@ bool LabController::showTemplate() {
     return result(m_session->replaceBoard(m_experiment.templateBoard, tr("Musteraufbau zeigen")));
 }
 
+void LabController::updateFinish() {
+    const bool building = m_flow.phase() == model::ExperimentFlow::Phase::Build;
+    const bool complete = building && m_session->templateComplete();
+    const bool can = complete && m_session->successReached();
+    if (complete == m_buildComplete && can == m_canFinish) return;
+    m_buildComplete = complete;
+    m_canFinish = can;
+    emit finishChanged();
+}
+
+bool LabController::finishExperiment() {
+    updateFinish();
+    if (!m_canFinish || !m_flow.reportSuccess()) return false;
+    m_progress.markDone(m_experiment.id); // Lernpfad: erledigt (bleibt erledigt)
+    updateFinish();
+    emit flowChanged();
+    emit progressChanged();
+    return true;
+}
+
 QString LabController::nextExperimentId() const {
     const qsizetype i = m_experimentIds.indexOf(m_experiment.id);
     return i >= 0 && i + 1 < m_experimentIds.size() ? m_experimentIds.at(i + 1) : QString();
@@ -540,11 +560,7 @@ QStringList LabController::texts(const QStringList& keys) const {
 void LabController::onFrame() {
     const double elapsed = m_clock.restart() / 1000.0;
     m_session->poll();
-    if (m_flow.phase() == model::ExperimentFlow::Phase::Build && m_session->successReached() && m_flow.reportSuccess()) {
-        m_progress.markDone(m_experiment.id); // Lernpfad: erledigt (bleibt erledigt)
-        emit flowChanged();
-        emit progressChanged();
-    }
+    updateFinish();
     updateAudio();
     sampleRecorder();
     m_sinceNotifyS += elapsed;

@@ -4,88 +4,88 @@
 <context>
     <name>Befehl</name>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="249" />
+        <location filename="../app/src/model/lab_session.cpp" line="261" />
         <source>Grundplatte 1–%1</source>
         <translation>Base board 1–%1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="284" />
+        <location filename="../app/src/model/lab_session.cpp" line="296" />
         <source>%1 setzen</source>
         <translation>Place %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="306" />
-        <location filename="../app/src/model/lab_session.cpp" line="394" />
+        <location filename="../app/src/model/lab_session.cpp" line="318" />
+        <location filename="../app/src/model/lab_session.cpp" line="406" />
         <source>%1 verschieben</source>
         <translation>Move %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="316" />
+        <location filename="../app/src/model/lab_session.cpp" line="328" />
         <source>%1 umdrehen</source>
         <translation>Flip %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="326" />
+        <location filename="../app/src/model/lab_session.cpp" line="338" />
         <source>%1 drehen</source>
         <translation>Rotate %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="334" />
+        <location filename="../app/src/model/lab_session.cpp" line="346" />
         <source>%1 entfernen</source>
         <translation>Remove %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="350" />
+        <location filename="../app/src/model/lab_session.cpp" line="362" />
         <source>Wert von %1 ändern</source>
         <translation>Change value of %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="357" />
+        <location filename="../app/src/model/lab_session.cpp" line="369" />
         <source>%1 reparieren</source>
         <translation>Repair %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="370" />
+        <location filename="../app/src/model/lab_session.cpp" line="382" />
         <source>%1 einsetzen</source>
         <translation>Insert %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="410" />
+        <location filename="../app/src/model/lab_session.cpp" line="422" />
         <source>%1 herausnehmen</source>
         <translation>Take out %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="421" />
+        <location filename="../app/src/model/lab_session.cpp" line="433" />
         <source>Leitung %1 ziehen</source>
         <translation>Draw wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="437" />
+        <location filename="../app/src/model/lab_session.cpp" line="449" />
         <source>Leitung %1 umsetzen</source>
         <translation>Move wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="446" />
+        <location filename="../app/src/model/lab_session.cpp" line="458" />
         <source>Leitung %1 löschen</source>
         <translation>Delete wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="456" />
+        <location filename="../app/src/model/lab_session.cpp" line="468" />
         <source>Leitung %1 umfärben</source>
         <translation>Recolour wire %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="468" />
+        <location filename="../app/src/model/lab_session.cpp" line="480" />
         <source>Spannungsanzeige %1</source>
         <translation>Voltage display %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="569" />
+        <location filename="../app/src/model/lab_session.cpp" line="581" />
         <source>Sicherung tauschen</source>
         <translation>Replace fuse</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="574" />
+        <location filename="../app/src/model/lab_session.cpp" line="586" />
         <source>Lautsprecher reparieren</source>
         <translation>Repair loudspeaker</translation>
     </message>
@@ -223,19 +223,19 @@
         <translation>Experiment</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="174" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="228" />
         <source>Frage</source>
         <translation>Question</translation>
     </message>
     <message>
         <location filename="../app/qml/ExperimentPanel.qml" line="108" />
-        <location filename="../app/qml/ExperimentPanel.qml" line="174" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="228" />
         <source>Aufbau</source>
         <translation>Build</translation>
     </message>
     <message>
         <location filename="../app/qml/ExperimentPanel.qml" line="113" />
-        <location filename="../app/qml/ExperimentPanel.qml" line="175" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="229" />
         <source>Geschafft! Was hast du beobachtet?</source>
         <translation>Well done! What did you observe?</translation>
     </message>
@@ -250,127 +250,147 @@
         <translation>Read aloud</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="175" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="179" />
+        <source>Fertig</source>
+        <translation>Done</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="206" />
+        <source>Es fehlen noch Bauteile oder Module.</source>
+        <translation>Some parts or modules are still missing.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="207" />
+        <source>Schalte ein und probiere aus – die Schaltung muss funktionieren.</source>
+        <translation>Switch on and try it out – the circuit has to work.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="208" />
+        <source>Es funktioniert! Tippe auf »Fertig«.</source>
+        <translation>It works! Tap "Done".</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ExperimentPanel.qml" line="229" />
         <source>Erklärung</source>
         <translation>Explanation</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="202" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="256" />
         <source>Nur in der App!</source>
         <translation>Only in the app!</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="210" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="264" />
         <source>Was vermutest du?</source>
         <translation>What do you think?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="225" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="279" />
         <source>Deine Vermutung: %1</source>
         <translation>Your guess: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="248" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="302" />
         <source>Schritt-für-Schritt-Hilfe ausblenden</source>
         <translation>Hide step-by-step help</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="249" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="303" />
         <source>Schritt für Schritt bauen</source>
         <translation>Build step by step</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="269" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="323" />
         <source>Alles gesteckt</source>
         <translation>All in place</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="270" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="324" />
         <source>Schritt %1 von %2</source>
         <translation>Step %1 of %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="283" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="337" />
         <source>Die blinkenden Felder zeigen, wohin es gehört.</source>
         <translation>The blinking fields show where it goes.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="310" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="364" />
         <source>Ich brauche einen Tipp</source>
         <translation>I need a hint</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="311" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="365" />
         <source>Noch ein Tipp</source>
         <translation>Another hint</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="317" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="371" />
         <source>Musteraufbau einsetzen</source>
         <translation>Insert the sample build</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="348" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="402" />
         <source>Deine Vermutung hat gestimmt!</source>
         <translation>Your guess was right!</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="349" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="403" />
         <source>Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.</source>
         <translation>Surprise! It turned out differently than you guessed – that's what makes research exciting.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="350" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="404" />
         <source>Jetzt weißt du es!</source>
         <translation>Now you know!</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="355" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="409" />
         <source>Deine Beobachtung: %1</source>
         <translation>Your observation: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="360" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="414" />
         <source>Mehr wissen</source>
         <translation>Learn more</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="362" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="416" />
         <source>Weiterforschen</source>
         <translation>Explore further</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="379" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="433" />
         <source>Was hast du beim Weiterforschen herausgefunden?</source>
         <translation>What did you find out while exploring further?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="381" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="435" />
         <source>Notiz für das Forscherheft</source>
         <translation>Note for the research journal</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="387" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="441" />
         <source>Ins Forscherheft schreiben</source>
         <translation>Write in the journal</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="393" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="447" />
         <source>Im Forscherheft gespeichert.</source>
         <translation>Saved in the journal.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="396" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="450" />
         <source>Jetzt in echt</source>
         <translation>Now for real</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="401" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="455" />
         <source>Nächstes Experiment</source>
         <translation>Next experiment</translation>
     </message>
     <message>
-        <location filename="../app/qml/ExperimentPanel.qml" line="401" />
+        <location filename="../app/qml/ExperimentPanel.qml" line="455" />
         <source>Freies Labor</source>
         <translation>Free lab</translation>
     </message>
@@ -903,151 +923,151 @@
         <translation>Time %1 s</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="596" />
-        <location filename="../app/qml/Lab.qml" line="610" />
+        <location filename="../app/qml/Lab.qml" line="605" />
+        <location filename="../app/qml/Lab.qml" line="619" />
         <source>%1 wird mit Stufe %2 freigeschaltet.</source>
         <translation>%1 will be unlocked at level %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="622" />
+        <location filename="../app/qml/Lab.qml" line="631" />
         <source>Module gehören in die Modulleiste unten.</source>
         <translation>Modules go into the module bar at the bottom.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1013" />
+        <location filename="../app/qml/Lab.qml" line="1022" />
         <source>Licht, Wärme, Wasser</source>
         <translation>Light, heat, water</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1020" />
+        <location filename="../app/qml/Lab.qml" line="1029" />
         <source>Raum hell</source>
         <translation>Room bright</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1020" />
+        <location filename="../app/qml/Lab.qml" line="1029" />
         <source>Dämmerung</source>
         <translation>Twilight</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1020" />
+        <location filename="../app/qml/Lab.qml" line="1029" />
         <source>Dunkel</source>
         <translation>Dark</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1023" />
+        <location filename="../app/qml/Lab.qml" line="1032" />
         <source>Raumlicht umschalten</source>
         <translation>Change room light</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1043" />
-        <location filename="../app/qml/Lab.qml" line="1067" />
+        <location filename="../app/qml/Lab.qml" line="1052" />
+        <location filename="../app/qml/Lab.qml" line="1076" />
         <source>Taschenlampe</source>
         <translation>Torch</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1043" />
-        <location filename="../app/qml/Lab.qml" line="1067" />
+        <location filename="../app/qml/Lab.qml" line="1052" />
+        <location filename="../app/qml/Lab.qml" line="1076" />
         <source>Föhn</source>
         <translation>Hair dryer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1043" />
-        <location filename="../app/qml/Lab.qml" line="1067" />
+        <location filename="../app/qml/Lab.qml" line="1052" />
+        <location filename="../app/qml/Lab.qml" line="1076" />
         <source>Wassertropfen</source>
         <translation>Water drop</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1087" />
+        <location filename="../app/qml/Lab.qml" line="1096" />
         <source>Spannungsanzeige ein/aus</source>
         <translation>Voltage display on/off</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1098" />
+        <location filename="../app/qml/Lab.qml" line="1107" />
         <source>Zeitschreiber Kanal %1: Messgerät</source>
         <translation>Recorder channel %1: meter</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1099" />
+        <location filename="../app/qml/Lab.qml" line="1108" />
         <source>Zeitschreiber Kanal %1: hier messen</source>
         <translation>Recorder channel %1: measure here</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1113" />
+        <location filename="../app/qml/Lab.qml" line="1122" />
         <source>Drehen</source>
         <translation>Rotate</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1122" />
+        <location filename="../app/qml/Lab.qml" line="1131" />
         <source>Umdrehen (Polung)</source>
         <translation>Flip (polarity)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1126" />
+        <location filename="../app/qml/Lab.qml" line="1135" />
         <source>Kurz stecken</source>
         <translation>Place short</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1126" />
+        <location filename="../app/qml/Lab.qml" line="1135" />
         <source>Lang stecken</source>
         <translation>Place long</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1135" />
+        <location filename="../app/qml/Lab.qml" line="1144" />
         <source>Wert</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1152" />
+        <location filename="../app/qml/Lab.qml" line="1161" />
         <source>Nennspannung</source>
         <translation>Rated voltage</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1158" />
+        <location filename="../app/qml/Lab.qml" line="1167" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1168" />
+        <location filename="../app/qml/Lab.qml" line="1177" />
         <source>Reparieren</source>
         <translation>Repair</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1174" />
+        <location filename="../app/qml/Lab.qml" line="1183" />
         <source>Entfernen</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1185" />
+        <location filename="../app/qml/Lab.qml" line="1194" />
         <source>Blick hinein</source>
         <translation>Look inside</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1189" />
+        <location filename="../app/qml/Lab.qml" line="1198" />
         <source>Herausnehmen</source>
         <translation>Take out</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1206" />
+        <location filename="../app/qml/Lab.qml" line="1215" />
         <source>Ausschalten</source>
         <translation>Switch off</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1206" />
+        <location filename="../app/qml/Lab.qml" line="1215" />
         <source>Einschalten</source>
         <translation>Switch on</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1210" />
+        <location filename="../app/qml/Lab.qml" line="1219" />
         <source>Wegräumen</source>
         <translation>Put away</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1225" />
+        <location filename="../app/qml/Lab.qml" line="1234" />
         <source>Farbe: %1</source>
         <translation>Colour: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1236" />
+        <location filename="../app/qml/Lab.qml" line="1245" />
         <source>Leitung löschen</source>
         <translation>Delete wire</translation>
     </message>
@@ -1061,7 +1081,7 @@
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="88" />
-        <location filename="../app/src/model/lab_session.cpp" line="296" />
+        <location filename="../app/src/model/lab_session.cpp" line="308" />
         <source>Das Bauteil passt dort nicht auf die Grundplatte.</source>
         <translation>The part doesn't fit on the board there.</translation>
     </message>
@@ -1077,9 +1097,9 @@
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="251" />
-        <location filename="../app/src/model/lab_session.cpp" line="271" />
-        <location filename="../app/src/model/lab_session.cpp" line="291" />
-        <location filename="../app/src/model/lab_session.cpp" line="314" />
+        <location filename="../app/src/model/lab_session.cpp" line="283" />
+        <location filename="../app/src/model/lab_session.cpp" line="303" />
+        <location filename="../app/src/model/lab_session.cpp" line="326" />
         <source>Unbekanntes Bauteil „%1“.</source>
         <translation>Unknown part "%1".</translation>
     </message>
@@ -1139,65 +1159,65 @@
         <translation>There is already a module there.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="239" />
+        <location filename="../app/src/model/lab_session.cpp" line="251" />
         <source>Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.</source>
         <translation>The base board has 8, 10 or 12 fields per row.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="242" />
+        <location filename="../app/src/model/lab_session.cpp" line="254" />
         <source>In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
         <translation>There is still something in fields %1–%2. Take out the parts and wires there first.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="289" />
-        <location filename="../app/src/model/lab_session.cpp" line="312" />
-        <location filename="../app/src/model/lab_session.cpp" line="322" />
-        <location filename="../app/src/model/lab_session.cpp" line="332" />
-        <location filename="../app/src/model/lab_session.cpp" line="341" />
-        <location filename="../app/src/model/lab_session.cpp" line="355" />
+        <location filename="../app/src/model/lab_session.cpp" line="301" />
+        <location filename="../app/src/model/lab_session.cpp" line="324" />
+        <location filename="../app/src/model/lab_session.cpp" line="334" />
+        <location filename="../app/src/model/lab_session.cpp" line="344" />
+        <location filename="../app/src/model/lab_session.cpp" line="353" />
+        <location filename="../app/src/model/lab_session.cpp" line="367" />
         <source>Bauteil %1 nicht gefunden.</source>
         <translation>Part %1 not found.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="324" />
+        <location filename="../app/src/model/lab_session.cpp" line="336" />
         <source>Nur Platinen lassen sich so drehen.</source>
         <translation>Only boards can be rotated like this.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="338" />
+        <location filename="../app/src/model/lab_session.cpp" line="350" />
         <source>Dieser Wert geht nicht.</source>
         <translation>This value isn't possible.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="346" />
+        <location filename="../app/src/model/lab_session.cpp" line="358" />
         <source>Diese Nennspannung gibt es nicht.</source>
         <translation>This rated voltage doesn't exist.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="376" />
-        <location filename="../app/src/model/lab_session.cpp" line="401" />
+        <location filename="../app/src/model/lab_session.cpp" line="388" />
+        <location filename="../app/src/model/lab_session.cpp" line="413" />
         <source>Modul %1 nicht gefunden.</source>
         <translation>Module %1 not found.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="427" />
-        <location filename="../app/src/model/lab_session.cpp" line="444" />
-        <location filename="../app/src/model/lab_session.cpp" line="452" />
+        <location filename="../app/src/model/lab_session.cpp" line="439" />
+        <location filename="../app/src/model/lab_session.cpp" line="456" />
+        <location filename="../app/src/model/lab_session.cpp" line="464" />
         <source>Leitung %1 nicht gefunden.</source>
         <translation>Wire %1 not found.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="461" />
+        <location filename="../app/src/model/lab_session.cpp" line="473" />
         <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
         <translation>The voltage display is only available on fields.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="462" />
+        <location filename="../app/src/model/lab_session.cpp" line="474" />
         <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
         <translation>This field is outside the base board.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="561" />
+        <location filename="../app/src/model/lab_session.cpp" line="573" />
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation>First unplug the wires from the meter.</translation>
     </message>
@@ -1435,18 +1455,28 @@
 <context>
     <name>PartTray</name>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="22" />
+        <location filename="../app/qml/PartTray.qml" line="41" />
         <source>Bauteilfach</source>
         <translation>Parts tray</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="86" />
-        <location filename="../app/qml/PartTray.qml" line="162" />
+        <location filename="../app/qml/PartTray.qml" line="56" />
+        <source>Modulfach, umschalten auf Bauteilfach</source>
+        <translation>Module tray, switch to parts tray</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/PartTray.qml" line="57" />
+        <source>Bauteilfach, umschalten auf Modulfach</source>
+        <translation>Parts tray, switch to module tray</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/PartTray.qml" line="118" />
+        <location filename="../app/qml/PartTray.qml" line="186" />
         <source>gesperrt bis Stufe %1</source>
         <translation>locked until level %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="109" />
+        <location filename="../app/qml/PartTray.qml" line="41" />
         <source>Modulfach</source>
         <translation>Module tray</translation>
     </message>
@@ -2061,12 +2091,12 @@
         <translation>Show sample build</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="957" />
+        <location filename="../app/src/lab_controller.cpp" line="973" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>This part will be unlocked at level %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="984" />
+        <location filename="../app/src/lab_controller.cpp" line="1000" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module is unlocked at level %1.</translation>
     </message>

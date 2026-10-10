@@ -268,6 +268,14 @@ private slots:
         QVERIFY(!s->successReached()); // Haltedauer 2 s noch nicht erreicht
         run(*s, 1.5);
         QVERIFY(s->successReached());
+        QVERIFY(s->templateComplete()); // ein Laempchen wie in der Vorlage
+        s->setMainSwitch(false);        // Bedienhandlung: Erfolg bleibt
+        QVERIFY(s->successReached());
+        QVERIFY(s->removePart("L2"));   // Aufbauaenderung: muss erneut funktionieren
+        QVERIFY(!s->successReached());
+        QVERIFY(!s->templateComplete());
+        s->undoStack().undo();
+        QVERIFY(s->templateComplete());
         // Neue Bedingung: Ergebnis beginnt von vorn
         s->setSuccess(exp.successCondition, exp.templateBoard);
         QVERIFY(!s->successReached());

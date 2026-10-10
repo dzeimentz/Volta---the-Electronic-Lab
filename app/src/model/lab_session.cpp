@@ -3,6 +3,7 @@
 #include <QCoreApplication>
 
 #include <algorithm>
+#include <map>
 #include <cmath>
 
 #include "anchor.hpp"
@@ -119,6 +120,16 @@ void LabSession::clearSuccess() {
 
 bool LabSession::successReached() const { return m_success && m_success->reached.load(); }
 
+bool LabSession::templateComplete() const {
+    if (!m_success) return false;
+    std::map<std::string, int> need;
+    for (const auto& p : m_successTemplate.parts) ++need[p.type];
+    for (const auto& m : m_successTemplate.modules) ++need[m.type];
+    for (const auto& p : m_board.parts) --need[p.type];
+    for (const auto& m : m_board.modules) --need[m.type];
+    return std::all_of(need.begin(), need.end(), [](const auto& n) { return n.second <= 0; });
+}
+
 LabSession::LabSession(Catalog catalog) : m_catalog(std::move(catalog)) {
     m_undo.setUndoLimit(kUndoLimit);
     rebuild({});
@@ -150,6 +161,7 @@ void LabSession::applyBoard(const Board& board, const std::vector<sim::StateOver
 void LabSession::rebuild(const std::vector<sim::StateOverride>& states) {
     m_net = buildNetlist(m_board, m_catalog);
     std::shared_ptr<sim::StepObserver> observer;
+    if (m_success) m_success->reached.store(false); // neuer Aufbau: muss erneut funktionieren
     if (m_success)
         observer = std::make_shared<SuccessObserver>(m_success, &m_success->eval, &m_success->reached,
                                                      successIndex(m_net, m_board, m_successTemplate));

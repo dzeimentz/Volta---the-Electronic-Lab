@@ -17,17 +17,49 @@ Rectangle {
     color: Theme.desk
     width: 2 * 92 + 3 * 8
 
-    Label {
+    // Umschalter Bauteilfach / Modulfach: das gewaehlte Fach ist hervorgehoben und unterstrichen (Farbe nie allein)
+    property bool showModules: false
+    readonly property bool hasModules: tray.modules.length > 0
+    onHasModulesChanged: if (!hasModules) showModules = false
+
+    Button {
         id: heading
-        text: qsTr("Bauteilfach")
-        color: "white"
-        font.pixelSize: Math.round((16) * Theme.fontScale)
-        font.bold: true
-        anchors { top: parent.top; left: parent.left; margins: 12 }
+        objectName: "trayToggle"
+        anchors { top: parent.top; left: parent.left; right: parent.right; margins: 8 }
+        implicitHeight: Theme.control
+        enabled: tray.hasModules
+        onClicked: tray.showModules = !tray.showModules
+        background: Rectangle {
+            radius: 8
+            color: heading.down ? "#33FFFFFF" : (heading.hovered && heading.enabled ? "#22FFFFFF" : "#14FFFFFF")
+            border.color: heading.enabled ? "#66FFFFFF" : "transparent"
+            border.width: heading.activeFocus ? 3 : 1
+        }
+        contentItem: Row {
+            spacing: 0
+            Repeater {
+                model: [qsTr("Bauteilfach"), "-", qsTr("Modulfach")]
+                Label {
+                    required property int index
+                    required property string modelData
+                    readonly property bool chosen: index === 0 ? !tray.showModules : index === 2 && tray.showModules
+                    visible: tray.hasModules || index === 0
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: modelData
+                    color: chosen || index === 1 ? "white" : "#9FB2C4"
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    font.bold: chosen
+                    font.underline: chosen && tray.hasModules
+                }
+            }
+        }
+        Accessible.name: tray.showModules ? qsTr("Modulfach, umschalten auf Bauteilfach")
+                                          : qsTr("Bauteilfach, umschalten auf Modulfach")
     }
 
     Grid {
         id: partGrid
+        visible: !tray.showModules
         anchors { top: heading.bottom; topMargin: 10; left: parent.left; leftMargin: 8 }
         columns: 2
         spacing: 6
@@ -103,17 +135,9 @@ Rectangle {
     }
 
     // Modulfach: Module auf ein Feld der Modulleiste ziehen (erster Anschluss liegt dort)
-    Label {
-        id: moduleHeading
-        visible: tray.modules.length > 0
-        text: qsTr("Modulfach")
-        color: "white"
-        font.pixelSize: Math.round((16) * Theme.fontScale)
-        font.bold: true
-        anchors { top: partGrid.bottom; topMargin: 14; left: parent.left; leftMargin: 12 }
-    }
     Grid {
-        anchors { top: moduleHeading.bottom; topMargin: 8; left: parent.left; leftMargin: 8 }
+        visible: tray.showModules
+        anchors { top: heading.bottom; topMargin: 10; left: parent.left; leftMargin: 8 }
         columns: 2
         spacing: 6
         Repeater {

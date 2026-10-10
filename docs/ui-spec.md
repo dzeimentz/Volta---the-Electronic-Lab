@@ -22,6 +22,9 @@
 
 ## Experimentansicht (Lab)
 - Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.
+- Bauteil- und Modulfach teilen sich die Seitenleiste: Der Knopf »Bauteilfach-Modulfach« oben schaltet um, das
+  gewaehlte Fach ist fett und unterstrichen. Ohne Module bleibt es beim Bauteilfach. Die Aufbauhilfe schaltet auf das
+  Fach um, das ihr naechster Schritt braucht.
 - Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen, Breite der Grundplatte »− 1–12 +« (8/10/12 Felder je Reihe), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
 - Links: **Experimentauswahl** als Aufklappfeld (»Freies Labor«, »Stufe n: Titel«); zeigt zugleich den Titel.
@@ -107,7 +110,10 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 
 ## Forschungskreislauf und Forscherheft (D2)
 - Experimentfeld: 1 Frage mit Vermutung (wird ohne Wertung ins Forscherheft geschrieben) -> 2 Aufbau mit Schritten
-  und gestuften Hilfen -> 3 nach dem Erfolg »Was hast du beobachtet?« (Auswahl) -> 4 Vergleich mit der Vermutung
+  und gestuften Hilfen; unten im Feld fest der Knopf »✓ Fertig«: grau und nicht klickbar, bis alle Bauteile und
+  Module der Vorlage stecken (Anzahl je Typ) und die Erfolgsbedingung im aktuellen Aufbau erfuellt war (jede
+  Aufbauaenderung verlangt einen neuen Nachweis, Bedienhandlungen nicht); ein Satz darunter nennt, was noch fehlt
+  -> 3 nach »Fertig« »Was hast du beobachtet?« (Auswahl) -> 4 Vergleich mit der Vermutung
   (»hat gestimmt« / »Ueberraschung! …« / »Jetzt weisst du es!«, Symbol zusaetzlich zur Farbe), Erklaerung,
   Mehr wissen, Weiterforschen mit eigener Notiz, Jetzt in echt, naechstes Experiment.
 - Forscherheft-Seite (Kachel auf der Startseite): je Experiment Vermutung, Beobachtung, Vergleich, Notizen, Datum;

@@ -93,6 +93,9 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList hints READ hints NOTIFY flowChanged) // bisher aufgedeckte Hilfen
     Q_PROPERTY(bool moreHints READ moreHints NOTIFY flowChanged)
     Q_PROPERTY(bool solutionShown READ solutionShown NOTIFY flowChanged)
+    // »Fertig« im Aufbau: erst klickbar, wenn alle Bauteile der Vorlage stecken und die Erfolgsbedingung erfuellt ist
+    Q_PROPERTY(bool buildComplete READ buildComplete NOTIFY finishChanged)
+    Q_PROPERTY(bool canFinish READ canFinish NOTIFY finishChanged)
     Q_PROPERTY(QString explanation READ explanation NOTIFY experimentChanged)
     Q_PROPERTY(QString moreKnowledge READ moreKnowledge NOTIFY experimentChanged)
     Q_PROPERTY(QStringList further READ further NOTIFY experimentChanged)
@@ -216,6 +219,10 @@ public:
     QVariantList journal() const;
     void useJournalFile(const QString& path);
     Q_INVOKABLE bool showTemplate(); // Musteraufbau (Befehl, rueckgaengig machbar) - erst nach der Loesungshilfe
+    // Experiment abschliessen (»Fertig«): weiter zur Beobachtung; Lernpfad: erledigt
+    Q_INVOKABLE bool finishExperiment();
+    bool buildComplete() const { return m_buildComplete; }
+    bool canFinish() const { return m_canFinish; }
 
     QVariantList experiments() const { return m_experimentList; }
     QString experimentId() const { return m_experiment.id; }
@@ -309,8 +316,10 @@ signals:
     void columnsChosen(int columns); // vom Kind gewaehlte Breite (zum Merken in den Einstellungen)
     void guideChanged();
     void recorderChanged();
+    void finishChanged();
 
 private:
+    void updateFinish();
     void onFrame();
     bool result(bool ok);
     QStringList texts(const QStringList& keys) const;
@@ -327,6 +336,8 @@ private:
     services::ProgressStore m_progress;
     services::JournalStore m_journal;
     bool m_unlockAll = false;
+    bool m_buildComplete = false;
+    bool m_canFinish = false;
     bool m_guideActive = false;
     model::Recorder m_recorder;
     void sampleRecorder();

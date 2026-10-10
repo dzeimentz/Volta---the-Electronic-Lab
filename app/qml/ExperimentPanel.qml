@@ -157,10 +157,64 @@ Rectangle {
         color: Theme.navy
     }
 
+    // »Fertig« (Aufbau): immer sichtbar unten im Feld; grau und nicht klickbar, bis alle Bauteile stecken und die
+    // Schaltung funktioniert. Der Zustand steht zusaetzlich als Text darunter (Farbe nie allein).
+    Rectangle {
+        id: finishBar
+        visible: !panel.collapsed && panel.phase === 2
+        anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 1 }
+        height: finishColumn.implicitHeight + 24
+        color: "#F4EFE2"
+        Rectangle { anchors { left: parent.left; right: parent.right; top: parent.top } height: 1; color: Theme.fieldOutline }
+        Column {
+            id: finishColumn
+            anchors { left: parent.left; right: parent.right; top: parent.top; margins: 12 }
+            spacing: 6
+            Button {
+                id: finishButton
+                objectName: "finishButton"
+                width: parent.width
+                implicitHeight: Theme.control + 4
+                enabled: panel.controller.canFinish
+                text: "✓ " + qsTr("Fertig")
+                onClicked: panel.controller.finishExperiment()
+                background: Rectangle {
+                    radius: 8
+                    color: !finishButton.enabled ? "#C9CED4"
+                         : finishButton.down ? "#1F5E23" : (finishButton.hovered ? "#276D2B" : "#2E7D32")
+                    border.color: finishButton.enabled ? "#1B4D1E" : "#9AA3AD"
+                    border.width: finishButton.activeFocus ? 3 : 1
+                }
+                contentItem: Label {
+                    text: finishButton.text
+                    color: finishButton.enabled ? "white" : "#6B7580"
+                    font.pixelSize: Math.round(17 * Theme.fontScale)
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                Accessible.name: text + (enabled ? "" : ", " + finishHint.text)
+            }
+            Label {
+                id: finishHint
+                objectName: "finishHint"
+                width: parent.width
+                wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: Math.round(13 * Theme.fontScale)
+                color: "#3C4752"
+                text: !panel.controller.buildComplete ? qsTr("Es fehlen noch Bauteile oder Module.")
+                    : !panel.controller.canFinish ? qsTr("Schalte ein und probiere aus – die Schaltung muss funktionieren.")
+                    : qsTr("Es funktioniert! Tippe auf »Fertig«.")
+            }
+        }
+    }
+
     ScrollView {
         id: scroll
         visible: !panel.collapsed
-        anchors.fill: parent
+        anchors { left: parent.left; right: parent.right; top: parent.top }
+        anchors.bottom: finishBar.visible ? finishBar.top : parent.bottom
         anchors.margins: 16
         anchors.topMargin: Theme.control + 8
         contentWidth: availableWidth

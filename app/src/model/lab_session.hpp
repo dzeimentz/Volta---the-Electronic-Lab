@@ -118,7 +118,11 @@ public:
     void setSuccess(const SuccessCondition& condition, const Board& templateBoard);
     void clearSuccess();
     bool successActive() const { return m_success != nullptr; }
+    // Erfolg im aktuellen Aufbau erreicht (gilt bis zur naechsten Aufbauaenderung; Bedienhandlungen loeschen ihn nicht)
     bool successReached() const;
+    // Alle Bauteile und Module der Vorlage stecken (Zuordnung ueber den Typ, Anzahl je Typ); Leitungen zaehlen nicht,
+    // denn jeder funktionierende Aufbau gilt
+    bool templateComplete() const;
 
     // Wird nach jeder Aenderung des Aufbaus aufgerufen (Oberflaeche aktualisieren)
     std::function<void()> onBoardChanged;
