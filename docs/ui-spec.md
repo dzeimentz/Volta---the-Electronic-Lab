@@ -157,6 +157,14 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Ring fuer Ring mit Farbname und Farbfeld, Eingabe wie »4,7k«/»4k7«/»2M2«), E-Reihen E6/E12/E24 als
   logarithmischer Zahlenstrahl mit naechstem Normwert und Abweichung, Bauteillexikon mit Normsymbolen.
   »Uebernehmen« auf den ausgewaehlten Widerstand. Formelrechner, Zeitschreiber, Fehlersuche, Teileliste folgen.
+- Fehlersuche umgesetzt (Reiter im Werkzeugkasten, ab Stufe 2; Modell `model/circuit_check`): »Schaltung pruefen«
+  listet Auffaelligkeiten als Fragen mit Nummer, dieselbe Nummer erscheint als Marke an der Stelle auf der
+  Grundplatte; Antippen hebt die Felder hervor bzw. waehlt das Bauteil. Am Aufbau: Kurzschluss ueber Leitungen,
+  ueberbrueckte Bauteile, lose Beine und Leitungen, offener Schalter, Sackgasse, fehlende Verbindung zu +9V/0V,
+  Hauptschalter aus; in der laufenden Simulation: zerstoerte und ueberlastete Bauteile, verpolte LED/Elko, sehr
+  grosser LED-Strom, Kurzschlussstrom. Die Pruefung ist grosszuegig (Mehranschluss-Bauteile und Module verbinden
+  alle Anschluesse); Widerstandsmessung mit dem Messgeraet braucht keine Batterie. Aenderungen am Aufbau loeschen
+  die Befunde. Der ContentSmokeTest prueft, dass keine Vorlage am erreichten Ziel einen Befund hat.
 
 ## Interaktives Readme
 - Rundgang beim ersten Start mit Begleitfigur; danach ueber das Fragezeichen.

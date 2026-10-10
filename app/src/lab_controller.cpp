@@ -521,6 +521,23 @@ void LabController::nextHint() {
     if (m_flow.nextHint()) emit flowChanged();
 }
 
+QVariantList LabController::checkCircuit() const {
+    static const char* const kKinds[] = {"short",    "bridged",   "broken",     "overload", "reversed", "noResistor",
+                                         "dangling", "looseWire", "openSwitch", "deadEnd",  "noSupply", "mainSwitch"};
+    QVariantList out;
+    for (const auto& f : m_session->checkCircuit()) {
+        QString text = QCoreApplication::translate("Meldung", f.message.source);
+        for (const auto& a : f.message.args) text = text.arg(qs(a));
+        QStringList anchors;
+        for (const auto& a : f.anchors) anchors << qs(a);
+        out << QVariantMap{{QStringLiteral("kind"), QString::fromLatin1(kKinds[static_cast<int>(f.kind)])},
+                           {QStringLiteral("part"), qs(f.partId)},
+                           {QStringLiteral("anchors"), anchors},
+                           {QStringLiteral("text"), text}};
+    }
+    return out;
+}
+
 bool LabController::clearBoard() {
     model::Board after = m_session->board();
     if (after.parts.empty() && after.wires.empty() && after.modules.empty()) return false;

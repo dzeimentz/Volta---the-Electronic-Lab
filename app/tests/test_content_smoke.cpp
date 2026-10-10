@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include "model/circuit_check.hpp"
 #include "model/netlist_builder.hpp"
 #include "model/success.hpp"
 #include "services/content_repository.hpp"
@@ -41,7 +42,8 @@ constexpr double kPressAfterS = 0.5;
 
 // Simuliert bis zu maxS; liefert die Zeit, zu der der Bewerter erstmals erfuellt ist (oder -1)
 double timeToSuccess(const model::Board& board, const model::Catalog& cat, model::SuccessEvaluator& eval, double maxS,
-                     std::vector<std::string>* buildErrors = nullptr) {
+                     std::vector<std::string>* buildErrors = nullptr,
+                     std::vector<model::CircuitFinding>* findings = nullptr) {
     model::Board start = board;
     std::vector<std::string> pressed;
     for (auto& p : start.parts)
@@ -62,7 +64,21 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
                     sw->setClosed(true);
         sim.step();
         eval.update(sim, net);
-        if (eval.reached()) return sim.timeS();
+        if (eval.reached()) {
+            // Fehlersuche am erreichten Ziel: mit dem Aufbau der Vorlage (Taster gedrueckt) und den Messwerten
+            if (findings) {
+                auto lookup = [&](const std::string& id) -> const core::ComponentReading* {
+                    auto it = net.parts.find(id);
+                    if (it == net.parts.end()) {
+                        it = net.desk.find(id);
+                        if (it == net.desk.end()) return nullptr;
+                    }
+                    return it->second < sim.probe().readings.size() ? &sim.probe().readings[it->second] : nullptr;
+                };
+                *findings = model::checkCircuit({board, cat, lookup});
+            }
+            return sim.timeS();
+        }
     }
     return -1.0;
 }
@@ -177,6 +193,25 @@ private slots:
         QVERIFY2(t > 0.0, qPrintable(QStringLiteral("%1: Vorlage erreicht ihre Erfolgsbedingung nicht in %2 s")
                                          .arg(id)
                                          .arg(limit)));
+    }
+
+    // Fehlersuche: am erreichten Ziel jeder Vorlage keine Auffaelligkeit (sie darf nie einen funktionierenden Aufbau
+    // bemaengeln); zerstoerende Experimente ausgenommen
+    void templatesPassCircuitCheck_data() { everyTemplateReachesItsSuccess_data(); }
+
+    void templatesPassCircuitCheck() {
+        QFETCH(QString, id);
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY2(repo.loadExperiment(id, exp), qPrintable(repo.lastError()));
+        if (exp.destructive) QSKIP("zerstoerendes Experiment");
+        model::Board board = exp.templateBoard;
+        board.desk.mainSwitch = true;
+        model::SuccessEvaluator eval(exp.successCondition);
+        std::vector<model::CircuitFinding> findings;
+        QVERIFY(timeToSuccess(board, m_catalog, eval, std::min(exp.maxHoldS + 5.0, 60.0), nullptr, &findings) > 0.0);
+        QVERIFY2(findings.empty(), findings.empty() ? "" : qPrintable(QStringLiteral("%1: %2").arg(id,
+                                                                QString::fromStdString(findings.front().message.text()))));
     }
 
     // Gegenprobe fuer Sensor-Experimente: Ohne die Werkzeuge der Vorlage (bzw. bei hellem Raum, wenn die Vorlage nur

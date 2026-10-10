@@ -11,9 +11,13 @@ Drawer {
     property string selectedPartId: "" // ausgewaehltes Bauteil im Labor
     property string selectedPartType: ""
     readonly property bool canApply: selectedPartType === "widerstand"
+    // Fehlersuche: Befunde fuer die Marken auf der Grundplatte, Antippen hebt eine Stelle hervor
+    signal checkResults(var list)
+    signal findingSelected(var anchors, string partId)
 
     edge: Qt.RightEdge
-    width: 430
+    width: 460
+    onClosed: faultFinder.reset()
     modal: false
     interactive: false // nur ueber den Knopf: kein Wischen vom Rand (rechts liegen Experimentfeld und Schaltplan)
     closePolicy: Popup.CloseOnEscape
@@ -91,10 +95,11 @@ Drawer {
             id: tabs
             objectName: "toolboxTabs"
             width: parent.width
-            TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control }
-            TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control }
-            TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control }
-            TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control }
+            TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
+            TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
+            TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
+            TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
+            TabButton { objectName: "tabCheck"; text: qsTr("Fehlersuche"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
         }
 
         StackLayout {
@@ -400,6 +405,15 @@ Drawer {
                 controller: box.controller
                 canApply: box.canApply
                 selectedPartId: box.selectedPartId
+            }
+
+            // ------------------------------------------------------------ Fehlersuche (ab Stufe 2)
+            FaultFinder {
+                id: faultFinder
+                objectName: "faultFinder"
+                controller: box.controller
+                onCheckResults: (list) => box.checkResults(list)
+                onFindingSelected: (anchors, partId) => box.findingSelected(anchors, partId)
             }
         }
     }

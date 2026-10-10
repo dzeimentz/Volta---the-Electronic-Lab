@@ -15,6 +15,7 @@ endif()
 add_library(volta_model STATIC
     src/model/anchor.cpp
     src/model/board_edit.cpp
+    src/model/circuit_check.cpp
     src/model/netlist_builder.cpp
     src/model/success.cpp
     src/model/build_guide.cpp
@@ -112,6 +113,7 @@ qt_add_qml_module(volta_ui
         qml/ToolToken.qml
         qml/RecorderPanel.qml
         qml/FlyoutBar.qml
+        qml/FaultFinder.qml
         qml/DrawnIcon.qml
         qml/FormulaCalculator.qml
     SOURCES

@@ -72,7 +72,9 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
   und Verstaerker, Daemmerungsschalter, Lichtschalter, Waerme- und Wassermelder, Treppenhauslicht, Zeitschalter
   und Wechselblinker aus Einzelteilen, Tueralarm, Selbsthaltung, Darlington, Nachlauf, Module im Verbund);
   insgesamt 61. ContentSmokeTest mit Gegenprobe fuer Sensor-Experimente.
-- Offen: Fehlersuche, Teileliste.
+- Fehlersuche im Werkzeugkasten: erledigt (alle Vorlagen ohne Befund; dabei Vorlage 4.4 um einen Basiswiderstand
+  ergaenzt, der Fotowiderstand war mit Taschenlampe ueberlastet).
+- Offen: Teileliste.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

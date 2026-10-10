@@ -586,6 +586,96 @@ private slots:
         QCOMPARE(s->undoStack().count(), 0);
     }
 
+    // Fehlersuche: Auffaelligkeiten als Fragen an der richtigen Stelle; ein funktionierender Aufbau bleibt ohne Befund
+    void circuitCheckFindsTypicalFaults() {
+        using K = model::CircuitFinding::Kind;
+        auto kinds = [](const std::vector<model::CircuitFinding>& f) {
+            std::vector<K> k;
+            for (const auto& x : f) k.push_back(x.kind);
+            return k;
+        };
+        auto has = [&](const std::vector<model::CircuitFinding>& f, K kind) {
+            const auto k = kinds(f);
+            return std::find(k.begin(), k.end(), kind) != k.end();
+        };
+        auto s = session();
+        QVERIFY(s->checkCircuit().empty()); // leere Grundplatte
+
+        // Widerstand 1 kOhm an 9 V: nur der Hauptschalter fehlt, danach ohne Befund
+        QVERIFY(s->addPart("widerstand", "B3", Orientation::Horizontal, Span::Short)); // R1 B3-B4
+        QVERIFY(s->addWire("P:+9V", "B3", "rot"));
+        auto f = s->checkCircuit();
+        QVERIFY(!f.empty());
+        QVERIFY(has(f, K::Dangling)); // B4 lose
+        QVERIFY(has(f, K::NoSupply)); // 0V fehlt
+        QCOMPARE(f.front().anchors.front(), std::string("B4"));
+        QVERIFY(s->addWire("B4", "P:0V", "schwarz"));
+        f = s->checkCircuit();
+        QCOMPARE(f.size(), std::size_t(1));
+        if (f.empty()) return;
+        QCOMPARE(f.front().kind, K::MainSwitchOff);
+        s->setMainSwitch(true);
+        run(*s, 0.2);
+        f = s->checkCircuit();
+        QVERIFY2(f.empty(), f.empty() ? "" : f.front().message.text().c_str());
+
+        // offener Taster in Reihe: genau der Taster ist die Frage
+        QVERIFY(s->addPart("taster", "D3", Orientation::Horizontal, Span::Short)); // S1 D3-D4
+        s->undoStack().undo();
+        s->undoStack().undo(); // Leitung B4-0V und Taster wieder weg
+        QVERIFY(s->addPart("taster", "D3", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addWire("B4", "D3", "blau"));
+        QVERIFY(s->addWire("D4", "P:0V", "schwarz"));
+        f = s->checkCircuit();
+        QCOMPARE(f.size(), std::size_t(1));
+        if (f.empty()) return;
+        QCOMPARE(f.front().kind, K::OpenSwitch);
+        QCOMPARE(f.front().partId, std::string("S1"));
+
+        // Sackgasse: Leitung zum Minuspol fehlt hinter dem geschlossenen Taster
+        s->setPartClosed("S1", true);
+        s->undoStack().undo(); // Leitung D4-0V weg
+        f = s->checkCircuit();
+        QVERIFY(has(f, K::NoSupply) || has(f, K::DeadEnd));
+
+        // Kurzschluss ueber eine Leitung
+        QVERIFY(s->addWire("P:+9V", "P:0V", "rot"));
+        f = s->checkCircuit();
+        QVERIFY(!f.empty());
+        QCOMPARE(f.front().kind, K::Short);
+    }
+
+    // Fehlersuche an der laufenden Simulation: verpolte und ungeschuetzte Leuchtdiode
+    void circuitCheckLed() {
+        using K = model::CircuitFinding::Kind;
+        auto s = session();
+        QVERIFY(s->addPart("led_rot", "B3", Orientation::Horizontal, Span::Short)); // D1 Anode B3, Kathode B4
+        QVERIFY(s->addPart("widerstand", "C3", Orientation::Horizontal, Span::Short)); // R1 C3-C4
+        QVERIFY(s->setPartValue("R1", 470.0));
+        // verpolt: Pluspol ueber den Widerstand an die Kathode
+        QVERIFY(s->addWire("P:+9V", "C3", "rot"));
+        QVERIFY(s->addWire("C4", "B4", "blau"));
+        QVERIFY(s->addWire("B3", "P:0V", "schwarz"));
+        s->setMainSwitch(true);
+        run(*s, 0.2);
+        auto f = s->checkCircuit();
+        QVERIFY(!f.empty());
+        QCOMPARE(f.front().kind, K::Reversed);
+        QCOMPARE(f.front().partId, std::string("D1"));
+
+        // ohne Vorwiderstand richtig herum: sehr grosser Strom bzw. zerstoert
+        auto t = session();
+        QVERIFY(t->addPart("led_rot", "B3", Orientation::Horizontal, Span::Short));
+        QVERIFY(t->addWire("P:+9V", "B3", "rot"));
+        QVERIFY(t->addWire("B4", "P:0V", "schwarz"));
+        t->setMainSwitch(true);
+        run(*t, 0.05);
+        f = t->checkCircuit();
+        QVERIFY(!f.empty());
+        QVERIFY(f.front().kind == K::NoResistor || f.front().kind == K::Broken);
+        QCOMPARE(f.front().partId, std::string("D1"));
+    }
+
     // Stufe 4: Wassertropfen macht die Feuchtesonde nass (Bedienhandlung, Wirkung ueber den Abstand)
     void waterToolWetsProbe() {
         auto s = session();

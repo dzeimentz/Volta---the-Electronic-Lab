@@ -684,6 +684,36 @@ private slots:
         QTRY_VERIFY(!box->property("opened").toBool());
     }
 
+    // Fehlersuche: Reiter im Werkzeugkasten, Fragen mit Nummer, Marke an der Stelle; Aenderung am Aufbau loescht sie
+    void toolboxFaultFinder() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false)); // R1 B3-B4
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot")));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("toolboxButton"))));
+        QObject* box = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("toolbox"));
+        QTRY_VERIFY(box->property("opened").toBool());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("tabCheck"))));
+        QQuickItem* checkButton = item(QStringLiteral("checkCircuitButton"));
+        QTRY_VERIFY(checkButton && checkButton->isVisible());
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(checkButton));
+        QTRY_VERIFY(item(QStringLiteral("finding_0")) != nullptr);
+        QQuickItem* mark = item(QStringLiteral("checkMark_0"));
+        QVERIFY(mark && mark->isVisible());
+        // Antippen hebt die Stelle hervor (B4: loses Bein)
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("finding_0"))));
+        QTRY_VERIFY(item(QStringLiteral("field_B4"))->property("highlighted").toBool());
+        // Aufbau geaendert: Befunde und Marken verschwinden
+        QVERIFY(m_lab->addWire(QStringLiteral("B4"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("checkMark_0")) == nullptr);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(checkButton));
+        QTRY_VERIFY(item(QStringLiteral("finding_0")) != nullptr); // Hauptschalter aus
+        QMetaObject::invokeMethod(box, "close");
+        QTRY_VERIFY(!box->property("opened").toBool());
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("checkMark_0")) == nullptr);
+    }
+
     // Schaltplan: einblenden, Bauteil im Plan antippen waehlt es auf der Grundplatte; Knoten hebt Felder hervor
     void schematicView() {
         m_settings->setUnlockAll(true);

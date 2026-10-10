@@ -15,6 +15,7 @@
 #include "board.hpp"
 #include "board_edit.hpp"
 #include "catalog.hpp"
+#include "circuit_check.hpp"
 #include "commands/board_command.hpp"
 #include "netlist_builder.hpp"
 #include "success.hpp"
@@ -114,6 +115,8 @@ public:
     // Die Endstufe schaltet in Wirklichkeit im Tontakt, die Simulation rechnet mit dem Mittelwert (Verhaltensmodell).
     // Signalstaerke: Wechselanteil einer Rechteckschwingung mit 50 % Tastverhaeltnis = Mittelwert des Stroms.
     bool speakerReading(core::ComponentReading& out) const;
+    // Fehlersuche: Auffaelligkeiten im Aufbau und in der laufenden Simulation (model/circuit_check)
+    std::vector<CircuitFinding> checkCircuit() const;
 
     // ---- Erfolgspruefung (laeuft im Simulations-Thread nach jedem Schritt)
     // Bauteilbezuege der Bedingung beziehen sich auf die Vorlage; die Zuordnung zum Aufbau des Kindes erfolgt ueber

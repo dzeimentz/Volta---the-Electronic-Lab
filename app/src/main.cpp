@@ -259,7 +259,19 @@ int main(int argc, char* argv[]) {
             if (!engine.rootObjects().isEmpty()) engine.rootObjects().first()->setProperty("inJournal", true);
         });
 
-    // Entwicklerhilfe: VOLTA_DEMO_TOOLBOX=0|1|2 oeffnet den Werkzeugkasten (Farbcode, E-Reihen, Lexikon)
+    // Entwicklerhilfe: VOLTA_DEMO_TOOLBOX=0|1|2|3|4 oeffnet den Werkzeugkasten (Farbcode, E-Reihen, Lexikon, Rechner,
+    // Fehlersuche); bei 4 mit einem fehlerhaften Aufbau (LED ohne Vorwiderstand, loser Widerstand), schon geprueft
+    if (qEnvironmentVariable("VOLTA_DEMO_TOOLBOX") == QStringLiteral("4"))
+        QTimer::singleShot(300, &lab, [&lab] {
+            lab.setUnlockAll(true);
+            lab.startFreeLab();
+            lab.addPart(QStringLiteral("led_rot"), QStringLiteral("B3"), false, false);
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("D6"), false, false);
+            lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("B4"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.addWire(QStringLiteral("B4"), QStringLiteral("D6"), QStringLiteral("blau"));
+            lab.setMainSwitch(true);
+        });
     if (const QString tb = qEnvironmentVariable("VOLTA_DEMO_TOOLBOX"); !tb.isEmpty())
         QTimer::singleShot(600, &engine, [&engine, tb] {
             const auto roots = engine.rootObjects();
@@ -269,6 +281,8 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(box, "open");
                 if (QObject* tabs = box->findChild<QObject*>(QStringLiteral("toolboxTabs")))
                     tabs->setProperty("currentIndex", tb.toInt());
+                if (QObject* finder = box->findChild<QObject*>(QStringLiteral("faultFinder")); finder && tb == u"4")
+                    QTimer::singleShot(600, finder, [finder] { QMetaObject::invokeMethod(finder, "check"); });
             }
         });
 

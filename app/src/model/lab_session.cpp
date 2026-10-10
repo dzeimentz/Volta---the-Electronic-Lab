@@ -629,6 +629,12 @@ bool LabSession::speakerReading(core::ComponentReading& out) const {
     return true;
 }
 
+std::vector<CircuitFinding> LabSession::checkCircuit() const {
+    return model::checkCircuit({m_board, m_catalog, [this](const std::string& id) -> const core::ComponentReading* {
+                                    return id == desk_id::kBattery ? deskReading(id) : reading(id);
+                                }});
+}
+
 const core::ComponentReading* LabSession::deskReading(const std::string& deskId) const {
     const auto it = m_net.desk.find(deskId);
     if (!snapshotCurrent() || it == m_net.desk.end() || it->second >= m_snap.readings.size()) return nullptr;

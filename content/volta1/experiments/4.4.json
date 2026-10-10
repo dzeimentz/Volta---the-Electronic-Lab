@@ -51,6 +51,15 @@
         "wert": 4700
       },
       {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "B4",
+          "B5"
+        ],
+        "wert": 1000
+      },
+      {
         "id": "T1",
         "typ": "transistor_npn",
         "felder": {
@@ -92,7 +101,7 @@
       },
       {
         "von": "B3",
-        "nach": "B5",
+        "nach": "B4",
         "farbe": "gelb"
       },
       {

@@ -27,7 +27,8 @@ Item {
     readonly property int slotsRight: slots * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap
     readonly property int trashX: Math.max(boardWidth - Theme.control, slotsRight + 12)
     readonly property int trashY: moduleY + (Theme.fieldHeight - Theme.control) / 2
-    property bool trashHot: false // ein Bauteil oder Modul wird gerade ueber den Muelleimer gezogen
+    property bool trashHot: false
+    property var checkMarks: [] // Befunde der Fehlersuche: nummerierte Marken an ihrer ersten Stelle // ein Bauteil oder Modul wird gerade ueber den Muelleimer gezogen
     // Verschiebung beim Ziehen (Szenenpunkte) in Punkte der skalierten Arbeitsflaeche umrechnen
     function toCanvasDelta(d) { return Qt.point(d.x / canvas.scale, d.y / canvas.scale) }
     function overTrash(p) {
@@ -783,6 +784,32 @@ Item {
                 }
             }
 
+            // Fehlersuche: nummerierte Marke je Befund an seiner ersten Stelle (gleiche Nummer wie in der Liste)
+            Repeater {
+                model: lab.checkMarks
+                Rectangle {
+                    required property int index
+                    required property var modelData
+                    objectName: "checkMark_" + index
+                    readonly property point at: lab.anchorPoint(modelData.anchors[0])
+                    readonly property size area: lab.anchorSize(modelData.anchors[0])
+                    // mehrere Marken am selben Feld nebeneinander
+                    readonly property int same: {
+                        let n = 0
+                        for (let i = 0; i < index; ++i) if (lab.checkMarks[i].anchors[0] === modelData.anchors[0]) ++n
+                        return n
+                    }
+                    x: at.x + area.width / 2 - width / 2 - same * (width + 2)
+                    y: at.y - area.height / 2 - height / 2
+                    z: 50
+                    width: 26; height: 26; radius: 13
+                    color: Theme.signalOrange
+                    border.color: "white"
+                    border.width: 2
+                    Label { anchors.centerIn: parent; text: parent.index + 1; color: "white"; font.bold: true; font.pixelSize: 14 }
+                }
+            }
+
             // Muelleimer: Antippen loescht das Ausgewaehlte (ohne Auswahl: alles abbauen), Bauteile und Module lassen
             // sich darauf ziehen; immer mit Rueckfrage, rueckgaengig machbar
             ToolButton {
@@ -1388,6 +1415,11 @@ Item {
         y: toolbar.height
         height: lab.height - toolbar.height
         selectedPartId: lab.selectedPart
+        onCheckResults: (list) => { lab.checkMarks = list; if (list.length === 0) lab.highlightFields = [] }
+        onFindingSelected: (anchors, partId) => {
+            lab.highlightFields = anchors
+            if (partId !== "") { lab.selectedPart = partId; lab.selectedWire = ""; lab.selectedModule = "" }
+        }
         selectedPartType: {
             const list = lab.controller.parts
             for (let i = 0; i < list.length; ++i) if (list[i].id === lab.selectedPart) return list[i].type
