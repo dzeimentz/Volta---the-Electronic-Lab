@@ -18,8 +18,8 @@ Rectangle {
     radius: 10
     height: 128
 
-    // Batterie: angedeutete 4,5-V-Flachbatterie als Hintergrund (Gehaeuse mit Banderole, zwei Messingfahnen:
-    // kurz = Plus, lang = Minus), darauf Zellenwahl und Hauptschalter
+    // Batterie: angedeutete 4,5-V-Flachbatterie als Hintergrund (Umriss etwas heller als das Pult, zwei
+    // Polzungen: kurz = Plus, lang = Minus), darauf Zellenwahl und Hauptschalter
     Item {
         id: flatBattery
         x: Math.max(6, desk.batteryX - width / 2)
@@ -28,24 +28,18 @@ Rectangle {
         height: desk.height - 22
         Rectangle { // Plus: kurze, breite Fahne (links neben der Beschriftung)
             x: 6; y: -10; width: 18; height: 12; radius: 2
-            color: "#C9A227"; border.color: "#8C6E12"
+            color: Qt.lighter(Theme.desk, 1.25); border.color: "#8FA6BC"; border.width: 2
         }
         Rectangle { // Minus: lange, schmale Fahne
             x: parent.width - 18; y: -12; width: 10; height: 14; radius: 2
-            color: "#C9A227"; border.color: "#8C6E12"
+            color: Qt.lighter(Theme.desk, 1.25); border.color: "#8FA6BC"; border.width: 2
         }
-        Rectangle { // Gehaeuse
+        Rectangle { // Gehaeuse: nur Umriss, etwas heller als das Pult
             anchors.fill: parent
             radius: 8
-            color: "#2C5A85"
-            border.color: "#14324F"
+            color: Qt.lighter(Theme.desk, 1.25)
+            border.color: "#8FA6BC"
             border.width: 2
-            Rectangle { // Banderole
-                anchors { left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter }
-                anchors.margins: 2
-                height: parent.height * 0.40
-                color: "#C7772A"
-            }
         }
     }
 

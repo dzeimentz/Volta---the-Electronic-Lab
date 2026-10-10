@@ -80,7 +80,7 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Zwei Plaetze, umschaltbar mit dem kleinen Knopf oben links im Geraet (gespeichert, `labor/messgeraet_im_pult`):
   neben der Grundplatte (hoch, Drehschalter, Buchsen unten im Geraet) oder oben im Pult rechts neben dem
   Lautsprecher (flach: Anzeige links, Tasten V/A/Ω, digital|analog; Buchsen in der Reihe der Pultleiste).
-- Batterie im Pult: angedeutete 4,5-V-Flachbatterie (Gehaeuse, Banderole, zwei Messingfahnen) als Hintergrund
+- Batterie im Pult: angedeutete 4,5-V-Flachbatterie (nur Umriss mit zwei Polzungen, etwas heller als das Pult)
   von Spannungswahl und Hauptschalter; ohne Spannungsaufdruck, die gewaehlte Spannung steht im Auswahlfeld.
 - Steckloecher der Kontaktfelder quadratisch.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
