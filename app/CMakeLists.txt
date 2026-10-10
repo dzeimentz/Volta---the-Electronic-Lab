@@ -52,6 +52,18 @@ set_target_properties(volta_app PROPERTIES
     QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android"
     QT_ANDROID_MIN_SDK_VERSION 26)
 
+# Inhaltspakete als Ressource (:/content): auf Android Pflicht (kein Dateisystem neben der App), auf dem Desktop
+# abschaltbar, damit Inhalte waehrend der Entwicklung ohne Neubau aus dem Quellbaum kommen
+option(VOLTA_EMBED_CONTENT "Inhaltspakete in die App einbetten" ${ANDROID})
+if(VOLTA_EMBED_CONTENT)
+    file(GLOB_RECURSE volta_content_files RELATIVE "${PROJECT_SOURCE_DIR}/content" CONFIGURE_DEPENDS
+         "${PROJECT_SOURCE_DIR}/content/catalog/*.json" "${PROJECT_SOURCE_DIR}/content/volta1/*.json")
+    list(TRANSFORM volta_content_files PREPEND "${PROJECT_SOURCE_DIR}/content/")
+    qt_add_resources(volta_app "volta_content" PREFIX "/content" BASE "${PROJECT_SOURCE_DIR}/content"
+                     FILES ${volta_content_files})
+    target_compile_definitions(volta_app PRIVATE VOLTA_EMBEDDED_CONTENT)
+endif()
+
 target_compile_definitions(volta_app PRIVATE
     VOLTA_EDITION="${VOLTA_EDITION}"
     VOLTA_APP_NAME="${VOLTA_APP_NAME}"

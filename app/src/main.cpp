@@ -31,11 +31,16 @@ int main(int argc, char* argv[]) {
     for (int size : {32, 64, 256}) icon.addFile(QStringLiteral(":/icons/volta_%1.png").arg(size), QSize(size, size));
     QGuiApplication::setWindowIcon(icon);
 
-    // Inhaltspakete: zuerst neben der ausfuehrbaren Datei (Release-Ordner, tools/deploy_release.py), sonst aus dem
-    // Quellbaum. Die Einbettung als Ressource folgt mit der Paketierung (Phase 5).
+    // Inhaltspakete: eingebettet (:/content, Android; VOLTA_EMBED_CONTENT), sonst neben der ausfuehrbaren Datei
+    // (Release-Ordner, tools/deploy_release.py), sonst aus dem Quellbaum
+#ifdef VOLTA_EMBEDDED_CONTENT
+    const QString contentDir = QStringLiteral(":/content");
+#else
     const QString besideExe = QCoreApplication::applicationDirPath() + QStringLiteral("/content");
     const bool deployed = QFileInfo::exists(besideExe + QStringLiteral("/catalog/bauteile.json"));
-    volta::LabController lab(deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR));
+    const QString contentDir = deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR);
+#endif
+    volta::LabController lab(contentDir);
     // Fortschritt im Lernpfad lokal speichern; Entwicklerhilfen (VOLTA_SCREENSHOT ...) lassen ihn unberuehrt
     if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty()) {
         lab.useProgressFile(volta::services::ProgressStore::defaultFile());

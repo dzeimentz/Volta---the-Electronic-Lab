@@ -6,6 +6,11 @@
 - Keine Berechtigungen; kein `INTERNET` im Manifest.
 - Familienrichtlinien von Google Play; Managed Google Play fuer Schulen.
 - Referenztablet: Einstiegsgeraet mit 3 GB RAM (Festlegung offen, siehe Roadmap).
+- Inhaltspakete sind eingebettet (`:/content`, CMake-Option `VOLTA_EMBED_CONTENT`, auf Android immer an); die App
+  braucht kein Dateisystem neben sich. Fortschritt und Forscherheft im privaten App-Speicher (`AppDataLocation`).
+- Entwicklungsrechner: Qt 6.11 for Android (arm64-v8a, armeabi-v7a; fuer den Emulator x86_64) ueber das Qt
+  Maintenance Tool, Android SDK (Plattform 35, Build-Tools 35), das von Qt 6.11 verlangte NDK, JDK 17.
+  Testgeraete: Tablet mit USB-Debugging oder Emulator (AVD). Erste Test-APKs nur mit Debug-Signatur.
 
 ## Desktop Windows und Linux x86-64 (Phase 5a, Entwicklungsziel ab Phase 0)
 - Windows 10/11 x86-64: MSIX und MSI (WiX), signiert; optional Microsoft Store.
