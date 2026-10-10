@@ -84,6 +84,10 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   von Spannungswahl und Hauptschalter; ohne Spannungsaufdruck, die gewaehlte Spannung steht im Auswahlfeld.
 - Steckloecher der Kontaktfelder quadratisch.
 - Bauteilfach kompakt (Kacheln 92 x 44, Abstand 4), damit alle Bauteile auch auf Tablets ohne Rollen passen.
+- Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (bei 8 Feldern je Reihe
+  rechts neben M16): Antippen loescht das Ausgewaehlte (Bauteil, Leitung, Modul), ohne Auswahl »Alles abbauen«;
+  Bauteile und Module lassen sich darauf ziehen (er faerbt sich rot). Immer mit Rueckfrage; Loeschen ist ein Befehl
+  und laesst sich rueckgaengig machen.
 - Android/iOS: keine Mindestfenstergroesse, Vollbild (Systemleisten per Wischen); Kontextmenues halten 8 dp
   Abstand zum Fensterrand und rollen, wenn sie hoeher sind als der Platz.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.

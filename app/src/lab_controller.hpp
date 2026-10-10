@@ -274,6 +274,8 @@ public:
     Q_INVOKABLE bool addModule(const QString& type, const QString& slotAnchor);
     Q_INVOKABLE bool moveModule(const QString& id, const QString& slotAnchor);
     Q_INVOKABLE bool removeModule(const QString& id);
+    // Muelleimer ohne Auswahl: alle Bauteile, Leitungen und Module abbauen (ein Befehl, rueckgaengig machbar)
+    Q_INVOKABLE bool clearBoard();
     int boardColumns() const { return m_session->board().columns; }
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();

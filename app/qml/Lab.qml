@@ -23,6 +23,23 @@ Item {
     readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
     readonly property int deskStripWidth: deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
     readonly property int meterX: boardWidth + Theme.fieldGap
+    // Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (nie ueber M16)
+    readonly property int slotsRight: slots * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap
+    readonly property int trashX: Math.max(boardWidth - Theme.control, slotsRight + 12)
+    readonly property int trashY: moduleY + (Theme.fieldHeight - Theme.control) / 2
+    property bool trashHot: false // ein Bauteil oder Modul wird gerade ueber den Muelleimer gezogen
+    // Verschiebung beim Ziehen (Szenenpunkte) in Punkte der skalierten Arbeitsflaeche umrechnen
+    function toCanvasDelta(d) { return Qt.point(d.x / canvas.scale, d.y / canvas.scale) }
+    function overTrash(p) {
+        return p.x >= trashX - 12 && p.x <= trashX + Theme.control + 12
+            && p.y >= trashY - 16 && p.y <= trashY + Theme.control + 16
+    }
+    // Mitte eines Bauteils (Durchschnitt seiner Felder) in canvas-Koordinaten
+    function partCenter(part) {
+        let x = 0, y = 0
+        for (let i = 0; i < part.anchors.length; ++i) { const p = anchorPoint(part.anchors[i]); x += p.x; y += p.y }
+        return Qt.point(x / part.anchors.length, y / part.anchors.length)
+    }
     // Messgeraet oben im Pult: rechts neben der Pultleiste; seine Buchsen liegen dann in der Reihe der Pultleiste
     readonly property bool meterDocked: settings ? settings.meterDocked : false
     readonly property int meterDockX: deskStripWidth + Theme.fieldGap
@@ -666,7 +683,7 @@ Item {
             objectName: "canvas"
             x: Theme.margin
             y: Theme.margin
-            width: Math.max(!lab.controller.meterVisible ? lab.boardWidth
+            width: Math.max(lab.trashX + Theme.control, !lab.controller.meterVisible ? lab.boardWidth
                             : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth)
                             : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
@@ -735,6 +752,7 @@ Item {
                     slotCount: modelData.width
                     selected: lab.selectedModule === modelData.id
                     movable: !lab.operating
+                    dragScale: canvas.scale
                     x: lab.anchorPoint("M:" + modelData.slot).x - Theme.slotWidth / 2 - 6
                     y: lab.moduleY - 6
                     onTapped: { lab.selectedModule = modelData.id; lab.selectedPart = ""; lab.selectedWire = "" }
@@ -746,13 +764,60 @@ Item {
                         const p = lab.toCanvas(scenePos)
                         moduleMenu.popup(canvas, p.x, p.y)
                     }
-                    onDragFinished: (delta) => {
+                    onDragMoved: (sceneDelta) => {
+                        const delta = lab.toCanvasDelta(sceneDelta)
+                        lab.trashHot = lab.overTrash(Qt.point(moduleItem.x + moduleItem.width / 2 + delta.x, lab.trashY + 10))
+                    }
+                    onDragFinished: (sceneDelta) => {
+                        const delta = lab.toCanvasDelta(sceneDelta)
+                        lab.trashHot = false
+                        if (lab.overTrash(Qt.point(moduleItem.x + moduleItem.width / 2 + delta.x, lab.trashY + 10))) {
+                            trashDialog.ask("module", moduleItem.modelData.id, moduleItem.modelData.type)
+                            return
+                        }
                         const p = lab.anchorPoint("M:" + moduleItem.modelData.slot)
                         const target = lab.slotAt(Qt.point(p.x + delta.x, p.y))
                         if (target !== "" && target !== "M:" + moduleItem.modelData.slot)
                             lab.controller.moveModule(moduleItem.modelData.id, target)
                     }
                 }
+            }
+
+            // Muelleimer: Antippen loescht das Ausgewaehlte (ohne Auswahl: alles abbauen), Bauteile und Module lassen
+            // sich darauf ziehen; immer mit Rueckfrage, rueckgaengig machbar
+            ToolButton {
+                id: trashButton
+                objectName: "trashButton"
+                x: lab.trashX
+                y: lab.trashY
+                width: Theme.control; height: Theme.control
+                // Auswahl schon beim Druecken merken: das Tippen hebt sonst ueber den Hintergrund die Auswahl auf
+                property var picked: ({ part: "", wire: "", module: "" })
+                onPressed: picked = { part: lab.selectedPart, wire: lab.selectedWire, module: lab.selectedModule }
+                onClicked: {
+                    if (picked.part !== "") {
+                        const list = lab.controller.parts
+                        for (let i = 0; i < list.length; ++i)
+                            if (list[i].id === picked.part) trashDialog.ask("part", list[i].id, list[i].type)
+                    } else if (picked.wire !== "") trashDialog.ask("wire", picked.wire, "")
+                    else if (picked.module !== "") {
+                        const mods = lab.controller.modules
+                        for (let m = 0; m < mods.length; ++m)
+                            if (mods[m].id === picked.module) trashDialog.ask("module", mods[m].id, mods[m].type)
+                    } else trashDialog.ask("all", "", "")
+                }
+                ToolTip.visible: hovered
+                ToolTip.text: qsTr("Löschen: Ausgewähltes antippen oder Bauteil hierher ziehen")
+                Accessible.name: qsTr("Löschen")
+                background: Rectangle {
+                    radius: 10
+                    color: lab.trashHot ? "#C62828" : (trashButton.down ? "#D7DEE6" : "#EEF2F6")
+                    border.color: lab.trashHot ? "#8E1B1B" : "#7F93A8"
+                    border.width: lab.trashHot ? 3 : 1.5
+                    scale: lab.trashHot ? 1.15 : 1
+                    Behavior on scale { enabled: !Theme.reduceMotion; NumberAnimation { duration: 100 } }
+                }
+                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "trash"; size: 26; color: lab.trashHot ? "white" : Theme.navy } }
             }
 
             // Alle Anschlusspunkte: Pultleiste, Messgeraet, Grundplatte, Modulleiste
@@ -824,6 +889,7 @@ Item {
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id
                     movable: !lab.operating
+                    dragScale: canvas.scale
                     points: modelData.anchors.map((a, i) => lab.socketPoint(a, modelData.sockets[i]))
                     onTapped: {
                         lab.selectedPart = part.modelData.id
@@ -836,7 +902,19 @@ Item {
                     onPushed: (down) => {
                         if (part.modelData.type === "taster") lab.controller.setPartClosed(part.modelData.id, down)
                     }
-                    onDragFinished: (delta) => {
+                    onDragMoved: (sceneDelta) => {
+                        const delta = lab.toCanvasDelta(sceneDelta)
+                        const c = lab.partCenter(part.modelData)
+                        lab.trashHot = lab.overTrash(Qt.point(c.x + delta.x, c.y + delta.y))
+                    }
+                    onDragFinished: (sceneDelta) => {
+                        const delta = lab.toCanvasDelta(sceneDelta)
+                        lab.trashHot = false
+                        const c = lab.partCenter(part.modelData)
+                        if (lab.overTrash(Qt.point(c.x + delta.x, c.y + delta.y))) {
+                            trashDialog.ask("part", part.modelData.id, part.modelData.type)
+                            return
+                        }
                         const p = lab.anchorPoint(part.modelData.start)
                         const target = lab.anchorAt(Qt.point(p.x + delta.x, p.y + delta.y), true)
                         if (target !== "" && target !== part.modelData.start)
@@ -1323,5 +1401,60 @@ Item {
         anchors.horizontalCenter: boardArea.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Theme.margin
+    }
+
+    // Rueckfrage vor dem Loeschen (Muelleimer); Loeschen ist ein Befehl und laesst sich rueckgaengig machen
+    Dialog {
+        id: trashDialog
+        objectName: "trashDialog"
+        property string kind: ""   // part, wire, module, all
+        property string itemId: ""
+        property string itemType: ""
+        function ask(kind, id, type) {
+            trashDialog.kind = kind
+            trashDialog.itemId = id
+            trashDialog.itemType = type
+            trashDialog.open()
+        }
+        anchors.centerIn: parent
+        modal: true
+        width: Math.min(460, lab.width - 32)
+        title: kind === "all" ? qsTr("Alles abbauen?") : qsTr("Löschen?")
+        contentItem: Column {
+            spacing: 16
+            Label {
+                width: trashDialog.width - trashDialog.leftPadding - trashDialog.rightPadding
+                wrapMode: Text.Wrap
+                font.pixelSize: Math.round(16 * Theme.fontScale)
+                text: (trashDialog.kind === "part" ? qsTr("%1 %2 von der Grundplatte nehmen?").arg(Texts.partName(trashDialog.itemType)).arg(trashDialog.itemId)
+                     : trashDialog.kind === "wire" ? qsTr("Diese Leitung entfernen?")
+                     : trashDialog.kind === "module" ? qsTr("%1 %2 aus der Modulleiste nehmen?").arg(Texts.moduleName(trashDialog.itemType)).arg(trashDialog.itemId)
+                     : qsTr("Alle Bauteile, Leitungen und Module von der Grundplatte nehmen?"))
+                     + "\n\n" + qsTr("Mit »Rückgängig« holst du es wieder zurück.")
+            }
+            Row {
+                anchors.right: parent.right
+                spacing: 12
+                Button {
+                    objectName: "trashCancel"
+                    text: qsTr("Abbrechen")
+                    height: Theme.control
+                    onClicked: trashDialog.reject()
+                }
+                Button {
+                    objectName: "trashConfirm"
+                    text: trashDialog.kind === "all" ? qsTr("Alles abbauen") : qsTr("Löschen")
+                    height: Theme.control
+                    onClicked: trashDialog.accept()
+                }
+            }
+        }
+        onAccepted: {
+            lab.beginEdit()
+            if (kind === "part") { lab.controller.removePart(itemId); lab.selectedPart = "" }
+            else if (kind === "wire") { lab.controller.removeWire(itemId); lab.selectedWire = "" }
+            else if (kind === "module") { lab.controller.removeModule(itemId); lab.selectedModule = "" }
+            else lab.controller.clearBoard()
+        }
     }
 }

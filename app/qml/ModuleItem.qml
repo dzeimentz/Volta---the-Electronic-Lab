@@ -22,6 +22,8 @@ Item {
     signal insideRequested()
     signal menuRequested(point scenePos)
     signal dragFinished(point delta)
+    signal dragMoved(point delta) // waehrend des Ziehens (Muelleimer hebt sich hervor)
+    property real dragScale: 1 // Massstab der Arbeitsflaeche
 
     // Feldbreite der Leiste: slotCount Felder samt Abstaenden, plus Rand
     width: slotCount * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap + 12
@@ -33,7 +35,7 @@ Item {
     }
 
     // Verschieben: das Modul folgt dem Finger, das Modell entscheidet beim Loslassen
-    transform: Translate { x: bodyDrag.active ? bodyDrag.translation.x : 0 }
+    transform: Translate { x: bodyDrag.active ? bodyDrag.translation.x / mod.dragScale : 0 }
 
     Rectangle {
         anchors.fill: parent
@@ -112,6 +114,7 @@ Item {
             enabled: mod.movable
             target: null
             yAxis.enabled: false
+            onTranslationChanged: if (active) mod.dragMoved(Qt.point(translation.x, 0))
             onActiveChanged: if (!active) mod.dragFinished(Qt.point(translation.x, 0))
         }
         TapHandler {

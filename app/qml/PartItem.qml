@@ -15,6 +15,8 @@ Item {
     property bool movable: true  // Steckmodus: verschiebbar; Betrieb: fest (Taster, Schalter bleiben bedienbar)
 
     signal dragFinished(point delta)
+    signal dragMoved(point delta) // waehrend des Ziehens (Muelleimer hebt sich hervor)
+    property real dragScale: 1 // Massstab der Arbeitsflaeche: Verschiebung in Szenenpunkten -> eigene Punkte
     signal tapped()
     signal pushed(bool down) // Taster gedrueckt/losgelassen
     signal menuRequested(point scenePos)
@@ -53,8 +55,8 @@ Item {
     id: visual
     anchors.fill: parent
     transform: Translate {
-        x: bodyDrag.active ? bodyDrag.activeTranslation.x : 0
-        y: bodyDrag.active ? bodyDrag.activeTranslation.y : 0
+        x: bodyDrag.active ? bodyDrag.activeTranslation.x / root.dragScale : 0
+        y: bodyDrag.active ? bodyDrag.activeTranslation.y / root.dragScale : 0
     }
 
     // Beine
@@ -140,7 +142,10 @@ Item {
             target: null
             // activeTranslation ist beim Deaktivieren schon zurueckgesetzt: letzte Verschiebung selbst merken
             property point lastTranslation
-            onActiveTranslationChanged: if (active) lastTranslation = Qt.point(activeTranslation.x, activeTranslation.y)
+            onActiveTranslationChanged: if (active) {
+                lastTranslation = Qt.point(activeTranslation.x, activeTranslation.y)
+                root.dragMoved(lastTranslation)
+            }
             onActiveChanged: if (!active) root.dragFinished(lastTranslation)
         }
         TapHandler {

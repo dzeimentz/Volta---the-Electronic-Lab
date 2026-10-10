@@ -6,7 +6,7 @@ import QtQuick.Shapes
 
 Item {
     id: icon
-    property string kind: "menu" // menu, down, up, close, undo, redo, backspace, pencil
+    property string kind: "menu" // menu, down, up, close, undo, redo, backspace, pencil, trash
     property color color: "white"
     property real size: 20
 
@@ -22,7 +22,8 @@ Item {
         undo: "M8 5 L4 9 L8 13 M4 9 H14 A5 5 0 0 1 14 19 H9",
         redo: "M16 5 L20 9 L16 13 M20 9 H10 A5 5 0 0 0 10 19 H15",
         backspace: "M8 6 H20 V18 H8 L3 12 Z M11 9 L17 15 M17 9 L11 15",
-        pencil: "M4 20 L5 15 L16 4 L20 8 L9 19 Z M14 6 L18 10"
+        pencil: "M4 20 L5 15 L16 4 L20 8 L9 19 Z M14 6 L18 10",
+        trash: "M4 7 H20 M9 7 V4 H15 V7 M6 7 L7 20 H17 L18 7 M10 11 V17 M14 11 V17"
     })[kind] || ""
 
     Shape {

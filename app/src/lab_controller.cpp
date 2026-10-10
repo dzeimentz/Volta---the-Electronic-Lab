@@ -521,6 +521,15 @@ void LabController::nextHint() {
     if (m_flow.nextHint()) emit flowChanged();
 }
 
+bool LabController::clearBoard() {
+    model::Board after = m_session->board();
+    if (after.parts.empty() && after.wires.empty() && after.modules.empty()) return false;
+    after.parts.clear();
+    after.wires.clear();
+    after.modules.clear();
+    return result(m_session->replaceBoard(after, tr("Alles abbauen")));
+}
+
 bool LabController::showTemplate() {
     if (!m_flow.solutionShown() || m_flow.phase() != model::ExperimentFlow::Phase::Build) return false;
     return result(m_session->replaceBoard(m_experiment.templateBoard, tr("Musteraufbau zeigen")));

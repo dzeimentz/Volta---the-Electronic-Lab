@@ -190,6 +190,43 @@ private slots:
         QCOMPARE(led->pins.back().second, std::string("D3"));
     }
 
+    // Muelleimer: Ausgewaehltes antippen bzw. Bauteil darauf ziehen, immer mit Rueckfrage, rueckgaengig machbar
+    void trashDeletesWithConfirmation() {
+        const std::size_t before = board().parts.size();
+        QVERIFY(part("D2"));
+        // Mitte des Bauteils: zwischen seinen Feldern D2 und D3
+        const QPoint body = (centerOf(item(QStringLiteral("field_D2"))) + centerOf(item(QStringLiteral("field_D3")))) / 2;
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, body);
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        QTRY_COMPARE(lab->property("selectedPart").toString(), QStringLiteral("D2"));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("trashButton"))));
+        QQuickItem* cancel = nullptr;
+        QTRY_VERIFY((cancel = item(QStringLiteral("trashCancel"))) && cancel->isVisible());
+        QTest::qWait(150); // Dialog fertig angeordnet
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(cancel));
+        QTRY_VERIFY(!cancel->isVisible());
+        QCOMPARE(board().parts.size(), before); // abgebrochen: nichts geloescht
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("trashButton"))));
+        QQuickItem* confirm = nullptr;
+        QTRY_VERIFY((confirm = item(QStringLiteral("trashConfirm"))) && confirm->isVisible());
+        QTest::qWait(150);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(confirm));
+        QTRY_COMPARE(board().parts.size(), before - 1);
+        QVERIFY(!part("D2"));
+        m_lab->undo();
+        QTRY_VERIFY(part("D2"));
+        // Ziehen auf den Muelleimer
+        QTest::qWait(50);
+        drag(body, centerOf(item(QStringLiteral("trashButton"))));
+        QTRY_VERIFY(confirm->isVisible());
+        QCOMPARE(board().parts.size(), before); // erst nach der Rueckfrage
+        QTest::qWait(150);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(confirm));
+        QTRY_VERIFY(!part("D2"));
+        m_lab->undo();
+        QTRY_VERIFY(part("D2"));
+    }
+
     void dropOutsideBoardDoesNothing() {
         QQuickItem* tile = item(QStringLiteral("tray_widerstand"));
         QVERIFY(tile);
