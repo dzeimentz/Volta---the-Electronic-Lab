@@ -23,6 +23,10 @@ Item {
     readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
     readonly property int deskStripWidth: deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
     readonly property int meterX: boardWidth + Theme.fieldGap
+    // Messgeraet oben im Pult: rechts neben der Pultleiste; seine Buchsen liegen dann in der Reihe der Pultleiste
+    readonly property bool meterDocked: settings ? settings.meterDocked : false
+    readonly property int meterDockX: deskStripWidth + Theme.fieldGap
+    readonly property int meterJacksWidth: 3 * Theme.deskFieldWidth + 2 * Theme.deskFieldGap
     readonly property var rows: ["A", "B", "C", "D", "E"]
     readonly property int columns: controller.boardColumns // 8, 10 oder 12 (+/- in der Werkzeugleiste)
     readonly property int slots: 16
@@ -53,6 +57,9 @@ Item {
 
     function anchorPoint(name) {
         const m = meterNames.indexOf(name)
+        if (m >= 0 && meterDocked)
+            return Qt.point(meterDockX + (Theme.meterDockWidth - meterJacksWidth) / 2 + Theme.deskFieldWidth / 2
+                            + m * (Theme.deskFieldWidth + Theme.deskFieldGap), deskY + Theme.fieldHeight / 2)
         if (m >= 0)
             return Qt.point(meterX + (Theme.meterAreaWidth - 3 * Theme.deskFieldWidth - 2 * Theme.deskFieldGap) / 2
                             + Theme.deskFieldWidth / 2 + m * (Theme.deskFieldWidth + Theme.deskFieldGap),
@@ -661,7 +668,9 @@ Item {
             objectName: "canvas"
             x: Theme.margin
             y: Theme.margin
-            width: Math.max(lab.controller.meterVisible ? lab.meterX + Theme.meterAreaWidth : lab.boardWidth,
+            width: Math.max(!lab.controller.meterVisible ? lab.boardWidth
+                            : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth)
+                            : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
             height: lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
             // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
@@ -698,10 +707,21 @@ Item {
                 objectName: "meterPanel"
                 visible: lab.controller.meterVisible
                 controller: lab.controller
-                x: lab.meterX
-                y: lab.boardY - 6
-                width: Theme.meterAreaWidth
-                height: 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
+                docked: lab.meterDocked
+                onDockToggled: if (lab.settings) lab.settings.meterDocked = !lab.settings.meterDocked
+                x: docked ? lab.meterDockX : lab.meterX
+                y: docked ? 4 : lab.boardY - 6
+                width: docked ? Theme.meterDockWidth : Theme.meterAreaWidth
+                height: docked ? lab.deskPanelHeight - 8 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
+            }
+            // Gruppenlinie ueber den Buchsen, wenn das Messgeraet im Pult sitzt
+            GroupLine {
+                visible: lab.controller.meterVisible && lab.meterDocked
+                y: lab.groupLineY
+                fromX: lab.meterDockX + (Theme.meterDockWidth - lab.meterJacksWidth) / 2 + 4
+                toX: fromX + lab.meterJacksWidth - 8
+                symbol: "V A Ω"
+                onTapped: lab.highlightGroup = lab.highlightGroup === "messgeraet" ? "" : "messgeraet"
             }
 
             // Module in der Modulleiste (unter den Feldern, die sie belegen)

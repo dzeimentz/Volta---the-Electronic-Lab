@@ -77,6 +77,12 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
     Hz bei langem Druck im freien Labor und ab Stufe 3. Durchgebrannter Lautsprecher: antippen = reparieren (Befehl).
     Tonausgabe ueber die Soundkarte folgt mit dem Audiodienst.
 - **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
+  Zwei Plaetze, umschaltbar mit dem kleinen Knopf oben links im Geraet (gespeichert, `labor/messgeraet_im_pult`):
+  neben der Grundplatte (hoch, Drehschalter, Buchsen unten im Geraet) oder oben im Pult rechts neben dem
+  Lautsprecher (flach: Anzeige links, Tasten V/A/Ω, digital|analog; Buchsen in der Reihe der Pultleiste).
+- Batterie im Pult: angedeutete 4,5-V-Flachbatterie (Gehaeuse, Banderole, zwei Messingfahnen) als Hintergrund
+  von Spannungswahl und Hauptschalter; ohne Spannungsaufdruck, die gewaehlte Spannung steht im Auswahlfeld.
+- Steckloecher der Kontaktfelder quadratisch.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
   - Umgesetzt (aus Phase 4 vorgezogen, `MeterPanel.qml`): Geraet rechts neben der Grundplatte, ein-/ausblendbar ueber
     »V A Ω« in der Werkzeugleiste (Ausblenden nicht, solange Leitungen an den Buchsen stecken; Buchsen nur

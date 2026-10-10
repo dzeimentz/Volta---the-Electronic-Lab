@@ -2,6 +2,8 @@
 // Traegheit und leichtem Ueberschwingen in allen Messarten; Ohm-Skala rueckwaerts und nichtlinear wie beim
 // Zeiger-Ohmmeter), Drehschalter V / A / Ohm, Umschalter digital/analog.
 // Die Buchsen COM, V/Ohm, A sind Kontaktfelder der Arbeitsflaeche (Lab.qml) und sitzen unten in diesem Rahmen.
+// Zwei Plaetze (Knopf oben links): neben der Grundplatte (hoch, Drehschalter) oder oben im Pult (docked: flach,
+// Anzeige links, Tasten V / A / Ohm rechts; die Buchsen liegen dann in der Reihe der Pultleiste).
 // Messart und Anzeigeart sind Bedienhandlungen; »Sicherung tauschen« ist ein Befehl.
 import QtQuick
 import QtQuick.Controls.Basic
@@ -13,6 +15,8 @@ Rectangle {
     property var state: ({})
     readonly property int mode: controller.meterMode // 0 V, 1 A, 2 Ohm
     readonly property bool analog: controller.meterAnalog
+    property bool docked: false
+    signal dockToggled()
 
     radius: 12
     color: "#2B3440"
@@ -28,10 +32,40 @@ Rectangle {
         function onStateChanged() { needle.level = meter.controller.meterState().level || 0 }
     }
 
+    // Platz wechseln: kleines Bild des Ziels (Balken oben = ins Pult, Balken rechts = neben die Grundplatte)
+    ToolButton {
+        id: dockButton
+        objectName: "meterDockButton"
+        x: 0; y: 0
+        width: Theme.control; height: Theme.control
+        onClicked: meter.dockToggled()
+        ToolTip.visible: hovered
+        ToolTip.text: meter.docked ? qsTr("Messgerät neben die Grundplatte") : qsTr("Messgerät oben ins Pult")
+        Accessible.name: ToolTip.text
+        background: Rectangle { anchors.fill: parent; anchors.margins: 6; radius: 6; color: dockButton.down ? "#4A5868" : (dockButton.hovered ? "#3A4655" : "transparent") }
+        contentItem: Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: 22; height: 16; radius: 2
+                color: "transparent"
+                border.color: "#C9D3DD"
+                border.width: 1.5
+                Rectangle {
+                    color: Theme.solderAmber
+                    x: meter.docked ? parent.width - width - 2 : 2
+                    y: 2
+                    width: meter.docked ? 6 : parent.width - 4
+                    height: meter.docked ? parent.height - 4 : 5
+                }
+            }
+        }
+    }
+
     Label {
         id: title
+        visible: !meter.docked
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 8
+        y: 14
         text: qsTr("Messgerät")
         color: "white"
         font.pixelSize: Math.round((14) * Theme.fontScale)
@@ -42,10 +76,10 @@ Rectangle {
     Rectangle {
         id: display
         objectName: "meterDisplay"
-        x: 12
-        y: title.y + title.height + 8
-        width: parent.width - 24
-        height: 92
+        x: meter.docked ? Theme.control + 2 : 12
+        y: meter.docked ? 8 : title.y + title.height + 12
+        width: meter.docked ? 158 : parent.width - 24
+        height: meter.docked ? parent.height - 16 : 92
         radius: 6
         color: meter.analog ? "#F4F1E6" : "#B9CBA4"
         border.color: "#10151B"
@@ -65,7 +99,7 @@ Rectangle {
                     : meter.state.overrange ? "OL"
                     : (meter.state.text || "")
                 font.family: "Consolas"
-                font.pixelSize: Math.round((34) * Theme.fontScale)
+                font.pixelSize: Math.round((meter.docked ? 30 : 34) * Theme.fontScale)
                 font.bold: true
                 color: "#18221A"
             }
@@ -85,7 +119,7 @@ Rectangle {
             anchors.fill: parent
             readonly property real cx: width / 2
             readonly property real cy: height - 10
-            readonly property real r: 54
+            readonly property real r: Math.min(54, height - 30)
             readonly property real range: meter.state.range || 0
             // Skalenpunkte als Anteil 0..1 des Ausschlags; Ohm: p = Rm / (Rm + R) fuer R = oo, 10, 3, 1, 1/3, 1/10, 0 * Rm
             readonly property var ticks: meter.mode === 2 ? [0, 1 / 11, 0.25, 0.5, 0.75, 10 / 11, 1]
@@ -159,9 +193,10 @@ Rectangle {
     // Hinweise unter der Anzeige (Text, nicht nur Farbe)
     Label {
         id: hint
-        x: 12
-        y: display.y + display.height + 4
-        width: parent.width - 24
+        x: meter.docked ? modeRow.x : 12
+        y: meter.docked ? parent.height - height - 6 : display.y + display.height + 4
+        width: meter.docked ? modeRow.width : parent.width - 24
+        z: 1
         visible: text !== ""
         wrapMode: Text.Wrap
         horizontalAlignment: Text.AlignHCenter
@@ -175,8 +210,41 @@ Rectangle {
     }
 
     // ---------------------------------------------------------------- Drehschalter V / A / Ohm
+    // Tasten V / A / Ohm (nur oben im Pult; neben der Grundplatte der Drehschalter)
+    Row {
+        id: modeRow
+        visible: meter.docked
+        x: display.x + display.width + 12
+        y: 8
+        spacing: 6
+        Repeater {
+            model: ["V", "A", "Ω"]
+            Rectangle {
+                required property int index
+                required property string modelData
+                objectName: "meterKey_" + index
+                width: Theme.control; height: Theme.control
+                radius: 6
+                color: meter.mode === index ? Theme.signalOrange : "#F4F1E6"
+                border.color: meter.mode === index ? Theme.solderAmber : "#7F93A8"
+                border.width: meter.mode === index ? 3 : 1.5
+                Label {
+                    anchors.centerIn: parent
+                    text: parent.modelData
+                    color: meter.mode === parent.index ? "white" : Theme.navy
+                    font.pixelSize: Math.round(18 * Theme.fontScale)
+                    font.bold: true
+                }
+                TapHandler { onTapped: meter.controller.meterMode = parent.index }
+                Accessible.role: Accessible.RadioButton
+                Accessible.name: [qsTr("Spannung messen"), qsTr("Strom messen"), qsTr("Widerstand messen")][index]
+            }
+        }
+    }
+
     Item {
         id: selector
+        visible: !meter.docked
         x: 0
         y: display.y + display.height + 30
         width: parent.width
@@ -233,8 +301,8 @@ Rectangle {
     // ---------------------------------------------------------------- digital / analog bzw. Sicherung tauschen
     Row {
         visible: !meter.state.fuseBlown
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: selector.y + selector.height + 2
+        x: meter.docked ? modeRow.x : (parent.width - width) / 2
+        y: meter.docked ? modeRow.y + modeRow.height + 4 : selector.y + selector.height + 2
         spacing: 2
         Label { anchors.verticalCenter: parent.verticalCenter; text: qsTr("digital"); color: "white"; font.pixelSize: Math.round((12) * Theme.fontScale) }
         Switch {
@@ -253,8 +321,8 @@ Rectangle {
     Button {
         objectName: "meterFuse"
         visible: meter.state.fuseBlown === true
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: selector.y + selector.height + 2
+        x: meter.docked ? modeRow.x : (parent.width - width) / 2
+        y: meter.docked ? modeRow.y + modeRow.height + 4 : selector.y + selector.height + 2
         height: Theme.control
         text: qsTr("Sicherung tauschen")
         onClicked: meter.controller.replaceMeterFuse()

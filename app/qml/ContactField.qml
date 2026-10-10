@@ -30,7 +30,7 @@ Rectangle {
             required property int index
             width: Theme.socketSize
             height: width
-            radius: width / 2
+            radius: 1 // quadratische Loecher der Steckfedern
             x: root.width / 2 + (index - (root.sockets - 1) / 2) * root.pitch - width / 2
             y: root.height / 2 - height / 2
             color: "#6E6553"

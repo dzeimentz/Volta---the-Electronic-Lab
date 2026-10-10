@@ -430,6 +430,19 @@ private slots:
         QVERIFY(m_lab->meterAnalog());
         QTRY_COMPARE(item(QStringLiteral("meterUnit"))->property("text").toString(), QStringLiteral("Ω"));
         m_lab->setMeterAnalog(false);
+        // Platz wechseln: oben ins Pult - die Buchsen wandern in die Reihe der Pultleiste, Tasten statt Drehschalter
+        QQuickItem* com = item(QStringLiteral("field_MESS:COM"));
+        const qreal besideY = com->mapToScene(QPointF(0, 0)).y();
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterDockButton"))));
+        QTRY_VERIFY(m_settings->meterDocked());
+        const qreal deskY = item(QStringLiteral("field_P:+9V"))->mapToScene(QPointF(0, 0)).y();
+        QTRY_VERIFY(std::abs(com->mapToScene(QPointF(0, 0)).y() - deskY) < 1.0);
+        QVERIFY(deskY < besideY);
+        QTRY_VERIFY(item(QStringLiteral("meterKey_0"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterKey_0"))));
+        QTRY_COMPARE(m_lab->meterMode(), 0);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterDockButton"))));
+        QTRY_VERIFY(!m_settings->meterDocked());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterToggle"))));
         QTRY_VERIFY(!m_lab->meterVisible());
         QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("field_MESS:COM")) == nullptr);

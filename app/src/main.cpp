@@ -1,5 +1,6 @@
 // Einstiegspunkt der Qt-Anwendung. Modell, Dienste und Lernpfad folgen gemaess docs/architecture.md.
 #include <QFileInfo>
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
@@ -23,6 +24,19 @@ int main(int argc, char* argv[]) {
     if (qEnvironmentVariableIsEmpty("QT_MEDIA_BACKEND")) qputenv("QT_MEDIA_BACKEND", "windows");
 #endif
     QGuiApplication app(argc, argv);
+#ifdef Q_OS_ANDROID
+    // Android: Symbolzeichen (Menue U+2630, Dreiecke U+25BE/U+25B4, Kreuz U+2715, Pfeile U+21B6/7) liegen nur in den
+    // Symbolschriften des Systems, die Qt nicht als Ersatzschrift nutzt (sonst leere Kaestchen). Die Dateien direkt
+    // laden und ihre Familien als Ersatz fuer Symbole eintragen.
+    for (const char* file : {"/system/fonts/NotoSansSymbols-Regular-Subsetted.ttf",
+                             "/system/fonts/NotoSansSymbols-Regular-Subsetted2.ttf"}) {
+        const int id = QFontDatabase::addApplicationFont(QString::fromLatin1(file));
+        for (const QString& family : QFontDatabase::applicationFontFamilies(id)) {
+            QFontDatabase::addApplicationFallbackFontFamily(QChar::Script_Common, family);
+            qInfo("Volta: Ersatzschrift %s (%s)", qPrintable(family), file);
+        }
+    }
+#endif
     QGuiApplication::setOrganizationName(QStringLiteral("DC Software Engineering"));
     QGuiApplication::setOrganizationDomain(QStringLiteral("dc-software-engineering.com"));
     QGuiApplication::setApplicationName(QStringLiteral(VOLTA_APP_NAME));
@@ -61,8 +75,11 @@ int main(int argc, char* argv[]) {
     // Einstellungen (Menue oben rechts), lokal gespeichert; Entwicklerhilfen aendern sie nicht
     // Entwicklerhilfe: VOLTA_DEMO_FONT=0|1|2 Schriftstufe (ohne Speichern)
     const QString demoFont = qEnvironmentVariable("VOLTA_DEMO_FONT");
-    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty());
+    // VOLTA_DEMO_METER_DOCKED=0|1: Messgeraet neben der Grundplatte bzw. oben im Pult (ohne Speichern)
+    const QString demoDocked = qEnvironmentVariable("VOLTA_DEMO_METER_DOCKED");
+    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty() && demoDocked.isEmpty());
     if (!demoFont.isEmpty()) settings.setFontLevel(demoFont.toInt());
+    if (!demoDocked.isEmpty()) settings.setMeterDocked(demoDocked.toInt() == 1);
     engine.rootContext()->setContextProperty(QStringLiteral("volta_settings"), &settings);
     // Tonausgabe und Vorlesen (Bildschirmfoto-Entwicklerhilfe: still)
     volta::services::AudioService audio;

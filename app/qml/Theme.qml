@@ -43,6 +43,7 @@ QtObject {
     readonly property int slotWidth: 36
     // Steckloecher: fuenf je Feld, mittig; Abstand von Lochmitte zu Lochmitte (Pultfelder sind schmaler)
     readonly property int meterAreaWidth: 190 // Messgeraet rechts neben der Grundplatte (einblendbar)
+    readonly property int meterDockWidth: 384 // Messgeraet oben im Pult (rechts neben der Pultleiste)
     readonly property int socketSize: 8
     readonly property int socketPitch: 13
     readonly property int deskSocketPitch: 10
