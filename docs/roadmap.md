@@ -17,6 +17,9 @@ Aufwaende in Personentagen (PT) eines erfahrenen Einzelentwicklers. Jede Phase e
 Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 
 ## Offene Entscheidungen
+Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, danach folgt Volta 2
+(`docs/volta2-planung.md`).
+
 | Entscheidung | Spaetestens |
 |---|---|
 | Referenztablet fuer Leistungstests | Beginn Phase 0 |

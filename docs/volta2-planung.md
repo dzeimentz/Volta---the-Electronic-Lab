@@ -98,7 +98,7 @@ elektronik-kompendium.de, Datenblaetter der Hersteller). Er kombiniert zwei Funk
 ## Offene Entscheidungen
 | Entscheidung | Spaetestens |
 |---|---|
-| Reihenfolge: Volta 1 erst veroeffentlichen (Phase 3) oder Volta 2 parallel | vor Schritt 2 |
+| ~~Reihenfolge: Volta 1 erst veroeffentlichen (Phase 3) oder Volta 2 parallel~~ entschieden 10/2026: erst Volta 1 fertigstellen, dann Volta 2 | – |
 | Hoerbare Simulation zwingend oder Rueckfall auf erzeugten Ton bei langsamen Geraeten | nach Schritt 1 |
 | Bedienpult II: Anordnung zweites Messgeraet, Wechselquelle, Generator (oben im Pult oder seitlich) | Schritt 4 |
 | Stufenplanung und Experimentliste freigeben | vor Schritt 5 |
