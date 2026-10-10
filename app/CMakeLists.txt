@@ -15,6 +15,7 @@ endif()
 add_library(volta_model STATIC
     src/model/anchor.cpp
     src/model/board_edit.cpp
+    src/model/board_json.cpp
     src/model/circuit_check.cpp
     src/model/netlist_builder.cpp
     src/model/success.cpp
@@ -27,6 +28,7 @@ add_library(volta_model STATIC
     src/services/content_repository.cpp
     src/services/progress_store.cpp
     src/services/journal_store.cpp
+    src/services/session_store.cpp
     src/sim/simulation_bridge.cpp
     src/model/lab_session.cpp
     src/model/commands/board_command.cpp

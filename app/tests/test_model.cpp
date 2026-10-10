@@ -6,7 +6,9 @@
 #include <cmath>
 
 #include "model/anchor.hpp"
+#include "model/board_json.hpp"
 #include "model/build_guide.hpp"
+#include "model/experiment_flow.hpp"
 #include "model/formula.hpp"
 #include "model/recorder.hpp"
 #include "model/tone_synth.hpp"
@@ -50,6 +52,61 @@ private:
     }
 
 private slots:
+    // Automatisches Speichern: Aufbau verlustfrei als JSON; Hauptschalter startet aus
+    void boardJsonRoundTrip() {
+        model::Board b;
+        b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 4700.0});
+        b.parts.push_back({"S1", "taster", {{"a", "C1"}, {"b", "C2"}}, 0.0, true});
+        b.wires.push_back({"L1", "P:+9V", "B3", "gelb", true});
+        b.modules.push_back({"BL1", "blinkmodul", 5});
+        b.voltageDisplays = {"B4"};
+        b.columns = 8;
+        b.desk.cells = 3;
+        b.desk.mainSwitch = true;
+        b.desk.switchClosed = true;
+        b.desk.p1 = 0.25;
+        b.desk.meterMode = core::MeterMode::Ohm;
+        b.desk.meterVisible = true;
+        b.desk.roomLight = 0;
+        b.desk.tools.push_back({"taschenlampe", 3.5, 1.0, false});
+        model::Board back;
+        QVERIFY(model::boardFromJson(model::boardToJson(b), back));
+        QCOMPARE(back.parts.size(), std::size_t(2));
+        QCOMPARE(back.parts[0].value, 4700.0);
+        QCOMPARE(back.parts[0].pins[1].second, std::string("B4"));
+        QVERIFY(back.parts[1].closed);
+        QCOMPARE(back.wires[0].color, std::string("gelb"));
+        QVERIFY(back.wires[0].colorFixed);
+        QCOMPARE(back.modules[0].slot, 5);
+        QCOMPARE(back.voltageDisplays.front(), std::string("B4"));
+        QCOMPARE(back.columns, 8);
+        QCOMPARE(back.desk.cells, 3);
+        QVERIFY(!back.desk.mainSwitch); // Start im Steckmodus
+        QVERIFY(back.desk.switchClosed);
+        QCOMPARE(back.desk.p1, 0.25);
+        QCOMPARE(back.desk.meterMode, core::MeterMode::Ohm);
+        QCOMPARE(back.desk.roomLight, 0);
+        QCOMPARE(back.desk.tools.size(), std::size_t(1));
+        QVERIFY(!back.desk.tools[0].on);
+        QVERIFY(!model::boardFromJson(QJsonObject{}, back)); // kein Aufbau
+    }
+
+    void flowRestore() {
+        using P = model::ExperimentFlow::Phase;
+        using C = model::ExperimentFlow::Comparison;
+        model::ExperimentFlow f;
+        QVERIFY(!f.restore(P::Build, 0, 0, -1, C::None)); // vor start()
+        f.start(3, 2);
+        QVERIFY(!f.restore(P::Build, -1, 0, -1, C::None)); // Aufbau ohne Vermutung
+        QVERIFY(!f.restore(P::Build, 1, 4, -1, C::None));  // mehr Tipps als vorhanden
+        QVERIFY(f.restore(P::Build, 1, 2, -1, C::None));
+        QCOMPARE(f.phase(), P::Build);
+        QCOMPARE(f.hintsShown(), 2);
+        QVERIFY(f.restore(P::Explain, 1, 3, 0, C::Matches));
+        QCOMPARE(f.observation(), 0);
+        QCOMPARE(f.comparison(), C::Matches);
+    }
+
     // Werkzeugkasten: Farbcode in beide Richtungen, E-Reihen mit naechstem Normwert
     void resistorColorCode() {
         namespace rc = model::resistor_code;

@@ -76,6 +76,9 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
   ergaenzt, der Fotowiderstand war mit Taschenlampe ueberlastet).
 - Offen: Teileliste.
 
+## Phase 3 – Stand
+- Automatisches Speichern des Laborstands (Aufbau, Experiment mit Ablauf), Weitermachen nach Neustart: erledigt.
+
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
 2. ~~Thermikmodell und Ereignisse; Robustheitstests.~~ erledigt, dazu: alle Bauteile der Stufen 1–4 inkl.

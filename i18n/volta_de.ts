@@ -630,57 +630,62 @@
 <context>
     <name>Home</name>
     <message>
-        <location filename="../app/qml/Home.qml" line="102"/>
+        <location filename="../app/qml/Home.qml" line="105"/>
+        <source>Weitermachen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Home.qml" line="112"/>
         <source>Freies Labor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="103"/>
+        <location filename="../app/qml/Home.qml" line="113"/>
         <source>Eigene Ideen ausprobieren – mit allen freigeschalteten Bauteilen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="109"/>
+        <location filename="../app/qml/Home.qml" line="119"/>
         <source>Forscherheft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="110"/>
+        <location filename="../app/qml/Home.qml" line="120"/>
         <source>Deine Vermutungen, Beobachtungen und Notizen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="116"/>
+        <location filename="../app/qml/Home.qml" line="126"/>
         <source>Lernpfad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="160"/>
+        <location filename="../app/qml/Home.qml" line="170"/>
         <source>Stufe %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="180"/>
+        <location filename="../app/qml/Home.qml" line="190"/>
         <source>%1 von %2 geschafft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="199"/>
+        <location filename="../app/qml/Home.qml" line="209"/>
         <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="205"/>
+        <location filename="../app/qml/Home.qml" line="215"/>
         <source>Experimente folgen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="244"/>
+        <location filename="../app/qml/Home.qml" line="254"/>
         <source>Nur in der App!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="261"/>
+        <location filename="../app/qml/Home.qml" line="271"/>
         <source>geschafft</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2287,28 +2292,28 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="420"/>
-        <location filename="../app/src/lab_controller.cpp" line="454"/>
+        <location filename="../app/src/lab_controller.cpp" line="503"/>
+        <location filename="../app/src/lab_controller.cpp" line="537"/>
         <source>Freies Labor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="547"/>
+        <location filename="../app/src/lab_controller.cpp" line="630"/>
         <source>Alles abbauen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="552"/>
+        <location filename="../app/src/lab_controller.cpp" line="635"/>
         <source>Musteraufbau zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="999"/>
+        <location filename="../app/src/lab_controller.cpp" line="1082"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1038"/>
+        <location filename="../app/src/lab_controller.cpp" line="1121"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>

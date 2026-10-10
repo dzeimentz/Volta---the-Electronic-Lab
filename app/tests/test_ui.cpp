@@ -684,6 +684,44 @@ private slots:
         QTRY_VERIFY(!box->property("opened").toBool());
     }
 
+    // Automatisches Speichern: Stand sichern, neuer Controller (Neustart) stellt Aufbau und Ablauf wieder her
+    void sessionSaveAndResume() {
+        QTemporaryDir dir;
+        const QString file = dir.filePath(QStringLiteral("laborstand.json"));
+        {
+            LabController a(QStringLiteral(VOLTA_CONTENT_DIR));
+            a.useSessionFile(file);
+            a.setUnlockAll(true);
+            QVERIFY(a.startExperiment(QStringLiteral("volta1.1.1")));
+            a.chooseGuess(1);
+            a.nextHint();
+            QVERIFY(a.addPart(QStringLiteral("gluehlampe"), QStringLiteral("C5"), false, false));
+            QVERIFY(a.addWire(QStringLiteral("P:+9V"), QStringLiteral("C5"), QStringLiteral("rot")));
+            a.setLabOpen(true);
+            a.saveSession();
+        }
+        LabController b(QStringLiteral(VOLTA_CONTENT_DIR));
+        b.useSessionFile(file);
+        QVERIFY(b.savedLabOpen());
+        QVERIFY(b.resumeSession());
+        QCOMPARE(b.experimentId(), QStringLiteral("volta1.1.1"));
+        QCOMPARE(b.phase(), 2);
+        QCOMPARE(b.guess(), 1);
+        QCOMPARE(b.hints().size(), 1);
+        QCOMPARE(b.session().board().parts.size(), std::size_t(1));
+        QCOMPARE(b.session().board().wires.size(), std::size_t(1));
+        QVERIFY(!b.session().board().desk.mainSwitch);
+        // freies Labor ohne Inhalte bleibt freies Labor
+        b.startFreeLab();
+        b.setLabOpen(false);
+        b.saveSession();
+        LabController c(QStringLiteral(VOLTA_CONTENT_DIR));
+        c.useSessionFile(file);
+        QVERIFY(c.resumeSession());
+        QVERIFY(c.freeLab());
+        QVERIFY(!c.savedLabOpen());
+    }
+
     // Fehlersuche: Reiter im Werkzeugkasten, Fragen mit Nummer, Marke an der Stelle; Aenderung am Aufbau loescht sie
     void toolboxFaultFinder() {
         m_settings->setUnlockAll(true);

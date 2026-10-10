@@ -11,6 +11,7 @@ Rectangle {
     property var settings: null
     signal experimentRequested(string id)
     signal freeLabRequested()
+    signal continueRequested() // zurueck ins Labor mit dem aktuellen (gespeicherten) Stand
     signal journalRequested()
     signal infoRequested()
 
@@ -94,8 +95,17 @@ Rectangle {
             bottomPadding: Theme.margin
             spacing: 18
 
-            Row {
+            Flow {
+                width: parent.width
                 spacing: 18
+                Tile {
+                    objectName: "tileContinue"
+                    visible: home.controller.freeLab || home.controller.experimentId !== ""
+                    icon: "▶️"
+                    title: qsTr("Weitermachen")
+                    subtitle: home.controller.title
+                    onActivated: home.continueRequested()
+                }
                 Tile {
                     objectName: "tileFreeLab"
                     icon: "🔧"

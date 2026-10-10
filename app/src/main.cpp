@@ -59,6 +59,7 @@ int main(int argc, char* argv[]) {
     if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty()) {
         lab.useProgressFile(volta::services::ProgressStore::defaultFile());
         lab.useJournalFile(volta::services::JournalStore::defaultFile());
+        lab.useSessionFile(volta::services::SessionStore::defaultFile());
     }
 
     QQmlApplicationEngine engine;

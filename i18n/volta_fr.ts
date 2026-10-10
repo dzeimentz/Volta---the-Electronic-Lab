@@ -630,57 +630,62 @@
 <context>
     <name>Home</name>
     <message>
-        <location filename="../app/qml/Home.qml" line="102" />
+        <location filename="../app/qml/Home.qml" line="105" />
+        <source>Weitermachen</source>
+        <translation>Continuer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Home.qml" line="112" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="103" />
+        <location filename="../app/qml/Home.qml" line="113" />
         <source>Eigene Ideen ausprobieren – mit allen freigeschalteten Bauteilen</source>
         <translation>Essaie tes propres idées – avec tous les composants débloqués</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="109" />
+        <location filename="../app/qml/Home.qml" line="119" />
         <source>Forscherheft</source>
         <translation>Carnet de recherche</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="110" />
+        <location filename="../app/qml/Home.qml" line="120" />
         <source>Deine Vermutungen, Beobachtungen und Notizen</source>
         <translation>Tes hypothèses, observations et notes</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="116" />
+        <location filename="../app/qml/Home.qml" line="126" />
         <source>Lernpfad</source>
         <translation>Parcours</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="160" />
+        <location filename="../app/qml/Home.qml" line="170" />
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="180" />
+        <location filename="../app/qml/Home.qml" line="190" />
         <source>%1 von %2 geschafft</source>
         <translation>%1 sur %2 réussies</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="199" />
+        <location filename="../app/qml/Home.qml" line="209" />
         <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
         <translation>Encore verrouillé – réussis d'abord les expériences du niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="205" />
+        <location filename="../app/qml/Home.qml" line="215" />
         <source>Experimente folgen.</source>
         <translation>Les expériences arrivent bientôt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="244" />
+        <location filename="../app/qml/Home.qml" line="254" />
         <source>Nur in der App!</source>
         <translation>Seulement dans l'appli !</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="261" />
+        <location filename="../app/qml/Home.qml" line="271" />
         <source>geschafft</source>
         <translation>réussi</translation>
     </message>
@@ -2287,28 +2292,28 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="420" />
-        <location filename="../app/src/lab_controller.cpp" line="454" />
+        <location filename="../app/src/lab_controller.cpp" line="503" />
+        <location filename="../app/src/lab_controller.cpp" line="537" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="547" />
+        <location filename="../app/src/lab_controller.cpp" line="630" />
         <source>Alles abbauen</source>
         <translation>Tout démonter</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="552" />
+        <location filename="../app/src/lab_controller.cpp" line="635" />
         <source>Musteraufbau zeigen</source>
         <translation>Afficher le montage modèle</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="999" />
+        <location filename="../app/src/lab_controller.cpp" line="1082" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1038" />
+        <location filename="../app/src/lab_controller.cpp" line="1121" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
     </message>

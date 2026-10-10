@@ -2,7 +2,9 @@
 
 #include <QCoreApplication>
 #include <QDateTime>
+#include <QGuiApplication>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QFile>
 #include <QSysInfo>
 
@@ -12,6 +14,7 @@
 #include <cmath>
 #include <cstdlib>
 
+#include "model/board_json.hpp"
 #include "model/build_guide.hpp"
 #include "model/formula.hpp"
 #include "services/audio_service.hpp"
@@ -65,6 +68,7 @@ LabController::LabController(QString contentRoot, QObject* parent)
 }
 
 LabController::~LabController() {
+    saveSession(); // beim Beenden den letzten Stand sichern
     m_timer.stop();
     m_session.reset();
 }
@@ -135,6 +139,85 @@ void LabController::rebuildExperimentList() {
         m.insert(QStringLiteral("destructive"), exp.destructive);
         m_experimentList << m;
     }
+}
+
+void LabController::useSessionFile(const QString& path) {
+    m_sessionStore = services::SessionStore(path);
+    if (m_saveEnabled) return;
+    m_saveEnabled = true;
+    m_saveTimer.setSingleShot(true);
+    m_saveTimer.setInterval(1500);
+    connect(&m_saveTimer, &QTimer::timeout, this, &LabController::saveSession);
+    for (auto sig : {&LabController::boardChanged, &LabController::deskChanged, &LabController::flowChanged,
+                     &LabController::experimentChanged})
+        connect(this, sig, this, [this] {
+            if (!m_restoring) m_saveTimer.start();
+        });
+    // Android beendet Apps im Hintergrund ohne Vorwarnung: beim Wechsel in den Hintergrund sofort speichern
+    connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+        if (state != Qt::ApplicationActive) saveSession();
+    });
+}
+
+void LabController::saveSession() {
+    m_saveTimer.stop();
+    if (!m_saveEnabled || m_restoring) return;
+    if (!m_freeLab && m_experiment.id.isEmpty()) return; // noch nichts im Labor
+    const QJsonObject flow{{QStringLiteral("phase"), static_cast<int>(m_flow.phase())},
+                           {QStringLiteral("vermutung"), m_flow.guess()},
+                           {QStringLiteral("tipps"), m_flow.hintsShown()},
+                           {QStringLiteral("beobachtung"), m_flow.observation()},
+                           {QStringLiteral("vergleich"), static_cast<int>(m_flow.comparison())}};
+    m_sessionStore.save(QJsonObject{{QStringLiteral("freies_labor"), m_freeLab},
+                                    {QStringLiteral("experiment"), m_experiment.id},
+                                    {QStringLiteral("labor_offen"), m_labOpen},
+                                    {QStringLiteral("ablauf"), flow},
+                                    {QStringLiteral("aufbau"), model::boardToJson(m_session->board())}});
+}
+
+bool LabController::savedLabOpen() const {
+    return m_sessionStore.load().value(QStringLiteral("labor_offen")).toBool(false);
+}
+
+void LabController::setLabOpen(bool open) {
+    if (open == m_labOpen) return;
+    m_labOpen = open;
+    if (m_saveEnabled) saveSession();
+}
+
+bool LabController::resumeSession() {
+    const QJsonObject saved = m_sessionStore.load();
+    model::Board board;
+    if (saved.isEmpty() || !model::boardFromJson(saved.value(QStringLiteral("aufbau")).toObject(), board)) return false;
+    m_restoring = true;
+    bool ok = true;
+    if (saved.value(QStringLiteral("freies_labor")).toBool()) {
+        startFreeLab();
+    } else {
+        ok = startExperiment(saved.value(QStringLiteral("experiment")).toString());
+        if (ok) {
+            const QJsonObject f = saved.value(QStringLiteral("ablauf")).toObject();
+            using P = model::ExperimentFlow::Phase;
+            using C = model::ExperimentFlow::Comparison;
+            const int phase = f.value(QStringLiteral("phase")).toInt(1);
+            m_flow.restore(static_cast<P>(std::clamp(phase, 1, 4)), f.value(QStringLiteral("vermutung")).toInt(-1),
+                           f.value(QStringLiteral("tipps")).toInt(0), f.value(QStringLiteral("beobachtung")).toInt(-1),
+                           static_cast<C>(std::clamp(f.value(QStringLiteral("vergleich")).toInt(0), 0, 3)));
+        }
+    }
+    if (ok) {
+        // gepruefte Teile des Aufbaus uebernehmen: unbekannte Bauteiltypen verwerfen
+        board.parts.erase(std::remove_if(board.parts.begin(), board.parts.end(),
+                                         [this](const model::PartPlacement& p) { return !m_session->catalog().part(p.type); }),
+                          board.parts.end());
+        m_session->loadBoard(board);
+        emit flowChanged();
+        emit deskChanged();
+        emit historyChanged();
+        emit boardChanged();
+    }
+    m_restoring = false;
+    return ok;
 }
 
 void LabController::useProgressFile(const QString& path) {

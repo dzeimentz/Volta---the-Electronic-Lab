@@ -50,6 +50,22 @@ public:
         return true;
     }
 
+    // Wiederherstellen (automatisches Speichern) nach start(): Werte werden gegen die Anzahl der Hilfen und
+    // Beobachtungen geprueft; false und unveraendert, wenn sie nicht passen
+    bool restore(Phase phase, int guess, int hintsShown, int observation, Comparison comparison) {
+        if (m_phase == Phase::None || phase == Phase::None) return false;
+        if (phase != Phase::Question && guess < 0) return false;
+        if (hintsShown < 0 || hintsShown > m_hintCount) return false;
+        if (phase == Phase::Observe && m_observationCount == 0) return false;
+        if (observation >= m_observationCount) return false;
+        m_phase = phase;
+        m_guess = guess;
+        m_hintsShown = hintsShown;
+        m_observation = phase == Phase::Explain ? observation : -1;
+        m_comparison = phase == Phase::Explain ? comparison : Comparison::None;
+        return true;
+    }
+
     Phase phase() const { return m_phase; }
     int guess() const { return m_guess; }
     int observation() const { return m_observation; }

@@ -83,6 +83,11 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Batterie im Pult: angedeutete 4,5-V-Flachbatterie (nur Umriss mit zwei Polzungen, etwas heller als das Pult)
   von Spannungswahl und Hauptschalter; ohne Spannungsaufdruck, die gewaehlte Spannung steht im Auswahlfeld.
 - Steckloecher der Kontaktfelder quadratisch.
+- Automatisches Speichern (`services/session_store`, `model/board_json`): Aufbau mit Pult, Messgeraet und
+  Werkzeugen, laufendes Experiment mit Ablauf (Vermutung, Tipps, Beobachtung) bzw. freies Labor und ob das Labor
+  offen war; 1,5 s nach jeder Aenderung und sofort beim Wechsel in den Hintergrund und beim Beenden, atomar in
+  `laborstand.json` im privaten App-Speicher. Beim Start: war das Labor offen, geht es dort weiter (Hauptschalter
+  aus, Steckmodus), sonst bietet die Startseite die Kachel »Weitermachen«. Rueckgaengig-Verlauf wird nicht gespeichert.
 - Bauteilfach kompakt (Kacheln 92 x 44, Abstand 4), damit alle Bauteile auch auf Tablets ohne Rollen passen.
 - Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (bei 8 Feldern je Reihe
   rechts neben M16): Antippen loescht das Ausgewaehlte (Bauteil, Leitung, Modul), ohne Auswahl »Alles abbauen«;

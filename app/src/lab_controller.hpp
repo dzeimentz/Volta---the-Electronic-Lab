@@ -17,6 +17,7 @@
 #include "services/content_repository.hpp"
 #include "services/journal_store.hpp"
 #include "services/progress_store.hpp"
+#include "services/session_store.hpp"
 
 namespace volta {
 namespace services {
@@ -126,6 +127,16 @@ public:
     void setUnlockAll(bool on);
     // Fortschritt dauerhaft speichern (main.cpp; ohne Aufruf nur im Speicher, z. B. in Tests)
     void useProgressFile(const QString& path);
+    // Automatisches Speichern des Laborstands (Aufbau, Experiment mit Ablauf, Labor offen); ohne Aufruf nur im Speicher
+    void useSessionFile(const QString& path);
+    // gespeicherten Stand laden (Start der App); true, wenn ein Stand wiederhergestellt wurde
+    Q_INVOKABLE bool resumeSession();
+    // war das Labor beim letzten Speichern offen? (Start direkt im Labor)
+    Q_INVOKABLE bool savedLabOpen() const;
+    // die Oberflaeche meldet, ob das Labor offen ist (wird mitgespeichert)
+    Q_INVOKABLE void setLabOpen(bool open);
+    // sofort speichern (App geht in den Hintergrund, Beenden)
+    Q_INVOKABLE void saveSession();
     Q_INVOKABLE bool isDone(const QString& experimentId) const { return m_progress.isDone(experimentId); }
     Q_INVOKABLE bool isUnlocked(const QString& experimentId) const;
     Q_INVOKABLE void resetProgress();
@@ -340,6 +351,11 @@ private:
     QVariantList m_experimentList;
     QList<services::Stage> m_stages;
     services::ProgressStore m_progress;
+    services::SessionStore m_sessionStore;
+    QTimer m_saveTimer;      // speichert kurz nach einer Aenderung
+    bool m_saveEnabled = false;
+    bool m_labOpen = false;
+    bool m_restoring = false;
     services::JournalStore m_journal;
     bool m_unlockAll = false;
     bool m_buildComplete = false;

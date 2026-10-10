@@ -24,6 +24,9 @@ ApplicationWindow {
     readonly property var speech: typeof volta_speech !== "undefined" ? volta_speech : null
     property bool inLab: false
     property bool inJournal: false
+    // Automatisches Speichern: letzten Laborstand laden; war das Labor offen, geht es dort direkt weiter
+    Component.onCompleted: if (labController.resumeSession() && labController.savedLabOpen()) root.inLab = true
+    onInLabChanged: labController.setLabOpen(root.inLab)
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
     Binding { target: labController; property: "unlockAll"; value: root.settings ? root.settings.unlockAll : false }
@@ -51,6 +54,7 @@ ApplicationWindow {
         settings: root.settings
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) root.inLab = true }
         onFreeLabRequested: { labController.startFreeLab(); root.inLab = true }
+        onContinueRequested: root.inLab = true
         onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
     }
