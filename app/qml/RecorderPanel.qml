@@ -90,7 +90,7 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     width: 32; height: 32
-                    text: "✕"
+                    contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 14 } }
                     onClicked: panel.controller.setRecorderChannel(index, "")
                     Accessible.name: qsTr("Kanal %1 trennen").arg(index + 1)
                 }
@@ -125,7 +125,7 @@ Rectangle {
         }
         ToolButton {
             width: Theme.control; height: Theme.control
-            text: "⌫"
+            contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "backspace"; color: Theme.navy; size: 22 } }
             onClicked: panel.controller.clearRecorder()
             ToolTip.visible: hovered
             ToolTip.text: Accessible.name
@@ -133,7 +133,7 @@ Rectangle {
         }
         ToolButton {
             width: Theme.control; height: Theme.control
-            text: "✕"
+            contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 20 } }
             onClicked: panel.closeRequested()
             Accessible.name: qsTr("Zeitschreiber schließen")
         }

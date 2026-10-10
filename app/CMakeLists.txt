@@ -112,6 +112,7 @@ qt_add_qml_module(volta_ui
         qml/ToolToken.qml
         qml/RecorderPanel.qml
         qml/FlyoutBar.qml
+        qml/DrawnIcon.qml
         qml/FormulaCalculator.qml
     SOURCES
         src/lab_controller.hpp

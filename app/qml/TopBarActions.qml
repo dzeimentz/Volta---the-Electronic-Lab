@@ -128,9 +128,7 @@ Row {
     ToolButton {
         objectName: "settingsButton"
         width: Theme.control; height: Theme.control
-        text: "☰"
-        font.pixelSize: 20
-        palette.buttonText: "white"
+        contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "menu"; color: "white"; size: 24 } }
         onClicked: settingsMenu.open()
         ToolTip.visible: hovered
         ToolTip.text: qsTr("Einstellungen")

@@ -353,6 +353,18 @@ Flickable {
                         width: Math.max(Theme.control, (col.width - 24) / 5); height: Theme.control
                         text: modelData
                         font.pixelSize: Math.round(17 * Theme.fontScale)
+                        // Loeschtaste gezeichnet (das Zeichen fehlt auf Android)
+                        contentItem: Item {
+                            Label {
+                                anchors.centerIn: parent
+                                visible: modelData !== "⌫"
+                                text: modelData
+                                font: parent.parent.font
+                                color: Theme.navy
+                            }
+                            DrawnIcon { anchors.centerIn: parent; visible: modelData === "⌫"; kind: "backspace"; color: Theme.navy; size: 22 }
+                        }
+                        Accessible.name: modelData === "⌫" ? qsTr("Zeichen löschen") : modelData
                         onClicked: {
                             if (modelData === "C") expr.text = ""
                             else if (modelData === "⌫") expr.text = expr.text.slice(0, -1)

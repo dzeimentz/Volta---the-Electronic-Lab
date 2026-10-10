@@ -81,8 +81,7 @@ Drawer {
             ToolButton {
                 id: closeButton
                 width: Theme.control; height: Theme.control
-                text: "✕"
-                font.pixelSize: 20
+                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 20 } }
                 onClicked: box.close()
                 Accessible.name: qsTr("Schließen")
             }

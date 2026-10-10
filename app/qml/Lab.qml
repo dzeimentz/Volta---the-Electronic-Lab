@@ -303,12 +303,11 @@ Item {
                 }
                 font.pixelSize: Math.round(14 * Theme.fontScale)
                 font.bold: true
-                indicator: Label {
+                indicator: DrawnIcon {
                     x: experimentBox.width - width - 12
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "▾"
-                    color: "white"
-                    font.pixelSize: 14
+                    kind: "down"
+                    size: 16
                 }
                 contentItem: Label {
                     leftPadding: 12
@@ -369,8 +368,7 @@ Item {
             }
             ToolButton {
                 objectName: "undoButton"
-                text: "↶"
-                font.pixelSize: 19
+                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "undo"; color: Theme.navy; size: 22; opacity: parent.parent.enabled ? 1 : 0.4 } }
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canUndo
                 onClicked: { lab.beginEdit(); lab.controller.undo() }
@@ -380,8 +378,7 @@ Item {
             }
             ToolButton {
                 objectName: "redoButton"
-                text: "↷"
-                font.pixelSize: 19
+                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "redo"; color: Theme.navy; size: 22; opacity: parent.parent.enabled ? 1 : 0.4 } }
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canRedo
                 onClicked: { lab.beginEdit(); lab.controller.redo() }

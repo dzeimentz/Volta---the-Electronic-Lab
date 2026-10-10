@@ -1,5 +1,5 @@
 // Ausklappende Werkzeuggruppe am unteren Rand (Bedienmuster wie in Visual Technic Studio): eingeklappt eine dunkle
-// Pille mit Titel, ▴ und Anzahl der Werkzeuge (»Licht und Wärme ▴ 3«); bei Mausberuehrung oder Antippen klappt
+// Pille mit Titel, Pfeil nach oben und Anzahl der Werkzeuge (»Licht und Wärme ▴ 3«); bei Mausberuehrung oder Antippen klappt
 // darueber die Werkzeugleiste aus. Wird der Zeiger entfernt, schliesst sie von selbst (Touch: einige Sekunden nach
 // der letzten Beruehrung). Solange busy (ein Werkzeug wird herausgezogen), bleibt sie offen. Mehrere Gruppen lassen
 // sich nebeneinander setzen; der Inhalt kommt als Kinder (Default-Eigenschaft).
@@ -51,13 +51,25 @@ Item {
             color: bar.expanded ? "#1F4670" : "#14304D"
             border.color: "#6F9CC8"
             border.width: 2
-            Label {
+            Row {
                 id: handleLabel
                 anchors.centerIn: parent
-                text: bar.title + "  ▴  " + bar.count
-                color: "white"
-                font.pixelSize: Math.round(14 * Theme.fontScale)
-                font.bold: true
+                spacing: 8
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: bar.title
+                    color: "white"
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    font.bold: true
+                }
+                DrawnIcon { anchors.verticalCenter: parent.verticalCenter; kind: "up"; size: 16 }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: bar.count
+                    color: "white"
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    font.bold: true
+                }
             }
         }
         HoverHandler { id: handleHover }

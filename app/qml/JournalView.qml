@@ -149,7 +149,7 @@ Rectangle {
                             Label {
                                 required property string modelData
                                 width: col.width
-                                text: "✎ " + modelData
+                                text: "📝 " + modelData // Notiz (Bildzeichen; der Stift U+270E fehlt auf Android)
                                 wrapMode: Text.Wrap
                                 font.pixelSize: Math.round(15 * Theme.fontScale)
                                 color: "#1E2B38"

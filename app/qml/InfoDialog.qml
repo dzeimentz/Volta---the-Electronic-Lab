@@ -61,9 +61,7 @@ Popup {
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
             width: Theme.control; height: Theme.control
-            text: "✕"
-            font.pixelSize: Math.round((20) * Theme.fontScale)
-            palette.buttonText: "white"
+            contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: "white"; size: 20 } }
             onClicked: info.close()
             Accessible.name: qsTr("Schließen")
         }
