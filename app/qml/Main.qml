@@ -8,8 +8,12 @@ ApplicationWindow {
     id: root
     width: 1280
     height: 800
-    minimumWidth: 1280
-    minimumHeight: 720
+    // Desktop: Mindestgroesse 1280 x 720. Android: Bildschirm ohne Mindestgroesse (sonst ragt das Fenster unter die
+    // Navigationsleiste) und im Vollbild; die Systemleisten kommen per Wischen vom Rand zurueck.
+    readonly property bool mobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
+    minimumWidth: mobile ? 0 : 1280
+    minimumHeight: mobile ? 0 : 720
+    visibility: mobile ? Window.FullScreen : Window.AutomaticVisibility
     visible: true
     title: Qt.application.name
     color: Theme.board

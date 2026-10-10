@@ -67,6 +67,7 @@ Row {
         }
         Menu {
             id: languageMenu
+            margins: 8 // immer ganz im Fenster
             objectName: "languageMenu"
             y: parent.height
             x: parent.width - width
@@ -139,6 +140,7 @@ Row {
         }
         Menu {
             id: settingsMenu
+            margins: 8 // immer ganz im Fenster
             objectName: "settingsMenu"
             y: parent.height
             x: parent.width - width
@@ -195,6 +197,7 @@ Row {
                 onTriggered: bar.controller.meterVisible = checked
             }
             Menu {
+                margins: 8 // immer ganz im Fenster
                 title: qsTr("Felder je Reihe")
                 Repeater {
                     model: [8, 10, 12]

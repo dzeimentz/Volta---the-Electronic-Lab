@@ -530,6 +530,7 @@ Item {
                 background: Rectangle { radius: 6; color: parent.hovered ? "#2A4A6E" : "transparent" }
                 Menu {
                     id: wireColorMenu
+                    margins: 8 // immer ganz im Fenster
                     y: parent.height
                     Repeater {
                         model: Texts.wireColors
@@ -1122,6 +1123,7 @@ Item {
     // ------------------------------------------------------------------ Menues
     Menu {
         id: fieldMenu
+        margins: 8 // immer ganz im Fenster
         property string anchorName
         MenuItem {
             text: qsTr("Spannungsanzeige ein/aus")
@@ -1147,6 +1149,7 @@ Item {
 
     Menu {
         id: partMenu
+        margins: 8 // immer ganz im Fenster
         objectName: "partMenu"
         property var part: ({})
         MenuItem {
@@ -1172,6 +1175,7 @@ Item {
         }
         Menu {
             id: valueMenu
+            margins: 8 // immer ganz im Fenster
             title: qsTr("Wert")
             enabled: partMenu.part.type === "widerstand"
             Instantiator {
@@ -1189,6 +1193,7 @@ Item {
         }
         Menu {
             id: voltMenu
+            margins: 8 // immer ganz im Fenster
             title: qsTr("Nennspannung")
             enabled: partMenu.part.type === "gluehlampe"
             Instantiator {
@@ -1218,6 +1223,7 @@ Item {
 
     Menu {
         id: moduleMenu
+        margins: 8 // immer ganz im Fenster
         objectName: "moduleMenu"
         property string moduleId
         property string moduleType
@@ -1239,6 +1245,7 @@ Item {
 
     Menu {
         id: toolMenu
+        margins: 8 // immer ganz im Fenster
         objectName: "toolMenu"
         property string toolType
         property bool toolOn
@@ -1254,6 +1261,7 @@ Item {
 
     Menu {
         id: wireMenu
+        margins: 8 // immer ganz im Fenster
         objectName: "wireMenu"
         property string wireId
         property string wireColor

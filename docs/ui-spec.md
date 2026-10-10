@@ -83,6 +83,9 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Batterie im Pult: angedeutete 4,5-V-Flachbatterie (nur Umriss mit zwei Polzungen, etwas heller als das Pult)
   von Spannungswahl und Hauptschalter; ohne Spannungsaufdruck, die gewaehlte Spannung steht im Auswahlfeld.
 - Steckloecher der Kontaktfelder quadratisch.
+- Bauteilfach kompakt (Kacheln 92 x 44, Abstand 4), damit alle Bauteile auch auf Tablets ohne Rollen passen.
+- Android/iOS: keine Mindestfenstergroesse, Vollbild (Systemleisten per Wischen); Kontextmenues halten 8 dp
+  Abstand zum Fensterrand und rollen, wenn sie hoeher sind als der Platz.
   Digital: 3 Stellen + Einheit, 3 Hz Aktualisierung. Analog: Zeiger mit Traegheit und leichtem Ueberschwingen.
   - Umgesetzt (aus Phase 4 vorgezogen, `MeterPanel.qml`): Geraet rechts neben der Grundplatte, ein-/ausblendbar ueber
     »V A Ω« in der Werkzeugleiste (Ausblenden nicht, solange Leitungen an den Buchsen stecken; Buchsen nur

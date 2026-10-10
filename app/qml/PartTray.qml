@@ -65,9 +65,9 @@ Rectangle {
     Grid {
         id: partGrid
         visible: !tray.showModules
-        anchors { top: heading.bottom; topMargin: 10; left: parent.left; leftMargin: 8 }
+        anchors { top: heading.bottom; topMargin: 6; left: parent.left; leftMargin: 8 }
         columns: 2
-        spacing: 6
+        spacing: 4
 
         Repeater {
             model: tray.parts
@@ -76,7 +76,7 @@ Rectangle {
                 required property var modelData
                 objectName: "tray_" + modelData.type
                 width: 92
-                height: 54
+                height: 44 // kompakt: alle Bauteile passen auch auf Tablets
                 radius: 8
                 readonly property bool locked: modelData.locked === true
                 color: locked ? "#8E9AA8" : (drag.active ? Theme.solderAmber : "#E9D7B0")
@@ -89,19 +89,21 @@ Rectangle {
                     type: entry.modelData.type
                     stroke: entry.locked ? "#3E4955" : Theme.navy
                     anchors.horizontalCenter: parent.horizontalCenter
-                    y: 5
-                    width: 52
-                    height: 22
+                    y: 2
+                    width: 46
+                    height: 18
                 }
                 Label {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     anchors.margins: 3
-                    height: 26
+                    height: 22
                     text: Texts.partName(entry.modelData.type)
                     color: entry.locked ? "#26313C" : Theme.navy
                     font.pixelSize: Math.round((12) * Theme.fontScale)
+                    fontSizeMode: Text.Fit
+                    minimumPixelSize: 9
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -142,9 +144,9 @@ Rectangle {
     // Modulfach: Module auf ein Feld der Modulleiste ziehen (erster Anschluss liegt dort)
     Grid {
         visible: tray.showModules
-        anchors { top: heading.bottom; topMargin: 10; left: parent.left; leftMargin: 8 }
+        anchors { top: heading.bottom; topMargin: 6; left: parent.left; leftMargin: 8 }
         columns: 2
-        spacing: 6
+        spacing: 4
         Repeater {
             model: tray.modules
             delegate: Rectangle {
@@ -152,7 +154,7 @@ Rectangle {
                 required property var modelData
                 objectName: "trayModule_" + modelData.type
                 width: 92
-                height: 54
+                height: 44 // kompakt: alle Bauteile passen auch auf Tablets
                 radius: 8
                 readonly property bool locked: modelData.locked === true
                 color: locked ? "#8E9AA8" : (modDrag.active ? Theme.solderAmber : "#D8CCE8")
@@ -162,16 +164,18 @@ Rectangle {
                     type: modEntry.modelData.type
                     stroke: modEntry.locked ? "#3E4955" : Theme.navy
                     anchors.horizontalCenter: parent.horizontalCenter
-                    y: 5
-                    width: 52
-                    height: 22
+                    y: 2
+                    width: 46
+                    height: 18
                 }
                 Label {
                     anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 3 }
-                    height: 26
+                    height: 22
                     text: Texts.moduleName(modEntry.modelData.type)
                     color: modEntry.locked ? "#26313C" : Theme.navy
                     font.pixelSize: Math.round((12) * Theme.fontScale)
+                    fontSizeMode: Text.Fit
+                    minimumPixelSize: 9
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
