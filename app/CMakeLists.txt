@@ -49,8 +49,12 @@ set_target_properties(volta_app PROPERTIES
     OUTPUT_NAME "${VOLTA_EDITION}"
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
-    QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android"
-    QT_ANDROID_MIN_SDK_VERSION 26)
+    QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android" # eigenes Manifest: keine Berechtigungen
+    QT_ANDROID_PACKAGE_NAME "com.dcsoftwareengineering.${VOLTA_EDITION}"
+    QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
+    QT_ANDROID_VERSION_CODE 1
+    QT_ANDROID_MIN_SDK_VERSION 26
+    QT_ANDROID_TARGET_SDK_VERSION 36)
 
 # Inhaltspakete als Ressource (:/content): auf Android Pflicht (kein Dateisystem neben der App), auf dem Desktop
 # abschaltbar, damit Inhalte waehrend der Entwicklung ohne Neubau aus dem Quellbaum kommen

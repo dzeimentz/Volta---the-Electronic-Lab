@@ -48,7 +48,13 @@ def main() -> int:
     # Pillow verkleinert selbst; fuer kleine Groessen die von Qt gerenderten (schaerferen) Bilder verwenden
     frames = [Image.open(ICONS / f"volta_{s}.png").convert("RGBA") for s in ICO_SIZES]
     base.save(ICONS / "volta.ico", sizes=[(s, s) for s in ICO_SIZES], append_images=frames)
-    print(f"Symbole erzeugt in {ICONS}")
+    # Android-Startsymbole (packaging/android/res/mipmap-*/ic_launcher.png)
+    big = Image.open(ICONS / "volta_1024.png").convert("RGBA")
+    for name, size in {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}.items():
+        target = ROOT / "packaging" / "android" / "res" / f"mipmap-{name}"
+        target.mkdir(parents=True, exist_ok=True)
+        big.resize((size, size), Image.LANCZOS).save(target / "ic_launcher.png")
+    print(f"Symbole erzeugt in {ICONS} und packaging/android/res")
     return 0
 
 
