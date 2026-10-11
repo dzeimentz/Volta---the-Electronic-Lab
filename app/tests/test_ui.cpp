@@ -1172,6 +1172,20 @@ private slots:
         m_lab->clearBoard();
     }
 
+    // Lang gestecktes Bauteil (drei Felder): in der Mitte greifen verschiebt das Bauteil, statt eine Leitung zu ziehen
+    void longPartCanBeGrabbed() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, true)); // B3-B5
+        QTRY_VERIFY(item(QStringLiteral("part_R1")) != nullptr);
+        QTest::qWait(100);
+        const int wires = m_lab->wires().size();
+        drag(centerOf(item(QStringLiteral("field_B4"))), centerOf(item(QStringLiteral("field_D4"))));
+        QTRY_COMPARE(m_lab->parts().first().toMap().value(QStringLiteral("start")).toString(), QStringLiteral("D3"));
+        QCOMPARE(m_lab->wires().size(), wires); // keine Leitung
+        m_lab->clearBoard();
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

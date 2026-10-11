@@ -100,6 +100,9 @@ Rectangle {
     DragHandler {
         id: wireDrag
         target: null
+        // liegt ein Bauteil auf dem Feld (lang gesteckt: Mitte ueber dem mittleren Feld), gehoert der Griff dem
+        // Bauteil: das Feld darf ihn keinem anderen Handler wegnehmen
+        grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.ApprovesTakeOverByAnything
         onCentroidChanged: if (active) { root.lastScenePos = centroid.scenePosition; root.wireDragUpdated(root.lastScenePos) }
         onActiveChanged: if (!active) root.wireDragFinished(root.lastScenePos)
     }
