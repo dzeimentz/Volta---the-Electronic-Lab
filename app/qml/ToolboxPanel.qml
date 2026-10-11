@@ -94,12 +94,14 @@ Drawer {
         TabBar {
             id: tabs
             objectName: "toolboxTabs"
+            clip: true
             width: parent.width
-            TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
-            TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
-            TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
-            TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
-            TabButton { objectName: "tabCheck"; text: qsTr("Fehlersuche"); height: Theme.control; leftPadding: 4; rightPadding: 4 }
+            TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            TabButton { objectName: "tabCheck"; text: qsTr("Fehlersuche"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            TabButton { objectName: "tabParts"; text: qsTr("Teileliste"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
         }
 
         StackLayout {
@@ -414,6 +416,13 @@ Drawer {
                 controller: box.controller
                 onCheckResults: (list) => box.checkResults(list)
                 onFindingSelected: (anchors, partId) => box.findingSelected(anchors, partId)
+            }
+
+            // ------------------------------------------------------------ Teileliste mit Aufbaukarte (PDF)
+            PartsListPanel {
+                id: partsList
+                objectName: "partsList"
+                controller: box.controller
             }
         }
     }

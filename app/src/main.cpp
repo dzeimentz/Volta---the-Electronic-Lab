@@ -302,6 +302,24 @@ int main(int argc, char* argv[]) {
 
     // Entwicklerhilfe: VOLTA_DEMO_TOOLBOX=0|1|2|3|4 oeffnet den Werkzeugkasten (Farbcode, E-Reihen, Lexikon, Rechner,
     // Fehlersuche); bei 4 mit einem fehlerhaften Aufbau (LED ohne Vorwiderstand, loser Widerstand), schon geprueft
+    // VOLTA_DEMO_TOOLBOX=5: Teileliste zum Experiment VOLTA_DEMO_EXP (Standard volta1.4.4); mit VOLTA_DEMO_CARD=<datei.pdf>
+    // wird die Aufbaukarte ohne Dateiauswahl geschrieben (Sichtpruefung des PDF)
+    if (qEnvironmentVariable("VOLTA_DEMO_TOOLBOX") == QStringLiteral("5"))
+        QTimer::singleShot(300, &lab, [&lab, &engine] {
+            lab.setUnlockAll(true);
+            lab.startExperiment(qEnvironmentVariable("VOLTA_DEMO_EXP", QStringLiteral("volta1.4.4")));
+            const QString card = qEnvironmentVariable("VOLTA_DEMO_CARD");
+            if (card.isEmpty()) return;
+            QTimer::singleShot(900, &lab, [&lab, &engine, card] {
+                const auto roots = engine.rootObjects();
+                QObject* panel = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("partsList"));
+                if (!panel) return;
+                QMetaObject::invokeMethod(panel, "refresh");
+                QVariant texts;
+                QMetaObject::invokeMethod(panel, "cardTexts", Q_RETURN_ARG(QVariant, texts));
+                qInfo() << "Aufbaukarte" << card << lab.exportBuildCard(QUrl::fromLocalFile(card), texts.toMap());
+            });
+        });
     if (qEnvironmentVariable("VOLTA_DEMO_TOOLBOX") == QStringLiteral("4"))
         QTimer::singleShot(300, &lab, [&lab] {
             lab.setUnlockAll(true);

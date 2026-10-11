@@ -74,7 +74,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
   insgesamt 61. ContentSmokeTest mit Gegenprobe fuer Sensor-Experimente.
 - Fehlersuche im Werkzeugkasten: erledigt (alle Vorlagen ohne Befund; dabei Vorlage 4.4 um einen Basiswiderstand
   ergaenzt, der Fotowiderstand war mit Taschenlampe ueberlastet).
-- Offen: Teileliste.
+- Teileliste mit Aufbaukarte (PDF) im Werkzeugkasten: erledigt.
 
 ## Phase 3 – Stand
 - Automatisches Speichern des Laborstands (Aufbau, Experiment mit Ablauf), Weitermachen nach Neustart: erledigt.
@@ -85,7 +85,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
   Praesentationsmodus folgen.
 - Paketgroesse: APK 68,9 MB (Ziel < 80 MB), ungenutzte Qt-Teile werden nicht ausgeliefert (docs/platforms.md).
 - Offen: Maskottchen Tick (docs/maskottchen-tick.md) in Hilfe, Startbildschirm, Hilfestufen, Fehlersuche und
-  Erfolg; Teileliste/Aufbaukarte; Hilfe/Readme; Barrierefreiheit; Fotoimport, Praesentationsmodus; LU-Texte; Store.
+  Erfolg (erledigt bis auf Hilfe); Teileliste/Aufbaukarte (erledigt); Hilfe/Readme; Barrierefreiheit; Fotoimport, Praesentationsmodus; LU-Texte; Store.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

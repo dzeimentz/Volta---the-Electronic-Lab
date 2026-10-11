@@ -21,6 +21,7 @@ add_library(volta_model STATIC
     src/model/netlist_builder.cpp
     src/model/success.cpp
     src/model/build_guide.cpp
+    src/model/parts_list.cpp
     src/model/tone_synth.cpp
     src/model/environment.cpp
     src/model/recorder.cpp
@@ -32,6 +33,7 @@ add_library(volta_model STATIC
     src/services/session_store.cpp
     src/services/profile_store.cpp
     src/services/profile_transfer.cpp
+    src/services/build_card.cpp
     src/sim/simulation_bridge.cpp
     src/model/lab_session.cpp
     src/model/commands/board_command.cpp
@@ -130,6 +132,7 @@ qt_add_qml_module(volta_ui
         qml/FormulaCalculator.qml
         qml/Tick.qml
         qml/TickSays.qml
+        qml/PartsListPanel.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

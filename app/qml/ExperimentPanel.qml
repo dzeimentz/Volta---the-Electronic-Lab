@@ -10,42 +10,7 @@ Rectangle {
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
 
     // Text eines Schritts der Aufbauhilfe (LabController::guideStep)
-    function guideText(s) {
-        if (!s || s.kind === undefined) return ""
-        const pinField = (name) => {
-            const list = s.pins || []
-            for (let i = 0; i < list.length; ++i) if (list[i].name === name) return list[i].field
-            return ""
-        }
-        switch (s.kind) {
-        case "fertig":
-            return qsTr("Jetzt ist alles an seinem Platz. Probiere aus, was passiert!")
-        case "hauptschalter":
-            return qsTr("Schalte den Hauptschalter der Batterie ein.")
-        case "modul":
-            return qsTr("Setze das %1 ab Feld %2 in die Modulleiste.").arg(Texts.moduleName(s.type)).arg(s.labels[0])
-        case "leitung":
-            return qsTr("Ziehe eine Leitung von %1 nach %2.").arg(s.labels[0]).arg(s.labels[1])
-        case "bauteil": {
-            const fields = (s.pins || []).map(p => p.field)
-            let t = fields.length === 3
-                ? qsTr("Stecke %1 auf %2, %3 und %4.").arg(Texts.partName(s.type)).arg(fields[0]).arg(fields[1]).arg(fields[2])
-                : fields.length === 4
-                ? qsTr("Stecke %1 auf %2, %3, %4 und %5.").arg(Texts.partName(s.type)).arg(fields[0]).arg(fields[1]).arg(fields[2]).arg(fields[3])
-                : qsTr("Stecke %1 auf %2 und %3.").arg(Texts.partName(s.type)).arg(fields[0]).arg(fields[fields.length - 1])
-            if (s.type.startsWith("led_")) t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
-            else if (s.type.startsWith("diode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
-            else if (s.type === "summer") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))
-            else if (s.type === "transistor_npn") t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
-            else if (s.type === "wechselschalter") t += " " + qsTr("Die Mitte kommt an %1.").arg(pinField("mitte"))
-            if (s.type === "widerstand" && s.value > 0) t += " " + qsTr("Wert: %1.").arg(Texts.ohm(s.value))
-            if (s.type === "gluehlampe" && s.value > 0)
-                t += " " + qsTr("Nennspannung: %1 V.").arg(Number(s.value).toLocaleString(Qt.locale(), "f", s.value % 1 === 0 ? 0 : 1))
-            return t
-        }
-        }
-        return ""
-    }
+    function guideText(s) { return Texts.stepText(s) }
     property bool collapsed: false // eingeklappt: nur der Knopf zum Aufklappen (mehr Platz fuer die Grundplatte)
 
     color: "#FFFDF7"

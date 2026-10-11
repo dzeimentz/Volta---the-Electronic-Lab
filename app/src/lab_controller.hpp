@@ -12,6 +12,7 @@
 
 #include <memory>
 
+#include "model/build_guide.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "model/recorder.hpp"
@@ -328,6 +329,15 @@ public:
     Q_INVOKABLE bool removeModule(const QString& id);
     // Fehlersuche (Werkzeugkasten): [{kind, part, anchors[], text}] - Fragen, wichtigste zuerst
     Q_INVOKABLE QVariantList checkCircuit() const;
+    // Teileliste und Aufbaukarte (Werkzeugkasten): im Experiment die Vorlage, im freien Labor der eigene Aufbau.
+    // partsList: kind ("modul", "bauteil", "leitung", "werkzeug", "batterie"), type, value, count, ids.
+    Q_INVOKABLE QVariantList partsList() const;
+    // alle Aufbauschritte wie guideStep (ohne Hauptschalter), fuer die Karte
+    Q_INVOKABLE QVariantList buildSteps() const;
+    // Vorschlag fuer den Dateinamen, z. B. "Volta1-Aufbaukarte-1.4.pdf"
+    Q_INVOKABLE QString buildCardFileName() const;
+    // PDF schreiben; texts: Felder von services::BuildCardTexts (fertig uebersetzt), labels als Map
+    Q_INVOKABLE bool exportBuildCard(const QUrl& target, const QVariantMap& texts);
     // Muelleimer ohne Auswahl: alle Bauteile, Leitungen und Module abbauen (ein Befehl, rueckgaengig machbar)
     Q_INVOKABLE bool clearBoard();
     int boardColumns() const { return m_session->board().columns; }
@@ -356,6 +366,8 @@ public:
     bool guideActive() const { return m_guideActive; }
     void setGuideActive(bool on);
     QVariantMap guideStep() const;
+    QVariantMap stepMap(const model::GuideStep& s, const model::Board& board) const;
+    const model::Board& cardBoard() const; // Aufbau fuer Teileliste und Aufbaukarte
 
     model::LabSession& session() { return *m_session; }
     // Tonausgabe (main.cpp); ohne Dienst (Tests) bleibt es still

@@ -8,6 +8,7 @@
 #include "model/anchor.hpp"
 #include "model/board_json.hpp"
 #include "model/build_guide.hpp"
+#include "model/parts_list.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/formula.hpp"
 #include "model/qr_code.hpp"
@@ -441,6 +442,28 @@ private slots:
             on = now;
         }
         QVERIFY2(edges >= 4, qPrintable(QString::number(edges)));
+    }
+
+    // Teileliste: gleiche Bauteile mit gleichem Wert zusammengefasst, Module zuerst, Leitungen nach Farbe
+    void partsListGroups() {
+        model::Board b;
+        b.modules.push_back({"BL1", "blinkmodul", 1});
+        b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 1000.0});
+        b.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});
+        b.parts.push_back({"R2", "widerstand", {{"a", "C3"}, {"b", "C4"}}, 470.0});
+        b.parts.push_back({"R3", "widerstand", {{"a", "D3"}, {"b", "D4"}}, 1000.0});
+        b.wires.push_back({"L1", "P:+9V", "B3", "rot"});
+        b.wires.push_back({"L2", "C4", "P:0V", "schwarz"});
+        b.wires.push_back({"L3", "D4", "P:0V", "schwarz"});
+        const auto lines = model::partsList(b);
+        QCOMPARE(lines.size(), std::size_t(6));
+        QCOMPARE(lines[0].kind, model::PartsLine::Kind::Module);
+        QCOMPARE(lines[1].type, std::string("led_rot"));
+        QCOMPARE(lines[2].value, 470.0);
+        QCOMPARE(lines[3].count, 2);
+        QCOMPARE(lines[3].ids, (std::vector<std::string>{"R1", "R3"}));
+        QCOMPARE(lines[4].type, std::string("rot"));
+        QCOMPARE(lines[5].count, 2); // zwei schwarze Leitungen
     }
 
     // Aufbauhilfe: Schritte aus der Vorlage, erledigt ohne Reihenfolgezwang, Richtung ungepolter Bauteile egal

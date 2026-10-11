@@ -934,6 +934,40 @@ private slots:
         QVERIFY(restarted.parentPinLockSeconds() > 0); // Sperre bleibt ueber den Neustart
     }
 
+    // Teileliste im Werkzeugkasten: Zeilen zur Vorlage, Aufbaukarte als PDF; zerstoerende Versuche ohne Karte
+    void partsListAndBuildCard() {
+        m_settings->setUnlockAll(true);
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.4.4")));
+        QObject* box = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("toolbox"));
+        QVERIFY(box);
+        QMetaObject::invokeMethod(box, "open");
+        QTRY_VERIFY(box->property("opened").toBool());
+        box->findChild<QObject*>(QStringLiteral("toolboxTabs"))->setProperty("currentIndex", 5);
+        QTRY_VERIFY(item(QStringLiteral("partsLine_0")) && item(QStringLiteral("partsLine_0"))->isVisible());
+        QObject* panel = box->findChild<QObject*>(QStringLiteral("partsList"));
+        QVERIFY(panel);
+        QVariant texts;
+        QVERIFY(QMetaObject::invokeMethod(panel, "cardTexts", Q_RETURN_ARG(QVariant, texts)));
+        const QVariantMap map = texts.toMap();
+        QVERIFY(map.value(QStringLiteral("parts")).toStringList().size() >= 5);
+        QVERIFY(map.value(QStringLiteral("steps")).toStringList().first().contains(QStringLiteral("B1")));
+        QTemporaryDir dir;
+        const QString file = dir.filePath(QStringLiteral("karte.pdf"));
+        QVERIFY(m_lab->exportBuildCard(QUrl::fromLocalFile(file), map));
+        QFile f(file);
+        QVERIFY(f.open(QIODevice::ReadOnly));
+        QVERIFY(f.read(5) == "%PDF-");
+        QVERIFY(f.size() > 5000);
+        f.close();
+        QCOMPARE(m_lab->buildCardFileName(), QStringLiteral("Volta1-Aufbaukarte-4.4.pdf"));
+        // »Nur in der App!«: Hinweis statt Knopf
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.2.4")));
+        QTRY_VERIFY(item(QStringLiteral("partsAppOnly")) && item(QStringLiteral("partsAppOnly"))->isVisible());
+        QVERIFY(!item(QStringLiteral("saveBuildCard"))->isVisible());
+        QMetaObject::invokeMethod(box, "close");
+        QTRY_VERIFY(!box->property("opened").toBool());
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

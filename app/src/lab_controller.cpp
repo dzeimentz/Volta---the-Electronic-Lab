@@ -5,6 +5,7 @@
 #include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QBuffer>
 #include <QFile>
 #include <QSysInfo>
 
@@ -18,6 +19,8 @@
 #include "model/qr_code.hpp"
 #include "services/profile_transfer.hpp"
 #include "model/build_guide.hpp"
+#include "model/parts_list.hpp"
+#include "services/build_card.hpp"
 #include "model/formula.hpp"
 #include "services/audio_service.hpp"
 #include "model/meter_display.hpp"
@@ -1024,18 +1027,9 @@ QString anchorLabel(const std::string& a) {
 }
 } // namespace
 
-QVariantMap LabController::guideStep() const {
+// Beschreibung eines Aufbauschritts fuer die Oberflaeche; Modulanschluesse mit Namen aus den Modulen von board
+QVariantMap LabController::stepMap(const model::GuideStep& s, const model::Board& board) const {
     QVariantMap m;
-    if (!m_guideActive || m_freeLab || m_experiment.id.isEmpty()) return m;
-    const auto steps = model::buildGuide(m_experiment.templateBoard, m_session->catalog());
-    const std::size_t i = model::currentStep(steps, m_session->board(), m_session->catalog());
-    m.insert(QStringLiteral("index"), static_cast<int>(i));
-    m.insert(QStringLiteral("count"), static_cast<int>(steps.size()));
-    if (i >= steps.size()) {
-        m.insert(QStringLiteral("kind"), QStringLiteral("fertig"));
-        return m;
-    }
-    const model::GuideStep& s = steps[i];
     static const char* kinds[] = {"modul", "bauteil", "leitung", "hauptschalter"};
     m.insert(QStringLiteral("kind"), QString::fromLatin1(kinds[static_cast<int>(s.kind)]));
     m.insert(QStringLiteral("id"), qs(s.id));
@@ -1055,12 +1049,12 @@ QVariantMap LabController::guideStep() const {
         // Feld der Modulleiste: Anschlussname des Moduls dazu, z. B. "M3 (ein)"
         if (t.rfind("M:", 0) == 0) {
             const int n = std::atoi(t.c_str() + 2);
-            for (const auto& mod : m_session->board().modules) {
+            for (const auto& mod : board.modules) {
                 const model::ModuleEntry* e = m_session->catalog().module(mod.type);
                 if (!e || n < mod.slot || n >= mod.slot + static_cast<int>(e->pins.size())) continue;
                 const std::string& pin = e->pins[static_cast<std::size_t>(n - mod.slot)];
                 label += QStringLiteral(" (%1)").arg(pin == "plus" ? QStringLiteral("+")
-                                                     : pin == "minus" ? QStringLiteral("−") : qs(pin));
+                                                     : pin == "minus" ? QStringLiteral("\u2212") : qs(pin));
             }
         }
         labels << label;
@@ -1068,6 +1062,82 @@ QVariantMap LabController::guideStep() const {
     m.insert(QStringLiteral("targets"), targets);
     m.insert(QStringLiteral("labels"), labels);
     return m;
+}
+
+QVariantMap LabController::guideStep() const {
+    if (!m_guideActive || m_freeLab || m_experiment.id.isEmpty()) return {};
+    const auto steps = model::buildGuide(m_experiment.templateBoard, m_session->catalog());
+    const std::size_t i = model::currentStep(steps, m_session->board(), m_session->catalog());
+    QVariantMap m = i < steps.size() ? stepMap(steps[i], m_session->board())
+                                     : QVariantMap{{QStringLiteral("kind"), QStringLiteral("fertig")}};
+    m.insert(QStringLiteral("index"), static_cast<int>(i));
+    m.insert(QStringLiteral("count"), static_cast<int>(steps.size()));
+    return m;
+}
+
+const model::Board& LabController::cardBoard() const {
+    return (m_freeLab || m_experiment.id.isEmpty()) ? m_session->board() : m_experiment.templateBoard;
+}
+
+QVariantList LabController::partsList() const {
+    const model::Board& board = cardBoard();
+    QVariantList out;
+    static const char* kinds[] = {"modul", "bauteil", "leitung", "werkzeug"};
+    for (const auto& l : model::partsList(board)) {
+        QStringList ids;
+        for (const auto& id : l.ids) ids << qs(id);
+        out << QVariantMap{{QStringLiteral("kind"), QString::fromLatin1(kinds[static_cast<int>(l.kind)])},
+                           {QStringLiteral("type"), qs(l.type)},
+                           {QStringLiteral("value"), l.value},
+                           {QStringLiteral("count"), l.count},
+                           {QStringLiteral("ids"), ids}};
+    }
+    // Batterie mit der eingestellten Spannung (1,5 V je Zelle)
+    out << QVariantMap{{QStringLiteral("kind"), QStringLiteral("batterie")},
+                       {QStringLiteral("type"), QStringLiteral("batterie")},
+                       {QStringLiteral("value"), board.desk.cells * 1.5},
+                       {QStringLiteral("count"), 1},
+                       {QStringLiteral("ids"), QStringList{}}};
+    return out;
+}
+
+QVariantList LabController::buildSteps() const {
+    const model::Board& board = cardBoard();
+    QVariantList out;
+    for (const auto& s : model::buildGuide(board, m_session->catalog()))
+        if (s.kind != model::GuideStep::Kind::MainSwitch) out << stepMap(s, board);
+    return out;
+}
+
+QString LabController::buildCardFileName() const {
+    if (m_freeLab || m_experiment.id.isEmpty()) return QStringLiteral("Volta1-Aufbaukarte-eigener-Aufbau.pdf");
+    QString id = m_experiment.id;
+    if (const qsizetype dot = id.indexOf(QLatin1Char('.')); dot >= 0) id = id.mid(dot + 1); // "volta1.1.4" -> "1.4"
+    return QStringLiteral("Volta1-Aufbaukarte-%1.pdf").arg(id);
+}
+
+bool LabController::exportBuildCard(const QUrl& target, const QVariantMap& texts) {
+    services::BuildCardTexts t;
+    t.brand = texts.value(QStringLiteral("brand")).toString();
+    t.title = texts.value(QStringLiteral("title")).toString();
+    t.subtitle = texts.value(QStringLiteral("subtitle")).toString();
+    t.question = texts.value(QStringLiteral("question")).toString();
+    t.warning = texts.value(QStringLiteral("warning")).toString();
+    t.boardHeading = texts.value(QStringLiteral("boardHeading")).toString();
+    t.partsHeading = texts.value(QStringLiteral("partsHeading")).toString();
+    t.stepsHeading = texts.value(QStringLiteral("stepsHeading")).toString();
+    t.parts = texts.value(QStringLiteral("parts")).toStringList();
+    t.steps = texts.value(QStringLiteral("steps")).toStringList();
+    t.footer = texts.value(QStringLiteral("footer")).toString();
+    const QVariantMap labels = texts.value(QStringLiteral("labels")).toMap();
+    for (auto it = labels.cbegin(); it != labels.cend(); ++it) t.labels.insert(it.key(), it.value().toString());
+    // erst vollstaendig im Speicher erzeugen, dann schreiben: keine halbe Datei bei einem Fehler
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    if (!services::writeBuildCardPdf(buffer, cardBoard(), m_session->catalog(), t)) return false;
+    QFile f(localOrContent(target)); // content://-Adressen (Android) schreibt QFile direkt
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) return false;
+    return f.write(buffer.data()) == buffer.data().size();
 }
 
 QVariantMap LabController::moduleState(const QString& id) const {

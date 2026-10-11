@@ -174,6 +174,13 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Ring fuer Ring mit Farbname und Farbfeld, Eingabe wie »4,7k«/»4k7«/»2M2«), E-Reihen E6/E12/E24 als
   logarithmischer Zahlenstrahl mit naechstem Normwert und Abweichung, Bauteillexikon mit Normsymbolen.
   »Uebernehmen« auf den ausgewaehlten Widerstand. Formelrechner, Zeitschreiber, Fehlersuche, Teileliste folgen.
+- Teileliste umgesetzt (Reiter im Werkzeugkasten, `PartsListPanel.qml`, Modell `model/parts_list`, PDF
+  `services/build_card`): im Experiment die Vorlage, im freien Labor der eigene Aufbau; gleiche Bauteile mit gleichem
+  Wert zusammengefasst (mit Kennungen), Leitungen nach Farbe (Farbstreifen plus Farbname), Werkzeuge, Batterie.
+  »Aufbaukarte speichern (PDF)« schreibt A4 mit Forscherfrage, Zeichnung der Grundplatte (Bauteile mit Kennung und
+  Wert, Polaritaet als Zeichen +/−/B/C/E, Leitungen in ihrer Farbe), Teileliste zum Abhaken, nummerierten Schritten
+  (wie die Schritt-fuer-Schritt-Hilfe, mit Leitungsfarbe) und Sicherheitshinweis. Zerstoerende Versuche (»Nur in der
+  App!«) bekommen keine Karte. Die Reiterleiste ist wischbar.
 - Fehlersuche umgesetzt (Reiter im Werkzeugkasten, ab Stufe 2; Modell `model/circuit_check`): »Schaltung pruefen«
   listet Auffaelligkeiten als Fragen mit Nummer, dieselbe Nummer erscheint als Marke an der Stelle auf der
   Grundplatte; Antippen hebt die Felder hervor bzw. waehlt das Bauteil. Am Aufbau: Kurzschluss ueber Leitungen,
