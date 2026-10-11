@@ -34,6 +34,7 @@ add_library(volta_model STATIC
     src/services/profile_store.cpp
     src/services/profile_transfer.cpp
     src/services/build_card.cpp
+    src/services/task_code.cpp
     src/sim/simulation_bridge.cpp
     src/model/lab_session.cpp
     src/model/commands/board_command.cpp
@@ -135,6 +136,10 @@ qt_add_qml_module(volta_ui
         qml/PartsListPanel.qml
         qml/HelpDialog.qml
         qml/TroublePopup.qml
+        qml/QrCanvas.qml
+        qml/TaskQrDialog.qml
+        qml/TaskDialog.qml
+        qml/HelpIcon.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

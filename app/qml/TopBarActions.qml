@@ -121,16 +121,7 @@ Row {
             radius: 6
             color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
         }
-        contentItem: Item {
-            Rectangle {
-                anchors.centerIn: parent
-                width: 24; height: 24; radius: 12
-                color: "transparent"
-                border.color: "white"
-                border.width: 2
-                Label { anchors.centerIn: parent; text: "?"; color: "white"; font.pixelSize: 15; font.bold: true }
-            }
-        }
+        contentItem: Item { HelpIcon { anchors.centerIn: parent; size: 28 } }
     }
     ToolButton {
         objectName: "infoButton"

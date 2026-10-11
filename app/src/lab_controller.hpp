@@ -23,6 +23,7 @@
 #include "services/profile_store.hpp"
 #include "services/progress_store.hpp"
 #include "services/session_store.hpp"
+#include "services/task_code.hpp"
 
 namespace volta {
 namespace services {
@@ -66,6 +67,7 @@ class LabController : public QObject {
     // Messgeraet neben der Grundplatte 10, im Pult 12 - die Grundplatte springt so nicht bei jedem Einblenden
     Q_PROPERTY(bool autoColumns READ autoColumns WRITE setAutoColumns NOTIFY columnsModeChanged)
     Q_PROPERTY(bool meterDocked READ meterDocked WRITE setMeterDocked NOTIFY columnsModeChanged)
+    Q_PROPERTY(QVariantMap task READ task NOTIFY taskChanged) // aktuelle Aufgabe (leer: keine)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -165,6 +167,15 @@ public:
     // Fortschrittscode als Link (fuer den QR-Code) und QR-Raster {size, cells: "0101..."} eines Textes
     Q_INVOKABLE QString progressLink() const;
     Q_INVOKABLE QVariantMap qrCode(const QString& text) const;
+    // Aufgaben der Lehrkraft (services/task_code): nur Hinweg, per QR-Code (Link) oder Code zum Eintippen.
+    // ids: volle Kennungen ("volta1.2.4"); withBoard: der aktuelle Aufbau geht als eigener Aufbau mit.
+    Q_INVOKABLE QString makeTaskLink(const QStringList& ids, const QString& text, bool withBoard, const QString& title) const;
+    Q_INVOKABLE QString makeTaskCode(const QStringList& ids) const; // leer, wenn es nicht in einen Code passt
+    // Aufgabe lesen (Link oder Code): ok, experiments [{id, title, stage, done}], title, text, hasBoard
+    Q_INVOKABLE QVariantMap readTask(const QString& linkOrCode) const;
+    Q_INVOKABLE bool acceptTask(const QString& linkOrCode); // wird zur aktuellen Aufgabe (je Profil gespeichert)
+    Q_INVOKABLE bool startTaskBoard();                       // eigener Aufbau der Aufgabe im freien Labor
+    Q_INVOKABLE void clearTask();
     // erledigte Experimente aus einem Link (zur Rueckfrage) bzw. uebernehmen (Anzahl neu erledigter)
     Q_INVOKABLE QStringList progressFromLink(const QString& link) const;
     Q_INVOKABLE int importProgressLink(const QString& link);
@@ -247,6 +258,7 @@ public:
     void setPot2(double v) { setPot(2, v); }
     bool deskSwitch() const { return m_session->board().desk.switchClosed; }
     bool meterVisible() const { return m_session->board().desk.meterVisible; }
+    QVariantMap task() const; // aktuelle Aufgabe wie readTask (leer: keine)
     bool autoColumns() const { return m_autoColumns; }
     void setAutoColumns(bool on);
     bool meterDocked() const { return m_meterDocked; }
@@ -407,6 +419,8 @@ signals:
     void profilesChanged();
     // Volta wurde mit einem Fortschritts-Link geoeffnet (QR-Code ueber die Kamera-App): Rueckfrage in der Oberflaeche
     void progressLinkReceived(const QString& link);
+    void taskLinkReceived(const QString& link);
+    void taskChanged();
 
 public slots:
     // Link-Handler fuer das Schema volta1 (QDesktopServices::setUrlHandler in main.cpp)
@@ -469,6 +483,9 @@ private:
     double m_sinceNotifyS = 0.0;
     QSet<QString> m_destroyedSeen; // bereits gemeldete kaputte Bauteile (geheilt: wieder meldbar)
     void checkDestroyed();
+    QString m_taskLink; // aktuelle Aufgabe als Link (aufgabe.txt im Profil)
+    QVariantMap taskMap(const services::task::Task& t) const;
+    void loadTask();
     std::vector<model::SynthVoice> buzzerVoices() const;
     double m_meterRangeV = 30.0; // zuletzt gelieferter Analogbereich (fuer die Skala)
 };

@@ -50,6 +50,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="volta1" android:host="fortschritt" />
+                <!-- Aufgabe der Lehrkraft: volta1://aufgabe?d=... -->
+                <data android:scheme="volta1" android:host="aufgabe" />
             </intent-filter>
 
           <meta-data

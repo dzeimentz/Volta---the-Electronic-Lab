@@ -329,3 +329,17 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
 - Tastatur (Desktop): Strg+Z/Strg+Y/Entf, Escape schliesst Fenster; Knoepfe per Tab erreichbar (Qt-Standard).
 - Offen: Rundgang mit TalkBack am Tablet (manuelle Pruefung), Schrift groesser als Stufe 3, Systemeinstellung
   »Animationen entfernen« von Android uebernehmen.
+
+## Aufgaben der Lehrkraft (10/2026)
+- Nur Hinweg (Lehrkraft -> Kinder), ohne Netz und ohne Kamera-Berechtigung: Die Kinder scannen mit der Kamera-App des
+  Geraets oder tippen einen Code ein. Format in `services/task_code`.
+- Lehrkraft (Elternbereich, PIN): »Aufgabe fuer die Klasse« - Experimente aus dem Lernpfad waehlen (bis 8, nach Stufen
+  aufklappbar) und/oder den aktuellen Aufbau aus dem Labor mitgeben (mit Titel), dazu ein freier Aufgabentext.
+  »QR-Code zeigen« fuellt das Fenster (Beamer): grosser QR-Code, daneben der Code zum Eintippen und der Inhalt.
+- Code zum Eintippen: bis 4 Experimente ohne Text und Aufbau, 8 Zeichen Crockford-Base32 mit Pruefziffer
+  (»2H31-0005«; O/0 und I/L/1 gleichwertig). Passt die Aufgabe in einen Code, enthaelt auch der QR-Code nur diesen
+  (`volta1://aufgabe?c=...`, grob und gut lesbar); sonst `volta1://aufgabe?d=` mit gepacktem JSON (Aufbau, Text).
+- Kind: Kachel »Aufgabe« auf der Startseite (Code eingeben bzw. aktuelle Aufgabe), Link aus der Kamera-App oeffnet
+  das Aufgabenfenster direkt (mit Profilen erst nach der Profilwahl). Tick zeigt Text und Experimente; Antippen startet
+  sie (auch in noch gesperrten Stufen), ein eigener Aufbau oeffnet im freien Labor. Die Aufgabe bleibt je Profil
+  gespeichert (`aufgabe.txt`), bis eine neue kommt oder sie entfernt wird.

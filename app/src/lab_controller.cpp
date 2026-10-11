@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QBuffer>
 #include <QFile>
+#include <QSaveFile>
 #include <QSysInfo>
 
 #include <QLocale>
@@ -243,6 +244,7 @@ void LabController::activateDataDir(const QString& dir, bool saveFirst) {
     useProgressFile(file("fortschritt.json"));
     useJournalFile(file("forscherheft.json"));
     useSessionFile(file("laborstand.json"));
+    loadTask();
     // Labor leeren: das neue Profil beginnt auf der Startseite (sein Stand kommt mit resumeSession)
     m_freeLab = false;
     m_flow.stop();
@@ -363,7 +365,115 @@ int LabController::importProgressLink(const QString& link) {
 }
 
 void LabController::handleUrl(const QUrl& url) {
-    if (url.scheme() == QLatin1String(services::transfer::kScheme)) emit progressLinkReceived(url.toString());
+    if (url.scheme() != QLatin1String(services::transfer::kScheme)) return;
+    if (url.host() == QLatin1String("aufgabe")) emit taskLinkReceived(url.toString());
+    else emit progressLinkReceived(url.toString());
+}
+
+// ------------------------------------------------------------------ Aufgaben der Lehrkraft
+
+namespace {
+services::task::Task makeTask(const QString& band, const QStringList& ids) {
+    services::task::Task t;
+    t.band = band;
+    const QString prefix = band + QLatin1Char('.');
+    for (const QString& id : ids)
+        if (id.startsWith(prefix)) t.experiments << id.mid(prefix.size());
+    return t;
+}
+} // namespace
+
+QString LabController::makeTaskLink(const QStringList& ids, const QString& text, bool withBoard, const QString& title) const {
+    services::task::Task t = makeTask(band(), ids);
+    t.text = text.trimmed();
+    if (withBoard && !m_session->board().parts.empty()) {
+        model::Board b = m_session->board();
+        b.desk.mainSwitch = false;
+        t.board = b;
+        t.title = title.trimmed();
+    }
+    if (t.experiments.isEmpty() && !t.board) return {};
+    return services::task::toLink(t);
+}
+
+QString LabController::makeTaskCode(const QStringList& ids) const {
+    return services::task::toCode(makeTask(band(), ids));
+}
+
+QVariantMap LabController::taskMap(const services::task::Task& t) const {
+    QVariantList exps;
+    for (const QString& s : t.experiments) {
+        const QString id = t.band + QLatin1Char('.') + s;
+        for (const QVariant& v : m_experimentList) {
+            QVariantMap e = v.toMap();
+            if (e.value(QStringLiteral("id")).toString() != id) continue;
+            e.insert(QStringLiteral("done"), m_progress.isDone(id));
+            exps << e;
+        }
+    }
+    const bool hasBoard = t.board.has_value();
+    return {{QStringLiteral("ok"), t.band == band() && (!exps.isEmpty() || hasBoard)},
+            {QStringLiteral("otherBand"), t.band != band()},
+            {QStringLiteral("experiments"), exps},
+            {QStringLiteral("title"), t.title},
+            {QStringLiteral("text"), t.text},
+            {QStringLiteral("hasBoard"), hasBoard}};
+}
+
+QVariantMap LabController::readTask(const QString& linkOrCode) const {
+    services::task::Task t;
+    if (!services::task::parse(linkOrCode, t)) return {{QStringLiteral("ok"), false}};
+    return taskMap(t);
+}
+
+QVariantMap LabController::task() const {
+    if (m_taskLink.isEmpty()) return {};
+    return readTask(m_taskLink);
+}
+
+bool LabController::acceptTask(const QString& linkOrCode) {
+    services::task::Task t;
+    if (!services::task::parse(linkOrCode, t) || !taskMap(t).value(QStringLiteral("ok")).toBool()) return false;
+    m_taskLink = services::task::toLink(t); // Code wird als Link abgelegt
+    if (!m_dataDir.isEmpty()) {
+        QSaveFile f(m_dataDir + QStringLiteral("/aufgabe.txt"));
+        if (f.open(QIODevice::WriteOnly)) {
+            f.write(m_taskLink.toUtf8());
+            f.commit();
+        }
+    }
+    emit taskChanged();
+    return true;
+}
+
+void LabController::clearTask() {
+    m_taskLink.clear();
+    if (!m_dataDir.isEmpty()) QFile::remove(m_dataDir + QStringLiteral("/aufgabe.txt"));
+    emit taskChanged();
+}
+
+void LabController::loadTask() {
+    m_taskLink.clear();
+    if (!m_dataDir.isEmpty()) {
+        QFile f(m_dataDir + QStringLiteral("/aufgabe.txt"));
+        if (f.open(QIODevice::ReadOnly) && f.size() < 256 * 1024) m_taskLink = QString::fromUtf8(f.readAll()).trimmed();
+    }
+    emit taskChanged();
+}
+
+bool LabController::startTaskBoard() {
+    services::task::Task t;
+    if (m_taskLink.isEmpty() || !services::task::parse(m_taskLink, t) || !t.board) return false;
+    startFreeLab();
+    model::Board b = *t.board;
+    b.desk.mainSwitch = false;
+    m_session->loadBoard(b);
+    if (!t.title.isEmpty()) m_title = t.title;
+    emit experimentChanged();
+    emit deskChanged();
+    emit historyChanged();
+    emit boardChanged();
+    return true;
 }
 
 namespace {

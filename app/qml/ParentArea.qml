@@ -9,6 +9,7 @@ Popup {
     id: area
     required property var controller
     property var settings: null
+    signal taskQrRequested(string link, string code) // grosser QR-Code (liegt im Hauptfenster)
     readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
     readonly property bool soundManaged: managed !== null && managed.soundMode !== ""
     readonly property bool profilesManaged: managed !== null && managed.profiles >= 0
@@ -208,6 +209,97 @@ Popup {
                     text: qsTr("Tick zeigen")
                     font.pixelSize: Math.round(14 * Theme.fontScale)
                     color: "#1E2B38"
+                }
+            }
+
+            // ---- Aufgabe fuer die Klasse (nur Hinweg: QR-Code und Code zum Eintippen)
+            Heading { text: qsTr("Aufgabe für die Klasse") }
+            Body { text: qsTr("Wählen Sie Experimente aus dem Lernpfad und/oder geben Sie den Aufbau mit, der gerade im Labor steckt. Volta zeigt einen großen QR-Code für den Beamer; die Kinder scannen ihn mit der Kamera-App. Bis zu vier Experimente ohne Text und Aufbau passen auch in einen Code zum Eintippen. Es werden keine Daten übertragen außer der Aufgabe selbst.") }
+            Column {
+                id: taskPicker
+                width: parent.width
+                spacing: 2
+                property var chosen: []
+                property int openStage: -1
+                function toggle(id) {
+                    const list = chosen.slice()
+                    const i = list.indexOf(id)
+                    if (i >= 0) list.splice(i, 1)
+                    else if (list.length < 8) list.push(id)
+                    chosen = list
+                }
+                Repeater {
+                    model: area.controller.stages
+                    Column {
+                        id: stageBox
+                        required property var modelData
+                        width: taskPicker.width
+                        readonly property int picked: modelData.experiments.filter(e => taskPicker.chosen.indexOf(e.id) >= 0).length
+                        Button {
+                            objectName: "taskStage_" + stageBox.modelData.number
+                            width: parent.width
+                            height: Theme.control
+                            text: (taskPicker.openStage === stageBox.modelData.number ? "▾  " : "▸  ")
+                                  + qsTr("Stufe %1: %2").arg(stageBox.modelData.number).arg(stageBox.modelData.title)
+                                  + (stageBox.picked > 0 ? "  (" + stageBox.picked + ")" : "")
+                            onClicked: taskPicker.openStage = taskPicker.openStage === stageBox.modelData.number ? -1 : stageBox.modelData.number
+                        }
+                        Repeater {
+                            model: taskPicker.openStage === stageBox.modelData.number ? stageBox.modelData.experiments : []
+                            CheckBox {
+                                required property var modelData
+                                objectName: "taskPick_" + modelData.id
+                                leftPadding: 24
+                                height: Theme.control
+                                text: modelData.title + (modelData.destructive ? "  ⚠" : "")
+                                checked: taskPicker.chosen.indexOf(modelData.id) >= 0
+                                enabled: checked || taskPicker.chosen.length < 8
+                                onClicked: taskPicker.toggle(modelData.id)
+                            }
+                        }
+                    }
+                }
+            }
+            Row {
+                spacing: 8
+                CheckBox {
+                    id: taskWithBoard
+                    objectName: "taskWithBoard"
+                    height: Theme.control
+                    enabled: area.controller.parts.length > 0
+                    text: area.controller.parts.length > 0
+                          ? qsTr("Aufbau aus dem Labor mitgeben (%1 Bauteile)").arg(area.controller.parts.length)
+                          : qsTr("Aufbau aus dem Labor mitgeben (im Labor ist noch nichts gesteckt)")
+                }
+            }
+            TextField {
+                id: taskTitle
+                objectName: "taskTitle"
+                visible: taskWithBoard.checked
+                width: Math.min(parent.width, 460)
+                height: Theme.control
+                maximumLength: 60
+                placeholderText: qsTr("Titel des Aufbaus, z. B. »Finde den Fehler«")
+            }
+            TextField {
+                id: taskText
+                objectName: "taskText"
+                width: parent.width
+                height: Theme.control
+                maximumLength: 160
+                placeholderText: qsTr("Aufgabentext (freiwillig), z. B. »Baut nach und messt die Spannung an der LED.«")
+            }
+            Button {
+                objectName: "taskShowQr"
+                height: Theme.control
+                font.bold: true
+                text: qsTr("QR-Code zeigen")
+                enabled: taskPicker.chosen.length > 0 || taskWithBoard.checked
+                onClicked: {
+                    const withBoard = taskWithBoard.checked
+                    const link = area.controller.makeTaskLink(taskPicker.chosen, taskText.text, withBoard, taskTitle.text)
+                    const code = withBoard || taskText.text.trim() !== "" ? "" : area.controller.makeTaskCode(taskPicker.chosen)
+                    if (link !== "") area.taskQrRequested(link, code)
                 }
             }
 

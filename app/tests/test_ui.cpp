@@ -1092,6 +1092,42 @@ private slots:
         m_lab->clearBoard();
     }
 
+    // Aufgabe der Lehrkraft: Code eintippen -> Aufgabe mit Experimenten; Link mit eigenem Aufbau oeffnet ihn im Labor
+    void teacherTask() {
+        QObject* root = m_engine->rootObjects().first();
+        const QStringList ids{QStringLiteral("volta1.2.4"), QStringLiteral("volta1.3.1")};
+        const QString code = m_lab->makeTaskCode(ids);
+        QCOMPARE(code.size(), 9);
+        QObject* dlg = root->findChild<QObject*>(QStringLiteral("taskDialog"));
+        QVERIFY(dlg);
+        QMetaObject::invokeMethod(dlg, "openTask");
+        QTRY_VERIFY(dlg->property("opened").toBool());
+        QQuickItem* field = item(QStringLiteral("taskCodeField"));
+        QVERIFY(field && field->isVisible());
+        field->setProperty("text", QString(code).toLower()); // klein getippt
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("taskCodeOpen"))));
+        QTRY_VERIFY(m_lab->task().value(QStringLiteral("ok")).toBool());
+        QTRY_VERIFY(item(QStringLiteral("taskExperiment_1")) && item(QStringLiteral("taskExperiment_1"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("taskExperiment_1"))));
+        QTRY_COMPARE(m_lab->experimentId(), QStringLiteral("volta1.3.1"));
+        QTRY_VERIFY(!dlg->property("opened").toBool());
+        // eigener Aufbau mit Text: nur als Link (kein Code)
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false));
+        const QString link = m_lab->makeTaskLink({}, QStringLiteral("Miss den Widerstand"), true, QStringLiteral("Messen"));
+        QVERIFY(link.contains(QStringLiteral("?d=")));
+        m_lab->clearBoard();
+        QVERIFY(m_lab->acceptTask(link));
+        QVERIFY(m_lab->task().value(QStringLiteral("hasBoard")).toBool());
+        QVERIFY(m_lab->startTaskBoard());
+        QCOMPARE(m_lab->parts().size(), 1);
+        QCOMPARE(m_lab->title(), QStringLiteral("Messen"));
+        m_lab->clearTask();
+        QVERIFY(!m_lab->task().value(QStringLiteral("ok")).toBool());
+        m_lab->clearBoard();
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

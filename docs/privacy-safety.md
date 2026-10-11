@@ -11,6 +11,8 @@
 - Kamera und Mikrofon werden nicht verwendet; Fotoimport ueber die Systemauswahl.
 
 ## Kinderschutz
+- Aufgaben der Lehrkraft (QR-Code bzw. Code zum Eintippen) enthalten nur Experimente, Aufbau und Aufgabentext - keine
+  Namen, kein Rueckkanal, kein Netz.
 - Elternschranke (PIN, Start 1234, aenderbar; Hinweis bis zur Aenderung) vor externen Links, Elternbereich und
   Erwachsenenteil des Readme. Die PIN steht nur als gesalzener Pruefwert in den Einstellungen.
 - Zerstoerende Experimente (`zerstoerend: true`) zeigen »Nur in der App!«.

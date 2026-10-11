@@ -85,6 +85,7 @@ ApplicationWindow {
         onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
         onHelpRequested: helpDialog.open()
+        onTaskRequested: taskDialog.openTask()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 
@@ -125,6 +126,25 @@ ApplicationWindow {
         onLinkRequested: (url) => { infoDialog.close(); parentGate.ask(() => Qt.openUrlExternally(url)) }
     }
     ParentGate { id: parentGate; settings: root.settings }
+    // Aufgabe der Lehrkraft (QR-Code ueber die Kamera-App oder Code zum Eintippen). Mit Profilen wartet sie, bis
+    // eines gewaehlt ist.
+    property string pendingTask: ""
+    function offerTask() {
+        if (root.pendingTask === "" || (labController.profilesEnabled && labController.currentProfile.id === undefined)) return
+        taskDialog.showLink(root.pendingTask)
+        root.pendingTask = ""
+    }
+    Connections {
+        target: labController
+        function onTaskLinkReceived(link) { root.pendingTask = link; root.offerTask() }
+        function onProfilesChanged() { root.offerTask() }
+    }
+    TaskDialog {
+        id: taskDialog
+        controller: labController
+        onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
+        onBoardRequested: { if (labController.startTaskBoard()) { root.inJournal = false; root.inLab = true } }
+    }
     HelpDialog {
         id: helpDialog
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
@@ -187,7 +207,13 @@ ApplicationWindow {
         onChosen: (id) => { if (labController.selectProfile(id)) root.resume() }
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
-    ParentArea { id: parentArea; controller: labController; settings: root.settings }
+    ParentArea {
+        id: parentArea
+        controller: labController
+        settings: root.settings
+        onTaskQrRequested: (link, code) => taskQr.showTask(link, code)
+    }
+    TaskQrDialog { id: taskQr; controller: labController }
 
     // Startbildschirm nur in der Desktop-Ausgabe (main.cpp setzt volta_showSplash)
     Loader {

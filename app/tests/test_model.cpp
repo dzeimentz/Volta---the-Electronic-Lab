@@ -14,6 +14,7 @@
 #include "model/qr_code.hpp"
 #include "model/recorder.hpp"
 #include "services/profile_transfer.hpp"
+#include "services/task_code.hpp"
 #include "model/tone_synth.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
@@ -442,6 +443,50 @@ private slots:
             on = now;
         }
         QVERIFY2(edges >= 4, qPrintable(QString::number(edges)));
+    }
+
+    // Aufgabe der Lehrkraft: Code zum Eintippen (Pruefziffer, verwechselbare Zeichen) und Link mit eigenem Aufbau
+    void taskCodeAndLink() {
+        namespace task = services::task;
+        task::Task t;
+        t.experiments = {QStringLiteral("2.4"), QStringLiteral("4.15"), QStringLiteral("0.1")};
+        const QString code = task::toCode(t);
+        QCOMPARE(code.size(), 9); // ABCD-EFGH
+        task::Task back;
+        QVERIFY(task::fromCode(code, back));
+        QCOMPARE(back.experiments, t.experiments);
+        QVERIFY(task::fromCode(code.toLower().remove(QLatin1Char('-')), back)); // klein, ohne Strich
+        QCOMPARE(task::toLink(t), QStringLiteral("volta1://aufgabe?c=") + code); // kurzer Link, grober QR-Code
+        QVERIFY(task::parse(task::toLink(t), back));
+        QCOMPARE(back.experiments, t.experiments);
+        // ein falsches Zeichen faellt auf
+        QString wrong = code;
+        wrong[0] = wrong[0] == QLatin1Char('A') ? QLatin1Char('B') : QLatin1Char('A');
+        QVERIFY(!task::fromCode(wrong, back));
+        // nicht in einen Code: Text, eigener Aufbau, mehr als 4 Experimente
+        task::Task many = t;
+        many.experiments << QStringLiteral("1.1") << QStringLiteral("1.2");
+        QVERIFY(task::toCode(many).isEmpty());
+        // Link mit eigenem Aufbau und Text
+        task::Task withBoard;
+        withBoard.title = QStringLiteral("Fehler finden");
+        withBoard.text = QStringLiteral("Warum leuchtet die LED nicht?");
+        model::Board b;
+        b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 470.0});
+        b.wires.push_back({"L1", "P:+9V", "B3", "rot"});
+        withBoard.board = b;
+        const QString link = task::toLink(withBoard);
+        QVERIFY(link.startsWith(QStringLiteral("volta1://aufgabe?d=")));
+        QVERIFY(link.size() < 600); // gut lesbarer QR-Code
+        task::Task read;
+        QVERIFY(task::parse(link, read));
+        QCOMPARE(read.title, withBoard.title);
+        QCOMPARE(read.text, withBoard.text);
+        QVERIFY(read.board.has_value());
+        QCOMPARE(read.board->parts.size(), std::size_t(1));
+        QCOMPARE(read.board->parts[0].value, 470.0);
+        QVERIFY(!task::parse(QStringLiteral("volta1://aufgabe?d=kaputt"), read));
+        QVERIFY(!task::parse(QStringLiteral("volta1://fortschritt?d=1.1"), read));
     }
 
     // Teileliste: gleiche Bauteile mit gleichem Wert zusammengefasst, Module zuerst, Leitungen nach Farbe

@@ -427,6 +427,22 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "show", Q_ARG(QVariant, helpKey == u"1" ? QString() : helpKey));
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_TASK=qr zeigt den QR-Code einer Beispielaufgabe (Lehrkraft); jeder andere Wert gilt als
+    // Link oder Code und oeffnet die Aufgabe wie nach dem Scannen (Kind)
+    if (const QString demoTask = qEnvironmentVariable("VOLTA_DEMO_TASK"); !demoTask.isEmpty())
+        QTimer::singleShot(600, &engine, [&engine, &lab, demoTask] {
+            const auto roots = engine.rootObjects();
+            if (roots.isEmpty()) return;
+            if (demoTask == u"qr") {
+                const QStringList ids{QStringLiteral("volta1.2.4"), QStringLiteral("volta1.3.1")};
+                if (QObject* dlg = roots.first()->findChild<QObject*>(QStringLiteral("taskQrDialog")))
+                    QMetaObject::invokeMethod(dlg, "showTask", Q_ARG(QVariant, lab.makeTaskLink(ids, {}, false, {})),
+                                              Q_ARG(QVariant, lab.makeTaskCode(ids)));
+            } else if (QObject* dlg = roots.first()->findChild<QObject*>(QStringLiteral("taskDialog"))) {
+                QMetaObject::invokeMethod(dlg, "showLink", Q_ARG(QVariant, demoTask));
+            }
+        });
+
     const QString shot = qEnvironmentVariable("VOLTA_SCREENSHOT");
     if (!shot.isEmpty()) {
         if (qEnvironmentVariableIntValue("VOLTA_SCREENSHOT_MAINSWITCH") == 1)

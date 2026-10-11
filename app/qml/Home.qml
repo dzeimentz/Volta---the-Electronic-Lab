@@ -16,6 +16,7 @@ Rectangle {
     signal journalRequested()
     signal infoRequested()
     signal helpRequested()
+    signal taskRequested()
     signal parentAreaRequested()
 
     color: Theme.board
@@ -138,9 +139,30 @@ Rectangle {
                     x: homeTick.bubbleLeft
                     y: homeTick.bubbleBottom + 10
                     height: Theme.control
-                    text: "?  " + qsTr("Zeig mir, wie Volta funktioniert")
+                    text: qsTr("Zeig mir, wie Volta funktioniert")
                     font.pixelSize: Math.round(15 * Theme.fontScale)
+                    font.bold: true
+                    leftPadding: 8
+                    rightPadding: 16
                     onClicked: home.helpRequested()
+                    // gut sichtbar: rotes Fragezeichen auf gelbem Kreis, heller Knopf mit blauem Rand
+                    contentItem: Row {
+                        spacing: 10
+                        HelpIcon { size: 32; anchors.verticalCenter: parent.verticalCenter }
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: homeHelp.text
+                            font: homeHelp.font
+                            color: Theme.navy
+                        }
+                    }
+                    background: Rectangle {
+                        radius: Theme.control / 2
+                        color: homeHelp.down ? "#FFE9A8" : (homeHelp.hovered ? "#FFF4CC" : "#FFFBEA")
+                        border.color: Theme.accent
+                        border.width: 2
+                    }
+                    Accessible.name: text
                 }
             }
 
@@ -154,6 +176,16 @@ Rectangle {
                     title: qsTr("Weitermachen")
                     subtitle: home.controller.title
                     onActivated: home.continueRequested()
+                }
+                // Aufgabe der Lehrkraft: zeigt die aktuelle Aufgabe oder fuehrt zur Eingabe des Codes
+                Tile {
+                    objectName: "tileTask"
+                    icon: "📋"
+                    title: home.controller.task.ok === true ? qsTr("Aufgabe deiner Lehrkraft") : qsTr("Aufgabe")
+                    subtitle: home.controller.task.ok === true
+                              ? (home.controller.task.text || qsTr("Antippen und loslegen"))
+                              : qsTr("Code der Lehrkraft eingeben")
+                    onActivated: home.taskRequested()
                 }
                 Tile {
                     objectName: "tileFreeLab"
