@@ -14,8 +14,11 @@ Als achtbeiniger Baustein passt er zum NE555 in Volta 2 (Stufe 6, `docs/volta2-p
 - Beispiel 3 (»Versorgungsspannung zu niedrig oder Kurzschluss«): Tick nennt immer den konkreten Befund der
   Fehlersuche (`circuit_check`), nie eine Vermutung - »Physik ehrlich«.
 - Sprechblasen nie ins Bild: Texte kommen ueber Inhaltsschluessel/qsTr (de, fr, en, lu) und koennen vorgelesen werden.
-- Rechte: vor der Veroeffentlichung klaeren, mit welchem Werkzeug das Blatt entstand und ob die Nutzung im Store
-  erlaubt ist; Name »Tick« auf Markenkonflikte pruefen. Eintrag im Info-Fenster (Gestaltung).
+- Herkunft: Gestaltungsblatt und Einzelbilder mit ChatGPT (Bildgenerierung) ueber das Konto des Anbieters erstellt
+  (10/2026). Nach den Nutzungsbedingungen von OpenAI gehoeren die Ergebnisse dem Nutzer, gewerbliche Nutzung ist
+  erlaubt. Rein KI-erzeugte Bilder sind in der EU aber kaum urheberrechtlich geschuetzt: Schutz der Figur gegen
+  Nachahmung nur ueber eine Marke (Wort-/Bildmarke »Tick« bzw. Figur) - vor dem Store-Eintrag entscheiden,
+  vorher Recherche nach gleichnamigen Marken der Klassen 9/28/41 (DPMA, EUIPO). Keine Rechtsberatung.
 
 ## Bildmaterial
 - Zehn Einzelbilder (10/2026), Originale in `docs/design/tick/` (PNG 512 px, transparent). In der App
