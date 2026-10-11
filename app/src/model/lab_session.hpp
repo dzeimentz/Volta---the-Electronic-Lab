@@ -122,7 +122,7 @@ public:
     // Bauteilbezuege der Bedingung beziehen sich auf die Vorlage; die Zuordnung zum Aufbau des Kindes erfolgt ueber
     // den Typ (docs/content-format.md, Erfolgsbedingungen): gleiche Kennung und gleicher Typ, sonst die Bauteile
     // dieses Typs in Reihenfolge. Jeder funktionierende Aufbau gilt.
-    void setSuccess(const SuccessCondition& condition, const Board& templateBoard);
+    void setSuccess(const SuccessCondition& condition, const Board& templateBoard, bool colourFixed = true);
     void clearSuccess();
     bool successActive() const { return m_success != nullptr; }
     // Erfolg im aktuellen Aufbau erreicht (gilt bis zur naechsten Aufbauaenderung; Bedienhandlungen loeschen ihn nicht)
@@ -157,6 +157,7 @@ private:
     struct SuccessTracker;
     std::shared_ptr<SuccessTracker> m_success;
     Board m_successTemplate;
+    bool m_colourFixed = true; // LED-Farbe der Vorlage verbindlich (catalog.hpp, sameKind)
     // Bauteilkennungen der letzten Topologie-Versionen: Zustaende aus einem Schnappschuss einer aelteren Version
     // (Befehle ohne Simulationsfortschritt dazwischen) bleiben ueber die Kennung zuordenbar.
     std::deque<std::pair<std::uint64_t, std::vector<std::string>>> m_idHistory;

@@ -28,7 +28,7 @@ struct LabSession::SuccessTracker {
 namespace {
 
 // Netzliste ohne Schaltung (nur Zuordnungen), mit den Kennungen der Vorlage als zusaetzliche Namen
-Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl) {
+Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl, bool colourFixed) {
     Netlist idx;
     idx.nodes = net.nodes;
     idx.parts = net.parts;
@@ -41,7 +41,7 @@ Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl) 
     std::vector<const PartPlacement*> open;
     for (const auto& t : tmpl.parts) {
         const PartPlacement* p = board.findPart(t.id);
-        if (p && p->type == t.type)
+        if (p && sameKind(p->type, t.type, colourFixed))
             taken.push_back(p->id);
         else
             open.push_back(&t);
@@ -72,7 +72,7 @@ Netlist successIndex(const Netlist& net, const Board& board, const Board& tmpl) 
     for (const PartPlacement* t : open) {
         idx.parts.erase(t->id);
         for (const auto& p : board.parts) {
-            if (p.type != t->type || isTaken(p.id)) continue;
+            if (!sameKind(p.type, t->type, colourFixed) || isTaken(p.id)) continue;
             const auto it = net.parts.find(p.id);
             if (it == net.parts.end()) continue;
             idx.parts[t->id] = it->second;
@@ -106,9 +106,10 @@ private:
 
 } // namespace
 
-void LabSession::setSuccess(const SuccessCondition& condition, const Board& templateBoard) {
+void LabSession::setSuccess(const SuccessCondition& condition, const Board& templateBoard, bool colourFixed) {
     m_success = std::make_shared<SuccessTracker>(condition);
     m_successTemplate = templateBoard;
+    m_colourFixed = colourFixed;
     rebuild({});
 }
 
@@ -123,9 +124,10 @@ bool LabSession::successReached() const { return m_success && m_success->reached
 bool LabSession::templateComplete() const {
     if (!m_success) return false;
     std::map<std::string, int> need;
-    for (const auto& p : m_successTemplate.parts) ++need[p.type];
+    const auto kind = [this](const std::string& t) { return !m_colourFixed && isLed(t) ? std::string("led") : t; };
+    for (const auto& p : m_successTemplate.parts) ++need[kind(p.type)];
     for (const auto& m : m_successTemplate.modules) ++need[m.type];
-    for (const auto& p : m_board.parts) --need[p.type];
+    for (const auto& p : m_board.parts) --need[kind(p.type)];
     for (const auto& m : m_board.modules) --need[m.type];
     return std::all_of(need.begin(), need.end(), [](const auto& n) { return n.second <= 0; });
 }
@@ -164,7 +166,7 @@ void LabSession::rebuild(const std::vector<sim::StateOverride>& states) {
     if (m_success) m_success->reached.store(false); // neuer Aufbau: muss erneut funktionieren
     if (m_success)
         observer = std::make_shared<SuccessObserver>(m_success, &m_success->eval, &m_success->reached,
-                                                     successIndex(m_net, m_board, m_successTemplate));
+                                                     successIndex(m_net, m_board, m_successTemplate, m_colourFixed));
     m_topology = m_bridge.setCircuit(std::move(m_net.circuit), states, std::move(observer));
     m_idHistory.emplace_back(m_topology, m_net.componentIds);
     while (m_idHistory.size() > 32) m_idHistory.pop_front();

@@ -122,7 +122,7 @@ bool LabController::startExperiment(const QString& id) {
         start.columns = autoColumnsFor(exp.templateBoard, false, start.desk.meterVisible);
     else
         start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
-    m_session->setSuccess(exp.successCondition, exp.templateBoard);
+    m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
     m_session->loadBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
     m_experiment = std::move(exp);
@@ -1181,6 +1181,7 @@ QVariantMap LabController::stepMap(const model::GuideStep& s, const model::Board
     m.insert(QStringLiteral("from"), qs(s.from));
     m.insert(QStringLiteral("to"), qs(s.to));
     m.insert(QStringLiteral("color"), qs(s.color));
+    m.insert(QStringLiteral("anyColour"), s.anyLedColour);
     QVariantList pins;
     for (const auto& [name, field] : s.pins)
         pins << QVariantMap{{QStringLiteral("name"), qs(name)}, {QStringLiteral("field"), qs(field)}};
@@ -1209,7 +1210,7 @@ QVariantMap LabController::stepMap(const model::GuideStep& s, const model::Board
 
 QVariantMap LabController::guideStep() const {
     if (!m_guideActive || m_freeLab || m_experiment.id.isEmpty()) return {};
-    const auto steps = model::buildGuide(m_experiment.templateBoard, m_session->catalog());
+    const auto steps = model::buildGuide(m_experiment.templateBoard, m_session->catalog(), m_experiment.colourFixed);
     const std::size_t i = model::currentStep(steps, m_session->board(), m_session->catalog());
     QVariantMap m = i < steps.size() ? stepMap(steps[i], m_session->board())
                                      : QVariantMap{{QStringLiteral("kind"), QStringLiteral("fertig")}};

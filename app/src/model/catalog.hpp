@@ -58,4 +58,12 @@ struct Catalog {
     }
 };
 
+// Leuchtdioden sind in der Farbe austauschbar, solange ein Experiment die Farbe nicht festlegt (»farbe_fest«):
+// Vorlage mit roter LED, Kind nimmt eine gruene - die Schaltung funktioniert gleich (nur die Flussspannung
+// unterscheidet sich etwas). Gilt fuer Erfolgsbedingung, »Fertig« und Schritt-fuer-Schritt-Hilfe.
+inline bool isLed(const std::string& type) { return type.rfind("led_", 0) == 0; }
+inline bool sameKind(const std::string& a, const std::string& b, bool colourFixed) {
+    return a == b || (!colourFixed && isLed(a) && isLed(b));
+}
+
 } // namespace volta::model

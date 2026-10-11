@@ -195,6 +195,30 @@ private slots:
                                          .arg(limit)));
     }
 
+    // LED-Farbe frei (ohne »farbe_fest«): die Vorlage erreicht ihr Ziel mit jeder LED-Farbe - sonst muss das
+    // Experiment die Farbe festlegen, damit ein Kind mit einer anderen LED nicht haengen bleibt
+    void templatesWorkWithAnyLedColour_data() { everyTemplateReachesItsSuccess_data(); }
+    void templatesWorkWithAnyLedColour() {
+        QFETCH(QString, id);
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY2(repo.loadExperiment(id, exp), qPrintable(repo.lastError()));
+        if (exp.colourFixed || exp.destructive) return;
+        if (std::none_of(exp.templateBoard.parts.begin(), exp.templateBoard.parts.end(),
+                         [](const model::PartPlacement& p) { return model::isLed(p.type); }))
+            return;
+        for (const char* colour : {"led_rot", "led_gruen", "led_gelb", "led_blau"}) {
+            model::Board board = exp.templateBoard;
+            for (auto& p : board.parts)
+                if (model::isLed(p.type)) p.type = colour;
+            board.desk.mainSwitch = true;
+            model::SuccessEvaluator eval(exp.successCondition);
+            std::vector<std::string> buildErrors;
+            const double t = timeToSuccess(board, m_catalog, eval, std::min(exp.maxHoldS + 5.0, 60.0), &buildErrors);
+            QVERIFY2(t > 0.0, qPrintable(QStringLiteral("%1 mit %2: Ziel nicht erreicht").arg(id, QLatin1String(colour))));
+        }
+    }
+
     // Fehlersuche: am erreichten Ziel jeder Vorlage keine Auffaelligkeit (sie darf nie einen funktionierenden Aufbau
     // bemaengeln); zerstoerende Experimente ausgenommen
     void templatesPassCircuitCheck_data() { everyTemplateReachesItsSuccess_data(); }

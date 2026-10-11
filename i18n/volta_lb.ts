@@ -4,88 +4,88 @@
 <context>
     <name>Befehl</name>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="261"/>
+        <location filename="../app/src/model/lab_session.cpp" line="263"/>
         <source>Grundplatte 1–%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="296"/>
+        <location filename="../app/src/model/lab_session.cpp" line="298"/>
         <source>%1 setzen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="332"/>
-        <location filename="../app/src/model/lab_session.cpp" line="420"/>
+        <location filename="../app/src/model/lab_session.cpp" line="334"/>
+        <location filename="../app/src/model/lab_session.cpp" line="422"/>
         <source>%1 verschieben</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="342"/>
+        <location filename="../app/src/model/lab_session.cpp" line="344"/>
         <source>%1 umdrehen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="352"/>
+        <location filename="../app/src/model/lab_session.cpp" line="354"/>
         <source>%1 drehen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="360"/>
+        <location filename="../app/src/model/lab_session.cpp" line="362"/>
         <source>%1 entfernen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="376"/>
+        <location filename="../app/src/model/lab_session.cpp" line="378"/>
         <source>Wert von %1 ändern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="383"/>
+        <location filename="../app/src/model/lab_session.cpp" line="385"/>
         <source>%1 reparieren</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="396"/>
+        <location filename="../app/src/model/lab_session.cpp" line="398"/>
         <source>%1 einsetzen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="436"/>
+        <location filename="../app/src/model/lab_session.cpp" line="438"/>
         <source>%1 herausnehmen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="447"/>
+        <location filename="../app/src/model/lab_session.cpp" line="449"/>
         <source>Leitung %1 ziehen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="463"/>
+        <location filename="../app/src/model/lab_session.cpp" line="465"/>
         <source>Leitung %1 umsetzen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="472"/>
+        <location filename="../app/src/model/lab_session.cpp" line="474"/>
         <source>Leitung %1 löschen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="482"/>
+        <location filename="../app/src/model/lab_session.cpp" line="484"/>
         <source>Leitung %1 umfärben</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="494"/>
+        <location filename="../app/src/model/lab_session.cpp" line="496"/>
         <source>Spannungsanzeige %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="595"/>
+        <location filename="../app/src/model/lab_session.cpp" line="597"/>
         <source>Sicherung tauschen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="600"/>
+        <location filename="../app/src/model/lab_session.cpp" line="602"/>
         <source>Lautsprecher reparieren</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1605,7 +1605,7 @@
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="88"/>
-        <location filename="../app/src/model/lab_session.cpp" line="322"/>
+        <location filename="../app/src/model/lab_session.cpp" line="324"/>
         <source>Das Bauteil passt dort nicht auf die Grundplatte.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1621,9 +1621,9 @@
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="251"/>
-        <location filename="../app/src/model/lab_session.cpp" line="283"/>
-        <location filename="../app/src/model/lab_session.cpp" line="317"/>
-        <location filename="../app/src/model/lab_session.cpp" line="340"/>
+        <location filename="../app/src/model/lab_session.cpp" line="285"/>
+        <location filename="../app/src/model/lab_session.cpp" line="319"/>
+        <location filename="../app/src/model/lab_session.cpp" line="342"/>
         <source>Unbekanntes Bauteil „%1“.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1683,65 +1683,65 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="251"/>
+        <location filename="../app/src/model/lab_session.cpp" line="253"/>
         <source>Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="254"/>
+        <location filename="../app/src/model/lab_session.cpp" line="256"/>
         <source>In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="315"/>
-        <location filename="../app/src/model/lab_session.cpp" line="338"/>
-        <location filename="../app/src/model/lab_session.cpp" line="348"/>
-        <location filename="../app/src/model/lab_session.cpp" line="358"/>
-        <location filename="../app/src/model/lab_session.cpp" line="367"/>
-        <location filename="../app/src/model/lab_session.cpp" line="381"/>
+        <location filename="../app/src/model/lab_session.cpp" line="317"/>
+        <location filename="../app/src/model/lab_session.cpp" line="340"/>
+        <location filename="../app/src/model/lab_session.cpp" line="350"/>
+        <location filename="../app/src/model/lab_session.cpp" line="360"/>
+        <location filename="../app/src/model/lab_session.cpp" line="369"/>
+        <location filename="../app/src/model/lab_session.cpp" line="383"/>
         <source>Bauteil %1 nicht gefunden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="350"/>
+        <location filename="../app/src/model/lab_session.cpp" line="352"/>
         <source>Nur Platinen lassen sich so drehen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="364"/>
+        <location filename="../app/src/model/lab_session.cpp" line="366"/>
         <source>Dieser Wert geht nicht.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="372"/>
+        <location filename="../app/src/model/lab_session.cpp" line="374"/>
         <source>Diese Nennspannung gibt es nicht.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="402"/>
-        <location filename="../app/src/model/lab_session.cpp" line="427"/>
+        <location filename="../app/src/model/lab_session.cpp" line="404"/>
+        <location filename="../app/src/model/lab_session.cpp" line="429"/>
         <source>Modul %1 nicht gefunden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="453"/>
-        <location filename="../app/src/model/lab_session.cpp" line="470"/>
-        <location filename="../app/src/model/lab_session.cpp" line="478"/>
+        <location filename="../app/src/model/lab_session.cpp" line="455"/>
+        <location filename="../app/src/model/lab_session.cpp" line="472"/>
+        <location filename="../app/src/model/lab_session.cpp" line="480"/>
         <source>Leitung %1 nicht gefunden.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="487"/>
+        <location filename="../app/src/model/lab_session.cpp" line="489"/>
         <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="488"/>
+        <location filename="../app/src/model/lab_session.cpp" line="490"/>
         <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="587"/>
+        <location filename="../app/src/model/lab_session.cpp" line="589"/>
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3210,83 +3210,88 @@
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="97"/>
-        <source>Stecke %1 auf %2, %3 und %4.</source>
+        <source>eine Leuchtdiode (Farbe egal)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="99"/>
-        <source>Stecke %1 auf %2, %3, %4 und %5.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/Texts.qml" line="100"/>
-        <source>Stecke %1 auf %2 und %3.</source>
+        <source>Stecke %1 auf %2, %3 und %4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="101"/>
-        <source>Das lange Bein kommt an %1.</source>
+        <source>Stecke %1 auf %2, %3, %4 und %5.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="102"/>
-        <source>Der Strich auf der Diode zeigt nach %1.</source>
+        <source>Stecke %1 auf %2 und %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="103"/>
-        <source>Plus kommt an %1.</source>
+        <source>Das lange Bein kommt an %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="104"/>
-        <source>B kommt an %1, C an %2.</source>
+        <source>Der Strich auf der Diode zeigt nach %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="105"/>
-        <source>Die Mitte kommt an %1.</source>
+        <source>Plus kommt an %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="106"/>
+        <source>B kommt an %1, C an %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="107"/>
-        <source>Wert: %1.</source>
+        <source>Die Mitte kommt an %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="109"/>
+        <source>Wert: %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="111"/>
         <source>Nennspannung: %1 V.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="135"/>
+        <location filename="../app/qml/Texts.qml" line="137"/>
         <source>Taschenlampe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="136"/>
+        <location filename="../app/qml/Texts.qml" line="138"/>
         <source>Föhn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="137"/>
+        <location filename="../app/qml/Texts.qml" line="139"/>
         <source>Wassertropfen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="146"/>
-        <location filename="../app/qml/Texts.qml" line="149"/>
-        <location filename="../app/qml/Texts.qml" line="152"/>
+        <location filename="../app/qml/Texts.qml" line="148"/>
+        <location filename="../app/qml/Texts.qml" line="151"/>
+        <location filename="../app/qml/Texts.qml" line="154"/>
         <source>%1 × %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="151"/>
+        <location filename="../app/qml/Texts.qml" line="153"/>
         <source>%1 × Leitung %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="153"/>
+        <location filename="../app/qml/Texts.qml" line="155"/>
         <source>Batterie %1 V</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3669,12 +3674,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1481"/>
+        <location filename="../app/src/lab_controller.cpp" line="1482"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1520"/>
+        <location filename="../app/src/lab_controller.cpp" line="1521"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>

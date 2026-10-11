@@ -93,11 +93,13 @@ QtObject {
             return qsTr("Ziehe eine Leitung von %1 nach %2.").arg(field(s.labels[0])).arg(field(s.labels[1]))
         case "bauteil": {
             const fields = (s.pins || []).map(p => p.field)
+            // LED ohne festgelegte Farbe: jede Farbe passt
+            const name = s.anyColour === true && s.type.startsWith("led_") ? qsTr("eine Leuchtdiode (Farbe egal)") : partName(s.type)
             let t = fields.length === 3
-                ? qsTr("Stecke %1 auf %2, %3 und %4.").arg(partName(s.type)).arg(fields[0]).arg(fields[1]).arg(fields[2])
+                ? qsTr("Stecke %1 auf %2, %3 und %4.").arg(name).arg(fields[0]).arg(fields[1]).arg(fields[2])
                 : fields.length === 4
-                ? qsTr("Stecke %1 auf %2, %3, %4 und %5.").arg(partName(s.type)).arg(fields[0]).arg(fields[1]).arg(fields[2]).arg(fields[3])
-                : qsTr("Stecke %1 auf %2 und %3.").arg(partName(s.type)).arg(fields[0]).arg(fields[fields.length - 1])
+                ? qsTr("Stecke %1 auf %2, %3, %4 und %5.").arg(name).arg(fields[0]).arg(fields[1]).arg(fields[2]).arg(fields[3])
+                : qsTr("Stecke %1 auf %2 und %3.").arg(name).arg(fields[0]).arg(fields[fields.length - 1])
             if (s.type.startsWith("led_")) t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
             else if (s.type.startsWith("diode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
             else if (s.type === "summer" || s.type === "elko" || s.type === "piezo") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))

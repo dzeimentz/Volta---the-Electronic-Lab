@@ -16,6 +16,7 @@ struct Experiment {
     QString id;
     int stage = 0;
     bool destructive = false;
+    bool colourFixed = false; // »farbe_fest«: die LED-Farbe der Vorlage ist Teil des Versuchs
     QString titleKey;
     model::Board templateBoard; // Vorlage (Anzeige, Schritt-fuer-Schritt-Hilfe, ContentSmokeTest)
     QStringList shownVoltages;  // "anzeigen": Felder mit vorab gesetzter Spannungsanzeige

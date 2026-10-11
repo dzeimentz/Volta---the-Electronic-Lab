@@ -283,6 +283,30 @@ private slots:
         QVERIFY(!s->successActive());
     }
 
+    // LED-Farbe frei: 4.1 (Transistor als Schalter) gelingt auch mit gruener statt roter LED; legt ein Experiment die
+    // Farbe fest (farbe_fest), zaehlt nur die Farbe der Vorlage
+    void ledColourIsInterchangeable() {
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY(repo.loadExperiment(QStringLiteral("volta1.4.1"), exp));
+        QVERIFY(!exp.colourFixed);
+        model::Board green = exp.templateBoard;
+        for (auto& p : green.parts)
+            if (p.type == "led_rot") p.type = "led_gruen";
+        for (const bool fixed : {false, true}) {
+            auto s = session();
+            s->loadBoard(green);
+            s->setSuccess(exp.successCondition, exp.templateBoard, fixed);
+            s->setMainSwitch(true);
+            run(*s, 2.0);
+            QCOMPARE(s->templateComplete(), !fixed);
+            QCOMPARE(s->successReached(), !fixed);
+        }
+        services::Experiment traffic;
+        QVERIFY(repo.loadExperiment(QStringLiteral("volta1.2.11"), traffic));
+        QVERIFY(traffic.colourFixed); // Ampel: Rot und Gruen gehoeren zum Versuch
+    }
+
     // 6-V-Laempchen an 9 V: ueberlastet, gilt nicht als geloest (und brennt spaeter durch)
     void lampAtNineVoltIsNoSuccess() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));

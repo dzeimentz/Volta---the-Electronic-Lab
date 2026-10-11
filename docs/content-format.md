@@ -138,3 +138,9 @@ Kindertexte: kurze Saetze, Du-Form, keine Fachwoerter ohne Erklaerung, keine Inh
 
 `paket.json` traegt `schema_version` (aktuell `1`) und `version` (SemVer). Inkompatible Formataenderungen erhoehen
 `schema_version` und erfordern eine Migration im `ContentRepository`.
+
+### LED-Farbe (`farbe_fest`, optional)
+Ohne Angabe sind Leuchtdioden in der Farbe austauschbar: Steckt das Kind eine gruene statt der roten LED der Vorlage,
+zaehlt sie fuer Erfolgsbedingung, »Fertig« und Schritt-fuer-Schritt-Hilfe wie die Vorlage (`model::sameKind`). Der
+ContentSmokeTest prueft, dass jede solche Vorlage ihr Ziel mit jeder LED-Farbe erreicht. `"farbe_fest": true` setzen,
+wenn die Farbe zum Versuch gehoert (Ampel rot/gruen 2.11, rot gegen blau 2.20, Wechselblinker 4.10).

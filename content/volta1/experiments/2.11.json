@@ -6,6 +6,7 @@
   "titel_key": "exp_2_11_titel",
   "dauer_min": 12,
   "zerstoerend": false,
+  "farbe_fest": true,
   "bauteile_frei": [
     "wechselschalter",
     "widerstand",

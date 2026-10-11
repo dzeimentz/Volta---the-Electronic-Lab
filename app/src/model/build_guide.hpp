@@ -27,10 +27,11 @@ struct GuideStep {
     int slot = 0;                                          // Modul: erstes Feld der Leiste
     // Felder, die hervorgehoben werden (Bauteil: seine Felder; Leitung: beide Enden; Modul: seine Felder)
     std::vector<std::string> targets;
+    bool anyLedColour = false; // LED-Farbe egal (Experiment ohne »farbe_fest«)
 };
 
 // Schritte aus der Vorlage: Module, Bauteile und Leitungen in Vorlagenreihenfolge, dann der Hauptschalter.
-std::vector<GuideStep> buildGuide(const Board& templateBoard, const Catalog& catalog);
+std::vector<GuideStep> buildGuide(const Board& templateBoard, const Catalog& catalog, bool colourFixed = true);
 
 // Ist der Schritt im Aufbau erfuellt?
 //  - Bauteil: gleicher Typ auf denselben Feldern. Ungepolte Bauteile (Widerstand, Lampe, Taster, Reedkontakt,

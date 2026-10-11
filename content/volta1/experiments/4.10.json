@@ -6,6 +6,7 @@
   "titel_key": "exp_4_10_titel",
   "dauer_min": 10,
   "zerstoerend": false,
+  "farbe_fest": true,
   "bauteile_frei": [
     "widerstand",
     "elko",

@@ -14,6 +14,7 @@
     "titel_key": {"$ref": "#/$defs/key"},
     "dauer_min": {"type": "integer", "minimum": 1, "maximum": 45},
     "zerstoerend": {"type": "boolean"},
+    "farbe_fest": {"type": "boolean"},
     "bauteile_frei": {"type": "array", "items": {"type": "string"}, "minItems": 1},
     "frage_key": {"$ref": "#/$defs/key"},
     "vermutungen": {"type": "array", "items": {"$ref": "#/$defs/key"}, "minItems": 2, "maxItems": 5},

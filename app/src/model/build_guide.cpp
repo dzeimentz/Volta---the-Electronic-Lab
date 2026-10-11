@@ -35,7 +35,7 @@ std::string fieldOf(const std::vector<std::pair<std::string, std::string>>& pins
 }
 
 bool samePart(const GuideStep& step, const PartPlacement& p) {
-    if (p.type != step.type || p.pins.size() != step.pins.size()) return false;
+    if (!sameKind(p.type, step.type, !step.anyLedColour) || p.pins.size() != step.pins.size()) return false;
     if (step.value > 0.0 && std::abs(p.value - step.value) > 1e-9 * std::max(1.0, step.value)) return false;
     if (unpolarized(step.type)) {
         std::vector<std::string> a = fieldsOf(step.pins), b = fieldsOf(p.pins);
@@ -57,7 +57,7 @@ bool samePart(const GuideStep& step, const PartPlacement& p) {
 
 } // namespace
 
-std::vector<GuideStep> buildGuide(const Board& tmpl, const Catalog& catalog) {
+std::vector<GuideStep> buildGuide(const Board& tmpl, const Catalog& catalog, bool colourFixed) {
     std::vector<GuideStep> steps;
     for (const auto& m : tmpl.modules) {
         GuideStep s;
@@ -76,6 +76,7 @@ std::vector<GuideStep> buildGuide(const Board& tmpl, const Catalog& catalog) {
         s.id = p.id;
         s.type = p.type;
         s.pins = p.pins;
+        s.anyLedColour = !colourFixed && isLed(p.type);
         // Wert nur, wo das Kind ihn waehlt (Widerstand, Nennspannung der Gluehlampe)
         if (p.type == "widerstand" || p.type == "gluehlampe") s.value = p.value;
         s.targets = fieldsOf(p.pins);
