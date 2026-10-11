@@ -1017,6 +1017,36 @@ private slots:
         QTRY_VERIFY(!box->property("opened").toBool());
     }
 
+    // Kaputtes Bauteil: Tick meldet sich, »Zur Fehlersuche« oeffnet sie; antippen daneben schliesst den Hinweis
+    void troublePopupOnDestroyed() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QObject* popup = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("troublePopup"));
+        QVERIFY(popup);
+        QVERIFY(m_lab->addPart(QStringLiteral("led_rot"), QStringLiteral("B3"), false, false)); // B3-B4, ohne Vorwiderstand
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot")));
+        QVERIFY(m_lab->addWire(QStringLiteral("B4"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
+        m_lab->setMainSwitch(true);
+        QTRY_VERIFY_WITH_TIMEOUT(popup->property("opened").toBool(), 10000);
+        QVERIFY(popup->property("message").toString().contains(QStringLiteral("D1")));
+        // daneben tippen schliesst
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, QPoint(m_window->width() / 2, 290));
+        QTRY_VERIFY(!popup->property("opened").toBool());
+        // erneut zeigen und den Weg zur Fehlersuche nehmen
+        QMetaObject::invokeMethod(popup, "showDestroyed", Q_ARG(QVariant, QStringLiteral("LED rot (D1)")));
+        QTRY_VERIFY(popup->property("opened").toBool());
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("troubleFinder"))));
+        QObject* box = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("toolbox"));
+        QTRY_VERIFY(box->property("opened").toBool());
+        QCOMPARE(box->findChild<QObject*>(QStringLiteral("toolboxTabs"))->property("currentIndex").toInt(), 4);
+        QTRY_VERIFY(item(QStringLiteral("finding_0")) != nullptr);
+        m_lab->setMainSwitch(false);
+        QMetaObject::invokeMethod(box, "close");
+        QTRY_VERIFY(!box->property("opened").toBool());
+        m_lab->clearBoard();
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

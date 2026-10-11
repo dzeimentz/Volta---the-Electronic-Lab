@@ -864,7 +864,25 @@ void LabController::onFrame() {
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
         m_sinceNotifyS = 0.0;
+        checkDestroyed();
         emit stateChanged();
+    }
+}
+
+// Uebergang »heil -> kaputt« melden (Oberflaeche: Tick bietet die Fehlersuche an). Rueckgaengig heilt das Bauteil;
+// geht es danach wieder kaputt, wird es erneut gemeldet.
+void LabController::checkDestroyed() {
+    for (const auto& p : m_session->board().parts) {
+        const core::ComponentReading* r = m_session->reading(p.id);
+        const QString id = qs(p.id);
+        if (r && r->destroyed) {
+            if (!m_destroyedSeen.contains(id)) {
+                m_destroyedSeen.insert(id);
+                emit partDestroyed(id, qs(p.type));
+            }
+        } else {
+            m_destroyedSeen.remove(id);
+        }
     }
 }
 

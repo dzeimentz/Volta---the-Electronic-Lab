@@ -15,6 +15,13 @@ Drawer {
     signal checkResults(var list)
     signal findingSelected(var anchors, string partId)
 
+    // Fehlersuche oeffnen und gleich pruefen (Hinweis von Tick, wenn etwas kaputt ist oder nicht funktioniert)
+    function showFaultFinder() {
+        open()
+        tabs.currentIndex = 4
+        Qt.callLater(faultFinder.check)
+    }
+
     edge: Qt.RightEdge
     width: 460
     onClosed: faultFinder.reset()

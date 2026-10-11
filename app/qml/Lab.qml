@@ -14,6 +14,7 @@ Item {
     signal homeRequested()  // zurueck zur Startseite
     signal infoRequested()  // Info-Fenster (liegt im Hauptfenster)
     signal helpRequested()  // Hilfe mit Tick (liegt im Hauptfenster)
+    signal helpTopicRequested(string key) // Hilfe bei einem Kapitel
     signal parentAreaRequested()
     Binding { target: Theme; property: "reduceMotion"; value: lab.settings ? lab.settings.reduceMotion : false }
     Binding { target: Theme; property: "showCurrentFlow"; value: lab.settings ? lab.settings.showCurrentFlow : true }
@@ -27,7 +28,7 @@ Item {
     // runde Knoepfe +/- fuer die Breite der Grundplatte: rechts neben den Feldern, in der Hoehe zentriert
     readonly property int sizerX: boardWidth + Theme.fieldGap
     readonly property int sizerY: boardY + (rows.length * (Theme.fieldHeight + Theme.fieldGap) - Theme.fieldGap) / 2
-                                  - (2 * Theme.control + 28) / 2
+                                  - (2 * Theme.control + 16) / 2
     readonly property int meterX: sizerX + Theme.control + Theme.fieldGap
     // Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (nie ueber M16)
     readonly property int slotsRight: slots * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap
@@ -797,21 +798,31 @@ Item {
             // schwarzem Ring; was nicht geht (- bei 8, + bei 12), ist grau. Dazwischen die aktuelle Breite.
             component SizeButton: ToolButton {
                 id: sizeButton
-                property string sign
+                property bool plus: true
+                // Tippflaeche 48 dp, sichtbarer Kreis kleiner; Zeichen als Balken gezeichnet (exakt mittig)
                 width: Theme.control; height: Theme.control
-                contentItem: Label {
-                    text: sizeButton.sign
-                    color: sizeButton.enabled ? "#111111" : "#7A838C"
-                    font.pixelSize: 26
-                    font.bold: true
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
+                readonly property color ink: enabled ? "#111111" : "#7A838C"
+                contentItem: Item {
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: 14; height: 3; radius: 1.5
+                        color: sizeButton.ink
+                    }
+                    Rectangle {
+                        visible: sizeButton.plus
+                        anchors.centerIn: parent
+                        width: 3; height: 14; radius: 1.5
+                        color: sizeButton.ink
+                    }
                 }
-                background: Rectangle {
-                    radius: width / 2
-                    color: !sizeButton.enabled ? "#C9CED4" : (sizeButton.down ? "#F2B705" : "#FFD23F")
-                    border.color: sizeButton.enabled ? "#111111" : "#9AA3AD"
-                    border.width: 3
+                background: Item {
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: 34; height: 34; radius: 17
+                        color: !sizeButton.enabled ? "#C9CED4" : (sizeButton.down ? "#F2B705" : "#FFD23F")
+                        border.color: sizeButton.enabled ? "#111111" : "#9AA3AD"
+                        border.width: 2.5
+                    }
                 }
                 ToolTip.visible: hovered
                 Accessible.name: ToolTip.text
@@ -819,17 +830,16 @@ Item {
             Column {
                 x: lab.sizerX
                 y: lab.sizerY
-                spacing: 2
+                spacing: 0
                 SizeButton {
                     objectName: "columnsPlus"
-                    sign: "+"
                     enabled: lab.columns < 12
                     onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns + 2) }
                     ToolTip.text: qsTr("Mehr Felder je Reihe")
                 }
                 Label {
                     width: Theme.control
-                    height: 24
+                    height: 16
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     text: qsTr("1–%1").arg(lab.columns)
@@ -840,7 +850,7 @@ Item {
                 }
                 SizeButton {
                     objectName: "columnsMinus"
-                    sign: "\u2212"
+                    plus: false
                     enabled: lab.columns > 8
                     onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns - 2) }
                     ToolTip.text: qsTr("Weniger Felder je Reihe")
@@ -1444,6 +1454,38 @@ Item {
         }
     }
 
+
+    // Etwas ist kaputt gegangen oder tut sich nicht: Tick bietet die Fehlersuche an (antippen daneben schliesst).
+    // »Tut sich nichts«: im Experiment, alles gesteckt, im Betrieb, aber nach 12 s noch kein Erfolg - je Aufbaustand
+    // hoechstens einmal. Bei »Nur in der App!« ist das Kaputtgehen gewollt: dann kein Hinweis.
+    property bool troubleShown: false
+    TroublePopup {
+        id: trouble
+        parent: boardArea
+        // mittig im sichtbaren Teil der Grundplatte (ein offener Werkzeugkasten deckt rechts einen Teil ab)
+        readonly property real freeWidth: boardArea.width - (toolbox.opened ? toolbox.width : 0)
+        width: Math.min(560, freeWidth - 24)
+        x: Math.max(8, (freeWidth - width) / 2)
+        y: Math.max(8, boardArea.height - height - 72)
+        finderUnlocked: lab.controller.unlockedStage >= 2
+        onFaultFinderRequested: toolbox.showFaultFinder()
+        onHelpRequested: lab.helpTopicRequested("fehler")
+    }
+    Connections {
+        target: lab.controller
+        function onPartDestroyed(id, type) {
+            if (lab.controller.destructive && !lab.controller.freeLab) return
+            trouble.showDestroyed(Texts.partName(type) + " (" + id + ")")
+        }
+        function onBoardChanged() { lab.troubleShown = false }
+    }
+    Timer {
+        id: idleTrouble
+        interval: 12000
+        running: lab.operating && !lab.controller.freeLab && lab.controller.phase === 2 && lab.controller.buildComplete
+                 && !lab.controller.canFinish && !lab.troubleShown && !toolbox.opened && !trouble.opened
+        onTriggered: { lab.troubleShown = true; trouble.showNotWorking() }
+    }
 
     ToolboxPanel {
         id: toolbox

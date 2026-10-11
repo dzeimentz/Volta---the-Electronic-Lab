@@ -97,6 +97,7 @@ ApplicationWindow {
         onHomeRequested: { root.inLab = false; if (root.speech) root.speech.stop() }
         onInfoRequested: infoDialog.open()
         onHelpRequested: helpDialog.open()
+        onHelpTopicRequested: (key) => helpDialog.show(key)
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 

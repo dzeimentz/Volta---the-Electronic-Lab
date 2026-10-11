@@ -134,6 +134,7 @@ qt_add_qml_module(volta_ui
         qml/TickSays.qml
         qml/PartsListPanel.qml
         qml/HelpDialog.qml
+        qml/TroublePopup.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp

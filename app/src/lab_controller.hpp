@@ -2,6 +2,7 @@
 
 #include <QElapsedTimer>
 #include <QObject>
+#include <QSet>
 #include <QString>
 #include <QStringList>
 #include <QTimer>
@@ -378,6 +379,7 @@ signals:
     void boardChanged();
     void deskChanged();
     void stateChanged();
+    void partDestroyed(const QString& id, const QString& type); // ein Bauteil ist gerade kaputt gegangen
     void historyChanged();
     void editFailed();
     void flowChanged();
@@ -448,6 +450,8 @@ private:
     QTimer m_timer;
     QElapsedTimer m_clock;
     double m_sinceNotifyS = 0.0;
+    QSet<QString> m_destroyedSeen; // bereits gemeldete kaputte Bauteile (geheilt: wieder meldbar)
+    void checkDestroyed();
     double m_meterRangeV = 30.0; // zuletzt gelieferter Analogbereich (fuer die Skala)
 };
 
