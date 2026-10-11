@@ -221,6 +221,96 @@ bool LabController::resumeSession() {
     return ok;
 }
 
+void LabController::useDataRoot(const QString& dir) {
+    m_dataRoot = dir;
+    m_profiles = services::ProfileStore(dir);
+    if (!m_profilesEnabled) activateDataDir(dir);
+    emit profilesChanged();
+}
+
+void LabController::activateDataDir(const QString& dir) {
+    saveSession(); // Stand des bisherigen Profils sichern
+    const auto file = [&](const char* name) { return dir.isEmpty() ? QString() : dir + QLatin1Char('/') + name; };
+    useProgressFile(file("fortschritt.json"));
+    useJournalFile(file("forscherheft.json"));
+    useSessionFile(file("laborstand.json"));
+    // Labor leeren: das neue Profil beginnt auf der Startseite (sein Stand kommt mit resumeSession)
+    m_freeLab = false;
+    m_flow.stop();
+    m_experiment = services::Experiment{};
+    m_title.clear();
+    m_session->clearSuccess();
+    model::Board empty;
+    empty.columns = m_preferredColumns;
+    m_session->loadBoard(empty);
+    emit experimentChanged();
+    emit flowChanged();
+    emit deskChanged();
+    emit historyChanged();
+    emit boardChanged();
+    emit progressChanged();
+}
+
+void LabController::setProfilesEnabled(bool on) {
+    if (on == m_profilesEnabled) return;
+    m_profilesEnabled = on;
+    m_currentProfile.clear();
+    if (!on) activateDataDir(m_dataRoot); // Daten ohne Profil
+    emit profilesChanged();
+}
+
+QVariantList LabController::profiles() const {
+    QVariantList out;
+    for (const auto& p : m_profiles.profiles())
+        out << QVariantMap{{QStringLiteral("id"), p.id}, {QStringLiteral("symbol"), p.symbol},
+                           {QStringLiteral("name"), p.name}};
+    return out;
+}
+
+QVariantMap LabController::currentProfile() const {
+    const services::Profile* p = m_profiles.find(m_currentProfile);
+    if (!p) return {};
+    return {{QStringLiteral("id"), p->id}, {QStringLiteral("symbol"), p->symbol}, {QStringLiteral("name"), p->name}};
+}
+
+QString LabController::addProfile(const QString& symbol, const QString& name) {
+    const QString id = m_profiles.add(symbol, name);
+    emit profilesChanged();
+    return id;
+}
+
+bool LabController::selectProfile(const QString& id) {
+    if (!m_profilesEnabled || !m_profiles.find(id)) return false;
+    activateDataDir(m_profiles.dataDir(id));
+    m_currentProfile = id;
+    emit profilesChanged();
+    return true;
+}
+
+void LabController::leaveProfile() {
+    if (m_currentProfile.isEmpty()) return;
+    saveSession();
+    m_currentProfile.clear();
+    emit profilesChanged();
+}
+
+bool LabController::removeProfile(const QString& id) {
+    if (id == m_currentProfile) {
+        m_currentProfile.clear();
+        activateDataDir({}); // Dateien des Profils nicht mehr benutzen
+    }
+    const bool ok = m_profiles.remove(id);
+    emit profilesChanged();
+    return ok;
+}
+
+void LabController::removeAllProfiles() {
+    m_currentProfile.clear();
+    if (m_profilesEnabled) activateDataDir({});
+    m_profiles.removeAll();
+    emit profilesChanged();
+}
+
 void LabController::useProgressFile(const QString& path) {
     m_progress = services::ProgressStore(path);
     emit progressChanged();

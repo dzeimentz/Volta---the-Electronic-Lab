@@ -16,6 +16,7 @@
 #include "model/recorder.hpp"
 #include "services/content_repository.hpp"
 #include "services/journal_store.hpp"
+#include "services/profile_store.hpp"
 #include "services/progress_store.hpp"
 #include "services/session_store.hpp"
 
@@ -43,6 +44,11 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList trayModules READ trayModules NOTIFY progressChanged)
     // Lernpfad: [{number, title, question, unlocked, done, total, experiments: [{id, title, done, destructive}]}]
     Q_PROPERTY(QVariantList stages READ stages NOTIFY progressChanged)
+    // Forscherprofile (Konzept 8.2): eingeschaltet im Elternbereich; [{id, symbol, name}] und das gewaehlte Profil
+    // ({} ohne Auswahl). Je Profil eigene Dateien fuer Fortschritt, Forscherheft und Laborstand.
+    Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY profilesChanged)
+    Q_PROPERTY(QVariantList profiles READ profiles NOTIFY profilesChanged)
+    Q_PROPERTY(QVariantMap currentProfile READ currentProfile NOTIFY profilesChanged)
     // Alle Bauteile und Stufen freigeben (Einstellung; spaeter hinter der Elternschranke)
     Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY progressChanged)
     // Gespeicherte Arbeitsumgebung (AppSettings): Felder je Reihe fuer neue Aufbauten (sofern die Vorlage passt) und
@@ -127,6 +133,21 @@ public:
     void setUnlockAll(bool on);
     // Fortschritt dauerhaft speichern (main.cpp; ohne Aufruf nur im Speicher, z. B. in Tests)
     void useProgressFile(const QString& path);
+    // Ablageort aller Daten (Fortschritt, Forscherheft, Laborstand, Profile); ohne Profile direkt dort
+    void useDataRoot(const QString& dir);
+    bool profilesEnabled() const { return m_profilesEnabled; }
+    void setProfilesEnabled(bool on);
+    QVariantList profiles() const;
+    QVariantMap currentProfile() const;
+    // neues Profil (Symbol, Spitzname); leere ID, wenn es nicht angelegt werden konnte
+    Q_INVOKABLE QString addProfile(const QString& symbol, const QString& name);
+    // Profil waehlen: seine Daten werden geladen (der Laborstand mit resumeSession)
+    Q_INVOKABLE bool selectProfile(const QString& id);
+    // zurueck zur Profilauswahl (aktuellen Stand vorher sichern)
+    Q_INVOKABLE void leaveProfile();
+    // Elternbereich: ein Profil bzw. alle Profile samt Daten loeschen
+    Q_INVOKABLE bool removeProfile(const QString& id);
+    Q_INVOKABLE void removeAllProfiles();
     // Automatisches Speichern des Laborstands (Aufbau, Experiment mit Ablauf, Labor offen); ohne Aufruf nur im Speicher
     void useSessionFile(const QString& path);
     // gespeicherten Stand laden (Start der App); true, wenn ein Stand wiederhergestellt wurde
@@ -340,6 +361,7 @@ signals:
     void guideChanged();
     void recorderChanged();
     void finishChanged();
+    void profilesChanged();
 
 private:
     void updateFinish();
@@ -362,6 +384,12 @@ private:
     bool m_saveEnabled = false;
     bool m_labOpen = false;
     bool m_restoring = false;
+    QString m_dataRoot;
+    services::ProfileStore m_profiles;
+    bool m_profilesEnabled = false;
+    QString m_currentProfile;
+    // Fortschritt, Forscherheft und Laborstand aus diesem Ordner (leer: nur im Speicher); Labor leer
+    void activateDataDir(const QString& dir);
     int m_gateA = 0;
     int m_gateB = 0;
     services::JournalStore m_journal;

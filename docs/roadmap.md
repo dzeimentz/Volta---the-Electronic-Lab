@@ -79,6 +79,8 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 ## Phase 3 – Stand
 - Automatisches Speichern des Laborstands (Aufbau, Experiment mit Ablauf), Weitermachen nach Neustart: erledigt.
 - Elternschranke und Elternbereich (Freigaben, Zuruecksetzen, Datenschutz, Vereinfachungen, Kontakt): erledigt.
+- Forscherprofile (Symbol, Spitzname, getrennte Daten, Verwaltung im Elternbereich): erledigt; Mitnahme per
+  Datei/QR-Code offen.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

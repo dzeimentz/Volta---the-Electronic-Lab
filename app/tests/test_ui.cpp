@@ -1,5 +1,6 @@
 // Oberflaechentests (Qt Quick, ohne sichtbares Fenster): echte Bedienung mit simulierter Maus und Tastatur
 // gegen die Experimentansicht. Prueft das Zusammenspiel QML <-> LabController <-> LabSession.
+#include <QDir>
 #include <QJSValue>
 #include <QQmlApplicationEngine>
 #include <QTemporaryDir>
@@ -682,6 +683,77 @@ private slots:
         QVERIFY(m_lab->canUndo());
         QMetaObject::invokeMethod(box, "close");
         QTRY_VERIFY(!box->property("opened").toBool());
+    }
+
+    // Forscherprofile: getrennte Daten je Profil (Fortschritt, Laborstand), Loeschen entfernt den Ordner
+    void profilesKeepDataApart() {
+        QTemporaryDir dir;
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
+        lab.useDataRoot(dir.path());
+        lab.setUnlockAll(true);
+        lab.setProfilesEnabled(true);
+        const QString a = lab.addProfile(QStringLiteral("🦊"), QStringLiteral("  Funkenfuchs  "));
+        const QString b = lab.addProfile(QStringLiteral("🐼"), QStringLiteral("Panda"));
+        QVERIFY(!a.isEmpty() && !b.isEmpty() && a != b);
+        QCOMPARE(lab.profiles().first().toMap().value(QStringLiteral("name")).toString(), QStringLiteral("Funkenfuchs"));
+        QVERIFY(lab.addProfile(QStringLiteral("🦉"), QStringLiteral("   ")).isEmpty()); // ohne Spitzname
+        QVERIFY(lab.selectProfile(a));
+        QCOMPARE(lab.currentProfile().value(QStringLiteral("id")).toString(), a);
+        lab.startFreeLab();
+        QVERIFY(lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false));
+        lab.saveSession();
+        QVERIFY(lab.selectProfile(b));
+        QVERIFY(lab.session().board().parts.empty()); // neues Profil: leeres Labor
+        QVERIFY(!lab.resumeSession());                // und kein gespeicherter Stand
+        QVERIFY(lab.selectProfile(a));
+        QVERIFY(lab.resumeSession());
+        QCOMPARE(lab.session().board().parts.size(), std::size_t(1));
+        // Neustart: Profile bleiben, Loeschen entfernt Profil und Ordner
+        LabController again(QStringLiteral(VOLTA_CONTENT_DIR));
+        again.useDataRoot(dir.path());
+        again.setProfilesEnabled(true);
+        QCOMPARE(again.profiles().size(), 2);
+        QVERIFY(QDir(dir.filePath(QStringLiteral("profile/") + a)).exists());
+        QVERIFY(again.removeProfile(a));
+        QVERIFY(!QDir(dir.filePath(QStringLiteral("profile/") + a)).exists());
+        again.removeAllProfiles();
+        QCOMPARE(again.profiles().size(), 0);
+    }
+
+    // Profilauswahl beim Start: neues Profil anlegen, Abzeichen auf der Startseite, Wechsel zurueck zur Auswahl
+    void profileChooserFlow() {
+        QObject* chooser = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("profileChooser"));
+        QVERIFY(chooser);
+        QVERIFY(!chooser->property("visible").toBool());
+        m_settings->setProfilesEnabled(true);
+        QTRY_VERIFY(chooser->property("visible").toBool());
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("profileNew"))));
+        QQuickItem* symbol = nullptr;
+        QTRY_VERIFY((symbol = item(QStringLiteral("profileSymbol_0"))) && symbol->isVisible());
+        QTest::qWait(100); // Anordnung abwarten
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(symbol));
+        QTRY_COMPARE(chooser->property("newSymbol").toString(), QStringLiteral("🦊"));
+        item(QStringLiteral("profileName"))->setProperty("text", QStringLiteral("Blitz"));
+        QQuickItem* create = item(QStringLiteral("profileCreate"));
+        QTRY_VERIFY(create->isEnabled());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(create));
+        QTRY_VERIFY(!chooser->property("visible").toBool());
+        QCOMPARE(m_lab->currentProfile().value(QStringLiteral("name")).toString(), QStringLiteral("Blitz"));
+        // zur Startseite: Abzeichen mit Profil, Antippen fuehrt zur Auswahl
+        QMetaObject::invokeMethod(item(QStringLiteral("homeButton")), "clicked");
+        QQuickItem* badge = nullptr;
+        QTRY_VERIFY((badge = item(QStringLiteral("profileBadge"))) && badge->isVisible());
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
+        QTRY_VERIFY(chooser->property("visible").toBool());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("profile_") +
+                                                                       m_lab->profiles().first().toMap().value(QStringLiteral("id")).toString())));
+        QTRY_VERIFY(!chooser->property("visible").toBool());
+        m_lab->removeAllProfiles();
+        m_settings->setProfilesEnabled(false);
+        QTRY_VERIFY(!chooser->property("visible").toBool());
+        m_engine->rootObjects().first()->setProperty("inLab", true); // folgende Tests arbeiten im Labor
     }
 
     // Elternschranke und Elternbereich: falsche Antwort haelt auf, richtige oeffnet; Freigabe und Zuruecksetzen

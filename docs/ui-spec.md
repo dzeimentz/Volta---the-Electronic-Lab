@@ -13,6 +13,12 @@
   Deutsch (DE), Français (FR), English (EN), Lëtzebuergesch (LU). Wechsel sofort, ohne Neustart,
   laufendes Experiment bleibt erhalten. Nicht hinter der Elternschranke.
 - Forscherprofil-Auswahl, wenn Profile aktiviert sind.
+- Forscherprofile umgesetzt (`ProfileChooser.qml`, `services/profile_store`): im Elternbereich einschaltbar
+  (Einstellung `profile/aktiv`, Vorgabe aus). Beim Start »Wer forscht heute?« mit Kacheln (Symbol, Spitzname) und
+  »Neues Profil« (24 Bildzeichen, Spitzname bis 16 Zeichen, Hinweis »nicht deinen richtigen Namen«, kein Passwort);
+  hoechstens 30 Profile. Je Profil eigener Ordner `profile/<id>/` mit Fortschritt, Forscherheft und Laborstand;
+  Sprache und Einstellungen gelten fuer das Geraet. Abzeichen auf der Startseite wechselt das Profil. Loeschen
+  einzeln oder »Alle Profile zuruecksetzen« nur im Elternbereich (mit Rueckfrage). Offen: Mitnahme per Datei/QR-Code.
 - Umgesetzt (Phase 2, D1, `Home.qml`): Kacheln Freies Labor und Forscherheft (folgt), Lernpfad mit Stufen aus
   `content/<band>/stufen.json` (Titel, Leitfrage), Fortschritt je Stufe und Experimentkarten (geschafft: Haken).
   Freischaltung zur Reduktion: Stufen 0 und 1 offen, jede weitere, wenn alle Experimente der vorigen geschafft sind;
@@ -203,7 +209,7 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Freigaben (»Alle Stufen und Bauteile freigeben«, aus dem Kindermenue hierher verlegt), Lernpfad-Fortschritt
   zuruecksetzen und Forscherheft leeren (je mit Rueckfrage), Datenschutz (was lokal gespeichert wird),
   »So rechnet Volta« (offengelegte Vereinfachungen der Simulation), Lernpfad im Ueberblick, Kontakt mit Links.
-- Offen: Ausblenden ueber die verwaltete Konfiguration (`elternbereich`), Profile, Klassenmodus.
+- Offen: Ausblenden ueber die verwaltete Konfiguration (`elternbereich`), Klassenmodus.
 
 ## Farben (Markenwerte DC Software Engineering)
 - Engineering Navy #0A2540, Pult #1A3A5C, Akzent #2E7DBE, Signal Orange #FF6B1A, Solder Amber #FFB07A,

@@ -24,8 +24,20 @@ ApplicationWindow {
     readonly property var speech: typeof volta_speech !== "undefined" ? volta_speech : null
     property bool inLab: false
     property bool inJournal: false
-    // Automatisches Speichern: letzten Laborstand laden; war das Labor offen, geht es dort direkt weiter
-    Component.onCompleted: if (labController.resumeSession() && labController.savedLabOpen()) root.inLab = true
+    // Automatisches Speichern: letzten Laborstand laden; war das Labor offen, geht es dort direkt weiter.
+    // Mit Forscherprofilen erst nach der Profilwahl (ProfileChooser).
+    function resume() {
+        root.inJournal = false
+        root.inLab = labController.resumeSession() && labController.savedLabOpen()
+    }
+    Component.onCompleted: {
+        labController.profilesEnabled = root.settings ? root.settings.profilesEnabled : false
+        if (!labController.profilesEnabled) root.resume()
+    }
+    Connections {
+        target: root.settings
+        function onChanged() { labController.profilesEnabled = root.settings.profilesEnabled }
+    }
     onInLabChanged: labController.setLabOpen(root.inLab)
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
@@ -55,6 +67,7 @@ ApplicationWindow {
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) root.inLab = true }
         onFreeLabRequested: { labController.startFreeLab(); root.inLab = true }
         onContinueRequested: root.inLab = true
+        onProfileSwitchRequested: { labController.leaveProfile(); root.inLab = false; root.inJournal = false }
         onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
@@ -94,6 +107,15 @@ ApplicationWindow {
         onLinkRequested: (url) => { infoDialog.close(); parentGate.ask(() => Qt.openUrlExternally(url)) }
     }
     ParentGate { id: parentGate; controller: labController }
+
+    // Forscherprofile: Auswahl, solange keins gewaehlt ist (ueber allen Ansichten, unter Schranke und Elternbereich)
+    ProfileChooser {
+        anchors.fill: parent
+        visible: labController.profilesEnabled && labController.currentProfile.id === undefined
+        controller: labController
+        onChosen: (id) => { if (labController.selectProfile(id)) root.resume() }
+        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+    }
     ParentArea { id: parentArea; controller: labController; settings: root.settings }
 
     // Startbildschirm nur in der Desktop-Ausgabe (main.cpp setzt volta_showSplash)

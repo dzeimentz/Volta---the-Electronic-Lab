@@ -34,6 +34,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_boardColumns = (cols == 8 || cols == 10 || cols == 12) ? cols : 12;
     m_meterVisible = s.value(QStringLiteral("labor/messgeraet"), false).toBool();
     m_meterDocked = s.value(QStringLiteral("labor/messgeraet_im_pult"), false).toBool();
+    m_profilesEnabled = s.value(QStringLiteral("profile/aktiv"), false).toBool();
     const QString color = s.value(QStringLiteral("labor/leitungsfarbe"), QStringLiteral("rot")).toString();
     m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("rot");
     m_autoWireColor = s.value(QStringLiteral("labor/leitungsfarbe_automatisch"), true).toBool();

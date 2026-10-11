@@ -101,6 +101,56 @@ Popup {
                 }
             }
 
+            // ---- Forscherprofile (geteilte Geraete)
+            Heading { text: qsTr("Forscherprofile") }
+            Body { text: qsTr("Teilen sich mehrere Kinder ein Gerät, bekommt jedes ein eigenes Profil mit Symbol und Spitznamen – ohne richtigen Namen und ohne Passwort. Fortschritt, Forscherheft und der letzte Aufbau werden je Profil gespeichert. Beim Start fragt Volta dann: »Wer forscht heute?«") }
+            Row {
+                spacing: 8
+                Switch {
+                    objectName: "parentProfiles"
+                    checked: area.settings ? area.settings.profilesEnabled : false
+                    enabled: area.settings !== null
+                    onToggled: area.settings.profilesEnabled = checked
+                    Accessible.name: qsTr("Forscherprofile verwenden")
+                }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Forscherprofile verwenden")
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    color: "#1E2B38"
+                }
+            }
+            Repeater {
+                model: area.controller.profiles
+                Row {
+                    required property var modelData
+                    spacing: 10
+                    Label {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 260
+                        elide: Text.ElideRight
+                        text: modelData.symbol + "  " + modelData.name
+                        font.pixelSize: Math.round(15 * Theme.fontScale)
+                        color: "#1E2B38"
+                    }
+                    Button {
+                        objectName: "parentRemoveProfile_" + modelData.id
+                        height: Theme.control
+                        text: qsTr("Löschen")
+                        onClicked: confirm.ask(qsTr("Das Profil »%1« mit Fortschritt, Forscherheft und Aufbau löschen?").arg(modelData.name),
+                                               () => area.controller.removeProfile(modelData.id))
+                    }
+                }
+            }
+            Button {
+                objectName: "parentRemoveAllProfiles"
+                visible: area.controller.profiles.length > 0
+                height: Theme.control
+                text: qsTr("Alle Profile zurücksetzen")
+                onClicked: confirm.ask(qsTr("Alle Forscherprofile mit ihrem Fortschritt, Forscherheft und Aufbau löschen?"),
+                                       () => area.controller.removeAllProfiles())
+            }
+
             // ---- Fortschritt und Forscherheft
             Heading { text: qsTr("Fortschritt und Forscherheft") }
             Body { text: qsTr("Der Fortschritt im Lernpfad und das Forscherheft liegen nur auf diesem Gerät. Zurücksetzen lässt sich nicht rückgängig machen.") }
@@ -185,7 +235,7 @@ Popup {
         anchors.centerIn: parent
         modal: true
         width: Math.min(440, area.width - 32)
-        title: qsTr("Wirklich zurücksetzen?")
+        title: qsTr("Wirklich löschen?")
         contentItem: Column {
             spacing: 16
             Label {
@@ -198,7 +248,7 @@ Popup {
                 anchors.right: parent.right
                 spacing: 12
                 Button { objectName: "parentConfirmCancel"; height: Theme.control; text: qsTr("Abbrechen"); onClicked: confirm.reject() }
-                Button { objectName: "parentConfirmOk"; height: Theme.control; text: qsTr("Zurücksetzen"); onClicked: confirm.accept() }
+                Button { objectName: "parentConfirmOk"; height: Theme.control; text: qsTr("Ja, löschen"); onClicked: confirm.accept() }
             }
         }
         onAccepted: if (confirm.action) confirm.action()

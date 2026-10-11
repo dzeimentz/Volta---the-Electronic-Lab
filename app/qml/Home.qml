@@ -11,7 +11,8 @@ Rectangle {
     property var settings: null
     signal experimentRequested(string id)
     signal freeLabRequested()
-    signal continueRequested() // zurueck ins Labor mit dem aktuellen (gespeicherten) Stand
+    signal continueRequested()
+    signal profileSwitchRequested() // Forscherprofil wechseln // zurueck ins Labor mit dem aktuellen (gespeicherten) Stand
     signal journalRequested()
     signal infoRequested()
     signal parentAreaRequested()
@@ -42,7 +43,25 @@ Rectangle {
                 font.bold: true
             }
         }
+        // Forscherprofil: Symbol und Spitzname; Antippen fuehrt zur Profilauswahl
+        Button {
+            id: profileBadge
+            objectName: "profileBadge"
+            visible: home.controller.profilesEnabled && home.controller.currentProfile.id !== undefined
+            anchors.right: topActions.left
+            anchors.rightMargin: 12
+            anchors.verticalCenter: parent.verticalCenter
+            height: Theme.control
+            text: (home.controller.currentProfile.symbol || "") + "  " + (home.controller.currentProfile.name || "")
+            font.pixelSize: Math.round(15 * Theme.fontScale)
+            font.bold: true
+            onClicked: home.profileSwitchRequested()
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Profil wechseln")
+            Accessible.name: qsTr("Profil wechseln: %1").arg(home.controller.currentProfile.name || "")
+        }
         TopBarActions {
+            id: topActions
             anchors.right: parent.right
             anchors.rightMargin: 12
             anchors.verticalCenter: parent.verticalCenter

@@ -29,6 +29,7 @@ add_library(volta_model STATIC
     src/services/progress_store.cpp
     src/services/journal_store.cpp
     src/services/session_store.cpp
+    src/services/profile_store.cpp
     src/sim/simulation_bridge.cpp
     src/model/lab_session.cpp
     src/model/commands/board_command.cpp
@@ -118,6 +119,7 @@ qt_add_qml_module(volta_ui
         qml/FaultFinder.qml
         qml/ParentArea.qml
         qml/ParentGate.qml
+        qml/ProfileChooser.qml
         qml/DrawnIcon.qml
         qml/FormulaCalculator.qml
     SOURCES

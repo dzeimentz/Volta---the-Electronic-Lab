@@ -1,4 +1,5 @@
 // Einstiegspunkt der Qt-Anwendung. Modell, Dienste und Lernpfad folgen gemaess docs/architecture.md.
+#include <QDir>
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -6,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QStandardPaths>
 #include <QTimer>
 #include <QtQml/qqmlextensionplugin.h>
 
@@ -57,9 +59,10 @@ int main(int argc, char* argv[]) {
     volta::LabController lab(contentDir);
     // Fortschritt im Lernpfad lokal speichern; Entwicklerhilfen (VOLTA_SCREENSHOT ...) lassen ihn unberuehrt
     if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty()) {
-        lab.useProgressFile(volta::services::ProgressStore::defaultFile());
-        lab.useJournalFile(volta::services::JournalStore::defaultFile());
-        lab.useSessionFile(volta::services::SessionStore::defaultFile());
+        // Fortschritt, Forscherheft, Laborstand und Forscherprofile im privaten App-Speicher
+        const QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        QDir().mkpath(dataDir);
+        lab.useDataRoot(dataDir);
     }
 
     QQmlApplicationEngine engine;
@@ -78,7 +81,15 @@ int main(int argc, char* argv[]) {
     const QString demoFont = qEnvironmentVariable("VOLTA_DEMO_FONT");
     // VOLTA_DEMO_METER_DOCKED=0|1: Messgeraet neben der Grundplatte bzw. oben im Pult (ohne Speichern)
     const QString demoDocked = qEnvironmentVariable("VOLTA_DEMO_METER_DOCKED");
-    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty() && demoDocked.isEmpty());
+    // VOLTA_DEMO_PROFILES=1: Forscherprofile mit drei Beispielprofilen (Profilauswahl, ohne Speichern)
+    const bool demoProfiles = qEnvironmentVariableIntValue("VOLTA_DEMO_PROFILES") == 1;
+    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty() && demoDocked.isEmpty() && !demoProfiles);
+    if (demoProfiles) {
+        settings.setProfilesEnabled(true);
+        lab.addProfile(QStringLiteral("🦊"), QStringLiteral("Funkenfuchs"));
+        lab.addProfile(QStringLiteral("🚀"), QStringLiteral("Raketa"));
+        lab.addProfile(QStringLiteral("🐢"), QStringLiteral("Turbo"));
+    }
     if (!demoFont.isEmpty()) settings.setFontLevel(demoFont.toInt());
     if (!demoDocked.isEmpty()) settings.setMeterDocked(demoDocked.toInt() == 1);
     engine.rootContext()->setContextProperty(QStringLiteral("volta_settings"), &settings);
