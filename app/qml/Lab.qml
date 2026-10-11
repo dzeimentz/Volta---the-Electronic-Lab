@@ -24,7 +24,11 @@ Item {
     // Buchsen des Dreifach-Messgeraets: unten im Messgeraet rechts neben der Grundplatte (nur eingeblendet)
     readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
     readonly property int deskStripWidth: deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
-    readonly property int meterX: boardWidth + Theme.fieldGap
+    // runde Knoepfe +/- fuer die Breite der Grundplatte: rechts neben den Feldern, in der Hoehe zentriert
+    readonly property int sizerX: boardWidth + Theme.fieldGap
+    readonly property int sizerY: boardY + (rows.length * (Theme.fieldHeight + Theme.fieldGap) - Theme.fieldGap) / 2
+                                  - (2 * Theme.control + 28) / 2
+    readonly property int meterX: sizerX + Theme.control + Theme.fieldGap
     // Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (nie ueber M16)
     readonly property int slotsRight: slots * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap
     readonly property int trashX: Math.max(boardWidth - Theme.control, slotsRight + 12)
@@ -391,7 +395,12 @@ Item {
             }
             ToolButton {
                 objectName: "undoButton"
-                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "undo"; color: Theme.navy; size: 22; opacity: parent.parent.enabled ? 1 : 0.4 } }
+                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "undo"; color: "white"; size: 22; opacity: parent.parent.enabled ? 1 : 0.35 } }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered && parent.enabled ? "#2A4A6E" : "transparent")
+                    border.color: parent.enabled ? "#7F93A8" : "#4A6178"
+                }
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canUndo
                 onClicked: { lab.beginEdit(); lab.controller.undo() }
@@ -401,50 +410,18 @@ Item {
             }
             ToolButton {
                 objectName: "redoButton"
-                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "redo"; color: Theme.navy; size: 22; opacity: parent.parent.enabled ? 1 : 0.4 } }
+                contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "redo"; color: "white"; size: 22; opacity: parent.parent.enabled ? 1 : 0.35 } }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.down ? "#33FFFFFF" : (parent.hovered && parent.enabled ? "#2A4A6E" : "transparent")
+                    border.color: parent.enabled ? "#7F93A8" : "#4A6178"
+                }
                 width: Theme.control; height: Theme.control
                 enabled: lab.controller.canRedo
                 onClicked: { lab.beginEdit(); lab.controller.redo() }
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Wiederholen: %1").arg(lab.controller.redoText)
                 Accessible.name: qsTr("Wiederholen")
-            }
-            // Breite der Grundplatte: Felder je Reihe 8 / 10 / 12 (Befehl, rueckgaengig machbar)
-            Row {
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 2
-                ToolButton {
-                    objectName: "columnsMinus"
-                    text: "−"
-                    font.pixelSize: 19
-                    width: Theme.control; height: Theme.control
-                    enabled: lab.columns > 8
-                    onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns - 2) }
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Weniger Felder je Reihe")
-                    Accessible.name: qsTr("Weniger Felder je Reihe")
-                }
-                Label {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 52
-                    horizontalAlignment: Text.AlignHCenter
-                    text: qsTr("1–%1").arg(lab.columns)
-                    color: "white"
-                    font.pixelSize: 13
-                    font.bold: true
-                    Accessible.name: qsTr("Felder je Reihe: %1").arg(lab.columns)
-                }
-                ToolButton {
-                    objectName: "columnsPlus"
-                    text: "+"
-                    font.pixelSize: 19
-                    width: Theme.control; height: Theme.control
-                    enabled: lab.columns < 12
-                    onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns + 2) }
-                    ToolTip.visible: hovered
-                    ToolTip.text: qsTr("Mehr Felder je Reihe")
-                    Accessible.name: qsTr("Mehr Felder je Reihe")
-                }
             }
             // Werkzeugkasten (Farbcode, E-Reihen, Lexikon)
             ToolButton {
@@ -466,6 +443,7 @@ Item {
                 background: Rectangle {
                     radius: 6
                     color: toolbox.opened ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
                 }
             }
             // Messgeraet ein-/ausblenden
@@ -689,7 +667,7 @@ Item {
             objectName: "canvas"
             x: Theme.margin
             y: Theme.margin
-            width: Math.max(lab.trashX + Theme.control, !lab.controller.meterVisible ? lab.boardWidth
+            width: Math.max(lab.trashX + Theme.control, lab.meterX, !lab.controller.meterVisible ? lab.boardWidth
                             : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth)
                             : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
@@ -812,6 +790,60 @@ Item {
                     border.color: "white"
                     border.width: 2
                     Label { anchors.centerIn: parent; text: parent.index + 1; color: "white"; font.bold: true; font.pixelSize: 14 }
+                }
+            }
+
+            // Breite der Grundplatte: Felder je Reihe 8 / 10 / 12 (Befehl, rueckgaengig machbar). Runde Knoepfe, gelb mit
+            // schwarzem Ring; was nicht geht (- bei 8, + bei 12), ist grau. Dazwischen die aktuelle Breite.
+            component SizeButton: ToolButton {
+                id: sizeButton
+                property string sign
+                width: Theme.control; height: Theme.control
+                contentItem: Label {
+                    text: sizeButton.sign
+                    color: sizeButton.enabled ? "#111111" : "#7A838C"
+                    font.pixelSize: 26
+                    font.bold: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    radius: width / 2
+                    color: !sizeButton.enabled ? "#C9CED4" : (sizeButton.down ? "#F2B705" : "#FFD23F")
+                    border.color: sizeButton.enabled ? "#111111" : "#9AA3AD"
+                    border.width: 3
+                }
+                ToolTip.visible: hovered
+                Accessible.name: ToolTip.text
+            }
+            Column {
+                x: lab.sizerX
+                y: lab.sizerY
+                spacing: 2
+                SizeButton {
+                    objectName: "columnsPlus"
+                    sign: "+"
+                    enabled: lab.columns < 12
+                    onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns + 2) }
+                    ToolTip.text: qsTr("Mehr Felder je Reihe")
+                }
+                Label {
+                    width: Theme.control
+                    height: 24
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: qsTr("1–%1").arg(lab.columns)
+                    color: Theme.navy
+                    font.pixelSize: 12
+                    font.bold: true
+                    Accessible.name: qsTr("Felder je Reihe: %1").arg(lab.columns)
+                }
+                SizeButton {
+                    objectName: "columnsMinus"
+                    sign: "\u2212"
+                    enabled: lab.columns > 8
+                    onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns - 2) }
+                    ToolTip.text: qsTr("Weniger Felder je Reihe")
                 }
             }
 

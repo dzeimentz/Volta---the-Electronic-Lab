@@ -165,6 +165,10 @@ qt_add_resources(volta_ui "tick" PREFIX "/tick" BASE resources/tick FILES
 qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
     resources/flags/de.svg resources/flags/fr.svg resources/flags/en.svg resources/flags/lb.svg)
 # Firmenlogo fuer das Info-Fenster (optional; ohne Datei zeigt Info den Schriftzug)
+# Startbild (nur Desktop-Ausgabe; Android/iPadOS zeigen den Startbildschirm des Systems)
+if(NOT ANDROID AND NOT IOS)
+    qt_add_resources(volta_ui "splash" PREFIX "/brand" BASE resources/brand FILES resources/brand/splash.jpg)
+endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/brand/dc_logo.png")
     qt_add_resources(volta_ui "brand" PREFIX "/brand" BASE resources/brand FILES resources/brand/dc_logo.png)
 endif()

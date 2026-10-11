@@ -40,8 +40,13 @@
 - Ziehen aus dem Fach: Das Bauteil erscheint schemenhaft an dem Platz, an dem es landen wuerde, und alle Felder, die
   es belegt, sind hervorgehoben (z. B. A1 und A2). Passt es dort nicht, bleibt nur das Namensschild am Finger.
 - Im Betrieb oeffnet ein langer Druck auf ein Bauteil kein Menue (ein Taster bleibt gedrueckt); Rechtsklick weiterhin.
-- Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen, Breite der Grundplatte »− 1–12 +« (8/10/12 Felder je Reihe), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
+- Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen (gerahmt wie »V A Ω« und Werkzeugkasten), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
+- Breite der Grundplatte (8/10/12 Felder je Reihe, Befehl): runde Knoepfe »+« und »−« uebereinander rechts neben den
+  Feldern, in der Hoehe zentriert, gelb mit schwarzem Ring, dazwischen »1–12«; was nicht geht, ist grau. Das
+  Messgeraet neben der Grundplatte rueckt dahinter.
+- Startbildschirm (Desktop): Startbild mit Tick, Schriftzug und Herstellerlogo (`resources/brand/splash.jpg`), Version
+  unten rechts; nicht in der Android-Ausgabe.
 - Links: **Experimentauswahl** als Aufklappfeld (»Freies Labor«, »Stufe n: Titel«); zeigt zugleich den Titel.
 - Gespeichert (`AppSettings`, `einstellungen.ini`): Sprache, Schriftgroesse, Stromfluss, Animationen, Startbildschirm,
   Freigabe sowie die Arbeitsumgebung: Felder je Reihe (fuer neue Aufbauten, sofern die Vorlage passt), Messgeraet im
