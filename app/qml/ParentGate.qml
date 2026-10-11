@@ -1,6 +1,7 @@
 // Elternschranke (docs/ui-spec.md, docs/privacy-safety.md): PIN fuer Erwachsene (Start-PIN 1234, im Elternbereich
 // aenderbar) schuetzt Elternbereich und externe Links. Eingabe ueber einen Ziffernblock (>= 48 dp), verdeckt; nach
 // fuenf Fehlversuchen 30 s Sperre (AppSettings). ask(action) ruft action() erst nach der richtigen PIN auf.
+// Am Rechner auch per Tastatur: Ziffern (auch Ziffernblock), Ruecktaste/Entf loescht, Eingabe bestaetigt.
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -20,6 +21,11 @@ Popup {
         gate.forgotShown = false
         gate.lockSeconds = gate.settings ? gate.settings.parentPinLockSeconds() : 0
         gate.open()
+    }
+    function typeDigit(d) {
+        if (gate.lockSeconds > 0 || gate.pin.length >= 8) return
+        gate.pin += d
+        gate.wrong = false
     }
     function submit() {
         if (gate.pin === "" || !gate.settings) return
@@ -49,10 +55,23 @@ Popup {
     padding: 20
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     onClosed: gate.pending = null
+    onOpened: keyCatcher.forceActiveFocus()
     background: Rectangle { radius: 12; color: "#FFFDF7"; border.color: Theme.navy; border.width: 2 }
 
     contentItem: Column {
         spacing: 12
+        // Tastatur: haelt den Fokus (die Knoepfe nehmen ihn nicht), Escape bleibt beim Popup (schliesst)
+        Item {
+            id: keyCatcher
+            objectName: "gateKeys"
+            width: 0; height: 0
+            focus: true
+            Keys.onPressed: (event) => {
+                if (event.text.length === 1 && event.text >= "0" && event.text <= "9") { gate.typeDigit(event.text); event.accepted = true }
+                else if (event.key === Qt.Key_Backspace || event.key === Qt.Key_Delete) { gate.pin = gate.pin.slice(0, -1); event.accepted = true }
+                else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) { gate.submit(); event.accepted = true }
+            }
+        }
         Label {
             width: parent.width
             text: qsTr("Für Erwachsene")
@@ -102,6 +121,7 @@ Popup {
                     required property string modelData
                     objectName: "gateKey_" + modelData
                     width: 72; height: Theme.control
+                    focusPolicy: Qt.NoFocus // Fokus bleibt bei der Tastatureingabe
                     enabled: gate.lockSeconds === 0
                     text: modelData === "ok" ? qsTr("OK") : modelData === "del" ? "" : modelData
                     font.pixelSize: Math.round(18 * Theme.fontScale)
@@ -120,7 +140,7 @@ Popup {
                     onClicked: {
                         if (modelData === "ok") gate.submit()
                         else if (modelData === "del") gate.pin = gate.pin.slice(0, -1)
-                        else if (gate.pin.length < 8) { gate.pin += modelData; gate.wrong = false }
+                        else gate.typeDigit(modelData)
                     }
                 }
             }
@@ -139,6 +159,7 @@ Popup {
             spacing: 12
             Button {
                 objectName: "gateForgotButton"
+                focusPolicy: Qt.NoFocus
                 visible: !gate.forgotShown
                 height: Theme.control
                 flat: true

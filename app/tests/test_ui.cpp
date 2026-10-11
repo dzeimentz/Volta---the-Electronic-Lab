@@ -1128,6 +1128,30 @@ private slots:
         m_lab->clearBoard();
     }
 
+    // PIN-Abfrage per Tastatur (Rechner): Ziffern, Ruecktaste, Eingabe
+    void parentGateKeyboard() {
+        QObject* root = m_engine->rootObjects().first();
+        QObject* gate = root->findChild<QObject*>(QStringLiteral("parentGate"));
+        QVERIFY(gate);
+        auto typeKeys = [this](const char* digits) {
+            for (const char* c = digits; *c; ++c) QTest::keyClick(m_window, *c);
+        };
+        QMetaObject::invokeMethod(gate, "ask", Q_ARG(QVariant, QVariant()));
+        QTRY_VERIFY(gate->property("opened").toBool());
+        QTest::qWait(100);
+        QTest::keyClick(m_window, Qt::Key_9);
+        QCOMPARE(gate->property("pin").toString(), QStringLiteral("9"));
+        QTest::keyClick(m_window, Qt::Key_Backspace);
+        QCOMPARE(gate->property("pin").toString(), QString());
+        typeKeys("4321");
+        QTest::keyClick(m_window, Qt::Key_Return);
+        QTRY_VERIFY(gate->property("wrong").toBool()); // falsche PIN, Abfrage bleibt offen
+        QVERIFY(gate->property("opened").toBool());
+        typeKeys("1234");
+        QTest::keyClick(m_window, Qt::Key_Enter);
+        QTRY_VERIFY(!gate->property("opened").toBool()); // Start-PIN
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {
