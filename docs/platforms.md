@@ -12,9 +12,14 @@
   Maintenance Tool, Android SDK (Plattform 35, Build-Tools 35), das von Qt 6.11 verlangte NDK, JDK 17.
   Testgeraete: Tablet mit USB-Debugging oder Emulator (AVD). Erste Test-APKs nur mit Debug-Signatur.
 - Stand 10/2026: Qt 6.11.2, NDK r27c (27.2.12479018), Plattform android-36, Build-Tools 36.0.0, JDK 21
-  (C:/Program Files/Android/openjdk/jdk-21.0.8). Bauen: Umgebungsvariablen wie in CLAUDE.md, dann
-  `cmake --preset android-arm64`, `cmake --build --preset android-arm64 --target apk`, Debug-APK mit
-  `gradlew assembleDebug` in build/android-arm64/app/android-build (Kopie nach Release/android/).
+  (C:/Program Files/Android/openjdk/jdk-21.0.8). Bauen mit `python tools/build_android.py [--install]`: Preset
+  android-arm64, androiddeployqt, Ausduennen, Gradle (Ausgabe in Datei, sonst haengt der Aufruf), Debug-APK nach
+  Release/android/, Pruefung auf Berechtigungen, mit --install auf alle per adb angeschlossenen Geraete.
+- Paketgroesse (Ziel < 80 MB): der Stil Basic ist fest (`QQuickStyle` in main.cpp); nicht ausgeliefert werden
+  FFmpeg (Ton ueber das Android- bzw. Windows-Medien-Backend), die Controls-Stile Fusion/Imagine/Material/Universal/
+  FluentWinUI3/Windows, NativeStyle, virtuelle Tastatur, TLS, Netzinformation, seltene Bildformate, Qt Sensors.
+  Auf Android muessen entfernte Bibliotheken auch aus res/values/libs.xml (sonst Absturz beim Start).
+  Stand: APK 68,9 MB (vorher 85,6 MB), Windows-Ordner 85 MB (vorher ca. 99 MB).
 - Eigenes Manifest `packaging/android/AndroidManifest.xml`: Paket `com.dcsoftwareengineering.volta1`, Querformat,
   keine Cloud-Sicherung, keine Berechtigungen (Qt traegt ueber Multimedia/TextToSpeech sonst INTERNET, CAMERA,
   RECORD_AUDIO, BLUETOOTH u. a. ein; diese werden mit tools:node="remove" entfernt). Verbleibend nur die interne

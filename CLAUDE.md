@@ -91,6 +91,9 @@ python3 tools/deploy_release.py
 # App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
 python3 tools/make_icons.py
 
+# Android-Test-APK (bauen, ausduennen, pruefen; --install spielt sie auf angeschlossene Tablets)
+python3 tools/build_android.py --install
+
 # Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
 cmake --preset android-arm64
 cmake --build --preset android-arm64

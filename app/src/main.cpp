@@ -7,6 +7,7 @@
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickStyle>
 #include <QQuickWindow>
 #include <QStandardPaths>
 #include <QTimer>
@@ -68,6 +69,8 @@ int main(int argc, char* argv[]) {
         lab.useDataRoot(dataDir);
     }
 
+    // Stil Basic fest (auch fuer den Dateidialog): andere Controls-Stile werden nicht ausgeliefert
+    QQuickStyle::setStyle(QStringLiteral("Basic"));
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("labController"), &lab);
     // Anzeigesprache: Oberflaeche (Uebersetzung, retranslate) und Inhalte (Experimenttexte) gemeinsam umschalten

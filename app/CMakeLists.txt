@@ -1,5 +1,5 @@
 # Qt-Anwendung (siehe docs/architecture.md, docs/adr/0001-qt6-stack.md)
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 QuickDialogs2 Multimedia TextToSpeech Sensors Svg LinguistTools)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 QuickDialogs2 Multimedia TextToSpeech Svg LinguistTools)
 qt_standard_project_setup(REQUIRES 6.8)
 
 set(VOLTA_APP_NAME "Volta 1 - Das Elektronik-Labor")
@@ -170,7 +170,7 @@ qt_add_resources(volta_ui "translations" PREFIX "/i18n" BASE "${CMAKE_CURRENT_BI
 
 target_link_libraries(volta_app PRIVATE
     volta_ui volta_uiplugin
-    Qt6::Quick Qt6::QuickControls2 Qt6::Multimedia Qt6::TextToSpeech Qt6::Sensors Qt6::Svg)
+    Qt6::Quick Qt6::QuickControls2 Qt6::Multimedia Qt6::TextToSpeech Qt6::Svg)
 
 if(VOLTA_BUILD_TESTS)
     add_subdirectory(tests)

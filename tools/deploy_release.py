@@ -65,6 +65,18 @@ def main() -> int:
         unwanted = [TARGET / "multimedia" / "ffmpegmediaplugin.dll", TARGET / "texttospeech" / "qtexttospeech_mock.dll"]
         for pattern in ("avcodec-*.dll", "avformat-*.dll", "avutil-*.dll", "swresample-*.dll", "swscale-*.dll"):
             unwanted += list(TARGET.glob(pattern))
+        # Stil Basic ist fest eingestellt (main.cpp): andere Controls-Stile, NativeStyle und die virtuelle Tastatur
+        # werden nicht gebraucht (Paketgroesse, docs/platforms.md)
+        for style in ("Fusion", "Imagine", "Material", "Universal", "FluentWinUI3", "Windows"):
+            unwanted += list(TARGET.glob(f"Qt6QuickControls2{style}*.dll"))
+            if (TARGET / "qml" / "QtQuick" / "Controls" / style).exists():
+                shutil.rmtree(TARGET / "qml" / "QtQuick" / "Controls" / style)
+        for folder in (TARGET / "qml" / "QtQuick" / "NativeStyle", TARGET / "qml" / "QtQuick" / "VirtualKeyboard"):
+            if folder.exists():
+                shutil.rmtree(folder)
+        unwanted += list(TARGET.glob("Qt6VirtualKeyboard*.dll")) + [
+            TARGET / "platforminputcontexts" / "qtvirtualkeyboardplugin.dll",
+            TARGET / "imageformats" / "qgif.dll", TARGET / "imageformats" / "qico.dll"]
         for f in unwanted:
             if f.exists():
                 f.unlink()
@@ -72,8 +84,9 @@ def main() -> int:
     if content.exists():
         shutil.rmtree(content)
     shutil.copytree(ROOT / "content", content, ignore=shutil.ignore_patterns("schema"))
-    size_mb = sum(f.stat().st_size for f in TARGET.rglob("*") if f.is_file()) / 1e6
-    print(f"Release: {TARGET / exe_name} ({size_mb:.0f} MB mit Laufzeit und Inhalten)")
+    size_mb = sum(f.stat().st_size for f in TARGET.rglob("*")
+                  if f.is_file() and "android" not in f.relative_to(TARGET).parts) / 1e6
+    print(f"Release: {TARGET / exe_name} ({size_mb:.0f} MB mit Laufzeit und Inhalten, ohne Android-APK)")
     return 0
 
 
