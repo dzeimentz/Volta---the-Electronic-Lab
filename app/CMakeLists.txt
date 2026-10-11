@@ -1,5 +1,5 @@
 # Qt-Anwendung (siehe docs/architecture.md, docs/adr/0001-qt6-stack.md)
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Multimedia TextToSpeech Sensors Svg LinguistTools)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 QuickDialogs2 Multimedia TextToSpeech Sensors Svg LinguistTools)
 qt_standard_project_setup(REQUIRES 6.8)
 
 set(VOLTA_APP_NAME "Volta 1 - Das Elektronik-Labor")
@@ -16,6 +16,7 @@ add_library(volta_model STATIC
     src/model/anchor.cpp
     src/model/board_edit.cpp
     src/model/board_json.cpp
+    src/model/qr_code.cpp
     src/model/circuit_check.cpp
     src/model/netlist_builder.cpp
     src/model/success.cpp
@@ -30,11 +31,16 @@ add_library(volta_model STATIC
     src/services/journal_store.cpp
     src/services/session_store.cpp
     src/services/profile_store.cpp
+    src/services/profile_transfer.cpp
     src/sim/simulation_bridge.cpp
     src/model/lab_session.cpp
     src/model/commands/board_command.cpp
 )
 target_include_directories(volta_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+# QR-Kodierer (Project Nayuki, MIT, third_party/qrcodegen/README.md)
+add_library(qrcodegen STATIC ${PROJECT_SOURCE_DIR}/third_party/qrcodegen/qrcodegen.cpp)
+target_include_directories(qrcodegen PUBLIC ${PROJECT_SOURCE_DIR}/third_party/qrcodegen)
+target_link_libraries(volta_model PRIVATE qrcodegen)
 find_package(Threads REQUIRED)
 target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads::Threads)
 
@@ -134,7 +140,7 @@ qt_add_qml_module(volta_ui
         src/services/speech_service.hpp
         src/services/speech_service.cpp
 )
-target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2 Qt6::Multimedia Qt6::TextToSpeech)
+target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::Multimedia Qt6::TextToSpeech)
 # Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben
 qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE resources/icons FILES
     resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png

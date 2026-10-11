@@ -5,6 +5,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <QUrl>
 #include <QVariantList>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
@@ -148,6 +149,18 @@ public:
     // Elternbereich: ein Profil bzw. alle Profile samt Daten loeschen
     Q_INVOKABLE bool removeProfile(const QString& id);
     Q_INVOKABLE void removeAllProfiles();
+    // ---- Mitnahme auf ein anderes Geraet (services/profile_transfer)
+    // Fortschrittscode als Link (fuer den QR-Code) und QR-Raster {size, cells: "0101..."} eines Textes
+    Q_INVOKABLE QString progressLink() const;
+    Q_INVOKABLE QVariantMap qrCode(const QString& text) const;
+    // erledigte Experimente aus einem Link (zur Rueckfrage) bzw. uebernehmen (Anzahl neu erledigter)
+    Q_INVOKABLE QStringList progressFromLink(const QString& link) const;
+    Q_INVOKABLE int importProgressLink(const QString& link);
+    // Profildatei: speichern; ansehen {ok, symbol, name, done}; laden (mit Profilen als neues Profil, sonst ersetzt
+    // sie den Stand dieses Geraets)
+    Q_INVOKABLE bool exportProfile(const QUrl& target);
+    Q_INVOKABLE QVariantMap inspectProfileFile(const QUrl& source) const;
+    Q_INVOKABLE bool importProfileFile(const QUrl& source);
     // Automatisches Speichern des Laborstands (Aufbau, Experiment mit Ablauf, Labor offen); ohne Aufruf nur im Speicher
     void useSessionFile(const QString& path);
     // gespeicherten Stand laden (Start der App); true, wenn ein Stand wiederhergestellt wurde
@@ -362,6 +375,12 @@ signals:
     void recorderChanged();
     void finishChanged();
     void profilesChanged();
+    // Volta wurde mit einem Fortschritts-Link geoeffnet (QR-Code ueber die Kamera-App): Rueckfrage in der Oberflaeche
+    void progressLinkReceived(const QString& link);
+
+public slots:
+    // Link-Handler fuer das Schema volta1 (QDesktopServices::setUrlHandler in main.cpp)
+    void handleUrl(const QUrl& url);
 
 private:
     void updateFinish();
@@ -388,8 +407,10 @@ private:
     services::ProfileStore m_profiles;
     bool m_profilesEnabled = false;
     QString m_currentProfile;
+    QString m_dataDir; // aktiver Datenordner (Profil oder ohne Profil); leer: nur im Speicher
+    QString band() const;
     // Fortschritt, Forscherheft und Laborstand aus diesem Ordner (leer: nur im Speicher); Labor leer
-    void activateDataDir(const QString& dir);
+    void activateDataDir(const QString& dir, bool saveFirst = true);
     int m_gateA = 0;
     int m_gateB = 0;
     services::JournalStore m_journal;

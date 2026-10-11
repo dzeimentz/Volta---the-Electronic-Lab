@@ -16,6 +16,8 @@
 #include <cstdlib>
 
 #include "model/board_json.hpp"
+#include "model/qr_code.hpp"
+#include "services/profile_transfer.hpp"
 #include "model/build_guide.hpp"
 #include "model/formula.hpp"
 #include "services/audio_service.hpp"
@@ -228,8 +230,9 @@ void LabController::useDataRoot(const QString& dir) {
     emit profilesChanged();
 }
 
-void LabController::activateDataDir(const QString& dir) {
-    saveSession(); // Stand des bisherigen Profils sichern
+void LabController::activateDataDir(const QString& dir, bool saveFirst) {
+    if (saveFirst) saveSession(); // Stand des bisherigen Profils sichern
+    m_dataDir = dir;
     const auto file = [&](const char* name) { return dir.isEmpty() ? QString() : dir + QLatin1Char('/') + name; };
     useProgressFile(file("fortschritt.json"));
     useJournalFile(file("forscherheft.json"));
@@ -309,6 +312,82 @@ void LabController::removeAllProfiles() {
     if (m_profilesEnabled) activateDataDir({});
     m_profiles.removeAll();
     emit profilesChanged();
+}
+
+QString LabController::band() const {
+    return m_experimentIds.isEmpty() ? QStringLiteral("volta1") : m_experimentIds.first().section(QLatin1Char('.'), 0, 0);
+}
+
+QString LabController::progressLink() const { return services::transfer::progressLink(band(), m_progress.doneIds()); }
+
+QVariantMap LabController::qrCode(const QString& text) const {
+    model::QrMatrix m;
+    if (!model::makeQrCode(text.toStdString(), m)) return {};
+    QString cells;
+    cells.reserve(static_cast<qsizetype>(m.dark.size()));
+    for (bool d : m.dark) cells += d ? QLatin1Char('1') : QLatin1Char('0');
+    return {{QStringLiteral("size"), m.size}, {QStringLiteral("cells"), cells}};
+}
+
+QStringList LabController::progressFromLink(const QString& link) const {
+    return services::transfer::parseProgressLink(link, band(), m_experimentIds);
+}
+
+int LabController::importProgressLink(const QString& link) {
+    int added = 0;
+    for (const QString& id : progressFromLink(link))
+        if (!m_progress.isDone(id)) {
+            m_progress.markDone(id);
+            ++added;
+        }
+    emit progressChanged();
+    return added;
+}
+
+void LabController::handleUrl(const QUrl& url) {
+    if (url.scheme() == QLatin1String(services::transfer::kScheme)) emit progressLinkReceived(url.toString());
+}
+
+namespace {
+QString localOrContent(const QUrl& url) { return url.isLocalFile() ? url.toLocalFile() : url.toString(); }
+} // namespace
+
+bool LabController::exportProfile(const QUrl& target) {
+    if (m_dataDir.isEmpty()) return false;
+    saveSession();
+    services::transfer::ProfileFile f = services::transfer::loadFromDir(m_dataDir);
+    if (const services::Profile* p = m_profiles.find(m_currentProfile)) {
+        f.symbol = p->symbol;
+        f.name = p->name;
+    }
+    return services::transfer::writeProfileFile(localOrContent(target), f);
+}
+
+QVariantMap LabController::inspectProfileFile(const QUrl& source) const {
+    services::transfer::ProfileFile f;
+    if (!services::transfer::readProfileFile(localOrContent(source), f)) return {{QStringLiteral("ok"), false}};
+    return {{QStringLiteral("ok"), true},
+            {QStringLiteral("symbol"), f.symbol},
+            {QStringLiteral("name"), f.name},
+            {QStringLiteral("done"), f.progress.value(QStringLiteral("erledigt")).toObject().size()}};
+}
+
+bool LabController::importProfileFile(const QUrl& source) {
+    services::transfer::ProfileFile f;
+    if (!services::transfer::readProfileFile(localOrContent(source), f) || m_dataRoot.isEmpty()) return false;
+    if (m_profilesEnabled) {
+        // als neues Profil (Symbol und Spitzname aus der Datei, sonst Vorgaben)
+        const QString id = m_profiles.add(f.symbol.isEmpty() ? QStringLiteral("🔬") : f.symbol,
+                                          f.name.isEmpty() ? tr("Forscher") : f.name);
+        if (id.isEmpty()) return false;
+        const bool ok = services::transfer::saveToDir(m_profiles.dataDir(id), f);
+        emit profilesChanged();
+        return ok;
+    }
+    // ohne Profile: ersetzt den Stand dieses Geraets (Rueckfrage in der Oberflaeche)
+    if (!services::transfer::saveToDir(m_dataRoot, f)) return false;
+    activateDataDir(m_dataRoot, false); // neu laden, ohne den alten Stand darueber zu speichern
+    return true;
 }
 
 void LabController::useProgressFile(const QString& path) {

@@ -19,6 +19,7 @@
   keine Cloud-Sicherung, keine Berechtigungen (Qt traegt ueber Multimedia/TextToSpeech sonst INTERNET, CAMERA,
   RECORD_AUDIO, BLUETOOTH u. a. ein; diese werden mit tools:node="remove" entfernt). Verbleibend nur die interne
   AndroidX-Signaturberechtigung DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION. Pruefung: `aapt dump badging`.
+  Intent-Filter fuer `volta1://fortschritt` (Fortschrittscode aus der Kamera-App, `QDesktopServices::setUrlHandler`).
 - Entwicklertablet: Meswoa MES-B3, 15,6", 1920 x 1080, 240 dpi (logisch 1280 x 720), arm64.
 
 ## Desktop Windows und Linux x86-64 (Phase 5a, Entwicklungsziel ab Phase 0)

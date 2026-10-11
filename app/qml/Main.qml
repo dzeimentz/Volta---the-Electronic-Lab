@@ -108,6 +108,55 @@ ApplicationWindow {
     }
     ParentGate { id: parentGate; controller: labController }
 
+    // Fortschrittscode (QR ueber die Kamera-App): Rueckfrage, dann in das aktuelle Profil uebernehmen. Mit Profilen
+    // wartet die Frage, bis eines gewaehlt ist.
+    property string pendingLink: ""
+    function offerLink() {
+        if (root.pendingLink === "" || (labController.profilesEnabled && labController.currentProfile.id === undefined)) return
+        linkDialog.count = labController.progressFromLink(root.pendingLink).length
+        linkDialog.open()
+    }
+    Connections {
+        target: labController
+        function onProgressLinkReceived(link) { root.pendingLink = link; root.offerLink() }
+        function onProfilesChanged() { root.offerLink() }
+    }
+    Dialog {
+        id: linkDialog
+        objectName: "linkDialog"
+        property int count: 0
+        anchors.centerIn: parent
+        modal: true
+        width: Math.min(460, root.width - 32)
+        title: qsTr("Fortschritt übernehmen?")
+        contentItem: Column {
+            spacing: 16
+            Label {
+                width: linkDialog.width - linkDialog.leftPadding - linkDialog.rightPadding
+                wrapMode: Text.Wrap
+                font.pixelSize: Math.round(15 * Theme.fontScale)
+                text: linkDialog.count === 0 ? qsTr("Dieser Code enthält keine Experimente von Volta 1.")
+                    : labController.currentProfile.id !== undefined
+                    ? qsTr("%1 erledigte Experimente in das Profil »%2« übernehmen?").arg(linkDialog.count).arg(labController.currentProfile.name)
+                    : qsTr("%1 erledigte Experimente übernehmen?").arg(linkDialog.count)
+            }
+            Row {
+                anchors.right: parent.right
+                spacing: 12
+                Button { objectName: "linkCancel"; height: Theme.control; text: qsTr("Abbrechen"); onClicked: linkDialog.reject() }
+                Button {
+                    objectName: "linkAccept"
+                    visible: linkDialog.count > 0
+                    height: Theme.control
+                    text: qsTr("Übernehmen")
+                    onClicked: linkDialog.accept()
+                }
+            }
+        }
+        onAccepted: labController.importProgressLink(root.pendingLink)
+        onClosed: root.pendingLink = ""
+    }
+
     // Forscherprofile: Auswahl, solange keins gewaehlt ist (ueber allen Ansichten, unter Schranke und Elternbereich)
     ProfileChooser {
         anchors.fill: parent

@@ -18,7 +18,13 @@
   »Neues Profil« (24 Bildzeichen, Spitzname bis 16 Zeichen, Hinweis »nicht deinen richtigen Namen«, kein Passwort);
   hoechstens 30 Profile. Je Profil eigener Ordner `profile/<id>/` mit Fortschritt, Forscherheft und Laborstand;
   Sprache und Einstellungen gelten fuer das Geraet. Abzeichen auf der Startseite wechselt das Profil. Loeschen
-  einzeln oder »Alle Profile zuruecksetzen« nur im Elternbereich (mit Rueckfrage). Offen: Mitnahme per Datei/QR-Code.
+  einzeln oder »Alle Profile zuruecksetzen« nur im Elternbereich (mit Rueckfrage).
+- Mitnahme (Elternbereich »Mitnehmen auf ein anderes Geraet«, `services/profile_transfer`): Profildatei
+  `*.volta1profil` (Symbol, Spitzname, Fortschritt, Forscherheft, letzter Aufbau) ueber die Dateiauswahl des Systems
+  (Android ohne Speicherberechtigung); Laden legt mit Profilen ein neues Profil an, ohne Profile ersetzt es nach
+  Rueckfrage den Stand. QR-Code nur mit den erledigten Experimenten, ohne Namen: Link `volta1://fortschritt?d=1.1,...`,
+  gescannt mit der Kamera-App des Systems, die Volta oeffnet (Intent-Filter, keine Kameraberechtigung); Volta fragt
+  vor dem Uebernehmen (mit Profilen erst nach der Profilwahl). QR-Kodierer `third_party/qrcodegen` (MIT).
 - Umgesetzt (Phase 2, D1, `Home.qml`): Kacheln Freies Labor und Forscherheft (folgt), Lernpfad mit Stufen aus
   `content/<band>/stufen.json` (Titel, Leitfrage), Fortschritt je Stufe und Experimentkarten (geschafft: Haken).
   Freischaltung zur Reduktion: Stufen 0 und 1 offen, jede weitere, wenn alle Experimente der vorigen geschafft sind;

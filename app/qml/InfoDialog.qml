@@ -153,6 +153,9 @@ Popup {
                 color: "#5A6672"
             }
 
+            Heading { text: qsTr("Fremdbestandteile") }
+            Line { text: qsTr("QR-Code: qrcodegen von Project Nayuki, MIT-Lizenz (Copyright Project Nayuki).") }
+
             Heading { text: qsTr("Datenschutz") }
             Line { text: qsTr("Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.") }
             Line { text: "© 2026 DC Software Engineering"; color: "#5A6672"; topPadding: 8 }

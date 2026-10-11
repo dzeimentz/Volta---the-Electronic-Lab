@@ -3,6 +3,7 @@
 // Simulation, Lernpfad im Ueberblick, Kontakt mit Links nach aussen (hier erlaubt, weil hinter der Schranke).
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Dialogs
 
 Popup {
     id: area
@@ -151,6 +152,43 @@ Popup {
                                        () => area.controller.removeAllProfiles())
             }
 
+            // ---- Mitnehmen auf ein anderes Geraet (Datei: ganzes Profil; QR-Code: nur der Fortschritt, ohne Namen)
+            Heading { text: qsTr("Mitnehmen auf ein anderes Gerät") }
+            Body { text: area.controller.profilesEnabled && area.controller.currentProfile.id === undefined
+                         ? qsTr("Wählen Sie zuerst ein Forscherprofil, dann lässt es sich mitnehmen.")
+                         : qsTr("Als Datei geht alles mit: Symbol, Spitzname, Fortschritt, Forscherheft und der letzte Aufbau. Der QR-Code enthält nur, welche Experimente erledigt sind – ohne Namen.") }
+            Flow {
+                width: parent.width
+                spacing: 10
+                readonly property bool ready: !area.controller.profilesEnabled || area.controller.currentProfile.id !== undefined
+                Button {
+                    objectName: "parentExportFile"
+                    height: Theme.control
+                    enabled: parent.ready
+                    text: qsTr("Als Datei speichern")
+                    onClicked: saveDialog.open()
+                }
+                Button {
+                    objectName: "parentImportFile"
+                    height: Theme.control
+                    text: qsTr("Aus Datei laden")
+                    onClicked: openDialog.open()
+                }
+                Button {
+                    objectName: "parentShowQr"
+                    height: Theme.control
+                    enabled: parent.ready
+                    text: qsTr("Fortschritt als QR-Code zeigen")
+                    onClicked: qrPopup.open()
+                }
+            }
+            Body {
+                id: transferResult
+                visible: text !== ""
+                text: ""
+                color: Theme.accent
+            }
+
             // ---- Fortschritt und Forscherheft
             Heading { text: qsTr("Fortschritt und Forscherheft") }
             Body { text: qsTr("Der Fortschritt im Lernpfad und das Forscherheft liegen nur auf diesem Gerät. Zurücksetzen lässt sich nicht rückgängig machen.") }
@@ -226,16 +264,97 @@ Popup {
         }
     }
 
-    // Rueckfrage vor dem Zuruecksetzen
+    // Profildatei speichern bzw. laden (Systemdialog; Android: Dateiauswahl ohne Speicherberechtigung)
+    FileDialog {
+        id: saveDialog
+        fileMode: FileDialog.SaveFile
+        nameFilters: [qsTr("Volta-Profil (*.volta1profil)")]
+        defaultSuffix: "volta1profil"
+        currentFile: "file:///" + (area.controller.currentProfile.name || "volta1") + ".volta1profil"
+        onAccepted: transferResult.text = area.controller.exportProfile(selectedFile)
+                    ? qsTr("Gespeichert.") : qsTr("Speichern hat nicht geklappt.")
+    }
+    FileDialog {
+        id: openDialog
+        fileMode: FileDialog.OpenFile
+        nameFilters: [qsTr("Volta-Profil (*.volta1profil)"), qsTr("Alle Dateien (*)")]
+        onAccepted: {
+            const info = area.controller.inspectProfileFile(selectedFile)
+            if (!info.ok) { transferResult.text = qsTr("Diese Datei ist kein Volta-Profil."); return }
+            const file = selectedFile
+            const who = (info.symbol || "") + " " + (info.name || "")
+            confirm.ask(area.controller.profilesEnabled
+                        ? qsTr("Neues Profil »%1« mit %2 erledigten Experimenten anlegen?").arg(who.trim()).arg(info.done)
+                        : qsTr("Den Stand auf diesem Gerät durch die Datei ersetzen (%1 erledigte Experimente)? Der bisherige Stand geht verloren.").arg(info.done),
+                        () => { transferResult.text = area.controller.importProfileFile(file)
+                                                      ? qsTr("Übernommen.") : qsTr("Laden hat nicht geklappt.") },
+                        qsTr("Übernehmen"))
+        }
+    }
+
+    // QR-Code mit dem Fortschritt: auf dem anderen Geraet mit der Kamera-App scannen
+    Popup {
+        id: qrPopup
+        objectName: "qrPopup"
+        anchors.centerIn: parent
+        modal: true
+        padding: 20
+        readonly property var code: opened ? area.controller.qrCode(area.controller.progressLink()) : ({})
+        background: Rectangle { radius: 12; color: "white"; border.color: Theme.navy; border.width: 2 }
+        contentItem: Column {
+            spacing: 12
+            Label {
+                width: 360
+                wrapMode: Text.Wrap
+                text: qsTr("Scannen Sie den Code auf dem anderen Gerät mit der Kamera-App. Volta öffnet sich dort und fragt, ob der Fortschritt übernommen werden soll.")
+                font.pixelSize: Math.round(14 * Theme.fontScale)
+            }
+            Canvas {
+                id: qrCanvas
+                objectName: "qrCanvas"
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: 300; height: 300
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.fillStyle = "white"
+                    ctx.fillRect(0, 0, width, height)
+                    const c = qrPopup.code
+                    if (!c.size) return
+                    const quiet = 4 // Ruhezone in Modulen
+                    const cell = Math.floor(width / (c.size + 2 * quiet))
+                    const off = Math.floor((width - cell * c.size) / 2)
+                    ctx.fillStyle = "black"
+                    for (let y = 0; y < c.size; ++y)
+                        for (let x = 0; x < c.size; ++x)
+                            if (c.cells.charAt(y * c.size + x) === "1") ctx.fillRect(off + x * cell, off + y * cell, cell, cell)
+                }
+                Connections { target: qrPopup; function onCodeChanged() { qrCanvas.requestPaint() } }
+            }
+            Button {
+                anchors.right: parent.right
+                height: Theme.control
+                text: qsTr("Schließen")
+                onClicked: qrPopup.close()
+            }
+        }
+    }
+
+    // Rueckfrage vor dem Loeschen bzw. Uebernehmen (okText: Beschriftung des Bestaetigungsknopfs)
     Dialog {
         id: confirm
         property var action: null
         property string question: ""
-        function ask(text, act) { confirm.question = text; confirm.action = act; confirm.open() }
+        property string okText: ""
+        function ask(text, act, ok) {
+            confirm.question = text
+            confirm.action = act
+            confirm.okText = ok || ""
+            confirm.open()
+        }
         anchors.centerIn: parent
         modal: true
         width: Math.min(440, area.width - 32)
-        title: qsTr("Wirklich löschen?")
+        title: confirm.okText === "" ? qsTr("Wirklich löschen?") : qsTr("Bitte bestätigen")
         contentItem: Column {
             spacing: 16
             Label {
@@ -248,7 +367,7 @@ Popup {
                 anchors.right: parent.right
                 spacing: 12
                 Button { objectName: "parentConfirmCancel"; height: Theme.control; text: qsTr("Abbrechen"); onClicked: confirm.reject() }
-                Button { objectName: "parentConfirmOk"; height: Theme.control; text: qsTr("Ja, löschen"); onClicked: confirm.accept() }
+                Button { objectName: "parentConfirmOk"; height: Theme.control; text: confirm.okText === "" ? qsTr("Ja, löschen") : confirm.okText; onClicked: confirm.accept() }
             }
         }
         onAccepted: if (confirm.action) confirm.action()

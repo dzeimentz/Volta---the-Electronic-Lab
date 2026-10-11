@@ -10,7 +10,9 @@
 #include "model/build_guide.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/formula.hpp"
+#include "model/qr_code.hpp"
 #include "model/recorder.hpp"
+#include "services/profile_transfer.hpp"
 #include "model/tone_synth.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
@@ -89,6 +91,26 @@ private slots:
         QCOMPARE(back.desk.tools.size(), std::size_t(1));
         QVERIFY(!back.desk.tools[0].on);
         QVERIFY(!model::boardFromJson(QJsonObject{}, back)); // kein Aufbau
+    }
+
+    // Mitnahme: Fortschritts-Link ohne Namen, nur bekannte Experimente; QR-Code passt
+    void progressLinkAndQr() {
+        namespace t = services::transfer;
+        const QStringList known{"volta1.1.1", "volta1.1.2", "volta1.4.15"};
+        const QString link = t::progressLink(QStringLiteral("volta1"), {"volta1.4.15", "volta1.1.1"});
+        QCOMPARE(link, QStringLiteral("volta1://fortschritt?d=1.1,4.15"));
+        QCOMPARE(t::parseProgressLink(link, QStringLiteral("volta1"), known), QStringList({"volta1.1.1", "volta1.4.15"}));
+        QVERIFY(t::parseProgressLink(QStringLiteral("volta1://fortschritt?d=9.9,1.2,1.2"), QStringLiteral("volta1"), known) ==
+                QStringList{"volta1.1.2"}); // unbekannt verworfen, doppelt einmal
+        QVERIFY(t::parseProgressLink(QStringLiteral("https://example.org/?d=1.1"), QStringLiteral("volta1"), known).isEmpty());
+        // alle 61 Experimente: der QR-Code bleibt klein genug fuer die Kamera
+        QStringList all;
+        for (int s = 1; s <= 4; ++s)
+            for (int n = 1; n <= 20; ++n) all << QStringLiteral("volta1.%1.%2").arg(s).arg(n);
+        model::QrMatrix qr;
+        QVERIFY(model::makeQrCode(t::progressLink(QStringLiteral("volta1"), all).toStdString(), qr));
+        QVERIFY(qr.size >= 21 && qr.size <= 97); // hoechstens Version 20
+        QCOMPARE(qr.dark.size(), std::size_t(qr.size * qr.size));
     }
 
     void flowRestore() {

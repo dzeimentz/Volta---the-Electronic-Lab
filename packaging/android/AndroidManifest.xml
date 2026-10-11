@@ -44,6 +44,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- Fortschrittscode: die Kamera-App oeffnet volta1://fortschritt?d=... mit Volta (keine Kameraberechtigung) -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="volta1" android:host="fortschritt" />
+            </intent-filter>
 
           <meta-data
                 android:name="android.app.lib_name"

@@ -720,6 +720,58 @@ private slots:
         QCOMPARE(again.profiles().size(), 0);
     }
 
+    // Mitnahme per Datei: Profil speichern und auf einem "anderen Geraet" als neues Profil laden
+    void profileFileTransfer() {
+        QTemporaryDir a, b;
+        LabController from(QStringLiteral(VOLTA_CONTENT_DIR));
+        from.useDataRoot(a.path());
+        from.setProfilesEnabled(true);
+        QVERIFY(from.selectProfile(from.addProfile(QStringLiteral("🦉"), QStringLiteral("Eule"))));
+        QCOMPARE(from.importProgressLink(QStringLiteral("volta1://fortschritt?d=1.1,1.2")), 2);
+        const QUrl file = QUrl::fromLocalFile(a.filePath(QStringLiteral("eule.volta1profil")));
+        QVERIFY(from.exportProfile(file));
+        const QVariantMap info = from.inspectProfileFile(file);
+        QVERIFY(info.value(QStringLiteral("ok")).toBool());
+        QCOMPARE(info.value(QStringLiteral("name")).toString(), QStringLiteral("Eule"));
+        QCOMPARE(info.value(QStringLiteral("done")).toInt(), 2);
+        // anderes Geraet mit Profilen: neues Profil mit dem Fortschritt
+        LabController to(QStringLiteral(VOLTA_CONTENT_DIR));
+        to.useDataRoot(b.path());
+        to.setProfilesEnabled(true);
+        QVERIFY(to.importProfileFile(file));
+        QCOMPARE(to.profiles().size(), 1);
+        QVERIFY(to.selectProfile(to.profiles().first().toMap().value(QStringLiteral("id")).toString()));
+        QVERIFY(to.isDone(QStringLiteral("volta1.1.2")));
+        // anderes Geraet ohne Profile: ersetzt den Stand
+        LabController plain(QStringLiteral(VOLTA_CONTENT_DIR));
+        QTemporaryDir c;
+        plain.useDataRoot(c.path());
+        QVERIFY(!plain.isDone(QStringLiteral("volta1.1.1")));
+        QVERIFY(plain.importProfileFile(file));
+        QVERIFY(plain.isDone(QStringLiteral("volta1.1.1")));
+        // keine Profildatei
+        QFile junk(a.filePath(QStringLiteral("x.volta1profil")));
+        QVERIFY(junk.open(QIODevice::WriteOnly));
+        junk.write("{}");
+        junk.close();
+        QVERIFY(!plain.inspectProfileFile(QUrl::fromLocalFile(junk.fileName())).value(QStringLiteral("ok")).toBool());
+    }
+
+    // Fortschritts-Link aus der Kamera-App: Rueckfrage, dann uebernommen
+    void progressLinkOpensDialog() {
+        m_lab->resetProgress();
+        QObject* dialog = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("linkDialog"));
+        QVERIFY(dialog);
+        m_lab->handleUrl(QUrl(QStringLiteral("volta1://fortschritt?d=1.1,1.3")));
+        QTRY_VERIFY(dialog->property("opened").toBool());
+        QCOMPARE(dialog->property("count").toInt(), 2);
+        QVERIFY(!m_lab->isDone(QStringLiteral("volta1.1.1"))); // erst nach der Rueckfrage
+        QMetaObject::invokeMethod(dialog, "accept");
+        QTRY_VERIFY(m_lab->isDone(QStringLiteral("volta1.1.3")));
+        QTRY_VERIFY(!dialog->property("opened").toBool());
+        m_lab->resetProgress();
+    }
+
     // Profilauswahl beim Start: neues Profil anlegen, Abzeichen auf der Startseite, Wechsel zurueck zur Auswahl
     void profileChooserFlow() {
         QObject* chooser = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("profileChooser"));

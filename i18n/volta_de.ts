@@ -789,11 +789,21 @@
     </message>
     <message>
         <location filename="../app/qml/InfoDialog.qml" line="156"/>
-        <source>Datenschutz</source>
+        <source>Fremdbestandteile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/InfoDialog.qml" line="157"/>
+        <source>QR-Code: qrcodegen von Project Nayuki, MIT-Lizenz (Copyright Project Nayuki).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/InfoDialog.qml" line="159"/>
+        <source>Datenschutz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/InfoDialog.qml" line="160"/>
         <source>Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1193,6 +1203,39 @@
     <message>
         <location filename="../app/qml/Lab.qml" line="1480"/>
         <source>Alles abbauen</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Main</name>
+    <message>
+        <location filename="../app/qml/Main.qml" line="131"/>
+        <source>Fortschritt übernehmen?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Main.qml" line="138"/>
+        <source>Dieser Code enthält keine Experimente von Volta 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Main.qml" line="140"/>
+        <source>%1 erledigte Experimente in das Profil »%2« übernehmen?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Main.qml" line="141"/>
+        <source>%1 erledigte Experimente übernehmen?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Main.qml" line="146"/>
+        <source>Abbrechen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Main.qml" line="151"/>
+        <source>Übernehmen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1669,214 +1712,306 @@
 <context>
     <name>ParentArea</name>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="57"/>
+        <location filename="../app/qml/ParentArea.qml" line="58"/>
         <source>Elternbereich</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="70"/>
+        <location filename="../app/qml/ParentArea.qml" line="71"/>
+        <location filename="../app/qml/ParentArea.qml" line="336"/>
         <source>Schließen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="85"/>
+        <location filename="../app/qml/ParentArea.qml" line="86"/>
         <source>Freigaben</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="86"/>
+        <location filename="../app/qml/ParentArea.qml" line="87"/>
         <source>Die Stufen des Lernpfads öffnen sich nacheinander, damit Kinder nicht mit zu vielen Bauteilen auf einmal beginnen. Für die Schule oder für ältere Kinder können Sie alles sofort freigeben.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="94"/>
-        <location filename="../app/qml/ParentArea.qml" line="98"/>
+        <location filename="../app/qml/ParentArea.qml" line="95"/>
+        <location filename="../app/qml/ParentArea.qml" line="99"/>
         <source>Alle Stufen und Bauteile freigeben</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="105"/>
+        <location filename="../app/qml/ParentArea.qml" line="106"/>
         <source>Forscherprofile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="106"/>
+        <location filename="../app/qml/ParentArea.qml" line="107"/>
         <source>Teilen sich mehrere Kinder ein Gerät, bekommt jedes ein eigenes Profil mit Symbol und Spitznamen – ohne richtigen Namen und ohne Passwort. Fortschritt, Forscherheft und der letzte Aufbau werden je Profil gespeichert. Beim Start fragt Volta dann: »Wer forscht heute?«</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="114"/>
-        <location filename="../app/qml/ParentArea.qml" line="118"/>
+        <location filename="../app/qml/ParentArea.qml" line="115"/>
+        <location filename="../app/qml/ParentArea.qml" line="119"/>
         <source>Forscherprofile verwenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="139"/>
+        <location filename="../app/qml/ParentArea.qml" line="140"/>
         <source>Löschen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="140"/>
+        <location filename="../app/qml/ParentArea.qml" line="141"/>
         <source>Das Profil »%1« mit Fortschritt, Forscherheft und Aufbau löschen?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="149"/>
+        <location filename="../app/qml/ParentArea.qml" line="150"/>
         <source>Alle Profile zurücksetzen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="150"/>
+        <location filename="../app/qml/ParentArea.qml" line="151"/>
         <source>Alle Forscherprofile mit ihrem Fortschritt, Forscherheft und Aufbau löschen?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="155"/>
-        <source>Fortschritt und Forscherheft</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../app/qml/ParentArea.qml" line="156"/>
-        <source>Der Fortschritt im Lernpfad und das Forscherheft liegen nur auf diesem Gerät. Zurücksetzen lässt sich nicht rückgängig machen.</source>
+        <source>Mitnehmen auf ein anderes Gerät</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="163"/>
-        <source>Lernpfad-Fortschritt zurücksetzen</source>
+        <location filename="../app/qml/ParentArea.qml" line="158"/>
+        <source>Wählen Sie zuerst ein Forscherprofil, dann lässt es sich mitnehmen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="164"/>
-        <source>Den Fortschritt im Lernpfad zurücksetzen? Alle Experimente gelten danach als nicht erledigt.</source>
+        <location filename="../app/qml/ParentArea.qml" line="159"/>
+        <source>Als Datei geht alles mit: Symbol, Spitzname, Fortschritt, Forscherheft und der letzte Aufbau. Der QR-Code enthält nur, welche Experimente erledigt sind – ohne Namen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="170"/>
-        <source>Forscherheft leeren</source>
+        <location filename="../app/qml/ParentArea.qml" line="168"/>
+        <source>Als Datei speichern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="171"/>
-        <source>Das Forscherheft leeren? Alle Vermutungen, Beobachtungen und Notizen werden gelöscht.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="177"/>
-        <source>Datenschutz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="178"/>
-        <source>Volta erhebt keine Daten. Es gibt kein Konto, keine Werbung, keine Käufe in der App und keine Verbindung ins Internet; Kamera und Mikrofon werden nicht verwendet.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="179"/>
-        <source>Nur auf diesem Gerät gespeichert werden:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="180"/>
-        <source>welche Experimente erledigt sind, mit Datum</source>
+        <location filename="../app/qml/ParentArea.qml" line="174"/>
+        <source>Aus Datei laden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="181"/>
-        <source>das Forscherheft mit Vermutungen, Beobachtungen und Notizen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="182"/>
-        <source>der zuletzt gebaute Aufbau, damit es nach einem Neustart weitergeht</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="183"/>
-        <source>die Einstellungen (Sprache, Schriftgröße, Ton und Ähnliches)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="184"/>
-        <source>Beim Deinstallieren der App wird alles gelöscht.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="187"/>
-        <source>So rechnet Volta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="188"/>
-        <source>Was in Volta passiert, ergibt sich aus einer echten Schaltungssimulation, nicht aus vorbereiteten Ergebnissen. Deshalb verhalten sich auch selbst erfundene Schaltungen plausibel. Einige Vereinfachungen sind für Kinder sinnvoll; wir legen sie offen:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="189"/>
-        <source>Das Tonmodul ist ein Verhaltensmodell: Es liefert seine Töne direkt, statt jede Schwingung zu berechnen. Blinkmodul, Zeitmodul und Verstärkermodul sind dagegen echte Transistorschaltungen.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="190"/>
-        <source>Elektromagnet und Relais werden ohne Induktivität gerechnet; die Spannungsspitze beim Abschalten fehlt deshalb.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="191"/>
-        <source>Der Lautsprecher ist eine Last von 8 Ω ohne Schwingspule.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../app/qml/ParentArea.qml" line="192"/>
-        <source>Bauteile erwärmen sich und kühlen schneller ab als in echt, damit man es beobachten kann.</source>
+        <source>Fortschritt als QR-Code zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="193"/>
-        <source>Die Batterie hat einen Innenwiderstand, Leitungen einen sehr kleinen Widerstand; gerechnet wird in Schritten von einer Millisekunde.</source>
+        <source>Fortschritt und Forscherheft</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="194"/>
-        <source>Im Blinkmodul wird der Durchbruch der Basis-Emitter-Strecke nicht nachgebildet; in echt wird jede Hälfte des Takts dadurch etwas kürzer.</source>
+        <source>Der Fortschritt im Lernpfad und das Forscherheft liegen nur auf diesem Gerät. Zurücksetzen lässt sich nicht rückgängig machen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="197"/>
-        <source>Der Lernpfad</source>
+        <location filename="../app/qml/ParentArea.qml" line="201"/>
+        <source>Lernpfad-Fortschritt zurücksetzen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="202"/>
-        <source>Stufe %1: %2 – %3</source>
+        <source>Den Fortschritt im Lernpfad zurücksetzen? Alle Experimente gelten danach als nicht erledigt.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="207"/>
-        <source>Kontakt und Hilfe</source>
+        <location filename="../app/qml/ParentArea.qml" line="208"/>
+        <source>Forscherheft leeren</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="209"/>
+        <source>Das Forscherheft leeren? Alle Vermutungen, Beobachtungen und Notizen werden gelöscht.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="215"/>
-        <source>Website öffnen</source>
+        <source>Datenschutz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="216"/>
+        <source>Volta erhebt keine Daten. Es gibt kein Konto, keine Werbung, keine Käufe in der App und keine Verbindung ins Internet; Kamera und Mikrofon werden nicht verwendet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="217"/>
+        <source>Nur auf diesem Gerät gespeichert werden:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="218"/>
+        <source>welche Experimente erledigt sind, mit Datum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="219"/>
+        <source>das Forscherheft mit Vermutungen, Beobachtungen und Notizen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="220"/>
+        <source>der zuletzt gebaute Aufbau, damit es nach einem Neustart weitergeht</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="221"/>
+        <source>die Einstellungen (Sprache, Schriftgröße, Ton und Ähnliches)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="222"/>
+        <source>Beim Deinstallieren der App wird alles gelöscht.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="225"/>
+        <source>So rechnet Volta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="226"/>
+        <source>Was in Volta passiert, ergibt sich aus einer echten Schaltungssimulation, nicht aus vorbereiteten Ergebnissen. Deshalb verhalten sich auch selbst erfundene Schaltungen plausibel. Einige Vereinfachungen sind für Kinder sinnvoll; wir legen sie offen:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="227"/>
+        <source>Das Tonmodul ist ein Verhaltensmodell: Es liefert seine Töne direkt, statt jede Schwingung zu berechnen. Blinkmodul, Zeitmodul und Verstärkermodul sind dagegen echte Transistorschaltungen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="228"/>
+        <source>Elektromagnet und Relais werden ohne Induktivität gerechnet; die Spannungsspitze beim Abschalten fehlt deshalb.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="229"/>
+        <source>Der Lautsprecher ist eine Last von 8 Ω ohne Schwingspule.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="230"/>
+        <source>Bauteile erwärmen sich und kühlen schneller ab als in echt, damit man es beobachten kann.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="231"/>
+        <source>Die Batterie hat einen Innenwiderstand, Leitungen einen sehr kleinen Widerstand; gerechnet wird in Schritten von einer Millisekunde.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="232"/>
+        <source>Im Blinkmodul wird der Durchbruch der Basis-Emitter-Strecke nicht nachgebildet; in echt wird jede Hälfte des Takts dadurch etwas kürzer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="235"/>
+        <source>Der Lernpfad</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="240"/>
+        <source>Stufe %1: %2 – %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="245"/>
+        <source>Kontakt und Hilfe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="253"/>
+        <source>Website öffnen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="259"/>
         <source>E-Mail schreiben</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="238"/>
+        <location filename="../app/qml/ParentArea.qml" line="271"/>
+        <location filename="../app/qml/ParentArea.qml" line="280"/>
+        <source>Volta-Profil (*.volta1profil)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="275"/>
+        <source>Gespeichert.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="275"/>
+        <source>Speichern hat nicht geklappt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="280"/>
+        <source>Alle Dateien (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="283"/>
+        <source>Diese Datei ist kein Volta-Profil.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="287"/>
+        <source>Neues Profil »%1« mit %2 erledigten Experimenten anlegen?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="288"/>
+        <source>Den Stand auf diesem Gerät durch die Datei ersetzen (%1 erledigte Experimente)? Der bisherige Stand geht verloren.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="290"/>
+        <source>Übernommen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="290"/>
+        <source>Laden hat nicht geklappt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="291"/>
+        <source>Übernehmen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="309"/>
+        <source>Scannen Sie den Code auf dem anderen Gerät mit der Kamera-App. Volta öffnet sich dort und fragt, ob der Fortschritt übernommen werden soll.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="357"/>
         <source>Wirklich löschen?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="251"/>
+        <location filename="../app/qml/ParentArea.qml" line="357"/>
+        <source>Bitte bestätigen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="370"/>
         <source>Ja, löschen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="250"/>
+        <location filename="../app/qml/ParentArea.qml" line="369"/>
         <source>Abbrechen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2729,28 +2864,33 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="607"/>
-        <location filename="../app/src/lab_controller.cpp" line="641"/>
+        <location filename="../app/src/lab_controller.cpp" line="381"/>
+        <source>Forscher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/src/lab_controller.cpp" line="686"/>
+        <location filename="../app/src/lab_controller.cpp" line="720"/>
         <source>Freies Labor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="734"/>
+        <location filename="../app/src/lab_controller.cpp" line="813"/>
         <source>Alles abbauen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="739"/>
+        <location filename="../app/src/lab_controller.cpp" line="818"/>
         <source>Musteraufbau zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1186"/>
+        <location filename="../app/src/lab_controller.cpp" line="1265"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1225"/>
+        <location filename="../app/src/lab_controller.cpp" line="1304"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
     </message>

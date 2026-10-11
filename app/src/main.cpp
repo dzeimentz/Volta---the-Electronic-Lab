@@ -1,4 +1,5 @@
 // Einstiegspunkt der Qt-Anwendung. Modell, Dienste und Lernpfad folgen gemaess docs/architecture.md.
+#include <QDesktopServices>
 #include <QDir>
 #include <QFileInfo>
 #include <QFontDatabase>
@@ -271,15 +272,18 @@ int main(int argc, char* argv[]) {
             if (!engine.rootObjects().isEmpty()) engine.rootObjects().first()->setProperty("inJournal", true);
         });
 
-    // Entwicklerhilfe: VOLTA_DEMO_PARENT=gate|area zeigt die Elternschranke bzw. den Elternbereich (Sichtpruefung)
+    // Entwicklerhilfe: VOLTA_DEMO_PARENT=gate|area|qr zeigt Elternschranke, Elternbereich bzw. Fortschritts-QR-Code
     if (const QString demo = qEnvironmentVariable("VOLTA_DEMO_PARENT"); !demo.isEmpty())
         QTimer::singleShot(600, &engine, [&engine, demo] {
             const auto roots = engine.rootObjects();
             if (roots.isEmpty()) return;
             if (QObject* gate = roots.first()->findChild<QObject*>(QStringLiteral("parentGate")); gate && demo == u"gate")
                 QMetaObject::invokeMethod(gate, "ask", Q_ARG(QVariant, QVariant()));
-            if (QObject* area = roots.first()->findChild<QObject*>(QStringLiteral("parentArea")); area && demo == u"area")
+            if (QObject* area = roots.first()->findChild<QObject*>(QStringLiteral("parentArea"));
+                area && (demo == u"area" || demo == u"qr"))
                 QMetaObject::invokeMethod(area, "open");
+            if (QObject* qr = roots.first()->findChild<QObject*>(QStringLiteral("qrPopup")); qr && demo == u"qr")
+                QMetaObject::invokeMethod(qr, "open");
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_TOOLBOX=0|1|2|3|4 oeffnet den Werkzeugkasten (Farbcode, E-Reihen, Lexikon, Rechner,
@@ -396,5 +400,9 @@ int main(int argc, char* argv[]) {
             QCoreApplication::quit();
         });
     }
-    return QGuiApplication::exec();
+    // Fortschritts-Links (QR-Code ueber die Kamera-App, Schema volta1://) an das Labor
+    QDesktopServices::setUrlHandler(QStringLiteral("volta1"), &lab, "handleUrl");
+    const int rc = QGuiApplication::exec();
+    QDesktopServices::unsetUrlHandler(QStringLiteral("volta1"));
+    return rc;
 }
