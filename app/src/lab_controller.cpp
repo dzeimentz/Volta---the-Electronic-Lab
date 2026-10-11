@@ -115,8 +115,12 @@ bool LabController::startExperiment(const QString& id) {
     start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
     start.desk.mainSwitch = false;
     start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
-    // gespeicherte Breite, wenn der Musteraufbau hineinpasst
-    start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
+    // Automatik: 8 Felder (bzw. passend zum Messgeraet); sonst die gespeicherte Breite - jeweils nur, wenn der
+    // Musteraufbau hineinpasst
+    if (m_autoColumns)
+        start.columns = autoColumnsFor(exp.templateBoard, false, start.desk.meterVisible);
+    else
+        start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
     m_session->setSuccess(exp.successCondition, exp.templateBoard);
     m_session->loadBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
@@ -726,8 +730,9 @@ void LabController::startFreeLab() {
     m_title = tr("Freies Labor");
     m_session->clearSuccess();
     model::Board empty;
-    empty.columns = m_preferredColumns;      // gespeicherte Breite
     empty.desk.meterVisible = m_preferMeter; // Messgeraet wie zuletzt im freien Labor
+    empty.columns = m_autoColumns ? autoColumnsFor(empty, true, empty.desk.meterVisible)
+                                  : m_preferredColumns; // gespeicherte Breite
     m_session->loadBoard(empty);
     emit experimentChanged();
     emit flowChanged();
@@ -1466,7 +1471,41 @@ void LabController::setMeterVisible(bool visible) {
     if (result(m_session->setMeterVisible(visible))) {
         emit deskChanged();
         emit boardChanged(); // Buchsen erscheinen bzw. verschwinden
+        applyAutoColumns();
     }
+}
+
+void LabController::setAutoColumns(bool on) {
+    if (m_autoColumns == on) return;
+    m_autoColumns = on;
+    emit columnsModeChanged();
+    applyAutoColumns();
+}
+
+void LabController::setMeterDocked(bool docked) {
+    if (m_meterDocked == docked) return;
+    m_meterDocked = docked;
+    emit columnsModeChanged();
+    if (meterVisible()) applyAutoColumns();
+}
+
+int LabController::autoColumnsFor(const model::Board& board, bool freeLab, bool meterVisible) const {
+    int want = freeLab ? 12 : 8;
+    if (meterVisible) want = m_meterDocked ? 12 : 10;
+    // was schon steckt (bzw. die Vorlage) muss hineinpassen: auf 8/10/12 aufrunden
+    const int used = model::highestUsedColumn(board);
+    while (want < used && want < 12) want += 2;
+    return want;
+}
+
+void LabController::applyAutoColumns() {
+    if (!m_autoColumns) return;
+    const bool free = m_freeLab || m_experiment.id.isEmpty();
+    const model::Board& b = m_session->board();
+    int want = autoColumnsFor(b, free, b.desk.meterVisible);
+    // im Experiment muss auch der Musteraufbau Platz haben
+    if (!free) want = std::max(want, autoColumnsFor(m_experiment.templateBoard, false, b.desk.meterVisible));
+    if (want != b.columns && result(m_session->setColumns(want))) emit boardChanged();
 }
 
 void LabController::setMeterMode(int mode) {

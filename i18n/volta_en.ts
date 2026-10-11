@@ -1580,32 +1580,32 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/qml/Main.qml" line="151" />
+        <location filename="../app/qml/Main.qml" line="153" />
         <source>Fortschritt übernehmen?</source>
         <translation>Take over progress?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="158" />
+        <location filename="../app/qml/Main.qml" line="160" />
         <source>Dieser Code enthält keine Experimente von Volta 1.</source>
         <translation>This code contains no Volta 1 experiments.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="160" />
+        <location filename="../app/qml/Main.qml" line="162" />
         <source>%1 erledigte Experimente in das Profil »%2« übernehmen?</source>
         <translation>Take over %1 completed experiments into the profile "%2"?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="161" />
+        <location filename="../app/qml/Main.qml" line="163" />
         <source>%1 erledigte Experimente übernehmen?</source>
         <translation>Take over %1 completed experiments?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="166" />
+        <location filename="../app/qml/Main.qml" line="168" />
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="171" />
+        <location filename="../app/qml/Main.qml" line="173" />
         <source>Übernehmen</source>
         <translation>Take over</translation>
     </message>
@@ -3394,7 +3394,7 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="140" />
         <location filename="../app/qml/TopBarActions.qml" line="141" />
-        <location filename="../app/qml/TopBarActions.qml" line="261" />
+        <location filename="../app/qml/TopBarActions.qml" line="273" />
         <source>Info</source>
         <translation>Info</translation>
     </message>
@@ -3421,31 +3421,41 @@
     </message>
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="215" />
+        <source>Steckfeld-Breite automatisch</source>
+        <translation>Board width automatic</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TopBarActions.qml" line="222" />
+        <source>Lernpfad 8, freies Labor 12 Felder je Reihe; Messgerät daneben 10, im Pult 12</source>
+        <translation>Learning path 8, free lab 12 fields per row; meter beside the board 10, in the desk 12</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TopBarActions.qml" line="227" />
         <source>Animationen reduzieren</source>
         <translation>Reduce animations</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="224" />
+        <location filename="../app/qml/TopBarActions.qml" line="236" />
         <source>Startbildschirm zeigen</source>
         <translation>Show start screen</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="231" />
+        <location filename="../app/qml/TopBarActions.qml" line="243" />
         <source>Messgerät anzeigen</source>
         <translation>Show meter</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="238" />
+        <location filename="../app/qml/TopBarActions.qml" line="250" />
         <source>Felder je Reihe</source>
         <translation>Fields per row</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="244" />
+        <location filename="../app/qml/TopBarActions.qml" line="256" />
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="256" />
+        <location filename="../app/qml/TopBarActions.qml" line="268" />
         <source>Elternbereich …</source>
         <translation>Parents' area …</translation>
     </message>
@@ -3481,33 +3491,33 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="395" />
+        <location filename="../app/src/lab_controller.cpp" line="399" />
         <source>Forscher</source>
         <translation>Researcher</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="692" />
-        <location filename="../app/src/lab_controller.cpp" line="726" />
+        <location filename="../app/src/lab_controller.cpp" line="696" />
+        <location filename="../app/src/lab_controller.cpp" line="730" />
         <source>Freies Labor</source>
         <translation>Free lab</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="819" />
+        <location filename="../app/src/lab_controller.cpp" line="824" />
         <source>Alles abbauen</source>
         <translation>Take everything apart</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="824" />
+        <location filename="../app/src/lab_controller.cpp" line="829" />
         <source>Musteraufbau zeigen</source>
         <translation>Show sample build</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1356" />
+        <location filename="../app/src/lab_controller.cpp" line="1361" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>This part will be unlocked at level %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1395" />
+        <location filename="../app/src/lab_controller.cpp" line="1400" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module is unlocked at level %1.</translation>
     </message>

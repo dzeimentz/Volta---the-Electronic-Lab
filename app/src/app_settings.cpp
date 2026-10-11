@@ -38,6 +38,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_boardColumns = (cols == 8 || cols == 10 || cols == 12) ? cols : 12;
     m_meterVisible = s.value(QStringLiteral("labor/messgeraet"), false).toBool();
     m_meterDocked = s.value(QStringLiteral("labor/messgeraet_im_pult"), false).toBool();
+    m_autoBoardColumns = s.value(QStringLiteral("labor/felder_automatisch"), true).toBool();
     m_profilesEnabled = s.value(QStringLiteral("profile/aktiv"), false).toBool();
     m_tickEnabled = s.value(QStringLiteral("anzeige/tick"), true).toBool();
     m_pinHash = s.value(QStringLiteral("eltern/pin_pruefwert")).toString();

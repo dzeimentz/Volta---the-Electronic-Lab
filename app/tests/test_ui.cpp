@@ -143,6 +143,7 @@ private slots:
         connect(m_language.get(), &LanguageService::languageChanged, m_lab.get(), &LabController::setContentLanguage);
         m_engine->rootContext()->setContextProperty(QStringLiteral("volta_languageService"), m_language.get());
         m_settings = std::make_unique<AppSettings>(false); // ohne Speichern
+        m_settings->setAutoBoardColumns(false); // feste Breite; die Automatik prueft autoBoardColumns()
         m_engine->rootContext()->setContextProperty(QStringLiteral("volta_settings"), m_settings.get());
         m_engine->loadFromModule("Volta", "Main");
         QVERIFY(!m_engine->rootObjects().isEmpty());
@@ -1045,6 +1046,36 @@ private slots:
         QMetaObject::invokeMethod(box, "close");
         QTRY_VERIFY(!box->property("opened").toBool());
         m_lab->clearBoard();
+    }
+
+    // Breite der Grundplatte automatisch: Lernpfad 8, freies Labor 12, Messgeraet daneben 10, im Pult 12
+    void autoBoardColumns() {
+        m_settings->setUnlockAll(true);
+        m_settings->setMeterDocked(false);
+        m_settings->setAutoBoardColumns(true);
+        QTRY_VERIFY(m_lab->autoColumns());
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.1.1")));
+        QCOMPARE(m_lab->boardColumns(), 8);
+        m_lab->setMeterVisible(true);
+        QCOMPARE(m_lab->boardColumns(), 10);
+        m_settings->setMeterDocked(true);
+        QTRY_COMPARE(m_lab->boardColumns(), 12);
+        m_lab->setMeterVisible(false);
+        QCOMPARE(m_lab->boardColumns(), 8);
+        m_lab->startFreeLab();
+        QCOMPARE(m_lab->boardColumns(), 12);
+        m_lab->setMeterVisible(true); // im Pult
+        QCOMPARE(m_lab->boardColumns(), 12);
+        m_settings->setMeterDocked(false);
+        QTRY_COMPARE(m_lab->boardColumns(), 10);
+        m_lab->setMeterVisible(false);
+        QCOMPARE(m_lab->boardColumns(), 12);
+        // Vorlage breiter als 8 Spalten: passt die Breite an
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.4.4")));
+        QVERIFY(m_lab->boardColumns() >= 8);
+        m_settings->setAutoBoardColumns(false);
+        QTRY_VERIFY(!m_lab->autoColumns());
+        m_lab->startFreeLab();
     }
 
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich

@@ -61,6 +61,10 @@ class LabController : public QObject {
     Q_PROPERTY(bool preferMeter MEMBER m_preferMeter)
     // Farbautomatik fuer neue Leitungen: am Pluspol rot, am Minuspol schwarz (Einstellung)
     Q_PROPERTY(bool autoWireColor MEMBER m_autoWireColor)
+    // Breite der Grundplatte automatisch (Einstellung im Menue): Lernpfad 8, freies Labor 12 Felder je Reihe;
+    // Messgeraet neben der Grundplatte 10, im Pult 12 - die Grundplatte springt so nicht bei jedem Einblenden
+    Q_PROPERTY(bool autoColumns READ autoColumns WRITE setAutoColumns NOTIFY columnsModeChanged)
+    Q_PROPERTY(bool meterDocked READ meterDocked WRITE setMeterDocked NOTIFY columnsModeChanged)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -242,6 +246,13 @@ public:
     void setPot2(double v) { setPot(2, v); }
     bool deskSwitch() const { return m_session->board().desk.switchClosed; }
     bool meterVisible() const { return m_session->board().desk.meterVisible; }
+    bool autoColumns() const { return m_autoColumns; }
+    void setAutoColumns(bool on);
+    bool meterDocked() const { return m_meterDocked; }
+    void setMeterDocked(bool docked);
+    // Breite nach der Automatik fuer einen Aufbau (Vorlage bzw. eigener Aufbau muss hineinpassen)
+    int autoColumnsFor(const model::Board& board, bool freeLab, bool meterVisible) const;
+    void applyAutoColumns(); // aktuellen Aufbau anpassen (Befehl wie +/-), nur wenn die Automatik an ist
     void setMeterVisible(bool visible);
     int meterMode() const { return static_cast<int>(m_session->board().desk.meterMode); }
     void setMeterMode(int mode);
@@ -385,6 +396,7 @@ signals:
     void flowChanged();
     void progressChanged();
     void journalChanged();
+    void columnsModeChanged();
     void columnsChosen(int columns); // vom Kind gewaehlte Breite (zum Merken in den Einstellungen)
     void guideChanged();
     void recorderChanged();
@@ -436,6 +448,8 @@ private:
     model::Recorder m_recorder;
     void sampleRecorder();
     bool m_autoWireColor = true;
+    bool m_autoColumns = false; // die App bindet die Einstellung (Vorgabe dort: an)
+    bool m_meterDocked = false;
     services::AudioService* m_audio = nullptr;
     double m_lastPulses = -1.0; // Impulszaehler des Pult-Lautsprechers (Knacken bei neuem Impuls)
     void updateAudio();

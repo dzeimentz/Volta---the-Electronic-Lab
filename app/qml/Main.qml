@@ -60,6 +60,8 @@ ApplicationWindow {
     Binding { target: labController; property: "preferredColumns"; value: root.settings ? root.settings.boardColumns : 12 }
     Binding { target: labController; property: "preferMeter"; value: root.settings ? root.settings.meterVisible : false }
     Binding { target: labController; property: "autoWireColor"; value: root.settings ? root.settings.autoWireColor : true }
+    Binding { target: labController; property: "autoColumns"; value: root.settings ? root.settings.autoBoardColumns : true }
+    Binding { target: labController; property: "meterDocked"; value: root.settings ? root.settings.meterDocked : false }
     Connections {
         target: labController
         function onColumnsChosen(columns) { if (root.settings) root.settings.boardColumns = columns }

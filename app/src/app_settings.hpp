@@ -29,6 +29,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool meterVisible READ meterVisible WRITE setMeterVisible NOTIFY changed) // im freien Labor
     // Platz des Messgeraets: oben im Pult (Buchsen in der Pultleiste) oder neben der Grundplatte
     Q_PROPERTY(bool meterDocked READ meterDocked WRITE setMeterDocked NOTIFY changed)
+    // Breite der Grundplatte automatisch (Lernpfad 8, freies Labor 12, Messgeraet daneben 10, im Pult 12)
+    Q_PROPERTY(bool autoBoardColumns READ autoBoardColumns WRITE setAutoBoardColumns NOTIFY changed)
     // Forscherprofile fuer geteilte Geraete (Elternbereich)
     Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY changed)
     // Klassenmodus Ton (Elternbereich): "normal", "kopfhoerer" (nur mit Kopfhoerern) oder "aus"
@@ -65,6 +67,8 @@ public:
     void setMeterVisible(bool on) { set(m_meterVisible, on, "labor/messgeraet"); }
     bool meterDocked() const { return m_meterDocked; }
     void setMeterDocked(bool on) { set(m_meterDocked, on, "labor/messgeraet_im_pult"); }
+    bool autoBoardColumns() const { return m_autoBoardColumns; }
+    void setAutoBoardColumns(bool on) { set(m_autoBoardColumns, on, "labor/felder_automatisch"); }
     bool profilesEnabled() const { return m_profilesEnabled; }
     bool tickEnabled() const { return m_tickEnabled; }
     void setTickEnabled(bool on) { set(m_tickEnabled, on, "anzeige/tick"); }
@@ -112,6 +116,7 @@ private:
     int m_boardColumns = 12;
     bool m_meterVisible = false;
     bool m_meterDocked = false;
+    bool m_autoBoardColumns = true;
     bool m_profilesEnabled = false;
     bool m_tickEnabled = true;
     QString m_classroomSound = QStringLiteral("normal");
