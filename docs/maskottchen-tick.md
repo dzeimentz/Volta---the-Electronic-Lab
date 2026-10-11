@@ -34,7 +34,7 @@ Als achtbeiniger Baustein passt er zum NE555 in Volta 2 (Stufe 6, `docs/volta2-p
 - Eingebaut (10/2026): Begruessung Startseite (mit Spitzname bei Profilen), Forscherfrage (neugierig), Tipps
   (nachdenklich, dann erklaerend; Figur nur beim neuesten Tipp), »Nur in der App!« (warnend), Erfolg (gut),
   Vergleich mit der Vermutung (froehlich / ueberrascht / motivierend), Fehlersuche (neugierig, gut, fragend).
-- Offen: Hilfe/Readme mit Tick; »ueberrascht« beim Durchbrennen eines Bauteils; Klassenmodus ohne Hopser.
+- Hilfe mit Tick (`HelpDialog.qml`): erledigt. Offen: »ueberrascht« beim Durchbrennen eines Bauteils; Klassenmodus ohne Hopser.
 
 ## Einsatz in Volta 1
 | Ort | Ausdruck | Inhalt |

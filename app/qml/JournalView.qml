@@ -10,6 +10,7 @@ Rectangle {
     property var settings: null
     signal backRequested()
     signal infoRequested()
+    signal helpRequested()
     signal parentAreaRequested()
     signal experimentRequested(string id)
 
@@ -57,6 +58,7 @@ Rectangle {
             languageService: journal.languageService
             settings: journal.settings
             onInfoRequested: journal.infoRequested()
+            onHelpRequested: journal.helpRequested()
             onParentAreaRequested: journal.parentAreaRequested()
         }
     }

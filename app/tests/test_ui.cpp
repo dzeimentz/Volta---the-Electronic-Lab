@@ -968,6 +968,55 @@ private slots:
         QTRY_VERIFY(!box->property("opened").toBool());
     }
 
+    // Hilfe mit Tick: Fragezeichen oeffnet sie, Kapitelknopf springt, Erwachsenenteil fuehrt ueber die PIN-Abfrage
+    void helpWithTick() {
+        QObject* root = m_engine->rootObjects().first();
+        QObject* help = root->findChild<QObject*>(QStringLiteral("helpDialog"));
+        QVERIFY(help);
+        // im Labor steht die Hilfe im Menue (Leiste voll), auf der Startseite als Fragezeichen
+        QVERIFY(!item(QStringLiteral("helpButton"))->isVisible() || !root->property("inLab").toBool());
+        root->setProperty("inLab", false);
+        QTRY_VERIFY(item(QStringLiteral("home"))->isVisible());
+        QQuickItem* button = item(QStringLiteral("helpButton"));
+        QVERIFY(button && button->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
+        QTRY_VERIFY(help->property("opened").toBool());
+        QQuickItem* chip = item(QStringLiteral("helpChip_fehler"));
+        QVERIFY(chip);
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(chip));
+        QQuickItem* section = item(QStringLiteral("helpSection_fehler"));
+        QVERIFY(section);
+        QTRY_VERIFY(section->mapToItem(m_window->contentItem(), QPointF(0, 0)).y() < 200); // nach oben gerollt
+        QMetaObject::invokeMethod(help, "jumpTo", Q_ARG(QVariant, QStringLiteral("eltern")));
+        QQuickItem* parentButton = item(QStringLiteral("helpParentArea"));
+        QVERIFY(parentButton);
+        QTest::qWait(400);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(parentButton));
+        QTRY_VERIFY(!help->property("opened").toBool());
+        QObject* gate = root->findChild<QObject*>(QStringLiteral("parentGate"));
+        QTRY_VERIFY(gate->property("opened").toBool()); // erst die PIN
+        QMetaObject::invokeMethod(gate, "close");
+        QTRY_VERIFY(!gate->property("opened").toBool());
+        root->setProperty("inLab", true);
+    }
+
+    // Werkzeugkasten: verdeckte Reiter rechts zeigt ein Pfeil; Antippen rollt die Leiste, dann zeigt er nach links
+    void toolboxTabArrows() {
+        QObject* box = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("toolbox"));
+        QMetaObject::invokeMethod(box, "open");
+        QTRY_VERIFY(box->property("opened").toBool());
+        box->findChild<QObject*>(QStringLiteral("toolboxTabs"))->setProperty("currentIndex", 0);
+        QQuickItem* right = item(QStringLiteral("tabsMoreRight"));
+        QVERIFY(right);
+        QTRY_VERIFY(right->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(right));
+        QTRY_VERIFY(!right->isVisible());
+        QTRY_VERIFY(item(QStringLiteral("tabsMoreLeft"))->isVisible());
+        QMetaObject::invokeMethod(box, "close");
+        QTRY_VERIFY(!box->property("opened").toBool());
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

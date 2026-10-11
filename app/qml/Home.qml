@@ -15,6 +15,7 @@ Rectangle {
     signal profileSwitchRequested() // Forscherprofil wechseln // zurueck ins Labor mit dem aktuellen (gespeicherten) Stand
     signal journalRequested()
     signal infoRequested()
+    signal helpRequested()
     signal parentAreaRequested()
 
     color: Theme.board
@@ -69,6 +70,7 @@ Rectangle {
             languageService: home.languageService
             settings: home.settings
             onInfoRequested: home.infoRequested()
+            onHelpRequested: home.helpRequested()
             onParentAreaRequested: home.parentAreaRequested()
         }
     }
@@ -116,15 +118,30 @@ Rectangle {
             bottomPadding: Theme.margin
             spacing: 18
 
-            // Tick begruesst (mit Spitzname, wenn ein Forscherprofil aktiv ist)
-            TickSays {
-                objectName: "homeTick"
-                width: Math.min(parent.width, 720)
-                figure: 128
-                mood: "freundlich"
-                text: (home.controller.profilesEnabled && home.controller.currentProfile.name
-                       ? qsTr("Hallo %1! Ich bin Tick.").arg(home.controller.currentProfile.name) : qsTr("Hallo! Ich bin Tick."))
-                      + " " + qsTr("Ich begleite dich durch deine Experimente. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.")
+            // Tick begruesst (mit Spitzname, wenn ein Forscherprofil aktiv ist); darunter der Weg in die Hilfe
+            Item {
+                width: parent.width
+                height: Math.max(homeTick.height, homeHelp.y + homeHelp.height)
+                TickSays {
+                    id: homeTick
+                    objectName: "homeTick"
+                    width: Math.min(parent.width, 720)
+                    figure: 128
+                    mood: "freundlich"
+                    text: (home.controller.profilesEnabled && home.controller.currentProfile.name
+                           ? qsTr("Hallo %1! Ich bin Tick.").arg(home.controller.currentProfile.name) : qsTr("Hallo! Ich bin Tick."))
+                          + " " + qsTr("Ich begleite dich durch deine Experimente. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.")
+                }
+                Button {
+                    id: homeHelp
+                    objectName: "homeHelp"
+                    x: homeTick.bubbleLeft
+                    y: homeTick.bubbleBottom + 10
+                    height: Theme.control
+                    text: "?  " + qsTr("Zeig mir, wie Volta funktioniert")
+                    font.pixelSize: Math.round(15 * Theme.fontScale)
+                    onClicked: home.helpRequested()
+                }
             }
 
             Flow {

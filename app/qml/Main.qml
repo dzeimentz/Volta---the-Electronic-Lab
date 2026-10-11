@@ -82,6 +82,7 @@ ApplicationWindow {
         onProfileSwitchRequested: { labController.leaveProfile(); root.inLab = false; root.inJournal = false }
         onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
+        onHelpRequested: helpDialog.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 
@@ -95,6 +96,7 @@ ApplicationWindow {
         speech: root.soundAllowed ? root.speech : null // Vorlesen nur, wenn Ton erlaubt ist
         onHomeRequested: { root.inLab = false; if (root.speech) root.speech.stop() }
         onInfoRequested: infoDialog.open()
+        onHelpRequested: helpDialog.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 
@@ -107,6 +109,7 @@ ApplicationWindow {
         settings: root.settings
         onBackRequested: root.inJournal = false
         onInfoRequested: infoDialog.open()
+        onHelpRequested: helpDialog.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
     }
@@ -119,6 +122,10 @@ ApplicationWindow {
         onLinkRequested: (url) => { infoDialog.close(); parentGate.ask(() => Qt.openUrlExternally(url)) }
     }
     ParentGate { id: parentGate; settings: root.settings }
+    HelpDialog {
+        id: helpDialog
+        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+    }
 
     // Fortschrittscode (QR ueber die Kamera-App): Rueckfrage, dann in das aktuelle Profil uebernehmen. Mit Profilen
     // wartet die Frage, bis eines gewaehlt ist.

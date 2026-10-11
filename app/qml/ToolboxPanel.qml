@@ -91,17 +91,78 @@ Drawer {
             }
         }
 
-        TabBar {
-            id: tabs
-            objectName: "toolboxTabs"
-            clip: true
+        // Reiterleiste mit Hinweispfeilen: Reiter, die nicht mehr in die Breite passen, liegen verdeckt rechts
+        // (oder links); ein pulsierender Pfeil zeigt das, Antippen rollt die Leiste dorthin
+        Item {
+            id: tabArea
             width: parent.width
-            TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
-            TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
-            TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
-            TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
-            TabButton { objectName: "tabCheck"; text: qsTr("Fehlersuche"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
-            TabButton { objectName: "tabParts"; text: qsTr("Teileliste"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            height: tabs.height
+            readonly property var view: tabs.contentItem
+            readonly property bool moreRight: view && view.contentWidth > view.width + 1 && !view.atXEnd
+            readonly property bool moreLeft: view && view.contentWidth > view.width + 1 && !view.atXBeginning
+
+            TabBar {
+                id: tabs
+                objectName: "toolboxTabs"
+                clip: true
+                anchors.fill: parent
+                TabButton { objectName: "tabColor"; text: qsTr("Farbcode"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+                TabButton { objectName: "tabSeries"; text: qsTr("E-Reihen"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+                TabButton { objectName: "tabLexicon"; text: qsTr("Lexikon"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+                TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+                TabButton { objectName: "tabCheck"; text: qsTr("Fehlersuche"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+                TabButton { objectName: "tabParts"; text: qsTr("Teileliste"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+            }
+
+            component TabArrow: Rectangle {
+                id: arrow
+                property bool pointsRight: true
+                signal activated()
+                width: 44
+                height: tabs.height
+                gradient: Gradient {
+                    orientation: Gradient.Horizontal
+                    GradientStop { position: 0.0; color: arrow.pointsRight ? "#00FFFDF7" : "#FFFDF7" }
+                    GradientStop { position: 0.45; color: "#FFFDF7" }
+                    GradientStop { position: 1.0; color: arrow.pointsRight ? "#FFFDF7" : "#00FFFDF7" }
+                }
+                Rectangle {
+                    id: arrowDot
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: arrow.pointsRight ? parent.width - width - 4 : 4
+                    width: 30; height: 30; radius: 15
+                    color: Theme.accent
+                    DrawnIcon {
+                        anchors.centerIn: parent
+                        anchors.horizontalCenterOffset: arrow.pointsRight ? 1 : -1
+                        kind: arrow.pointsRight ? "right" : "left"
+                        color: "white"
+                        size: 22
+                    }
+                    SequentialAnimation on opacity {
+                        running: arrow.visible && !Theme.reduceMotion
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 0.45; duration: 700; easing.type: Easing.InOutQuad }
+                        NumberAnimation { to: 1.0; duration: 700; easing.type: Easing.InOutQuad }
+                    }
+                }
+                TapHandler { onTapped: arrow.activated() }
+                Accessible.role: Accessible.Button
+                Accessible.name: arrow.pointsRight ? qsTr("Weitere Reiter rechts") : qsTr("Weitere Reiter links")
+            }
+            TabArrow {
+                objectName: "tabsMoreRight"
+                anchors.right: parent.right
+                visible: tabArea.moreRight
+                onActivated: tabArea.view.contentX = tabArea.view.contentWidth - tabArea.view.width
+            }
+            TabArrow {
+                objectName: "tabsMoreLeft"
+                pointsRight: false
+                anchors.left: parent.left
+                visible: tabArea.moreLeft
+                onActivated: tabArea.view.contentX = 0
+            }
         }
 
         StackLayout {

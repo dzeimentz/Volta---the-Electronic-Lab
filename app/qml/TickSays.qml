@@ -16,6 +16,8 @@ Item {
     property bool bold: false
     property bool figureShown: true // false: nur die Blase (z. B. aeltere Tipps)
     readonly property bool showFigure: Theme.tick && figureShown
+    readonly property real bubbleLeft: bubble.x
+    readonly property real bubbleBottom: bubble.y + bubble.height
 
     implicitHeight: Math.max(showFigure ? figure : 0, bubble.height)
     height: implicitHeight

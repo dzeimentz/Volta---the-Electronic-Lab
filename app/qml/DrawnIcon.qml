@@ -6,18 +6,20 @@ import QtQuick.Shapes
 
 Item {
     id: icon
-    property string kind: "menu" // menu, down, up, close, undo, redo, backspace, pencil, trash
+    property string kind: "menu" // menu, down, up, left, right, close, undo, redo, backspace, pencil, trash
     property color color: "white"
     property real size: 20
 
     implicitWidth: size
     implicitHeight: size
 
-    readonly property bool filled: kind === "down" || kind === "up"
+    readonly property bool filled: kind === "down" || kind === "up" || kind === "left" || kind === "right"
     readonly property string path: ({
         menu: "M4 6 H20 M4 12 H20 M4 18 H20",
         down: "M6 9 L18 9 L12 16 Z",
         up: "M6 15 L18 15 L12 8 Z",
+        left: "M15 6 L15 18 L8 12 Z",
+        right: "M9 6 L9 18 L16 12 Z",
         close: "M6 6 L18 18 M18 6 L6 18",
         undo: "M8 5 L4 9 L8 13 M4 9 H14 A5 5 0 0 1 14 19 H9",
         redo: "M16 5 L20 9 L16 13 M20 9 H10 A5 5 0 0 0 10 19 H15",

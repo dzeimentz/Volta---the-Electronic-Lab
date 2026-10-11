@@ -85,7 +85,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
   Praesentationsmodus folgen.
 - Paketgroesse: APK 68,9 MB (Ziel < 80 MB), ungenutzte Qt-Teile werden nicht ausgeliefert (docs/platforms.md).
 - Offen: Maskottchen Tick (docs/maskottchen-tick.md) in Hilfe, Startbildschirm, Hilfestufen, Fehlersuche und
-  Erfolg (erledigt bis auf Hilfe); Teileliste/Aufbaukarte (erledigt); Hilfe/Readme; Barrierefreiheit; Fotoimport, Praesentationsmodus; LU-Texte; Store.
+  Erfolg (erledigt bis auf Hilfe); Teileliste/Aufbaukarte (erledigt); Hilfe mit Tick (erledigt, Uebungsplatten offen); Barrierefreiheit; Fotoimport, Praesentationsmodus; LU-Texte; Store.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

@@ -196,6 +196,13 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Sprache und Einstellungen – jeweils mit Uebungsplatte (vom Lernpfad getrennt) und Aufgabe mit Bestaetigung.
 - Teil fuer Erwachsene (hinter Elternschranke): Systemanforderungen, Gesten/Tastenkuerzel, Datenschutz,
   Konfigurationsschluessel fuer Schulen, Aenderungsliste. »Was ist neu« nach Updates. Kontexthilfe, Volltextsuche.
+- Umgesetzt (10/2026, `HelpDialog.qml`): Hilfe mit Tick, elf Kapitel fuer Kinder (Willkommen, Bauteile stecken,
+  Leitungen, Bedienpult, Rueckgaengig und Loeschen, Messen, Werkzeugkasten, Experimente, Wenn etwas nicht klappt,
+  Sicher experimentieren, Oben rechts), je mit Tick in passender Stimmung; Kapitelknoepfe zum Springen. Erwachsenenteil
+  als Verweis in den Elternbereich (PIN) mit Tastenkuerzeln. Aufruf: »?« oben rechts (Startseite, Forscherheft), im
+  Labor im Menue (Leiste voll), »Zeig mir, wie Volta funktioniert« unter Ticks Begruessung. Offen: Uebungsplatten mit
+  Aufgaben, Rundgang beim ersten Start, »Was ist neu«, Volltextsuche.
+- Werkzeugkasten: verdeckte Reiter zeigt ein pulsierender Pfeil (rechts bzw. links), Antippen rollt die Leiste.
 
 ## Info-Seite
 - Produkt: »Volta 1 – Das Elektronik-Labor«, Version, Build, Paket- und Kernversion.

@@ -9,6 +9,8 @@ Row {
     property var languageService: null
     property var settings: null
     signal infoRequested()
+    signal helpRequested()
+    property bool helpInMenu: false // im Labor ist die Leiste voll: Hilfe dann im Menue statt als Knopf
     readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
     signal parentAreaRequested() // hinter der Elternschranke (Main.qml)
     spacing: 6
@@ -106,6 +108,30 @@ Row {
             }
         }
     }
+    // Hilfe mit Tick (Fragezeichen)
+    ToolButton {
+        objectName: "helpButton"
+        visible: !bar.helpInMenu
+        width: Theme.control; height: Theme.control
+        onClicked: bar.helpRequested()
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Hilfe")
+        Accessible.name: qsTr("Hilfe")
+        background: Rectangle {
+            radius: 6
+            color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+        }
+        contentItem: Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: 24; height: 24; radius: 12
+                color: "transparent"
+                border.color: "white"
+                border.width: 2
+                Label { anchors.centerIn: parent; text: "?"; color: "white"; font.pixelSize: 15; font.bold: true }
+            }
+        }
+    }
     ToolButton {
         objectName: "infoButton"
         width: Theme.control; height: Theme.control
@@ -148,6 +174,14 @@ Row {
             y: parent.height
             x: parent.width - width
             width: 300
+            MenuItem {
+                objectName: "menuHelp"
+                visible: bar.helpInMenu
+                height: visible ? Theme.control : 0
+                text: "?  " + qsTr("Hilfe")
+                font.bold: true
+                onTriggered: bar.helpRequested()
+            }
             MenuItem {
                 objectName: "settingFlow"
                 height: Theme.control

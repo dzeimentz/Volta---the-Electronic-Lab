@@ -419,6 +419,14 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_HELP=<kapitel> oeffnet die Hilfe bei einem Kapitel (z. B. werkzeug, eltern; 1: Anfang)
+    if (const QString helpKey = qEnvironmentVariable("VOLTA_DEMO_HELP"); !helpKey.isEmpty())
+        QTimer::singleShot(600, &engine, [&engine, helpKey] {
+            const auto roots = engine.rootObjects();
+            if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("helpDialog")))
+                QMetaObject::invokeMethod(dlg, "show", Q_ARG(QVariant, helpKey == u"1" ? QString() : helpKey));
+        });
+
     const QString shot = qEnvironmentVariable("VOLTA_SCREENSHOT");
     if (!shot.isEmpty()) {
         if (qEnvironmentVariableIntValue("VOLTA_SCREENSHOT_MAINSWITCH") == 1)
