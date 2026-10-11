@@ -116,6 +116,8 @@ qt_add_qml_module(volta_ui
         qml/RecorderPanel.qml
         qml/FlyoutBar.qml
         qml/FaultFinder.qml
+        qml/ParentArea.qml
+        qml/ParentGate.qml
         qml/DrawnIcon.qml
         qml/FormulaCalculator.qml
     SOURCES

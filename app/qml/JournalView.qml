@@ -10,6 +10,7 @@ Rectangle {
     property var settings: null
     signal backRequested()
     signal infoRequested()
+    signal parentAreaRequested()
     signal experimentRequested(string id)
 
     color: "#FBF6EA"
@@ -56,6 +57,7 @@ Rectangle {
             languageService: journal.languageService
             settings: journal.settings
             onInfoRequested: journal.infoRequested()
+            onParentAreaRequested: journal.parentAreaRequested()
         }
     }
 

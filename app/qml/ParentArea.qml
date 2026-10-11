@@ -1,0 +1,206 @@
+// Elternbereich (docs/ui-spec.md, docs/privacy-safety.md): nur hinter der Elternschranke erreichbar. Freigaben,
+// Zuruecksetzen von Fortschritt und Forscherheft (mit Rueckfrage), Datenschutz, offengelegte Vereinfachungen der
+// Simulation, Lernpfad im Ueberblick, Kontakt mit Links nach aussen (hier erlaubt, weil hinter der Schranke).
+import QtQuick
+import QtQuick.Controls.Basic
+
+Popup {
+    id: area
+    required property var controller
+    property var settings: null
+
+    objectName: "parentArea"
+    modal: true
+    focus: true
+    anchors.centerIn: Overlay.overlay
+    width: Math.min(760, parent ? parent.width - 32 : 760)
+    height: parent ? parent.height - 32 : 700
+    padding: 0
+    closePolicy: Popup.CloseOnEscape
+    background: Rectangle { radius: 12; color: "#FFFDF7"; border.color: Theme.navy; border.width: 2 }
+
+    component Heading: Label {
+        width: parent.width
+        font.pixelSize: Math.round(17 * Theme.fontScale)
+        font.bold: true
+        color: Theme.navy
+        topPadding: 10
+    }
+    component Body: Label {
+        width: parent.width
+        wrapMode: Text.Wrap
+        font.pixelSize: Math.round(14 * Theme.fontScale)
+        lineHeight: 1.1
+        color: "#1E2B38"
+    }
+    component Point: Label {
+        width: parent.width
+        leftPadding: 16
+        wrapMode: Text.Wrap
+        font.pixelSize: Math.round(14 * Theme.fontScale)
+        color: "#1E2B38"
+        text: "• " + body
+        property string body
+    }
+
+    // Kopf
+    Rectangle {
+        id: head
+        width: parent.width
+        height: 64
+        radius: 12
+        color: Theme.navy
+        Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 12; color: Theme.navy }
+        Label {
+            x: 20
+            anchors.verticalCenter: parent.verticalCenter
+            text: qsTr("Elternbereich")
+            color: "white"
+            font.pixelSize: Math.round(20 * Theme.fontScale)
+            font.bold: true
+        }
+        ToolButton {
+            objectName: "parentAreaClose"
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            width: Theme.control; height: Theme.control
+            contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: "white"; size: 20 } }
+            onClicked: area.close()
+            Accessible.name: qsTr("Schließen")
+        }
+    }
+
+    ScrollView {
+        id: scroll
+        anchors { left: parent.left; right: parent.right; top: head.bottom; bottom: parent.bottom; margins: 20 }
+        contentWidth: availableWidth
+        clip: true
+
+        Column {
+            width: scroll.availableWidth
+            spacing: 8
+
+            // ---- Freigaben
+            Heading { text: qsTr("Freigaben") }
+            Body { text: qsTr("Die Stufen des Lernpfads öffnen sich nacheinander, damit Kinder nicht mit zu vielen Bauteilen auf einmal beginnen. Für die Schule oder für ältere Kinder können Sie alles sofort freigeben.") }
+            Row {
+                spacing: 8
+                Switch {
+                    objectName: "parentUnlockAll"
+                    checked: area.settings ? area.settings.unlockAll : false
+                    enabled: area.settings !== null
+                    onToggled: area.settings.unlockAll = checked
+                    Accessible.name: qsTr("Alle Stufen und Bauteile freigeben")
+                }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Alle Stufen und Bauteile freigeben")
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    color: "#1E2B38"
+                }
+            }
+
+            // ---- Fortschritt und Forscherheft
+            Heading { text: qsTr("Fortschritt und Forscherheft") }
+            Body { text: qsTr("Der Fortschritt im Lernpfad und das Forscherheft liegen nur auf diesem Gerät. Zurücksetzen lässt sich nicht rückgängig machen.") }
+            Flow {
+                width: parent.width
+                spacing: 10
+                Button {
+                    objectName: "parentResetProgress"
+                    height: Theme.control
+                    text: qsTr("Lernpfad-Fortschritt zurücksetzen")
+                    onClicked: confirm.ask(qsTr("Den Fortschritt im Lernpfad zurücksetzen? Alle Experimente gelten danach als nicht erledigt."),
+                                           () => area.controller.resetProgress())
+                }
+                Button {
+                    objectName: "parentResetJournal"
+                    height: Theme.control
+                    text: qsTr("Forscherheft leeren")
+                    onClicked: confirm.ask(qsTr("Das Forscherheft leeren? Alle Vermutungen, Beobachtungen und Notizen werden gelöscht."),
+                                           () => area.controller.resetJournal())
+                }
+            }
+
+            // ---- Datenschutz
+            Heading { text: qsTr("Datenschutz") }
+            Body { text: qsTr("Volta erhebt keine Daten. Es gibt kein Konto, keine Werbung, keine Käufe in der App und keine Verbindung ins Internet; Kamera und Mikrofon werden nicht verwendet.") }
+            Body { text: qsTr("Nur auf diesem Gerät gespeichert werden:") }
+            Point { body: qsTr("welche Experimente erledigt sind, mit Datum") }
+            Point { body: qsTr("das Forscherheft mit Vermutungen, Beobachtungen und Notizen") }
+            Point { body: qsTr("der zuletzt gebaute Aufbau, damit es nach einem Neustart weitergeht") }
+            Point { body: qsTr("die Einstellungen (Sprache, Schriftgröße, Ton und Ähnliches)") }
+            Body { text: qsTr("Beim Deinstallieren der App wird alles gelöscht.") }
+
+            // ---- So rechnet Volta
+            Heading { text: qsTr("So rechnet Volta") }
+            Body { text: qsTr("Was in Volta passiert, ergibt sich aus einer echten Schaltungssimulation, nicht aus vorbereiteten Ergebnissen. Deshalb verhalten sich auch selbst erfundene Schaltungen plausibel. Einige Vereinfachungen sind für Kinder sinnvoll; wir legen sie offen:") }
+            Point { body: qsTr("Das Tonmodul ist ein Verhaltensmodell: Es liefert seine Töne direkt, statt jede Schwingung zu berechnen. Blinkmodul, Zeitmodul und Verstärkermodul sind dagegen echte Transistorschaltungen.") }
+            Point { body: qsTr("Elektromagnet und Relais werden ohne Induktivität gerechnet; die Spannungsspitze beim Abschalten fehlt deshalb.") }
+            Point { body: qsTr("Der Lautsprecher ist eine Last von 8 Ω ohne Schwingspule.") }
+            Point { body: qsTr("Bauteile erwärmen sich und kühlen schneller ab als in echt, damit man es beobachten kann.") }
+            Point { body: qsTr("Die Batterie hat einen Innenwiderstand, Leitungen einen sehr kleinen Widerstand; gerechnet wird in Schritten von einer Millisekunde.") }
+            Point { body: qsTr("Im Blinkmodul wird der Durchbruch der Basis-Emitter-Strecke nicht nachgebildet; in echt wird jede Hälfte des Takts dadurch etwas kürzer.") }
+
+            // ---- Lernpfad
+            Heading { text: qsTr("Der Lernpfad") }
+            Repeater {
+                model: area.controller.stages
+                Point {
+                    required property var modelData
+                    body: qsTr("Stufe %1: %2 – %3").arg(modelData.number).arg(modelData.title).arg(modelData.question)
+                }
+            }
+
+            // ---- Kontakt
+            Heading { text: qsTr("Kontakt und Hilfe") }
+            Body { text: "DC Software Engineering, Daniel Zeimentz, Irrel (DE)" }
+            Flow {
+                width: parent.width
+                spacing: 10
+                Button {
+                    objectName: "parentWebsite"
+                    height: Theme.control
+                    text: qsTr("Website öffnen")
+                    onClicked: Qt.openUrlExternally("https://dc-software-engineering.com")
+                }
+                Button {
+                    objectName: "parentMail"
+                    height: Theme.control
+                    text: qsTr("E-Mail schreiben")
+                    onClicked: Qt.openUrlExternally("mailto:info@dc-software-engineering.com?subject=Volta%201")
+                }
+            }
+            Item { width: 1; height: 12 }
+        }
+    }
+
+    // Rueckfrage vor dem Zuruecksetzen
+    Dialog {
+        id: confirm
+        property var action: null
+        property string question: ""
+        function ask(text, act) { confirm.question = text; confirm.action = act; confirm.open() }
+        anchors.centerIn: parent
+        modal: true
+        width: Math.min(440, area.width - 32)
+        title: qsTr("Wirklich zurücksetzen?")
+        contentItem: Column {
+            spacing: 16
+            Label {
+                width: confirm.width - confirm.leftPadding - confirm.rightPadding
+                wrapMode: Text.Wrap
+                text: confirm.question
+                font.pixelSize: Math.round(15 * Theme.fontScale)
+            }
+            Row {
+                anchors.right: parent.right
+                spacing: 12
+                Button { objectName: "parentConfirmCancel"; height: Theme.control; text: qsTr("Abbrechen"); onClicked: confirm.reject() }
+                Button { objectName: "parentConfirmOk"; height: Theme.control; text: qsTr("Zurücksetzen"); onClicked: confirm.accept() }
+            }
+        }
+        onAccepted: if (confirm.action) confirm.action()
+    }
+}

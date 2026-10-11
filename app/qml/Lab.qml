@@ -13,6 +13,7 @@ Item {
     property var speech: null          // Vorlesen (main.cpp); ohne: kein Vorlese-Knopf
     signal homeRequested()  // zurueck zur Startseite
     signal infoRequested()  // Info-Fenster (liegt im Hauptfenster)
+    signal parentAreaRequested()
     Binding { target: Theme; property: "reduceMotion"; value: lab.settings ? lab.settings.reduceMotion : false }
     Binding { target: Theme; property: "showCurrentFlow"; value: lab.settings ? lab.settings.showCurrentFlow : true }
 
@@ -258,6 +259,7 @@ Item {
             languageService: lab.languageService
             settings: lab.settings
             onInfoRequested: lab.infoRequested()
+            onParentAreaRequested: lab.parentAreaRequested()
         }
 
         Row {

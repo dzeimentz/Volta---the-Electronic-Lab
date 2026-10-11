@@ -140,6 +140,12 @@ public:
     Q_INVOKABLE bool isDone(const QString& experimentId) const { return m_progress.isDone(experimentId); }
     Q_INVOKABLE bool isUnlocked(const QString& experimentId) const;
     Q_INVOKABLE void resetProgress();
+    // Forscherheft leeren (Elternbereich)
+    Q_INVOKABLE void resetJournal();
+    // Elternschranke (docs/ui-spec.md): Rechenaufgabe a x b mit a 12..19, b 3..9 (Zahlen in Worten, fuer Kinder der
+    // Zielgruppe zu schwer); {a, b}. checkParentGate prueft die Antwort zur zuletzt gestellten Aufgabe.
+    Q_INVOKABLE QVariantMap newParentGateTask();
+    Q_INVOKABLE bool checkParentGate(int answer) const;
 
     // Werkzeugkasten (Konzept 5.7): Farbcode, E-Reihen, Bauteillexikon
     Q_INVOKABLE QVariantMap colorCode(double ohm, int rings) const; // {valid, rings[], ohm, tolerance}
@@ -356,6 +362,8 @@ private:
     bool m_saveEnabled = false;
     bool m_labOpen = false;
     bool m_restoring = false;
+    int m_gateA = 0;
+    int m_gateB = 0;
     services::JournalStore m_journal;
     bool m_unlockAll = false;
     bool m_buildComplete = false;

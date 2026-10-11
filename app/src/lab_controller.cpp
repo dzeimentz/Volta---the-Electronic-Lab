@@ -5,6 +5,7 @@
 #include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QRandomGenerator>
 #include <QFile>
 #include <QSysInfo>
 
@@ -224,6 +225,19 @@ void LabController::useProgressFile(const QString& path) {
     m_progress = services::ProgressStore(path);
     emit progressChanged();
 }
+
+void LabController::resetJournal() {
+    m_journal.reset();
+    emit journalChanged();
+}
+
+QVariantMap LabController::newParentGateTask() {
+    m_gateA = static_cast<int>(QRandomGenerator::global()->bounded(12, 20));
+    m_gateB = static_cast<int>(QRandomGenerator::global()->bounded(3, 10));
+    return {{QStringLiteral("a"), m_gateA}, {QStringLiteral("b"), m_gateB}};
+}
+
+bool LabController::checkParentGate(int answer) const { return m_gateA > 0 && answer == m_gateA * m_gateB; }
 
 void LabController::resetProgress() {
     m_progress.reset();

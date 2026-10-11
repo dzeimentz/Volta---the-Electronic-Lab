@@ -14,6 +14,7 @@ Rectangle {
     signal continueRequested() // zurueck ins Labor mit dem aktuellen (gespeicherten) Stand
     signal journalRequested()
     signal infoRequested()
+    signal parentAreaRequested()
 
     color: Theme.board
 
@@ -49,6 +50,7 @@ Rectangle {
             languageService: home.languageService
             settings: home.settings
             onInfoRequested: home.infoRequested()
+            onParentAreaRequested: home.parentAreaRequested()
         }
     }
 

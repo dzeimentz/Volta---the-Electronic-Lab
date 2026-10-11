@@ -1,6 +1,6 @@
 // Info (docs/ui-spec.md): Programm, Plattformen, verwendete Technik, Hersteller und Kontakt.
-// Web-Adresse und E-Mail stehen als Text da und sind bewusst keine Links: externe Links nur hinter der
-// Elternschranke (CLAUDE.md, Kindersicherheit).
+// Web-Adresse und E-Mail stehen als Text da; die Knoepfe »Website« und »E-Mail« melden linkRequested, Main.qml
+// oeffnet sie erst nach der Elternschranke (CLAUDE.md, Kindersicherheit).
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -8,6 +8,7 @@ Popup {
     id: info
     required property var controller
     readonly property var app: controller.appInfo()
+    signal linkRequested(string url)
 
     modal: true
     focus: true
@@ -128,6 +129,29 @@ Popup {
             Line { text: "Daniel Zeimentz" }
             Line { text: qsTr("E-Mail: %1").arg("info@dc-software-engineering.com") }
             Line { text: qsTr("Web: %1").arg("www.dc-software-engineering.com") }
+            Flow {
+                width: parent.width
+                spacing: 10
+                Button {
+                    objectName: "infoWebsite"
+                    height: Theme.control
+                    text: qsTr("Website öffnen")
+                    onClicked: info.linkRequested("https://dc-software-engineering.com")
+                }
+                Button {
+                    objectName: "infoMail"
+                    height: Theme.control
+                    text: qsTr("E-Mail schreiben")
+                    onClicked: info.linkRequested("mailto:info@dc-software-engineering.com?subject=Volta%201")
+                }
+            }
+            Label {
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: qsTr("Für Erwachsene: Vor dem Öffnen kommt eine kleine Rechenaufgabe.")
+                font.pixelSize: Math.round(12 * Theme.fontScale)
+                color: "#5A6672"
+            }
 
             Heading { text: qsTr("Datenschutz") }
             Line { text: qsTr("Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.") }

@@ -9,6 +9,7 @@ Row {
     property var languageService: null
     property var settings: null
     signal infoRequested()
+    signal parentAreaRequested() // hinter der Elternschranke (Main.qml)
     spacing: 6
 
     // Schriftgroesse: A- kleiner, A+ groesser (drei Stufen; groesste ist die Vorgabe)
@@ -211,16 +212,13 @@ Row {
                     }
                 }
             }
-            MenuItem {
-                objectName: "settingUnlockAll"
-                height: Theme.control
-                text: qsTr("Alle Bauteile freigeben")
-                checkable: true
-                enabled: bar.settings !== null
-                checked: bar.settings ? bar.settings.unlockAll : false
-                onTriggered: bar.settings.unlockAll = checked
-            }
             MenuSeparator {}
+            MenuItem {
+                objectName: "settingParentArea"
+                height: Theme.control
+                text: qsTr("Elternbereich …")
+                onTriggered: bar.parentAreaRequested()
+            }
             MenuItem {
                 height: Theme.control
                 text: qsTr("Info")

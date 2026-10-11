@@ -57,6 +57,7 @@ ApplicationWindow {
         onContinueRequested: root.inLab = true
         onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
+        onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 
     Lab {
@@ -69,6 +70,7 @@ ApplicationWindow {
         speech: root.speech
         onHomeRequested: { root.inLab = false; if (root.speech) root.speech.stop() }
         onInfoRequested: infoDialog.open()
+        onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 
     JournalView {
@@ -80,6 +82,7 @@ ApplicationWindow {
         settings: root.settings
         onBackRequested: root.inJournal = false
         onInfoRequested: infoDialog.open()
+        onParentAreaRequested: parentGate.ask(() => parentArea.open())
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
     }
 
@@ -87,7 +90,11 @@ ApplicationWindow {
         id: infoDialog
         objectName: "infoDialog"
         controller: labController
+        // Links nach aussen erst nach der Elternschranke
+        onLinkRequested: (url) => { infoDialog.close(); parentGate.ask(() => Qt.openUrlExternally(url)) }
     }
+    ParentGate { id: parentGate; controller: labController }
+    ParentArea { id: parentArea; controller: labController; settings: root.settings }
 
     // Startbildschirm nur in der Desktop-Ausgabe (main.cpp setzt volta_showSplash)
     Loader {

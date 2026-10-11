@@ -684,6 +684,53 @@ private slots:
         QTRY_VERIFY(!box->property("opened").toBool());
     }
 
+    // Elternschranke und Elternbereich: falsche Antwort haelt auf, richtige oeffnet; Freigabe und Zuruecksetzen
+    void parentGateAndArea() {
+        m_settings->setUnlockAll(false);
+        QObject* gate = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("parentGate"));
+        QObject* area = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("parentArea"));
+        QVERIFY(gate && area);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("settingsButton"))));
+        QQuickItem* entry = nullptr;
+        QTRY_VERIFY((entry = item(QStringLiteral("settingParentArea"))) && entry->isVisible());
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(entry));
+        QTRY_VERIFY(gate->property("opened").toBool());
+        const QVariantMap task = gate->property("task").toMap();
+        const int a = task.value(QStringLiteral("a")).toInt(), b = task.value(QStringLiteral("b")).toInt();
+        QVERIFY(a >= 12 && a <= 19 && b >= 3 && b <= 9);
+        QVERIFY(item(QStringLiteral("gateQuestion"))->property("text").toString().contains(QStringLiteral(" mal ")));
+        auto type = [&](int n) {
+            for (QChar ch : QString::number(n))
+                QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateKey_") + ch)));
+            QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateKey_ok"))));
+        };
+        QTest::qWait(100);
+        type(a * b + 1); // falsch
+        QVERIFY(gate->property("opened").toBool());
+        QVERIFY(!area->property("opened").toBool());
+        type(a * b);     // richtig
+        QTRY_VERIFY(area->property("opened").toBool());
+        QTRY_VERIFY(!gate->property("opened").toBool());
+        // Freigabe im Elternbereich
+        QQuickItem* unlock = item(QStringLiteral("parentUnlockAll"));
+        QVERIFY(unlock);
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(unlock));
+        QTRY_VERIFY(m_settings->unlockAll());
+        QMetaObject::invokeMethod(area, "close");
+        QTRY_VERIFY(!area->property("opened").toBool());
+        // Info: Link nach aussen nur ueber die Schranke (hier abbrechen)
+        QObject* info = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("infoDialog"));
+        QMetaObject::invokeMethod(info, "open");
+        QTRY_VERIFY(info->property("opened").toBool());
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("infoWebsite"))));
+        QTRY_VERIFY(gate->property("opened").toBool());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateCancel"))));
+        QTRY_VERIFY(!gate->property("opened").toBool());
+    }
+
     // Automatisches Speichern: Stand sichern, neuer Controller (Neustart) stellt Aufbau und Ablauf wieder her
     void sessionSaveAndResume() {
         QTemporaryDir dir;

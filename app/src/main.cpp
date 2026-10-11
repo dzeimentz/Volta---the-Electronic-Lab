@@ -260,6 +260,17 @@ int main(int argc, char* argv[]) {
             if (!engine.rootObjects().isEmpty()) engine.rootObjects().first()->setProperty("inJournal", true);
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_PARENT=gate|area zeigt die Elternschranke bzw. den Elternbereich (Sichtpruefung)
+    if (const QString demo = qEnvironmentVariable("VOLTA_DEMO_PARENT"); !demo.isEmpty())
+        QTimer::singleShot(600, &engine, [&engine, demo] {
+            const auto roots = engine.rootObjects();
+            if (roots.isEmpty()) return;
+            if (QObject* gate = roots.first()->findChild<QObject*>(QStringLiteral("parentGate")); gate && demo == u"gate")
+                QMetaObject::invokeMethod(gate, "ask", Q_ARG(QVariant, QVariant()));
+            if (QObject* area = roots.first()->findChild<QObject*>(QStringLiteral("parentArea")); area && demo == u"area")
+                QMetaObject::invokeMethod(area, "open");
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_TOOLBOX=0|1|2|3|4 oeffnet den Werkzeugkasten (Farbcode, E-Reihen, Lexikon, Rechner,
     // Fehlersuche); bei 4 mit einem fehlerhaften Aufbau (LED ohne Vorwiderstand, loser Widerstand), schon geprueft
     if (qEnvironmentVariable("VOLTA_DEMO_TOOLBOX") == QStringLiteral("4"))
