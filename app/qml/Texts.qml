@@ -3,15 +3,6 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-    // Zahl 0..19 in Worten (Elternschranke: Aufgabe in Worten statt Ziffern)
-    function numberWord(n) {
-        const words = [qsTr("null"), qsTr("eins"), qsTr("zwei"), qsTr("drei"), qsTr("vier"), qsTr("fünf"),
-                       qsTr("sechs"), qsTr("sieben"), qsTr("acht"), qsTr("neun"), qsTr("zehn"), qsTr("elf"),
-                       qsTr("zwölf"), qsTr("dreizehn"), qsTr("vierzehn"), qsTr("fünfzehn"), qsTr("sechzehn"),
-                       qsTr("siebzehn"), qsTr("achtzehn"), qsTr("neunzehn")]
-        return n >= 0 && n < words.length ? words[n] : String(n)
-    }
-
     function partName(type) {
         switch (type) {
         case "widerstand": return qsTr("Widerstand")

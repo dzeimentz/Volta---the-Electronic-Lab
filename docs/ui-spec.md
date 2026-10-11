@@ -205,10 +205,13 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Supportangaben.
 
 ## Elternschranke
-- Einfache Rechenaufgabe mit Zahlen in Worten; schuetzt Elternbereich, externe Links, Readme-Erwachsenenteil.
-- Umgesetzt (`ParentGate.qml`, Aufgabe im `LabController`): »Wie viel ist dreizehn mal vier?« (a 12–19, b 3–9,
-  Zahlwoerter in der Anzeigesprache), Eingabe ueber Ziffernblock (48 dp), nach drei Fehlversuchen neue Aufgabe;
-  wird bei jedem Oeffnen neu gestellt. Info-Fenster: »Website oeffnen« und »E-Mail schreiben« erst nach der Schranke.
+- Frei waehlbare PIN (Entscheidung 10/2026 statt der Rechenaufgabe); schuetzt Elternbereich, externe Links,
+  Readme-Erwachsenenteil.
+- Umgesetzt (`ParentGate.qml`, `AppSettings`): Start-PIN 1234, im Elternbereich aenderbar (4–8 Ziffern, zweimal
+  eingeben); solange die Start-PIN gilt, zeigt der Elternbereich oben einen deutlichen Hinweis. Gespeichert nur als
+  gesalzener SHA-256-Pruefwert. Eingabe verdeckt ueber Ziffernblock (48 dp); nach fuenf Fehlversuchen 30 s Sperre, die
+  einen Neustart ueberdauert. »PIN vergessen?« erklaert das Zuruecksetzen ueber das Loeschen der App-Daten.
+  Info-Fenster: »Website oeffnen« und »E-Mail schreiben« erst nach der Schranke.
 
 ## Elternbereich
 - Erreichbar ueber das Menue (☰ »Elternbereich …«) hinter der Elternschranke (`ParentArea.qml`):

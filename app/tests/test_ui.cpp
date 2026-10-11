@@ -875,20 +875,18 @@ private slots:
         QTest::qWait(100);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(entry));
         QTRY_VERIFY(gate->property("opened").toBool());
-        const QVariantMap task = gate->property("task").toMap();
-        const int a = task.value(QStringLiteral("a")).toInt(), b = task.value(QStringLiteral("b")).toInt();
-        QVERIFY(a >= 12 && a <= 19 && b >= 3 && b <= 9);
-        QVERIFY(item(QStringLiteral("gateQuestion"))->property("text").toString().contains(QStringLiteral(" mal ")));
-        auto type = [&](int n) {
-            for (QChar ch : QString::number(n))
+        QVERIFY(m_settings->parentPinIsDefault());
+        auto type = [&](const QString& digits) {
+            for (QChar ch : digits)
                 QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateKey_") + ch)));
             QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateKey_ok"))));
         };
         QTest::qWait(100);
-        type(a * b + 1); // falsch
+        type(QStringLiteral("4321")); // falsch
         QVERIFY(gate->property("opened").toBool());
+        QVERIFY(gate->property("wrong").toBool());
         QVERIFY(!area->property("opened").toBool());
-        type(a * b);     // richtig
+        type(QStringLiteral("1234")); // Start-PIN
         QTRY_VERIFY(area->property("opened").toBool());
         QTRY_VERIFY(!gate->property("opened").toBool());
         // Freigabe im Elternbereich
@@ -908,6 +906,33 @@ private slots:
         QTRY_VERIFY(gate->property("opened").toBool());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateCancel"))));
         QTRY_VERIFY(!gate->property("opened").toBool());
+    }
+
+    // PIN fuer den Elternbereich: aendern (nur Ziffern, 4-8), Pruefwert statt PIN, Sperre nach fuenf Fehlversuchen
+    void parentPin() {
+        QTemporaryDir dir;
+        const QString file = dir.filePath(QStringLiteral("einstellungen.ini"));
+        {
+            AppSettings s(true, file);
+            QVERIFY(s.parentPinIsDefault());
+            QVERIFY(s.checkParentPin(QStringLiteral("1234")));
+            QVERIFY(!s.setParentPin(QStringLiteral("12a4")));
+            QVERIFY(!s.setParentPin(QStringLiteral("123")));
+            QVERIFY(s.setParentPin(QStringLiteral("80734")));
+            QVERIFY(!s.parentPinIsDefault());
+            QVERIFY(!s.checkParentPin(QStringLiteral("1234")));
+        }
+        QFile f(file);
+        QVERIFY(f.open(QIODevice::ReadOnly));
+        QVERIFY(!f.readAll().contains("80734")); // nur der Pruefwert steht in der Datei
+        f.close();
+        AppSettings again(true, file); // Neustart
+        QVERIFY(again.checkParentPin(QStringLiteral("80734")));
+        for (int i = 0; i < 5; ++i) QVERIFY(!again.checkParentPin(QStringLiteral("0000")));
+        QVERIFY(again.parentPinLockSeconds() > 0);
+        QVERIFY(!again.checkParentPin(QStringLiteral("80734"))); // gesperrt, auch mit richtiger PIN
+        AppSettings restarted(true, file);
+        QVERIFY(restarted.parentPinLockSeconds() > 0); // Sperre bleibt ueber den Neustart
     }
 
     // Automatisches Speichern: Stand sichern, neuer Controller (Neustart) stellt Aufbau und Ablauf wieder her

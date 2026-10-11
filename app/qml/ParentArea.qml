@@ -106,6 +106,68 @@ Popup {
                 }
             }
 
+            // ---- PIN fuer den Elternbereich
+            Rectangle {
+                objectName: "pinDefaultWarning"
+                visible: area.settings !== null && area.settings.parentPinIsDefault
+                width: parent.width
+                height: pinWarn.implicitHeight + 20
+                radius: 8
+                color: "#FFF4D6"
+                border.color: Theme.solderAmber
+                Label {
+                    id: pinWarn
+                    x: 10; y: 10
+                    width: parent.width - 20
+                    wrapMode: Text.Wrap
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    font.bold: true
+                    color: "#5A3A00"
+                    text: qsTr("Noch gilt die Start-PIN 1234, die Kinder leicht erraten. Bitte legen Sie unten eine eigene PIN fest.")
+                }
+            }
+            Heading { text: qsTr("PIN für den Elternbereich") }
+            Body { text: qsTr("Die PIN schützt den Elternbereich und Links aus der App heraus. Sie hat 4 bis 8 Ziffern und bleibt nur auf diesem Gerät.") }
+            Flow {
+                width: parent.width
+                spacing: 10
+                TextField {
+                    id: newPin
+                    objectName: "pinNew"
+                    width: 160; height: Theme.control
+                    placeholderText: qsTr("Neue PIN")
+                    echoMode: TextInput.Password
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    maximumLength: 8
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]{0,8}/ }
+                }
+                TextField {
+                    id: repeatPin
+                    objectName: "pinRepeat"
+                    width: 160; height: Theme.control
+                    placeholderText: qsTr("Wiederholen")
+                    echoMode: TextInput.Password
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    maximumLength: 8
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]{0,8}/ }
+                }
+                Button {
+                    objectName: "pinSave"
+                    height: Theme.control
+                    text: qsTr("PIN ändern")
+                    onClicked: {
+                        if (newPin.text.length < 4) pinResult.text = qsTr("Die PIN braucht mindestens 4 Ziffern.")
+                        else if (newPin.text !== repeatPin.text) pinResult.text = qsTr("Die beiden Eingaben sind verschieden.")
+                        else if (area.settings && area.settings.setParentPin(newPin.text)) {
+                            pinResult.text = qsTr("Die neue PIN gilt ab sofort.")
+                            newPin.text = ""
+                            repeatPin.text = ""
+                        } else pinResult.text = qsTr("Die PIN konnte nicht gespeichert werden.")
+                    }
+                }
+            }
+            Body { id: pinResult; objectName: "pinResult"; visible: text !== ""; text: ""; color: Theme.accent }
+
             // ---- Klassenzimmer: Ton
             Heading { text: qsTr("Ton im Klassenzimmer") }
             Body { text: qsTr("Damit es in der Klasse ruhig bleibt, können Sie den Ton ganz abschalten oder nur über Kopfhörer erlauben. Das gilt auch für das Vorlesen.") }

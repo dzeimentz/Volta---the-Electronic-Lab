@@ -33,6 +33,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY changed)
     // Klassenmodus Ton (Elternbereich): "normal", "kopfhoerer" (nur mit Kopfhoerern) oder "aus"
     Q_PROPERTY(QString classroomSound READ classroomSound WRITE setClassroomSound NOTIFY changed)
+    // Elternschranke: PIN (4-8 Ziffern), gespeichert nur als gesalzener SHA-256-Pruefwert; Start-PIN 1234
+    Q_PROPERTY(bool parentPinIsDefault READ parentPinIsDefault NOTIFY changed)
     Q_PROPERTY(QString wireColor READ wireColor WRITE setWireColor NOTIFY changed)
     Q_PROPERTY(bool autoWireColor READ autoWireColor WRITE setAutoWireColor NOTIFY changed) // Plus rot, Minus schwarz
     Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY changed)
@@ -64,6 +66,14 @@ public:
     bool profilesEnabled() const { return m_profilesEnabled; }
     QString classroomSound() const { return m_classroomSound; }
     void setClassroomSound(const QString& mode);
+    bool parentPinIsDefault() const { return m_pinHash.isEmpty(); }
+    // PIN pruefen; nach 5 Fehlversuchen 30 s gesperrt (auch ueber einen Neustart). false waehrend der Sperre.
+    Q_INVOKABLE bool checkParentPin(const QString& pin);
+    // verbleibende Sperre in Sekunden (0: frei)
+    Q_INVOKABLE int parentPinLockSeconds() const;
+    // neue PIN setzen (nur Ziffern, 4-8 Stellen); false bei ungueltiger PIN
+    Q_INVOKABLE bool setParentPin(const QString& pin);
+    static constexpr const char* kDefaultPin = "1234";
     void setProfilesEnabled(bool on) { set(m_profilesEnabled, on, "profile/aktiv"); }
     QString wireColor() const { return m_wireColor; }
     bool autoWireColor() const { return m_autoWireColor; }
@@ -100,6 +110,12 @@ private:
     bool m_meterDocked = false;
     bool m_profilesEnabled = false;
     QString m_classroomSound = QStringLiteral("normal");
+    QString m_pinHash; // leer: Start-PIN
+    QString m_pinSalt;
+    int m_pinFailures = 0;
+    qint64 m_pinLockedUntil = 0; // ms seit Epoche
+    static QString hashPin(const QString& salt, const QString& pin);
+    void savePinState();
     QString m_wireColor = QStringLiteral("rot");
     bool m_autoWireColor = true;
     bool m_schematicVisible = false;

@@ -117,7 +117,7 @@ ApplicationWindow {
         // Links nach aussen erst nach der Elternschranke
         onLinkRequested: (url) => { infoDialog.close(); parentGate.ask(() => Qt.openUrlExternally(url)) }
     }
-    ParentGate { id: parentGate; controller: labController }
+    ParentGate { id: parentGate; settings: root.settings }
 
     // Fortschrittscode (QR ueber die Kamera-App): Rueckfrage, dann in das aktuelle Profil uebernehmen. Mit Profilen
     // wartet die Frage, bis eines gewaehlt ist.

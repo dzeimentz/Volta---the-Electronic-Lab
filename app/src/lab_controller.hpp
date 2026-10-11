@@ -181,10 +181,6 @@ public:
     Q_INVOKABLE void resetProgress();
     // Forscherheft leeren (Elternbereich)
     Q_INVOKABLE void resetJournal();
-    // Elternschranke (docs/ui-spec.md): Rechenaufgabe a x b mit a 12..19, b 3..9 (Zahlen in Worten, fuer Kinder der
-    // Zielgruppe zu schwer); {a, b}. checkParentGate prueft die Antwort zur zuletzt gestellten Aufgabe.
-    Q_INVOKABLE QVariantMap newParentGateTask();
-    Q_INVOKABLE bool checkParentGate(int answer) const;
 
     // Werkzeugkasten (Konzept 5.7): Farbcode, E-Reihen, Bauteillexikon
     Q_INVOKABLE QVariantMap colorCode(double ohm, int rings) const; // {valid, rings[], ohm, tolerance}
@@ -418,8 +414,6 @@ private:
     QString band() const;
     // Fortschritt, Forscherheft und Laborstand aus diesem Ordner (leer: nur im Speicher); Labor leer
     void activateDataDir(const QString& dir, bool saveFirst = true);
-    int m_gateA = 0;
-    int m_gateB = 0;
     services::JournalStore m_journal;
     bool m_unlockAll = false;
     bool m_buildComplete = false;

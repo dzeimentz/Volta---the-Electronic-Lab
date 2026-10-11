@@ -1,41 +1,44 @@
-// Elternschranke (docs/ui-spec.md, docs/privacy-safety.md): eine Rechenaufgabe mit Zahlen in Worten schuetzt
-// Elternbereich und externe Links. Eingabe ueber einen Ziffernblock (>= 48 dp); nach drei Fehlversuchen kommt eine
-// neue Aufgabe. ask(action) oeffnet die Schranke und ruft action() erst nach der richtigen Antwort auf.
+// Elternschranke (docs/ui-spec.md, docs/privacy-safety.md): PIN fuer Erwachsene (Start-PIN 1234, im Elternbereich
+// aenderbar) schuetzt Elternbereich und externe Links. Eingabe ueber einen Ziffernblock (>= 48 dp), verdeckt; nach
+// fuenf Fehlversuchen 30 s Sperre (AppSettings). ask(action) ruft action() erst nach der richtigen PIN auf.
 import QtQuick
 import QtQuick.Controls.Basic
 
 Popup {
     id: gate
-    required property var controller
-    property var task: ({ a: 0, b: 0 })
-    property string answer: ""
-    property int tries: 0
-    property var pending: null // Aktion nach bestandener Aufgabe
+    property var settings: null
+    property string pin: ""
+    property bool wrong: false
+    property int lockSeconds: 0
+    property bool forgotShown: false
+    property var pending: null // Aktion nach richtiger PIN
 
     function ask(action) {
         gate.pending = action
-        gate.newTask()
+        gate.pin = ""
+        gate.wrong = false
+        gate.forgotShown = false
+        gate.lockSeconds = gate.settings ? gate.settings.parentPinLockSeconds() : 0
         gate.open()
     }
-    function newTask() {
-        gate.task = gate.controller.newParentGateTask()
-        gate.answer = ""
-        gate.tries = 0
-        wrong.visible = false
-    }
     function submit() {
-        if (gate.answer === "") return
-        if (gate.controller.checkParentGate(parseInt(gate.answer))) {
+        if (gate.pin === "" || !gate.settings) return
+        if (gate.settings.checkParentPin(gate.pin)) {
             const action = gate.pending
             gate.pending = null
             gate.close()
             if (action) action()
             return
         }
-        gate.answer = ""
-        gate.tries += 1
-        wrong.visible = true
-        if (gate.tries >= 3) { gate.task = gate.controller.newParentGateTask(); gate.tries = 0 }
+        gate.pin = ""
+        gate.wrong = true
+        gate.lockSeconds = gate.settings.parentPinLockSeconds()
+    }
+    Timer {
+        interval: 1000
+        repeat: true
+        running: gate.opened && gate.lockSeconds > 0
+        onTriggered: gate.lockSeconds = gate.settings ? gate.settings.parentPinLockSeconds() : 0
     }
 
     objectName: "parentGate"
@@ -60,18 +63,9 @@ Popup {
         Label {
             width: parent.width
             wrapMode: Text.Wrap
-            text: qsTr("Bitte lösen Sie diese Aufgabe, um fortzufahren.")
+            text: qsTr("Bitte geben Sie die PIN für den Elternbereich ein.")
             font.pixelSize: Math.round(14 * Theme.fontScale)
             color: "#1E2B38"
-        }
-        Label {
-            objectName: "gateQuestion"
-            width: parent.width
-            wrapMode: Text.Wrap
-            text: qsTr("Wie viel ist %1 mal %2?").arg(Texts.numberWord(gate.task.a)).arg(Texts.numberWord(gate.task.b))
-            font.pixelSize: Math.round(18 * Theme.fontScale)
-            font.bold: true
-            color: Theme.navy
         }
         Rectangle {
             width: parent.width
@@ -80,20 +74,21 @@ Popup {
             color: "white"
             border.color: Theme.fieldOutline
             Label {
-                objectName: "gateAnswer"
+                objectName: "gatePin"
                 anchors.centerIn: parent
-                text: gate.answer === "" ? " " : gate.answer
+                text: gate.pin === "" ? " " : "●".repeat(gate.pin.length) // verdeckt (Punkte)
                 font.pixelSize: Math.round(22 * Theme.fontScale)
-                font.bold: true
+                font.letterSpacing: 6
                 color: Theme.navy
             }
         }
         Label {
-            id: wrong
-            visible: false
+            objectName: "gateMessage"
+            visible: text !== ""
             width: parent.width
             wrapMode: Text.Wrap
-            text: gate.tries === 0 ? qsTr("Nicht richtig. Hier ist eine neue Aufgabe.") : qsTr("Nicht richtig. Bitte versuchen Sie es noch einmal.")
+            text: gate.lockSeconds > 0 ? qsTr("Zu viele Versuche. Bitte warten Sie %1 Sekunden.").arg(gate.lockSeconds)
+                : gate.wrong ? qsTr("Die PIN stimmt nicht.") : ""
             font.pixelSize: Math.round(13 * Theme.fontScale)
             color: "#B23B1E"
         }
@@ -107,6 +102,7 @@ Popup {
                     required property string modelData
                     objectName: "gateKey_" + modelData
                     width: 72; height: Theme.control
+                    enabled: gate.lockSeconds === 0
                     text: modelData === "ok" ? qsTr("OK") : modelData === "del" ? "" : modelData
                     font.pixelSize: Math.round(18 * Theme.fontScale)
                     font.bold: modelData === "ok"
@@ -123,18 +119,38 @@ Popup {
                     Accessible.name: modelData === "del" ? qsTr("Ziffer löschen") : text
                     onClicked: {
                         if (modelData === "ok") gate.submit()
-                        else if (modelData === "del") gate.answer = gate.answer.slice(0, -1)
-                        else if (gate.answer.length < 4) gate.answer += modelData
+                        else if (modelData === "del") gate.pin = gate.pin.slice(0, -1)
+                        else if (gate.pin.length < 8) { gate.pin += modelData; gate.wrong = false }
                     }
                 }
             }
         }
-        Button {
-            objectName: "gateCancel"
+        Label {
+            objectName: "gateForgot"
+            width: parent.width
+            wrapMode: Text.Wrap
+            visible: gate.forgotShown
+            text: qsTr("PIN vergessen? Dann lässt sich Volta nur zurücksetzen, indem Sie die App-Daten löschen (Android: Einstellungen, Apps, Volta 1, Speicher, Daten löschen). Dabei gehen auch Fortschritt und Forscherheft verloren.")
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+            color: "#4A5866"
+        }
+        Row {
             anchors.right: parent.right
-            height: Theme.control
-            text: qsTr("Abbrechen")
-            onClicked: gate.close()
+            spacing: 12
+            Button {
+                objectName: "gateForgotButton"
+                visible: !gate.forgotShown
+                height: Theme.control
+                flat: true
+                text: qsTr("PIN vergessen?")
+                onClicked: gate.forgotShown = true
+            }
+            Button {
+                objectName: "gateCancel"
+                height: Theme.control
+                text: qsTr("Abbrechen")
+                onClicked: gate.close()
+            }
         }
     }
 }

@@ -11,7 +11,8 @@
 - Kamera und Mikrofon werden nicht verwendet; Fotoimport ueber die Systemauswahl.
 
 ## Kinderschutz
-- Elternschranke vor externen Links, Elternbereich und Erwachsenenteil des Readme.
+- Elternschranke (PIN, Start 1234, aenderbar; Hinweis bis zur Aenderung) vor externen Links, Elternbereich und
+  Erwachsenenteil des Readme. Die PIN steht nur als gesalzener Pruefwert in den Einstellungen.
 - Zerstoerende Experimente (`zerstoerend: true`) zeigen »Nur in der App!«.
 - »Jetzt in echt« schlaegt nie zerstoerende Versuche vor.
 - Sicherheitskapitel: Steckdose, Lithium-Akkus und Powerbanks sind tabu.
