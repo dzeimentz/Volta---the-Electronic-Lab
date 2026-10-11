@@ -1152,6 +1152,26 @@ private slots:
         QTRY_VERIFY(!gate->property("opened").toBool()); // Start-PIN
     }
 
+    // Doppeltippen dreht ein Bauteil (Abkuerzung zum Menue »Drehen«), rueckgaengig machbar
+    void doubleTapRotatesPart() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("B3"), false, false)); // waagerecht
+        auto vertical = [this] { return m_lab->parts().first().toMap().value(QStringLiteral("vertical")).toBool(); };
+        QVERIFY(!vertical());
+        QTRY_VERIFY(item(QStringLiteral("part_R1")) != nullptr);
+        QTest::qWait(100);
+        // Mitte des Bauteils: zwischen seinen Feldern B3 und B4
+        const QPoint body = (centerOf(item(QStringLiteral("field_B3"))) + centerOf(item(QStringLiteral("field_B4")))) / 2;
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, body);
+        QTest::qWait(50);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, body);
+        QTRY_VERIFY(vertical());
+        m_lab->undo();
+        QVERIFY(!vertical());
+        m_lab->clearBoard();
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

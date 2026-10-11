@@ -18,6 +18,7 @@ Item {
     signal dragMoved(point delta) // waehrend des Ziehens (Muelleimer hebt sich hervor)
     property real dragScale: 1 // Massstab der Arbeitsflaeche: Verschiebung in Szenenpunkten -> eigene Punkte
     signal tapped()
+    signal doubleTapped() // Abkuerzung zum Drehen (Steckmodus)
     signal pushed(bool down) // Taster gedrueckt/losgelassen
     signal menuRequested(point scenePos)
 
@@ -154,9 +155,14 @@ Item {
             // das Ziehen darf ihn dennoch uebernehmen
             gesturePolicy: TapHandler.ReleaseWithinBounds
             acceptedButtons: Qt.LeftButton | Qt.RightButton
+            // zweiter Tipp innerhalb von 400 ms: Doppeltippen (selbst gemessen, gleich fuer Maus und Finger)
+            property double lastTap: 0
             onTapped: (eventPoint, button) => {
-                if (button === Qt.RightButton) root.menuRequested(eventPoint.scenePosition)
-                else root.tapped()
+                if (button === Qt.RightButton) { root.menuRequested(eventPoint.scenePosition); return }
+                const now = Date.now()
+                if (root.movable && now - lastTap < 400) { lastTap = 0; root.doubleTapped(); return }
+                lastTap = now
+                root.tapped()
             }
             // im Betrieb haelt ein langer Druck den Taster gedrueckt; das Menue bleibt dann beim Rechtsklick
             onLongPressed: if (root.movable) root.menuRequested(point.scenePosition)

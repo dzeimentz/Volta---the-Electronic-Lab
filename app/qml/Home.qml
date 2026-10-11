@@ -97,7 +97,17 @@ Rectangle {
             Column {
                 anchors.verticalCenter: parent.verticalCenter
                 width: tile.width - 90
-                Label { text: tile.title; font.pixelSize: Math.round((20) * Theme.fontScale); font.bold: true; color: tile.available ? Theme.navy : "#6E6A60" }
+                // lange Titel (»Aufgabe deiner Lehrkraft«) passen sich der Kachel an statt hinauszuragen
+                Label {
+                    width: parent.width
+                    text: tile.title
+                    font.pixelSize: Math.round((20) * Theme.fontScale)
+                    fontSizeMode: Text.HorizontalFit
+                    minimumPixelSize: 13
+                    elide: Text.ElideRight
+                    font.bold: true
+                    color: tile.available ? Theme.navy : "#6E6A60"
+                }
                 Label { width: parent.width; text: tile.subtitle; wrapMode: Text.Wrap; font.pixelSize: Math.round((13) * Theme.fontScale); color: "#4A5866" }
             }
         }

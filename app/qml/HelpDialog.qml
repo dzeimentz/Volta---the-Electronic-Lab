@@ -29,7 +29,7 @@ Popup {
           say: qsTr("Ziehe ein Bauteil aus dem Bauteilfach links auf die Grundplatte. Seine Beine landen in Kontaktfeldern."),
           points: [qsTr("Alles, was im selben Feld steckt, ist miteinander verbunden."),
                    qsTr("Module wie das Blinkmodul findest du im Modulfach. Sie gehören in die Modulleiste unten."),
-                   qsTr("Ein Bauteil verschiebst du, indem du es ziehst."),
+                   qsTr("Ein Bauteil verschiebst du, indem du es ziehst. Tippst du zweimal schnell darauf, dreht es sich."),
                    qsTr("Halte ein Bauteil lange gedrückt (am Computer: Rechtsklick). Im Menü kannst du es drehen, einen Wert wählen oder entfernen.")] },
         { key: "leitungen", title: qsTr("Leitungen ziehen"), mood: "erklaerend",
           say: qsTr("Ziehe mit dem Finger von einem Feld zu einem anderen – schon liegt dort eine Leitung."),

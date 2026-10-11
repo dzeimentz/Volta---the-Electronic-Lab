@@ -692,9 +692,13 @@
         <translation>Les modules comme le module clignotant se trouvent dans le bac à modules. Ils vont dans la barre de modules en bas.</translation>
     </message>
     <message>
-        <location filename="../app/qml/HelpDialog.qml" line="32" />
         <source>Ein Bauteil verschiebst du, indem du es ziehst.</source>
-        <translation>Pour déplacer un composant, fais-le glisser.</translation>
+        <translation type="vanished">Pour déplacer un composant, fais-le glisser.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="32" />
+        <source>Ein Bauteil verschiebst du, indem du es ziehst. Tippst du zweimal schnell darauf, dreht es sich.</source>
+        <translation>Pour déplacer un composant, fais-le glisser. Si tu le touches deux fois rapidement, il pivote.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="33" />
@@ -1014,102 +1018,102 @@
         <translation>Changer de profil : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="133" />
+        <location filename="../app/qml/Home.qml" line="143" />
         <source>Hallo %1! Ich bin Tick.</source>
         <translation>Bonjour %1 ! Je suis Tick.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="133" />
+        <location filename="../app/qml/Home.qml" line="143" />
         <source>Hallo! Ich bin Tick.</source>
         <translation>Bonjour ! Je suis Tick.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="134" />
+        <location filename="../app/qml/Home.qml" line="144" />
         <source>Ich begleite dich durch deine Experimente. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.</source>
         <translation>Je t'accompagne dans tes expériences. Commence par le parcours d'apprentissage ou essaie tes propres idées dans le labo libre.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="142" />
+        <location filename="../app/qml/Home.qml" line="152" />
         <source>Zeig mir, wie Volta funktioniert</source>
         <translation>Montre-moi comment marche Volta</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="176" />
+        <location filename="../app/qml/Home.qml" line="186" />
         <source>Weitermachen</source>
         <translation>Continuer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="184" />
+        <location filename="../app/qml/Home.qml" line="194" />
         <source>Aufgabe deiner Lehrkraft</source>
         <translation>Tâche de ton enseignant</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="184" />
+        <location filename="../app/qml/Home.qml" line="194" />
         <source>Aufgabe</source>
         <translation>Tâche</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="186" />
+        <location filename="../app/qml/Home.qml" line="196" />
         <source>Antippen und loslegen</source>
         <translation>Touche et c'est parti</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="187" />
+        <location filename="../app/qml/Home.qml" line="197" />
         <source>Code der Lehrkraft eingeben</source>
         <translation>Saisir le code de l'enseignant</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="193" />
+        <location filename="../app/qml/Home.qml" line="203" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="194" />
+        <location filename="../app/qml/Home.qml" line="204" />
         <source>Eigene Ideen ausprobieren – mit allen freigeschalteten Bauteilen</source>
         <translation>Essaie tes propres idées – avec tous les composants débloqués</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="200" />
+        <location filename="../app/qml/Home.qml" line="210" />
         <source>Forscherheft</source>
         <translation>Carnet de recherche</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="201" />
+        <location filename="../app/qml/Home.qml" line="211" />
         <source>Deine Vermutungen, Beobachtungen und Notizen</source>
         <translation>Tes hypothèses, observations et notes</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="207" />
+        <location filename="../app/qml/Home.qml" line="217" />
         <source>Lernpfad</source>
         <translation>Parcours</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="251" />
+        <location filename="../app/qml/Home.qml" line="261" />
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="271" />
+        <location filename="../app/qml/Home.qml" line="281" />
         <source>%1 von %2 geschafft</source>
         <translation>%1 sur %2 réussies</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="290" />
+        <location filename="../app/qml/Home.qml" line="300" />
         <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
         <translation>Encore verrouillé – réussis d'abord les expériences du niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="296" />
+        <location filename="../app/qml/Home.qml" line="306" />
         <source>Experimente folgen.</source>
         <translation>Les expériences arrivent bientôt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="335" />
+        <location filename="../app/qml/Home.qml" line="345" />
         <source>Nur in der App!</source>
         <translation>Seulement dans l'appli !</translation>
     </message>
     <message>
-        <location filename="../app/qml/Home.qml" line="352" />
+        <location filename="../app/qml/Home.qml" line="362" />
         <source>geschafft</source>
         <translation>réussi</translation>
     </message>
@@ -1273,54 +1277,54 @@
 <context>
     <name>Lab</name>
     <message>
-        <location filename="../app/qml/Lab.qml" line="315" />
+        <location filename="../app/qml/Lab.qml" line="321" />
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="309" />
+        <location filename="../app/qml/Lab.qml" line="315" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="293" />
-        <location filename="../app/qml/Lab.qml" line="294" />
+        <location filename="../app/qml/Lab.qml" line="299" />
+        <location filename="../app/qml/Lab.qml" line="300" />
         <source>Startseite</source>
         <translation>Accueil</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="409" />
+        <location filename="../app/qml/Lab.qml" line="415" />
         <source>Rückgängig: %1</source>
         <translation>Annuler : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="410" />
+        <location filename="../app/qml/Lab.qml" line="416" />
         <source>Rückgängig</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="424" />
+        <location filename="../app/qml/Lab.qml" line="430" />
         <source>Wiederholen: %1</source>
         <translation>Rétablir : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="425" />
+        <location filename="../app/qml/Lab.qml" line="431" />
         <source>Wiederholen</source>
         <translation>Rétablir</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="856" />
+        <location filename="../app/qml/Lab.qml" line="862" />
         <source>Weniger Felder je Reihe</source>
         <translation>Moins de cases par rangée</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="845" />
+        <location filename="../app/qml/Lab.qml" line="851" />
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="366" />
-        <location filename="../app/qml/Lab.qml" line="367" />
+        <location filename="../app/qml/Lab.qml" line="372" />
+        <location filename="../app/qml/Lab.qml" line="373" />
         <source>Experiment wählen</source>
         <translation>Choisir une expérience</translation>
     </message>
@@ -1330,295 +1334,299 @@
         <translation>Courant coupé – mode montage. Pour tester, rallume l'interrupteur principal.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="219" />
         <source>Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …).</source>
-        <translation>Un appui long ou un clic droit ouvre le menu (couleur, tourner, supprimer …).</translation>
+        <translation type="vanished">Un appui long ou un clic droit ouvre le menu (couleur, tourner, supprimer …).</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="378" />
+        <location filename="../app/qml/Lab.qml" line="384" />
         <source>Betrieb: Schaltung testen. Antippen schaltet aus und wechselt in den Steckmodus.</source>
         <translation>En marche : tester le circuit. Toucher pour couper et passer en mode montage.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="379" />
+        <location filename="../app/qml/Lab.qml" line="385" />
         <source>Steckmodus: aufbauen und ändern. Antippen schaltet ein und wechselt in den Betrieb.</source>
         <translation>Mode montage : construire et modifier. Toucher pour allumer et passer en marche.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="380" />
-        <location filename="../app/qml/Lab.qml" line="382" />
+        <location filename="../app/qml/Lab.qml" line="386" />
+        <location filename="../app/qml/Lab.qml" line="388" />
         <source>Betrieb</source>
         <translation>En marche</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="380" />
-        <location filename="../app/qml/Lab.qml" line="382" />
+        <location filename="../app/qml/Lab.qml" line="386" />
+        <location filename="../app/qml/Lab.qml" line="388" />
         <source>Stecken</source>
         <translation>Montage</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="849" />
+        <location filename="../app/qml/Lab.qml" line="855" />
         <source>Felder je Reihe: %1</source>
         <translation>Cases par rangée : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="838" />
+        <location filename="../app/qml/Lab.qml" line="844" />
         <source>Mehr Felder je Reihe</source>
         <translation>Plus de cases par rangée</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="442" />
-        <location filename="../app/qml/Lab.qml" line="443" />
+        <location filename="../app/qml/Lab.qml" line="225" />
+        <source>Doppeltippen dreht ein Bauteil. Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …).</source>
+        <translation>Toucher deux fois fait pivoter un composant. Un appui long ou un clic droit ouvre le menu (couleur, tourner, supprimer …).</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="448" />
+        <location filename="../app/qml/Lab.qml" line="449" />
         <source>Werkzeugkasten</source>
         <translation>Boîte à outils</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="459" />
+        <location filename="../app/qml/Lab.qml" line="465" />
         <source>Messgerät ausblenden</source>
         <translation>Masquer le multimètre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="459" />
+        <location filename="../app/qml/Lab.qml" line="465" />
         <source>Messgerät einblenden</source>
         <translation>Afficher le multimètre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="484" />
+        <location filename="../app/qml/Lab.qml" line="490" />
         <source>Schaltplan ausblenden</source>
         <translation>Masquer le schéma</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="484" />
+        <location filename="../app/qml/Lab.qml" line="490" />
         <source>Schaltplan zeigen</source>
         <translation>Afficher le schéma</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="506" />
+        <location filename="../app/qml/Lab.qml" line="512" />
         <source>Zeitschreiber ausblenden</source>
         <translation>Masquer l'enregistreur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="506" />
+        <location filename="../app/qml/Lab.qml" line="512" />
         <source>Zeitschreiber zeigen</source>
         <translation>Afficher l'enregistreur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="521" />
+        <location filename="../app/qml/Lab.qml" line="527" />
         <source>Leitungsfarbe: %1</source>
         <translation>Couleur du fil : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="567" />
+        <location filename="../app/qml/Lab.qml" line="573" />
         <source>Zeit %1 s</source>
         <translation>Temps %1 s</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="613" />
-        <location filename="../app/qml/Lab.qml" line="630" />
+        <location filename="../app/qml/Lab.qml" line="619" />
+        <location filename="../app/qml/Lab.qml" line="636" />
         <source>%1 wird mit Stufe %2 freigeschaltet.</source>
         <translation>%1 sera débloqué au niveau %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="642" />
+        <location filename="../app/qml/Lab.qml" line="648" />
         <source>Module gehören in die Modulleiste unten.</source>
         <translation>Les modules se placent dans la barre des modules en bas.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="884" />
+        <location filename="../app/qml/Lab.qml" line="890" />
         <source>Löschen: Ausgewähltes antippen oder Bauteil hierher ziehen</source>
         <translation>Supprimer : touche l'élément choisi ou fais glisser un composant ici</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="885" />
-        <location filename="../app/qml/Lab.qml" line="1561" />
+        <location filename="../app/qml/Lab.qml" line="891" />
+        <location filename="../app/qml/Lab.qml" line="1563" />
         <source>Löschen</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1030" />
+        <location filename="../app/qml/Lab.qml" line="1037" />
         <source>Leitung %1 von %2 nach %3</source>
         <translation>Fil %1 de %2 à %3</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1210" />
+        <location filename="../app/qml/Lab.qml" line="1217" />
         <source>Licht, Wärme, Wasser</source>
         <translation>Lumière, chaleur, eau</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1217" />
+        <location filename="../app/qml/Lab.qml" line="1224" />
         <source>Raum hell</source>
         <translation>Pièce éclairée</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1217" />
+        <location filename="../app/qml/Lab.qml" line="1224" />
         <source>Dämmerung</source>
         <translation>Crépuscule</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1217" />
+        <location filename="../app/qml/Lab.qml" line="1224" />
         <source>Dunkel</source>
         <translation>Sombre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1220" />
+        <location filename="../app/qml/Lab.qml" line="1227" />
         <source>Raumlicht umschalten</source>
         <translation>Changer la lumière de la pièce</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1240" />
-        <location filename="../app/qml/Lab.qml" line="1264" />
+        <location filename="../app/qml/Lab.qml" line="1247" />
+        <location filename="../app/qml/Lab.qml" line="1271" />
         <source>Taschenlampe</source>
         <translation>Lampe de poche</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1240" />
-        <location filename="../app/qml/Lab.qml" line="1264" />
+        <location filename="../app/qml/Lab.qml" line="1247" />
+        <location filename="../app/qml/Lab.qml" line="1271" />
         <source>Föhn</source>
         <translation>Sèche-cheveux</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1240" />
-        <location filename="../app/qml/Lab.qml" line="1264" />
+        <location filename="../app/qml/Lab.qml" line="1247" />
+        <location filename="../app/qml/Lab.qml" line="1271" />
         <source>Wassertropfen</source>
         <translation>Goutte d'eau</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1285" />
+        <location filename="../app/qml/Lab.qml" line="1292" />
         <source>Spannungsanzeige ein/aus</source>
         <translation>Afficher/masquer la tension</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1296" />
+        <location filename="../app/qml/Lab.qml" line="1303" />
         <source>Zeitschreiber Kanal %1: Messgerät</source>
         <translation>Enregistreur voie %1 : multimètre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1297" />
+        <location filename="../app/qml/Lab.qml" line="1304" />
         <source>Zeitschreiber Kanal %1: hier messen</source>
         <translation>Enregistreur voie %1 : mesurer ici</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1312" />
+        <location filename="../app/qml/Lab.qml" line="1319" />
         <source>Drehen</source>
         <translation>Tourner</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1321" />
+        <location filename="../app/qml/Lab.qml" line="1323" />
         <source>Umdrehen (Polung)</source>
         <translation>Retourner (polarité)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1325" />
+        <location filename="../app/qml/Lab.qml" line="1327" />
         <source>Kurz stecken</source>
         <translation>Placer court</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1325" />
+        <location filename="../app/qml/Lab.qml" line="1327" />
         <source>Lang stecken</source>
         <translation>Placer long</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1335" />
+        <location filename="../app/qml/Lab.qml" line="1337" />
         <source>Wert</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1353" />
+        <location filename="../app/qml/Lab.qml" line="1355" />
         <source>Nennspannung</source>
         <translation>Tension nominale</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1359" />
+        <location filename="../app/qml/Lab.qml" line="1361" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1369" />
+        <location filename="../app/qml/Lab.qml" line="1371" />
         <source>Reparieren</source>
         <translation>Réparer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1375" />
+        <location filename="../app/qml/Lab.qml" line="1377" />
         <source>Entfernen</source>
         <translation>Retirer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1387" />
+        <location filename="../app/qml/Lab.qml" line="1389" />
         <source>Blick hinein</source>
         <translation>Regard à l'intérieur</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1391" />
+        <location filename="../app/qml/Lab.qml" line="1393" />
         <source>Herausnehmen</source>
         <translation>Retirer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1409" />
+        <location filename="../app/qml/Lab.qml" line="1411" />
         <source>Ausschalten</source>
         <translation>Éteindre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1409" />
+        <location filename="../app/qml/Lab.qml" line="1411" />
         <source>Einschalten</source>
         <translation>Allumer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1413" />
+        <location filename="../app/qml/Lab.qml" line="1415" />
         <source>Wegräumen</source>
         <translation>Ranger</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1429" />
+        <location filename="../app/qml/Lab.qml" line="1431" />
         <source>Farbe: %1</source>
         <translation>Couleur : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1440" />
+        <location filename="../app/qml/Lab.qml" line="1442" />
         <source>Leitung löschen</source>
         <translation>Supprimer le fil</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1537" />
+        <location filename="../app/qml/Lab.qml" line="1539" />
         <source>Alles abbauen?</source>
         <translation>Tout démonter ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1537" />
+        <location filename="../app/qml/Lab.qml" line="1539" />
         <source>Löschen?</source>
         <translation>Supprimer ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1544" />
+        <location filename="../app/qml/Lab.qml" line="1546" />
         <source>%1 %2 von der Grundplatte nehmen?</source>
         <translation>Retirer %1 %2 de la plaque ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1545" />
+        <location filename="../app/qml/Lab.qml" line="1547" />
         <source>Diese Leitung entfernen?</source>
         <translation>Retirer ce fil ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1546" />
+        <location filename="../app/qml/Lab.qml" line="1548" />
         <source>%1 %2 aus der Modulleiste nehmen?</source>
         <translation>Retirer %1 %2 de la barre des modules ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1547" />
+        <location filename="../app/qml/Lab.qml" line="1549" />
         <source>Alle Bauteile, Leitungen und Module von der Grundplatte nehmen?</source>
         <translation>Retirer tous les composants, fils et modules de la plaque ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1548" />
+        <location filename="../app/qml/Lab.qml" line="1550" />
         <source>Mit »Rückgängig« holst du es wieder zurück.</source>
         <translation>Avec « Annuler », tu peux tout récupérer.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1555" />
+        <location filename="../app/qml/Lab.qml" line="1557" />
         <source>Abbrechen</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1561" />
+        <location filename="../app/qml/Lab.qml" line="1563" />
         <source>Alles abbauen</source>
         <translation>Tout démonter</translation>
     </message>
@@ -2582,47 +2590,47 @@
 <context>
     <name>ParentGate</name>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="58" />
+        <location filename="../app/qml/ParentGate.qml" line="77" />
         <source>Für Erwachsene</source>
         <translation>Pour les adultes</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="66" />
+        <location filename="../app/qml/ParentGate.qml" line="85" />
         <source>Bitte geben Sie die PIN für den Elternbereich ein.</source>
         <translation>Veuillez saisir le code PIN de l'espace parents.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="90" />
+        <location filename="../app/qml/ParentGate.qml" line="109" />
         <source>Zu viele Versuche. Bitte warten Sie %1 Sekunden.</source>
         <translation>Trop d'essais. Veuillez patienter %1 secondes.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="91" />
+        <location filename="../app/qml/ParentGate.qml" line="110" />
         <source>Die PIN stimmt nicht.</source>
         <translation>Le code PIN est incorrect.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="106" />
+        <location filename="../app/qml/ParentGate.qml" line="126" />
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="119" />
+        <location filename="../app/qml/ParentGate.qml" line="139" />
         <source>Ziffer löschen</source>
         <translation>Effacer le chiffre</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="133" />
+        <location filename="../app/qml/ParentGate.qml" line="153" />
         <source>PIN vergessen? Dann lässt sich Volta nur zurücksetzen, indem Sie die App-Daten löschen (Android: Einstellungen, Apps, Volta 1, Speicher, Daten löschen). Dabei gehen auch Fortschritt und Forscherheft verloren.</source>
         <translation>Code PIN oublié ? Volta ne peut alors être réinitialisé qu'en effaçant les données de l'application (Android : Paramètres, Applications, Volta 1, Stockage, Effacer les données). La progression et le cahier de recherche sont alors aussi perdus.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="145" />
+        <location filename="../app/qml/ParentGate.qml" line="166" />
         <source>PIN vergessen?</source>
         <translation>Code PIN oublié ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="151" />
+        <location filename="../app/qml/ParentGate.qml" line="172" />
         <source>Abbrechen</source>
         <translation>Annuler</translation>
     </message>
@@ -2630,32 +2638,32 @@
 <context>
     <name>PartItem</name>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="118" />
+        <location filename="../app/qml/PartItem.qml" line="119" />
         <source>%1 kaputt</source>
         <translation>%1 cassé</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="121" />
+        <location filename="../app/qml/PartItem.qml" line="122" />
         <source>%1 °C</source>
         <translation>%1 °C</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="123" />
+        <location filename="../app/qml/PartItem.qml" line="124" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="171" />
+        <location filename="../app/qml/PartItem.qml" line="177" />
         <source>kaputt</source>
         <translation>cassé</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="171" />
+        <location filename="../app/qml/PartItem.qml" line="177" />
         <source>überlastet</source>
         <translation>surchargé</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="172" />
+        <location filename="../app/qml/PartItem.qml" line="178" />
         <source>ausgewählt</source>
         <translation>sélectionné</translation>
     </message>

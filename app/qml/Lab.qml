@@ -212,11 +212,17 @@ Item {
     }
     // Aktionen (Farbe, Drehen, Loeschen ...) gibt es nur ueber das Kontextmenue: langer Druck bzw. Rechtsklick.
     // Beim ersten Auswaehlen einmal darauf hinweisen (Antippen selbst loest nie etwas Unumkehrbares aus).
+    // Drehen (Menue oder Doppeltippen): Platine um 90 Grad, sonst waagerecht <-> senkrecht ab demselben Feld
+    function turnPart(p) {
+        lab.beginEdit()
+        if (p.pins.length === 4) lab.controller.rotatePart(p.id)
+        else lab.controller.movePart(p.id, p.start, !p.vertical, p.longSpan)
+    }
     property bool menuHintShown: false
     function showMenuHint() {
         if (menuHintShown) return
         menuHintShown = true
-        toast.show(qsTr("Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …)."))
+        toast.show(qsTr("Doppeltippen dreht ein Bauteil. Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …)."))
     }
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property bool recorderVisible: false // Zeitschreiber unter der Arbeitsflaeche
@@ -976,6 +982,7 @@ Item {
                     onPushed: (down) => {
                         if (part.modelData.type === "taster") lab.controller.setPartClosed(part.modelData.id, down)
                     }
+                    onDoubleTapped: { lab.selectedPart = part.modelData.id; lab.turnPart(part.modelData) }
                     onDragMoved: (sceneDelta) => {
                         const delta = lab.toCanvasDelta(sceneDelta)
                         const c = lab.partCenter(part.modelData)
@@ -1310,12 +1317,7 @@ Item {
         property var part: ({})
         MenuItem {
             text: qsTr("Drehen")
-            onTriggered: {
-                lab.beginEdit()
-                if (partMenu.part.pins.length === 4) lab.controller.rotatePart(partMenu.part.id) // Platine: 90 Grad
-                else lab.controller.movePart(partMenu.part.id, partMenu.part.start, !partMenu.part.vertical,
-                                             partMenu.part.longSpan)
-            }
+            onTriggered: lab.turnPart(partMenu.part)
         }
         MenuItem {
             text: qsTr("Umdrehen (Polung)")
