@@ -22,6 +22,17 @@ ApplicationWindow {
     readonly property var settings: typeof volta_settings !== "undefined" ? volta_settings : null
     readonly property var audio: typeof volta_audio !== "undefined" ? volta_audio : null
     readonly property var speech: typeof volta_speech !== "undefined" ? volta_speech : null
+    readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
+    readonly property var audioRoute: typeof volta_audioRoute !== "undefined" ? volta_audioRoute : null
+    // Klassenmodus Ton: Vorgabe der Schule, sonst Einstellung im Elternbereich; »kopfhoerer« nur mit Kopfhoerern
+    readonly property string soundMode: managed && managed.soundMode !== "" ? managed.soundMode
+                                        : (settings ? settings.classroomSound : "normal")
+    readonly property bool soundAllowed: soundMode === "normal"
+                                         || (soundMode === "kopfhoerer" && audioRoute !== null && audioRoute.headphones)
+    onSoundAllowedChanged: if (!soundAllowed && speech) speech.stop()
+    // Forscherprofile: Vorgabe der Schule (0 = aus, sonst an) oder Einstellung im Elternbereich
+    readonly property bool profilesWanted: managed && managed.profiles >= 0 ? managed.profiles > 0
+                                           : (settings ? settings.profilesEnabled : false)
     property bool inLab: false
     property bool inJournal: false
     // Automatisches Speichern: letzten Laborstand laden; war das Labor offen, geht es dort direkt weiter.
@@ -31,19 +42,19 @@ ApplicationWindow {
         root.inLab = labController.resumeSession() && labController.savedLabOpen()
     }
     Component.onCompleted: {
-        labController.profilesEnabled = root.settings ? root.settings.profilesEnabled : false
+        labController.profilesEnabled = root.profilesWanted
         if (!labController.profilesEnabled) root.resume()
     }
     Connections {
         target: root.settings
-        function onChanged() { labController.profilesEnabled = root.settings.profilesEnabled }
+        function onChanged() { labController.profilesEnabled = root.profilesWanted }
     }
     onInLabChanged: labController.setLabOpen(root.inLab)
 
     // Einstellung »Alle Bauteile freigeben« wirkt auf Lernpfad und Bauteilfach
     Binding { target: labController; property: "unlockAll"; value: root.settings ? root.settings.unlockAll : false }
     // Ton nur im Labor und wenn eingeschaltet; Vorlesen in der Anzeigesprache
-    Binding { target: root.audio; when: root.audio !== null; property: "enabled"; value: root.settings ? root.settings.soundOn : true }
+    Binding { target: root.audio; when: root.audio !== null; property: "enabled"; value: (root.settings ? root.settings.soundOn : true) && root.soundAllowed }
     Binding { target: root.audio; when: root.audio !== null; property: "active"; value: root.inLab }
     Binding { target: root.speech; when: root.speech !== null && root.languageService !== null; property: "language"; value: root.languageService ? root.languageService.language : "de" }
     Binding { target: labController; property: "preferredColumns"; value: root.settings ? root.settings.boardColumns : 12 }
@@ -80,7 +91,7 @@ ApplicationWindow {
         controller: labController
         languageService: root.languageService
         settings: root.settings
-        speech: root.speech
+        speech: root.soundAllowed ? root.speech : null // Vorlesen nur, wenn Ton erlaubt ist
         onHomeRequested: { root.inLab = false; if (root.speech) root.speech.stop() }
         onInfoRequested: infoDialog.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())

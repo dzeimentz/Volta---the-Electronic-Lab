@@ -33,6 +33,10 @@ LanguageService::LanguageService(QQmlEngine* engine, bool persist, QObject* pare
     }
 }
 
+bool LanguageService::hasSavedChoice() const {
+    return m_persist && QSettings(settingsFile(), QSettings::IniFormat).contains(QStringLiteral("anzeige/sprache"));
+}
+
 LanguageService::~LanguageService() {
     if (m_installed) QCoreApplication::removeTranslator(&m_translator);
 }

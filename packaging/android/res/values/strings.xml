@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Beschriftungen der verwalteten Konfiguration (Konsole der Geraeteverwaltung) -->
+<resources>
+    <string name="mc_sprache">Sprache</string>
+    <string name="mc_sprache_beschreibung">Anfangssprache der App</string>
+    <string name="mc_sprache_gesperrt">Sprache sperren (Flaggensymbol ausblenden)</string>
+    <string name="mc_stufen_frei">Freigegebene Stufen</string>
+    <string name="mc_stufen_frei_beschreibung">Stufen bis einschliesslich dieser Nummer sind sofort offen</string>
+    <string name="mc_elternbereich">Elternbereich anzeigen</string>
+    <string name="mc_fotoimport">Fotos ins Forscherheft erlauben</string>
+    <string name="mc_ton">Ton im Klassenzimmer</string>
+    <string name="mc_profile">Forscherprofile</string>
+    <string name="mc_profile_beschreibung">0 = aus, sonst hoechste Anzahl der Profile (bis 30)</string>
+    <string name="mc_praesentation">Praesentationsmodus erlauben</string>
+    <string-array name="mc_sprachen_namen">
+        <item>Deutsch</item>
+        <item>Français</item>
+        <item>English</item>
+        <item>Lëtzebuergesch</item>
+    </string-array>
+    <string-array name="mc_sprachen_werte">
+        <item>de</item>
+        <item>fr</item>
+        <item>en</item>
+        <item>lb</item>
+    </string-array>
+    <string-array name="mc_ton_namen">
+        <item>Normal</item>
+        <item>Nur mit Kopfhörern</item>
+        <item>Aus</item>
+    </string-array>
+    <string-array name="mc_ton_werte">
+        <item>normal</item>
+        <item>kopfhoerer</item>
+        <item>aus</item>
+    </string-array>
+</resources>

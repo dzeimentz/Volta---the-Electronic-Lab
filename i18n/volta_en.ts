@@ -1209,32 +1209,32 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../app/qml/Main.qml" line="131" />
+        <location filename="../app/qml/Main.qml" line="142" />
         <source>Fortschritt übernehmen?</source>
         <translation>Take over progress?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="138" />
+        <location filename="../app/qml/Main.qml" line="149" />
         <source>Dieser Code enthält keine Experimente von Volta 1.</source>
         <translation>This code contains no Volta 1 experiments.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="140" />
+        <location filename="../app/qml/Main.qml" line="151" />
         <source>%1 erledigte Experimente in das Profil »%2« übernehmen?</source>
         <translation>Take over %1 completed experiments into the profile "%2"?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="141" />
+        <location filename="../app/qml/Main.qml" line="152" />
         <source>%1 erledigte Experimente übernehmen?</source>
         <translation>Take over %1 completed experiments?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="146" />
+        <location filename="../app/qml/Main.qml" line="157" />
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="151" />
+        <location filename="../app/qml/Main.qml" line="162" />
         <source>Übernehmen</source>
         <translation>Take over</translation>
     </message>
@@ -1712,306 +1712,346 @@
 <context>
     <name>ParentArea</name>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="58" />
+        <location filename="../app/qml/ParentArea.qml" line="62" />
         <source>Elternbereich</source>
         <translation>Parents' area</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="71" />
-        <location filename="../app/qml/ParentArea.qml" line="336" />
+        <location filename="../app/qml/ParentArea.qml" line="75" />
+        <location filename="../app/qml/ParentArea.qml" line="383" />
         <source>Schließen</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="86" />
+        <location filename="../app/qml/ParentArea.qml" line="105" />
+        <source>Einige Einstellungen gibt Ihre Schule bzw. die Geräteverwaltung vor; sie lassen sich hier nicht ändern.</source>
+        <translation>Some settings are set by your school or device management; they cannot be changed here.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="110" />
+        <source>Ton im Klassenzimmer</source>
+        <translation>Sound in the classroom</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="111" />
+        <source>Damit es in der Klasse ruhig bleibt, können Sie den Ton ganz abschalten oder nur über Kopfhörer erlauben. Das gilt auch für das Vorlesen.</source>
+        <translation>To keep the classroom quiet you can switch sound off completely or allow it only with headphones. This also applies to reading aloud.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="115" />
+        <source>Normal</source>
+        <translation>Normal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="115" />
+        <source>Nur mit Kopfhörern</source>
+        <translation>Only with headphones</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="115" />
+        <source>Aus</source>
+        <translation>Off</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="128" />
+        <source>Kopfhörer erkannt.</source>
+        <translation>Headphones detected.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="128" />
+        <source>Keine Kopfhörer erkannt.</source>
+        <translation>No headphones detected.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ParentArea.qml" line="133" />
         <source>Freigaben</source>
         <translation>Unlocking</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="87" />
+        <location filename="../app/qml/ParentArea.qml" line="134" />
         <source>Die Stufen des Lernpfads öffnen sich nacheinander, damit Kinder nicht mit zu vielen Bauteilen auf einmal beginnen. Für die Schule oder für ältere Kinder können Sie alles sofort freigeben.</source>
         <translation>The levels of the learning path open one after the other so that children don't start with too many parts at once. For school or for older children you can unlock everything right away.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="95" />
-        <location filename="../app/qml/ParentArea.qml" line="99" />
+        <location filename="../app/qml/ParentArea.qml" line="142" />
+        <location filename="../app/qml/ParentArea.qml" line="146" />
         <source>Alle Stufen und Bauteile freigeben</source>
         <translation>Unlock all levels and parts</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="106" />
+        <location filename="../app/qml/ParentArea.qml" line="153" />
         <source>Forscherprofile</source>
         <translation>Researcher profiles</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="107" />
+        <location filename="../app/qml/ParentArea.qml" line="154" />
         <source>Teilen sich mehrere Kinder ein Gerät, bekommt jedes ein eigenes Profil mit Symbol und Spitznamen – ohne richtigen Namen und ohne Passwort. Fortschritt, Forscherheft und der letzte Aufbau werden je Profil gespeichert. Beim Start fragt Volta dann: »Wer forscht heute?«</source>
         <translation>If several children share a device, each gets their own profile with a symbol and a nickname – no real name and no password. Progress, the research notebook and the last circuit are saved per profile. At start, Volta then asks: "Who is researching today?"</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="115" />
-        <location filename="../app/qml/ParentArea.qml" line="119" />
+        <location filename="../app/qml/ParentArea.qml" line="162" />
+        <location filename="../app/qml/ParentArea.qml" line="166" />
         <source>Forscherprofile verwenden</source>
         <translation>Use researcher profiles</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="140" />
+        <location filename="../app/qml/ParentArea.qml" line="187" />
         <source>Löschen</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="141" />
+        <location filename="../app/qml/ParentArea.qml" line="188" />
         <source>Das Profil »%1« mit Fortschritt, Forscherheft und Aufbau löschen?</source>
         <translation>Delete the profile "%1" with its progress, research notebook and circuit?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="150" />
+        <location filename="../app/qml/ParentArea.qml" line="197" />
         <source>Alle Profile zurücksetzen</source>
         <translation>Reset all profiles</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="151" />
+        <location filename="../app/qml/ParentArea.qml" line="198" />
         <source>Alle Forscherprofile mit ihrem Fortschritt, Forscherheft und Aufbau löschen?</source>
         <translation>Delete all researcher profiles with their progress, research notebook and circuit?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="156" />
+        <location filename="../app/qml/ParentArea.qml" line="203" />
         <source>Mitnehmen auf ein anderes Gerät</source>
         <translation>Take to another device</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="158" />
+        <location filename="../app/qml/ParentArea.qml" line="205" />
         <source>Wählen Sie zuerst ein Forscherprofil, dann lässt es sich mitnehmen.</source>
         <translation>Choose a researcher profile first; then it can be taken along.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="159" />
+        <location filename="../app/qml/ParentArea.qml" line="206" />
         <source>Als Datei geht alles mit: Symbol, Spitzname, Fortschritt, Forscherheft und der letzte Aufbau. Der QR-Code enthält nur, welche Experimente erledigt sind – ohne Namen.</source>
         <translation>A file takes everything: symbol, nickname, progress, research notebook and the last circuit. The QR code only contains which experiments are done – without a name.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="168" />
+        <location filename="../app/qml/ParentArea.qml" line="215" />
         <source>Als Datei speichern</source>
         <translation>Save as file</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="174" />
+        <location filename="../app/qml/ParentArea.qml" line="221" />
         <source>Aus Datei laden</source>
         <translation>Load from file</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="181" />
+        <location filename="../app/qml/ParentArea.qml" line="228" />
         <source>Fortschritt als QR-Code zeigen</source>
         <translation>Show progress as QR code</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="193" />
+        <location filename="../app/qml/ParentArea.qml" line="240" />
         <source>Fortschritt und Forscherheft</source>
         <translation>Progress and research notebook</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="194" />
+        <location filename="../app/qml/ParentArea.qml" line="241" />
         <source>Der Fortschritt im Lernpfad und das Forscherheft liegen nur auf diesem Gerät. Zurücksetzen lässt sich nicht rückgängig machen.</source>
         <translation>Learning path progress and the research notebook are stored only on this device. Resetting cannot be undone.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="201" />
+        <location filename="../app/qml/ParentArea.qml" line="248" />
         <source>Lernpfad-Fortschritt zurücksetzen</source>
         <translation>Reset learning path progress</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="202" />
+        <location filename="../app/qml/ParentArea.qml" line="249" />
         <source>Den Fortschritt im Lernpfad zurücksetzen? Alle Experimente gelten danach als nicht erledigt.</source>
         <translation>Reset the learning path progress? All experiments will then count as not done.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="208" />
+        <location filename="../app/qml/ParentArea.qml" line="255" />
         <source>Forscherheft leeren</source>
         <translation>Clear research notebook</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="209" />
+        <location filename="../app/qml/ParentArea.qml" line="256" />
         <source>Das Forscherheft leeren? Alle Vermutungen, Beobachtungen und Notizen werden gelöscht.</source>
         <translation>Clear the research notebook? All guesses, observations and notes will be deleted.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="215" />
+        <location filename="../app/qml/ParentArea.qml" line="262" />
         <source>Datenschutz</source>
         <translation>Privacy</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="216" />
+        <location filename="../app/qml/ParentArea.qml" line="263" />
         <source>Volta erhebt keine Daten. Es gibt kein Konto, keine Werbung, keine Käufe in der App und keine Verbindung ins Internet; Kamera und Mikrofon werden nicht verwendet.</source>
         <translation>Volta collects no data. There is no account, no advertising, no in-app purchases and no internet connection; camera and microphone are not used.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="217" />
+        <location filename="../app/qml/ParentArea.qml" line="264" />
         <source>Nur auf diesem Gerät gespeichert werden:</source>
         <translation>Only the following is stored on this device:</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="218" />
+        <location filename="../app/qml/ParentArea.qml" line="265" />
         <source>welche Experimente erledigt sind, mit Datum</source>
         <translation>which experiments are done, with the date</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="219" />
+        <location filename="../app/qml/ParentArea.qml" line="266" />
         <source>das Forscherheft mit Vermutungen, Beobachtungen und Notizen</source>
         <translation>the research notebook with guesses, observations and notes</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="220" />
+        <location filename="../app/qml/ParentArea.qml" line="267" />
         <source>der zuletzt gebaute Aufbau, damit es nach einem Neustart weitergeht</source>
         <translation>the most recent circuit, so work can continue after a restart</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="221" />
+        <location filename="../app/qml/ParentArea.qml" line="268" />
         <source>die Einstellungen (Sprache, Schriftgröße, Ton und Ähnliches)</source>
         <translation>the settings (language, font size, sound and similar)</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="222" />
+        <location filename="../app/qml/ParentArea.qml" line="269" />
         <source>Beim Deinstallieren der App wird alles gelöscht.</source>
         <translation>Everything is deleted when the app is uninstalled.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="225" />
+        <location filename="../app/qml/ParentArea.qml" line="272" />
         <source>So rechnet Volta</source>
         <translation>How Volta calculates</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="226" />
+        <location filename="../app/qml/ParentArea.qml" line="273" />
         <source>Was in Volta passiert, ergibt sich aus einer echten Schaltungssimulation, nicht aus vorbereiteten Ergebnissen. Deshalb verhalten sich auch selbst erfundene Schaltungen plausibel. Einige Vereinfachungen sind für Kinder sinnvoll; wir legen sie offen:</source>
         <translation>What happens in Volta comes from a real circuit simulation, not from prepared results. That's why even self-invented circuits behave plausibly. Some simplifications make sense for children; we disclose them:</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="227" />
+        <location filename="../app/qml/ParentArea.qml" line="274" />
         <source>Das Tonmodul ist ein Verhaltensmodell: Es liefert seine Töne direkt, statt jede Schwingung zu berechnen. Blinkmodul, Zeitmodul und Verstärkermodul sind dagegen echte Transistorschaltungen.</source>
         <translation>The tone module is a behavioural model: it delivers its tones directly instead of calculating every oscillation. The blinker, timer and amplifier modules, on the other hand, are real transistor circuits.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="228" />
+        <location filename="../app/qml/ParentArea.qml" line="275" />
         <source>Elektromagnet und Relais werden ohne Induktivität gerechnet; die Spannungsspitze beim Abschalten fehlt deshalb.</source>
         <translation>The electromagnet and relay are calculated without inductance; the voltage spike when switching off is therefore missing.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="229" />
+        <location filename="../app/qml/ParentArea.qml" line="276" />
         <source>Der Lautsprecher ist eine Last von 8 Ω ohne Schwingspule.</source>
         <translation>The loudspeaker is an 8 Ω load without a voice coil.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="230" />
+        <location filename="../app/qml/ParentArea.qml" line="277" />
         <source>Bauteile erwärmen sich und kühlen schneller ab als in echt, damit man es beobachten kann.</source>
         <translation>Parts heat up and cool down faster than in reality so that you can observe it.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="231" />
+        <location filename="../app/qml/ParentArea.qml" line="278" />
         <source>Die Batterie hat einen Innenwiderstand, Leitungen einen sehr kleinen Widerstand; gerechnet wird in Schritten von einer Millisekunde.</source>
         <translation>The battery has an internal resistance, wires a very small resistance; calculation runs in steps of one millisecond.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="232" />
+        <location filename="../app/qml/ParentArea.qml" line="279" />
         <source>Im Blinkmodul wird der Durchbruch der Basis-Emitter-Strecke nicht nachgebildet; in echt wird jede Hälfte des Takts dadurch etwas kürzer.</source>
         <translation>In the blinker module the breakdown of the base-emitter junction is not modelled; in reality each half of the cycle is a little shorter.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="235" />
+        <location filename="../app/qml/ParentArea.qml" line="282" />
         <source>Der Lernpfad</source>
         <translation>The learning path</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="240" />
+        <location filename="../app/qml/ParentArea.qml" line="287" />
         <source>Stufe %1: %2 – %3</source>
         <translation>Level %1: %2 – %3</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="245" />
+        <location filename="../app/qml/ParentArea.qml" line="292" />
         <source>Kontakt und Hilfe</source>
         <translation>Contact and help</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="253" />
+        <location filename="../app/qml/ParentArea.qml" line="300" />
         <source>Website öffnen</source>
         <translation>Open website</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="259" />
+        <location filename="../app/qml/ParentArea.qml" line="306" />
         <source>E-Mail schreiben</source>
         <translation>Write an e-mail</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="271" />
-        <location filename="../app/qml/ParentArea.qml" line="280" />
+        <location filename="../app/qml/ParentArea.qml" line="318" />
+        <location filename="../app/qml/ParentArea.qml" line="327" />
         <source>Volta-Profil (*.volta1profil)</source>
         <translation>Volta profile (*.volta1profil)</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="275" />
+        <location filename="../app/qml/ParentArea.qml" line="322" />
         <source>Gespeichert.</source>
         <translation>Saved.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="275" />
+        <location filename="../app/qml/ParentArea.qml" line="322" />
         <source>Speichern hat nicht geklappt.</source>
         <translation>Saving did not work.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="280" />
+        <location filename="../app/qml/ParentArea.qml" line="327" />
         <source>Alle Dateien (*)</source>
         <translation>All files (*)</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="283" />
+        <location filename="../app/qml/ParentArea.qml" line="330" />
         <source>Diese Datei ist kein Volta-Profil.</source>
         <translation>This file is not a Volta profile.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="287" />
+        <location filename="../app/qml/ParentArea.qml" line="334" />
         <source>Neues Profil »%1« mit %2 erledigten Experimenten anlegen?</source>
         <translation>Create the new profile "%1" with %2 completed experiments?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="288" />
+        <location filename="../app/qml/ParentArea.qml" line="335" />
         <source>Den Stand auf diesem Gerät durch die Datei ersetzen (%1 erledigte Experimente)? Der bisherige Stand geht verloren.</source>
         <translation>Replace the state on this device with the file (%1 completed experiments)? The current state will be lost.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="290" />
+        <location filename="../app/qml/ParentArea.qml" line="337" />
         <source>Übernommen.</source>
         <translation>Taken over.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="290" />
+        <location filename="../app/qml/ParentArea.qml" line="337" />
         <source>Laden hat nicht geklappt.</source>
         <translation>Loading did not work.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="291" />
+        <location filename="../app/qml/ParentArea.qml" line="338" />
         <source>Übernehmen</source>
         <translation>Take over</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="309" />
+        <location filename="../app/qml/ParentArea.qml" line="356" />
         <source>Scannen Sie den Code auf dem anderen Gerät mit der Kamera-App. Volta öffnet sich dort und fragt, ob der Fortschritt übernommen werden soll.</source>
         <translation>Scan the code on the other device with the camera app. Volta opens there and asks whether the progress should be taken over.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="357" />
+        <location filename="../app/qml/ParentArea.qml" line="404" />
         <source>Wirklich löschen?</source>
         <translation>Really delete?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="357" />
+        <location filename="../app/qml/ParentArea.qml" line="404" />
         <source>Bitte bestätigen</source>
         <translation>Please confirm</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="370" />
+        <location filename="../app/qml/ParentArea.qml" line="417" />
         <source>Ja, löschen</source>
         <translation>Yes, delete</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentArea.qml" line="369" />
+        <location filename="../app/qml/ParentArea.qml" line="416" />
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
@@ -2109,53 +2149,53 @@
 <context>
     <name>ProfileChooser</name>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="43" />
+        <location filename="../app/qml/ProfileChooser.qml" line="45" />
         <source>Elternbereich</source>
         <translation>Parents' area</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="62" />
+        <location filename="../app/qml/ProfileChooser.qml" line="64" />
         <source>Neues Forscherprofil</source>
         <translation>New researcher profile</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="62" />
+        <location filename="../app/qml/ProfileChooser.qml" line="64" />
         <source>Wer forscht heute?</source>
         <translation>Who is researching today?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="117" />
-        <location filename="../app/qml/ProfileChooser.qml" line="125" />
+        <location filename="../app/qml/ProfileChooser.qml" line="119" />
+        <location filename="../app/qml/ProfileChooser.qml" line="127" />
         <source>Neues Profil</source>
         <translation>New profile</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="132" />
+        <location filename="../app/qml/ProfileChooser.qml" line="134" />
         <source>1. Such dir ein Symbol aus:</source>
         <translation>1. Pick a symbol:</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="158" />
+        <location filename="../app/qml/ProfileChooser.qml" line="160" />
         <source>2. Gib dir einen Spitznamen:</source>
         <translation>2. Give yourself a nickname:</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="169" />
+        <location filename="../app/qml/ProfileChooser.qml" line="171" />
         <source>Spitzname</source>
         <translation>Nickname</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="176" />
+        <location filename="../app/qml/ProfileChooser.qml" line="178" />
         <source>Bitte nicht deinen richtigen Namen – ein Spitzname reicht, zum Beispiel »Funkenfuchs«.</source>
         <translation>Please don't use your real name – a nickname is enough, for example "Sparkfox".</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="187" />
+        <location filename="../app/qml/ProfileChooser.qml" line="189" />
         <source>Los geht's</source>
         <translation>Let's go</translation>
     </message>
     <message>
-        <location filename="../app/qml/ProfileChooser.qml" line="198" />
+        <location filename="../app/qml/ProfileChooser.qml" line="200" />
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
@@ -2783,80 +2823,80 @@
 <context>
     <name>TopBarActions</name>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="29" />
+        <location filename="../app/qml/TopBarActions.qml" line="30" />
         <source>Schrift kleiner</source>
         <translation>Smaller text</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="29" />
+        <location filename="../app/qml/TopBarActions.qml" line="30" />
         <source>Schrift größer</source>
         <translation>Larger text</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="55" />
+        <location filename="../app/qml/TopBarActions.qml" line="57" />
         <source>Anzeigesprache wählen</source>
         <translation>Choose language</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="86" />
+        <location filename="../app/qml/TopBarActions.qml" line="88" />
         <source>folgt</source>
         <translation>coming soon</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="112" />
-        <location filename="../app/qml/TopBarActions.qml" line="113" />
-        <location filename="../app/qml/TopBarActions.qml" line="224" />
+        <location filename="../app/qml/TopBarActions.qml" line="114" />
+        <location filename="../app/qml/TopBarActions.qml" line="115" />
+        <location filename="../app/qml/TopBarActions.qml" line="227" />
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="136" />
-        <location filename="../app/qml/TopBarActions.qml" line="137" />
+        <location filename="../app/qml/TopBarActions.qml" line="138" />
+        <location filename="../app/qml/TopBarActions.qml" line="139" />
         <source>Einstellungen</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="152" />
+        <location filename="../app/qml/TopBarActions.qml" line="154" />
         <source>Stromfluss anzeigen</source>
         <translation>Show current flow</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="161" />
+        <location filename="../app/qml/TopBarActions.qml" line="163" />
         <source>Ton über Lautsprecher</source>
         <translation>Sound through speakers</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="170" />
+        <location filename="../app/qml/TopBarActions.qml" line="172" />
         <source>Leitungsfarbe automatisch (Plus rot, Minus schwarz)</source>
         <translation>Automatic wire colour (plus red, minus black)</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="179" />
+        <location filename="../app/qml/TopBarActions.qml" line="181" />
         <source>Animationen reduzieren</source>
         <translation>Reduce animations</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="188" />
+        <location filename="../app/qml/TopBarActions.qml" line="190" />
         <source>Startbildschirm zeigen</source>
         <translation>Show start screen</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="195" />
+        <location filename="../app/qml/TopBarActions.qml" line="197" />
         <source>Messgerät anzeigen</source>
         <translation>Show meter</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="202" />
+        <location filename="../app/qml/TopBarActions.qml" line="204" />
         <source>Felder je Reihe</source>
         <translation>Fields per row</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="208" />
+        <location filename="../app/qml/TopBarActions.qml" line="210" />
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>
     <message>
-        <location filename="../app/qml/TopBarActions.qml" line="219" />
+        <location filename="../app/qml/TopBarActions.qml" line="222" />
         <source>Elternbereich …</source>
         <translation>Parents' area …</translation>
     </message>
@@ -2864,33 +2904,33 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="381" />
+        <location filename="../app/src/lab_controller.cpp" line="393" />
         <source>Forscher</source>
         <translation>Researcher</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="686" />
-        <location filename="../app/src/lab_controller.cpp" line="720" />
+        <location filename="../app/src/lab_controller.cpp" line="698" />
+        <location filename="../app/src/lab_controller.cpp" line="732" />
         <source>Freies Labor</source>
         <translation>Free lab</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="813" />
+        <location filename="../app/src/lab_controller.cpp" line="825" />
         <source>Alles abbauen</source>
         <translation>Take everything apart</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="818" />
+        <location filename="../app/src/lab_controller.cpp" line="830" />
         <source>Musteraufbau zeigen</source>
         <translation>Show sample build</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1265" />
+        <location filename="../app/src/lab_controller.cpp" line="1277" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>This part will be unlocked at level %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1304" />
+        <location filename="../app/src/lab_controller.cpp" line="1316" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module is unlocked at level %1.</translation>
     </message>

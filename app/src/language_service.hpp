@@ -32,6 +32,8 @@ public:
     static bool isAvailable(const QString& code);
 
     Q_INVOKABLE bool setLanguage(const QString& code);
+    // hat das Kind (bzw. die Familie) schon einmal eine Sprache gewaehlt? (verwaltete Anfangssprache sonst)
+    bool hasSavedChoice() const;
 
 signals:
     void languageChanged(const QString& code);

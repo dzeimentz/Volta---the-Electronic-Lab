@@ -81,6 +81,9 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 - Elternschranke und Elternbereich (Freigaben, Zuruecksetzen, Datenschutz, Vereinfachungen, Kontakt): erledigt.
 - Forscherprofile (Symbol, Spitzname, getrennte Daten, Verwaltung im Elternbereich) und Mitnahme per Datei und
   QR-Code (Fortschritt ohne Namen): erledigt.
+- Klassenmodus Ton und verwaltete Konfiguration (Android, Windows, Linux): erledigt; Fotoimport und
+  Praesentationsmodus folgen.
+- Offen: Groesse der Pakete (ungenutzte Qt-Stile aus dem Dateidialog-Modul ausschliessen; Ziel < 80 MB).
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt

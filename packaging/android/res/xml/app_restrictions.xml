@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Verwaltete Konfiguration fuer Schulen (docs/platforms.md); gelesen von services/managed_config -->
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+    <restriction android:key="sprache" android:title="@string/mc_sprache" android:description="@string/mc_sprache_beschreibung"
+        android:restrictionType="choice" android:entries="@array/mc_sprachen_namen" android:entryValues="@array/mc_sprachen_werte"
+        android:defaultValue="de" />
+    <restriction android:key="sprache_gesperrt" android:title="@string/mc_sprache_gesperrt"
+        android:restrictionType="bool" android:defaultValue="false" />
+    <restriction android:key="stufen_frei" android:title="@string/mc_stufen_frei" android:description="@string/mc_stufen_frei_beschreibung"
+        android:restrictionType="integer" android:defaultValue="1" />
+    <restriction android:key="elternbereich" android:title="@string/mc_elternbereich"
+        android:restrictionType="bool" android:defaultValue="true" />
+    <restriction android:key="fotoimport" android:title="@string/mc_fotoimport"
+        android:restrictionType="bool" android:defaultValue="true" />
+    <restriction android:key="klassenmodus_ton" android:title="@string/mc_ton"
+        android:restrictionType="choice" android:entries="@array/mc_ton_namen" android:entryValues="@array/mc_ton_werte"
+        android:defaultValue="normal" />
+    <restriction android:key="profile" android:title="@string/mc_profile" android:description="@string/mc_profile_beschreibung"
+        android:restrictionType="integer" android:defaultValue="0" />
+    <restriction android:key="praesentation" android:title="@string/mc_praesentation"
+        android:restrictionType="bool" android:defaultValue="false" />
+</restrictions>

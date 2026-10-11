@@ -215,7 +215,9 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   Freigaben (»Alle Stufen und Bauteile freigeben«, aus dem Kindermenue hierher verlegt), Lernpfad-Fortschritt
   zuruecksetzen und Forscherheft leeren (je mit Rueckfrage), Datenschutz (was lokal gespeichert wird),
   »So rechnet Volta« (offengelegte Vereinfachungen der Simulation), Lernpfad im Ueberblick, Kontakt mit Links.
-- Offen: Ausblenden ueber die verwaltete Konfiguration (`elternbereich`), Klassenmodus.
+- Klassenmodus Ton (Elternbereich »Ton im Klassenzimmer«, `services/audio_route`): normal, nur mit Kopfhoerern
+  (Android: AudioManager-Geraete Kabel/USB/Bluetooth; Desktop: Name des Ausgabegeraets), aus; gilt fuer Pult-Ton und
+  Vorlesen. Die verwaltete Konfiguration kann ihn vorgeben, ebenso das Ausblenden des Elternbereichs.
 
 ## Farben (Markenwerte DC Software Engineering)
 - Engineering Navy #0A2540, Pult #1A3A5C, Akzent #2E7DBE, Signal Orange #FF6B1A, Solder Amber #FFB07A,

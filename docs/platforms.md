@@ -53,6 +53,15 @@ Quellen: Android `RestrictionsManager` (app_restrictions.xml), iOS `com.apple.co
 Windows Registry `HKLM\Software\DC Software Engineering\Volta1` oder `volta.ini` neben der EXE,
 Linux `/etc/xdg/dc-software-engineering/volta1.ini`.
 
+Umgesetzt (`services/managed_config`, Stand 10/2026): Android ueber `packaging/android/res/xml/app_restrictions.xml`
+(Beschriftungen fuer die Verwaltungskonsole in `res/values/strings.xml`) und RestrictionsManager per JNI; Windows
+Registry, sonst `volta.ini` neben der EXE (Abschnitt `[General]`); Linux `/etc/xdg/...`; zum Testen
+`VOLTA_MANAGED_INI=<Datei>`. Wirkung: `sprache` setzt die Anfangssprache (gesperrt: immer, Flaggensymbol weg),
+`stufen_frei` oeffnet Stufen bis zur Nummer, `elternbereich=false` blendet Menue- und Profil-Eintrag aus,
+`klassenmodus_ton` legt den Ton fest (im Elternbereich dann nicht aenderbar), `profile` schaltet Profile ein (Zahl =
+Hoechstzahl) oder aus. `fotoimport` und `praesentation` werden gelesen, die Funktionen folgen. Im Elternbereich
+weist ein Hinweis auf verwaltete Einstellungen hin.
+
 ## Groessen- und Leistungsziele
 - Installationsgroesse < 80 MB je Plattform (nur benoetigte Qt-Module).
 - 60 fps bei 40 Bauteilen inkl. Modulinhalten auf dem Referenztablet.

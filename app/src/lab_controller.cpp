@@ -276,7 +276,19 @@ QVariantMap LabController::currentProfile() const {
     return {{QStringLiteral("id"), p->id}, {QStringLiteral("symbol"), p->symbol}, {QStringLiteral("name"), p->name}};
 }
 
+void LabController::setProfileLimit(int limit) {
+    m_profileLimit = std::clamp(limit, 1, services::ProfileStore::kMaxProfiles);
+    emit profilesChanged();
+}
+
+void LabController::setManagedUnlockStage(int stage) {
+    m_managedStage = stage;
+    rebuildExperimentList();
+    emit progressChanged();
+}
+
 QString LabController::addProfile(const QString& symbol, const QString& name) {
+    if (m_profiles.profiles().size() >= m_profileLimit) return {};
     const QString id = m_profiles.add(symbol, name);
     emit profilesChanged();
     return id;
@@ -423,7 +435,7 @@ void LabController::setUnlockAll(bool on) {
 // Freischaltung dient der Reduktion, nicht der Belohnung (Konzept 5.5).
 int LabController::highestUnlockedStage() const {
     if (m_unlockAll) return 99;
-    int open = 1;
+    int open = std::max(1, m_managedStage); // Vorgabe der Schule: mindestens bis zu dieser Stufe frei
     for (const auto& st : m_stages) {
         if (st.number < 1) continue;
         if (st.number > open) break;

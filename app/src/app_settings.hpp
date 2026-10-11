@@ -31,6 +31,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool meterDocked READ meterDocked WRITE setMeterDocked NOTIFY changed)
     // Forscherprofile fuer geteilte Geraete (Elternbereich)
     Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY changed)
+    // Klassenmodus Ton (Elternbereich): "normal", "kopfhoerer" (nur mit Kopfhoerern) oder "aus"
+    Q_PROPERTY(QString classroomSound READ classroomSound WRITE setClassroomSound NOTIFY changed)
     Q_PROPERTY(QString wireColor READ wireColor WRITE setWireColor NOTIFY changed)
     Q_PROPERTY(bool autoWireColor READ autoWireColor WRITE setAutoWireColor NOTIFY changed) // Plus rot, Minus schwarz
     Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY changed)
@@ -60,6 +62,8 @@ public:
     bool meterDocked() const { return m_meterDocked; }
     void setMeterDocked(bool on) { set(m_meterDocked, on, "labor/messgeraet_im_pult"); }
     bool profilesEnabled() const { return m_profilesEnabled; }
+    QString classroomSound() const { return m_classroomSound; }
+    void setClassroomSound(const QString& mode);
     void setProfilesEnabled(bool on) { set(m_profilesEnabled, on, "profile/aktiv"); }
     QString wireColor() const { return m_wireColor; }
     bool autoWireColor() const { return m_autoWireColor; }
@@ -95,6 +99,7 @@ private:
     bool m_meterVisible = false;
     bool m_meterDocked = false;
     bool m_profilesEnabled = false;
+    QString m_classroomSound = QStringLiteral("normal");
     QString m_wireColor = QStringLiteral("rot");
     bool m_autoWireColor = true;
     bool m_schematicVisible = false;

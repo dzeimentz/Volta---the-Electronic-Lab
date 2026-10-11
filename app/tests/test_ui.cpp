@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QJSValue>
 #include <QQmlApplicationEngine>
+#include <QSettings>
 #include <QTemporaryDir>
 #include <algorithm>
 #include <QQmlContext>
@@ -12,6 +13,8 @@
 #include <QtTest>
 
 #include "lab_controller.hpp"
+#include "services/audio_route.hpp"
+#include "services/managed_config.hpp"
 #include "app_settings.hpp"
 #include "language_service.hpp"
 #include "services/progress_store.hpp"
@@ -718,6 +721,58 @@ private slots:
         QVERIFY(!QDir(dir.filePath(QStringLiteral("profile/") + a)).exists());
         again.removeAllProfiles();
         QCOMPARE(again.profiles().size(), 0);
+    }
+
+    // Verwaltete Konfiguration: gueltige Werte uebernehmen, ungueltige ignorieren; INI-Quelle; Wirkung im Labor
+    void managedConfiguration() {
+        using services::ManagedConfig;
+        const ManagedConfig none(QVariantMap{});
+        QVERIFY(!none.managed());
+        QCOMPARE(none.unlockStage(), -1);
+        QCOMPARE(none.profiles(), -1);
+        QVERIFY(none.parentArea());
+        QVERIFY(none.soundMode().isEmpty());
+        const ManagedConfig school(QVariantMap{{"sprache", "FR"}, {"sprache_gesperrt", "true"}, {"stufen_frei", "3"},
+                                               {"elternbereich", "false"}, {"klassenmodus_ton", "kopfhoerer"},
+                                               {"profile", "12"}});
+        QVERIFY(school.managed());
+        QCOMPARE(school.language(), QStringLiteral("fr"));
+        QVERIFY(school.languageLocked());
+        QCOMPARE(school.unlockStage(), 3);
+        QVERIFY(!school.parentArea());
+        QCOMPARE(school.soundMode(), QStringLiteral("kopfhoerer"));
+        QCOMPARE(school.profiles(), 12);
+        const ManagedConfig odd(QVariantMap{{"sprache", "xx"}, {"klassenmodus_ton", "laut"}, {"profile", "99"}});
+        QVERIFY(odd.language().isEmpty() && odd.soundMode().isEmpty());
+        QCOMPARE(odd.profiles(), 30); // begrenzt
+        // INI-Quelle (wie volta.ini neben der EXE)
+        QTemporaryDir dir;
+        const QString ini = dir.filePath(QStringLiteral("volta.ini"));
+        {
+            QSettings s(ini, QSettings::IniFormat);
+            s.setValue(QStringLiteral("klassenmodus_ton"), QStringLiteral("aus"));
+            s.setValue(QStringLiteral("stufen_frei"), 2);
+        }
+        qputenv("VOLTA_MANAGED_INI", ini.toLocal8Bit());
+        const ManagedConfig fromIni;
+        qunsetenv("VOLTA_MANAGED_INI");
+        QCOMPARE(fromIni.soundMode(), QStringLiteral("aus"));
+        QCOMPARE(fromIni.unlockStage(), 2);
+        // Kopfhoerer am Geraetenamen (Desktop)
+        QVERIFY(services::AudioRoute::looksLikeHeadphones(QStringLiteral("Kopfhörer (Realtek Audio)")));
+        QVERIFY(services::AudioRoute::looksLikeHeadphones(QStringLiteral("Headset Earphone")));
+        QVERIFY(!services::AudioRoute::looksLikeHeadphones(QStringLiteral("Lautsprecher (Realtek Audio)")));
+        // Wirkung: Stufen bis 3 offen, Profilzahl begrenzt
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
+        lab.resetProgress();
+        QCOMPARE(lab.unlockedStage(), 1);
+        lab.setManagedUnlockStage(3);
+        QCOMPARE(lab.unlockedStage(), 3);
+        lab.setProfilesEnabled(true);
+        lab.setProfileLimit(2);
+        QVERIFY(!lab.addProfile(QStringLiteral("🦊"), QStringLiteral("A")).isEmpty());
+        QVERIFY(!lab.addProfile(QStringLiteral("🐼"), QStringLiteral("B")).isEmpty());
+        QVERIFY(lab.addProfile(QStringLiteral("🦉"), QStringLiteral("C")).isEmpty()); // Grenze erreicht
     }
 
     // Mitnahme per Datei: Profil speichern und auf einem "anderen Geraet" als neues Profil laden

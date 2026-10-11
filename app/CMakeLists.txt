@@ -139,6 +139,10 @@ qt_add_qml_module(volta_ui
         src/services/audio_service.cpp
         src/services/speech_service.hpp
         src/services/speech_service.cpp
+        src/services/audio_route.hpp
+        src/services/audio_route.cpp
+        src/services/managed_config.hpp
+        src/services/managed_config.cpp
 )
 target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::Multimedia Qt6::TextToSpeech)
 # Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben

@@ -9,6 +9,10 @@ Popup {
     id: area
     required property var controller
     property var settings: null
+    readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
+    readonly property bool soundManaged: managed !== null && managed.soundMode !== ""
+    readonly property bool profilesManaged: managed !== null && managed.profiles >= 0
+    readonly property var audioRoute: typeof volta_audioRoute !== "undefined" ? volta_audioRoute : null
 
     objectName: "parentArea"
     modal: true
@@ -82,6 +86,49 @@ Popup {
             width: scroll.availableWidth
             spacing: 8
 
+            // ---- Von der Schule verwaltet (Hinweis, wenn eine Geraeteverwaltung Vorgaben macht)
+            Rectangle {
+                objectName: "managedNotice"
+                visible: area.managed !== null && area.managed.managed
+                width: parent.width
+                height: managedText.implicitHeight + 20
+                radius: 8
+                color: "#E6EEF7"
+                border.color: Theme.accent
+                Label {
+                    id: managedText
+                    x: 10; y: 10
+                    width: parent.width - 20
+                    wrapMode: Text.Wrap
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    color: "#1E2B38"
+                    text: qsTr("Einige Einstellungen gibt Ihre Schule bzw. die Geräteverwaltung vor; sie lassen sich hier nicht ändern.")
+                }
+            }
+
+            // ---- Klassenzimmer: Ton
+            Heading { text: qsTr("Ton im Klassenzimmer") }
+            Body { text: qsTr("Damit es in der Klasse ruhig bleibt, können Sie den Ton ganz abschalten oder nur über Kopfhörer erlauben. Das gilt auch für das Vorlesen.") }
+            Column {
+                spacing: 0
+                Repeater {
+                    model: [["normal", qsTr("Normal")], ["kopfhoerer", qsTr("Nur mit Kopfhörern")], ["aus", qsTr("Aus")]]
+                    RadioButton {
+                        required property var modelData
+                        objectName: "classroomSound_" + modelData[0]
+                        height: Theme.control
+                        text: modelData[1]
+                        enabled: !area.soundManaged && area.settings !== null
+                        checked: (area.soundManaged ? area.managed.soundMode : (area.settings ? area.settings.classroomSound : "normal")) === modelData[0]
+                        onClicked: area.settings.classroomSound = modelData[0]
+                    }
+                }
+            }
+            Body {
+                text: area.audioRoute && area.audioRoute.headphones ? qsTr("Kopfhörer erkannt.") : qsTr("Keine Kopfhörer erkannt.")
+                color: "#4A5866"
+            }
+
             // ---- Freigaben
             Heading { text: qsTr("Freigaben") }
             Body { text: qsTr("Die Stufen des Lernpfads öffnen sich nacheinander, damit Kinder nicht mit zu vielen Bauteilen auf einmal beginnen. Für die Schule oder für ältere Kinder können Sie alles sofort freigeben.") }
@@ -109,8 +156,8 @@ Popup {
                 spacing: 8
                 Switch {
                     objectName: "parentProfiles"
-                    checked: area.settings ? area.settings.profilesEnabled : false
-                    enabled: area.settings !== null
+                    checked: area.profilesManaged ? area.managed.profiles > 0 : (area.settings ? area.settings.profilesEnabled : false)
+                    enabled: area.settings !== null && !area.profilesManaged
                     onToggled: area.settings.profilesEnabled = checked
                     Accessible.name: qsTr("Forscherprofile verwenden")
                 }

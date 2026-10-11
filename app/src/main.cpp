@@ -12,7 +12,9 @@
 #include <QTimer>
 #include <QtQml/qqmlextensionplugin.h>
 
+#include "services/audio_route.hpp"
 #include "services/audio_service.hpp"
+#include "services/managed_config.hpp"
 #include "services/speech_service.hpp"
 #include "lab_controller.hpp"
 #include "app_settings.hpp"
@@ -99,6 +101,15 @@ int main(int argc, char* argv[]) {
     if (!qEnvironmentVariableIsEmpty("VOLTA_SCREENSHOT")) audio.setSuppressed(true);
     lab.setAudio(&audio);
     volta::services::SpeechService speech;
+    // Verwaltete Konfiguration der Schule und Kopfhoerer-Erkennung (Klassenmodus Ton)
+    volta::services::ManagedConfig managed;
+    volta::services::AudioRoute audioRoute;
+    if (managed.unlockStage() >= 0) lab.setManagedUnlockStage(managed.unlockStage());
+    if (managed.profiles() > 0) lab.setProfileLimit(managed.profiles());
+    if (!managed.language().isEmpty() && (managed.languageLocked() || !language.hasSavedChoice()))
+        language.setLanguage(managed.language());
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_managed"), &managed);
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_audioRoute"), &audioRoute);
     engine.rootContext()->setContextProperty(QStringLiteral("volta_audio"), &audio);
     engine.rootContext()->setContextProperty(QStringLiteral("volta_speech"), &speech);
     // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux); abschaltbar in den Einstellungen

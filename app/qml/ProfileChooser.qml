@@ -16,7 +16,8 @@ Rectangle {
     color: Theme.board
     readonly property var symbols: ["🦊", "🐼", "🦉", "🐢", "🐙", "🦄", "🐝", "🐬", "🦁", "🐸", "🐧", "🦖",
                                     "🚀", "🌟", "⚡", "🔭", "🧲", "💡", "🌈", "🍀", "🎈", "🐞", "🦋", "🐳"]
-    readonly property bool full: controller.profiles.length >= 30
+    readonly property bool full: controller.profiles.length >= controller.profileLimit
+    readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
 
     // Eingaben nicht an die Ansichten darunter durchlassen
     MouseArea { anchors.fill: parent; acceptedButtons: Qt.AllButtons; onWheel: (wheel) => wheel.accepted = true }
@@ -36,6 +37,7 @@ Rectangle {
         }
         ToolButton {
             objectName: "profileParentArea"
+            visible: !chooser.managed || chooser.managed.parentArea
             anchors.right: parent.right
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter

@@ -9,6 +9,7 @@ Row {
     property var languageService: null
     property var settings: null
     signal infoRequested()
+    readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
     signal parentAreaRequested() // hinter der Elternschranke (Main.qml)
     spacing: 6
 
@@ -48,7 +49,8 @@ Row {
     ToolButton {
         id: languageButton
         objectName: "languageButton"
-        visible: bar.languageService !== null
+        // verwaltete Konfiguration: Sprache gesperrt -> kein Flaggensymbol
+        visible: bar.languageService !== null && !(bar.managed && bar.managed.languageLocked)
         width: Theme.control; height: Theme.control
         onClicked: languageMenu.open()
         ToolTip.visible: hovered
@@ -215,7 +217,8 @@ Row {
             MenuSeparator {}
             MenuItem {
                 objectName: "settingParentArea"
-                height: Theme.control
+                visible: !bar.managed || bar.managed.parentArea
+                height: visible ? Theme.control : 0
                 text: qsTr("Elternbereich …")
                 onTriggered: bar.parentAreaRequested()
             }

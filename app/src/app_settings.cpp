@@ -35,6 +35,8 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_meterVisible = s.value(QStringLiteral("labor/messgeraet"), false).toBool();
     m_meterDocked = s.value(QStringLiteral("labor/messgeraet_im_pult"), false).toBool();
     m_profilesEnabled = s.value(QStringLiteral("profile/aktiv"), false).toBool();
+    const QString sound = s.value(QStringLiteral("anzeige/ton_klasse"), QStringLiteral("normal")).toString();
+    m_classroomSound = (sound == QLatin1String("aus") || sound == QLatin1String("kopfhoerer")) ? sound : QStringLiteral("normal");
     const QString color = s.value(QStringLiteral("labor/leitungsfarbe"), QStringLiteral("rot")).toString();
     m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("rot");
     m_autoWireColor = s.value(QStringLiteral("labor/leitungsfarbe_automatisch"), true).toBool();
@@ -66,6 +68,14 @@ void AppSettings::setBoardColumns(int columns) {
 void AppSettings::setWireColor(const QString& color) {
     if (!kWireColors.contains(color)) return;
     set(m_wireColor, color, "labor/leitungsfarbe");
+}
+
+void AppSettings::setClassroomSound(const QString& mode) {
+    const QString m = (mode == QLatin1String("aus") || mode == QLatin1String("kopfhoerer")) ? mode : QStringLiteral("normal");
+    if (m == m_classroomSound) return;
+    m_classroomSound = m;
+    if (m_persist) QSettings(m_file, QSettings::IniFormat).setValue(QStringLiteral("anzeige/ton_klasse"), m);
+    emit changed();
 }
 
 } // namespace volta

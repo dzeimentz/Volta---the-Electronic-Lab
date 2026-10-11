@@ -50,6 +50,7 @@ class LabController : public QObject {
     Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY profilesChanged)
     Q_PROPERTY(QVariantList profiles READ profiles NOTIFY profilesChanged)
     Q_PROPERTY(QVariantMap currentProfile READ currentProfile NOTIFY profilesChanged)
+    Q_PROPERTY(int profileLimit READ profileLimit NOTIFY profilesChanged) // Hoechstzahl (verwaltete Konfiguration)
     // Alle Bauteile und Stufen freigeben (Einstellung; spaeter hinter der Elternschranke)
     Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY progressChanged)
     // Gespeicherte Arbeitsumgebung (AppSettings): Felder je Reihe fuer neue Aufbauten (sofern die Vorlage passt) und
@@ -137,6 +138,10 @@ public:
     // Ablageort aller Daten (Fortschritt, Forscherheft, Laborstand, Profile); ohne Profile direkt dort
     void useDataRoot(const QString& dir);
     bool profilesEnabled() const { return m_profilesEnabled; }
+    int profileLimit() const { return m_profileLimit; }
+    // Verwaltete Konfiguration (Schule): Hoechstzahl der Profile, mindestens freigegebene Stufe (-1: keine Vorgabe)
+    void setProfileLimit(int limit);
+    void setManagedUnlockStage(int stage);
     void setProfilesEnabled(bool on);
     QVariantList profiles() const;
     QVariantMap currentProfile() const;
@@ -406,6 +411,8 @@ private:
     QString m_dataRoot;
     services::ProfileStore m_profiles;
     bool m_profilesEnabled = false;
+    int m_profileLimit = services::ProfileStore::kMaxProfiles;
+    int m_managedStage = -1;
     QString m_currentProfile;
     QString m_dataDir; // aktiver Datenordner (Profil oder ohne Profil); leer: nur im Speicher
     QString band() const;
