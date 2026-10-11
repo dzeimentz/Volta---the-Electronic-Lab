@@ -17,12 +17,21 @@ Als achtbeiniger Baustein passt er zum NE555 in Volta 2 (Stufe 6, `docs/volta2-p
 - Rechte: vor der Veroeffentlichung klaeren, mit welchem Werkzeug das Blatt entstand und ob die Nutzung im Store
   erlaubt ist; Name »Tick« auf Markenkonflikte pruefen. Eintrag im Info-Fenster (Gestaltung).
 
-## Bildmaterial (wird gebraucht)
-- Je Ausdruck ein Einzelbild mit transparentem Hintergrund, PNG, ca. 512 x 512 px:
-  freundlich, idee, neugierig, nachdenklich, froehlich, warnend, erklaerend, motivierend, ueberrascht, fragend.
+## Bildmaterial
+- Zehn Einzelbilder (10/2026), Originale in `docs/design/tick/` (PNG 512 px, transparent). In der App
+  (`app/resources/tick/tick_<stimmung>.png`): auf die Figur zugeschnitten, 256 Farben, zusammen ca. 360 KB.
+- Stimmungen: erklaerend (Zeigestock), fragend (?), freundlich (winkt), froehlich (springt), gut (Daumen hoch),
+  motivierend (Faust), nachdenklich, neugierig (Lupe), ueberrascht, warnend (Warnschild). »Idee« ist im Satz nicht
+  enthalten; die leuchtende Lampe traegt Tick ohnehin in jeder Stimmung.
 - PNG statt WebP: das WebP-Bildformat wird in der APK nicht ausgeliefert (Paketgroesse).
-- Aus dem Gestaltungsblatt ausschneiden geht nicht sauber (Hintergrund, ca. 150 px je Figur).
-- Geschaetzt 2-3 MB fuer alle zehn Bilder.
+
+## Umsetzung
+- `Tick.qml` (Figur), `TickSays.qml` (Figur mit Sprechblase; kurzer Hopser bei neuem Text, nicht bei
+  »Bewegung reduzieren«). Einstellung `anzeige/tick` (Elternbereich »Tick zeigen«); aus: dieselbe Blase ohne Figur.
+- Eingebaut (10/2026): Begruessung Startseite (mit Spitzname bei Profilen), Forscherfrage (neugierig), Tipps
+  (nachdenklich, dann erklaerend; Figur nur beim neuesten Tipp), »Nur in der App!« (warnend), Erfolg (gut),
+  Vergleich mit der Vermutung (froehlich / ueberrascht / motivierend), Fehlersuche (neugierig, gut, fragend).
+- Offen: Hilfe/Readme mit Tick; »ueberrascht« beim Durchbrennen eines Bauteils; Klassenmodus ohne Hopser.
 
 ## Einsatz in Volta 1
 | Ort | Ausdruck | Inhalt |

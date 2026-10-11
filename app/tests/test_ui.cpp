@@ -4,6 +4,7 @@
 #include <QJSValue>
 #include <QQmlApplicationEngine>
 #include <QSettings>
+#include <QFile>
 #include <QTemporaryDir>
 #include <algorithm>
 #include <QQmlContext>
@@ -890,10 +891,8 @@ private slots:
         QTRY_VERIFY(area->property("opened").toBool());
         QTRY_VERIFY(!gate->property("opened").toBool());
         // Freigabe im Elternbereich
-        QQuickItem* unlock = item(QStringLiteral("parentUnlockAll"));
-        QVERIFY(unlock);
         QTest::qWait(100);
-        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(unlock));
+        clickInPanel(QStringLiteral("parentUnlockAll"));
         QTRY_VERIFY(m_settings->unlockAll());
         QMetaObject::invokeMethod(area, "close");
         QTRY_VERIFY(!area->property("opened").toBool());
@@ -933,6 +932,23 @@ private slots:
         QVERIFY(!again.checkParentPin(QStringLiteral("80734"))); // gesperrt, auch mit richtiger PIN
         AppSettings restarted(true, file);
         QVERIFY(restarted.parentPinLockSeconds() > 0); // Sperre bleibt ueber den Neustart
+    }
+
+    // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
+    // abschaltbar - dann bleibt der Text als Kasten stehen
+    void tickMascot() {
+        for (const char* mood : {"erklaerend", "fragend", "freundlich", "froehlich", "gut", "motivierend",
+                                 "nachdenklich", "neugierig", "ueberrascht", "warnend"})
+            QVERIFY2(QFile::exists(QStringLiteral(":/tick/tick_%1.png").arg(QLatin1String(mood))), mood);
+        QQuickItem* tick = item(QStringLiteral("homeTick"));
+        QVERIFY(tick);
+        QVERIFY(tick->property("showFigure").toBool());
+        QVERIFY(tick->property("text").toString().contains(QStringLiteral("Tick")));
+        m_settings->setTickEnabled(false);
+        QTRY_VERIFY(!tick->property("showFigure").toBool());
+        QVERIFY(tick->height() > 0); // Hinweis bleibt
+        m_settings->setTickEnabled(true);
+        QTRY_VERIFY(tick->property("showFigure").toBool());
     }
 
     // Automatisches Speichern: Stand sichern, neuer Controller (Neustart) stellt Aufbau und Ablauf wieder her

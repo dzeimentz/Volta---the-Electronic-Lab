@@ -39,21 +39,21 @@ Flickable {
         width: parent.width
         spacing: 10
 
-        Label {
+        TickSays {
             width: parent.width
-            wrapMode: Text.Wrap
+            figure: 76
             visible: !finder.unlocked
+            mood: "nachdenklich"
             text: "🔒 " + qsTr("Die Fehlersuche wird mit Stufe 2 freigeschaltet.")
-            font.pixelSize: Math.round(14 * Theme.fontScale)
-            color: "#4A5866"
+            textColor: "#4A5866"
         }
-        Label {
+        TickSays {
+            objectName: "checkIntro"
             width: parent.width
-            wrapMode: Text.Wrap
-            visible: finder.unlocked
+            figure: 76
+            visible: finder.unlocked && !finder.checked
+            mood: "neugierig"
             text: qsTr("Funktioniert etwas nicht? Ich schaue mir deinen Aufbau an und stelle dir Fragen dazu.")
-            font.pixelSize: Math.round(14 * Theme.fontScale)
-            color: "#1E2B38"
         }
         Button {
             objectName: "checkCircuitButton"
@@ -74,14 +74,24 @@ Flickable {
         }
 
         // Ergebnis
-        Label {
+        TickSays {
             objectName: "checkNothingFound"
             width: parent.width
-            wrapMode: Text.Wrap
+            figure: 76
             visible: finder.checked && finder.findings.length === 0
+            mood: "gut"
             text: "✓ " + qsTr("Ich habe nichts Auffälliges gefunden. Macht die Schaltung, was du erwartest? Vergleiche mit dem Schaltplan.")
-            font.pixelSize: Math.round(14 * Theme.fontScale)
-            color: "#2E7D32"
+            textColor: "#2E7D32"
+        }
+        TickSays {
+            objectName: "checkSomethingFound"
+            width: parent.width
+            figure: 76
+            visible: finder.checked && finder.findings.length > 0
+            mood: "fragend"
+            text: qsTr("Mir ist etwas aufgefallen. Tippe auf eine Frage, dann zeige ich dir die Stelle.")
+            bubbleColor: "#FFF4D6"
+            borderColor: Theme.solderAmber
         }
         Repeater {
             model: finder.findings

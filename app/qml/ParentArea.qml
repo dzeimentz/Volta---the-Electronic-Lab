@@ -191,6 +191,26 @@ Popup {
                 color: "#4A5866"
             }
 
+            // ---- Maskottchen
+            Heading { text: qsTr("Maskottchen Tick") }
+            Body { text: qsTr("Tick begrüßt, stellt die Forscherfrage, gibt Tipps und hilft bei der Fehlersuche. Ohne Tick erscheinen dieselben Hinweise als einfache Kästen.") }
+            Row {
+                spacing: 8
+                Switch {
+                    objectName: "parentTick"
+                    checked: area.settings ? area.settings.tickEnabled : true
+                    enabled: area.settings !== null
+                    onToggled: area.settings.tickEnabled = checked
+                    Accessible.name: qsTr("Tick zeigen")
+                }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Tick zeigen")
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    color: "#1E2B38"
+                }
+            }
+
             // ---- Freigaben
             Heading { text: qsTr("Freigaben") }
             Body { text: qsTr("Die Stufen des Lernpfads öffnen sich nacheinander, damit Kinder nicht mit zu vielen Bauteilen auf einmal beginnen. Für die Schule oder für ältere Kinder können Sie alles sofort freigeben.") }

@@ -32,6 +32,8 @@ class AppSettings : public QObject {
     // Forscherprofile fuer geteilte Geraete (Elternbereich)
     Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY changed)
     // Klassenmodus Ton (Elternbereich): "normal", "kopfhoerer" (nur mit Kopfhoerern) oder "aus"
+    // Maskottchen Tick in Hilfen, Fehlersuche und Erfolg (Elternbereich); aus: dieselben Hinweise ohne Figur
+    Q_PROPERTY(bool tickEnabled READ tickEnabled WRITE setTickEnabled NOTIFY changed)
     Q_PROPERTY(QString classroomSound READ classroomSound WRITE setClassroomSound NOTIFY changed)
     // Elternschranke: PIN (4-8 Ziffern), gespeichert nur als gesalzener SHA-256-Pruefwert; Start-PIN 1234
     Q_PROPERTY(bool parentPinIsDefault READ parentPinIsDefault NOTIFY changed)
@@ -64,6 +66,8 @@ public:
     bool meterDocked() const { return m_meterDocked; }
     void setMeterDocked(bool on) { set(m_meterDocked, on, "labor/messgeraet_im_pult"); }
     bool profilesEnabled() const { return m_profilesEnabled; }
+    bool tickEnabled() const { return m_tickEnabled; }
+    void setTickEnabled(bool on) { set(m_tickEnabled, on, "anzeige/tick"); }
     QString classroomSound() const { return m_classroomSound; }
     void setClassroomSound(const QString& mode);
     bool parentPinIsDefault() const { return m_pinHash.isEmpty(); }
@@ -109,6 +113,7 @@ private:
     bool m_meterVisible = false;
     bool m_meterDocked = false;
     bool m_profilesEnabled = false;
+    bool m_tickEnabled = true;
     QString m_classroomSound = QStringLiteral("normal");
     QString m_pinHash; // leer: Start-PIN
     QString m_pinSalt;

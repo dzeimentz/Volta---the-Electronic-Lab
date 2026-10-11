@@ -243,24 +243,27 @@ Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
-            Rectangle {
+            TickSays {
                 visible: panel.controller.destructive
                 width: parent.width
-                height: onlyApp.implicitHeight + 12
-                radius: 6
-                color: "#FFE9DC"
-                border.color: Theme.signalOrange
-                Label {
-                    id: onlyApp
-                    anchors.centerIn: parent
-                    text: "⚠ " + qsTr("Nur in der App!")
-                    font.bold: true
-                    color: "#8A3200"
-                }
+                figure: 80
+                mood: "warnend"
+                text: "⚠ " + qsTr("Nur in der App!")
+                bold: true
+                textColor: "#8A3200"
+                bubbleColor: "#FFE9DC"
+                borderColor: Theme.signalOrange
             }
 
             // ---- 1 Frage
-            Body { visible: panel.phase === 1; text: panel.controller.question }
+            TickSays {
+                objectName: "questionTick"
+                visible: panel.phase === 1
+                width: parent.width
+                figure: 80
+                mood: "neugierig"
+                text: panel.controller.question
+            }
             Heading { visible: panel.phase === 1; text: qsTr("Was vermutest du?") }
             Repeater {
                 model: panel.phase === 1 ? panel.controller.guesses : []
@@ -342,20 +345,16 @@ Rectangle {
             }
             Repeater {
                 model: panel.phase === 2 ? panel.controller.hints : []
-                Rectangle {
+                TickSays {
                     required property int index
                     required property string modelData
                     width: parent.width
-                    height: hintText.implicitHeight + 16
-                    radius: 6
-                    color: "#FFF4D6"
-                    border.color: Theme.solderAmber
-                    Body {
-                        id: hintText
-                        x: 8; y: 8
-                        width: parent.width - 16
-                        text: "💡 " + modelData
-                    }
+                    figure: 80
+                    figureShown: index === panel.controller.hints.length - 1
+                    mood: index === 0 ? "nachdenklich" : "erklaerend"
+                    text: "💡 " + modelData
+                    bubbleColor: "#FFF4D6"
+                    borderColor: Theme.solderAmber
                 }
             }
             WideButton {
@@ -373,6 +372,13 @@ Rectangle {
             }
 
             // ---- 3 Beobachtung (Auswahl; danach Vergleich mit der Vermutung, ohne zu werten)
+            TickSays {
+                visible: panel.phase === 3
+                width: parent.width
+                figure: 80
+                mood: "gut"
+                text: qsTr("Super, deine Schaltung funktioniert! Schau genau hin: Was passiert?")
+            }
             Repeater {
                 model: panel.phase === 3 ? panel.controller.observations : []
                 WideButton {
@@ -385,24 +391,19 @@ Rectangle {
             }
 
             // ---- 4 Erklaerung und Weiterforschen
-            Rectangle {
+            TickSays {
                 objectName: "comparisonBox"
                 visible: panel.phase === 4 && panel.controller.comparison > 0
                 width: parent.width
-                height: cmpText.implicitHeight + 20
-                radius: 8
-                color: panel.controller.comparison === 1 ? "#E6F4E7" : "#FFF4D6"
-                border.color: panel.controller.comparison === 1 ? "#2E7D32" : Theme.solderAmber
-                Body {
-                    id: cmpText
-                    x: 10; y: 10
-                    width: parent.width - 20
-                    font.bold: true
-                    // Symbol zusaetzlich zur Farbe
-                    text: panel.controller.comparison === 1 ? "✓ " + qsTr("Deine Vermutung hat gestimmt!")
-                        : panel.controller.comparison === 2 ? "★ " + qsTr("Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.")
-                        : "★ " + qsTr("Jetzt weißt du es!")
-                }
+                figure: 80
+                mood: panel.controller.comparison === 1 ? "froehlich" : panel.controller.comparison === 2 ? "ueberrascht" : "motivierend"
+                bubbleColor: panel.controller.comparison === 1 ? "#E6F4E7" : "#FFF4D6"
+                borderColor: panel.controller.comparison === 1 ? "#2E7D32" : Theme.solderAmber
+                bold: true
+                // Symbol zusaetzlich zur Farbe
+                text: panel.controller.comparison === 1 ? "✓ " + qsTr("Deine Vermutung hat gestimmt!")
+                    : panel.controller.comparison === 2 ? "★ " + qsTr("Überraschung! Es kam anders, als du vermutet hast – genau das macht Forschen spannend.")
+                    : "★ " + qsTr("Jetzt weißt du es!")
             }
             Body {
                 visible: panel.phase === 4 && panel.controller.observation >= 0

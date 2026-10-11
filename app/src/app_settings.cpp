@@ -39,6 +39,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_meterVisible = s.value(QStringLiteral("labor/messgeraet"), false).toBool();
     m_meterDocked = s.value(QStringLiteral("labor/messgeraet_im_pult"), false).toBool();
     m_profilesEnabled = s.value(QStringLiteral("profile/aktiv"), false).toBool();
+    m_tickEnabled = s.value(QStringLiteral("anzeige/tick"), true).toBool();
     m_pinHash = s.value(QStringLiteral("eltern/pin_pruefwert")).toString();
     m_pinSalt = s.value(QStringLiteral("eltern/pin_salz")).toString();
     m_pinFailures = s.value(QStringLiteral("eltern/fehlversuche"), 0).toInt();

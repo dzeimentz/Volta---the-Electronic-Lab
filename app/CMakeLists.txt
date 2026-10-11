@@ -128,6 +128,8 @@ qt_add_qml_module(volta_ui
         qml/ProfileChooser.qml
         qml/DrawnIcon.qml
         qml/FormulaCalculator.qml
+        qml/Tick.qml
+        qml/TickSays.qml
     SOURCES
         src/lab_controller.hpp
         src/lab_controller.cpp
@@ -149,6 +151,12 @@ target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2
 qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE resources/icons FILES
     resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png
     resources/icons/toolbox_light.svg resources/icons/toolbox_dark.svg resources/icons/home_light.svg)
+# Maskottchen Tick: zehn Stimmungen (docs/maskottchen-tick.md), PNG mit 256 Farben (WebP fehlt in der APK)
+qt_add_resources(volta_ui "tick" PREFIX "/tick" BASE resources/tick FILES
+    resources/tick/tick_erklaerend.png resources/tick/tick_fragend.png resources/tick/tick_freundlich.png
+    resources/tick/tick_froehlich.png resources/tick/tick_gut.png resources/tick/tick_motivierend.png
+    resources/tick/tick_nachdenklich.png resources/tick/tick_neugierig.png resources/tick/tick_ueberrascht.png
+    resources/tick/tick_warnend.png)
 # Runde Flaggen der Anzeigesprachen (Werkzeugleiste oben rechts)
 qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
     resources/flags/de.svg resources/flags/fr.svg resources/flags/en.svg resources/flags/lb.svg)

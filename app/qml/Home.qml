@@ -116,6 +116,17 @@ Rectangle {
             bottomPadding: Theme.margin
             spacing: 18
 
+            // Tick begruesst (mit Spitzname, wenn ein Forscherprofil aktiv ist)
+            TickSays {
+                objectName: "homeTick"
+                width: Math.min(parent.width, 720)
+                figure: 128
+                mood: "freundlich"
+                text: (home.controller.profilesEnabled && home.controller.currentProfile.name
+                       ? qsTr("Hallo %1! Ich bin Tick.").arg(home.controller.currentProfile.name) : qsTr("Hallo! Ich bin Tick."))
+                      + " " + qsTr("Ich begleite dich durch deine Experimente. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.")
+            }
+
             Flow {
                 width: parent.width
                 spacing: 18
