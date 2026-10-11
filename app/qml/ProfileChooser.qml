@@ -152,6 +152,8 @@ Rectangle {
                         border.width: chooser.newSymbol === modelData ? 4 : 1
                         Label { anchors.centerIn: parent; text: parent.modelData; font.pixelSize: 36 }
                         TapHandler { onTapped: chooser.newSymbol = parent.modelData }
+                        Accessible.role: Accessible.RadioButton
+                        Accessible.name: qsTr("Symbol %1").arg(modelData) + (chooser.newSymbol === modelData ? ", " + qsTr("ausgewählt") : "")
                     }
                 }
             }

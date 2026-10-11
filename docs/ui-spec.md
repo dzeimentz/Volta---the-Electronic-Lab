@@ -316,3 +316,16 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   63 %), Kippstufe (Blinkfrequenz). Gesperrte Blaetter mit Schloss.
 - Eingaben mit Vorsatz: 4,7k, 4k7, 470m, 100µ (auch 100u), 2,2 MΩ, 15 mA; ungueltig: rot umrandet.
 - Rechenmodus mit Tastenfeld (Ziffern, Komma, + − × ÷, Klammern, Vorsaetze p n µ m k M).
+
+## Barrierefreiheit – Pruefung 10/2026
+- Bedienelemente: alle Knoepfe mit Text oder `Accessible.name`; Tippflaechen mindestens 48 dp (Formelrechner-Knoepfe
+  von 40 auf 48 korrigiert; die +/- Knoepfe der Grundplatte zeigen einen kleineren Kreis in einer 48-dp-Flaeche).
+- Bildschirmleser: Kontaktfelder (»Feld B3«, mit Spannungsstufe), Bauteile (Name, Kennung, Wert, kaputt/ueberlastet,
+  ausgewaehlt), Leitungen (Farbe, von, nach), Gruppenlinien, Schaltplan-Knoten und Profilsymbole haben Rolle und Namen.
+- Kontrast (WCAG AA 4,5:1): Akzentblau auf #2873B0 abgedunkelt (Weiss darauf 5,0:1, vorher 4,4:1); Grautexte 6–7:1;
+  Warnhinweise 7:1. Unterschreiten nur deaktivierte Elemente (zulaessig), die zusaetzlich grau und ohne Wirkung sind.
+- Farbe nie allein: Leitungsfarbe mit Namen, Polaritaet mit +/−, Erfolg mit ✓, Warnung mit ⚠/!, Messart mit Buchstaben.
+- Bewegung: »Animationen reduzieren« stoppt Pulsieren, Hopser und Stromfluss-Animation.
+- Tastatur (Desktop): Strg+Z/Strg+Y/Entf, Escape schliesst Fenster; Knoepfe per Tab erreichbar (Qt-Standard).
+- Offen: Rundgang mit TalkBack am Tablet (manuelle Pruefung), Schrift groesser als Stufe 3, Systemeinstellung
+  »Animationen entfernen« von Android uebernehmen.

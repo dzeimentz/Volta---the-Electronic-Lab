@@ -36,4 +36,7 @@ Item {
         }
     }
     TapHandler { onTapped: line.tapped() }
+
+    Accessible.role: Accessible.Button
+    Accessible.name: qsTr("Felder von %1 hervorheben").arg(line.symbol)
 }

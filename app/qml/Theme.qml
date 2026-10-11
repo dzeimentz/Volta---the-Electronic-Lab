@@ -6,7 +6,7 @@ QtObject {
     // Farben
     readonly property color navy: "#0A2540"
     readonly property color desk: "#1A3A5C"
-    readonly property color accent: "#2E7DBE"
+    readonly property color accent: "#2873B0" // Weiss darauf 5:1 (WCAG AA)
     readonly property color signalOrange: "#FF6B1A"
     readonly property color solderAmber: "#FFB07A"
     readonly property color voltageBar: "#8EE68A"

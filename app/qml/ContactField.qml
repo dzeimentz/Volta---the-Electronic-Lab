@@ -108,4 +108,8 @@ Rectangle {
         onLongPressed: root.menuRequested(point.scenePosition)
         onTapped: (eventPoint, button) => { if (button === Qt.RightButton) root.menuRequested(eventPoint.scenePosition) }
     }
+
+    // Bildschirmleser: Feldname, bei eingeschalteter Anzeige auch die Spannungsstufe
+    Accessible.role: Accessible.Button
+    Accessible.name: qsTr("Feld %1").arg(root.label) + (root.showVoltage ? ", " + qsTr("Spannungsanzeige %1 von 4").arg(root.bars) : "")
 }

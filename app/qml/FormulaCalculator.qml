@@ -179,7 +179,7 @@ Flickable {
                     model: [{n: qsTr("rot"), v: "1,9"}, {n: qsTr("gelb"), v: "2,0"}, {n: qsTr("grün"), v: "2,1"}, {n: qsTr("blau"), v: "3,1"}]
                     Button {
                         required property var modelData
-                        height: 40
+                        height: Theme.control
                         text: modelData.n
                         font.pixelSize: Math.round(12 * Theme.fontScale)
                         onClicked: luf.text = modelData.v

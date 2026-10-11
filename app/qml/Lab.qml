@@ -1026,6 +1026,10 @@ Item {
                         to: wire.toPoint
                         wireColor: Theme.wireColor(wire.modelData.color)
                         selected: lab.selectedWire === wire.modelData.id
+                        Accessible.role: Accessible.Button
+                        Accessible.name: qsTr("Leitung %1 von %2 nach %3").arg(Texts.colorName(wire.modelData.color))
+                                         .arg(String(wire.modelData.from).replace(/^[A-Z]+:/, ""))
+                                         .arg(String(wire.modelData.to).replace(/^[A-Z]+:/, ""))
                         Connections {
                             target: lab.controller
                             function onStateChanged() { wireShape.currentmA = lab.controller.wireCurrent(wire.modelData.id) }

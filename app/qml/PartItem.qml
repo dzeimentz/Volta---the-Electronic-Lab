@@ -163,4 +163,11 @@ Item {
             onPressedChanged: root.pushed(pressed)
         }
     }
+
+    // Bildschirmleser: Bauteil, Kennung, Wert und Zustand (Farbe nie allein)
+    Accessible.role: Accessible.Button
+    Accessible.name: Texts.partName(root.partType) + " " + root.partId
+                     + (Texts.partValue(root.partType, root.value) !== "" ? ", " + Texts.partValue(root.partType, root.value) : "")
+                     + (root.destroyed ? ", " + qsTr("kaputt") : root.overloaded ? ", " + qsTr("überlastet") : "")
+                     + (root.selected ? ", " + qsTr("ausgewählt") : "")
 }

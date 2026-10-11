@@ -123,6 +123,8 @@ Rectangle {
                         y: nd.modelData.y - 10
                         width: Math.max(48, nd.modelData.x2 - nd.modelData.x)
                         height: 20
+                        Accessible.role: Accessible.Button
+                        Accessible.name: qsTr("Knoten %1 auf der Grundplatte zeigen").arg(nd.index + 1)
                         TapHandler {
                             onTapped: {
                                 view.highlightedNode = view.highlightedNode === nd.index ? -1 : nd.index
