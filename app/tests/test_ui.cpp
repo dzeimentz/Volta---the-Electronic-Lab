@@ -1078,6 +1078,20 @@ private slots:
         m_lab->startFreeLab();
     }
 
+    // Summer und Piezo-Schallgeber klingen beide (gleiches Modell »buzzer«)
+    void piezoSounds() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        QVERIFY(m_lab->addPart(QStringLiteral("piezo"), QStringLiteral("B3"), false, false)); // plus B3, minus B4
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("B3"), QStringLiteral("rot")));
+        QVERIFY(m_lab->addWire(QStringLiteral("B4"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
+        m_lab->setMainSwitch(true);
+        QTRY_COMPARE(m_lab->soundingParts(), 1);
+        m_lab->setMainSwitch(false);
+        QTRY_COMPARE(m_lab->soundingParts(), 0);
+        m_lab->clearBoard();
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

@@ -17,6 +17,7 @@
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
 #include "model/recorder.hpp"
+#include "model/tone_synth.hpp"
 #include "services/content_repository.hpp"
 #include "services/journal_store.hpp"
 #include "services/profile_store.hpp"
@@ -341,6 +342,8 @@ public:
     Q_INVOKABLE bool removeModule(const QString& id);
     // Fehlersuche (Werkzeugkasten): [{kind, part, anchors[], text}] - Fragen, wichtigste zuerst
     Q_INVOKABLE QVariantList checkCircuit() const;
+    // Anzahl der gerade klingenden Summer/Piezo-Schallgeber (Tonausgabe, Tests)
+    Q_INVOKABLE int soundingParts() const;
     // Teileliste und Aufbaukarte (Werkzeugkasten): im Experiment die Vorlage, im freien Labor der eigene Aufbau.
     // partsList: kind ("modul", "bauteil", "leitung", "werkzeug", "batterie"), type, value, count, ids.
     Q_INVOKABLE QVariantList partsList() const;
@@ -466,6 +469,7 @@ private:
     double m_sinceNotifyS = 0.0;
     QSet<QString> m_destroyedSeen; // bereits gemeldete kaputte Bauteile (geheilt: wieder meldbar)
     void checkDestroyed();
+    std::vector<model::SynthVoice> buzzerVoices() const;
     double m_meterRangeV = 30.0; // zuletzt gelieferter Analogbereich (fuer die Skala)
 };
 

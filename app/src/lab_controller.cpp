@@ -976,6 +976,21 @@ QVariantMap LabController::recorderData(int maxPoints) const {
 }
 
 // Tonausgabe: Pult-Lautsprecher (Ton oder Knacken je Impuls) und Summer auf der Grundplatte
+// Toene aller klingenden Bauteile: Lautsprecher am Pult, Summer und Piezo-Schallgeber (Modell »buzzer«)
+std::vector<model::SynthVoice> LabController::buzzerVoices() const {
+    std::vector<model::SynthVoice> voices;
+    for (const auto& p : m_session->board().parts) {
+        const model::CatalogEntry* e = m_session->catalog().part(p.type);
+        if (!e || e->model != "buzzer") continue;
+        const core::ComponentReading* r = m_session->reading(p.id);
+        if (r && !r->destroyed && r->frequencyHz > 0.0 && r->level > 0.02)
+            voices.push_back({r->frequencyHz, 0.6 * r->level});
+    }
+    return voices;
+}
+
+int LabController::soundingParts() const { return static_cast<int>(buzzerVoices().size()); }
+
 void LabController::updateAudio() {
     if (!m_audio) return;
     std::vector<model::SynthVoice> voices;
@@ -987,12 +1002,7 @@ void LabController::updateAudio() {
             m_audio->click(0.7);
         m_lastPulses = ls.displayValue;
     }
-    for (const auto& p : m_session->board().parts) {
-        if (p.type != "summer") continue;
-        const core::ComponentReading* r = m_session->reading(p.id);
-        if (r && !r->destroyed && r->frequencyHz > 0.0 && r->level > 0.02)
-            voices.push_back({r->frequencyHz, 0.6 * r->level});
-    }
+    for (const auto& v : buzzerVoices()) voices.push_back(v);
     m_audio->setVoices(voices);
 }
 
