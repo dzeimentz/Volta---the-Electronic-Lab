@@ -133,6 +133,8 @@ ausfuehrbaren Datei (Desktop-Release), die eingebettete Qt-Ressource `:/content`
 ## Baende als eigene Apps
 
 - Ein Quellbaum, je Band ein CMake-Ziel bzw. eine Option `VOLTA_EDITION=volta1|volta2|volta3|zuse1`.
+- Zuse ist als eigene Produktlinie vorgeschlagen (ADR-0010, `docs/Konzept_Zuse_v0.1.pdf`): Werkbank und
+  Systemplatine statt Grundplatte, eigene Logiksimulation `logic/`, Editionen `zuse1|zuse2|zuse3`.
 - Die Edition bestimmt App-ID, Name, Symbol, enthaltene Inhaltspakete und freigeschaltete Bauteilmodelle.
 
 ## Abhaengigkeiten
