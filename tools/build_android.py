@@ -110,9 +110,13 @@ def main() -> int:
     print(f"Entfernt: {removed / 2**20:.1f} MB nicht benoetigter Bibliotheken")
 
     gradlew = "gradlew.bat" if sys.platform == "win32" else "./gradlew"
+    apk_in = ANDROID_BUILD / "build" / "outputs" / "apk" / "debug" / "android-build-debug.apk"
+    # Gradle packt sonst inkrementell in die vorhandene APK und laesst geaenderte Eintraege als Luecken stehen
+    # (Datei wuchs so um rund 30 MB ohne neuen Inhalt): jedes Mal frisch packen
+    apk_in.unlink(missing_ok=True)
+    shutil.rmtree(ANDROID_BUILD / "build" / "intermediates" / "incremental" / "packageDebug", ignore_errors=True)
     run([str(ANDROID_BUILD / gradlew), "assembleDebug", "--no-daemon", "--console=plain"], env, BUILD / "gradle.log",
         cwd=ANDROID_BUILD)
-    apk_in = ANDROID_BUILD / "build" / "outputs" / "apk" / "debug" / "android-build-debug.apk"
     target = ROOT / "Release" / "android"
     target.mkdir(parents=True, exist_ok=True)
     apk = target / f"Volta1-{version()}-arm64-debug.apk"
