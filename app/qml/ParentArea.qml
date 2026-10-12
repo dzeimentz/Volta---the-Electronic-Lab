@@ -12,6 +12,8 @@ Popup {
     signal taskQrRequested(string link, string code) // grosser QR-Code (liegt im Hauptfenster)
     readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
     readonly property bool soundManaged: managed !== null && managed.soundMode !== ""
+    // verwaltete Geraete: nur, wenn die Schule es erlaubt (Schluessel »praesentation«); sonst immer
+    readonly property bool presentationAllowed: managed === null || !managed.managed || managed.presentation
     readonly property bool profilesManaged: managed !== null && managed.profiles >= 0
     readonly property var audioRoute: typeof volta_audioRoute !== "undefined" ? volta_audioRoute : null
 
@@ -301,6 +303,21 @@ Popup {
                     const code = withBoard || taskText.text.trim() !== "" ? "" : area.controller.makeTaskCode(taskPicker.chosen)
                     if (link !== "") area.taskQrRequested(link, code)
                 }
+            }
+
+            // ---- Praesentationsmodus (Beamer, Tafel)
+            Heading { visible: area.presentationAllowed; text: qsTr("Präsentationsmodus") }
+            Body {
+                visible: area.presentationAllowed
+                text: qsTr("Für die Arbeit am Beamer oder an der Tafel: Volta zeigt sich bildschirmfüllend mit etwas größerer Schrift, alle Stufen sind offen. Fortschritt, Forscherheft und Laborstand dieses Geräts bleiben unberührt – was Sie in der Präsentation aufbauen, wird beim Beenden verworfen.")
+            }
+            Button {
+                objectName: "presentationStart"
+                visible: area.presentationAllowed
+                height: Theme.control
+                font.bold: true
+                text: "▶ " + qsTr("Präsentation starten")
+                onClicked: { area.close(); area.controller.presentation = true }
             }
 
             // ---- Freigaben

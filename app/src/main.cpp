@@ -443,6 +443,10 @@ int main(int argc, char* argv[]) {
             }
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_PRESENTATION=1 startet den Praesentationsmodus
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_PRESENTATION") == 1)
+        QTimer::singleShot(500, &lab, [&lab] { lab.setPresentation(true); });
+
     const QString shot = qEnvironmentVariable("VOLTA_SCREENSHOT");
     if (!shot.isEmpty()) {
         if (qEnvironmentVariableIntValue("VOLTA_SCREENSHOT_MAINSWITCH") == 1)

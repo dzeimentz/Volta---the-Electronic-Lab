@@ -8,7 +8,8 @@
 - Forscherheft, Fotos und Schaltungen nur im privaten App-Speicher; Export nur auf ausdrueckliche Handlung.
 - Fortschrittscode (QR) enthaelt nur Experiment-IDs und Erfolgsstatus, keinen Namen.
 - Supportangaben: Version, Build, Plattform, OS, Geraetemodell, Paketversionen – nichts weiter.
-- Kamera und Mikrofon werden nicht verwendet; Fotoimport ueber die Systemauswahl.
+- Kamera und Mikrofon werden nicht verwendet; Fotoimport ueber die Systemauswahl. Importierte Fotos werden neu
+  kodiert (ohne Kameradaten/Aufnahmeort) und nur im privaten App-Speicher abgelegt.
 
 ## Kinderschutz
 - Aufgaben der Lehrkraft (QR-Code bzw. Code zum Eintippen) enthalten nur Experimente, Aufbau und Aufgabentext - keine

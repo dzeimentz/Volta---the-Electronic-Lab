@@ -343,3 +343,13 @@ Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganz
   das Aufgabenfenster direkt (mit Profilen erst nach der Profilwahl). Tick zeigt Text und Experimente; Antippen startet
   sie (auch in noch gesperrten Stufen), ein eigener Aufbau oeffnet im freien Labor. Die Aufgabe bleibt je Profil
   gespeichert (`aufgabe.txt`), bis eine neue kommt oder sie entfernt wird.
+
+## Fotos im Forscherheft und Praesentationsmodus (10/2026)
+- Forscherheft: »📷 Foto hinzufuegen« je Experiment (Systemauswahl, keine Kamera-Berechtigung), hoechstens 12 je
+  Eintrag. Das Bild wird verkleinert (laengste Seite 1600 px) und als JPEG neu gespeichert - Kameradaten wie der
+  Aufnahmeort fallen dabei weg. Ablage `fotos/` neben `forscherheft.json` im Profil; Vorschaubilder, Antippen
+  vergroessert, »Foto entfernen« mit Rueckfrage. Zuruecksetzen des Forscherhefts loescht die Fotos. Die Profildatei
+  (.volta1profil) nimmt Fotos nicht mit.
+- Praesentationsmodus (Elternbereich, PIN): Vollbild (Desktop), Schrift +10 %, alle Stufen offen. Gearbeitet wird in
+  einem leeren, nicht gespeicherten Stand; Fortschritt, Forscherheft und Laborstand des Profils bleiben unberuehrt.
+  Hinweis unten links mit »Beenden« (zurueck zur Startseite, vorheriger Stand).

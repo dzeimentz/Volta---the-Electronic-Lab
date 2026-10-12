@@ -64,7 +64,9 @@ Registry, sonst `volta.ini` neben der EXE (Abschnitt `[General]`); Linux `/etc/x
 `VOLTA_MANAGED_INI=<Datei>`. Wirkung: `sprache` setzt die Anfangssprache (gesperrt: immer, Flaggensymbol weg),
 `stufen_frei` oeffnet Stufen bis zur Nummer, `elternbereich=false` blendet Menue- und Profil-Eintrag aus,
 `klassenmodus_ton` legt den Ton fest (im Elternbereich dann nicht aenderbar), `profile` schaltet Profile ein (Zahl =
-Hoechstzahl) oder aus. `fotoimport` und `praesentation` werden gelesen, die Funktionen folgen. Im Elternbereich
+Hoechstzahl) oder aus. `fotoimport=false` blendet »Foto hinzufuegen« im Forscherheft aus; `praesentation`: auf
+verwalteten Geraeten ist der Praesentationsmodus nur mit `praesentation=true` im Elternbereich zu sehen (ohne
+Verwaltung immer). Im Elternbereich
 weist ein Hinweis auf verwaltete Einstellungen hin.
 
 ## Groessen- und Leistungsziele

@@ -1,7 +1,9 @@
 // Forscherheft (Konzept 5.8): je Experiment Vermutung, Beobachtung, Vergleich und eigene Notizen, neueste zuerst.
-// Nur lokal gespeichert; Zeichnungen, Fotos und PDF-Export folgen (Phase 3).
+// Nur lokal gespeichert. Fotos ueber die Systemauswahl (verwaltete Konfiguration »fotoimport« kann es abschalten);
+// Zeichnungen und PDF-Export folgen.
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Dialogs
 
 Rectangle {
     id: journal
@@ -15,6 +17,69 @@ Rectangle {
     signal experimentRequested(string id)
 
     color: "#FBF6EA"
+    readonly property bool photosAllowed: typeof volta_managed === "undefined" || volta_managed.photoImport
+    property string photoTarget: "" // Experiment, zu dem das naechste Foto gehoert
+    property string photoMessage: ""
+
+    FileDialog {
+        id: photoDialog
+        fileMode: FileDialog.OpenFile
+        nameFilters: [qsTr("Bilder (*.jpg *.jpeg *.png)")]
+        onAccepted: journal.photoMessage = journal.controller.addJournalPhoto(journal.photoTarget, selectedFile)
+                    ? "" : qsTr("Dieses Bild konnte Volta nicht lesen.")
+    }
+    // Foto gross ansehen, auf Wunsch entfernen (mit Rueckfrage)
+    Popup {
+        id: photoView
+        objectName: "photoView"
+        property string experimentId: ""
+        property string file: ""
+        property url url
+        property bool confirming: false
+        anchors.centerIn: Overlay.overlay
+        width: Math.min(900, journal.width - 32)
+        height: Math.min(700, journal.height - 32)
+        modal: true
+        padding: 12
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        onClosed: confirming = false
+        background: Rectangle { radius: 12; color: "white"; border.color: Theme.navy; border.width: 2 }
+        contentItem: Column {
+            spacing: 10
+            Image {
+                width: parent.width
+                height: parent.height - Theme.control - 10
+                source: photoView.url
+                fillMode: Image.PreserveAspectFit
+                asynchronous: true
+            }
+            Row {
+                anchors.right: parent.right
+                spacing: 10
+                Label {
+                    visible: photoView.confirming
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Foto wirklich entfernen?")
+                    font.pixelSize: Math.round(15 * Theme.fontScale)
+                }
+                Button {
+                    objectName: "photoRemove"
+                    height: Theme.control
+                    text: photoView.confirming ? qsTr("Ja, entfernen") : qsTr("Foto entfernen")
+                    onClicked: {
+                        if (!photoView.confirming) { photoView.confirming = true; return }
+                        journal.controller.removeJournalPhoto(photoView.experimentId, photoView.file)
+                        photoView.close()
+                    }
+                }
+                Button {
+                    height: Theme.control
+                    text: qsTr("Schließen")
+                    onClicked: photoView.close()
+                }
+            }
+        }
+    }
 
     Rectangle {
         id: header
@@ -159,10 +224,65 @@ Rectangle {
                                 color: "#1E2B38"
                             }
                         }
-                        Button {
-                            text: qsTr("Experiment öffnen")
-                            height: Theme.control
-                            onClicked: journal.experimentRequested(page.modelData.id)
+                        // Fotos: Vorschaubilder, Antippen vergroessert
+                        Flow {
+                            width: parent.width
+                            spacing: 8
+                            visible: (page.modelData.photos || []).length > 0
+                            Repeater {
+                                model: page.modelData.photos || []
+                                Rectangle {
+                                    required property var modelData
+                                    required property int index
+                                    objectName: "photo_" + page.modelData.id + "_" + index
+                                    width: 132; height: 99
+                                    radius: 6
+                                    color: "#EEE8DA"
+                                    border.color: "#D8CDB4"
+                                    Image {
+                                        anchors.fill: parent
+                                        anchors.margins: 3
+                                        source: parent.modelData.url
+                                        sourceSize: Qt.size(264, 198)
+                                        fillMode: Image.PreserveAspectCrop
+                                        asynchronous: true
+                                        clip: true
+                                    }
+                                    TapHandler {
+                                        onTapped: {
+                                            photoView.experimentId = page.modelData.id
+                                            photoView.file = parent.modelData.file
+                                            photoView.url = parent.modelData.url
+                                            photoView.open()
+                                        }
+                                    }
+                                    Accessible.role: Accessible.Button
+                                    Accessible.name: qsTr("Foto %1 ansehen").arg(index + 1)
+                                }
+                            }
+                        }
+                        Row {
+                            spacing: 10
+                            Button {
+                                text: qsTr("Experiment öffnen")
+                                height: Theme.control
+                                onClicked: journal.experimentRequested(page.modelData.id)
+                            }
+                            Button {
+                                objectName: "photoAdd_" + page.modelData.id
+                                visible: journal.photosAllowed && (page.modelData.photos || []).length < 12
+                                height: Theme.control
+                                text: "📷 " + qsTr("Foto hinzufügen")
+                                onClicked: { journal.photoTarget = page.modelData.id; journal.photoMessage = ""; photoDialog.open() }
+                            }
+                        }
+                        Label {
+                            visible: journal.photoMessage !== "" && journal.photoTarget === page.modelData.id
+                            width: parent.width
+                            wrapMode: Text.Wrap
+                            text: journal.photoMessage
+                            color: "#B23B1E"
+                            font.pixelSize: Math.round(13 * Theme.fontScale)
                         }
                     }
                 }

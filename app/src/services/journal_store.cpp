@@ -4,6 +4,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QImage>
+#include <QImageReader>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QSaveFile>
@@ -78,7 +80,60 @@ bool JournalStore::addNote(const QString& experimentId, const QString& note) {
 
 bool JournalStore::reset() {
     m_entries = QJsonObject{};
+    if (const QString dir = photoDir(); !dir.isEmpty()) QDir(dir).removeRecursively(); // Fotos gehoeren dazu
     return save();
+}
+
+QString JournalStore::photoDir() const {
+    return m_path.isEmpty() ? QString() : QFileInfo(m_path).absolutePath() + QStringLiteral("/fotos");
+}
+
+QString JournalStore::addPhoto(const QString& experimentId, const QString& source) {
+    if (experimentId.isEmpty() || m_path.isEmpty()) return {};
+    QJsonObject e = touched(experimentId);
+    QJsonArray photos = e.value(QStringLiteral("fotos")).toArray();
+    if (photos.size() >= kMaxPhotos) return {};
+    QFile in(source); // content://-Adressen (Android) liest QFile direkt
+    if (!in.open(QIODevice::ReadOnly) || in.size() > 40 * 1024 * 1024) return {};
+    QImageReader reader(&in);
+    reader.setAutoTransform(true); // Hochformat aus der Kamera richtig herum
+    const QSize size = reader.size();
+    constexpr int kMaxSide = 1600;
+    if (size.isValid() && std::max(size.width(), size.height()) > kMaxSide)
+        reader.setScaledSize(size.scaled(kMaxSide, kMaxSide, Qt::KeepAspectRatio));
+    QImage image = reader.read();
+    if (image.isNull()) return {};
+    if (std::max(image.width(), image.height()) > kMaxSide)
+        image = image.scaled(kMaxSide, kMaxSide, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QString dir = photoDir();
+    QDir().mkpath(dir);
+    QString name = experimentId;
+    name.replace(QLatin1Char('.'), QLatin1Char('_'));
+    name += QStringLiteral("_%1.jpg").arg(QDateTime::currentMSecsSinceEpoch());
+    QSaveFile out(dir + QLatin1Char('/') + name);
+    if (!out.open(QIODevice::WriteOnly) || !image.convertToFormat(QImage::Format_RGB32).save(&out, "JPG", 85) ||
+        !out.commit())
+        return {};
+    photos.append(name);
+    e.insert(QStringLiteral("fotos"), photos);
+    m_entries.insert(experimentId, e);
+    return save() ? name : QString();
+}
+
+bool JournalStore::removePhoto(const QString& experimentId, const QString& fileName) {
+    QJsonObject e = m_entries.value(experimentId).toObject();
+    QJsonArray photos = e.value(QStringLiteral("fotos")).toArray();
+    for (qsizetype i = 0; i < photos.size(); ++i) {
+        if (photos.at(i).toString() != fileName) continue;
+        photos.removeAt(i);
+        e.insert(QStringLiteral("fotos"), photos);
+        m_entries.insert(experimentId, e);
+        // nur Dateinamen ohne Pfad (Schutz vor »../«)
+        if (!fileName.contains(QLatin1Char('/')) && !fileName.contains(QLatin1Char('\\')))
+            QFile::remove(photoDir() + QLatin1Char('/') + fileName);
+        return save();
+    }
+    return false;
 }
 
 QList<QJsonObject> JournalStore::entries() const {

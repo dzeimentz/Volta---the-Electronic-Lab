@@ -18,6 +18,13 @@ public:
     // Beobachtung und Vergleich ("passt", "anders", "offen")
     bool setObservation(const QString& experimentId, const QString& observation, const QString& comparison);
     bool addNote(const QString& experimentId, const QString& note);
+    // Foto ins Forscherheft (Fotoimport ueber die Systemauswahl): wird verkleinert (laengste Seite 1600 px) und als JPEG
+    // neu gespeichert - dabei fallen Kameradaten wie Aufnahmeort weg. Liegt im Ordner »fotos« neben der Datei.
+    // Hoechstens kMaxPhotos je Eintrag. Rueckgabe: Dateiname, leer bei Fehler.
+    QString addPhoto(const QString& experimentId, const QString& source);
+    bool removePhoto(const QString& experimentId, const QString& fileName);
+    QString photoDir() const;
+    static constexpr int kMaxPhotos = 12;
     bool reset();
 
     // Eintraege, neueste zuerst: {id, datum, vermutung, beobachtung, vergleich, notizen[]}

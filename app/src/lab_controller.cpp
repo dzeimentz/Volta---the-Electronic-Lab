@@ -523,6 +523,19 @@ void LabController::useProgressFile(const QString& path) {
     emit progressChanged();
 }
 
+bool LabController::addJournalPhoto(const QString& experimentId, const QUrl& source) {
+    const QString path = source.isLocalFile() ? source.toLocalFile() : source.toString();
+    if (m_journal.addPhoto(experimentId, path).isEmpty()) return false;
+    emit journalChanged();
+    return true;
+}
+
+bool LabController::removeJournalPhoto(const QString& experimentId, const QString& fileName) {
+    if (!m_journal.removePhoto(experimentId, fileName)) return false;
+    emit journalChanged();
+    return true;
+}
+
 void LabController::resetJournal() {
     m_journal.reset();
     emit journalChanged();
@@ -541,6 +554,22 @@ void LabController::setUnlockAll(bool on) {
 
 // Eine Stufe ist offen, wenn alle Experimente der vorigen Stufen erledigt sind (Stufe 0 und 1 immer offen).
 // Freischaltung dient der Reduktion, nicht der Belohnung (Konzept 5.5).
+void LabController::setPresentation(bool on) {
+    if (on == m_presentation) return;
+    if (on) {
+        m_presentationDir = m_dataDir;
+        m_presentationUnlock = m_unlockAll;
+        activateDataDir(QString(), true); // Stand des Profils sichern; danach liegt nichts mehr auf der Platte
+        m_unlockAll = true;
+    } else {
+        m_unlockAll = m_presentationUnlock;
+        activateDataDir(m_presentationDir, false); // Praesentationsaufbau verwerfen, Profil wieder laden
+    }
+    m_presentation = on;
+    emit presentationChanged();
+    emit progressChanged();
+}
+
 int LabController::highestUnlockedStage() const {
     if (m_unlockAll) return 99;
     int open = std::max(1, m_managedStage); // Vorgabe der Schule: mindestens bis zu dieser Stufe frei
@@ -891,6 +920,10 @@ QVariantList LabController::journal() const {
         const QDateTime when = QDateTime::fromString(e.value(QStringLiteral("datum")).toString(), Qt::ISODate);
         QStringList notes;
         for (const QJsonValue& n : e.value(QStringLiteral("notizen")).toArray()) notes << n.toString();
+        QVariantList photos; // {file, url}
+        for (const QJsonValue& p : e.value(QStringLiteral("fotos")).toArray())
+            photos << QVariantMap{{QStringLiteral("file"), p.toString()},
+                                  {QStringLiteral("url"), QUrl::fromLocalFile(m_journal.photoDir() + QLatin1Char('/') + p.toString())}};
         const QString cmp = e.value(QStringLiteral("vergleich")).toString();
         out << QVariantMap{{QStringLiteral("id"), id},
                            {QStringLiteral("title"), title},
@@ -899,7 +932,8 @@ QVariantList LabController::journal() const {
                            {QStringLiteral("observation"), e.value(QStringLiteral("beobachtung")).toString()},
                            {QStringLiteral("comparison"), cmp == QLatin1String("passt") ? 1 : cmp == QLatin1String("anders") ? 2
                                                           : cmp == QLatin1String("offen") ? 3 : 0},
-                           {QStringLiteral("notes"), notes}};
+                           {QStringLiteral("notes"), notes},
+                           {QStringLiteral("photos"), photos}};
     }
     return out;
 }

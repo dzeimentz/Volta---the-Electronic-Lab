@@ -68,6 +68,9 @@ class LabController : public QObject {
     Q_PROPERTY(bool autoColumns READ autoColumns WRITE setAutoColumns NOTIFY columnsModeChanged)
     Q_PROPERTY(bool meterDocked READ meterDocked WRITE setMeterDocked NOTIFY columnsModeChanged)
     Q_PROPERTY(QVariantMap task READ task NOTIFY taskChanged) // aktuelle Aufgabe (leer: keine)
+    // Praesentationsmodus (Lehrkraft am Beamer, aus dem Elternbereich): alle Stufen offen, nichts wird gespeichert -
+    // Fortschritt, Forscherheft und Laborstand des Profils bleiben unberuehrt; beim Beenden ist alles wie vorher
+    Q_PROPERTY(bool presentation READ presentation WRITE setPresentation NOTIFY presentationChanged)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -199,6 +202,9 @@ public:
     Q_INVOKABLE void resetProgress();
     // Forscherheft leeren (Elternbereich)
     Q_INVOKABLE void resetJournal();
+    // Foto ins Forscherheft des Experiments (Systemauswahl liefert die Adresse); false, wenn es nicht lesbar ist
+    Q_INVOKABLE bool addJournalPhoto(const QString& experimentId, const QUrl& source);
+    Q_INVOKABLE bool removeJournalPhoto(const QString& experimentId, const QString& fileName);
 
     // Werkzeugkasten (Konzept 5.7): Farbcode, E-Reihen, Bauteillexikon
     Q_INVOKABLE QVariantMap colorCode(double ohm, int rings) const; // {valid, rings[], ohm, tolerance}
@@ -259,6 +265,8 @@ public:
     bool deskSwitch() const { return m_session->board().desk.switchClosed; }
     bool meterVisible() const { return m_session->board().desk.meterVisible; }
     QVariantMap task() const; // aktuelle Aufgabe wie readTask (leer: keine)
+    bool presentation() const { return m_presentation; }
+    void setPresentation(bool on);
     bool autoColumns() const { return m_autoColumns; }
     void setAutoColumns(bool on);
     bool meterDocked() const { return m_meterDocked; }
@@ -421,6 +429,7 @@ signals:
     void progressLinkReceived(const QString& link);
     void taskLinkReceived(const QString& link);
     void taskChanged();
+    void presentationChanged();
 
 public slots:
     // Link-Handler fuer das Schema volta1 (QDesktopServices::setUrlHandler in main.cpp)
@@ -459,6 +468,9 @@ private:
     void activateDataDir(const QString& dir, bool saveFirst = true);
     services::JournalStore m_journal;
     bool m_unlockAll = false;
+    bool m_presentation = false;
+    QString m_presentationDir;      // Datenordner vor der Praesentation
+    bool m_presentationUnlock = false;
     bool m_buildComplete = false;
     bool m_canFinish = false;
     bool m_guideActive = false;

@@ -67,7 +67,8 @@ ApplicationWindow {
         function onColumnsChosen(columns) { if (root.settings) root.settings.boardColumns = columns }
     }
     // Schriftgroesse in drei Stufen (A-/A+ oben rechts)
-    Binding { target: Theme; property: "fontScale"; value: root.settings ? [0.8, 0.9, 1.0][root.settings.fontLevel] : 1.0 }
+    // Praesentation: etwas groessere Schrift (Beamer)
+    Binding { target: Theme; property: "fontScale"; value: (root.settings ? [0.8, 0.9, 1.0][root.settings.fontLevel] : 1.0) * (labController.presentation ? 1.1 : 1.0) }
     Binding { target: Theme; property: "tick"; value: root.settings ? root.settings.tickEnabled : true }
     font.pixelSize: Math.round(15 * Theme.fontScale)
 
@@ -214,6 +215,56 @@ ApplicationWindow {
         onTaskQrRequested: (link, code) => taskQr.showTask(link, code)
     }
     TaskQrDialog { id: taskQr; controller: labController }
+
+    // Praesentationsmodus: Vollbild (Desktop), Hinweis unten links mit »Beenden«; beim Beenden zurueck zur Startseite
+    property int visibilityBeforePresentation: Window.AutomaticVisibility
+    Connections {
+        target: labController
+        function onPresentationChanged() {
+            root.inLab = false
+            root.inJournal = false
+            if (root.mobile) return
+            if (labController.presentation) {
+                root.visibilityBeforePresentation = root.visibility
+                root.visibility = Window.FullScreen
+            } else {
+                root.visibility = root.visibilityBeforePresentation === Window.FullScreen ? Window.Windowed
+                                                                                          : root.visibilityBeforePresentation
+            }
+        }
+    }
+    Rectangle {
+        objectName: "presentationBanner"
+        visible: labController.presentation
+        z: 900
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.margins: 12
+        width: bannerRow.implicitWidth + 24
+        height: Theme.control + 8
+        radius: height / 2
+        color: Theme.navy
+        border.color: Theme.solderAmber
+        border.width: 2
+        Row {
+            id: bannerRow
+            anchors.centerIn: parent
+            spacing: 12
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "▶ " + qsTr("Präsentation – es wird nichts gespeichert")
+                color: "white"
+                font.bold: true
+                font.pixelSize: 15
+            }
+            Button {
+                objectName: "presentationEnd"
+                height: Theme.control - 6
+                text: qsTr("Beenden")
+                onClicked: labController.presentation = false
+            }
+        }
+    }
 
     // Startbildschirm nur in der Desktop-Ausgabe (main.cpp setzt volta_showSplash)
     Loader {

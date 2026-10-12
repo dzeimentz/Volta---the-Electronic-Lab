@@ -1,6 +1,7 @@
 // Oberflaechentests (Qt Quick, ohne sichtbares Fenster): echte Bedienung mit simulierter Maus und Tastatur
 // gegen die Experimentansicht. Prueft das Zusammenspiel QML <-> LabController <-> LabSession.
 #include <QDir>
+#include <QJsonArray>
 #include <QJSValue>
 #include <QQmlApplicationEngine>
 #include <QSettings>
@@ -19,6 +20,9 @@
 #include "app_settings.hpp"
 #include "language_service.hpp"
 #include "services/progress_store.hpp"
+#include "services/journal_store.hpp"
+#include <QImage>
+#include <QImageReader>
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 
@@ -1184,6 +1188,58 @@ private slots:
         QTRY_COMPARE(m_lab->parts().first().toMap().value(QStringLiteral("start")).toString(), QStringLiteral("D3"));
         QCOMPARE(m_lab->wires().size(), wires); // keine Leitung
         m_lab->clearBoard();
+    }
+
+    // Fotoimport ins Forscherheft: verkleinert, als JPEG neu gespeichert (ohne Kameradaten), entfernbar, beim
+    // Zuruecksetzen geloescht
+    void journalPhotos() {
+        QTemporaryDir dir;
+        const QString source = dir.filePath(QStringLiteral("kamera.png"));
+        QImage big(3200, 2400, QImage::Format_RGB32);
+        big.fill(Qt::darkGreen);
+        QVERIFY(big.save(source));
+        services::JournalStore store(dir.filePath(QStringLiteral("profil/forscherheft.json")));
+        const QString name = store.addPhoto(QStringLiteral("volta1.2.4"), source);
+        QVERIFY(!name.isEmpty());
+        const QString saved = store.photoDir() + QLatin1Char('/') + name;
+        QVERIFY(QFile::exists(saved));
+        {
+            QImageReader reader(saved); // eigener Block: Windows sperrt die Datei, solange sie offen ist
+            QCOMPARE(reader.format(), QByteArray("jpeg"));
+            QCOMPARE(reader.size(), QSize(1600, 1200));
+        }
+        QCOMPARE(store.entry(QStringLiteral("volta1.2.4")).value(QStringLiteral("fotos")).toArray().size(), 1);
+        QVERIFY(store.addPhoto(QStringLiteral("volta1.2.4"), dir.filePath(QStringLiteral("gibtsnicht.jpg"))).isEmpty());
+        QVERIFY(store.removePhoto(QStringLiteral("volta1.2.4"), name));
+        QVERIFY(!QFile::exists(saved));
+        QVERIFY(!store.addPhoto(QStringLiteral("volta1.2.4"), source).isEmpty());
+        QVERIFY(store.reset());
+        QVERIFY(!QDir(store.photoDir()).exists());
+    }
+
+    // Praesentationsmodus: alle Stufen offen, nichts wird gespeichert; danach ist der Stand wie vorher
+    void presentationKeepsProfileData() {
+        QTemporaryDir dir;
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
+        lab.useDataRoot(dir.path());
+        QVERIFY(lab.importProgressLink(QStringLiteral("volta1://fortschritt?d=1.1")) == 1);
+        lab.startFreeLab();
+        QVERIFY(lab.addPart(QStringLiteral("gluehlampe"), QStringLiteral("B3"), false, false));
+        lab.saveSession();
+        const int stageBefore = lab.unlockedStage();
+        lab.setPresentation(true);
+        QVERIFY(lab.unlockedStage() > 10);
+        QVERIFY(!lab.isDone(QStringLiteral("volta1.1.1"))); // leerer Stand in der Praesentation
+        QVERIFY(lab.importProgressLink(QStringLiteral("volta1://fortschritt?d=2.1")) == 1);
+        lab.startFreeLab();
+        QVERIFY(lab.addPart(QStringLiteral("led_rot"), QStringLiteral("C3"), false, false));
+        lab.setPresentation(false);
+        QVERIFY(lab.isDone(QStringLiteral("volta1.1.1")));
+        QVERIFY(!lab.isDone(QStringLiteral("volta1.2.1"))); // nichts aus der Praesentation uebernommen
+        QCOMPARE(lab.unlockedStage(), stageBefore);
+        QVERIFY(lab.resumeSession());
+        QCOMPARE(lab.parts().size(), 1); // der eigene Aufbau, nicht der aus der Praesentation
+        QCOMPARE(lab.parts().first().toMap().value(QStringLiteral("type")).toString(), QStringLiteral("gluehlampe"));
     }
 
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
