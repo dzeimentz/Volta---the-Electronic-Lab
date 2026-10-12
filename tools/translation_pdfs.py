@@ -3,6 +3,7 @@
 
 Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/translation_pdfs.py            # erzeugt beide PDFs in Release/Uebersetzung/
+    python3 tools/translation_pdfs.py --offen    # nur die noch nicht uebersetzten luxemburgischen Texte
     python3 tools/translation_pdfs.py --import-lb <ausgefuellt.pdf>   # luxemburgische Eingaben uebernehmen
 
 1. Volta1-Texte-LU.pdf: zwei Spalten - links der deutsche Text, rechts ein Eingabefeld fuer Luxemburgisch. Die Felder
@@ -150,7 +151,7 @@ class Sheet:
         self.c.save()
 
 
-def make_lb(path: Path):
+def make_lb(path: Path, only_open: bool = False):
     sheet = Sheet(path, "Volta 1 – Texte auf Luxemburgisch",
                   "Bitte tragen Sie rechts neben jedem deutschen Text die luxemburgische Fassung ein und speichern Sie "
                   "die Datei (z. B. mit Acrobat Reader: Datei › Speichern). Platzhalter wie %1 und %2 stehen für "
@@ -161,6 +162,10 @@ def make_lb(path: Path):
     lb_ui = ui_texts("lb")
     col = (sheet.w - 2 * sheet.margin - 12) / 2
     for title, rows in sections():
+        if only_open:
+            rows = [r for r in rows if not (lb_content.get(r[1], "") if r[0].startswith("c_") else lb_ui.get(r[2], ""))]
+            if not rows:
+                continue
         sheet.heading(f"{title} ({len(rows)} Texte)")
         for field, key, text in rows:
             p = sheet.para(text, 9.5)
@@ -272,6 +277,10 @@ def main() -> int:
         return 0
     setup_fonts()
     OUT.mkdir(parents=True, exist_ok=True)
+    if "--offen" in sys.argv:
+        make_lb(OUT / "Volta1-Texte-LU-offen.pdf", only_open=True)
+        print(f"-> {OUT / 'Volta1-Texte-LU-offen.pdf'}")
+        return 0
     make_lb(OUT / "Volta1-Texte-LU.pdf")
     make_de_en_fr(OUT / "Volta1-Texte-DE-EN-FR.pdf")
     n = sum(len(r) for _, r in sections())
