@@ -928,7 +928,7 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="259" />
         <source>Volta braucht kein Internet, legt kein Konto an und sammelt keine Daten. Datenschutz, Freigaben, Forscherprofile, Ton im Klassenzimmer, die PIN und die Erklärung, wie Volta rechnet, finden Sie im Elternbereich. Er ist durch eine PIN geschützt.</source>
-        <translation>Volta brauch keen Internet, mécht kee Kont op a sammelt keng Donnéeën. Dateschutz, Fräigaben, Fuerscherprofiler, Toun am Klassesall, de PIN an d'Erklärung, wéi Volta rechent, fann Dir am Elgeberäich. Hien ass duerch e PIN geschützt.</translation>
+        <translation>Volta brauch keen Internet, mécht kee Kont op a sammelt keng Donnéeën. Dateschutz, Fräigaben, Fuerscherprofiler, Toun am Klassesall, de PIN an d'Erklärung, wéi Volta rechent, fann Dir am Elterenberäich. Hien ass duerch e PIN geschützt.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="266" />
@@ -938,7 +938,7 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="271" />
         <source>Elternbereich öffnen</source>
-        <translation>Elgeberäich opmaachen</translation>
+        <translation>Elterenberäich opmaachen</translation>
     </message>
 </context>
 <context>
@@ -2121,7 +2121,7 @@
     <message>
         <location filename="../app/qml/ParentArea.qml" line="65" />
         <source>Elternbereich</source>
-        <translation>Elgeberäich</translation>
+        <translation>Elterenberäich</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="78" />
@@ -2142,12 +2142,12 @@
     <message>
         <location filename="../app/qml/ParentArea.qml" line="132" />
         <source>PIN für den Elternbereich</source>
-        <translation>PIN fir den Elgeberäich</translation>
+        <translation>PIN fir den Elterenberäich</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="133" />
         <source>Die PIN schützt den Elternbereich und Links aus der App heraus. Sie hat 4 bis 8 Ziffern und bleibt nur auf diesem Gerät.</source>
-        <translation>De PIN schützt den Elgeberäich a Linken aus der App eraus. Hien huet 4 bis 8 Zifferen a bleift nëmmen op dësem Apparat.</translation>
+        <translation>De PIN schützt den Elterenberäich a Linken aus der App eraus. Hien huet 4 bis 8 Zifferen a bleift nëmmen op dësem Apparat.</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="141" />
@@ -2594,7 +2594,7 @@
     <message>
         <location filename="../app/qml/ParentGate.qml" line="85" />
         <source>Bitte geben Sie die PIN für den Elternbereich ein.</source>
-        <translation>Gitt w.e.g. de PIN fir den Elgeberäich an.</translation>
+        <translation>Gitt w.e.g. de PIN fir den Elterenberäich an.</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentGate.qml" line="109" />
@@ -2782,7 +2782,7 @@
     <message>
         <location filename="../app/qml/ProfileChooser.qml" line="45" />
         <source>Elternbereich</source>
-        <translation>Elgeberäich</translation>
+        <translation>Elterenberäich</translation>
     </message>
     <message>
         <location filename="../app/qml/ProfileChooser.qml" line="64" />
@@ -3684,7 +3684,7 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="259" />
         <source>Elternbereich …</source>
-        <translation>Elgeberäich...</translation>
+        <translation>Elterenberäich...</translation>
     </message>
 </context>
 <context>

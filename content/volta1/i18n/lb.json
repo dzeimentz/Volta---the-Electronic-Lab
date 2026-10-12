@@ -619,7 +619,7 @@
   "exp_3_2_erklaerung": "Hannereneen deelen sech d'Biercher d'Batteriespannung. Well béid d'selwecht sinn, kritt all Bierchend d'Hallschent. Zesumme ginn déi zwee Deeler erëm 9 V.",
   "exp_3_2_mehr": "Mooss och iwwer deem zweete Bierchend an iwwer béiden zesummen. D'Deeler addéiere sech zur ganzer Spannung.",
   "exp_3_2_w1": "Mooss iwwer L2 (A2 an A3). Erginn L1 a L2 zesummen 9 V?",
-  "exp_3_2_echt": "In alen Liichterkette hänke vill kleng Luuchten hannereneen un der Steckdous; all Luucht kritt nëmmen e klengen Deel.",
+  "exp_3_2_echt": "An alen Liichterkette hänke vill kleng Luuchten hannereneen un der Steckdous; all Luucht kritt nëmmen e klengen Deel.",
   "exp_3_3_titel": "Wéi vill Stroum fléisst duerch d'Liichtdiod?",
   "exp_3_3_frage": "Fir Stroum ze moossen, muss en duerch de Miessapparat fléissen. Wou muss de Miessapparat dofir hin?",
   "exp_3_3_v1": "An de Stroumkrees, matten dran.",
@@ -893,7 +893,7 @@
   "exp_4_2_erklaerung": "Den Transistor verstäerkt: De Kollekterstroum ass e festen Multiplikator vum Basisstroum – bei dësem Transistor ongeféier dat 200-Facht. Dës Zuel heescht Stroumverstäerkung.",
   "exp_4_2_mehr": "D'Verstäerkung gëllt nëmmen, soulaang wéi de Kollekterkrees genuch Stroum zouléisst. Mat engem grousse Widderstand um Kollekter ass den Transistor ganz duerchgeschalt – dann schafft en als Schalter.",
   "exp_4_2_w1": "Huel 47 kΩ un der Basis. Verduebelt sech de Kollekterstroum ongeféier?",
-  "exp_4_2_echt": "In Héierapparaten a Mikrofonverstäerker maachen Transisteren aus klenge Stréim grouss.",
+  "exp_4_2_echt": "An Héierapparaten a Mikrofonverstäerker maachen Transisteren aus klenge Stréim grouss.",
   "exp_4_3_titel": "Eng Nuetsluucht, déi sech selwer aschalt",
   "exp_4_3_frage": "E Fotowidderstand an en Transistor: Kann d'Liichtdiod vu selwer ugoen, wann et däischter gëtt?",
   "exp_4_3_v1": "Jo, am Däischteren geet si un.",
@@ -1127,5 +1127,5 @@
   "exp_4_15_erklaerung": "D'Verstäerkermodul ass hei de Schalter fir d'Stroumversuergung vum Blénkmodul: Eréischt wann Waasser e klenge Stroum un säin Agang léisst, verbënnt et d'Blénkmodul mat 0V – dann blénkt d'Liichtdiod. Moduler loosse sech wéi Bausteng kombinéieren.",
   "exp_4_15_mehr": "Mat »Bléck eran« a béid Moduler gesäis du, wéi d'Transisteren zesummespillen.",
   "exp_4_15_w1": "Hänk zousätzlech de Piezo un de Blénk-Ausgang. Gëtt doraus en Alarm, deen een och héiert?",
-  "exp_4_15_echt": "Richteg Warnanlagen bestinn aus Bausteng: Fühler, Verstäerker, Taktgëtt, Luucht an Hupp."
+  "exp_4_15_echt": "Richteg Warnanlagen bestinn aus Bausteng: Fühler, Verstäerker, Taktgenerator, Luucht an Hupp."
 }
