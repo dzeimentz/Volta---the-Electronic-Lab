@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
-"""Baut die Android-Test-APK von Volta 1 (arm64, Debug-Signatur) und spielt sie auf angeschlossene Tablets.
+"""Baut die Android-Test-APK von Volta 1 (arm64, Debug-Signatur) und spielt sie auf angeschlossene Tablets, oder das
+Paket fuer Google Play (AAB, arm64 + armv7, unsigniert).
 
 Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/build_android.py            # bauen, Release/android/Volta1-<version>-arm64-debug.apk
     python3 tools/build_android.py --install  # zusaetzlich auf alle per adb angeschlossenen Geraete spielen
+    python3 tools/build_android.py --armv7    # Test-APK fuer aeltere 32-Bit-Tablets (...-armv7-debug.apk)
+    python3 tools/build_android.py --aab      # Release/android/Volta1-<version>-release-unsigned.aab
+
+AAB: Release-Bau fuer arm64-v8a und armeabi-v7a in einem Paket (build/android-release, QT_ANDROID_ABIS), Gradle
+bundleRelease ohne Signatur. Signieren mit dem eigenen Upload-Schluessel ist Sache des Inhabers (CLAUDE.md: keine
+Releases signieren, nichts hochladen), z. B.
+    jarsigner -keystore <upload.jks> Volta1-<version>-release-unsigned.aab <alias>
 
 Ablauf (docs/platforms.md): cmake-Preset android-arm64 bauen, androiddeployqt (ohne Gradle) legt die Bibliotheken
 ab, danach werden nicht benoetigte Qt-Teile entfernt (FFmpeg, ungenutzte Controls-Stile, virtuelle Tastatur, TLS,
@@ -26,13 +34,16 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-BUILD = ROOT / "build" / "android-arm64"
+AAB = "--aab" in sys.argv
+ARMV7 = "--armv7" in sys.argv and not AAB
+PRESET = "android-armv7" if ARMV7 else "android-arm64"
+BUILD = ROOT / "build" / ("android-release" if AAB else PRESET)
 ANDROID_BUILD = BUILD / "app" / "android-build"
-LIBS = ANDROID_BUILD / "libs" / "arm64-v8a"
+LIBS = ANDROID_BUILD / "libs" # je ABI ein Unterordner
 PACKAGE = "com.dcsoftwareengineering.volta1"
 ACTIVITY = "org.qtproject.qt.android.bindings.QtActivity"
 
-# Bibliotheken, die Volta nicht braucht (Muster auf Dateinamen in libs/arm64-v8a)
+# Bibliotheken, die Volta nicht braucht (Muster auf Dateinamen in libs/<abi>)
 UNWANTED = [
     r"^libav(codec|format|util|device|filter)\.so$", r"^libsw(scale|resample)\.so$",  # FFmpeg: nur Tonausgabe
     r"ffmpegmediaplugin",
@@ -51,6 +62,8 @@ def environment() -> dict[str, str]:
     env.setdefault("ANDROID_NDK_ROOT", env["ANDROID_SDK_ROOT"] + "/ndk/27.2.12479018")
     env.setdefault("JAVA_HOME", "C:/Program Files/Android/openjdk/jdk-21.0.8")
     env.setdefault("QT_ROOT_ANDROID", "C:/Qt/6.11.2/android_arm64_v8a")
+    if ARMV7: # eigene Qt-Ausgabe je ABI (das AAB holt sich armv7 selbst ueber QT_ANDROID_ABIS)
+        env["QT_ROOT_ANDROID"] = env["QT_ROOT_ANDROID"].replace("android_arm64_v8a", "android_armv7")
     env.setdefault("QT_HOST_PATH", "C:/Qt/6.11.2/mingw_64")
     extra = ["C:/Qt/Tools/Ninja", "C:/Qt/Tools/CMake_64/bin"]
     env["PATH"] = os.pathsep.join(extra + [env.get("PATH", "")])
@@ -90,19 +103,53 @@ def version() -> str:
     return m.group(1) if m else "0"
 
 
+def bundle(env: dict[str, str]) -> int:
+    """Gradle bundleRelease ohne Signatur; prueft Architekturen und Berechtigungen im fertigen AAB."""
+    gradlew = "gradlew.bat" if sys.platform == "win32" else "./gradlew"
+    aab_in = ANDROID_BUILD / "build" / "outputs" / "bundle" / "release" / "android-build-release.aab"
+    aab_in.unlink(missing_ok=True)
+    run([str(ANDROID_BUILD / gradlew), "bundleRelease", "--no-daemon", "--console=plain"], env,
+        BUILD / "gradle.log", cwd=ANDROID_BUILD)
+    target = ROOT / "Release" / "android"
+    target.mkdir(parents=True, exist_ok=True)
+    aab = target / f"Volta1-{version()}-release-unsigned.aab"
+    shutil.copy2(aab_in, aab)
+    import zipfile
+    with zipfile.ZipFile(aab) as z:
+        names = z.namelist()
+        manifest = z.read("base/manifest/AndroidManifest.xml")
+    abis = sorted({n.split("/")[2] for n in names if n.startswith("base/lib/")})
+    signed = any(n.startswith("META-INF/") and n.endswith((".RSA", ".EC", ".DSA")) for n in names)
+    # Manifest im AAB ist protobuf: nur Elemente »uses-permission« zaehlen (android.permission.DUMP schuetzt den
+    # Empfaenger des AndroidX-ProfileInstaller und ist keine Anforderung); interne Signaturberechtigung ausgenommen
+    perms = []
+    for m in re.finditer(rb"uses-permission", manifest):
+        found = re.search(rb"[A-Za-z0-9_.]+\.[A-Z_]{3,}", manifest[m.end():m.end() + 300])
+        name = found.group(0).decode() if found else "?"
+        if not name.endswith("DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"):
+            perms.append(name)
+    if perms:
+        print(f"FEHLER: Das AAB fordert Berechtigungen an: {perms}")
+        return 1
+    print(f"AAB: {aab} ({aab.stat().st_size / 2**20:.1f} MB), ABIs {', '.join(abis)}, "
+          f"{'SIGNIERT?!' if signed else 'unsigniert'}, keine Berechtigungen")
+    return 0
+
+
 def main() -> int:
     env = environment()
     BUILD.mkdir(parents=True, exist_ok=True)
     if not (BUILD / "CMakeCache.txt").exists():
-        run(["cmake", "--preset", "android-arm64"], env, BUILD / "configure.log")
-    run(["cmake", "--build", "--preset", "android-arm64"], env, BUILD / "native.log")
+        extra = ["-B", str(BUILD), "-DQT_ANDROID_ABIS=arm64-v8a;armeabi-v7a"] if AAB else []
+        run(["cmake", "--preset", PRESET] + extra, env, BUILD / "configure.log")
+    run(["cmake", "--build", str(BUILD)], env, BUILD / "native.log")
     deploy = str(Path(env["QT_HOST_PATH"]) / "bin" / "androiddeployqt")
     run([deploy, "--input", str(BUILD / "app" / "android-volta_app-deployment-settings.json"),
          "--output", str(ANDROID_BUILD), "--android-platform", "android-36", "--jdk", env["JAVA_HOME"],
-         "--no-gdbserver"], env, BUILD / "deploy.log")
+         "--no-gdbserver"] + (["--release", "--aab"] if AAB else []), env, BUILD / "deploy.log")
 
     removed = 0
-    for f in sorted(LIBS.glob("*.so")):
+    for f in sorted(LIBS.glob("*/*.so")):
         if any(re.search(p, f.name) for p in UNWANTED):
             removed += f.stat().st_size
             f.unlink()
@@ -110,6 +157,8 @@ def main() -> int:
     print(f"Entfernt: {removed / 2**20:.1f} MB nicht benoetigter Bibliotheken")
 
     gradlew = "gradlew.bat" if sys.platform == "win32" else "./gradlew"
+    if AAB:
+        return bundle(env)
     apk_in = ANDROID_BUILD / "build" / "outputs" / "apk" / "debug" / "android-build-debug.apk"
     # Gradle packt sonst inkrementell in die vorhandene APK und laesst geaenderte Eintraege als Luecken stehen
     # (Datei wuchs so um rund 30 MB ohne neuen Inhalt): jedes Mal frisch packen
@@ -119,7 +168,7 @@ def main() -> int:
         cwd=ANDROID_BUILD)
     target = ROOT / "Release" / "android"
     target.mkdir(parents=True, exist_ok=True)
-    apk = target / f"Volta1-{version()}-arm64-debug.apk"
+    apk = target / f"Volta1-{version()}-{'armv7' if ARMV7 else 'arm64'}-debug.apk"
     shutil.copy2(apk_in, apk)
 
     sdk = Path(env["ANDROID_SDK_ROOT"])

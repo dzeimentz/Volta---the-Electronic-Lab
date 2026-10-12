@@ -15,11 +15,15 @@
   (C:/Program Files/Android/openjdk/jdk-21.0.8). Bauen mit `python tools/build_android.py [--install]`: Preset
   android-arm64, androiddeployqt, Ausduennen, Gradle (Ausgabe in Datei, sonst haengt der Aufruf), Debug-APK nach
   Release/android/, Pruefung auf Berechtigungen, mit --install auf alle per adb angeschlossenen Geraete.
+  `--armv7`: Test-APK fuer 32-Bit-Tablets (Qt android_armv7, Preset android-armv7). `--aab`: Paket fuer Google
+  Play, Release-Bau fuer arm64-v8a und armeabi-v7a zusammen (build/android-release, QT_ANDROID_ABIS), Gradle
+  bundleRelease, unsigniert nach Release/android/Volta1-<version>-release-unsigned.aab; signieren mit dem
+  Upload-Schluessel ist Sache des Inhabers. Gradle packt jedes Mal frisch (inkrementell blieben Luecken in der Datei).
 - Paketgroesse (Ziel < 80 MB): der Stil Basic ist fest (`QQuickStyle` in main.cpp); nicht ausgeliefert werden
   FFmpeg (Ton ueber das Android- bzw. Windows-Medien-Backend), die Controls-Stile Fusion/Imagine/Material/Universal/
   FluentWinUI3/Windows, NativeStyle, virtuelle Tastatur, TLS, Netzinformation, seltene Bildformate, Qt Sensors.
   Auf Android muessen entfernte Bibliotheken auch aus res/values/libs.xml (sonst Absturz beim Start).
-  Stand: APK 68,9 MB (vorher 85,6 MB), Windows-Ordner 85 MB (vorher ca. 99 MB).
+  Stand 0.9.0: Test-APK arm64 57,5 MB, armv7 40,8 MB, AAB (beide ABIs) 44,4 MB; Windows-Ordner ca. 118 MB.
 - Eigenes Manifest `packaging/android/AndroidManifest.xml`: Paket `com.dcsoftwareengineering.volta1`, Querformat,
   keine Cloud-Sicherung, keine Berechtigungen (Qt traegt ueber Multimedia/TextToSpeech sonst INTERNET, CAMERA,
   RECORD_AUDIO, BLUETOOTH u. a. ein; diese werden mit tools:node="remove" entfernt). Verbleibend nur die interne
