@@ -5,6 +5,7 @@
 #include <QJSValue>
 #include <QQmlApplicationEngine>
 #include <QSettings>
+#include <QStyleHints>
 #include <QFile>
 #include <QTemporaryDir>
 #include <algorithm>
@@ -94,6 +95,14 @@ private:
         QCoreApplication::processEvents();
     }
 
+    // Sichtbare Popups (Dialoge, Menues, Werkzeugkasten), auch solche, die gerade noch ausblenden
+    QList<QObject*> visiblePopups() const {
+        QList<QObject*> list;
+        for (QObject* o : m_engine->rootObjects().first()->findChildren<QObject*>())
+            if (o->inherits("QQuickPopup") && o->property("visible").toBool()) list << o;
+        return list;
+    }
+
     const model::Board& board() const { return m_lab->session().board(); }
     const model::PartPlacement* part(const std::string& id) const { return board().findPart(id); }
 
@@ -117,7 +126,7 @@ private:
         QVERIFY(m_lab->buildComplete());
         QQuickItem* finish = item(QStringLiteral("finishButton"));
         QVERIFY(finish && !finish->isEnabled()); // grau, bis die Schaltung funktioniert
-        QTRY_VERIFY_WITH_TIMEOUT(m_lab->canFinish(), 10000); // Haltedauer 2 s in Echtzeit
+        QTRY_VERIFY_WITH_TIMEOUT(m_lab->canFinish(), 30000); // Haltedauer 2 s in Echtzeit (Reserve fuer Last)
         QTRY_VERIFY(finish->isEnabled());
         QCOMPARE(m_lab->phase(), 2); // kein automatischer Abschluss
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(finish)); // fest unten im Feld, nicht im Rollbereich
@@ -149,6 +158,10 @@ private slots:
         m_settings = std::make_unique<AppSettings>(false); // ohne Speichern
         m_settings->setAutoBoardColumns(false); // feste Breite; die Automatik prueft autoBoardColumns()
         m_engine->rootContext()->setContextProperty(QStringLiteral("volta_settings"), m_settings.get());
+        // Langes Druecken oeffnet auf Bauteilen, Feldern und Leitungsenden das Menue (Schwelle 0,8 s Echtzeit). Kein
+        // Test will das; unter Last kann aber zwischen Druecken und Ziehen bzw. Loslassen so viel Zeit vergehen.
+        // Schwelle vor dem Laden der Oberflaeche hochsetzen, damit sie fuer alle TapHandler gilt.
+        QGuiApplication::styleHints()->setMousePressAndHoldInterval(60000);
         m_engine->loadFromModule("Volta", "Main");
         QVERIFY(!m_engine->rootObjects().isEmpty());
         m_window = qobject_cast<QQuickWindow*>(m_engine->rootObjects().first());
@@ -175,6 +188,19 @@ private slots:
         QTRY_COMPARE(board().parts.size(), std::size_t(2));
         QTest::qWait(100); // Bauteilfach neu aufgebaut (alte Kacheln werden verzoegert geloescht)
         QCOMPARE(m_lab->phase(), 0);
+    }
+
+    // Vor jedem Test: kein Popup mehr offen oder im Ausblenden. Der Werkzeugkasten faehrt nach close() noch eine
+    // Weile hinaus (unter Last deutlich laenger); solange greifen die Tastenkuerzel des Labors nicht, und am Ende gibt
+    // Qt den Fokus an das Element zurueck, das ihn vor dem Oeffnen hatte - mitten im naechsten Test. Ein nach einem
+    // Fehlschlag offen gebliebenes modales Fenster wuerde ausserdem alle folgenden Klicks schlucken.
+    void init() {
+        for (QObject* popup : visiblePopups()) {
+            if (!popup->property("opened").toBool()) continue; // blendet schon aus
+            qWarning() << "Popup aus dem vorigen Test noch offen, wird geschlossen:" << popup->objectName();
+            QMetaObject::invokeMethod(popup, "close");
+        }
+        QTRY_VERIFY_WITH_TIMEOUT(visiblePopups().isEmpty(), 10000);
     }
 
     void dragPartFromTray() {
@@ -1156,6 +1182,21 @@ private slots:
         typeKeys("1234");
         QTest::keyClick(m_window, Qt::Key_Enter);
         QTRY_VERIFY(!gate->property("opened").toBool()); // Start-PIN
+        // Abfrage oeffnet, waehrend ein anderes Fenster noch ausblendet (wie Info -> Webseite): endet das Ausblenden
+        // danach, gibt Qt den Fokus an das vorher fokussierte Element - die Abfrage muss ihn sich zurueckholen
+        QObject* box = root->findChild<QObject*>(QStringLiteral("toolbox"));
+        QVERIFY(box);
+        QMetaObject::invokeMethod(box, "open");
+        QTRY_VERIFY(box->property("opened").toBool());
+        QMetaObject::invokeMethod(box, "close");
+        QMetaObject::invokeMethod(gate, "ask", Q_ARG(QVariant, QVariant()));
+        QTRY_VERIFY(gate->property("opened").toBool());
+        QTRY_VERIFY(!box->property("visible").toBool()); // Werkzeugkasten ganz ausgeblendet
+        QTest::qWait(50);
+        QTest::keyClick(m_window, Qt::Key_7);
+        QCOMPARE(gate->property("pin").toString(), QStringLiteral("7"));
+        QTest::keyClick(m_window, Qt::Key_Escape);
+        QTRY_VERIFY(!gate->property("opened").toBool());
     }
 
     // Doppeltippen dreht ein Bauteil (Abkuerzung zum Menue »Drehen«), rueckgaengig machbar
@@ -1169,8 +1210,9 @@ private slots:
         QTest::qWait(100);
         // Mitte des Bauteils: zwischen seinen Feldern B3 und B4
         const QPoint body = (centerOf(item(QStringLiteral("field_B3"))) + centerOf(item(QStringLiteral("field_B4")))) / 2;
+        // zwei Tipps binnen 400 ms Echtzeit (PartItem misst selbst): kein qWait dazwischen, das dauert unter Last laenger
         QTest::mouseClick(m_window, Qt::LeftButton, {}, body);
-        QTest::qWait(50);
+        QCoreApplication::processEvents();
         QTest::mouseClick(m_window, Qt::LeftButton, {}, body);
         QTRY_VERIFY(vertical());
         m_lab->undo();

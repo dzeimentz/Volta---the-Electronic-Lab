@@ -56,6 +56,12 @@ Popup {
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     onClosed: gate.pending = null
     onOpened: keyCatcher.forceActiveFocus()
+    // Schliesst ein anderes Fenster fuer die Abfrage (Info, Hilfe, Werkzeugkasten) und endet sein Ausblenden erst nach
+    // dem Oeffnen, gibt Qt den Fokus an das Element zurueck, das ihn vorher hatte: dann bekaeme die PIN-Abfrage keine
+    // Tasten mehr. Solange sie offen ist, holt sie sich den Fokus zurueck (sie oeffnet selbst keine weiteren Fenster).
+    onActiveFocusChanged: if (opened && !activeFocus) Qt.callLater(() => {
+        if (gate.opened && !gate.activeFocus) keyCatcher.forceActiveFocus()
+    })
     background: Rectangle { radius: 12; color: "#FFFDF7"; border.color: Theme.navy; border.width: 2 }
 
     contentItem: Column {
