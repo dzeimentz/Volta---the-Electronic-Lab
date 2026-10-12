@@ -95,7 +95,7 @@
     <message>
         <location filename="../app/qml/ContactField.qml" line="117" />
         <source>Feld %1</source>
-        <translation>Champ %1</translation>
+        <translation>Case %1</translation>
     </message>
     <message>
         <location filename="../app/qml/ContactField.qml" line="117" />
@@ -424,7 +424,7 @@
     <message>
         <location filename="../app/qml/FaultFinder.qml" line="71" />
         <source>Tipp: Schalte den Hauptschalter ein, dann schaue ich auch nach, was gerade fließt.</source>
-        <translation>Astuce : allume l'interrupteur principal, alors je regarde aussi ce qui circule en ce moment.</translation>
+        <translation>Astuce : allume l'interrupteur principal, et je regarderai aussi ce qui circule en ce moment.</translation>
     </message>
     <message>
         <location filename="../app/qml/FaultFinder.qml" line="83" />
@@ -633,7 +633,7 @@
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="377" />
         <source>Vorsätze: p = billionstel, n = milliardstel, µ = millionstel, m = tausendstel, k = tausend, M = Million.</source>
-        <translation>Préfixes : p = billionième, n = milliardième, µ = millionième, m = millième, k = mille, M = million.</translation>
+        <translation>Préfixes : p = pico (billionième), n = nano (milliardième), µ = micro (millionième), m = milli (millième), k = kilo (mille), M = méga (million).</translation>
     </message>
 </context>
 <context>
@@ -641,7 +641,7 @@
     <message>
         <location filename="../app/qml/GroupLine.qml" line="41" />
         <source>Felder von %1 hervorheben</source>
-        <translation>Mettre en évidence les champs de %1</translation>
+        <translation>Mettre en évidence les cases de %1</translation>
     </message>
 </context>
 <context>
@@ -679,12 +679,12 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="29" />
         <source>Ziehe ein Bauteil aus dem Bauteilfach links auf die Grundplatte. Seine Beine landen in Kontaktfeldern.</source>
-        <translation>Fais glisser un composant du bac à composants à gauche sur la plaque de base. Ses pattes arrivent dans des champs de contact.</translation>
+        <translation>Fais glisser un composant du bac à composants à gauche sur la plaque de base. Ses pattes arrivent dans des cases de contact.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="30" />
         <source>Alles, was im selben Feld steckt, ist miteinander verbunden.</source>
-        <translation>Tout ce qui est branché dans le même champ est relié.</translation>
+        <translation>Tout ce qui est branché dans la même case est relié.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="31" />
@@ -713,7 +713,7 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="35" />
         <source>Ziehe mit dem Finger von einem Feld zu einem anderen – schon liegt dort eine Leitung.</source>
-        <translation>Glisse ton doigt d'un champ à un autre – et voilà un fil.</translation>
+        <translation>Glisse ton doigt d'une case à une autre – et voilà un fil.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="36" />
@@ -798,7 +798,7 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="52" />
         <source>Im Menü eines Feldes (langer Druck) schaltest du dort eine Spannungsanzeige ein.</source>
-        <translation>Dans le menu d'un champ (appui long), tu y allumes un indicateur de tension.</translation>
+        <translation>Dans le menu d'une case (appui long), tu y allumes un indicateur de tension.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="53" />
@@ -843,7 +843,7 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="61" />
         <source>Fehlersuche: Ich prüfe deinen Aufbau (ab Stufe 2).</source>
-        <translation>Recherche d'erreurs : je vérifie ton montage (à partir du niveau 2).</translation>
+        <translation>Recherche de pannes : je vérifie ton montage (à partir du niveau 2).</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="62" />
@@ -898,7 +898,7 @@
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="72" />
         <source>Öffne im Werkzeugkasten die Fehlersuche und tippe auf »Schaltung prüfen«. Ich stelle dir Fragen zu den Stellen, die mir auffallen.</source>
-        <translation>Ouvre la recherche d'erreurs dans la boîte à outils et touche « Vérifier le circuit ». Je te pose des questions sur les endroits qui me frappent.</translation>
+        <translation>Ouvre la recherche de pannes dans la boîte à outils et touche « Vérifier le circuit ». Je te pose des questions sur les endroits qui me frappent.</translation>
     </message>
     <message>
         <location filename="../app/qml/HelpDialog.qml" line="73" />
@@ -2065,7 +2065,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="92" />
         <source>Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.</source>
-        <translation>Dans le module minuterie, au repos, le transistor T1 conduit. Un appui sur « start » allume T2 ; son saut pousse la base de T1 dans le moins à travers le condensateur C, T1 bloque. Ce n'est que lorsque C s'est rechargé à travers R_zeit – environ 3 secondes – que T1 conduit de nouveau. Tant que T1 bloque, T3 commute la sortie. Ce que tu vois ici est calculé en ce moment.</translation>
+        <translation>Dans le module minuterie, au repos, le transistor T1 conduit. Un appui sur « départ » allume T2 ; son saut pousse la base de T1 dans le moins à travers le condensateur C, T1 bloque. Ce n'est que lorsque C s'est rechargé à travers R_zeit – environ 3 secondes – que T1 conduit de nouveau. Tant que T1 bloque, T3 commute la sortie. Ce que tu vois ici est calculé en ce moment.</translation>
     </message>
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="94" />
@@ -2107,7 +2107,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="307" />
         <source>Eingang „ein“</source>
-        <translation>Entrée « ein »</translation>
+        <translation>Entrée « marche »</translation>
     </message>
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="313" />
@@ -2142,7 +2142,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="327" />
         <source>Endstufe „aus“</source>
-        <translation>Étage de sortie « aus »</translation>
+        <translation>Étage de sortie (borne « sortie »)</translation>
     </message>
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="336" />
@@ -2152,7 +2152,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="356" />
         <source>Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.</source>
-        <translation>Alimentation : %1 V. L'étage de sortie s'allume et s'éteint au rythme du son ; Volta calcule avec la valeur moyenne du courant. Un haut-parleur entre plus et « aus » joue la mélodie.</translation>
+        <translation>Alimentation : %1 V. L'étage de sortie s'allume et s'éteint au rythme du son ; Volta calcule avec la valeur moyenne du courant. Un haut-parleur entre plus et « sortie » joue la mélodie.</translation>
     </message>
 </context>
 <context>
@@ -3274,22 +3274,22 @@
     <message>
         <location filename="../app/qml/Texts.qml" line="48" />
         <source>aus</source>
-        <translation>aus</translation>
+        <translation>sortie</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="49" />
         <source>ein</source>
-        <translation>ein</translation>
+        <translation>marche</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="50" />
         <source>Takt</source>
-        <translation>Takt</translation>
+        <translation>cadence</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="51" />
         <source>Start</source>
-        <translation>Start</translation>
+        <translation>départ</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="58" />
@@ -3722,7 +3722,7 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="213" />
         <source>Lernpfad 8, freies Labor 12 Felder je Reihe; Messgerät daneben 10, im Pult 12</source>
-        <translation>Parcours 8, labo libre 12 champs par rangée ; appareil de mesure à côté 10, dans le pupitre 12</translation>
+        <translation>Parcours 8, labo libre 12 cases par rangée ; appareil de mesure à côté 10, dans le pupitre 12</translation>
     </message>
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="218" />
@@ -3760,7 +3760,7 @@
     <message>
         <location filename="../app/qml/TroublePopup.qml" line="16" />
         <source>Oh! %1 ist kaputt gegangen. Willst du wissen, warum?</source>
-        <translation>Oh ! %1 est cassé(e). Tu veux savoir pourquoi ?</translation>
+        <translation>Oh ! Le composant %1 est cassé. Tu veux savoir pourquoi ?</translation>
     </message>
     <message>
         <location filename="../app/qml/TroublePopup.qml" line="21" />
@@ -3775,7 +3775,7 @@
     <message>
         <location filename="../app/qml/TroublePopup.qml" line="60" />
         <source>Zur Fehlersuche</source>
-        <translation>Vers la recherche d'erreurs</translation>
+        <translation>Vers la recherche de pannes</translation>
     </message>
     <message>
         <location filename="../app/qml/TroublePopup.qml" line="60" />

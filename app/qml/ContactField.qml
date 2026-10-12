@@ -43,6 +43,11 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 3
         anchors.horizontalCenter: parent.horizontalCenter
+        // schmale Felder der Modulleiste: laengere Anschlussnamen (»cadence«) werden kleiner statt abgeschnitten
+        width: Math.min(implicitWidth, parent.width - 4)
+        horizontalAlignment: Text.AlignHCenter
+        fontSizeMode: Text.HorizontalFit
+        minimumPixelSize: 8
         text: root.label
         font.pixelSize: Math.round((13) * Theme.fontScale)
         font.bold: true

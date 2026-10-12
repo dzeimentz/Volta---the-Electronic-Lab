@@ -404,7 +404,7 @@
     <message>
         <location filename="../app/qml/FaultFinder.qml" line="47" />
         <source>Die Fehlersuche wird mit Stufe 2 freigeschaltet.</source>
-        <translation>Troubleshooting is unlocked at level 2.</translation>
+        <translation>Troubleshooting will be unlocked at level 2.</translation>
     </message>
     <message>
         <location filename="../app/qml/FaultFinder.qml" line="56" />
@@ -482,7 +482,7 @@
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="94" />
         <source>Der Formelrechner wird mit Stufe 3 freigeschaltet.</source>
-        <translation>The formula calculator is unlocked at level 3.</translation>
+        <translation>The formula calculator will be unlocked at level 3.</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="129" />
@@ -2107,7 +2107,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="307" />
         <source>Eingang „ein“</source>
-        <translation>Input "ein"</translation>
+        <translation>Input "in"</translation>
     </message>
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="313" />
@@ -2142,7 +2142,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="327" />
         <source>Endstufe „aus“</source>
-        <translation>Output stage "aus"</translation>
+        <translation>Output stage "out"</translation>
     </message>
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="336" />
@@ -2152,7 +2152,7 @@
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="356" />
         <source>Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.</source>
-        <translation>Supply: %1 V. The output stage switches on and off in time with the sound; Volta calculates with the average current. A loudspeaker between plus and "aus" plays the melody along.</translation>
+        <translation>Supply: %1 V. The output stage switches on and off in time with the sound; Volta calculates with the average current. A loudspeaker between plus and "out" plays the melody along.</translation>
     </message>
 </context>
 <context>
@@ -3274,22 +3274,22 @@
     <message>
         <location filename="../app/qml/Texts.qml" line="48" />
         <source>aus</source>
-        <translation>aus</translation>
+        <translation>out</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="49" />
         <source>ein</source>
-        <translation>ein</translation>
+        <translation>in</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="50" />
         <source>Takt</source>
-        <translation>Takt</translation>
+        <translation>rate</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="51" />
         <source>Start</source>
-        <translation>Start</translation>
+        <translation>start</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="58" />
@@ -3814,7 +3814,7 @@
     <message>
         <location filename="../app/src/lab_controller.cpp" line="1555" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
-        <translation>This module is unlocked at level %1.</translation>
+        <translation>This module will be unlocked at level %1.</translation>
     </message>
 </context>
 </TS>
