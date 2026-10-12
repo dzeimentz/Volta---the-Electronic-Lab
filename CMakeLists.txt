@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 project(Volta
-    VERSION 0.1.0
+    VERSION 0.9.0 # Testphase vor 1.0; Android-versionCode folgt daraus (app/CMakeLists.txt)
     DESCRIPTION "Volta - Das Elektronik-Labor"
     HOMEPAGE_URL "https://dc-software-engineering.com"
     LANGUAGES CXX)

@@ -37,7 +37,15 @@ SHOTS = OUT / "bilder" / "de"
 EXE = ROOT / "build" / "desktop-debug" / "app" / ("volta1.exe" if os.name == "nt" else "volta1")
 TICK = ROOT / "app" / "resources" / "tick"
 FONTS = Path("C:/Windows/Fonts")
-VERSION = "0.1.0"
+
+
+def _version() -> str:
+    import re
+    m = re.search(r"project\(Volta\s+VERSION\s+([0-9.]+)", (ROOT / "CMakeLists.txt").read_text(encoding="utf-8"))
+    return m.group(1) if m else "0"
+
+
+VERSION = _version()
 
 NAVY = colors.HexColor("#0A2540")
 BLUE = colors.HexColor("#1E5FC2")

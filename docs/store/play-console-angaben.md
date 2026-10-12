@@ -1,6 +1,6 @@
 # Google Play Console – Angaben zum App-Inhalt
 
-Antworten für die Formulare unter »App-Inhalte« (Stand: Volta 1.0, Oktober 2026). Grundlage: `docs/privacy-safety.md`.
+Antworten für die Formulare unter »App-Inhalte« (Stand: Volta 0.9, Oktober 2026; gilt unverändert für 1.0). Grundlage: `docs/privacy-safety.md`.
 
 ## Datenschutzerklärung
 URL der gehosteten `datenschutzerklaerung.html` (z. B. https://dc-software-engineering.com/volta/datenschutz).

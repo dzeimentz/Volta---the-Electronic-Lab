@@ -20,7 +20,7 @@ Stand: Oktober 2026. Alles hier ist vorbereitet; Signieren, Hochladen und Veröf
 - [ ] FR- und LB-Eintrag von Muttersprachlern gegenlesen lassen
 - [ ] Entwicklerkonto (Organisation, D-U-N-S bei Firmenkonto) und Identitätsprüfung
 - [ ] Release-Build als **AAB**, signiert mit eigenem Upload-Schlüssel (Play App Signing) – Schritt des Inhabers
-- [ ] versionCode/versionName erhöhen (aktuell 0.1.0), targetSdk 36
+- [ ] Version: Testphase 0.9.x (versionCode 900 ff., aus CMakeLists.txt berechnet); vor dem Produktions-Release 1.0.0 (versionCode 10000), targetSdk 36
 - [ ] Architekturen: derzeit nur arm64-v8a; armv7 ist geplant (ältere Schul-Tablets)
 - [ ] Interner Test → geschlossener Test (bei neuen Privatkonten: 12 Tester über 14 Tage) → Produktion
 - [ ] Hinweis: Luxemburgisch ist bei Google Play keine Eintragssprache; die LB-Texte dienen für die eigene

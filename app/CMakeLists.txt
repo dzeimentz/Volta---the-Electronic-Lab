@@ -58,6 +58,9 @@ if(WIN32)
     target_sources(volta_app PRIVATE $<TARGET_OBJECTS:volta_app_rc>)
 endif()
 
+# Android-versionCode aus der Version: Haupt * 10000 + Neben * 100 + Korrektur (0.9.0 -> 900, 1.0.0 -> 10000);
+# steigt mit jeder Version, wie Google Play es verlangt
+math(EXPR VOLTA_VERSION_CODE "${PROJECT_VERSION_MAJOR} * 10000 + ${PROJECT_VERSION_MINOR} * 100 + ${PROJECT_VERSION_PATCH}")
 set_target_properties(volta_app PROPERTIES
     OUTPUT_NAME "${VOLTA_EDITION}"
     WIN32_EXECUTABLE ON
@@ -65,7 +68,7 @@ set_target_properties(volta_app PROPERTIES
     QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android" # eigenes Manifest: keine Berechtigungen
     QT_ANDROID_PACKAGE_NAME "com.dcsoftwareengineering.${VOLTA_EDITION}"
     QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
-    QT_ANDROID_VERSION_CODE 1
+    QT_ANDROID_VERSION_CODE ${VOLTA_VERSION_CODE}
     QT_ANDROID_MIN_SDK_VERSION 26
     QT_ANDROID_TARGET_SDK_VERSION 36)
 
