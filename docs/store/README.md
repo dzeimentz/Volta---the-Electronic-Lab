@@ -8,6 +8,7 @@ Stand: Oktober 2026. Alles hier ist vorbereitet; Signieren, Hochladen und Veröf
 |---|---|
 | `listing-de.md`, `-en`, `-fr`, `-lb` | Name (≤ 30), Kurzbeschreibung (≤ 80), Beschreibung (≤ 4000) |
 | `datenschutzerklaerung.html` | Datenschutzerklärung DE/EN zum Hosten |
+| `markenpruefung.md` | Vorrecherche »Volta« und »Tick« im Markenregister (TMview) |
 | `play-console-angaben.md` | Antworten für »App-Inhalte« (Werbung, Zugriff, IARC, Zielgruppe, Datensicherheit) |
 | `tools/store_assets.py` | erzeugt `Release/Store/`: `icon-512.png`, `feature-<sprache>.png` (1024 × 500), Screenshots 1920 × 1200 je Sprache |
 
@@ -15,7 +16,7 @@ Stand: Oktober 2026. Alles hier ist vorbereitet; Signieren, Hochladen und Veröf
 
 - [ ] Anschrift in `datenschutzerklaerung.html` eintragen (Markierung »todo«) und unter
       https://dc-software-engineering.com/volta/datenschutz hosten; URL in der Play Console angeben
-- [ ] Markenrecherche »Volta« und »Tick« (DPMA/EUIPO, Klassen 9 und 41)
+- [ ] Markenlage »Volta«/»Tick« anwaltlich bewerten lassen – Vorrecherche in `markenpruefung.md`
 - [ ] FR- und LB-Eintrag von Muttersprachlern gegenlesen lassen
 - [ ] Entwicklerkonto (Organisation, D-U-N-S bei Firmenkonto) und Identitätsprüfung
 - [ ] Release-Build als **AAB**, signiert mit eigenem Upload-Schlüssel (Play App Signing) – Schritt des Inhabers
