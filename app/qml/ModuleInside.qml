@@ -157,8 +157,8 @@ Popup {
                         width: pinLabel.implicitWidth + 14
                         height: 24
                         radius: 12
-                        color: Theme.field
-                        border.color: Theme.fieldOutline
+                        color: Theme.fieldSilver
+                        border.color: Theme.fieldEdge
                         Label { id: pinLabel; anchors.centerIn: parent; text: parent.text; font.bold: true; color: Theme.navy; font.pixelSize: 13 }
                     }
                     Pin { x: 0; y: 8; text: Texts.pinName("plus") }

@@ -919,7 +919,6 @@ Item {
                     height: lab.anchorSize(modelData).height
                     x: lab.anchorPoint(modelData).x - width / 2
                     y: lab.anchorPoint(modelData).y - height / 2
-                    color: modelData.startsWith("MESS:") ? "#D9DEE6" : Theme.field
                     highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
                                  || lab.highlightFields.indexOf(modelData) >= 0
                                  || (lab.trayPreview.fields || []).indexOf(modelData) >= 0

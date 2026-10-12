@@ -19,9 +19,25 @@ Rectangle {
     signal menuRequested(point scenePos)
 
     radius: 6
-    color: Theme.field
-    border.color: highlighted ? Theme.signalOrange : Theme.fieldOutline
+    // silberner Metallglanz statt flacher Farbe
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: Theme.fieldShine }
+        GradientStop { position: 0.42; color: Theme.fieldSilver }
+        GradientStop { position: 0.58; color: Theme.fieldShade }
+        GradientStop { position: 1.0; color: Theme.fieldGlow }
+    }
+    border.color: highlighted ? Theme.signalOrange : Theme.fieldEdge
     border.width: highlighted ? 4 : 1
+
+    // Lichtkante oben: das Blech spiegelt
+    Rectangle {
+        x: root.radius; y: 2
+        width: root.width - 2 * root.radius
+        height: 2
+        radius: 1
+        color: "white"
+        opacity: 0.75
+    }
 
     // Steckloecher mittig im Feld (waagrecht und senkrecht); Bauteilbeine und Leitungen stecken genau hier
     Repeater {
@@ -33,8 +49,8 @@ Rectangle {
             radius: 1 // quadratische Loecher der Steckfedern
             x: root.width / 2 + (index - (root.sockets - 1) / 2) * root.pitch - width / 2
             y: root.height / 2 - height / 2
-            color: "#6E6553"
-            border.color: "#4F4839"
+            color: Theme.socket
+            border.color: Theme.socketEdge
             border.width: 1
         }
     }
