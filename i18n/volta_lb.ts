@@ -93,12 +93,12 @@
 <context>
     <name>ContactField</name>
     <message>
-        <location filename="../app/qml/ContactField.qml" line="117" />
+        <location filename="../app/qml/ContactField.qml" line="122" />
         <source>Feld %1</source>
         <translation>Feld %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ContactField.qml" line="117" />
+        <location filename="../app/qml/ContactField.qml" line="122" />
         <source>Spannungsanzeige %1 von 4</source>
         <translation>Spannungsanzeig %1 vu 4</translation>
     </message>
@@ -115,7 +115,7 @@
         <location filename="../app/qml/ControlDesk.qml" line="57" />
         <location filename="../app/qml/ControlDesk.qml" line="57" />
         <source>%1 V</source>
-        <translation type="unfinished" />
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../app/qml/ControlDesk.qml" line="60" />
@@ -436,17 +436,17 @@
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="163" />
         <source>U = R · I = %1 · %2</source>
-        <translation type="unfinished" />
+        <translation>U = R · I = %1 · %2</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="164" />
         <source>R = U ÷ I = %1 ÷ %2</source>
-        <translation type="unfinished" />
+        <translation>R = U ÷ I = %1 ÷ %2</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="165" />
         <source>I = U ÷ R = %1 ÷ %2</source>
-        <translation type="unfinished" />
+        <translation>I = U ÷ R = %1 ÷ %2</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="179" />
@@ -522,17 +522,17 @@
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="239" />
         <source>P = U · I</source>
-        <translation type="unfinished" />
+        <translation>P = U · I</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="240" />
         <source>P = I · I · R</source>
-        <translation type="unfinished" />
+        <translation>P = I · I · R</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="240" />
         <source>P = U · U ÷ R</source>
-        <translation type="unfinished" />
+        <translation>P = U · U ÷ R</translation>
     </message>
     <message>
         <location filename="../app/qml/FormulaCalculator.qml" line="241" />
@@ -1296,7 +1296,7 @@
     <message>
         <location filename="../app/qml/Lab.qml" line="851" />
         <source>1–%1</source>
-        <translation type="unfinished" />
+        <translation>1–%1</translation>
     </message>
     <message>
         <location filename="../app/qml/Lab.qml" line="372" />
@@ -1510,7 +1510,7 @@
     <message>
         <location filename="../app/qml/Lab.qml" line="1361" />
         <source>%1 V</source>
-        <translation type="unfinished" />
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../app/qml/Lab.qml" line="1371" />
@@ -2014,7 +2014,7 @@
         <location filename="../app/qml/ModuleInside.qml" line="272" />
         <location filename="../app/qml/ModuleInside.qml" line="308" />
         <source>%1 V</source>
-        <translation type="unfinished" />
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../app/qml/ModuleInside.qml" line="233" />
@@ -2587,47 +2587,47 @@
 <context>
     <name>ParentGate</name>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="77" />
+        <location filename="../app/qml/ParentGate.qml" line="83" />
         <source>Für Erwachsene</source>
         <translation>Fir Erwuessener</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="85" />
+        <location filename="../app/qml/ParentGate.qml" line="91" />
         <source>Bitte geben Sie die PIN für den Elternbereich ein.</source>
         <translation>Gitt w.e.g. de PIN fir den Elterenberäich an.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="109" />
+        <location filename="../app/qml/ParentGate.qml" line="115" />
         <source>Zu viele Versuche. Bitte warten Sie %1 Sekunden.</source>
         <translation>Ze vill Versich. Waart w.e.g. %1 Sekonnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="110" />
+        <location filename="../app/qml/ParentGate.qml" line="116" />
         <source>Die PIN stimmt nicht.</source>
         <translation>De PIN stëmmt net.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="126" />
+        <location filename="../app/qml/ParentGate.qml" line="132" />
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="139" />
+        <location filename="../app/qml/ParentGate.qml" line="145" />
         <source>Ziffer löschen</source>
         <translation>Ziffer läschen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="153" />
+        <location filename="../app/qml/ParentGate.qml" line="159" />
         <source>PIN vergessen? Dann lässt sich Volta nur zurücksetzen, indem Sie die App-Daten löschen (Android: Einstellungen, Apps, Volta 1, Speicher, Daten löschen). Dabei gehen auch Fortschritt und Forscherheft verloren.</source>
         <translation>PIN vergiess? Dann léisst sech Volta nëmmen zrécksetzen, andeems Dir d'App-Donnéeën läscht (Android: Astellungen, Apps, Volta 1, Späicher, Donnéeën läschen). Dobäi ginn och Fortschrëtt a Fuerscherheft verluer.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="166" />
+        <location filename="../app/qml/ParentGate.qml" line="172" />
         <source>PIN vergessen?</source>
         <translation>PIN vergiess?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="172" />
+        <location filename="../app/qml/ParentGate.qml" line="178" />
         <source>Abbrechen</source>
         <translation>Ofbriechen</translation>
     </message>
@@ -2642,12 +2642,12 @@
     <message>
         <location filename="../app/qml/PartItem.qml" line="122" />
         <source>%1 °C</source>
-        <translation type="unfinished" />
+        <translation>%1 °C</translation>
     </message>
     <message>
         <location filename="../app/qml/PartItem.qml" line="124" />
         <source>%1 V</source>
-        <translation type="unfinished" />
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../app/qml/PartItem.qml" line="177" />
@@ -2867,7 +2867,7 @@
         <location filename="../app/qml/RecorderPanel.qml" line="112" />
         <location filename="../app/qml/RecorderPanel.qml" line="164" />
         <source>%1 s</source>
-        <translation type="unfinished" />
+        <translation>%1 s</translation>
     </message>
     <message>
         <location filename="../app/qml/RecorderPanel.qml" line="124" />
@@ -2901,7 +2901,7 @@
         <location filename="../app/qml/SchematicView.qml" line="27" />
         <location filename="../app/qml/SchematicView.qml" line="37" />
         <source>%1 V</source>
-        <translation type="unfinished" />
+        <translation>%1 V</translation>
     </message>
     <message>
         <location filename="../app/qml/SchematicView.qml" line="44" />
@@ -2983,57 +2983,66 @@
         <translation>Mat dësem Code kann Volta näischt ufänken.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="50" />
+        <location filename="../app/qml/TaskDialog.qml" line="54" />
         <source>Hat dir deine Lehrkraft einen Code gegeben? Tippe ihn hier ein.</source>
         <translation>Huet däin Enseignant der e Code ginn? Tipp en hei an.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="67" />
         <source>Code der Lehrkraft</source>
-        <translation>Code vum Enseignant</translation>
+        <translation type="vanished">Code vum Enseignant</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="73" />
+        <location filename="../app/qml/TaskDialog.qml" line="88" />
+        <source>Code der Lehrkraft, erster Teil</source>
+        <translation>Code vum Enseignant, éischten Deel</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TaskDialog.qml" line="104" />
+        <source>Code der Lehrkraft, zweiter Teil</source>
+        <translation>Code vum Enseignant, zweeten Deel</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TaskDialog.qml" line="110" />
         <source>Aufgabe öffnen</source>
         <translation>Aufgab opmaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="78" />
+        <location filename="../app/qml/TaskDialog.qml" line="115" />
         <source>Der Code stimmt nicht. Prüfe jeden Buchstaben und jede Zahl.</source>
         <translation>De Code stëmmt net. Préif all Buschtaf an all Zuel.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="89" />
+        <location filename="../app/qml/TaskDialog.qml" line="126" />
         <source>Deine Lehrkraft hat eine Aufgabe für dich!</source>
         <translation>Däin Enseignant huet eng Aufgab fir dech!</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="100" />
+        <location filename="../app/qml/TaskDialog.qml" line="137" />
         <source>Stufe %1: %2</source>
         <translation>Stuf %1: %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="110" />
+        <location filename="../app/qml/TaskDialog.qml" line="147" />
         <source>Aufbau öffnen: %1</source>
         <translation>Opbau opmaachen: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="110" />
+        <location filename="../app/qml/TaskDialog.qml" line="147" />
         <source>Aufbau der Lehrkraft</source>
         <translation>Opbau vum Enseignant</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="122" />
+        <location filename="../app/qml/TaskDialog.qml" line="159" />
         <source>Anderen Code eingeben</source>
         <translation>Aneren Code aginn</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="129" />
+        <location filename="../app/qml/TaskDialog.qml" line="166" />
         <source>Aufgabe entfernen</source>
         <translation>Aufgab ewechhuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="135" />
+        <location filename="../app/qml/TaskDialog.qml" line="172" />
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
@@ -3348,7 +3357,7 @@
         <location filename="../app/qml/Texts.qml" line="151" />
         <location filename="../app/qml/Texts.qml" line="154" />
         <source>%1 × %2</source>
-        <translation type="unfinished" />
+        <translation>%1 × %2</translation>
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="153" />
@@ -3540,7 +3549,7 @@
     <message>
         <location filename="../app/qml/ToolboxPanel.qml" line="298" />
         <source>z. B. 4,7k</source>
-        <translation type="unfinished" />
+        <translation>z. B. 4,7k</translation>
     </message>
     <message>
         <location filename="../app/qml/ToolboxPanel.qml" line="305" />
@@ -3679,7 +3688,7 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="247" />
         <source>1–%1</source>
-        <translation type="unfinished" />
+        <translation>1–%1</translation>
     </message>
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="259" />

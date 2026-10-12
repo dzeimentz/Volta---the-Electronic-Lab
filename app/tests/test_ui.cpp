@@ -1286,6 +1286,26 @@ private slots:
         QCOMPARE(lab.parts().first().toMap().value(QStringLiteral("type")).toString(), QStringLiteral("gluehlampe"));
     }
 
+    // Code der Lehrkraft: zwei Haelften mit festem Strich, nach vier Zeichen geht es im zweiten Feld weiter
+    void taskCodeTyping() {
+        QObject* dlg = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("taskDialog"));
+        m_lab->clearTask();
+        QMetaObject::invokeMethod(dlg, "openTask");
+        QTRY_VERIFY(dlg->property("opened").toBool());
+        QQuickItem* first = item(QStringLiteral("taskCodeField"));
+        QQuickItem* second = item(QStringLiteral("taskCodeField2"));
+        QTRY_VERIFY(first && first->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(first));
+        const QString code = m_lab->makeTaskCode({QStringLiteral("volta1.1.1")}).remove(QLatin1Char('-'));
+        for (QChar c : code) QTest::keyClick(m_window, c.toLatin1());
+        QCOMPARE(first->property("text").toString().toUpper(), code.left(4));
+        QCOMPARE(second->property("text").toString().toUpper(), code.mid(4));
+        QTest::keyClick(m_window, Qt::Key_Return);
+        QTRY_VERIFY(m_lab->task().value(QStringLiteral("ok")).toBool());
+        QMetaObject::invokeMethod(dlg, "close");
+        m_lab->clearTask();
+    }
+
     // Maskottchen Tick: alle Stimmungsbilder eingebunden, Begruessung auf der Startseite, im Elternbereich
     // abschaltbar - dann bleibt der Text als Kasten stehen
     void tickMascot() {

@@ -26,9 +26,13 @@ Popup {
         entering = !hasTask
         message = ""
         codeField.text = ""
+        codeField2.text = ""
         open()
     }
 
+    // beim Eingeben gleich mit dem Cursor im ersten Feld beginnen
+    onOpened: if (entering) codeField.forceActiveFocus()
+    onEnteringChanged: if (entering && opened) Qt.callLater(() => codeField.forceActiveFocus())
     objectName: "taskDialog"
     anchors.centerIn: Overlay.overlay
     width: Math.min(620, parent ? parent.width - 32 : 620)
@@ -52,19 +56,52 @@ Popup {
         Row {
             visible: dlg.entering
             spacing: 10
-            TextField {
-                id: codeField
-                objectName: "taskCodeField"
-                width: 240
+            // Code in zwei Haelften mit festem Trennstrich: ist die erste voll, geht es in der zweiten weiter; ein
+            // eingefuegter ganzer Code (mit oder ohne Strich) wird aufgeteilt; Ruecktaste in der leeren zweiten Haelfte
+            // springt zurueck
+            component CodePart: TextField {
+                width: 112
                 height: Theme.control
-                placeholderText: "ABCD-EFGH"
-                font.pixelSize: 22
+                horizontalAlignment: TextInput.AlignHCenter
+                placeholderText: "····"
+                font.pixelSize: 24
                 font.family: "monospace"
                 font.capitalization: Font.AllUppercase
-                inputMethodHints: Qt.ImhUppercaseOnly | Qt.ImhNoPredictiveText
+                inputMethodHints: Qt.ImhUppercaseOnly | Qt.ImhNoPredictiveText | Qt.ImhPreferLatin
+                validator: RegularExpressionValidator { regularExpression: /[0-9A-Za-z]{0,4}/ }
+                onAccepted: if (openButton.enabled) openButton.clicked()
+            }
+            CodePart {
+                id: codeField
+                objectName: "taskCodeField"
+                // ganzer Code eingefuegt: der Pruefer laesst ihn erst gar nicht durch, darum vorher abfangen
+                validator: null
                 maximumLength: 12
-                onAccepted: openButton.clicked()
-                Accessible.name: qsTr("Code der Lehrkraft")
+                onTextChanged: {
+                    const clean = text.replace(/[^0-9A-Za-z]/g, "")
+                    if (clean.length > 4 || clean !== text) {
+                        codeField2.text = clean.substring(4, 8)
+                        text = clean.substring(0, 4)
+                    }
+                    if (text.length === 4 && activeFocus) codeField2.forceActiveFocus()
+                }
+                Accessible.name: qsTr("Code der Lehrkraft, erster Teil")
+            }
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "–"
+                font.pixelSize: 28
+                font.bold: true
+                color: Theme.navy
+                Accessible.ignored: true
+            }
+            CodePart {
+                id: codeField2
+                objectName: "taskCodeField2"
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Key_Backspace && text.length === 0) { codeField.forceActiveFocus(); event.accepted = true }
+                }
+                Accessible.name: qsTr("Code der Lehrkraft, zweiter Teil")
             }
             Button {
                 id: openButton
@@ -72,9 +109,9 @@ Popup {
                 height: Theme.control
                 text: qsTr("Aufgabe öffnen")
                 font.bold: true
-                enabled: codeField.text.trim().length >= 8
+                enabled: codeField.text.length === 4 && codeField2.text.length === 4
                 onClicked: {
-                    if (dlg.controller.acceptTask(codeField.text)) { dlg.entering = false; dlg.message = "" }
+                    if (dlg.controller.acceptTask(codeField.text + "-" + codeField2.text)) { dlg.entering = false; dlg.message = "" }
                     else dlg.message = qsTr("Der Code stimmt nicht. Prüfe jeden Buchstaben und jede Zahl.")
                 }
             }
@@ -120,7 +157,7 @@ Popup {
                 visible: !dlg.entering
                 height: Theme.control
                 text: qsTr("Anderen Code eingeben")
-                onClicked: { dlg.entering = true; dlg.message = ""; codeField.text = "" }
+                onClicked: { dlg.entering = true; dlg.message = ""; codeField.text = ""; codeField2.text = "" }
             }
             Button {
                 objectName: "taskRemove"

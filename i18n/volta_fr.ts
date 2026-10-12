@@ -93,12 +93,12 @@
 <context>
     <name>ContactField</name>
     <message>
-        <location filename="../app/qml/ContactField.qml" line="117" />
+        <location filename="../app/qml/ContactField.qml" line="122" />
         <source>Feld %1</source>
         <translation>Case %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ContactField.qml" line="117" />
+        <location filename="../app/qml/ContactField.qml" line="122" />
         <source>Spannungsanzeige %1 von 4</source>
         <translation>Indicateur de tension %1 sur 4</translation>
     </message>
@@ -2655,47 +2655,47 @@
 <context>
     <name>ParentGate</name>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="77" />
+        <location filename="../app/qml/ParentGate.qml" line="83" />
         <source>Für Erwachsene</source>
         <translation>Pour les adultes</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="85" />
+        <location filename="../app/qml/ParentGate.qml" line="91" />
         <source>Bitte geben Sie die PIN für den Elternbereich ein.</source>
         <translation>Veuillez saisir le code PIN de l'espace parents.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="109" />
+        <location filename="../app/qml/ParentGate.qml" line="115" />
         <source>Zu viele Versuche. Bitte warten Sie %1 Sekunden.</source>
         <translation>Trop d'essais. Veuillez patienter %1 secondes.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="110" />
+        <location filename="../app/qml/ParentGate.qml" line="116" />
         <source>Die PIN stimmt nicht.</source>
         <translation>Le code PIN est incorrect.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="126" />
+        <location filename="../app/qml/ParentGate.qml" line="132" />
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="139" />
+        <location filename="../app/qml/ParentGate.qml" line="145" />
         <source>Ziffer löschen</source>
         <translation>Effacer le chiffre</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="153" />
+        <location filename="../app/qml/ParentGate.qml" line="159" />
         <source>PIN vergessen? Dann lässt sich Volta nur zurücksetzen, indem Sie die App-Daten löschen (Android: Einstellungen, Apps, Volta 1, Speicher, Daten löschen). Dabei gehen auch Fortschritt und Forscherheft verloren.</source>
         <translation>Code PIN oublié ? Volta ne peut alors être réinitialisé qu'en effaçant les données de l'application (Android : Paramètres, Applications, Volta 1, Stockage, Effacer les données). La progression et le cahier de recherche sont alors aussi perdus.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="166" />
+        <location filename="../app/qml/ParentGate.qml" line="172" />
         <source>PIN vergessen?</source>
         <translation>Code PIN oublié ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ParentGate.qml" line="172" />
+        <location filename="../app/qml/ParentGate.qml" line="178" />
         <source>Abbrechen</source>
         <translation>Annuler</translation>
     </message>
@@ -3051,57 +3051,66 @@
         <translation>Volta ne peut rien faire avec ce code.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="50" />
+        <location filename="../app/qml/TaskDialog.qml" line="54" />
         <source>Hat dir deine Lehrkraft einen Code gegeben? Tippe ihn hier ein.</source>
         <translation>Ton enseignant t'a donné un code ? Tape-le ici.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="67" />
         <source>Code der Lehrkraft</source>
-        <translation>Code de l'enseignant</translation>
+        <translation type="vanished">Code de l'enseignant</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="73" />
+        <location filename="../app/qml/TaskDialog.qml" line="88" />
+        <source>Code der Lehrkraft, erster Teil</source>
+        <translation>Code de l'enseignant, première partie</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TaskDialog.qml" line="104" />
+        <source>Code der Lehrkraft, zweiter Teil</source>
+        <translation>Code de l'enseignant, deuxième partie</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TaskDialog.qml" line="110" />
         <source>Aufgabe öffnen</source>
         <translation>Ouvrir la tâche</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="78" />
+        <location filename="../app/qml/TaskDialog.qml" line="115" />
         <source>Der Code stimmt nicht. Prüfe jeden Buchstaben und jede Zahl.</source>
         <translation>Le code n'est pas correct. Vérifie chaque lettre et chaque chiffre.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="89" />
+        <location filename="../app/qml/TaskDialog.qml" line="126" />
         <source>Deine Lehrkraft hat eine Aufgabe für dich!</source>
         <translation>Ton enseignant a une tâche pour toi !</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="100" />
+        <location filename="../app/qml/TaskDialog.qml" line="137" />
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="110" />
+        <location filename="../app/qml/TaskDialog.qml" line="147" />
         <source>Aufbau öffnen: %1</source>
         <translation>Ouvrir le montage : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="110" />
+        <location filename="../app/qml/TaskDialog.qml" line="147" />
         <source>Aufbau der Lehrkraft</source>
         <translation>Montage de l'enseignant</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="122" />
+        <location filename="../app/qml/TaskDialog.qml" line="159" />
         <source>Anderen Code eingeben</source>
         <translation>Saisir un autre code</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="129" />
+        <location filename="../app/qml/TaskDialog.qml" line="166" />
         <source>Aufgabe entfernen</source>
         <translation>Supprimer la tâche</translation>
     </message>
     <message>
-        <location filename="../app/qml/TaskDialog.qml" line="135" />
+        <location filename="../app/qml/TaskDialog.qml" line="172" />
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
