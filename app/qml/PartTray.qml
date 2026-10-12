@@ -41,6 +41,8 @@ Rectangle {
             id: trayRow
             anchors.centerIn: parent
             spacing: 6
+            // lange Namen (FR »Boîte à composants | Casier à modules«) verkleinern statt abschneiden
+            scale: Math.min(1, (parent.width - 4) / Math.max(1, implicitWidth))
             Repeater {
                 model: [qsTr("Bauteilfach"), "|", qsTr("Modulfach")]
                 Label {
