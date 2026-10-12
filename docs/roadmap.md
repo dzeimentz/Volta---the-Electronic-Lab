@@ -4,17 +4,25 @@ Aufwaende in Personentagen (PT) eines erfahrenen Einzelentwicklers. Jede Phase e
 
 | Phase | Inhalt | PT | Ergebnis | Status |
 |---|---|---|---|---|
-| 0 Grundlagen | Marktsichtung, Markenrecherche, Kalibrierung Bauteilmodelle, Simulationskern (MNA, Newton, Thermik, Teilschaltungen, Messschnittstelle), Testsuite, Qt-Projektgeruest Android + Desktop, Uebernahme Grafikschicht aus VTS | 25 | getesteter Kern | **aktiv** |
-| 1 Prototyp | Grundplatte, Bedienpult I, gezogene Leitungen, Undo/Redo, Spannungsanzeige, 6 Bauteile Stufe 1, Stromfluss, 3 Experimente | 25 | spielbarer Android-Prototyp, Erprobung mit Kindern | offen |
-| 2 Inhalt Stufen 1–2 | Lernpfad-Engine, Forschungskreislauf, Hilfen, Vorlesen, Blink-/Tonmodul mit »Blick hinein«, Schaltplan, Farbcode/E-Reihen, Lexikon, ~30 Experimente | 40 | inhaltlich vollstaendige Beta | offen |
-| 3 Android 1.0 | Forscherheft, Elternbereich, Readme, Info, Flaggensymbol, Autosave, Profile, Klassenmodus, verwaltete Konfiguration, Barrierefreiheit, Store, Pilot | 25 | Veroeffentlichung Android | offen |
-| 4 Stufen 3–4 | Dreifach-Messgeraet, Lichtring, Klanganzeige, Formelrechner, Zeitschreiber, Fehlersuche, Teileliste, Transistor, Zeit-/Verstaerkermodul, Lichtsensor, ~30 Experimente | 45 | Version 1.5 | offen |
-| 5a Desktop x86-64 | Maus/Tastatur, Fenster, MSIX/MSI, AppImage, Konfiguration, Test auf Schulrechner und Tafel | 15 | Windows + Linux | offen |
+| 0 Grundlagen | Marktsichtung, Markenrecherche, Kalibrierung Bauteilmodelle, Simulationskern (MNA, Newton, Thermik, Teilschaltungen, Messschnittstelle), Testsuite, Qt-Projektgeruest Android + Desktop, Uebernahme Grafikschicht aus VTS | 25 | getesteter Kern | erledigt bis auf Kalibrierung an realem Material und Leistungsmessung auf Tablets |
+| 1 Prototyp | Grundplatte, Bedienpult I, gezogene Leitungen, Undo/Redo, Spannungsanzeige, 6 Bauteile Stufe 1, Stromfluss, 3 Experimente | 25 | spielbarer Android-Prototyp, Erprobung mit Kindern | erledigt; Erprobung mit Kindern offen |
+| 2 Inhalt Stufen 1–2 | Lernpfad-Engine, Forschungskreislauf, Hilfen, Vorlesen, Blink-/Tonmodul mit »Blick hinein«, Schaltplan, Farbcode/E-Reihen, Lexikon, ~30 Experimente | 40 | inhaltlich vollstaendige Beta | erledigt |
+| 3 Android 1.0 | Forscherheft, Elternbereich, Readme, Info, Flaggensymbol, Autosave, Profile, Klassenmodus, verwaltete Konfiguration, Barrierefreiheit, Store, Pilot | 25 | Veroeffentlichung Android | **Testphase 0.9** – App fertig, Store vorbereitet; offen: Pilot, Konto, Anschrift, Markenbewertung |
+| 4 Stufen 3–4 | Dreifach-Messgeraet, Lichtring, Klanganzeige, Formelrechner, Zeitschreiber, Fehlersuche, Teileliste, Transistor, Zeit-/Verstaerkermodul, Lichtsensor, ~30 Experimente | 45 | Version 1.5 | erledigt (vorgezogen, Teil von 1.0) |
+| 5a Desktop x86-64 | Maus/Tastatur, Fenster, MSIX/MSI, AppImage, Konfiguration, Test auf Schulrechner und Tafel | 15 | Windows + Linux | teilweise: Windows-Ausgabe laeuft; offen Installer (MSIX/MSI), AppImage, Test an Schulrechner und Tafel |
 | 5b iPad | Anpassung, Pencil, Qt-Lizenz iOS, Kinderkategorie | 20 | iPadOS | offen |
-| 6 Ausbau | Lehrkraftmodus, FR, EN, LU mit Aufnahmen | 50 | Version 2.0 | offen |
-| 7 Schulpaket | Handreichung, Arbeitsblaetter, Lehrplanbezug DE/LU/Ostbelgien, Datenschutz-Merkblatt, Praesentationsmodus, Fortschrittscode | 30 | Schulfreigabe | offen |
+| 6 Ausbau | Lehrkraftmodus, FR, EN, LU mit Aufnahmen | 50 | Version 2.0 | teilweise: FR, EN, LU als Text, Aufgaben der Lehrkraft per QR-Code/Code; offen Tonaufnahmen |
+| 7 Schulpaket | Handreichung, Arbeitsblaetter, Lehrplanbezug DE/LU/Ostbelgien, Datenschutz-Merkblatt, Praesentationsmodus, Fortschrittscode | 30 | Schulfreigabe | teilweise: Praesentationsmodus, Fortschrittscode, Anleitungen (PDF); offen Arbeitsblaetter, Lehrplanbezug, Datenschutz-Merkblatt |
 
 Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
+
+## Stand Version 0.9.0 (13.10.2026)
+Volta 1 ist inhaltlich vollstaendig (61 Experimente, Stufen 0–4, alle Bauteile und Module, Werkzeugkasten,
+Messgeraet, Zeitschreiber, Forscherheft mit Fotos, Elternbereich, Profile, Aufgaben der Lehrkraft, Tick, Hilfe und
+Kurzanleitung, DE/FR/EN/LU). Android: Test-APK arm64/armv7, AAB fuer Google Play (unsigniert). Store-Unterlagen in
+`docs/store/` (Checkliste `docs/store/README.md`), Anleitungen ueber `tools/manual_pdfs.py`.
+Bis 1.0: Erprobung mit Kindern und Pilot mit einer Lehrkraft, Korrekturen als 0.9.x; Schritte des Inhabers
+(Anschrift, Datenschutzerklaerung online, Markenbewertung »Volta«, Entwicklerkonto, Signatur, Verwertungsweg).
 
 ## Offene Entscheidungen
 Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, danach folgt Volta 2
@@ -22,11 +30,11 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 
 | Entscheidung | Spaetestens |
 |---|---|
-| Referenztablet fuer Leistungstests | Beginn Phase 0 |
-| Ergebnis Markenrecherche, ggf. Anmeldung | Ende Phase 0 |
+| ~~Referenztablet fuer Leistungstests~~ Meswoa MES-B3 15,6" (Entwicklung), A10 10,1" (Pruefung); Messung offen | Beginn Phase 0 |
+| Ergebnis Markenrecherche, ggf. Anmeldung – Vorrecherche erledigt (`docs/store/markenpruefung.md`), anwaltliche Bewertung offen | vor 1.0 |
 | Geraetelage Zielschulen, Reihenfolge Android/Desktop/iPad | Ende Phase 0 |
-| Gestalt und Name der Begleitfigur | Ende Phase 1 |
-| Verwertungsweg (frei, Einmalkauf, Schullizenz) | Ende Phase 2 |
+| ~~Gestalt und Name der Begleitfigur~~ entschieden: Tick (`docs/maskottchen-tick.md`) | Ende Phase 1 |
+| Verwertungsweg (frei, Einmalkauf, Schullizenz) | vor dem Store-Eintrag |
 | Mitwirkung der Lehrkraft am Pilot | Beginn Phase 3 |
 | Qt-Lizenzweg fuer iPadOS | vor Phase 5b |
 | Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich | vor Phase 3 |
@@ -40,7 +48,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
   mit Erklaerung; Erfolgspruefung im Simulations-Thread (`StepObserver`). Lokales Release: `tools/deploy_release.py`.
 - Nach Phase 1 vorgezogen: Sprachumschaltung DE/FR/EN (LU folgt) und Info oben rechts, Startbildschirm (Desktop),
   Dreifach-Messgeraet bedienbar (Phase 4), Breite der Grundplatte 8/10/12, Transistor auf 2-x-2-Platine.
-- Offen: Android-Build (Kit fehlt auf dem Entwicklungsrechner), Erprobung mit Kindern, Begleitfigur.
+- Offen: Erprobung mit Kindern (Android-Build und Begleitfigur Tick inzwischen erledigt).
 
 ## Phase 2 – Stand (Inhalt Stufen 1–2)
 - D1 Startseite mit Lernpfad, Freischaltung und gespeichertem Fortschritt: erledigt.
@@ -57,7 +65,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 - Tonausgabe ueber die Soundkarte (Pult-Lautsprecher, Summer, Knacken je Impuls) und Vorlesen ueber die
   Systemstimme (DE/FR/EN): erledigt (ADR-0009).
 - Meldungen des Modells und Befehlsnamen (Rueckgaengig) uebersetzbar: erledigt.
-- Offen in Phase 2: LU-Texte, muttersprachliche Pruefung FR/EN.
+- LU-Texte und Gegenlesen FR/EN: erledigt (10/2026).
 
 ## Phase 4 – Stand (Stufen 3–4)
 - Bauteile der Stufe 3 im Kern: Fotowiderstand, Heissleiter, Elektromagnet, Relais (Referenztests); Licht und
@@ -81,11 +89,13 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 - Elternschranke und Elternbereich (Freigaben, Zuruecksetzen, Datenschutz, Vereinfachungen, Kontakt): erledigt.
 - Forscherprofile (Symbol, Spitzname, getrennte Daten, Verwaltung im Elternbereich) und Mitnahme per Datei und
   QR-Code (Fortschritt ohne Namen): erledigt.
-- Klassenmodus Ton und verwaltete Konfiguration (Android, Windows, Linux): erledigt; Fotoimport und
-  Praesentationsmodus folgen.
-- Paketgroesse: APK 68,9 MB (Ziel < 80 MB), ungenutzte Qt-Teile werden nicht ausgeliefert (docs/platforms.md).
-- Offen: Maskottchen Tick (docs/maskottchen-tick.md) in Hilfe, Startbildschirm, Hilfestufen, Fehlersuche und
-  Erfolg (erledigt bis auf Hilfe); Teileliste/Aufbaukarte (erledigt); Hilfe mit Tick (erledigt, Uebungsplatten offen); Barrierefreiheit; Fotoimport, Praesentationsmodus; LU-Texte; Store.
+- Klassenmodus Ton und verwaltete Konfiguration (Android, Windows, Linux), Fotoimport ins Forscherheft,
+  Praesentationsmodus: erledigt.
+- Paketgroesse: Test-APK 57,5 MB, AAB 44,4 MB (Ziel < 80 MB), ungenutzte Qt-Teile werden nicht ausgeliefert
+  (docs/platforms.md).
+- Maskottchen Tick in Startseite, Hilfe, Hilfestufen, Fehlersuche und Erfolg; Hilfe und Kurzanleitung in der App;
+  Teileliste/Aufbaukarte; Barrierefreiheit; LU-Texte: erledigt. Store-Unterlagen vorbereitet (`docs/store/`).
+- Offen: Uebungsplatten in der Hilfe; Pilot; Schritte des Inhabers fuer den Store.
 
 ## Naechste konkrete Schritte (Phase 0)
 1. ~~`core/`: `Circuit`, `Simulator`, dichte LU, Widerstand, Quelle, Diode/LED mit Newton, Referenztests 1–4.~~ erledigt
