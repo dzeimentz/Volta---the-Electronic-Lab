@@ -157,7 +157,7 @@ Popup {
                         width: pinLabel.implicitWidth + 14
                         height: 24
                         radius: 12
-                        color: Theme.fieldSilver
+                        color: Theme.fieldMetal
                         border.color: Theme.fieldEdge
                         Label { id: pinLabel; anchors.centerIn: parent; text: parent.text; font.bold: true; color: Theme.navy; font.pixelSize: 13 }
                     }

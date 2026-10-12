@@ -3669,6 +3669,11 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <location filename="../app/qml/TopBarActions.qml" line="212"/>
+        <source>Kontaktfelder silbern (sonst Messing)</source>
+        <translation>Bornes argentées (sinon laiton)</translation>
+    </message>
+    <message>
         <location filename="../app/qml/TopBarActions.qml" line="32" />
         <source>Schrift kleiner</source>
         <translation>Texte plus petit</translation>

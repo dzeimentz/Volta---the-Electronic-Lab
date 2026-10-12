@@ -1110,6 +1110,17 @@ private slots:
         m_lab->startFreeLab();
     }
 
+    // Kontaktfelder silbern oder messingfarben (Einstellung, Menue und Theme folgen)
+    void silverFields() {
+        QObject* item = m_window->findChild<QObject*>(QStringLiteral("settingSilverFields"));
+        QVERIFY(item);
+        QVERIFY(item->property("checked").toBool());
+        m_settings->setSilverFields(false);
+        QTRY_VERIFY(!item->property("checked").toBool());
+        m_settings->setSilverFields(true);
+        QTRY_VERIFY(item->property("checked").toBool());
+    }
+
     // Summer und Piezo-Schallgeber klingen beide (gleiches Modell »buzzer«)
     void piezoSounds() {
         m_settings->setUnlockAll(true);

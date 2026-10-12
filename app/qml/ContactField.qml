@@ -19,10 +19,10 @@ Rectangle {
     signal menuRequested(point scenePos)
 
     radius: 6
-    // silberner Metallglanz statt flacher Farbe
+    // Metallglanz statt flacher Farbe (Silber oder Messing, Theme.silverFields)
     gradient: Gradient {
         GradientStop { position: 0.0; color: Theme.fieldShine }
-        GradientStop { position: 0.42; color: Theme.fieldSilver }
+        GradientStop { position: 0.42; color: Theme.fieldMetal }
         GradientStop { position: 0.58; color: Theme.fieldShade }
         GradientStop { position: 1.0; color: Theme.fieldGlow }
     }

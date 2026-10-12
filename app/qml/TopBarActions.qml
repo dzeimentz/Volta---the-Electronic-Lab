@@ -213,6 +213,15 @@ Row {
                 ToolTip.text: qsTr("Lernpfad 8, freies Labor 12 Felder je Reihe; Messgerät daneben 10, im Pult 12")
             }
             MenuItem {
+                objectName: "settingSilverFields"
+                height: Theme.control
+                text: qsTr("Kontaktfelder silbern (sonst Messing)")
+                checkable: true
+                enabled: bar.settings !== null
+                checked: bar.settings ? bar.settings.silverFields : true
+                onTriggered: bar.settings.silverFields = checked
+            }
+            MenuItem {
                 objectName: "settingMotion"
                 height: Theme.control
                 text: qsTr("Animationen reduzieren")

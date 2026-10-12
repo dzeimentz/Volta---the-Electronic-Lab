@@ -14,15 +14,16 @@ QtObject {
     readonly property color board: "#F7F3EA"
     readonly property color field: "#CFC5AE"
     readonly property color fieldOutline: "#9C9079"
-    // leicht spiegelnder Metallglanz der Kontaktfelder (Silber, vernickeltes Blech): heller Glanz oben,
-    // Schattenkante in der Mitte, Rueckstrahlung unten; Theme.field bleibt die mittlere Tonlage
-    readonly property color fieldSilver: "#D2D7DD"
-    readonly property color fieldShine: "#F8FAFC"
-    readonly property color fieldShade: "#AEB5BE"
-    readonly property color fieldGlow: "#DCE1E7"
-    readonly property color fieldEdge: "#858D98"
-    readonly property color socket: "#59606A"
-    readonly property color socketEdge: "#3D434B"
+    // leicht spiegelnder Metallglanz der Kontaktfelder: heller Glanz oben, Schattenkante in der Mitte,
+    // Rueckstrahlung unten. Einstellung: Silber (vernickeltes Blech, Standard) oder Messing (verzinnt, warm)
+    property bool silverFields: true
+    readonly property color fieldMetal: silverFields ? "#D2D7DD" : field
+    readonly property color fieldShine: silverFields ? "#F8FAFC" : "#F2EEE4"
+    readonly property color fieldShade: silverFields ? "#AEB5BE" : "#B8AD93"
+    readonly property color fieldGlow: silverFields ? "#DCE1E7" : "#DDD5C2"
+    readonly property color fieldEdge: silverFields ? "#858D98" : fieldOutline
+    readonly property color socket: silverFields ? "#59606A" : "#6E6553"
+    readonly property color socketEdge: silverFields ? "#3D434B" : "#4F4839"
     readonly property color destroyed: "#4A4A4A"
 
     // Leitungsfarben (docs/domain-model.md)

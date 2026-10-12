@@ -3597,6 +3597,11 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <location filename="../app/qml/TopBarActions.qml" line="212"/>
+        <source>Kontaktfelder silbern (sonst Messing)</source>
+        <translation>Kontaktfelder silbern (sonst Messing)</translation>
+    </message>
+    <message>
         <location filename="../app/qml/TopBarActions.qml" line="32"/>
         <source>Schrift kleiner</source>
         <translation type="unfinished"></translation>

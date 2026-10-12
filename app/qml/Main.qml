@@ -69,6 +69,7 @@ ApplicationWindow {
     // Schriftgroesse in drei Stufen (A-/A+ oben rechts)
     // Praesentation: etwas groessere Schrift (Beamer)
     Binding { target: Theme; property: "fontScale"; value: (root.settings ? [0.8, 0.9, 1.0][root.settings.fontLevel] : 1.0) * (labController.presentation ? 1.1 : 1.0) }
+    Binding { target: Theme; property: "silverFields"; value: root.settings ? root.settings.silverFields : true }
     Binding { target: Theme; property: "tick"; value: root.settings ? root.settings.tickEnabled : true }
     font.pixelSize: Math.round(15 * Theme.fontScale)
 

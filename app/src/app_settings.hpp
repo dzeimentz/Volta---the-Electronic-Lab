@@ -31,6 +31,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool meterDocked READ meterDocked WRITE setMeterDocked NOTIFY changed)
     // Breite der Grundplatte automatisch (Lernpfad 8, freies Labor 12, Messgeraet daneben 10, im Pult 12)
     Q_PROPERTY(bool autoBoardColumns READ autoBoardColumns WRITE setAutoBoardColumns NOTIFY changed)
+    // Kontaktfelder silbern (Standard) oder messingfarben, jeweils mit Metallglanz
+    Q_PROPERTY(bool silverFields READ silverFields WRITE setSilverFields NOTIFY changed)
     // Forscherprofile fuer geteilte Geraete (Elternbereich)
     Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY changed)
     // Klassenmodus Ton (Elternbereich): "normal", "kopfhoerer" (nur mit Kopfhoerern) oder "aus"
@@ -69,6 +71,8 @@ public:
     void setMeterDocked(bool on) { set(m_meterDocked, on, "labor/messgeraet_im_pult"); }
     bool autoBoardColumns() const { return m_autoBoardColumns; }
     void setAutoBoardColumns(bool on) { set(m_autoBoardColumns, on, "labor/felder_automatisch"); }
+    bool silverFields() const { return m_silverFields; }
+    void setSilverFields(bool on) { set(m_silverFields, on, "anzeige/felder_silber"); }
     bool profilesEnabled() const { return m_profilesEnabled; }
     bool tickEnabled() const { return m_tickEnabled; }
     void setTickEnabled(bool on) { set(m_tickEnabled, on, "anzeige/tick"); }
@@ -117,6 +121,7 @@ private:
     bool m_meterVisible = false;
     bool m_meterDocked = false;
     bool m_autoBoardColumns = true;
+    bool m_silverFields = true;
     bool m_profilesEnabled = false;
     bool m_tickEnabled = true;
     QString m_classroomSound = QStringLiteral("normal");
