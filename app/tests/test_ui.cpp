@@ -406,7 +406,7 @@ private slots:
         QTRY_VERIFY(item(QStringLiteral("field_E12")));
     }
 
-    // Sprache oben rechts: Menue mit runden Flaggen, LU noch nicht waehlbar; Oberflaeche und Inhalte wechseln
+    // Sprache oben rechts: Menue mit runden Flaggen (DE, FR, EN, LU); Oberflaeche und Inhalte wechseln
     void languageSwitch() {
         m_lab->startExperiment(QStringLiteral("volta1.1.1"));
         QQuickItem* button = item(QStringLiteral("languageButton"));
@@ -415,14 +415,16 @@ private slots:
         QQuickItem* fr = nullptr;
         QTRY_VERIFY((fr = item(QStringLiteral("language_fr"))) != nullptr && fr->isVisible());
         QQuickItem* lb = item(QStringLiteral("language_lb"));
-        QVERIFY(lb && !lb->isEnabled()); // Luxemburgisch folgt
+        QVERIFY(lb && lb->isEnabled());
         QTest::qWait(50);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(fr));
         QTRY_COMPARE(m_language->language(), QStringLiteral("fr"));
         QCOMPARE(m_lab->title(), QStringLiteral("Comment allumer une ampoule ?"));
         QCOMPARE(QCoreApplication::translate("TopBarActions", "Einstellungen"), QStringLiteral("Réglages"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral(","));
-        QVERIFY(!m_language->setLanguage(QStringLiteral("lb")));
+        QVERIFY(m_language->setLanguage(QStringLiteral("lb")));
+        QCOMPARE(m_lab->title(), QStringLiteral("Wéi bréngs du e Bierchend zum Liichten?"));
+        QCOMPARE(QCoreApplication::translate("TopBarActions", "Einstellungen"), QStringLiteral("Astellungen"));
         QVERIFY(m_language->setLanguage(QStringLiteral("en")));
         QCOMPARE(m_lab->title(), QStringLiteral("How do you make a bulb light up?"));
         QCOMPARE(QLocale().decimalPoint(), QStringLiteral("."));

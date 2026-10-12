@@ -21,7 +21,7 @@ struct Language {
 constexpr Language kLanguages[] = {{"de", "DE", "Deutsch", true},
                                    {"fr", "FR", "Français", true},
                                    {"en", "EN", "English", true},
-                                   {"lb", "LU", "Lëtzebuergesch", false}};
+                                   {"lb", "LU", "Lëtzebuergesch", true}};
 } // namespace
 
 LanguageService::LanguageService(QQmlEngine* engine, bool persist, QObject* parent)
