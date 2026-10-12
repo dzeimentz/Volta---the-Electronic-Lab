@@ -1034,6 +1034,32 @@ private slots:
         root->setProperty("inLab", true);
     }
 
+    // Kurzanleitung neben der Hilfe: Knopf auf der Startseite oeffnet sie mit Bild der eigenen Sprache; von dort geht
+    // es in die ausfuehrliche Hilfe
+    void quickGuide() {
+        QObject* root = m_engine->rootObjects().first();
+        QObject* guide = root->findChild<QObject*>(QStringLiteral("quickGuide"));
+        QObject* help = root->findChild<QObject*>(QStringLiteral("helpDialog"));
+        QVERIFY(guide && help);
+        root->setProperty("inLab", false);
+        QTRY_VERIFY(item(QStringLiteral("home"))->isVisible());
+        QVERIFY(item(QStringLiteral("quickGuideButton"))->isVisible()); // auch oben neben dem Fragezeichen
+        QQuickItem* button = item(QStringLiteral("homeQuickGuide"));
+        QVERIFY(button && button->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
+        QTRY_VERIFY(guide->property("opened").toBool());
+        QQuickItem* image = item(QStringLiteral("quickGuideImage"));
+        QVERIFY(image);
+        QTRY_COMPARE(image->property("status").toInt(), 1); // Image.Ready: Bild ist in den Ressourcen
+        QMetaObject::invokeMethod(guide, "close");
+        QTRY_VERIFY(!guide->property("opened").toBool());
+        QMetaObject::invokeMethod(guide, "helpRequested");
+        QTRY_VERIFY(help->property("opened").toBool());
+        QMetaObject::invokeMethod(help, "close");
+        QTRY_VERIFY(!help->property("opened").toBool());
+        root->setProperty("inLab", true);
+    }
+
     // Werkzeugkasten: verdeckte Reiter rechts zeigt ein Pfeil; Antippen rollt die Leiste, dann zeigt er nach links
     void toolboxTabArrows() {
         QObject* box = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("toolbox"));

@@ -3,6 +3,7 @@
 
     python3 tools/manual_pdfs.py            # beide PDFs nach Release/Anleitung/
     python3 tools/manual_pdfs.py --bilder   # vorher die Bildschirmfotos neu aufnehmen
+    python3 tools/manual_pdfs.py --app-bilder   # nur die Bilder der Kurzanleitung in der App (QuickGuide.qml)
 
 - Volta1-Anleitung-de.pdf: ausfuehrliche Anleitung (alle Bereiche der App, Elternbereich, Sicherheit, Bauteile)
 - Volta1-Kurzanleitung-de.pdf: zwei Seiten zum Ausdrucken (erstes Experiment, Bedienung auf einen Blick)
@@ -637,8 +638,7 @@ def long_manual(path):
 def short_manual(path):
     story = [P("Kurzanleitung", "h1"),
              P("In sechs Schritten zum ersten Experiment", "h2")]
-    annotated(SHOTS / "aufbauhilfe.png", OUT / "bilder" / "_kurz_nummern.png",
-              [(1, (196, 230)), (2, (222, 205)), (3, (1255, 455)), (4, (412, 12)), (5, (1255, 712)), (6, (1255, 562))])
+    annotated(SHOTS / "aufbauhilfe.png", OUT / "bilder" / "_kurz_nummern.png", QUICK_MARKS)
     w, h = PILImage.open(OUT / "bilder" / "_kurz_nummern.png").size
     story += [_frame(Image(str(OUT / "bilder" / "_kurz_nummern.png"), width=170 * mm, height=170 * mm * h / w)),
               Spacer(1, 6)]
@@ -695,8 +695,33 @@ def short_manual(path):
     doc.build(story)
 
 
+# Kurzanleitung: Nummern der sechs Schritte im Bild »aufbauhilfe« (1280 x 800); 1 zeigt allgemein auf das Bauteilfach,
+# weil dessen Reihenfolge von der Sprache abhaengt
+QUICK_MARKS = [(1, (196, 140)), (2, (222, 205)), (3, (1255, 455)), (4, (412, 12)), (5, (1255, 712)), (6, (1255, 562))]
+APP_GUIDE = ROOT / "app" / "resources" / "guide"
+
+
+def app_images():
+    """Bild der Kurzanleitung in der App je Sprache: app/resources/guide/kurz_<sprache>.jpg (1024 x 640)."""
+    APP_GUIDE.mkdir(parents=True, exist_ok=True)
+    for lang in ("de", "en", "fr", "lb"):
+        raw = OUT / "bilder" / f"_app_{lang}.png"
+        env = dict(os.environ)
+        env.update({"VOLTA_NO_SPLASH": "1", "VOLTA_DEMO_LANG": lang, "VOLTA_SCREENSHOT": str(raw)})
+        env.update(SCENES["aufbauhilfe"])
+        subprocess.run([str(EXE)], env=env, timeout=60, check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        annotated(raw, raw, QUICK_MARKS)
+        PILImage.open(raw).convert("RGB").resize((1024, 640), PILImage.LANCZOS).save(
+            APP_GUIDE / f"kurz_{lang}.jpg", quality=82, optimize=True)
+        print(f"  App-Bild {lang}: {(APP_GUIDE / f'kurz_{lang}.jpg').stat().st_size // 1024} KB")
+
+
 def main() -> int:
     global S
+    if "--app-bilder" in sys.argv:
+        app_images()
+        return 0
     take_screenshots("--bilder" in sys.argv)
     missing = [n for n in SCENES if not (SHOTS / f"{n}.png").exists()]
     if missing:

@@ -16,6 +16,7 @@ Rectangle {
     signal journalRequested()
     signal infoRequested()
     signal helpRequested()
+    signal quickGuideRequested()
     signal taskRequested()
     signal parentAreaRequested()
 
@@ -72,6 +73,7 @@ Rectangle {
             settings: home.settings
             onInfoRequested: home.infoRequested()
             onHelpRequested: home.helpRequested()
+            onQuickGuideRequested: home.quickGuideRequested()
             onParentAreaRequested: home.parentAreaRequested()
         }
     }
@@ -132,7 +134,7 @@ Rectangle {
             // Tick begruesst (mit Spitzname, wenn ein Forscherprofil aktiv ist); darunter der Weg in die Hilfe
             Item {
                 width: parent.width
-                height: Math.max(homeTick.height, homeHelp.y + homeHelp.height)
+                height: Math.max(homeTick.height, homeGuide.y + homeGuide.height)
                 TickSays {
                     id: homeTick
                     objectName: "homeTick"
@@ -169,6 +171,38 @@ Rectangle {
                     background: Rectangle {
                         radius: Theme.control / 2
                         color: homeHelp.down ? "#FFE9A8" : (homeHelp.hovered ? "#FFF4CC" : "#FFFBEA")
+                        border.color: Theme.accent
+                        border.width: 2
+                    }
+                    Accessible.name: text
+                }
+                // Kurzanleitung gleich daneben (bei wenig Platz darunter)
+                Button {
+                    id: homeGuide
+                    objectName: "homeQuickGuide"
+                    readonly property bool besides: homeHelp.x + homeHelp.width + 12 + implicitWidth <= parent.width
+                    x: besides ? homeHelp.x + homeHelp.width + 12 : homeHelp.x
+                    y: besides ? homeHelp.y : homeHelp.y + homeHelp.height + 10
+                    height: Theme.control
+                    text: qsTr("Kurzanleitung")
+                    font.pixelSize: Math.round(15 * Theme.fontScale)
+                    font.bold: true
+                    leftPadding: 10
+                    rightPadding: 16
+                    onClicked: home.quickGuideRequested()
+                    contentItem: Row {
+                        spacing: 10
+                        GuideIcon { size: 30; anchors.verticalCenter: parent.verticalCenter }
+                        Label {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: homeGuide.text
+                            font: homeGuide.font
+                            color: Theme.navy
+                        }
+                    }
+                    background: Rectangle {
+                        radius: Theme.control / 2
+                        color: homeGuide.down ? "#FFE9A8" : (homeGuide.hovered ? "#FFF4CC" : "#FFFBEA")
                         border.color: Theme.accent
                         border.width: 2
                     }

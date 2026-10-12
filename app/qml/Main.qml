@@ -87,6 +87,7 @@ ApplicationWindow {
         onJournalRequested: root.inJournal = true
         onInfoRequested: infoDialog.open()
         onHelpRequested: helpDialog.open()
+        onQuickGuideRequested: quickGuide.open()
         onTaskRequested: taskDialog.openTask()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
@@ -102,6 +103,7 @@ ApplicationWindow {
         onHomeRequested: { root.inLab = false; if (root.speech) root.speech.stop() }
         onInfoRequested: infoDialog.open()
         onHelpRequested: helpDialog.open()
+        onQuickGuideRequested: quickGuide.open()
         onHelpTopicRequested: (key) => helpDialog.show(key)
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
@@ -116,6 +118,7 @@ ApplicationWindow {
         onBackRequested: root.inJournal = false
         onInfoRequested: infoDialog.open()
         onHelpRequested: helpDialog.open()
+        onQuickGuideRequested: quickGuide.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
     }
@@ -146,6 +149,10 @@ ApplicationWindow {
         controller: labController
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
         onBoardRequested: { if (labController.startTaskBoard()) { root.inJournal = false; root.inLab = true } }
+    }
+    QuickGuide {
+        id: quickGuide
+        onHelpRequested: helpDialog.open()
     }
     HelpDialog {
         id: helpDialog

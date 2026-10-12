@@ -1008,6 +1008,10 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Quick guide</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Home.qml" line="62" />
         <source>Profil wechseln</source>
         <translation>Switch profile</translation>
@@ -3669,6 +3673,10 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Quick guide</translation>
+    </message>
+    <message>
         <location filename="../app/qml/TopBarActions.qml" line="212"/>
         <source>Kontaktfelder silbern (sonst Messing)</source>
         <translation>Silver contact fields (otherwise brass)</translation>
@@ -3829,6 +3837,133 @@
         <location filename="../app/src/lab_controller.cpp" line="1555" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module will be unlocked at level %1.</translation>
+    </message>
+</context>
+<context>
+    <name>QuickGuide</name>
+    <message>
+        <source>Bauteil holen</source>
+        <translation>Get a part</translation>
+    </message>
+    <message>
+        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
+        <translation>Drag a part from the parts tray onto the base board. Everything in the same contact field is connected.</translation>
+    </message>
+    <message>
+        <source>Leitungen ziehen</source>
+        <translation>Draw wires</translation>
+    </message>
+    <message>
+        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
+        <translation>Drag your finger from field to field. Wires to plus turn red, wires to minus black.</translation>
+    </message>
+    <message>
+        <source>Schritt für Schritt</source>
+        <translation>Step by step</translation>
+    </message>
+    <message>
+        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
+        <translation>Read the question, choose your guess and tap “Build step by step”. The target fields blink blue.</translation>
+    </message>
+    <message>
+        <source>Einschalten</source>
+        <translation>Switch on</translation>
+    </message>
+    <message>
+        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
+        <translation>Tap “Build”: the button changes to “Running” and current flows. To change your circuit, tap it again.</translation>
+    </message>
+    <message>
+        <source>Fertig</source>
+        <translation>Done</translation>
+    </message>
+    <message>
+        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
+        <translation>Does it work? Then tap “Done” and choose what you observed.</translation>
+    </message>
+    <message>
+        <source>Hilfe</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
+        <translation>Stuck? Tap “I need a hint”. If something broke, “Undo” makes it whole again.</translation>
+    </message>
+    <message>
+        <source>Bauteil stecken oder verschieben</source>
+        <translation>Place or move a part</translation>
+    </message>
+    <message>
+        <source>ziehen</source>
+        <translation>drag</translation>
+    </message>
+    <message>
+        <source>Bauteil drehen</source>
+        <translation>Rotate a part</translation>
+    </message>
+    <message>
+        <source>zweimal schnell tippen (am Computer: Doppelklick)</source>
+        <translation>tap twice quickly (on a computer: double-click)</translation>
+    </message>
+    <message>
+        <source>Menü: Drehen, Farbe, Wert, Löschen …</source>
+        <translation>Menu: rotate, colour, value, delete …</translation>
+    </message>
+    <message>
+        <source>lange drücken (am Computer: Rechtsklick)</source>
+        <translation>press and hold (on a computer: right-click)</translation>
+    </message>
+    <message>
+        <source>Leitung ziehen</source>
+        <translation>Draw a wire</translation>
+    </message>
+    <message>
+        <source>von Feld zu Feld ziehen</source>
+        <translation>drag from field to field</translation>
+    </message>
+    <message>
+        <source>Etwas entfernen</source>
+        <translation>Remove something</translation>
+    </message>
+    <message>
+        <source>antippen und dann den Mülleimer antippen</source>
+        <translation>tap it, then tap the bin</translation>
+    </message>
+    <message>
+        <source>Rückgängig und Wiederholen</source>
+        <translation>Undo and redo</translation>
+    </message>
+    <message>
+        <source>gebogene Pfeile oben in der Leiste</source>
+        <translation>curved arrows in the bar at the top</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>In sechs Schritten zum ersten Experiment</source>
+        <translation>Your first experiment in six steps</translation>
+    </message>
+    <message>
+        <source>Das Labor mit den Nummern der sechs Schritte</source>
+        <translation>The lab with the numbers of the six steps</translation>
+    </message>
+    <message>
+        <source>Bedienung auf einen Blick</source>
+        <translation>Controls at a glance</translation>
+    </message>
+    <message>
+        <source>Mit echten Bauteilen: nur Batterien bis 9 Volt, niemals an der Steckdose! Versuche mit »Nur in der App!« baust du nicht in echt nach.</source>
+        <translation>With real parts: only batteries up to 9 volts, never the mains socket! Don't build experiments marked “Only in the app!” for real.</translation>
+    </message>
+    <message>
+        <source>Zur ausführlichen Hilfe</source>
+        <translation>Go to the full help</translation>
+    </message>
+    <message>
+        <source>Kurzanleitung</source>
+        <translation>Quick guide</translation>
     </message>
 </context>
 </TS>

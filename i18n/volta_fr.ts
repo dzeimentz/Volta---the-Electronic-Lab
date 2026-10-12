@@ -1008,6 +1008,10 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Guide rapide</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Home.qml" line="62" />
         <source>Profil wechseln</source>
         <translation>Changer de profil</translation>
@@ -3669,6 +3673,10 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Guide rapide</translation>
+    </message>
+    <message>
         <location filename="../app/qml/TopBarActions.qml" line="212"/>
         <source>Kontaktfelder silbern (sonst Messing)</source>
         <translation>Bornes argentées (sinon laiton)</translation>
@@ -3829,6 +3837,133 @@
         <location filename="../app/src/lab_controller.cpp" line="1555" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
+    </message>
+</context>
+<context>
+    <name>QuickGuide</name>
+    <message>
+        <source>Bauteil holen</source>
+        <translation>Prendre un composant</translation>
+    </message>
+    <message>
+        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
+        <translation>Fais glisser un composant de la boîte à composants sur la plaque de base. Tout ce qui est dans la même case de contact est relié.</translation>
+    </message>
+    <message>
+        <source>Leitungen ziehen</source>
+        <translation>Tirer des fils</translation>
+    </message>
+    <message>
+        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
+        <translation>Fais glisser ton doigt d'une case à l'autre. Les fils au plus deviennent rouges, ceux au moins noirs.</translation>
+    </message>
+    <message>
+        <source>Schritt für Schritt</source>
+        <translation>Pas à pas</translation>
+    </message>
+    <message>
+        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
+        <translation>Lis la question, choisis ton idée et touche « Construire pas à pas ». Les cases cibles clignotent en bleu.</translation>
+    </message>
+    <message>
+        <source>Einschalten</source>
+        <translation>Allumer</translation>
+    </message>
+    <message>
+        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
+        <translation>Touche « Montage » : le bouton devient « En marche » et le courant passe. Pour modifier ton montage, touche-le de nouveau.</translation>
+    </message>
+    <message>
+        <source>Fertig</source>
+        <translation>Terminé</translation>
+    </message>
+    <message>
+        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
+        <translation>Ça marche ? Alors touche « Terminé » et choisis ce que tu as observé.</translation>
+    </message>
+    <message>
+        <source>Hilfe</source>
+        <translation>Aide</translation>
+    </message>
+    <message>
+        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
+        <translation>Tu es bloqué ? Touche « J'ai besoin d'un indice ». Si quelque chose est cassé, « Annuler » le répare.</translation>
+    </message>
+    <message>
+        <source>Bauteil stecken oder verschieben</source>
+        <translation>Placer ou déplacer un composant</translation>
+    </message>
+    <message>
+        <source>ziehen</source>
+        <translation>faire glisser</translation>
+    </message>
+    <message>
+        <source>Bauteil drehen</source>
+        <translation>Faire pivoter un composant</translation>
+    </message>
+    <message>
+        <source>zweimal schnell tippen (am Computer: Doppelklick)</source>
+        <translation>toucher deux fois rapidement (sur ordinateur : double-clic)</translation>
+    </message>
+    <message>
+        <source>Menü: Drehen, Farbe, Wert, Löschen …</source>
+        <translation>Menu : pivoter, couleur, valeur, supprimer …</translation>
+    </message>
+    <message>
+        <source>lange drücken (am Computer: Rechtsklick)</source>
+        <translation>appui long (sur ordinateur : clic droit)</translation>
+    </message>
+    <message>
+        <source>Leitung ziehen</source>
+        <translation>Tirer un fil</translation>
+    </message>
+    <message>
+        <source>von Feld zu Feld ziehen</source>
+        <translation>faire glisser d'une case à l'autre</translation>
+    </message>
+    <message>
+        <source>Etwas entfernen</source>
+        <translation>Retirer quelque chose</translation>
+    </message>
+    <message>
+        <source>antippen und dann den Mülleimer antippen</source>
+        <translation>le toucher, puis toucher la poubelle</translation>
+    </message>
+    <message>
+        <source>Rückgängig und Wiederholen</source>
+        <translation>Annuler et rétablir</translation>
+    </message>
+    <message>
+        <source>gebogene Pfeile oben in der Leiste</source>
+        <translation>flèches courbes dans la barre du haut</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <source>In sechs Schritten zum ersten Experiment</source>
+        <translation>Ta première expérience en six étapes</translation>
+    </message>
+    <message>
+        <source>Das Labor mit den Nummern der sechs Schritte</source>
+        <translation>Le labo avec les numéros des six étapes</translation>
+    </message>
+    <message>
+        <source>Bedienung auf einen Blick</source>
+        <translation>Les commandes en un coup d'œil</translation>
+    </message>
+    <message>
+        <source>Mit echten Bauteilen: nur Batterien bis 9 Volt, niemals an der Steckdose! Versuche mit »Nur in der App!« baust du nicht in echt nach.</source>
+        <translation>Avec de vrais composants : seulement des piles jusqu'à 9 volts, jamais la prise de courant ! Ne refais pas en vrai les expériences « Seulement dans l'appli ! ».</translation>
+    </message>
+    <message>
+        <source>Zur ausführlichen Hilfe</source>
+        <translation>Vers l'aide complète</translation>
+    </message>
+    <message>
+        <source>Kurzanleitung</source>
+        <translation>Guide rapide</translation>
     </message>
 </context>
 </TS>

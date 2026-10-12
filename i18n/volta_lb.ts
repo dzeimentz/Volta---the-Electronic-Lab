@@ -944,6 +944,10 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Kuerzuleedung</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Home.qml" line="62" />
         <source>Profil wechseln</source>
         <translation>Profil wiesselen</translation>
@@ -3601,6 +3605,10 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Kuerzuleedung</translation>
+    </message>
+    <message>
         <location filename="../app/qml/TopBarActions.qml" line="212"/>
         <source>Kontaktfelder silbern (sonst Messing)</source>
         <translation>Kontaktfelder sëlwer (soss Messing)</translation>
@@ -3761,6 +3769,133 @@
         <location filename="../app/src/lab_controller.cpp" line="1555" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dëst Modul gëtt mat Stuf %1 fräigeschalt.</translation>
+    </message>
+</context>
+<context>
+    <name>QuickGuide</name>
+    <message>
+        <source>Bauteil holen</source>
+        <translation>Deel huelen</translation>
+    </message>
+    <message>
+        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
+        <translation>Zéi en Deel aus dem Deelerfach op d'Grondplack. Alles am selwechte Kontaktfeld ass matenee verbonnen.</translation>
+    </message>
+    <message>
+        <source>Leitungen ziehen</source>
+        <translation>Leitungen zéien</translation>
+    </message>
+    <message>
+        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
+        <translation>Zéi mam Fanger vu Feld zu Feld. Leitungen u Plus gi rout, u Minus schwaarz.</translation>
+    </message>
+    <message>
+        <source>Schritt für Schritt</source>
+        <translation>Schrëtt fir Schrëtt</translation>
+    </message>
+    <message>
+        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
+        <translation>Liess d'Fro, wiel deng Vermutung an tipp op »Schrëtt fir Schrëtt bauen«. D'Zilfelder blénke blo.</translation>
+    </message>
+    <message>
+        <source>Einschalten</source>
+        <translation>Uschalten</translation>
+    </message>
+    <message>
+        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
+        <translation>Tipp op »Stiechen«: De Knäppchen gëtt zu »Betrib«, an de Stroum fléisst. Fir ëmzebauen, tippst du nach eng Kéier drop.</translation>
+    </message>
+    <message>
+        <source>Fertig</source>
+        <translation>Fäerdeg</translation>
+    </message>
+    <message>
+        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
+        <translation>Funktionéiert et? Da tipp op »Fäerdeg« a wiel, wat s du beobacht hues.</translation>
+    </message>
+    <message>
+        <source>Hilfe</source>
+        <translation>Hëllef</translation>
+    </message>
+    <message>
+        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
+        <translation>Kënns du net weider, tipp op »Ech brauch en Tipp«. Ass eppes futti gaang, mécht »Réckgängeg« et erëm ganz.</translation>
+    </message>
+    <message>
+        <source>Bauteil stecken oder verschieben</source>
+        <translation>Deel stiechen oder réckelen</translation>
+    </message>
+    <message>
+        <source>ziehen</source>
+        <translation>zéien</translation>
+    </message>
+    <message>
+        <source>Bauteil drehen</source>
+        <translation>Deel dréinen</translation>
+    </message>
+    <message>
+        <source>zweimal schnell tippen (am Computer: Doppelklick)</source>
+        <translation>zweemol séier tippen (um Computer: Duebelklick)</translation>
+    </message>
+    <message>
+        <source>Menü: Drehen, Farbe, Wert, Löschen …</source>
+        <translation>Menü: Dréinen, Faarf, Wäert, Läschen …</translation>
+    </message>
+    <message>
+        <source>lange drücken (am Computer: Rechtsklick)</source>
+        <translation>laang drécken (um Computer: Rietsklick)</translation>
+    </message>
+    <message>
+        <source>Leitung ziehen</source>
+        <translation>Leitung zéien</translation>
+    </message>
+    <message>
+        <source>von Feld zu Feld ziehen</source>
+        <translation>vu Feld zu Feld zéien</translation>
+    </message>
+    <message>
+        <source>Etwas entfernen</source>
+        <translation>Eppes ewechhuelen</translation>
+    </message>
+    <message>
+        <source>antippen und dann den Mülleimer antippen</source>
+        <translation>untippen an dann d'Dreckskëscht untippen</translation>
+    </message>
+    <message>
+        <source>Rückgängig und Wiederholen</source>
+        <translation>Réckgängeg a Widderhuelen</translation>
+    </message>
+    <message>
+        <source>gebogene Pfeile oben in der Leiste</source>
+        <translation>gebéie Feiler uewen an der Leescht</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Zoumaachen</translation>
+    </message>
+    <message>
+        <source>In sechs Schritten zum ersten Experiment</source>
+        <translation>An sechs Schrëtt bei dat éischt Experiment</translation>
+    </message>
+    <message>
+        <source>Das Labor mit den Nummern der sechs Schritte</source>
+        <translation>De Labo mat den Nummere vun de sechs Schrëtt</translation>
+    </message>
+    <message>
+        <source>Bedienung auf einen Blick</source>
+        <translation>Bedienung op ee Bléck</translation>
+    </message>
+    <message>
+        <source>Mit echten Bauteilen: nur Batterien bis 9 Volt, niemals an der Steckdose! Versuche mit »Nur in der App!« baust du nicht in echt nach.</source>
+        <translation>Mat richtegen Deeler: nëmme Batterie bis 9 Volt, ni un der Steckdous! Versich mat »Nëmmen an der App!« baus du net an echt no.</translation>
+    </message>
+    <message>
+        <source>Zur ausführlichen Hilfe</source>
+        <translation>Bei déi ausféierlech Hëllef</translation>
+    </message>
+    <message>
+        <source>Kurzanleitung</source>
+        <translation>Kuerzuleedung</translation>
     </message>
 </context>
 </TS>

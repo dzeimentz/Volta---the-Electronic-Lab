@@ -14,6 +14,7 @@ Item {
     signal homeRequested()  // zurueck zur Startseite
     signal infoRequested()  // Info-Fenster (liegt im Hauptfenster)
     signal helpRequested()  // Hilfe mit Tick (liegt im Hauptfenster)
+    signal quickGuideRequested()
     signal helpTopicRequested(string key) // Hilfe bei einem Kapitel
     signal parentAreaRequested()
     Binding { target: Theme; property: "reduceMotion"; value: lab.settings ? lab.settings.reduceMotion : false }
@@ -272,6 +273,7 @@ Item {
             settings: lab.settings
             onInfoRequested: lab.infoRequested()
             onHelpRequested: lab.helpRequested()
+            onQuickGuideRequested: lab.quickGuideRequested()
             helpInMenu: true
             onParentAreaRequested: lab.parentAreaRequested()
         }

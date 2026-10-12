@@ -10,6 +10,7 @@ Row {
     property var settings: null
     signal infoRequested()
     signal helpRequested()
+    signal quickGuideRequested() // Kurzanleitung, neben der Hilfe
     property bool helpInMenu: false // im Labor ist die Leiste voll: Hilfe dann im Menue statt als Knopf
     readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
     signal parentAreaRequested() // hinter der Elternschranke (Main.qml)
@@ -123,6 +124,21 @@ Row {
         }
         contentItem: Item { HelpIcon { anchors.centerIn: parent; size: 28 } }
     }
+    // Kurzanleitung (Blatt mit gelbem Kopf)
+    ToolButton {
+        objectName: "quickGuideButton"
+        visible: !bar.helpInMenu
+        width: Theme.control; height: Theme.control
+        onClicked: bar.quickGuideRequested()
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Kurzanleitung")
+        Accessible.name: qsTr("Kurzanleitung")
+        background: Rectangle {
+            radius: 6
+            color: parent.down ? "#33FFFFFF" : (parent.hovered ? "#1FFFFFFF" : "transparent")
+        }
+        contentItem: Item { GuideIcon { anchors.centerIn: parent; size: 28 } }
+    }
     ToolButton {
         objectName: "infoButton"
         width: Theme.control; height: Theme.control
@@ -172,6 +188,14 @@ Row {
                 text: "?  " + qsTr("Hilfe")
                 font.bold: true
                 onTriggered: bar.helpRequested()
+            }
+            MenuItem {
+                objectName: "menuQuickGuide"
+                visible: bar.helpInMenu
+                height: visible ? Theme.control : 0
+                text: "»  " + qsTr("Kurzanleitung")
+                font.bold: true
+                onTriggered: bar.quickGuideRequested()
             }
             MenuItem {
                 objectName: "settingFlow"

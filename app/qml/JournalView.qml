@@ -13,6 +13,7 @@ Rectangle {
     signal backRequested()
     signal infoRequested()
     signal helpRequested()
+    signal quickGuideRequested()
     signal parentAreaRequested()
     signal experimentRequested(string id)
 
@@ -124,6 +125,7 @@ Rectangle {
             settings: journal.settings
             onInfoRequested: journal.infoRequested()
             onHelpRequested: journal.helpRequested()
+            onQuickGuideRequested: journal.quickGuideRequested()
             onParentAreaRequested: journal.parentAreaRequested()
         }
     }

@@ -135,6 +135,8 @@ qt_add_qml_module(volta_ui
         qml/TickSays.qml
         qml/PartsListPanel.qml
         qml/HelpDialog.qml
+        qml/QuickGuide.qml
+        qml/GuideIcon.qml
         qml/TroublePopup.qml
         qml/QrCanvas.qml
         qml/TaskQrDialog.qml
@@ -167,6 +169,9 @@ qt_add_resources(volta_ui "tick" PREFIX "/tick" BASE resources/tick FILES
     resources/tick/tick_froehlich.png resources/tick/tick_gut.png resources/tick/tick_motivierend.png
     resources/tick/tick_nachdenklich.png resources/tick/tick_neugierig.png resources/tick/tick_ueberrascht.png
     resources/tick/tick_warnend.png)
+# Kurzanleitung: Labor mit den Nummern der sechs Schritte je Sprache (tools/manual_pdfs.py --app-bilder)
+qt_add_resources(volta_ui "guide" PREFIX "/guide" BASE resources/guide FILES
+    resources/guide/kurz_de.jpg resources/guide/kurz_en.jpg resources/guide/kurz_fr.jpg resources/guide/kurz_lb.jpg)
 # Runde Flaggen der Anzeigesprachen (Werkzeugleiste oben rechts)
 qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
     resources/flags/de.svg resources/flags/fr.svg resources/flags/en.svg resources/flags/lb.svg)

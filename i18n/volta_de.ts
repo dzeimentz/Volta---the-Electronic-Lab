@@ -944,6 +944,10 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Kurzanleitung</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Home.qml" line="62"/>
         <source>Profil wechseln</source>
         <translation type="unfinished"></translation>
@@ -3597,6 +3601,10 @@
 <context>
     <name>TopBarActions</name>
     <message>
+        <source>Kurzanleitung</source>
+        <translation>Kurzanleitung</translation>
+    </message>
+    <message>
         <location filename="../app/qml/TopBarActions.qml" line="212"/>
         <source>Kontaktfelder silbern (sonst Messing)</source>
         <translation>Kontaktfelder silbern (sonst Messing)</translation>
@@ -3757,6 +3765,133 @@
         <location filename="../app/src/lab_controller.cpp" line="1555"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QuickGuide</name>
+    <message>
+        <source>Bauteil holen</source>
+        <translation>Bauteil holen</translation>
+    </message>
+    <message>
+        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
+        <translation>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</translation>
+    </message>
+    <message>
+        <source>Leitungen ziehen</source>
+        <translation>Leitungen ziehen</translation>
+    </message>
+    <message>
+        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
+        <translation>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</translation>
+    </message>
+    <message>
+        <source>Schritt für Schritt</source>
+        <translation>Schritt für Schritt</translation>
+    </message>
+    <message>
+        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
+        <translation>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</translation>
+    </message>
+    <message>
+        <source>Einschalten</source>
+        <translation>Einschalten</translation>
+    </message>
+    <message>
+        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
+        <translation>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</translation>
+    </message>
+    <message>
+        <source>Fertig</source>
+        <translation>Fertig</translation>
+    </message>
+    <message>
+        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
+        <translation>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</translation>
+    </message>
+    <message>
+        <source>Hilfe</source>
+        <translation>Hilfe</translation>
+    </message>
+    <message>
+        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
+        <translation>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</translation>
+    </message>
+    <message>
+        <source>Bauteil stecken oder verschieben</source>
+        <translation>Bauteil stecken oder verschieben</translation>
+    </message>
+    <message>
+        <source>ziehen</source>
+        <translation>ziehen</translation>
+    </message>
+    <message>
+        <source>Bauteil drehen</source>
+        <translation>Bauteil drehen</translation>
+    </message>
+    <message>
+        <source>zweimal schnell tippen (am Computer: Doppelklick)</source>
+        <translation>zweimal schnell tippen (am Computer: Doppelklick)</translation>
+    </message>
+    <message>
+        <source>Menü: Drehen, Farbe, Wert, Löschen …</source>
+        <translation>Menü: Drehen, Farbe, Wert, Löschen …</translation>
+    </message>
+    <message>
+        <source>lange drücken (am Computer: Rechtsklick)</source>
+        <translation>lange drücken (am Computer: Rechtsklick)</translation>
+    </message>
+    <message>
+        <source>Leitung ziehen</source>
+        <translation>Leitung ziehen</translation>
+    </message>
+    <message>
+        <source>von Feld zu Feld ziehen</source>
+        <translation>von Feld zu Feld ziehen</translation>
+    </message>
+    <message>
+        <source>Etwas entfernen</source>
+        <translation>Etwas entfernen</translation>
+    </message>
+    <message>
+        <source>antippen und dann den Mülleimer antippen</source>
+        <translation>antippen und dann den Mülleimer antippen</translation>
+    </message>
+    <message>
+        <source>Rückgängig und Wiederholen</source>
+        <translation>Rückgängig und Wiederholen</translation>
+    </message>
+    <message>
+        <source>gebogene Pfeile oben in der Leiste</source>
+        <translation>gebogene Pfeile oben in der Leiste</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>In sechs Schritten zum ersten Experiment</source>
+        <translation>In sechs Schritten zum ersten Experiment</translation>
+    </message>
+    <message>
+        <source>Das Labor mit den Nummern der sechs Schritte</source>
+        <translation>Das Labor mit den Nummern der sechs Schritte</translation>
+    </message>
+    <message>
+        <source>Bedienung auf einen Blick</source>
+        <translation>Bedienung auf einen Blick</translation>
+    </message>
+    <message>
+        <source>Mit echten Bauteilen: nur Batterien bis 9 Volt, niemals an der Steckdose! Versuche mit »Nur in der App!« baust du nicht in echt nach.</source>
+        <translation>Mit echten Bauteilen: nur Batterien bis 9 Volt, niemals an der Steckdose! Versuche mit »Nur in der App!« baust du nicht in echt nach.</translation>
+    </message>
+    <message>
+        <source>Zur ausführlichen Hilfe</source>
+        <translation>Zur ausführlichen Hilfe</translation>
+    </message>
+    <message>
+        <source>Kurzanleitung</source>
+        <translation>Kurzanleitung</translation>
     </message>
 </context>
 </TS>
