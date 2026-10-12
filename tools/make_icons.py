@@ -7,7 +7,7 @@ Aufruf (aus dem Repository-Wurzelverzeichnis):
 
 Ablauf: tools/render_icon.cpp mit dem Qt der Desktop-Installation uebersetzen (nach build/tools/) und das SVG in
 PNGs rendern; ohne Qt wird ersatzweise cairosvg verwendet (pip install cairosvg), falls vorhanden. Mit Pillow
-entstehen daraus das Windows-Symbol volta.ico und die Mobilsaetze:
+entstehen daraus das Windows-Symbol volta.ico, das macOS-Symbol packaging/macos/volta.icns und die Mobilsaetze:
 
 - Android (packaging/android/res): ic_launcher und ic_launcher_round (48 dp, mdpi-xxxhdpi) fuer Startprogramme ohne
   adaptive Symbole sowie ic_launcher_foreground (108 dp) als Vordergrund des adaptiven Symbols. Hintergrund
@@ -31,6 +31,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_all import IS_WINDOWS, ROOT, environment  # noqa: E402
 
+IS_MACOS = sys.platform == "darwin"
+
 ICONS = ROOT / "app" / "resources" / "icons"
 SVG = ICONS / "volta.svg"
 SIZES = [16, 24, 32, 48, 64, 128, 256, 512, 1024]
@@ -42,6 +44,7 @@ DENSITIES = {"mdpi": 1.0, "hdpi": 1.5, "xhdpi": 2.0, "xxhdpi": 3.0, "xxxhdpi": 4
 LAUNCHER_DP = 48
 ADAPTIVE_DP = 108
 IOS_ASSETS = ROOT / "packaging" / "ios" / "Assets.xcassets"
+MACOS_ICNS = ROOT / "packaging" / "macos" / "volta.icns"
 LAUNCH_LOGO_PT = 192
 NAVY = (10, 37, 64)  # Theme.navy, Grund fuer das iOS-Symbol ohne Transparenz
 
@@ -79,9 +82,17 @@ class Renderer:
             out_dir.mkdir(parents=True, exist_ok=True)
             exe = out_dir / ("render_icon.exe" if IS_WINDOWS else "render_icon")
             inc = qt_root / "include"
-            cmd = ["g++", "-std=c++17", "-O1", str(ROOT / "tools" / "render_icon.cpp"), "-o", str(exe),
-                   f"-I{inc}", f"-I{inc / 'QtCore'}", f"-I{inc / 'QtGui'}", f"-I{inc / 'QtSvg'}",
-                   f"-L{qt_root / 'lib'}", "-lQt6Svg", "-lQt6Gui", "-lQt6Core"]
+            lib = qt_root / "lib"
+            src = str(ROOT / "tools" / "render_icon.cpp")
+            if IS_MACOS:
+                # Qt fuer macOS liegt als Frameworks vor (lib/QtCore.framework/Headers)
+                cmd = ["clang++", "-std=c++17", "-O1", src, "-o", str(exe), f"-F{lib}", f"-Wl,-rpath,{lib}"]
+                for m in ("QtCore", "QtGui", "QtSvg"):
+                    cmd += [f"-I{lib / (m + '.framework') / 'Headers'}", "-framework", m]
+            else:
+                cmd = ["g++", "-std=c++17", "-O1", src, "-o", str(exe),
+                       f"-I{inc}", f"-I{inc / 'QtCore'}", f"-I{inc / 'QtGui'}", f"-I{inc / 'QtSvg'}",
+                       f"-L{lib}", "-lQt6Svg", "-lQt6Gui", "-lQt6Core"]
             if subprocess.run(cmd, env=env).returncode != 0:
                 return False
             self.exe, self.env, self.name = exe, env, "Qt Svg"
@@ -106,6 +117,13 @@ class Renderer:
         return True
 
 
+def make_icns() -> None:
+    """macOS-Symbol aus dem 1024-px-Bild (Pillow erzeugt die Groessen 16-1024 selbst)."""
+    from PIL import Image
+    MACOS_ICNS.parent.mkdir(parents=True, exist_ok=True)
+    Image.open(ICONS / "volta_1024.png").convert("RGBA").save(MACOS_ICNS)
+
+
 def make_desktop(renderer: Renderer) -> bool:
     from PIL import Image
     if not renderer.render(SVG, SIZES, ICONS):
@@ -114,7 +132,8 @@ def make_desktop(renderer: Renderer) -> bool:
     # Pillow verkleinert selbst; fuer kleine Groessen die gerenderten (schaerferen) Bilder verwenden
     frames = [Image.open(ICONS / f"volta_{s}.png").convert("RGBA") for s in ICO_SIZES]
     base.save(ICONS / "volta.ico", sizes=[(s, s) for s in ICO_SIZES], append_images=frames)
-    print(f"Desktop-Symbole erzeugt in {ICONS}")
+    make_icns()
+    print(f"Desktop-Symbole erzeugt in {ICONS} und {MACOS_ICNS}")
     return True
 
 

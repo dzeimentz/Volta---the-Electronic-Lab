@@ -7,6 +7,9 @@ Aufruf (aus dem Repository-Wurzelverzeichnis):
 Ablauf: Preset desktop-release konfigurieren (beim ersten Mal) und bauen, volta1(.exe) nach Release/ kopieren,
 Qt-Laufzeit mit windeployqt daneben legen (nur Windows) und die Inhaltspakete nach Release/content kopieren
 (die App sucht ihre Inhalte zuerst neben der ausfuehrbaren Datei). Release/ ist nicht im Repository (.gitignore).
+macOS: das App-Bundle volta1.app nach Release/ kopieren und die Qt-Laufzeit mit macdeployqt hineinlegen; die
+Inhalte sind dort eingebettet (VOLTA_EMBED_CONTENT). Ohne Signierung startet es nur auf diesem Mac ohne Rueckfrage
+(Weitergabe braucht Developer ID und Notarisierung, docs/platforms.md).
 Nur fuer den lokalen Gebrauch: nichts wird signiert, hochgeladen oder veroeffentlicht.
 """
 from __future__ import annotations
@@ -31,6 +34,23 @@ def run(cmd: list[str], env: dict[str, str]) -> None:
         raise SystemExit(1)
 
 
+def deploy_macos(env: dict[str, str], qt_root: Path) -> int:
+    bundle = ROOT / "build" / PRESET / "app" / "volta1.app"
+    if not bundle.exists():
+        print(f"{bundle} fehlt nach dem Bauen.")
+        return 1
+    TARGET.mkdir(exist_ok=True)
+    target = TARGET / "volta1.app"
+    if target.exists():
+        shutil.rmtree(target)
+    shutil.copytree(bundle, target, symlinks=True)
+    deploy = shutil.which("macdeployqt", path=env["PATH"]) or str(qt_root / "bin" / "macdeployqt")
+    run([deploy, str(target), f"-qmldir={ROOT / 'app' / 'qml'}"], env)
+    size_mb = sum(f.stat().st_size for f in target.rglob("*") if f.is_file()) / 1e6
+    print(f"Release: {target} ({size_mb:.0f} MB mit Laufzeit, Inhalte eingebettet; nicht signiert)")
+    return 0
+
+
 def main() -> int:
     env, qt_root, use_mingw = environment()
     if qt_root is None:
@@ -42,6 +62,8 @@ def main() -> int:
     run(configure, env)
     run(["cmake", "--build", "--preset", PRESET], env)
 
+    if sys.platform == "darwin":
+        return deploy_macos(env, qt_root)
     exe_name = "volta1.exe" if IS_WINDOWS else "volta1"
     exe = ROOT / "build" / PRESET / "app" / exe_name
     if not exe.exists():

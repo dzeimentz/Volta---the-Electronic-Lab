@@ -98,6 +98,8 @@ cmake --build --preset android-arm64
 cmake --preset android-aab && cmake --build --preset android-aab
 # iPadOS: nur auf macOS mit Xcode (QT_ROOT_IOS, QT_HOST_PATH), siehe docs/platforms.md
 cmake --preset ios
+# macOS: desktop-debug/desktop-release wie oben (QT_ROOT_DESKTOP=~/Qt/6.11.0/macos); App liegt in
+#   build/desktop-debug/app/volta1.app; Einrichtung eines (geliehenen) Macs: docs/platforms.md
 ```
 
 Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach Aenderungen an `content/`:

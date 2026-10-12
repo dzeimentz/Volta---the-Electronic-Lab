@@ -1,4 +1,4 @@
-// Startbildschirm der Desktop-Ausgabe (Windows/Linux x86-64): Volta-Symbol, Name, Version und Herstellerlogo.
+// Startbildschirm der Desktop-Ausgabe (Windows/Linux x86-64, macOS): Volta-Symbol, Name, Version und Herstellerlogo.
 // Blendet nach kurzer Zeit aus; Klick/Tippen oder eine Taste ueberspringt ihn. Mobile Plattformen nutzen den
 // Startbildschirm des Systems (Phase 3/5b).
 import QtQuick

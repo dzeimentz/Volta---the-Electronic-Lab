@@ -82,7 +82,45 @@ verdecken, sonst `SafeArea` aus Qt Quick nutzen).
      Pointer Handlers), Xcode »Privacy Report«.
 
 ## macOS (optional)
-- Gleicher Code, Apple Silicon, sobald der Mac vorhanden ist.
+- Gleicher Code, Apple Silicon (und Intel), Presets `desktop-debug` / `desktop-release` wie unter Windows/Linux.
+- Vorbereitet (ungetestet): App-Bundle mit `packaging/macos/Info.plist.in` und Symbol `packaging/macos/volta.icns`
+  (aus `tools/make_icons.py`), Inhalte eingebettet (`VOLTA_EMBED_CONTENT` auf Apple voreingestellt), Startbildschirm
+  `Splash.qml` wie auf dem Desktop. `tools/deploy_release.py` legt `Release/volta1.app` mit `macdeployqt` an.
+- Weitergabe ausserhalb des eigenen Macs nur signiert (Developer ID, Apple Developer Program) und notarisiert;
+  Mac App Store zusaetzlich mit App Sandbox. Beides nur auf ausdrueckliche Anweisung.
+
+## Entwicklung auf dem Mac (iPadOS und macOS)
+Gilt auch fuer einen geliehenen Mac (z. B. MacBook Air M1). Reihenfolge:
+
+1. **Eigenes Benutzerkonto** auf dem Mac anlegen und darin arbeiten; eigene Apple-ID verwenden. Freier Speicher
+   mindestens ca. 60 GB (Xcode mit iOS-Simulator ca. 30-40 GB, Qt ca. 5-10 GB, Builds).
+2. **Xcode** aus dem App Store (Mindestversion von macOS dort beachten), einmal starten, iOS-Plattform mit Simulator
+   laden; `xcode-select --install`.
+3. **Homebrew**, dann `brew install cmake ninja git python gh`; `pip3 install pillow` (Symbole).
+4. **Qt 6.11** ueber den Qt Online Installer: macOS und iOS, Module wie unter Windows (Multimedia, TextToSpeech,
+   Sensors, Svg, Qt Quick).
+5. **Claude Code** installieren und im Repository starten; `gh auth login`, Repository klonen.
+6. Umgebung (`~/.zshrc`):
+   ```bash
+   export QT_ROOT_DESKTOP="$HOME/Qt/6.11.0/macos"
+   export QT_ROOT_IOS="$HOME/Qt/6.11.0/ios"
+   export QT_HOST_PATH="$HOME/Qt/6.11.0/macos"
+   ```
+7. **Pruefen und bauen:**
+   ```bash
+   python3 tools/check_all.py                       # Inhalte, Kern, App-Tests (macOS)
+   VOLTA_SCREENSHOT=bild.png build/desktop-debug/app/volta1.app/Contents/MacOS/volta1
+   python3 tools/make_icons.py                      # Symbole mit Qt neu rendern (optional)
+   cmake --preset ios && open build/ios/*.xcodeproj  # iPad: Team waehlen, Simulator oder iPad per USB
+   python3 tools/deploy_release.py                  # Release/volta1.app (nicht signiert)
+   ```
+   Simulator ohne Xcode-Oberflaeche: `xcrun simctl list devices`, `xcrun simctl boot <id>`,
+   `xcrun simctl install booted <App>`, `xcrun simctl io booted screenshot bild.png`.
+8. **Signierung:** Zum Testen reicht das kostenlose »Personal Team« der eigenen Apple-ID (App laeuft 7 Tage auf dem
+   eigenen iPad). TestFlight, App Store und Developer-ID brauchen das Apple Developer Program (Firmenkonto mit
+   D-U-N-S-Nummer). Vor einer Veroeffentlichung den Qt-Lizenzweg fuer iOS entscheiden (Roadmap).
+9. **Beim Zurueckgeben:** alles committen und pushen, `gh auth logout`, Apple-ID in Xcode abmelden, Zertifikate
+   nicht auf dem Mac lassen (ggf. vorher geschuetzt exportieren), Benutzerkonto loeschen.
 
 ## Verwaltete Konfiguration
 | Schluessel | Typ | Standard | Wirkung |

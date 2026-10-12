@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty());
     if (!demoFont.isEmpty()) settings.setFontLevel(demoFont.toInt());
     engine.rootContext()->setContextProperty(QStringLiteral("volta_settings"), &settings);
-    // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux); abschaltbar in den Einstellungen
+    // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux/macOS); abschaltbar in den Einstellungen
     // oder mit VOLTA_NO_SPLASH=1
     const bool splash = volta::AppSettings::splashAvailable() && settings.showSplash() &&
                         qEnvironmentVariableIntValue("VOLTA_NO_SPLASH") != 1;

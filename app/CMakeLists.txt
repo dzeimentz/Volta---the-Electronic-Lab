@@ -37,10 +37,11 @@ qt_add_executable(volta_app
     src/main.cpp
 )
 
-# Inhaltspakete als Qt-Ressource (:/content): auf Android und iOS immer, weil es dort keinen Ordner neben der
-# ausfuehrbaren Datei gibt; auf dem Desktop optional (-DVOLTA_EMBED_CONTENT=ON). Schemata und CLAUDE.md bleiben
-# draussen. main.cpp nimmt zuerst content/ neben der ausfuehrbaren Datei, dann :/content, dann den Quellbaum.
-if(ANDROID OR IOS)
+# Inhaltspakete als Qt-Ressource (:/content): auf Android, iOS und macOS (App-Bundle) voreingestellt, weil es dort
+# keinen Ordner neben der ausfuehrbaren Datei gibt; sonst optional (-DVOLTA_EMBED_CONTENT=ON). Schemata und
+# CLAUDE.md bleiben draussen. main.cpp nimmt zuerst content/ neben der ausfuehrbaren Datei, dann :/content, dann
+# den Quellbaum.
+if(ANDROID OR APPLE)
     set(_volta_embed_default ON)
 else()
     set(_volta_embed_default OFF)
@@ -105,6 +106,21 @@ if(IOS)
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${VOLTA_APP_ID}"
         XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2" # nur iPad
         XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+endif()
+
+# macOS (optional, Apple Silicon und Intel): App-Bundle mit Info.plist und Symbol (volta.icns aus
+# tools/make_icons.py) aus packaging/macos; Laufzeit beilegen mit tools/deploy_release.py (macdeployqt)
+if(APPLE AND NOT IOS)
+    set(_mac "${PROJECT_SOURCE_DIR}/packaging/macos")
+    target_sources(volta_app PRIVATE "${_mac}/volta.icns")
+    set_source_files_properties("${_mac}/volta.icns" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(volta_app PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${_mac}/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
+        MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
+        MACOSX_BUNDLE_ICON_FILE "volta.icns"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
 endif()
 
 target_compile_definitions(volta_app PRIVATE
