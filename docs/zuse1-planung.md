@@ -1,90 +1,50 @@
-# Zuse 1 – Computertechnik fuer Einsteiger (Entwurf)
+# Zuse 1 – Ergaenzungen zum Konzept Zuse v0.2
 
-Stand: 13.10.2026, erster Entwurf. Zuse 1 ist ein eigener Band der Reihe (Edition `zuse1`, docs/architecture.md)
-aus derselben Codebasis wie Volta. Begonnen wird erst nach der Veroeffentlichung von Volta 1 (docs/roadmap.md);
-das Konzept v3.0 (Abschnitt 4.3) sieht ein eigenes Konzeptdokument vor, dieser Entwurf ist dessen Vorstufe.
-Eckdaten aus dem Konzept: 12–16 Jahre, Bit und Gatter bis zum selbst gebauten 4-Bit-Kleinstrechner,
-Programmieren in Maschinensprache und mit Bloecken (Anbindung an den Blockeditor UBBE naheliegend), spaeter
-Bruecke zu realen Mikrocontrollern (z. B. ESP32).
+Massgeblich ist **`docs/Konzept_Zuse.md`** (v0.2, 13.10.2026; PDF `docs/Konzept_Zuse_v0.2.pdf`, Entwuerfe in
+`docs/zuse/`) mit **ADR-0010** (Zuse als eigene Linie mit Werkbank und Systemplatine). Diese Datei sammelt nur, was
+seitdem dazugekommen ist: Entscheidungen des Inhabers und die Auswertung einer Quelle. Ein frueherer Entwurf in
+dieser Datei (Zuse auf der Volta-Grundplatte mit Modulleiste, 74xx-Bausteinen und eigener Stufenliste) ist durch
+das Konzept ueberholt und entfernt.
 
-## Leitidee
-Vom Schalter zum eigenen Rechner: Kinder bauen Schritt fuer Schritt aus einfachen Verknuepfungen Speicher,
-Zaehler und Rechenwerk – und am Ende den **kleinsten denkbaren Rechenautomaten** (Speicher, Befehlszaehler,
-Befehlsregister, Befehlsdecoder, Multiplexer, Rechenwerk), der ein selbst eingegebenes Programm im Einzeltakt
-ausfuehrt. Konrad Zuse und seine Z1–Z3 sind das Geschichtsfenster des Bandes: die Idee, den Ablauf der
-Rechenschritte selbst zu speichern.
+## Entscheidungen des Inhabers
+- 13.10.2026: **Busbreite in Zuse 1: 4 Bit durchgehend** (Datenbus, Register, ALU, Speicherworte, Adressen 0–15).
+  Deckt sich mit dem Konzept (Zuse-4; 8 Bit erst in Zuse 2).
+- 13.10.2026: **Zuse 1 nach Volta 3.** *Abgleich noetig:* Das Konzept (Abschnitt 14, R7, ADR-0010) setzt den
+  Prototyp Z0 nach dem Android-Pilot von Volta 1 und die Phasen Z1 ff. nach der Veroeffentlichung von Volta 1 an,
+  nicht nach Volta 3. Zu klaeren: gilt »nach Volta 3« fuer die Veroeffentlichung (Prototyp Z0 trotzdem frueh) oder
+  fuer den Beginn der Arbeit?
 
-## Quelle und Umgang damit
-Grundlage der Gliederung ist der Lehrgang »Digitaltechnik im Experiment – Lehrgang Elektronische
-Datenverarbeitung« (H. Weidner, ELRAD 11/77–05/82, Sonderheft Heise 2005; private Sammlung des Inhabers, nicht
-im Repository). Er fuehrt in zehn Teilen von UND/ODER bis zum Konzept eines Rechners, jeweils mit Versuchen auf
-steckbaren Experimentierbrettern (Eingabe mit Schaltern und Tastern, Anzeige mit Laempchen, Bausteinbretter).
-Uebernommen werden nur **Prinzipien und Reihenfolge**; Texte, Abbildungen, Brett-Layouts und Aufgaben werden
-nicht nachgebildet, Experimente sind Eigenentwicklungen (CLAUDE.md, Regel 2). Ausgeschlossen ist das Kapitel
-zum Experimentiernetzteil mit Netztrafo (Regel 6): die 5 V kommen aus dem Pult.
+## Quelle: ELRAD-Lehrgang »Digitaltechnik im Experiment« (Auswertung 13.10.2026)
+Lehrgang Elektronische Datenverarbeitung von H. Weidner (ELRAD 11/77–05/82, Sonderheft Heise 2005; private
+Sammlung, `I:\ELRAD\pdf\sonderhefte\digitaltechnik\`, nicht im Repository). Zehn Teile vom UND/ODER mit Schaltern
+und Laempchen ueber Flipflops, Zaehler, Codierer, Addierer und ein Rechenwerk mit Akkumulator bis zum »kleinsten
+denkbaren Rechenautomaten« (Speicher 16 x 4, Befehlszaehler, Befehlsregister und -decoder, Multiplexer).
+Er bestaetigt den Aufbau des Konzepts (Abschnitt 7.1) fast Stufe fuer Stufe. Uebernommen werden nur Prinzipien;
+der Lehrgang arbeitet mit 74xx-Bausteinen auf Steckbrettern – genau das ist im Konzept ein Nicht-Ziel (3.2).
+Ausgeschlossen ist sein Kapitel zum Netzteil mit Netztrafo (Volta-Regel 6).
 
-## Darstellung (Vorschlag)
-- Grundplatte und Kontaktfelder wie in Volta (fuer Einzelleitungen), Busbuchsen siehe Bus-Konzept; dazu **Bausteine** in der Modulleiste: Gatterbausteine (4 x NAND,
-  4 x NOR, 6 x NICHT …), Flipflops, Zaehler, Decoder, Siebensegmentanzeige, spaeter Rechenwerk und Speicher.
-  Anschluesse mit Nummer und Kurzname wie beim 555 in Volta 2.
-- **Eingabeleiste** im Pult: Schalter H/L, entprellte Taster, Taktgeber (Einzeltakt per Taste, langsam,
-  schnell), Ruecksetzen. **Anzeigeleiste**: Laempchen/LEDs, die H und L zusaetzlich mit 1/0 beschriften
-  (Farbe nie allein).
-- Pegel H/L an jedem Feld sichtbar (statt der Spannungsbalken), Leitungen mit H-Pegel hervorgehoben.
-- »Blick hinein«: ein NAND aus Transistoren (Bruecke zu Volta 1/2), ein Flipflop aus zwei NAND, die
-  Volladdierer im Rechenwerk.
+Die Fotos seiner Versuchsaufbauten zeigen anschaulich, warum Einzelleitungen nicht tragen (schon ein Zaehler mit
+Vergleich wird zum Kabelknaeuel) – ein gutes Argument fuer die Busse und die Abstraktionsleiter des Konzepts.
 
-## Bus-Konzept: Buendel statt Einzelleitungen
-Die Versuchsaufbauten im Lehrgang zeigen das Problem deutlich: schon ein Zaehler mit Vergleich braucht Dutzende
-Einzelkabel, die sich kreuzen und kaum noch nachzuverfolgen sind. Fuer Kinder ist das mehr Verwirrung als Lernen.
-Darum ab der Stufe, in der mehrere Bits gemeinsam laufen, **Busse**:
-- **Einzelleitungen nur am Anfang** (Stufen 1–3): ein Gatter, ein Flipflop – hier soll jede Verbindung
-  sichtbar und einzeln gezogen werden, wie in Volta.
-- **Bus ab Stufe 4**: Bausteine mit mehreren gleichartigen Anschluessen (Zaehler, Register, Addierer, Speicher,
-  Anzeige) haben eine **Busbuchse** (**4 Bit durchgehend**, wie der Kleinstrechner; Bitnummern 0–3 beschriftet). Eine Busleitung wird wie
-  eine Leitung gezogen, verbindet aber alle Bits auf einmal (breites Band mit Bitstreifen).
-- **Wert auf dem Bus sichtbar**: am Band die Bits als 1/0 und die Zahl dazu (dual, dezimal, spaeter hexadezimal);
-  Aenderungen leuchten kurz auf. Fuer den Zeitverlauf: Logikanalysator mit Bus-Spur.
-- **Abzweig** fuer einzelne Bits: aus einem Bus laesst sich ein Bit herausfuehren (z. B. Bit 3 auf eine LED),
-  damit Bus und Einzelleitung zusammenpassen und erklaerbar bleiben.
-- **Drei Busse im eigenen Rechner** (Stufe 8): Datenbus, Adressbus, Steuerleitungen (Lesen/Schreiben, Takt) –
-  farblich und mit Namen unterschieden (Farbe nie allein). Im Schaltplan als dicke Linie mit Schraegstrich und
-  Bitzahl.
-- Mehrere Ausgaenge an einem Bus: nur ueber schaltbare Ausgaenge (Tri-State); stehen zwei aktive Ausgaenge
-  gegeneinander, meldet Volta einen **Buskonflikt** (ehrliche Physik, in der Fehlersuche erklaert).
-- Modell: ein Bus ist im Kern ein Buendel einzelner Netze; die Simulation bleibt auf Gatterebene, nur Darstellung
-  und Bedienung fassen zusammen. Undo/Redo wie bei Leitungen (Befehle).
+Ergaenzungen, die das Konzept noch nicht nennt (Vorschlag, Zuordnung zu den Stufen in 7.1):
 
-## Stufen (Entwurf)
-| Stufe | Thema | Inhalte (Auswahl) |
+| Idee aus dem Lehrgang | Vorschlag fuer Zuse | Stufe |
 |---|---|---|
-| 1 | Zwei Zustaende | Schalter und Laempchen, H/L und 1/0, UND als Reihen-, ODER als Parallelschaltung (Bruecke zu Volta 1), NICHT |
-| 2 | Gatter | Wahrheitstabellen selbst aufnehmen (Forscherheft), NAND als Allzweckbaustein, alle Verknuepfungen aus NAND, Exklusiv-ODER |
-| 3 | Speichern | RS-Flipflop aus zwei NAND, Taster prellt (ehrliche Physik: Zaehler springt mehrfach) und Entprellen, getaktetes, D- und JK-Flipflop |
-| 4 | Zaehlen | Dualzahlen, Zaehler aus Flipflops, Teiler durch 2, 4, 8 …, Dezimalzaehler mit Ruecksetzen, Sekundentakt und kleine Uhr, Zaehler mit einstellbarem Endwert |
-| 5 | Codieren und Anzeigen | Dezimal-Dual-Codierer, Decoder, Siebensegmentanzeige, Vergleicher (gleich, groesser, kleiner), Vereinfachen von Schaltungen (Rechenregeln der Logik) |
-| 6 | Rechnen | Halb- und Volladdierer, 4-bit-Addierer, Subtrahieren, Schieberegister, serielles Addieren mit Akkumulator |
-| 7 | Das Rechenwerk | Rechenwerk mit Steuerleitungen (logische und arithmetische Funktionen), Akkumulator, Zwischenspeicher |
-| 8 | Der eigene Rechner | Speicher mit Adressen (Lesen/Schreiben), Befehlszaehler, Befehlsregister und -decoder, Programme im Einzeltakt: addieren, zaehlen, Lauflicht; Zuse und die Z3 |
+| Wahrheitstabelle selbst aufnehmen (erst messen, dann eintragen) | Pruefung umkehrbar: das Kind fuellt die Tabelle zuerst aus, dann laeuft die Simulation dagegen | 1–2 |
+| Alle Verknuepfungen aus NAND; Rechenregeln der Logik (De Morgan), Vereinfachen | Werkzeug »Vereinfachen«: zwei Chips mit gleicher Wahrheitstabelle sind gleichwertig – der mit weniger Gattern gewinnt einen Stern | 1–4 |
+| Prellender Taster und Entprellen mit RS-Flipflop | Taster-Baustein mit (abschaltbarem) Prellen: der Zaehler springt mehrfach – Anlass fuer das erste Flipflop | 6–7 |
+| Teiler 2, 4, 8 … aus Flipflops, Sekundentakt | Takt-Baustein mit Teilern; im Logikanalysator sichtbar | 7 |
+| Vergleicher (gleich, groesser, kleiner) | Null-Erkennung bzw. Vergleicher als Chip – Voraussetzung fuer den Befehl JZ | 5 oder 9 |
+| Codierer, Decoder, Siebensegmentanzeige | Decoder als eigener Chip (Stufe 8) und optional Siebensegment-Decoder fuer die Ausgabe der Systemplatine | 8 / frei |
+| Serielles Addieren mit Schieberegister und Akkumulator | Vergleich »parallel gegen seriell« als Weiterforschen; Schieberegister eher Zuse 2 | Weiterforschen |
+| Laufzeiten und Stoerimpulse | Die Einheitsverzoegerung der Logiksimulation erzeugt echte kurze Stoerimpulse; im Logikanalysator zeigen und erklaeren statt verstecken | 4–7 |
+| Konrad Zuse als Urheber des gespeicherten Rechenablaufs | Geschichtsfenster zu Z1 und Z3 in Stufe 10 | 10 |
 
-## Simulation
-- **Logikmodell** im Kern (docs/simulation-core.md): ereignisgesteuerte Gatter mit Laufzeit, Kopplung an
-  analoge Pegel dort, wo Volta-Bauteile (Taster, LED, Transistor) angeschlossen sind.
-- Ehrliche Physik auch digital: prellende Taster, offene Eingaenge (Verhalten wie TTL: offen = H, im Lexikon
-  erklaert), Ueberlast eines Ausgangs, kurze Stoerimpulse durch Laufzeiten (»Glitch«) im Zeitdiagramm sichtbar.
-- Versorgung 5 V aus dem Pult; Bausteine ohne Versorgung arbeiten nicht.
-
-## Werkzeugkasten (Vorschlag)
-Wahrheitstabelle (Aufnahme per Knopf), Zahlensysteme (dual, dezimal, hexadezimal), Zeitdiagramm/Logikanalysator
-(Nachfolger des Zeitschreibers), Befehlstabelle des eigenen Rechners, Lexikon der Bausteine, Fehlersuche.
-
-## Entschieden
-- 13.10.2026: Zuse 1 erscheint **nach Volta 3** und setzt dort an, wo Volta 3 mit Gattern und Kippstufen endet.
-- 13.10.2026: Busbreite **4 Bit durchgehend** (Zaehler, Register, Rechenwerk, Speicherworte, Adressen 0–15).
-
-## Offene Entscheidungen
-| Entscheidung | Spaetestens |
-|---|---|
-| Bausteine mit echten Typnummern (7400, 7490 …) oder neutralen Namen (Gatterbaustein A …) | Stufenplanung |
-| Name »Zuse«: Markenrecherche (docs/privacy-safety.md) und Namensrecht (Einverstaendnis der Erben bzw. der Zuse-Gesellschaft klaeren) | vor Planungsbeginn |
-| Eigenes Bedienpult (Eingabe-/Anzeigeleiste) oder Volta-Pult mit Erweiterung | Darstellung |
+## Weitere Punkte zum Konzept
+- Das PDF `docs/Konzept_Zuse_v0.2.pdf` nennt noch ADR-0009 fuer die Inhalts-Einbettung; im Repository ist das
+  ADR-0011 (ADR-0009 beschreibt hier die Tonausgabe). Markdown und ADR-0010 sind angepasst, das PDF beim naechsten
+  Stand neu erzeugen.
+- Konzept Abschnitt 9 bezieht sich auf den Cloud-Zweig `claude/mobile-android-ipad-0w8lbc` (Pull Request #1). Dieser
+  Zweig setzt auf einem alten Stand auf; die Android-Arbeit ist lokal inzwischen auf anderem Weg erledigt (Test-APK,
+  AAB, armv7). Touch-Bedienung (Zoom mit zwei Fingern, Hochformat), iPadOS- und macOS-Paketierung aus dem Zweig sind
+  noch nicht uebernommen.
