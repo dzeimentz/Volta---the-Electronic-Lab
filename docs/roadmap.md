@@ -22,7 +22,7 @@ Messgeraet, Zeitschreiber, Forscherheft mit Fotos, Elternbereich, Profile, Aufga
 Kurzanleitung, DE/FR/EN/LU). Android: Test-APK arm64/armv7, AAB fuer Google Play (unsigniert). Store-Unterlagen in
 `docs/store/` (Checkliste `docs/store/README.md`), Anleitungen ueber `tools/manual_pdfs.py`.
 Bis 1.0: Erprobung mit Kindern und Pilot mit einer Lehrkraft, Korrekturen als 0.9.x; Schritte des Inhabers
-(Anschrift, Datenschutzerklaerung online, Markenbewertung »Volta«, Entwicklerkonto, Signatur, Verwertungsweg).
+(Datenschutzerklaerung online, Markenbewertung »Volta«, Entwicklerkonto, Signatur, Verwertungsweg).
 
 ## Offene Entscheidungen
 Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, danach folgt Volta 2
@@ -37,7 +37,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 | Verwertungsweg (frei, Einmalkauf, Schullizenz) | vor dem Store-Eintrag |
 | Mitwirkung der Lehrkraft am Pilot | Beginn Phase 3 |
 | Qt-Lizenzweg fuer iPadOS | vor Phase 5b |
-| Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich | vor Phase 3 |
+| ~~Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich~~ eingetragen (13.10.2026) | vor Phase 3 |
 
 ## Phase 1 – Stand
 - 1.1–1.4 Grundplatte, Bauteilfach, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Stromfluss: erledigt.

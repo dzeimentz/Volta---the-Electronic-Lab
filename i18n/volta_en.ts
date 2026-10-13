@@ -1125,6 +1125,10 @@
 <context>
     <name>InfoDialog</name>
     <message>
+        <source>Deutschland</source>
+        <translation>Germany</translation>
+    </message>
+    <message>
         <location filename="../app/qml/InfoDialog.qml" line="57" />
         <source>Version %1</source>
         <translation>Version %1</translation>
@@ -2190,6 +2194,10 @@
 </context>
 <context>
     <name>ParentArea</name>
+    <message>
+        <source>Deutschland</source>
+        <translation>Germany</translation>
+    </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="65" />
         <source>Elternbereich</source>

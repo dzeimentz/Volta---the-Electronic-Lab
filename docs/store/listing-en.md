@@ -47,5 +47,6 @@ Volta is developed by DC Software Engineering.
 
 **Category:** Education
 **Contact e-mail:** info@dc-software-engineering.com
+**Address:** DC Software Engineering, Daniel Zeimentz, Aufm Rothenhügel 26, 54666 Irrel, Germany
 **Website:** https://dc-software-engineering.com
 **Privacy policy (URL):** https://dc-software-engineering.com/volta/privacy – file: `datenschutzerklaerung.html`

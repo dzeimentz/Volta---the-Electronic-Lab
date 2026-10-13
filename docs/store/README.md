@@ -14,8 +14,9 @@ Stand: Oktober 2026. Alles hier ist vorbereitet; Signieren, Hochladen und Veröf
 
 ## Checkliste
 
-- [ ] Anschrift in `datenschutzerklaerung.html` eintragen (Markierung »todo«) und unter
-      https://dc-software-engineering.com/volta/datenschutz hosten; URL in der Play Console angeben
+- [x] Anschrift in `datenschutzerklaerung.html`, im Info-Fenster und im Elternbereich eingetragen
+- [ ] `datenschutzerklaerung.html` unter https://dc-software-engineering.com/volta/datenschutz hosten; URL in der
+      Play Console angeben
 - [ ] Markenlage »Volta«/»Tick« anwaltlich bewerten lassen – Vorrecherche in `markenpruefung.md`
 - [ ] FR- und LB-Eintrag von Muttersprachlern gegenlesen lassen
 - [ ] Entwicklerkonto (Organisation, D-U-N-S bei Firmenkonto) und Identitätsprüfung

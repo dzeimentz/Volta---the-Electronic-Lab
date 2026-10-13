@@ -481,7 +481,7 @@ Popup {
 
             // ---- Kontakt
             Heading { text: qsTr("Kontakt und Hilfe") }
-            Body { text: "DC Software Engineering, Daniel Zeimentz, Irrel (DE)" }
+            Body { text: "DC Software Engineering, Daniel Zeimentz, Aufm Rothenhügel 26, 54666 Irrel, " + qsTr("Deutschland") }
             Flow {
                 width: parent.width
                 spacing: 10

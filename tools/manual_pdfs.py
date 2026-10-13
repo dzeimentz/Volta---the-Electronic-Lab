@@ -263,7 +263,7 @@ def cover(title, subtitle, mood="freundlich"):
             P(f"<font size=20><b>{title}</b></font>", "center"), Spacer(1, 3 * mm), P(subtitle, "center"),
             Spacer(1, 18 * mm),
             P(f"Version {VERSION} · Oktober 2026 · für Android-Tablets und Windows<br/>"
-              "DC Software Engineering, Daniel Zeimentz, Irrel · info@dc-software-engineering.com", "small")]
+              "DC Software Engineering, Daniel Zeimentz, Aufm Rothenhügel 26, 54666 Irrel · info@dc-software-engineering.com", "small")]
 
 
 # ---------------------------------------------------------------- Ausfuehrliche Anleitung
@@ -633,7 +633,7 @@ def long_manual(path):
                      ["Rechtsklick", "Menü eines Bauteils, einer Leitung oder eines Feldes"],
                      ["Doppelklick", "Bauteil drehen"]], [62, 108]),
               P("Kontakt", "h2"),
-              P("DC Software Engineering, Daniel Zeimentz, Irrel (Deutschland)<br/>"
+              P("DC Software Engineering, Daniel Zeimentz, Aufm Rothenhügel 26, 54666 Irrel (Deutschland)<br/>"
                 "Web: dc-software-engineering.com · E-Mail: info@dc-software-engineering.com"),
               tick_box("froehlich", "Viel Spaß beim Forschen! Und denk dran: Wer sich irrt, lernt am meisten.")]
 

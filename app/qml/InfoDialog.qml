@@ -125,8 +125,9 @@ Popup {
                     }
                 }
             }
-            Line { text: "DC Software Engineering, Irrel (DE)"; font.bold: true }
-            Line { text: "Daniel Zeimentz" }
+            // Anbieterkennzeichnung mit ladungsfaehiger Anschrift
+            Line { text: "DC Software Engineering"; font.bold: true }
+            Line { text: "Daniel Zeimentz, Aufm Rothenhügel 26, 54666 Irrel, " + qsTr("Deutschland") }
             Line { text: qsTr("E-Mail: %1").arg("info@dc-software-engineering.com") }
             Line { text: qsTr("Web: %1").arg("www.dc-software-engineering.com") }
             Flow {
