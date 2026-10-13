@@ -1261,6 +1261,10 @@
 <context>
     <name>Lab</name>
     <message>
+        <source>Ganze Platte zeigen</source>
+        <translation>Ganz Plack weisen</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Lab.qml" line="321" />
         <source>Stufe %1: %2</source>
         <translation>Stuf %1: %2</translation>

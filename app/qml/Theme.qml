@@ -61,4 +61,5 @@ QtObject {
     readonly property int slotGap: 8
     readonly property int control: 48       // Bedienelemente >= 48 dp
     readonly property int margin: 24
+    readonly property real maxZoom: 2.0     // groesste Vergroesserung der Arbeitsflaeche (zwei Finger, Strg + Mausrad)
 }

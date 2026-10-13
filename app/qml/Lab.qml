@@ -178,6 +178,43 @@ Item {
     // Nennspannung einer Gluehlampe (Wert; ohne Wert die Katalogvorgabe)
     function lampVolt(part) { return part && part.value > 0 ? part.value : (catalogEntry("gluehlampe").defaultVolt || 0) }
     function toCanvas(scenePos) { return canvas.mapFromItem(null, scenePos.x, scenePos.y) }
+
+    // ------------------------------------------------------------------ Ansicht: Zoom und Verschieben
+    // Selbsttaetig (autoView): die ganze Arbeitsflaeche passt ins Fenster (die Breite der Grundplatte waehlt die
+    // Automatik 8/10/12). Zwei Finger, Strg + Mausrad, Mausrad, Leertaste + Ziehen und mittlere Maustaste stellen
+    // Massstab und Ausschnitt von Hand ein; der Knopf oben rechts in der Arbeitsflaeche kehrt zur ganzen Platte zurueck.
+    readonly property real fitScale: Math.min(1, (boardArea.width - 2 * Theme.margin) / canvas.width,
+                                              (boardArea.height - 2 * Theme.margin) / canvas.height)
+    property bool autoView: true
+    property bool spaceHeld: false // Leertaste gedrueckt: Ziehen mit der Maus verschiebt den Ausschnitt
+    property real userScale: 1
+    property point userPos: Qt.point(Theme.margin, Theme.margin)
+    readonly property real viewScale: autoView ? fitScale : Math.max(fitScale, Math.min(Theme.maxZoom, userScale))
+    // Ausschnitt begrenzen: passt die Flaeche, bleibt sie oben links; sonst kein leerer Rand ueber Theme.margin
+    function clampOffset(offset, scaled, view) {
+        if (scaled + 2 * Theme.margin <= view) return Theme.margin
+        return Math.max(view - scaled - Theme.margin, Math.min(Theme.margin, offset))
+    }
+    // Punkt der Arbeitsflaeche unter einem Punkt in boardArea
+    function contentAt(p) { return Qt.point((p.x - canvas.x) / canvas.scale, (p.y - canvas.y) / canvas.scale) }
+    // Massstab s einstellen, so dass der Flaechenpunkt c unter dem Punkt p (boardArea) bleibt
+    function zoomTo(s, c, p) {
+        const scale = Math.max(fitScale, Math.min(Theme.maxZoom, s))
+        userPos = Qt.point(p.x - c.x * scale, p.y - c.y * scale)
+        userScale = scale
+        autoView = false
+    }
+    // Ziehen: Flaeche ab der Startlage um die Verschiebung des Zeigers versetzen
+    function panTo(start, translation) {
+        userScale = canvas.scale
+        userPos = Qt.point(start.x + translation.x, start.y + translation.y)
+        autoView = false
+    }
+    function panBy(dx, dy) {
+        userScale = canvas.scale
+        userPos = Qt.point(canvas.x + dx, canvas.y + dy)
+        autoView = false
+    }
     // Mitte und Rand einer Gruppe von Pultfeldern (Index in deskNames)
     function deskX(i) { return anchorPoint(deskNames[i]).x }
     function groupCenter(first, last) { return (deskX(first) + deskX(last)) / 2 }
@@ -664,26 +701,124 @@ Item {
 
     Rectangle {
         id: boardArea
+        objectName: "boardArea"
         anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: recorderPanel.top }
         color: Theme.board
         clip: true
 
-        // Tippen ins Leere hebt die Auswahl auf
-        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = ""; lab.selectedModule = "" } }
+        // Tippen ins Leere hebt die Auswahl auf (und gibt der Arbeitsflaeche den Tastaturfokus fuer die Leertaste)
+        TapHandler {
+            onTapped: { lab.selectedPart = ""; lab.selectedWire = ""; lab.selectedModule = ""; spaceKeys.forceActiveFocus() }
+        }
+
+        // Leertaste + Ziehen (Desktop): solange die Leertaste gehalten wird, nimmt eine Ebene ueber der Arbeitsflaeche
+        // das Ziehen mit der Maus als Verschieben (Felder und Bauteile bleiben unberuehrt)
+        Item {
+            id: spaceKeys
+            objectName: "spaceKeys"
+            Keys.onPressed: (event) => {
+                if (event.key === Qt.Key_Space) { if (!event.isAutoRepeat) lab.spaceHeld = true; event.accepted = true }
+            }
+            Keys.onReleased: (event) => {
+                if (event.key === Qt.Key_Space) { if (!event.isAutoRepeat) lab.spaceHeld = false; event.accepted = true }
+            }
+            onActiveFocusChanged: if (!activeFocus) lab.spaceHeld = false
+        }
+        Item {
+            objectName: "spacePanLayer"
+            anchors.fill: parent
+            z: 10
+            visible: lab.spaceHeld
+            HoverHandler { cursorShape: spacePan.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor }
+            DragHandler {
+                id: spacePan
+                target: null
+                grabPermissions: PointerHandler.CanTakeOverFromAnything // vor dem Ziehen einer Leitung
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                property point startPos
+                onActiveChanged: if (active) startPos = Qt.point(canvas.x, canvas.y)
+                onActiveTranslationChanged: if (active) lab.panTo(startPos, activeTranslation)
+            }
+        }
+
+        // Zoom und Verschieben mit zwei Fingern: der Flaechenpunkt unter dem Mittelpunkt der Finger bleibt darunter
+        PinchHandler {
+            id: pinch
+            objectName: "boardPinch"
+            target: null
+            minimumPointCount: 2
+            maximumPointCount: 2
+            // zwei Finger gehoeren dem Zoom, auch wenn einer auf einem Bauteil oder Feld liegt
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            property real startScale: 1
+            property point startContent
+            onActiveChanged: {
+                if (active) {
+                    startScale = canvas.scale
+                    startContent = lab.contentAt(centroid.position)
+                }
+            }
+            onActiveScaleChanged: if (active) lab.zoomTo(startScale * activeScale, startContent, centroid.position)
+            onCentroidChanged: if (active) lab.zoomTo(startScale * activeScale, startContent, centroid.position)
+        }
+        // Strg + Mausrad: Zoom am Mauszeiger; Mausrad bzw. Umschalt + Mausrad: senkrecht bzw. waagrecht verschieben
+        WheelHandler {
+            acceptedModifiers: Qt.ControlModifier
+            target: null
+            onWheel: (event) => lab.zoomTo(canvas.scale * Math.pow(1.1, event.angleDelta.y / 120),
+                                          lab.contentAt(point.position), point.position)
+        }
+        WheelHandler {
+            acceptedModifiers: Qt.NoModifier
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            target: null
+            enabled: canvas.width * canvas.scale + 2 * Theme.margin > boardArea.width
+                     || canvas.height * canvas.scale + 2 * Theme.margin > boardArea.height
+            onWheel: (event) => lab.panBy(event.angleDelta.x / 2, event.angleDelta.y / 2)
+        }
+        WheelHandler {
+            acceptedModifiers: Qt.ShiftModifier
+            target: null
+            onWheel: (event) => lab.panBy(event.angleDelta.y / 2, 0)
+        }
+        // Mittlere Maustaste: Ausschnitt ziehen
+        DragHandler {
+            target: null
+            acceptedButtons: Qt.MiddleButton
+            acceptedDevices: PointerDevice.Mouse
+            property point startPos
+            onActiveChanged: if (active) startPos = Qt.point(canvas.x, canvas.y)
+            onActiveTranslationChanged: if (active) lab.panTo(startPos, activeTranslation)
+        }
+
+        // Ganze Platte zeigen: nur sichtbar, wenn von Hand gezoomt oder verschoben wurde
+        ToolButton {
+            objectName: "viewReset"
+            anchors { right: parent.right; top: parent.top; margins: 8 }
+            z: 11
+            width: Theme.control; height: Theme.control
+            visible: !lab.autoView
+            onClicked: lab.autoView = true
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Ganze Platte zeigen")
+            Accessible.name: ToolTip.text
+            contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "fit"; size: 24; color: Theme.navy } }
+            background: Rectangle { radius: 8; color: parent.down ? "#D7DEE6" : "#EEF2F6"; border.color: "#7F93A8"; border.width: 1.5 }
+        }
 
         Item {
             id: canvas
             objectName: "canvas"
-            x: Theme.margin
-            y: Theme.margin
             width: Math.max(lab.trashX + Theme.control, lab.meterX, !lab.controller.meterVisible ? lab.boardWidth
                             : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth)
                             : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
             height: lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
-            // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
+            // Massstab und Ausschnitt aus der Ansicht (oben); selbsttaetig passt die ganze Flaeche ins Fenster
             transformOrigin: Item.TopLeft
-            scale: Math.min(1, (boardArea.width - 2 * Theme.margin) / width, (boardArea.height - 2 * Theme.margin) / height)
+            scale: lab.viewScale
+            x: lab.autoView ? Theme.margin : lab.clampOffset(lab.userPos.x, width * scale, boardArea.width)
+            y: lab.autoView ? Theme.margin : lab.clampOffset(lab.userPos.y, height * scale, boardArea.height)
 
             ControlDesk {
                 controller: lab.controller
@@ -1290,6 +1425,7 @@ Item {
         margins: 8 // immer ganz im Fenster
         property string anchorName
         MenuItem {
+            height: Theme.control
             text: qsTr("Spannungsanzeige ein/aus")
             enabled: !fieldMenu.anchorName.startsWith("MESS:")
             onTriggered: lab.controller.toggleVoltageDisplay(fieldMenu.anchorName)
@@ -1298,6 +1434,7 @@ Item {
         Repeater {
             model: lab.controller.recorderAvailable ? 2 : 0
             MenuItem {
+                height: Theme.control
                 required property int index
                 objectName: "recordChannel_" + index
                 text: fieldMenu.anchorName.startsWith("MESS:")
@@ -1317,14 +1454,17 @@ Item {
         objectName: "partMenu"
         property var part: ({})
         MenuItem {
+            height: Theme.control
             text: qsTr("Drehen")
             onTriggered: lab.turnPart(partMenu.part)
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Umdrehen (Polung)")
             onTriggered: { lab.beginEdit(); lab.controller.flipPart(partMenu.part.id) }
         }
         MenuItem {
+            height: Theme.control
             text: partMenu.part.longSpan ? qsTr("Kurz stecken") : qsTr("Lang stecken")
             enabled: partMenu.part.anchors !== undefined && partMenu.part.anchors.length === 2
             onTriggered: {
@@ -1340,6 +1480,7 @@ Item {
             Instantiator {
                 model: Texts.resistorValues
                 delegate: MenuItem {
+                    height: Theme.control
                     required property var modelData
                     text: Texts.ohm(modelData)
                     checkable: true
@@ -1358,6 +1499,7 @@ Item {
             Instantiator {
                 model: lab.catalogEntry("gluehlampe").voltages || []
                 delegate: MenuItem {
+                    height: Theme.control
                     required property var modelData
                     text: qsTr("%1 V").arg(Number(modelData).toLocaleString(Qt.locale(), "f", modelData % 1 === 0 ? 0 : 1))
                     checkable: true
@@ -1369,11 +1511,13 @@ Item {
             }
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Reparieren")
             onTriggered: { lab.beginEdit(); lab.controller.repairPart(partMenu.part.id) }
         }
         MenuSeparator {}
         MenuItem {
+            height: Theme.control
             objectName: "partMenuRemove"
             text: "🗑 " + qsTr("Entfernen")
             onTriggered: { lab.beginEdit(); lab.controller.removePart(partMenu.part.id); lab.selectedPart = "" }
@@ -1387,10 +1531,12 @@ Item {
         property string moduleId
         property string moduleType
         MenuItem {
+            height: Theme.control
             text: qsTr("Blick hinein")
             onTriggered: moduleInside.show(moduleMenu.moduleId, moduleMenu.moduleType)
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Herausnehmen")
             onTriggered: { lab.beginEdit(); lab.controller.removeModule(moduleMenu.moduleId); lab.selectedModule = "" }
         }
@@ -1409,10 +1555,12 @@ Item {
         property string toolType
         property bool toolOn
         MenuItem {
+            height: Theme.control
             text: toolMenu.toolOn ? qsTr("Ausschalten") : qsTr("Einschalten")
             onTriggered: lab.controller.setToolOn(toolMenu.toolType, !toolMenu.toolOn)
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Wegräumen")
             onTriggered: lab.controller.removeTool(toolMenu.toolType)
         }
@@ -1427,6 +1575,7 @@ Item {
         Instantiator {
             model: Texts.wireColors
             delegate: MenuItem {
+                height: Theme.control
                 required property string modelData
                 objectName: "wireMenuColor_" + modelData
                 text: qsTr("Farbe: %1").arg(Texts.colorName(modelData))
@@ -1439,6 +1588,7 @@ Item {
         }
         MenuSeparator {}
         MenuItem {
+            height: Theme.control
             objectName: "wireMenuRemove"
             text: "🗑 " + qsTr("Leitung löschen")
             onTriggered: { lab.beginEdit(); lab.controller.removeWire(wireMenu.wireId); lab.selectedWire = "" }

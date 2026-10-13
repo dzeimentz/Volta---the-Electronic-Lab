@@ -35,7 +35,7 @@ Item {
             color: "#5A5A5A"
         }
     }
-    TapHandler { onTapped: line.tapped() }
+    TapHandler { margin: 12; onTapped: line.tapped() } // Fangbereich 48 dp (Linie 24 dp hoch)
 
     Accessible.role: Accessible.Button
     Accessible.name: qsTr("Felder von %1 hervorheben").arg(line.symbol)

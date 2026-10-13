@@ -8,6 +8,8 @@
 #include <QStyleHints>
 #include <QFile>
 #include <QTemporaryDir>
+#include <QWheelEvent>
+#include <cmath>
 #include <algorithm>
 #include <QQmlContext>
 #include <QQuickItem>
@@ -1032,6 +1034,55 @@ private slots:
         QMetaObject::invokeMethod(gate, "close");
         QTRY_VERIFY(!gate->property("opened").toBool());
         root->setProperty("inLab", true);
+    }
+
+    // Zoom und Verschieben (Touch-Bedienung, docs/ui-spec.md): Strg + Mausrad zoomt um den Zeiger, Leertaste + Ziehen
+    // und mittlere Maustaste verschieben den Ausschnitt statt eine Leitung zu ziehen, der Knopf zeigt wieder die ganze
+    // Platte (zwei Finger nutzen dieselben Funktionen zoomTo/panTo)
+    void zoomAndPanBoard() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        QQuickItem* canvas = item(QStringLiteral("canvas"));
+        QQuickItem* area = item(QStringLiteral("boardArea"));
+        QQuickItem* reset = findItem(m_window->contentItem(), QStringLiteral("viewReset"));
+        QVERIFY(canvas && area && reset);
+        QTRY_VERIFY(area->isVisible());
+        const double fit = canvas->scale();
+        QVERIFY(fit > 0.0 && fit <= 1.0);
+        QVERIFY(!reset->isVisible()); // ganze Platte: nichts zurueckzusetzen
+
+        // Klick auf eine leere Stelle (unten rechts) gibt der Arbeitsflaeche den Tastaturfokus
+        QTest::mouseClick(m_window, Qt::LeftButton, {},
+                          area->mapToScene(QPointF(area->width() - 20, area->height() - 20)).toPoint());
+        const QPointF pos = area->mapToScene(QPointF(area->width() / 2, area->height() / 2));
+        const QPointF before = canvas->mapFromScene(pos);
+        QWheelEvent sceneWheel(pos, m_window->mapToGlobal(pos), QPoint(), QPoint(0, 360), Qt::NoButton,
+                               Qt::ControlModifier, Qt::NoScrollPhase, false);
+        QGuiApplication::sendEvent(m_window, &sceneWheel);
+        QTRY_VERIFY(canvas->scale() > fit * 1.3);
+        const QPointF after = canvas->mapFromScene(pos);
+        QVERIFY(std::abs(after.x() - before.x()) < 1.0 && std::abs(after.y() - before.y()) < 1.0); // Punkt bleibt
+        QTRY_VERIFY(reset->isVisible());
+
+        // Leertaste + Ziehen verschiebt und legt keine Leitung an
+        const int wires = m_lab->wires().size();
+        double x0 = canvas->x();
+        QTest::keyPress(m_window, Qt::Key_Space);
+        const QPoint start = pos.toPoint();
+        drag(start, start - QPoint(100, 0));
+        QTest::keyRelease(m_window, Qt::Key_Space);
+        QTRY_VERIFY(canvas->x() < x0 - 50);
+        QCOMPARE(m_lab->wires().size(), wires);
+
+        // mittlere Maustaste: ebenso
+        x0 = canvas->x();
+        drag(start, start + QPoint(60, 0), Qt::MiddleButton);
+        QTRY_VERIFY(canvas->x() > x0 + 30);
+        QCOMPARE(m_lab->wires().size(), wires);
+
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(reset));
+        QTRY_COMPARE(canvas->scale(), fit);
+        QTRY_VERIFY(!reset->isVisible());
     }
 
     // Kurzanleitung neben der Hilfe: Knopf auf der Startseite oeffnet sie mit Bild der eigenen Sprache; von dort geht

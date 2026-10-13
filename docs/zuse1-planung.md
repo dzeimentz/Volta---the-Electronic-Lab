@@ -9,10 +9,10 @@ das Konzept ueberholt und entfernt.
 ## Entscheidungen des Inhabers
 - 13.10.2026: **Busbreite in Zuse 1: 4 Bit durchgehend** (Datenbus, Register, ALU, Speicherworte, Adressen 0–15).
   Deckt sich mit dem Konzept (Zuse-4; 8 Bit erst in Zuse 2).
-- 13.10.2026: **Zuse 1 nach Volta 3.** *Abgleich noetig:* Das Konzept (Abschnitt 14, R7, ADR-0010) setzt den
-  Prototyp Z0 nach dem Android-Pilot von Volta 1 und die Phasen Z1 ff. nach der Veroeffentlichung von Volta 1 an,
-  nicht nach Volta 3. Zu klaeren: gilt »nach Volta 3« fuer die Veroeffentlichung (Prototyp Z0 trotzdem frueh) oder
-  fuer den Beginn der Arbeit?
+- 13.10.2026: Zuse 1 nach Volta 3 – **am 14.10.2026 wieder offen:** Eine Marktanalyse sieht die Nachfrage bei
+  Lernsystemen (Kasten und App) eher bei der Informationstechnik als bei der Elektronik. Erwogen werden deshalb
+  **zwei parallele Linien** (Volta und Zuse). Die Entscheidung wartet auf die Antwort eines Verlags, den der
+  Inhaber angeschrieben hat. Bis dahin gilt das Konzept (Z0 nach dem Android-Pilot von Volta 1).
 
 ## Quelle: ELRAD-Lehrgang »Digitaltechnik im Experiment« (Auswertung 13.10.2026)
 Lehrgang Elektronische Datenverarbeitung von H. Weidner (ELRAD 11/77–05/82, Sonderheft Heise 2005; private

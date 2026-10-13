@@ -77,6 +77,17 @@
 
 Waehrend des Ziehens einer Leitung leuchtet das Zielfeld auf; Fangbereich = ganzes Feld + 8 dp.
 
+Umgesetzt (Zoom/Verschieben, `Lab.qml`, uebernommen aus dem Cloud-Zweig `claude/mobile-android-ipad-0w8lbc` und an
+den lokalen Stand angepasst): zwei Finger (`PinchHandler`; der Punkt unter den Fingern bleibt stehen, zwei Finger
+gehen vor Bauteil und Leitung), Strg + Mausrad (Zoom am Zeiger), Mausrad bzw. Umschalt + Mausrad (Verschieben, nur
+wenn gezoomt), Leertaste + Ziehen und mittlere Maustaste (Ausschnitt ziehen; die Leertaste wirkt, wenn die
+Arbeitsflaeche den Fokus hat, z. B. nach Tippen ins Leere). Massstab zwischen »ganze Platte« und 200 %. Ansicht zu
+Beginn auf allen Geraeten: ganze Platte (die Breite 8/10/12 waehlt die Automatik); Knopf oben rechts in der
+Arbeitsflaeche (»Ganze Platte zeigen«) nur nach Zoomen sichtbar. Menueeintraege, Analogschalter und Gruppenlinien
+mit Fangbereich >= 48 dp. Offen: Tippen mit zwei/drei Fingern fuer Rueckgaengig/Wiederholen (braucht eigene
+Erkennung und Geraetetest); Hochformat mit Bauteilfach unten (Android ist auf Querformat festgelegt, Thema fuer
+das iPad).
+
 ## Bedienpult
 - **Hauptschalter** fuer die Batterie.
 - **Drehregler mit Lichtring**: 16 Segmente auf 270°, Luecke unten; Segmente vom linken Anschlag bis zur Stellung

@@ -123,6 +123,16 @@ int main(int argc, char* argv[]) {
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");
+    // Entwicklerhilfe: VOLTA_DEMO_SIZE=<breite>x<hoehe> setzt die Fenstergroesse in dp (ohne Mindestgroesse), z. B.
+    // 1024x600 fuer ein kleines Tablet; VOLTA_DEMO_ZOOM=<massstab> zoomt die Arbeitsflaeche wie mit zwei Fingern
+    const QStringList demoSize = qEnvironmentVariable("VOLTA_DEMO_SIZE").split(QLatin1Char('x'));
+    if (demoSize.size() == 2 && !engine.rootObjects().isEmpty()) {
+        QObject* window = engine.rootObjects().first();
+        window->setProperty("minimumWidth", 0);
+        window->setProperty("minimumHeight", 0);
+        window->setProperty("width", demoSize[0].toInt());
+        window->setProperty("height", demoSize[1].toInt());
+    }
     // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
@@ -242,6 +252,16 @@ int main(int argc, char* argv[]) {
             const auto roots = engine.rootObjects();
             if (QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab")))
                 l->setProperty("recorderVisible", true);
+        });
+
+    // Entwicklerhilfe: VOLTA_DEMO_ZOOM=<massstab> zoomt die Arbeitsflaeche (Mitte oben links) wie mit zwei Fingern
+    if (const double zoom = qEnvironmentVariable("VOLTA_DEMO_ZOOM").toDouble(); zoom > 0)
+        QTimer::singleShot(1200, &engine, [&engine, zoom] {
+            const auto roots = engine.rootObjects();
+            if (QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab"))) {
+                l->setProperty("userScale", zoom);
+                l->setProperty("autoView", false);
+            }
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_COLUMNS=8|10|12 stellt die Breite der Grundplatte ein (wie +/- in der Werkzeugleiste)

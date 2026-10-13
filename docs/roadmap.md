@@ -35,6 +35,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 | Geraetelage Zielschulen, Reihenfolge Android/Desktop/iPad | Ende Phase 0 |
 | ~~Gestalt und Name der Begleitfigur~~ entschieden: Tick (`docs/maskottchen-tick.md`) | Ende Phase 1 |
 | Verwertungsweg (frei, Einmalkauf, Schullizenz) | vor dem Store-Eintrag |
+| Volta und Zuse als zwei parallele Linien (Marktanalyse: Nachfrage eher bei IT); Anfrage an einen Verlag laeuft (10/2026) | nach Antwort des Verlags |
 | Mitwirkung der Lehrkraft am Pilot | Beginn Phase 3 |
 | Qt-Lizenzweg fuer iPadOS | vor Phase 5b |
 | ~~Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich~~ eingetragen (13.10.2026) | vor Phase 3 |
