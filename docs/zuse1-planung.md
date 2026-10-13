@@ -41,7 +41,7 @@ Darum ab der Stufe, in der mehrere Bits gemeinsam laufen, **Busse**:
 - **Einzelleitungen nur am Anfang** (Stufen 1–3): ein Gatter, ein Flipflop – hier soll jede Verbindung
   sichtbar und einzeln gezogen werden, wie in Volta.
 - **Bus ab Stufe 4**: Bausteine mit mehreren gleichartigen Anschluessen (Zaehler, Register, Addierer, Speicher,
-  Anzeige) haben eine **Busbuchse** (4 bzw. 8 Bit, Bitnummern 0–3/0–7 beschriftet). Eine Busleitung wird wie
+  Anzeige) haben eine **Busbuchse** (**4 Bit durchgehend**, wie der Kleinstrechner; Bitnummern 0–3 beschriftet). Eine Busleitung wird wie
   eine Leitung gezogen, verbindet aber alle Bits auf einmal (breites Band mit Bitstreifen).
 - **Wert auf dem Bus sichtbar**: am Band die Bits als 1/0 und die Zahl dazu (dual, dezimal, spaeter hexadezimal);
   Aenderungen leuchten kurz auf. Fuer den Zeitverlauf: Logikanalysator mit Bus-Spur.
@@ -78,11 +78,13 @@ Darum ab der Stufe, in der mehrere Bits gemeinsam laufen, **Busse**:
 Wahrheitstabelle (Aufnahme per Knopf), Zahlensysteme (dual, dezimal, hexadezimal), Zeitdiagramm/Logikanalysator
 (Nachfolger des Zeitschreibers), Befehlstabelle des eigenen Rechners, Lexikon der Bausteine, Fehlersuche.
 
+## Entschieden
+- 13.10.2026: Zuse 1 erscheint **nach Volta 3** und setzt dort an, wo Volta 3 mit Gattern und Kippstufen endet.
+- 13.10.2026: Busbreite **4 Bit durchgehend** (Zaehler, Register, Rechenwerk, Speicherworte, Adressen 0–15).
+
 ## Offene Entscheidungen
 | Entscheidung | Spaetestens |
 |---|---|
-| Stellung in der Reihe: laut Konzept nach Volta 3 (setzt bei Gattern und Kippstufen an) oder schon nach Volta 2 | vor Planungsbeginn |
-| Busbreite: 4 Bit durchgehend (wie der Kleinstrechner) oder 8 Bit ab Stufe 6 | Darstellung |
 | Bausteine mit echten Typnummern (7400, 7490 …) oder neutralen Namen (Gatterbaustein A …) | Stufenplanung |
 | Name »Zuse«: Markenrecherche (docs/privacy-safety.md) und Namensrecht (Einverstaendnis der Erben bzw. der Zuse-Gesellschaft klaeren) | vor Planungsbeginn |
 | Eigenes Bedienpult (Eingabe-/Anzeigeleiste) oder Volta-Pult mit Erweiterung | Darstellung |
