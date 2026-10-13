@@ -60,6 +60,12 @@
       "cacheVariables": { "ANDROID_ABI": "armeabi-v7a" }
     },
     {
+      "name": "android-aab",
+      "displayName": "Android App Bundle (arm64-v8a + armeabi-v7a, Google Play)",
+      "inherits": "android-arm64",
+      "cacheVariables": { "QT_ANDROID_ABIS": "arm64-v8a;armeabi-v7a" }
+    },
+    {
       "name": "ios",
       "displayName": "iPadOS arm64 (Phase 5b, benoetigt macOS)",
       "inherits": "base",
@@ -75,7 +81,9 @@
     { "name": "desktop-debug", "configurePreset": "desktop-debug" },
     { "name": "desktop-release", "configurePreset": "desktop-release" },
     { "name": "android-arm64", "configurePreset": "android-arm64" },
-    { "name": "android-armv7", "configurePreset": "android-armv7" }
+    { "name": "android-armv7", "configurePreset": "android-armv7" },
+    { "name": "android-aab", "configurePreset": "android-aab", "targets": ["aab"] },
+    { "name": "ios", "configurePreset": "ios", "configuration": "Release" }
   ],
   "testPresets": [
     { "name": "core-only", "configurePreset": "core-only", "output": { "outputOnFailure": true } },

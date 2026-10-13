@@ -1,0 +1,2 @@
+2026-10-05 13:57:47,957 - aqt.metadata - DEBUG - metadata 139621881847936 Connection to 'https://download.qt.io' failed. Retrying with fallback 'https://ftp1.nluug.nl/languages/qt/'.
+2026-10-05 13:57:52,564 - aqt.main - ERROR - installer 139621881847936 Failure to connect to https://ftp1.nluug.nl/languages/qt/online/qtsdkrepository/linux_x64/desktop/: ProxyError

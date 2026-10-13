@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hintergrund des adaptiven Symbols: Farbverlauf der Grundflaeche aus app/resources/icons/volta.svg -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="#1F4B76"
+        android:endColor="#0A2540"
+        android:type="linear" />
+</shape>

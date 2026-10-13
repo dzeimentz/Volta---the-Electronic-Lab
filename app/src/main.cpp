@@ -25,11 +25,15 @@ int main(int argc, char* argv[]) {
     for (int size : {32, 64, 256}) icon.addFile(QStringLiteral(":/icons/volta_%1.png").arg(size), QSize(size, size));
     QGuiApplication::setWindowIcon(icon);
 
-    // Inhaltspakete: zuerst neben der ausfuehrbaren Datei (Release-Ordner, tools/deploy_release.py), sonst aus dem
-    // Quellbaum. Die Einbettung als Ressource folgt mit der Paketierung (Phase 5).
-    const QString besideExe = QCoreApplication::applicationDirPath() + QStringLiteral("/content");
-    const bool deployed = QFileInfo::exists(besideExe + QStringLiteral("/catalog/bauteile.json"));
-    volta::LabController lab(deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR));
+    // Inhaltspakete: zuerst neben der ausfuehrbaren Datei (Release-Ordner, tools/deploy_release.py), dann eingebettet
+    // als Qt-Ressource (Android, iOS; VOLTA_EMBED_CONTENT), sonst aus dem Quellbaum (Entwicklung).
+    const auto hasCatalog = [](const QString& dir) {
+        return QFileInfo::exists(dir + QStringLiteral("/catalog/bauteile.json"));
+    };
+    QString contentRoot = QCoreApplication::applicationDirPath() + QStringLiteral("/content");
+    if (!hasCatalog(contentRoot)) contentRoot = QStringLiteral(":/content");
+    if (!hasCatalog(contentRoot)) contentRoot = QStringLiteral(VOLTA_CONTENT_DIR);
+    volta::LabController lab(contentRoot);
     // Fortschritt im Lernpfad lokal speichern; Entwicklerhilfen (VOLTA_SCREENSHOT ...) lassen ihn unberuehrt
     if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty())
         lab.useProgressFile(volta::services::ProgressStore::defaultFile());
@@ -51,14 +55,27 @@ int main(int argc, char* argv[]) {
     volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty());
     if (!demoFont.isEmpty()) settings.setFontLevel(demoFont.toInt());
     engine.rootContext()->setContextProperty(QStringLiteral("volta_settings"), &settings);
-    // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux); abschaltbar in den Einstellungen
+    // Startbildschirm mit Herstellerlogo in der Desktop-Ausgabe (Windows/Linux/macOS); abschaltbar in den Einstellungen
     // oder mit VOLTA_NO_SPLASH=1
     const bool splash = volta::AppSettings::splashAvailable() && settings.showSplash() &&
                         qEnvironmentVariableIntValue("VOLTA_NO_SPLASH") != 1;
     engine.rootContext()->setContextProperty(QStringLiteral("volta_showSplash"), splash);
+    // Entwicklerhilfe: VOLTA_DEMO_TOUCH=1 zeigt die Touch-Oberflaeche wie auf Android/iOS (Originalgroesse, ohne
+    // Mindestgroesse des Fensters); VOLTA_DEMO_SIZE=<breite>x<hoehe> setzt die Fenstergroesse in dp, z. B. 800x1280
+    // fuer ein Tablet im Hochformat oder 1180x820 fuer ein iPad im Querformat
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_forceTouch"),
+                                             qEnvironmentVariableIntValue("VOLTA_DEMO_TOUCH") == 1);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");
+    const QStringList demoSize = qEnvironmentVariable("VOLTA_DEMO_SIZE").split(QLatin1Char('x'));
+    if (demoSize.size() == 2 && !engine.rootObjects().isEmpty()) {
+        QObject* window = engine.rootObjects().first();
+        window->setProperty("minimumWidth", 0);
+        window->setProperty("minimumHeight", 0);
+        window->setProperty("width", demoSize[0].toInt());
+        window->setProperty("height", demoSize[1].toInt());
+    }
     // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())

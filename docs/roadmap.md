@@ -26,6 +26,7 @@ Summe bis Android 1.0: 115 PT. Vollausbau Volta 1: 275 PT.
 | Verwertungsweg (frei, Einmalkauf, Schullizenz) | Ende Phase 2 |
 | Mitwirkung der Lehrkraft am Pilot | Beginn Phase 3 |
 | Qt-Lizenzweg fuer iPadOS | vor Phase 5b |
+| Zuse als eigene Linie annehmen (ADR-0010), Markenrecherche »Zuse« | vor Prototyp Werkbank (Phase Z0) |
 | Vollstaendige Anschrift fuer Anbieterkennzeichnung im Info-Bereich | vor Phase 3 |
 
 ## Phase 1 – Stand

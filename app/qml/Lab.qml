@@ -133,6 +133,57 @@ Item {
     property string trayType: ""
     property point trayPos
 
+    // ------------------------------------------------------------------ Ansicht: Zoom und Verschieben
+    // Selbsttaetig (autoView): Desktop passt die ganze Arbeitsflaeche ins Fenster, Touch startet in Originalgroesse
+    // (Kontaktfelder 56 dp). Zwei Finger (PinchHandler), Strg + Mausrad, Mausrad und mittlere Maustaste stellen
+    // Massstab und Ausschnitt von Hand ein (viewScale, viewPos); ⤢ kehrt zur selbsttaetigen Ansicht zurueck.
+    readonly property bool compact: width < Theme.compactWidth // Hochformat, iPad: schmale Werkzeugleiste
+    readonly property bool portrait: height > width // Hochformat: Bauteilfach als Leiste unten
+    readonly property real fitScale: Math.min(1, (boardArea.width - 2 * Theme.margin) / canvas.width,
+                                              (boardArea.height - 2 * Theme.margin) / canvas.height)
+    readonly property real defaultScale: Theme.touchUi ? Math.max(fitScale, 1) : fitScale
+    property bool autoView: true
+    property bool spaceHeld: false // Leertaste gedrueckt: Ziehen mit der Maus verschiebt den Ausschnitt
+    property real userScale: 1
+    property point userPos: Qt.point(Theme.margin, Theme.margin)
+    readonly property real viewScale: autoView ? defaultScale
+                                               : Math.max(fitScale, Math.min(Theme.maxZoom, userScale))
+    // Ausschnitt begrenzen: passt die Flaeche, bleibt sie oben links; sonst kein leerer Rand ueber Theme.margin
+    function clampOffset(offset, scaled, view) {
+        if (scaled + 2 * Theme.margin <= view) return Theme.margin
+        return Math.max(view - scaled - Theme.margin, Math.min(Theme.margin, offset))
+    }
+    // Punkt der Arbeitsflaeche (canvas) unter einem Punkt in boardArea
+    function contentAt(p) { return Qt.point((p.x - canvas.x) / canvas.scale, (p.y - canvas.y) / canvas.scale) }
+    // Massstab s einstellen, so dass der Flaechenpunkt c unter dem Punkt p (boardArea) bleibt
+    function zoomTo(s, c, p) {
+        const scale = Math.max(fitScale, Math.min(Theme.maxZoom, s))
+        userPos = Qt.point(p.x - c.x * scale, p.y - c.y * scale)
+        userScale = scale
+        autoView = false
+    }
+    // Ziehen mit der Maus: Flaeche ab der Startlage um die Verschiebung des Zeigers versetzen
+    function panTo(start, translation) {
+        userScale = canvas.scale
+        userPos = Qt.point(start.x + translation.x, start.y + translation.y)
+        autoView = false
+    }
+    function panBy(dx, dy) {
+        userScale = canvas.scale
+        userPos = Qt.point(canvas.x + dx, canvas.y + dy)
+        autoView = false
+    }
+    // ⤢: Touch wechselt zwischen Uebersicht (ganze Flaeche) und Originalgroesse, Desktop zurueck zum Einpassen
+    function toggleOverview() {
+        if (autoView && defaultScale > fitScale) {
+            userScale = fitScale
+            userPos = Qt.point(Theme.margin, Theme.margin)
+            autoView = false
+        } else {
+            autoView = true
+        }
+    }
+
     Connections {
         target: lab.controller
         function onEditFailed() { toast.show(lab.controller.lastEditError) }
@@ -182,7 +233,7 @@ Item {
                 id: experimentBox
                 objectName: "experimentBox"
                 anchors.verticalCenter: parent.verticalCenter
-                width: 250 // laengere Titel werden gekuerzt; die Liste ist breiter
+                width: lab.compact ? 180 : 250 // laengere Titel werden gekuerzt; die Liste ist breiter
                 height: Theme.control
                 textRole: "text"
                 readonly property var entries: {
@@ -242,7 +293,7 @@ Item {
                     font.bold: index === experimentBox.currentIndex
                     highlighted: experimentBox.highlightedIndex === index
                 }
-                popup.width: Math.max(width, 460)
+                popup.width: Math.min(Math.max(width, 460), lab.width - 2 * Theme.margin)
                 ToolTip.visible: hovered && !pressed
                 ToolTip.text: qsTr("Experiment wählen")
                 Accessible.name: qsTr("Experiment wählen")
@@ -269,8 +320,10 @@ Item {
                 ToolTip.text: qsTr("Wiederholen: %1").arg(lab.controller.redoText)
                 Accessible.name: qsTr("Wiederholen")
             }
-            // Breite der Grundplatte: Felder je Reihe 8 / 10 / 12 (Befehl, rueckgaengig machbar)
+            // Breite der Grundplatte: Felder je Reihe 8 / 10 / 12 (Befehl, rueckgaengig machbar); schmal nur im
+            // Einstellungsmenue (Felder je Reihe)
             Row {
+                visible: !lab.compact
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 2
                 ToolButton {
@@ -306,9 +359,10 @@ Item {
                     Accessible.name: qsTr("Mehr Felder je Reihe")
                 }
             }
-            // Messgeraet ein-/ausblenden
+            // Messgeraet ein-/ausblenden (schmal nur im Einstellungsmenue)
             ToolButton {
                 objectName: "meterToggle"
+                visible: !lab.compact
                 height: Theme.control
                 width: 72
                 checkable: true
@@ -331,8 +385,51 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
-            // Farbe fuer neue Leitungen
+            // Farbe fuer neue Leitungen; schmal: ein Knopf mit der aktuellen Farbe, Auswahl im Aufklappfeld
+            Item {
+                id: colorButton
+                objectName: "wireColorButton"
+                visible: lab.compact
+                width: Theme.control; height: Theme.control
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 30; height: 30; radius: 15
+                    color: Theme.wireColor(lab.newWireColor)
+                    border.color: Theme.solderAmber
+                    border.width: 4
+                }
+                TapHandler { onTapped: colorPopup.open() }
+                Accessible.role: Accessible.Button
+                Accessible.name: qsTr("Leitungsfarbe %1").arg(Texts.colorName(lab.newWireColor))
+                Popup {
+                    id: colorPopup
+                    y: parent.height
+                    padding: 4
+                    background: Rectangle { color: Theme.desk; radius: 8; border.color: "#7F93A8" }
+                    contentItem: Row {
+                        Repeater {
+                            model: Texts.wireColors
+                            Item {
+                                id: popupChip
+                                required property string modelData
+                                width: Theme.control; height: Theme.control
+                                Rectangle {
+                                    anchors.centerIn: parent
+                                    width: 26; height: 26; radius: 13
+                                    color: Theme.wireColor(popupChip.modelData)
+                                    border.color: lab.newWireColor === popupChip.modelData ? Theme.solderAmber : "#5A6F85"
+                                    border.width: lab.newWireColor === popupChip.modelData ? 4 : 1
+                                }
+                                TapHandler { onTapped: { lab.newWireColor = popupChip.modelData; colorPopup.close() } }
+                                Accessible.role: Accessible.RadioButton
+                                Accessible.name: qsTr("Leitungsfarbe %1").arg(Texts.colorName(popupChip.modelData))
+                            }
+                        }
+                    }
+                }
+            }
             Row {
+                visible: !lab.compact
                 anchors.verticalCenter: parent.verticalCenter
                 Repeater {
                     model: Texts.wireColors
@@ -368,13 +465,36 @@ Item {
         objectName: "experimentPanel"
         controller: lab.controller
         anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
-        width: lab.controller.phase > 0 ? (collapsed ? Theme.control + 8 : 340) : 0
+        width: lab.controller.phase > 0 ? (collapsed ? Theme.control + 8 : Math.min(340, lab.width - 2 * Theme.control)) : 0
         visible: width > 0
+        z: 2 // schmal: aufgeklappt ueber der Grundplatte
+    }
+    // Platz fuer das Experimentfeld; schmal nur der eingeklappte Streifen (aufgeklappt liegt es darueber)
+    Item {
+        id: panelSlot
+        anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
+        width: lab.compact && lab.controller.phase > 0 ? Theme.control + 8 : experimentPanel.width
+    }
+    // Schmal: beim Wechsel ins Hochformat einklappen, neues Experiment (Frage) aufgeklappt zeigen
+    onCompactChanged: if (compact) experimentPanel.collapsed = true
+    property string shownExperiment: ""
+    Connections {
+        target: lab.controller
+        function onExperimentChanged() {
+            if (lab.compact && lab.controller.experimentId !== lab.shownExperiment) experimentPanel.collapsed = false
+            lab.shownExperiment = lab.controller.experimentId
+        }
     }
 
     PartTray {
         id: tray
-        anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
+        objectName: "partTray"
+        horizontal: lab.portrait
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        // feste Bindungen statt wechselnder Anker (Wechsel Hoch-/Querformat zur Laufzeit)
+        width: lab.portrait ? panelSlot.x : implicitWidth
+        height: lab.portrait ? implicitHeight : lab.height - toolbar.height
         parts: lab.controller.trayParts
         onDragUpdated: (type, scenePos) => {
             lab.trayType = type
@@ -391,24 +511,107 @@ Item {
 
     Rectangle {
         id: boardArea
-        anchors { left: tray.right; right: experimentPanel.left; top: toolbar.bottom; bottom: parent.bottom }
+        objectName: "boardArea"
+        anchors.left: lab.portrait ? parent.left : tray.right
+        anchors.right: panelSlot.left
+        anchors.top: toolbar.bottom
+        anchors.bottom: lab.portrait ? tray.top : parent.bottom
         color: Theme.board
         clip: true
 
-        // Tippen ins Leere hebt die Auswahl auf
-        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = "" } }
+        // Tippen ins Leere hebt die Auswahl auf (und gibt der Arbeitsflaeche den Tastaturfokus fuer die Leertaste)
+        TapHandler { onTapped: { lab.selectedPart = ""; lab.selectedWire = ""; spaceKeys.forceActiveFocus() } }
+
+        // Leertaste + Ziehen (Desktop, docs/ui-spec.md): solange die Leertaste gehalten wird, liegt eine Ebene ueber
+        // der Arbeitsflaeche, die das Ziehen mit der Maus als Verschieben nimmt (Felder und Bauteile bleiben unberuehrt)
+        Item {
+            id: spaceKeys
+            objectName: "spaceKeys"
+            focus: true
+            Keys.onPressed: (event) => {
+                if (event.key === Qt.Key_Space) { if (!event.isAutoRepeat) lab.spaceHeld = true; event.accepted = true }
+            }
+            Keys.onReleased: (event) => {
+                if (event.key === Qt.Key_Space) { if (!event.isAutoRepeat) lab.spaceHeld = false; event.accepted = true }
+            }
+            onActiveFocusChanged: if (!activeFocus) lab.spaceHeld = false
+        }
+        Item {
+            objectName: "spacePanLayer"
+            anchors.fill: parent
+            z: 10
+            visible: lab.spaceHeld
+            HoverHandler { cursorShape: spacePan.active ? Qt.ClosedHandCursor : Qt.OpenHandCursor }
+            DragHandler {
+                id: spacePan
+                target: null
+                grabPermissions: PointerHandler.CanTakeOverFromAnything // vor dem Ziehen einer Leitung
+                acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+                property point startPos
+                onActiveChanged: if (active) startPos = Qt.point(canvas.x, canvas.y)
+                onActiveTranslationChanged: if (active) lab.panTo(startPos, activeTranslation)
+            }
+        }
+
+        // Zoom und Verschieben mit zwei Fingern: der Flaechenpunkt unter dem Mittelpunkt der Finger bleibt darunter
+        PinchHandler {
+            id: pinch
+            objectName: "boardPinch"
+            target: null
+            minimumPointCount: 2
+            maximumPointCount: 2
+            property real startScale: 1
+            property point startContent
+            onActiveChanged: {
+                if (active) {
+                    startScale = canvas.scale
+                    startContent = lab.contentAt(centroid.position)
+                }
+            }
+            onActiveScaleChanged: if (active) lab.zoomTo(startScale * activeScale, startContent, centroid.position)
+            onCentroidChanged: if (active) lab.zoomTo(startScale * activeScale, startContent, centroid.position)
+        }
+        // Strg + Mausrad: Zoom am Mauszeiger; Mausrad/Umschalt + Mausrad: senkrecht/waagrecht verschieben
+        WheelHandler {
+            acceptedModifiers: Qt.ControlModifier
+            target: null
+            onWheel: (event) => lab.zoomTo(canvas.scale * Math.pow(1.1, event.angleDelta.y / 120),
+                                          lab.contentAt(point.position), point.position)
+        }
+        WheelHandler {
+            acceptedModifiers: Qt.NoModifier
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            target: null
+            enabled: canvas.width * canvas.scale + 2 * Theme.margin > boardArea.width
+                     || canvas.height * canvas.scale + 2 * Theme.margin > boardArea.height
+            onWheel: (event) => lab.panBy(event.angleDelta.x / 2, event.angleDelta.y / 2)
+        }
+        WheelHandler {
+            acceptedModifiers: Qt.ShiftModifier
+            target: null
+            onWheel: (event) => lab.panBy(event.angleDelta.y / 2, 0)
+        }
+        // Mittlere Maustaste: Ausschnitt ziehen
+        DragHandler {
+            target: null
+            acceptedButtons: Qt.MiddleButton
+            acceptedDevices: PointerDevice.Mouse
+            property point startPos
+            onActiveChanged: if (active) startPos = Qt.point(canvas.x, canvas.y)
+            onActiveTranslationChanged: if (active) lab.panTo(startPos, activeTranslation)
+        }
 
         Item {
             id: canvas
             objectName: "canvas"
-            x: Theme.margin
-            y: Theme.margin
             width: Math.max(lab.controller.meterVisible ? lab.meterX + Theme.meterAreaWidth : lab.boardWidth,
                             lab.deskStripWidth)
             height: lab.moduleY + Theme.fieldHeight
-            // passt die ganze Arbeitsflaeche ins Fenster (auch 1280 x 720)
+            // Massstab und Ausschnitt aus der Ansicht (oben); selbsttaetig oben links mit Rand
             transformOrigin: Item.TopLeft
-            scale: Math.min(1, (boardArea.width - 2 * Theme.margin) / width, (boardArea.height - 2 * Theme.margin) / height)
+            scale: lab.viewScale
+            x: lab.autoView ? Theme.margin : lab.clampOffset(lab.userPos.x, width * scale, boardArea.width)
+            y: lab.autoView ? Theme.margin : lab.clampOffset(lab.userPos.y, height * scale, boardArea.height)
 
             ControlDesk {
                 controller: lab.controller
@@ -614,6 +817,21 @@ Item {
             }
         }
 
+        // ⤢ Ansicht: Touch Uebersicht <-> Originalgroesse, Desktop zurueck zum Einpassen (nur wenn es etwas bewirkt)
+        ToolButton {
+            objectName: "viewToggle"
+            anchors { right: parent.right; top: parent.top; margins: 8 }
+            width: Theme.control; height: Theme.control
+            visible: !lab.autoView || lab.defaultScale > lab.fitScale
+            text: "⤢"
+            font.pixelSize: Math.round((24) * Theme.fontScale)
+            onClicked: lab.toggleOverview()
+            ToolTip.visible: hovered
+            ToolTip.text: lab.autoView ? qsTr("Ganze Platte zeigen") : qsTr("Ansicht zurücksetzen")
+            Accessible.name: ToolTip.text
+            background: Rectangle { radius: 6; color: "#E6FFFFFF"; border.color: Theme.fieldOutline }
+        }
+
         // Fehler der Netzliste (Entwicklung)
         Column {
             anchors { right: parent.right; bottom: parent.bottom; margins: Theme.margin }
@@ -629,6 +847,7 @@ Item {
         id: fieldMenu
         property string anchorName
         MenuItem {
+            height: Theme.control
             text: qsTr("Spannungsanzeige ein/aus")
             onTriggered: lab.controller.toggleVoltageDisplay(fieldMenu.anchorName)
         }
@@ -639,6 +858,7 @@ Item {
         objectName: "partMenu"
         property var part: ({})
         MenuItem {
+            height: Theme.control
             text: qsTr("Drehen")
             onTriggered: partMenu.part.pins.length === 4
                          ? lab.controller.rotatePart(partMenu.part.id) // Platine: 90 Grad im Uhrzeigersinn
@@ -646,10 +866,12 @@ Item {
                                                  partMenu.part.longSpan)
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Umdrehen (Polung)")
             onTriggered: lab.controller.flipPart(partMenu.part.id)
         }
         MenuItem {
+            height: Theme.control
             text: partMenu.part.longSpan ? qsTr("Kurz stecken") : qsTr("Lang stecken")
             enabled: partMenu.part.anchors !== undefined && partMenu.part.anchors.length === 2
             onTriggered: lab.controller.movePart(partMenu.part.id, partMenu.part.start, partMenu.part.vertical,
@@ -663,6 +885,7 @@ Item {
                 model: Texts.resistorValues
                 delegate: MenuItem {
                     required property var modelData
+                    height: Theme.control
                     text: Texts.ohm(modelData)
                     checkable: true
                     checked: partMenu.part.value === modelData
@@ -680,6 +903,7 @@ Item {
                 model: lab.catalogEntry("gluehlampe").voltages || []
                 delegate: MenuItem {
                     required property var modelData
+                    height: Theme.control
                     text: qsTr("%1 V").arg(Number(modelData).toLocaleString(Qt.locale(), "f", modelData % 1 === 0 ? 0 : 1))
                     checkable: true
                     checked: Math.abs(lab.lampVolt(partMenu.part) - modelData) < 1e-9
@@ -690,10 +914,12 @@ Item {
             }
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Reparieren")
             onTriggered: lab.controller.repairPart(partMenu.part.id)
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Entfernen")
             onTriggered: { lab.controller.removePart(partMenu.part.id); lab.selectedPart = "" }
         }
@@ -706,6 +932,7 @@ Item {
             model: Texts.wireColors
             delegate: MenuItem {
                 required property string modelData
+                height: Theme.control
                 text: qsTr("Farbe: %1").arg(Texts.colorName(modelData))
                 onTriggered: lab.controller.setWireColor(wireMenu.wireId, modelData)
             }
@@ -713,6 +940,7 @@ Item {
             onObjectRemoved: (index, object) => wireMenu.removeItem(object)
         }
         MenuItem {
+            height: Theme.control
             text: qsTr("Leitung löschen")
             onTriggered: { lab.controller.removeWire(wireMenu.wireId); lab.selectedWire = "" }
         }

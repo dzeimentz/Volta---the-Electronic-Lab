@@ -256,6 +256,14 @@
         <translation>Moins de cases par rangée</translation>
     </message>
     <message>
+        <source>Ganze Platte zeigen</source>
+        <translation>Afficher toute la plaque</translation>
+    </message>
+    <message>
+        <source>Ansicht zurücksetzen</source>
+        <translation>Réinitialiser la vue</translation>
+    </message>
+    <message>
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>

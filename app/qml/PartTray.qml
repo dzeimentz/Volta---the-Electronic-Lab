@@ -1,16 +1,19 @@
 // Bauteilfach: Bauteile aus dem Fach auf die Grundplatte ziehen (docs/ui-spec.md, Gesten).
 // Zwei Spalten, damit alle Bauteile ohne Blaettern sichtbar sind (Ziehen gehoert dem Bauteil, nicht der Liste).
+// Hochformat (horizontal): Leiste unter der Grundplatte, so viele Spalten wie in die Breite passen.
 import QtQuick
 import QtQuick.Controls.Basic
 
 Rectangle {
     id: tray
     required property var parts // catalogParts des LabController
+    property bool horizontal: false
     signal dragUpdated(string type, point scenePos)
     signal dragFinished(string type, point scenePos)
 
     color: Theme.desk
-    width: 2 * 92 + 3 * 8
+    implicitWidth: 2 * 92 + 3 * 8 // senkrecht: zwei Spalten
+    implicitHeight: grid.y + grid.height + 10 // waagrecht: so hoch wie die Reihen
 
     Label {
         id: heading
@@ -22,8 +25,9 @@ Rectangle {
     }
 
     Grid {
+        id: grid
         anchors { top: heading.bottom; topMargin: 10; left: parent.left; leftMargin: 8 }
-        columns: 2
+        columns: tray.horizontal ? Math.max(2, Math.floor((tray.width - 16 + 6) / (92 + 6))) : 2
         spacing: 6
 
         Repeater {

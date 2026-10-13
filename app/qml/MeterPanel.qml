@@ -239,6 +239,7 @@ Rectangle {
         Label { anchors.verticalCenter: parent.verticalCenter; text: qsTr("digital"); color: "white"; font.pixelSize: Math.round((12) * Theme.fontScale) }
         Switch {
             objectName: "meterAnalog"
+            height: Theme.control
             checked: meter.controller.meterAnalog
             onToggled: meter.controller.meterAnalog = checked
             Accessible.name: qsTr("Zeigeranzeige")

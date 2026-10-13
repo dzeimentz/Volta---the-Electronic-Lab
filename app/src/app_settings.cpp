@@ -27,7 +27,7 @@ AppSettings::AppSettings(bool persist, QObject* parent) : QObject(parent), m_per
 }
 
 bool AppSettings::splashAvailable() {
-#if (defined(Q_OS_WIN) || defined(Q_OS_LINUX)) && !defined(Q_OS_ANDROID)
+#if (defined(Q_OS_WIN) || defined(Q_OS_LINUX) || defined(Q_OS_MACOS)) && !defined(Q_OS_ANDROID)
     return true;
 #else
     return false;

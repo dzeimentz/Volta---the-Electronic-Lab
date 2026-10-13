@@ -3,13 +3,19 @@ find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Multimedi
 qt_standard_project_setup(REQUIRES 6.8)
 
 set(VOLTA_APP_NAME "Volta 1 - Das Elektronik-Labor")
+set(VOLTA_APP_SHORT_NAME "Volta 1") # Name unter dem Symbol (Android, iPadOS)
 if(VOLTA_EDITION STREQUAL "volta2")
     set(VOLTA_APP_NAME "Volta 2 - Das Elektronik-Labor")
+    set(VOLTA_APP_SHORT_NAME "Volta 2")
 elseif(VOLTA_EDITION STREQUAL "volta3")
     set(VOLTA_APP_NAME "Volta 3 - Das Elektronik-Labor")
+    set(VOLTA_APP_SHORT_NAME "Volta 3")
 elseif(VOLTA_EDITION STREQUAL "zuse1")
     set(VOLTA_APP_NAME "Zuse 1 - Computertechnik fuer Einsteiger")
+    set(VOLTA_APP_SHORT_NAME "Zuse 1")
 endif()
+# App-ID (Android-Paketname, iOS-Bundle-ID); vor der ersten Veroeffentlichung festlegen, danach unveraenderlich
+set(VOLTA_APP_ID "com.dcsoftwareengineering.${VOLTA_EDITION}" CACHE STRING "App-ID fuer Android und iOS")
 
 # Schaltungsmodell und Dienste: ohne Oberflaeche testbar (Qt Core fuer JSON)
 add_library(volta_model STATIC
@@ -30,6 +36,32 @@ target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads:
 qt_add_executable(volta_app
     src/main.cpp
 )
+
+# Inhaltspakete als Qt-Ressource (:/content): auf Android, iOS und macOS (App-Bundle) voreingestellt, weil es dort
+# keinen Ordner neben der ausfuehrbaren Datei gibt; sonst optional (-DVOLTA_EMBED_CONTENT=ON). Schemata und
+# CLAUDE.md bleiben draussen. main.cpp nimmt zuerst content/ neben der ausfuehrbaren Datei, dann :/content, dann
+# den Quellbaum.
+if(ANDROID OR APPLE)
+    set(_volta_embed_default ON)
+else()
+    set(_volta_embed_default OFF)
+endif()
+option(VOLTA_EMBED_CONTENT "Inhaltspakete als Qt-Ressource in die App einbetten" ${_volta_embed_default})
+file(GLOB_RECURSE VOLTA_CONTENT_FILES CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/content/*")
+list(FILTER VOLTA_CONTENT_FILES EXCLUDE REGEX "/content/(schema/|CLAUDE\\.md$)")
+function(volta_embed_content target)
+    # relative Pfade: qt_add_resources mit BASE ausserhalb des Quellverzeichnisses
+    set(_files "")
+    foreach(_f IN LISTS VOLTA_CONTENT_FILES)
+        file(RELATIVE_PATH _rel "${CMAKE_CURRENT_SOURCE_DIR}" "${_f}")
+        list(APPEND _files "${_rel}")
+    endforeach()
+    file(RELATIVE_PATH _base "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/content")
+    qt_add_resources(${target} "volta_content" PREFIX "/content" BASE "${_base}" FILES ${_files})
+endfunction()
+if(VOLTA_EMBED_CONTENT)
+    volta_embed_content(volta_app)
+endif()
 # App-Symbol (Quelle resources/icons/volta.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)
     # eigene Objektbibliothek ohne Include-Pfade: windres (MinGW) scheitert an Leerzeichen in Include-Pfaden
@@ -44,6 +76,52 @@ set_target_properties(volta_app PROPERTIES
     MACOSX_BUNDLE ON
     QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android"
     QT_ANDROID_MIN_SDK_VERSION 26)
+
+# Android (docs/platforms.md): Manifest, Symbole und Startthema in packaging/android; Versionscode aus der
+# Projektversion (0.1.0 -> 100, 1.2.3 -> 10203)
+if(ANDROID)
+    math(EXPR VOLTA_VERSION_CODE
+         "${PROJECT_VERSION_MAJOR} * 10000 + ${PROJECT_VERSION_MINOR} * 100 + ${PROJECT_VERSION_PATCH}")
+    set_target_properties(volta_app PROPERTIES
+        QT_ANDROID_PACKAGE_NAME "${VOLTA_APP_ID}"
+        QT_ANDROID_APP_NAME "${VOLTA_APP_SHORT_NAME}"
+        QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
+        QT_ANDROID_VERSION_CODE "${VOLTA_VERSION_CODE}")
+endif()
+
+# iPadOS (Phase 5b, nur auf macOS mit Xcode): Info.plist, Symbole (Asset-Katalog) und Startbildschirm
+# (LaunchScreen.storyboard) aus packaging/ios
+if(IOS)
+    set(_ios "${PROJECT_SOURCE_DIR}/packaging/ios")
+    target_sources(volta_app PRIVATE "${_ios}/Assets.xcassets" "${_ios}/PrivacyInfo.xcprivacy")
+    set_source_files_properties("${_ios}/Assets.xcassets" "${_ios}/PrivacyInfo.xcprivacy"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(volta_app PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${_ios}/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
+        MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        QT_IOS_LAUNCH_SCREEN "${_ios}/LaunchScreen.storyboard"
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${VOLTA_APP_ID}"
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2" # nur iPad
+        XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+endif()
+
+# macOS (optional, Apple Silicon und Intel): App-Bundle mit Info.plist und Symbol (volta.icns aus
+# tools/make_icons.py) aus packaging/macos; Laufzeit beilegen mit tools/deploy_release.py (macdeployqt)
+if(APPLE AND NOT IOS)
+    set(_mac "${PROJECT_SOURCE_DIR}/packaging/macos")
+    target_sources(volta_app PRIVATE "${_mac}/volta.icns")
+    set_source_files_properties("${_mac}/volta.icns" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(volta_app PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${_mac}/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
+        MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
+        MACOSX_BUNDLE_ICON_FILE "volta.icns"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+endif()
 
 target_compile_definitions(volta_app PRIVATE
     VOLTA_EDITION="${VOLTA_EDITION}"

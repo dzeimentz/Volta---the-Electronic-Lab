@@ -33,6 +33,9 @@ QtObject {
     property bool reduceMotion: false   // Animationen reduzieren (docs/ui-spec.md)
     property bool showCurrentFlow: true // Stromflusspunkte auf den Leitungen
     property real fontScale: 1.0        // Schriftgroesse (Einstellung A-/A+): 0,8 / 0,9 / 1,0
+    // Touch-Oberflaeche (Android, iOS; auf dem Desktop mit VOLTA_DEMO_TOUCH=1): Arbeitsflaeche startet in
+    // Originalgroesse, damit Kontaktfelder 56 dp hoch bleiben; Zoom/Verschieben mit zwei Fingern
+    property bool touchUi: Qt.platform.os === "android" || Qt.platform.os === "ios"
 
     // Masse in dp (Qt Quick: geraeteunabhaengige Pixel)
     readonly property int fieldWidth: 72
@@ -49,4 +52,6 @@ QtObject {
     readonly property int slotGap: 8
     readonly property int control: 48       // Bedienelemente >= 48 dp
     readonly property int margin: 24
+    readonly property real maxZoom: 2.0     // groesste Vergroesserung der Arbeitsflaeche
+    readonly property int compactWidth: 1280 // darunter (Hochformat, iPad, kleine Tablets): schmale Werkzeugleiste
 }

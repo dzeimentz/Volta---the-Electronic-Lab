@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Startthema der Aktivitaet (AndroidManifest.xml): das System zeigt den Fensterhintergrund als Startbildschirm,
+     bis Qt das erste Bild zeichnet. Der Desktop-Startbildschirm (Splash.qml) ist auf Android abgeschaltet. -->
+<resources>
+    <style name="VoltaLaunchTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:statusBarColor">@color/volta_navy</item>
+        <item name="android:navigationBarColor">@color/volta_navy</item>
+    </style>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Startbildschirm von iPadOS (Systemmechanik, statisch): Navy (Theme.navy) mit dem Volta-Motiv (LaunchLogo aus
+     Assets.xcassets, erzeugt von tools/make_icons.py) in der Mitte. Keine Texte (keine Uebersetzung moeglich). -->
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="volta-launch-vc">
+    <device id="ipad10_9rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <scene sceneID="volta-launch-scene">
+            <objects>
+                <viewController id="volta-launch-vc" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="volta-launch-view">
+                        <rect key="frame" x="0.0" y="0.0" width="1180" height="820"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="LaunchLogo" translatesAutoresizingMaskIntoConstraints="NO" id="volta-launch-logo">
+                                <rect key="frame" x="494" y="314" width="192" height="192"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="192" id="volta-logo-w"/>
+                                    <constraint firstAttribute="height" constant="192" id="volta-logo-h"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="volta-launch-safe"/>
+                        <color key="backgroundColor" red="0.0392" green="0.1451" blue="0.2510" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="volta-launch-logo" firstAttribute="centerX" secondItem="volta-launch-view" secondAttribute="centerX" id="volta-logo-cx"/>
+                            <constraint firstItem="volta-launch-logo" firstAttribute="centerY" secondItem="volta-launch-view" secondAttribute="centerY" id="volta-logo-cy"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="volta-launch-fr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LaunchLogo" width="192" height="192"/>
+    </resources>
+</document>

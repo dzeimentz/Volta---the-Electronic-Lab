@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Startbildschirm bis Android 11 (Fensterhintergrund des Startthemas): Navy mit dem Volta-Motiv in der Mitte.
+     Ab Android 12 zeigt das System den Startbildschirm selbst (values-v31/styles.xml). -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/volta_navy" />
+    <item
+        android:width="192dp"
+        android:height="192dp"
+        android:gravity="center"
+        android:drawable="@mipmap/ic_launcher_foreground" />
+</layer-list>
