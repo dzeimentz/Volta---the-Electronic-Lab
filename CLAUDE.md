@@ -161,4 +161,5 @@ Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach A
 | `docs/privacy-safety.md` | Datenschutz, Kinderschutz, Store-Auflagen |
 | `docs/roadmap.md` | Phasen, Aufwaende, offene Entscheidungen |
 | `docs/volta2-planung.md` | Entwurf Volta 2: Schwerpunkte, Bedienpult II, Audio-Risiko, Stufen, Timer 555 |
+| `docs/zuse1-planung.md` | Entwurf Zuse 1: vom Gatter zum eigenen Rechner, Stufen, Logikmodell |
 | `docs/glossary.md` | Begriffe deutsch/englisch |
