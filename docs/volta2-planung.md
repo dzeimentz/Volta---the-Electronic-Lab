@@ -81,6 +81,10 @@ elektronik-kompendium.de, Datenblaetter der Hersteller). Er kombiniert zwei Funk
   Stuetzkondensator werden in »Mehr wissen« erwaehnt, nicht simuliert (Vereinfachung, offengelegt).
 - Langsame Anwendungen (Blinken, Zeitschalter) laufen mit der Volta-1-Schrittweite; hoerbare Anwendungen
   brauchen die Audio-Schrittweite (siehe oben).
+- Ergaenzt nach der Quellensammlung (s. u.): Pin 5 muss beliebige Spannungen annehmen (Modulation, Sirenen,
+  PWM); Trigger und Schwelle gleichzeitig aktiv: Verhalten des NE555 (Schwelle hat Vorrang) festlegen und im
+  Lexikon nennen (Hersteller unterscheiden sich); erneutes Triggern waehrend der Monozeit wird ignoriert
+  (Frequenzteiler); Ausgang darf eine Relaisspule und einen Lautsprecher ab 75 Ohm Gesamtwiderstand treiben.
 
 ### Experimente (Entwurf, ca. 10)
 1. Der 555 als Blinker (astabil): LED am Ausgang, Frequenz mit R1, R2 und C; Rechnung f ≈ 1,44 / ((R1 + 2 R2) C)
@@ -94,6 +98,45 @@ elektronik-kompendium.de, Datenblaetter der Hersteller). Er kombiniert zwei Funk
 8. Lichtorgel/Lichtton: Fotowiderstand statt R2 – die Tonhoehe folgt dem Licht.
 9. Motor stufenlos: Pulsweitensteuerung mit Transistorstufe am Ausgang, Pulse am Oszilloskop sichtbar.
 10. Schmitt-Trigger: Daemmerungsschalter ohne Flackern (Schwellen 1/3 und 2/3 U).
+
+### Quellensammlung »555 Applications« (Auswertung 13.10.2026)
+Private Sammlung des Inhabers (55 Seiten Zeitschriftenartikel 1973–1982: Electronics »Designer's casebook«,
+Radio-Electronics, Popular Electronics, Electronics Today International, Datenblatt-Notizen). Liegt nicht im
+Repository. Verwendet werden nur **Schaltungsprinzipien** (Standardanwendungen des 555); Texte, Abbildungen
+und Bauteilwerte werden nicht uebernommen, Experimente bleiben Eigenentwicklungen (CLAUDE.md, Regel 2).
+
+Fuer Kinder geeignet und **zusaetzlich** zur Liste oben (Vorschlag, je nach Umfang Stufe 6 oder 7):
+11. **Reaktionstester**: LED blitzt in festem Takt kurz auf, ein Taster »friert« sie ein – wer trifft den Blitz?
+12. **Morsetaste**: Taster an Reset (Pin 4) schaltet den Tongenerator; Tonhoehe mit Drehregler, Lautstaerke
+    mit Vorwiderstand.
+13. **Wechselblinker mit einem Chip**: zwei LEDs am Ausgang, eine nach +U, eine nach Masse (rot/gruen im Wechsel).
+14. **Speicher mit zwei Tastern** (bistabil): Taster an Trigger setzt, Taster an Reset loescht – das Flipflop im
+    Inneren wird sichtbar (Bruecke zu Volta 3).
+15. **Helligkeit stufenlos** (Tastverhaeltnis 1–99 % mit zwei Dioden und Drehregler): LED dimmen, ohne die
+    Frequenz zu aendern; am Oszilloskop sichtbar.
+16. **Sirenen-Werkstatt**: Dauerton, Intervallton (zweiter 555 als 1-Hz-Taktgeber an Pin 4), Zweiklang (an
+    Pin 5), auf- und abschwellender Heulton (Saegezahn aus einem Kondensator ueber Transistor an Pin 5).
+17. **Alarmanlage**: Ton startet bei Dunkelheit, Licht, Kaelte oder Waerme (Fotowiderstand/Heissleiter mit
+    Transistor an Pin 4) – Wiederholung der Sensoren aus Volta 1 mit neuem Baustein.
+18. **Waechter fuer fehlende Pulse**: Taster muss regelmaessig gedrueckt werden, sonst Alarm (»Herzschlag-
+    Waechter«, Totmannschalter) – nachtriggerbarer Monoflop mit Transistor ueber dem Kondensator.
+19. **Lauflicht aus drei Zeitschaltern**: drei monostabile 555 in Reihe, der letzte startet den ersten wieder.
+20. **Frequenzteiler**: ein Monoflop, der waehrend seiner Zeit weitere Pulse ignoriert, teilt einen Takt durch 2,
+    3, 4 … (Oszilloskop: Eingang und Ausgang).
+21. **Kondensatoren messen**: unbekannter Kondensator im Zeitglied, Frequenz am Messgeraet ablesen und mit dem
+    Formelrechner in µF umrechnen.
+22. **Frequenzmesser mit Zeigerinstrument**: Monoflop liefert gleich lange Pulse, der Mittelwert am analogen
+    Messgeraet steigt mit der Frequenz.
+23. **Schoenes Rechteck mit 50 %**: Ladung ueber den Ausgang (Widerstand von Pin 3 nach Pin 2/6, Pin 7 frei).
+24. **Ding-dong / Tonstoss**: Taster startet einen Ton, der nach einigen Sekunden ausklingt (Monoflop an Reset
+    des Tongenerators).
+
+Fuer spaeter (Volta 3, Digitaltechnik/OP): lange Zeiten mit Zaehlerbausteinen (4017, 8281), Gatter-Tongeber,
+Spannungs-Frequenz-Wandler und Analogdividierer mit OP, Pulshoehen-Diskriminator, Integrator als Zeitbasis.
+
+**Ausgeschlossen** (Sicherheit, CLAUDE.md Regel 6): alles mit Netzspannung (Triac-Schaltungen an 117/230 V,
+Netztrafo-Netzteile, Netzfrequenz als Takt), Hochspannung (Glimmlampe ueber Trafo), Zuendanlage und
+Kfz-Elektrik (Drehzahlmesser an der Zuendspule, Scheinwerferschaltungen).
 
 ## Offene Entscheidungen
 | Entscheidung | Spaetestens |
