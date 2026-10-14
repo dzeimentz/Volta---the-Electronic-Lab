@@ -21,6 +21,7 @@ option(VOLTA_BUILD_TESTS "Tests bauen" ON)
 enable_testing()
 
 add_subdirectory(core)
+add_subdirectory(logic) # Logiksimulation der Zuse-Reihe (Qt-frei)
 
 if(VOLTA_BUILD_APP)
     add_subdirectory(app)
