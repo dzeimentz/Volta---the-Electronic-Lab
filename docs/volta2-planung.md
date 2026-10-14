@@ -32,10 +32,43 @@ Entwicklertablet (Meswoa MES-B3, MediaTek) mit einer typischen Audioschaltung (O
 Rueckfallebene, falls zu langsam: hoerbare Ausgabe nur fuer kleine Schaltungen, sonst erzeugter Ton wie beim
 Tonmodul (offen erklaert).
 
+### Ergebnis Leistungstest (14.10.2026, `core/bench/bench_audio.cpp`)
+Tongeneratoren um 1 kHz an 9 V mit Hauptschalter, Lautsprecher 8 Ohm; 1, 2 und 4 Generatoren; Release-Build.
+Echtzeitfaktor (simulierte / gerechnete Zeit) bei 20 µs, Desktop (MinGW) bzw. Tablet MES-B3 (arm64, NDK 27):
+
+| Bauart | 1 Gen. | 2 Gen. | 4 Gen. | Tonhoehe gegen Formel |
+|---|---|---|---|---|
+| Transistor-Kippstufe + Emitterfolger | 1,3 / 0,9 | 0,3 / 0,2 | 0,1 / 0,0 | −3 % |
+| Timer 555 (Prototyp Verhaltensmodell) | 18,5 / 14,4 | 9,5 / 7,6 | 4,3 / 3,2 | −2 … −3 % |
+
+Befunde:
+- **Transistor-Kippstufen im Hoerbereich sind nicht echtzeitfaehig.** An jeder Kippflanke beschleunigt sich die
+  Mitkopplung bis in den Nanosekundenbereich; das Rueckwaertsverfahren muss den Schritt bis 2^-15 teilen
+  (ca. 13 Newton-Iterationen je Schritt im Mittel, bis 1000 an der Flanke). Physikalisch richtig, aber jede
+  Flanke jedes Generators bremst die ganze Schaltung. Versuche mit gedaempftem Newton, Residuen-Rueckschritt und
+  SPICE-artiger Schrittsteuerung brachten hoechstens Faktor 2 – nicht uebernommen.
+- Bei 50 µs schwingt die Kippstufe gar nicht an (das implizite Verfahren daempft den instabilen Gleichgewichts-
+  punkt); auch bei 20 µs braucht sie deutliche Unsymmetrie (wie das Blinkmodul, R_B 1 : 1,22).
+- **Integrierte Bausteine als Verhaltensmodell sind schnell und genau**: Teiler, Entladung, Ausgang als Leitwerte,
+  Komparatoren und Flipflop als diskreter Zustand; der Schaltzeitpunkt wird innerhalb des Schritts anteilig
+  beruecksichtigt (ohne das: −8 % bei 20 µs). Die Schaltung bleibt linear, eine Loesung je Schritt.
+- In den Kern uebernommen: **Wiederverwendung der LU-Zerlegung**, solange die gestempelte Matrix gleich bleibt
+  (bitgleiches Ergebnis; 555 mit 4 Generatoren 3,2 → 4,3-fach auf dem Desktop, 2,2 → 3,2-fach auf dem Tablet).
+
+Folgerungen fuer Volta 2:
+- Hoerbare Simulation mit 20 µs fuer Schaltungen mit 555, OP und linearen Stufen (Verstaerker, Filter); der
+  Transistor-Verstaerker im Kleinsignalbetrieb kippt nicht und ist unkritisch (noch zu messen).
+- Transistor-Kippstufen im Hoerbereich (z. B. »Sirene aus zwei Transistoren«): hoerbar nur als einzelner
+  Generator auf schnellen Geraeten, sonst Ton aus der simulierten Frequenz (offen erklaert) oder Zeitlupe.
+- Das 555-Modell erhaelt im Kern eine echte Ereignisortung (Teilschritt bis zum Schwellendurchgang) statt der
+  Vorhersage aus der Steigung; Vorgabe < 2 % gegen Referenz.
+- Weitere Reserve: Messwerte nicht nach jedem 20-µs-Schritt veroeffentlichen (Oberflaeche braucht ca. 60/s),
+  duenn besetzte Zerlegung fuer grosse Aufbauten.
+
 ## Reihenfolge
 | Schritt | Inhalt | Ergebnis |
 |---|---|---|
-| 1 Leistungstest Audio | Kern mit 20-µs-Schritten, Faktorisierung wiederverwenden, Messung auf dem Tablet | Machbarkeit der hoerbaren Simulation |
+| 1 Leistungstest Audio | Kern mit 20-µs-Schritten, Faktorisierung wiederverwenden, Messung auf dem Tablet | erledigt: machbar mit Verhaltensmodellen (s. o.) |
 | 2 Band-Infrastruktur | Edition volta2, Inhaltspaket `content/volta2`, Bedienpult I/II, gemeinsamer Katalog mit Bandfreigabe | zweite App aus derselben Codebasis |
 | 3 Bauteilmodelle | OP-Makromodell, 555, Z-Diode, Spannungsregler, Wechselquelle, IR-LED, Fototransistor, Optokoppler, Lautsprecher als Last | Referenztests (< 2 %) |
 | 4 Messgeraete | Oszilloskop, Funktionsgenerator, zweites Messgeraet, Handbereichswahl | Bedienpult II |
