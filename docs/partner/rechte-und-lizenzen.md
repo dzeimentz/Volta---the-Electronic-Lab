@@ -15,6 +15,7 @@ geklärt werden. Sie ist keine Rechtsberatung; der Vertrag wird anwaltlich gepr�
 | Inhalte `content/` | 61 Experimente, Stufen, Lexikon, Hilfen, Texte DE/FR/EN/LU | eigene Entwicklung; LU-Texte von Muttersprachlern geprüft bzw. geliefert |
 | Gestaltung | Programmsymbol, Kontaktfelder, Bedienpult, Fensterleiste, gezeichnete Symbole, Flaggen | eigene Entwicklung |
 | Maskottchen »Tick« | zehn Stimmungsbilder | im Auftrag des Inhabers mit einem KI-Bildwerkzeug (ChatGPT) erzeugt |
+| Maskottchen »Zetti« (Zuse 1) | zehn Posen und Mimiken aus einem Entwurfsbogen (`tools/make_zetti.py`) | im Auftrag des Inhabers mit einem KI-Bildwerkzeug (ChatGPT) erzeugt (Oktober 2026) |
 | Werkzeuge `tools/` | Prüfung, Paketierung, Anleitungen, Flyer, Store-Grafiken | eigene Entwicklung |
 
 **Nachweis der Urheberschaft:** vollständige Versionsgeschichte (Git) seit dem 04.10.2026 mit Datum und Autor
@@ -56,6 +57,7 @@ kommerzielle Qt-Lizenz nötig (Kosten je Entwickler und Jahr, vor der iPad-Ausga
 |---|---|---|
 | »Volta« | mehrere ältere Marken in Klassen 9/41, u. a. mit Bildungs- und Elektrotechnikbezug (Vorrecherche `docs/store/markenpruefung.md`) | eine Partnerausgabe kann unter eigenem Namen erscheinen; »Volta« als Technik-/Reihenname nach anwaltlicher Prüfung |
 | »Tick« | Wortmarke »TICK« für Software belegt (Werkzeughersteller), Figurenname unkritischer | Figur austauschbar (siehe Branding-Konzept) |
+| »Zetti« | noch nicht recherchiert | vor Veröffentlichung prüfen; Figur austauschbar |
 | »Zuse« | Namensrecht der Familie bzw. Gesellschaften zu klären | Ersatzname vorhalten |
 
 ## 4. Abgrenzung zum gestalterischen Vorbild
@@ -76,7 +78,7 @@ externe Links hinter der Elternschranke.
 ## 6. Offene Punkte vor einer Vereinbarung
 
 1. Anwaltliche Bewertung der Marke »Volta« und des Namens »Zuse«.
-2. Schutzfähigkeit der Figur Tick; ggf. eigene Figur des Partners.
+2. Schutzfähigkeit der Figuren Tick und Zetti; ggf. eigene Figur des Partners.
 3. Rechte an den LU-Texten: schriftliche Rechteeinräumung der Übersetzer einholen.
 4. Lizenzhinweise gesammelt in der App (eigene Seite »Lizenzen« mit allen Texten) – technisch vorbereitet, Inhalt
    wird ergänzt.
