@@ -2,7 +2,9 @@
 
 - Status: vorgeschlagen
 - Datum: 2026-10-12
-- Konzept: `docs/Konzept_Zuse_v0.2.pdf` bzw. `docs/Konzept_Zuse.md`; Entwuerfe in `docs/zuse/`
+- Konzept: `docs/Konzept_Zuse.md` (seit v0.3 vom 15.10.2026: spielerischer Einstieg mit Raetselkisten und
+  Werkzeugkiste, Bedienfeld als Leitbild, Einordnung in das DC Learning Ecosystem; die eigene Linie bleibt);
+  PDF `docs/Konzept_Zuse_v0.3.pdf`; Entwuerfe in `docs/zuse/`
 
 ## Kontext
 Das Konzept Volta v3.0 sieht Zuse 1 als Erweiterung der Volta-Reihe auf derselben Grundplatte mit Kontaktfeldern

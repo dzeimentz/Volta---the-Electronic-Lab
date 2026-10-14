@@ -2,434 +2,470 @@
 
 _Konzept der Zuse-Reihe: Zuse 1 · Zuse 2 · Zuse 3_
 
-Markdown-Fassung des Konzepts; gleicher Inhalt wie `docs/Konzept_Zuse_v0.2.pdf` (beide aus einer Quelle erzeugt).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Zuse_v0.3.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
-| Datum | 13.10.2026 |
-| Bezug | Konzept Volta v3.0 (Abschnitte 4.3, 6.3, 11.2), ADR-0001, ADR-0005, ADR-0006, ADR-0011, ADR-0010 |
+| Datum | 15.10.2026 |
+| Bezug | DC Learning Ecosystem – Gesamtkonzept v1.1 und DC Learning Design Standard v1.0 (15.10.2026); Konzept Volta v3.0; ADR-0001, ADR-0005, ADR-0006, ADR-0010, ADR-0011 |
 | Zielplattformen | Android (Tablet), iPadOS, Windows und Linux x86-64, macOS |
-| Aenderungen zu v0.1 | Entstehung und verworfener Entwurf, Bedienung und Gesten, Tablet-Layout, Farblinien, Lernpfade Zuse 2 und 3, Bausteinformat, Plattformen und Mac-Entwicklung, Datenschutz |
+| Änderungen zu v0.2 | Ausrichtung am Bedarf der Schulen (Sek. I) und der Verlage; spielerischer Einstieg mit Alltagsfragen, Rätselkisten und Werkzeugkiste statt »Chip erstellen«; Maskottchen Zetti; Zahlensysteme (binär, dezimal, hexadezimal); Bedienfeld früher Bausatz-Rechner als Leitbild der Reihe; helle Gestaltung wie Volta; Normen und Konventionen; Stand des Prototyps Z0; neue Stufenfolge Zuse 1 (0–13); Einordnung in das DC Learning Ecosystem (Kernlinie Volta → Zuse → MCU Explorer); Zuse 3 als vertiefte Rechnerarchitektur statt Mikrocontroller; Angleichung an den DC Learning Design Standard |
 
-![Gestaltungsentwurf der Zuse-Reihe](zuse/entwurf_linie_zuse.png)
+![Symbol Zuse 1](../zuse/resources/icons/zuse1_256.png)
 
 ## 1. Zusammenfassung
 
-Zuse ist eine eigene Produktlinie von DC Software Engineering neben Volta. Sie fuehrt Jugendliche von 12 bis 16 Jahren vom einzelnen Bit ueber Gatter, Rechenwerk und Speicher bis zu einem selbst gebauten Rechner, den sie anschliessend programmieren. Das Konzept Volta v3.0 sah Zuse 1 noch als Erweiterung der Volta-Reihe auf derselben Grundplatte vor. Entwuerfe haben gezeigt, dass das fuer Computertechnik nicht traegt. Zuse wird deshalb auf eigene Beine gestellt: eigene Arbeitsflaeche, eigene Simulation, eigene Gestaltung.
+Zuse ist eine eigene Produktlinie von DC Software Engineering neben Volta. Sie erklärt Kindern und Jugendlichen, wie ein Computer funktioniert – vom einzelnen Bit bis zum selbst gebauten Rechner, den sie über Kippschalter programmieren.
 
-Kern ist die **Abstraktionsleiter**. Auf der **Werkbank** baut das Kind aus vorhandenen Bausteinen einen neuen, prueft ihn mit Wahrheitstabelle oder Testfolge und speichert ihn als **Chip**. Dieser Chip steht in der naechsten Stufe als Baustein zur Verfuegung. Auf der **Systemplatine** stecken am Ende die selbst gebauten Chips an einem gemeinsamen Bus und bilden einen Rechner. »Blick hinein« oeffnet jeden Chip bis hinunter zum Gatter.
+Version 0.2 setzte auf eine Werkbank, auf der aus Gattern Chips entstehen. Der Prototyp (Phase Z0) hat gezeigt: Die Technik trägt, der Einstieg aber ist zu abstrakt. Version 0.3 dreht die Reihenfolge um. Jede Stufe beginnt mit einer **Frage aus dem Alltag** (»Die Klingel soll läuten, wenn vorne oder hinten jemand drückt«). Das Kind **probiert verschlossene Rätselkisten** aus, findet die passende Regel selbst und bekommt erst dann ihren Namen (ODER) und ihr Zeichen. Die Regel wandert in die **Werkzeugkiste** und wird später zum Bauen eigener **Erfindungen** benutzt (Alarmanlage, Treppenhauslicht, Addierer). Das Maskottchen **Zetti** begleitet zurückhaltend; eine zuschaltbare **Zahlenleiste** zeigt jederzeit, was die Schalter und LEDs als Binär-, Dezimal- und Hexadezimalzahl bedeuten.
 
-Die Reihe umfasst drei Baende: **Zuse 1** (Gatter bis 4-Bit-Rechner), **Zuse 2** (8-Bit-CPU und Assembler), **Zuse 3** (Mikrocontroller mit Sensoren und Aktoren, Bruecke zurueck zur Volta-Elektrik). Geteilt mit Volta werden Qt-Stapel, Plattformen, Lernpfad, Inhaltspakete, Mehrsprachigkeit, Befehlsmuster und alle Regeln zu Datenschutz, Kindersicherheit und Barrierefreiheit. Neu sind eine ereignisgesteuerte Logiksimulation (Qt-frei), Werkbank und Systemplatine als Oberflaeche und eine Gestaltungslinie, die zur Informationstechnik passt.
+Leitbild der Reihe ist das **Bedienfeld der ersten Bausatz-Rechner** (Altair 8800, 1975): Kippschalter für Adresse und Daten, LEDs, Taster für Ablegen, Einzelschritt und Start. Es wächst mit jedem Band – von vier Bit in Zuse 1 über acht Bit in Zuse 2 bis zu Ein-/Ausgabe-Registern und Unterbrechungen eines eigenen Prozessorkerns in Zuse 3.
 
-**Empfehlung:** ADR-0010 annehmen; Volta 1 bleibt vorrangig. Vor der Umsetzung: Markenrecherche »Zuse«, Prototyp der Werkbank (fuenf Gatter, Pruefen, Chip erstellen, Blick hinein) und Erprobung mit drei bis fuenf Jugendlichen.
+Im **DC Learning Ecosystem** ist Zuse das Mittelstück der Kernlinie **Volta → Zuse → MCU Explorer**: vom elektrischen Signal über die Rechnerarchitektur zur programmierbaren Hardware. Mikrocontroller mit C/C++ sind Sache des MCU Explorers; Zuse liefert das Verständnis, was in einem Prozessor geschieht.
+
+Die Gestaltung ist hell und freundlich wie Volta 1 und folgt dem DC Learning Design Standard. Gemeinsam mit Volta bleiben Qt-Stapel, Plattformen, Lernpfad, Inhaltspakete, Mehrsprachigkeit, Befehlsmuster und alle Regeln zu Datenschutz, Kindersicherheit und Barrierefreiheit.
+
+**Empfehlung:** Die Richtung von v0.3 als Grundlage festschreiben, den Prototyp um die Stufen 7 (Zählen am Bedienfeld) bis 9 (Rechnen bis 15) erweitern und ihn mit drei bis fünf Kindern der Zielgruppe erproben. Weitere Phasen erst nach der Rückmeldung der angefragten Verlage.
 
 ## 2. Ausgangslage und Entstehung
 
 ### 2.1 Ausgangspunkt im Konzept Volta v3.0
 
-Das Volta-Konzept beschreibt Zuse 1 in Abschnitt 4.3 als Fortsetzung von Volta 3: Aus Schaltern und Laempchen entstehen Bits, aus Gattern ein Addierer, aus Kippstufen ein Speicher, aus Taktgeber und Befehlsdecoder ein Kleinstrechner. Es nennt einen eigenen Simulationsmodus auf Gatter- und Registerebene, einen Programmiereditor und eine moegliche Anbindung an den Blockeditor UBBE und an Mikrocontroller wie den ESP32. Als groesste technische Huerde gilt die Kopplung der Logiksimulation an den analogen Kern ohne Zeitversatz (Abschnitt 6.3). Der Aufwand ist mit »eigenes Konzept« angegeben (Abschnitt 11.2).
+Das Volta-Konzept beschreibt Zuse 1 als Fortsetzung von Volta 3: Aus Schaltern und Lämpchen entstehen Bits, aus Gattern ein Addierer, aus Kippstufen ein Speicher, aus Taktgeber und Befehlsdecoder ein Kleinstrechner. Als größte technische Hürde gilt die Kopplung einer Logiksimulation an den analogen Kern.
 
-### 2.2 Erster Entwurf: Zuse auf der Volta-Grundplatte
+### 2.2 Erster Entwurf: Zuse auf der Volta-Grundplatte (verworfen)
 
-Ein erster Bildentwurf setzte Zuse 1 auf die bekannte Volta-Grundplatte: ein »Rechnerpult« statt Batteriepult (Takt, Einzelschritt, Reset, Kippschalter fuer zwei 4-Bit-Zahlen, Ausgabe-Laempchen), Gatter als Bausteine auf den Kontaktfeldern, Leitungen mit Pegelanzeige, rechts ein Logikanalysator, unten ein Speichermodul. Der Entwurf zeigt einen Addierer fuer 6 + 3 = 9.
+![Verworfener Entwurf: Zuse 1 auf der Volta-Grundplatte](zuse/entwurf_alternative_grundplatte.png)
 
-![Verworfener Entwurf: Zuse 1 auf der Volta-Grundplatte (Addierer, Rechnerpult, Logikanalysator)](zuse/entwurf_alternative_grundplatte.png)
+Schon der Addierer füllt die Grundplatte; ein 4-Bit-Rechner besteht aus mehreren Hundert Gattern. Mit Einzelleitungen entsteht ein Knäuel, das auf dem Tablet nicht bedienbar ist. Daraus folgte die eigene Linie mit eigener Arbeitsfläche und eigener Logiksimulation (ADR-0010). Die Kopplung an den analogen Kern braucht erst der MCU Explorer an seinen Anschlüssen.
 
-_Verworfener Entwurf: Zuse 1 auf der Volta-Grundplatte (Addierer, Rechnerpult, Logikanalysator)_
+### 2.3 Version 0.2: Werkbank und Chips
 
-Dabei wurde deutlich:
+Version 0.2 stellte die Abstraktionsleiter in den Mittelpunkt: Auf einer dunklen Werkbank baut das Kind aus NAND-Gattern einen Baustein, prüft ihn mit der Wahrheitstabelle und speichert ihn als Chip; »Blick hinein« öffnet jeden Chip bis zum Gatter.
 
-- Schon der Addierer fuellt die Platte; ein 4-Bit-Rechner besteht aus mehreren Hundert Gattern. Auf Kontaktfeldern mit Einzelleitungen entsteht ein Leitungsknaeuel, das auf dem Tablet nicht bedienbar ist und die Mindestgroessen (Bedienelemente 48 dp, Kontaktfelder 56 dp) nicht halten kann.
-- Ein eng gerastertes Steckbrett mit 74xx-Bausteinen waere authentisch, ist fuer Volta aber ausdruecklich ein Nicht-Ziel (Konzept Volta 3.2) und auf dem Tablet ebenso zu kleinteilig.
-- Das eigentliche Lernziel der Computertechnik ist Abstraktion: Ein gepruefter Baustein wird zur Black Box und traegt die naechste Ebene. Die Grundplatte bildet das nicht ab.
-- Die Kopplung an den analogen Kern ist fuer Zuse 1 und 2 didaktisch nicht noetig; gebraucht wird sie erst in Zuse 3 an den Anschluessen nach aussen.
+### 2.4 Erfahrungen aus dem Prototyp Z0
 
-### 2.3 Entscheidung fuer eine eigene Linie
+Der Prototyp (Oktober 2026) setzte v0.2 um: Logikbibliothek, Werkbank mit Rückgängig, Prüfen, Chip erstellen, Blick hinein über drei Ebenen, Android-Testversion. Die Bewertung des Inhabers:
 
-Daraus folgte der Schnitt: Zuse wird eine eigene Reihe mit eigener Arbeitsflaeche (Werkbank und Systemplatine), eigener Logiksimulation und eigener Gestaltungslinie. Zugleich wurde fuer die Volta-Reihe festgehalten, dass sich die Baende farblich unterscheiden (Abschnitt 4.2). Die Entscheidung ist als ADR-0010 vorgeschlagen.
+- **Technisch richtig, aber nicht nachvollziehbar.** Die erste Aufgabe »NICHT aus NAND« setzt voraus, was erst gelernt werden soll. Normzeichen (&, ≥1, =1) und eine Prüftabelle »soll/ist« wirken wie eine Prüfung, bevor das Kind weiß, worum es geht. »Chip erstellen« bleibt abstrakt.
+- **Der dunkle Hintergrund passt nicht** zu einem spielerischen Einstieg; Volta 1 zeigt mit heller, freundlicher Gestaltung, was funktioniert.
+- **Kippschalter, Taster und LEDs** wie auf den ersten Bausatz-Rechnern sind dagegen sofort eingängig.
+
+Daraus entstand Version 0.3: erst die Frage, dann das Ausprobieren, dann der Name – und gebaut wird erst, wenn ein Problem es verlangt.
+
+### 2.5 Bedarf in Schulen und Verlagen
+
+| Beobachtung | Folgerung für Zuse |
+|---|---|
+| Informatik wird in vielen Ländern Pflichtfach der Sekundarstufe I (u. a. Hamburg 7–10, Baden-Württemberg ab 5, Bremen ab 2026/27, Rheinland-Pfalz ab 2028/29; Sachsen, Mecklenburg-Vorpommern, Sachsen-Anhalt) | Zuse 1 auf Klasse 5–8 ausrichten: Bits und Binärzahlen, Eingabe–Verarbeitung–Ausgabe, »Wie funktioniert ein Computer?« |
+| Logikgatter stehen meist erst in der Sekundarstufe II | Gatter in Zuse 1 über Alltagsfragen, nicht über Formalismus; Tiefe (eigene CPU) in Zuse 2 |
+| Informatik ist Mangelfach; viele Lehrkräfte unterrichten fachfremd | sofort einsetzbar, ohne Hardware, mit Lehrerhandreichung und Lehrplanbezug |
+| Verlage verkaufen Schulbücher mit digitalem Begleitsystem, Simulationen kommen meist aus freien Quellen | Zuse als Simulation zum Schulbuch oder als eigenständiges Produkt anbieten |
+| Praktischer Unterricht setzt auf Mikrocontroller (Calliope mini, micro:bit, Arduino) | im Ecosystem Aufgabe des MCU Explorers; Zuse liefert das Verständnis von Register, Speicher und Befehl darunter |
+
+Die Angaben beruhen auf öffentlichen Übersichten (u. a. Informatik-Monitor 2025/26) und sind mit den angefragten Verlagen zu bestätigen.
 
 ## 3. Ziele und Nicht-Ziele
 
 ### 3.1 Ziele
 
-- **Verstehen, wie ein Rechner funktioniert**, vom Bit bis zum laufenden Programm, durch eigenes Bauen statt Zuschauen.
-- **Alles selbst gebaut:** Jede Ebene entsteht aus den geprueften Bausteinen der vorigen. Am Ende laeuft ein Rechner aus Chips, die das Kind selbst gebaut hat.
-- **Abstraktion erlebbar:** Baustein wird Chip, Chip wird Baustein; »Blick hinein« verbindet die Ebenen jederzeit.
-- **Ehrliche Simulation:** Verhalten entsteht aus der Logiksimulation, nie aus hinterlegten Ergebnissen (Volta-Regel 3, uebertragen auf Logik).
-- **Tablet zuerst:** wenige, grosse Bedienziele; Busse statt Einzelleitungen; Finger, Stift und Maus gleichwertig; Hoch- und Querformat.
-- **Eigenstaendige Gestaltung** mit Bezug zur Informationstechnik, erkennbar verwandt mit Volta.
-- Offline, ohne Konto, ohne Werbung, ohne Kaeufe in der App, ohne Datenerhebung; mehrsprachig (DE, FR, EN, LU).
+- **Verstehen, wie ein Computer funktioniert** – vom Bit bis zum laufenden Programm, durch eigenes Ausprobieren und Bauen.
+- **Jede Stufe beantwortet eine Frage**, die ein Kind verstehen kann, und zeigt, wozu das Gelernte gebraucht wird.
+- **Entdecken vor Benennen:** Regeln werden durch Ausprobieren gefunden, Fachbegriffe und Normzeichen kommen danach.
+- **Abstraktion erlebbar:** Aus Werkzeugen werden Erfindungen, aus Erfindungen Werkzeuge; »Blick hinein« verbindet die Ebenen.
+- **Ehrliche Simulation:** Verhalten entsteht aus der Logiksimulation, nie aus hinterlegten Ergebnissen (Volta-Regel 3).
+- **Zahlen verstehen:** binär, dezimal und hexadezimal jederzeit nebeneinander, mit Erklärung, warum ein Computer binär rechnet.
+- **Tablet zuerst:** große Bedienziele, Finger, Stift und Maus gleichwertig.
+- **Schultauglich:** passend zu den Lehrplänen der Sekundarstufe I, auch für fachfremd Unterrichtende.
+- Offline, ohne Konto, ohne Werbung, ohne Käufe in der App, ohne Datenerhebung; mehrsprachig (DE, FR, EN, LU).
 
 ### 3.2 Nicht-Ziele
 
 - Kein Nachbau eines Steckbretts mit Standard-Logikbausteinen (74xx); Pinbelegungen realer Chips sind kein Pflichtwissen.
-- Keine Hochsprachen-Entwicklungsumgebung; programmiert wird in Maschinensprache, Assembler und Bloecken.
-- Keine Online-Funktionen: kein Cloud-Compiler, kein Teilen ueber Server, kein Nachladen von Paketen.
+- Kein Nachbau eines historischen Rechners und keine fremden Namen im Produkt; das Bedienfeld der Bausatz-Rechner ist nur Vorbild für das Prinzip.
+- Keine Hochsprachen-Entwicklungsumgebung; programmiert wird über das Bedienfeld, in Maschinensprache, Assembler und Blöcken.
+- Keine Online-Funktionen, kein Nachladen von Paketen.
 - Keine analoge Detailsimulation in Zuse 1 und 2 (Pegel sind 0 und 1, keine Spannungen).
-- Keine Punkte, Muenzen oder Ranglisten; belohnt wird das Funktionieren.
-- Keine Nachbildung bestehender Kurse oder Lernspiele (z. B. Nand2Tetris oder Logik-Puzzlespiele): Befehlssatz, Stufen, Texte und Gestaltung sind Eigenentwicklungen.
+- Keine Punkte, Münzen oder Ranglisten; belohnt wird das Funktionieren.
+- Keine Nachbildung bestehender Kurse oder Lernspiele; Stufen, Texte, Befehlssatz und Gestaltung sind Eigenentwicklungen.
 
 ## 4. Die Zuse-Reihe
 
-### 4.1 Baende
+### 4.1 Bände
 
-| Band | Alter | Schwerpunkte | Neu gegenueber dem Vorgaenger |
-|---|---|---|---|
-| Zuse 1 | 12–16 | Bit, Gatter, Wahrheitstabelle, Halb- und Volladdierer, 4-Bit-Rechenwerk, Flipflop und Register, Takt und Zaehler, Speicher, Steuerwerk, 4-Bit-Rechner »Zuse-4« mit eigenem Befehlssatz, Maschinensprache | Werkbank, Chip erstellen, Systemplatine, Logikanalysator, Programmtabelle |
-| Zuse 2 | 13–16 | 8-Bit-Datenweg, Adressbus, Spruenge und Bedingungen, Stapel und Unterprogramme, Ein-/Ausgabe-Ports, Assembler mit Marken, einfache Spiele und Anzeigen | 8-Bit-Busse, Assembler-Editor, Speicheransicht, Pixelmatrix |
-| Zuse 3 | 14–16 | Mikrocontroller als fertiger Chip, Anschluesse nach aussen, Sensoren und Aktoren, Zeitgeber und Unterbrechungen, Programmieren in Bloecken und Text | Anschluss-Leiste mit Kopplung an den Volta-Kern, Block-Editor, virtuelle Peripherie |
+| Band | Alter | Schwerpunkte | Bedienfeld | Rechner |
+|---|---|---|---|---|
+| Zuse 1 | 10–14 (Kl. 5–8) | Bit, Zahlensysteme, NICHT/UND/ODER/XODER, Addierer, Speicher, Takt, Zähler, Programm | 4 Daten-, 4 Adressschalter; LEDs für Adresse, Daten, Übertrag, Null, Lauf/Halt | Zuse-4: 4 Bit, 16 Speicherplätze, aus eigenen Erfindungen |
+| Zuse 2 | 13–16 | eigene CPU aus eigenen Bausteinen, 8-Bit-Datenweg, Sprünge, Stapel, Ein-/Ausgabe, Assembler | 8 Daten-, 8 Adressschalter, Status-LEDs | Zuse-8: 8 Bit, eigener Befehlssatz, Pixelmatrix |
+| Zuse 3 | 14–16 | vertiefte Rechnerarchitektur: Unterbrechungen, Zeitgeber, Ein-/Ausgabe über Register, Von-Neumann und Harvard, eigener kleiner Prozessorkern | Bedienfeld mit Ein-/Ausgabe-Registern und Unterbrechungs-LEDs | Zuse-K: kleiner Prozessorkern als Brücke zum MCU Explorer |
 
-Jeder Band ist eine eigene App mit eigener Altersstufe, wie in der Volta-Reihe. Produktnamen: »Zuse 1 – Computertechnik fuer Einsteiger«; die Zusaetze fuer Zuse 2 und 3 sind offen. Der Name verweist auf Konrad Zuse und die Z1; die Markenrecherche steht aus (Risiko R1). Konzeptbasis fuer Zuse 2 und 3 sind Arbeitsentwuerfe; das Volta-Konzept kennt bisher nur Zuse 1.
+Mikrocontroller mit Arduino-Hardware, C/C++, Sensoren und Aktoren gehören nicht zu Zuse, sondern zur eigenen Linie MCU Explorer (Abschnitt 4.3).
 
-### 4.2 Verhaeltnis zu Volta
+Jeder Band ist eine eigene App. Produktnamen: »Zuse 1 – Computertechnik für Einsteiger«; Zusätze für Zuse 2 und 3 offen. Der Name verweist auf Konrad Zuse und die Z1; die Markenrecherche steht aus (R1).
+
+### 4.2 Verhältnis zu Volta
 
 | Bereich | Gemeinsam mit Volta | Eigen in Zuse |
 |---|---|---|
-| Arbeitsflaeche | Pointer Handlers, Zoom/Verschieben, Mindestgroessen, Tablet-Layout | Werkbank und Systemplatine statt Grundplatte mit Kontaktfeldern |
-| Simulation | Prinzip »ehrlich«, Qt-freie Bibliothek (C++17, nur Standardbibliothek) | ereignisgesteuerte Logiksimulation; Volta-Kern nur in Zuse 3 an den Anschluessen |
-| Lernpfad | Stufen, Freischaltung, Fortschritt, gestufte Hilfen, Musterloesung | Erfolg = bestandene Pruefung eines Bausteins oder Programms |
-| Rueckgaengig | Befehlsmuster (ADR-0005) | eigene Befehle fuer Werkbank und Platine |
-| Inhalte | Inhaltspakete (JSON), Mehrsprachigkeit, Einbettung als Qt-Ressource (ADR-0011) | Bausteinformat, Programme |
+| Einstieg | Geschichte und Leitfrage je Stufe, Maskottchen, helle Gestaltung | Rätselkisten, Werkzeugkiste, Bedienfeld |
+| Simulation | Prinzip »ehrlich«, Qt-freie Bibliothek (C++17) | ereignisgesteuerte Logiksimulation (`logic/`); rein digital, Kopplung an den Volta-Kern im MCU Explorer |
+| Lernpfad | Stufen, Freischaltung, Fortschritt, gestufte Hilfen, Musterlösung | Erfolg = richtige Kiste gefunden oder Erfindung geprüft |
+| Rückgängig | Befehlsmuster (ADR-0005) | eigene Befehle für Werkbank und Bedienfeld |
+| Inhalte | Inhaltspakete (JSON), Mehrsprachigkeit, Einbettung als Qt-Ressource (ADR-0011) | Stufen mit Rätselkisten, Bausteinformat, Programme |
 | Plattformen | Android, iPadOS, Windows, Linux, macOS; Paketierung, Symbole aus SVG | – |
-| Gestaltung | Bedienmuster, Schriftstufen A−/A+, Sprache und Info oben rechts | eigene Linie: dunkle Platine, Loetpads, Monospace, Akzent je Band |
+| Figur | Volta: Tick | Zuse: Zetti |
 
-Farblinien beider Reihen: Volta 1 Navy/Orange, Volta 2 Petrol/Bernstein, Volta 3 Aubergine/Cyan (je Band eigener Rahmen, Grundplatte und Funktionsfarben gleich); Zuse 1 Cyan, Zuse 2 Lindgruen, Zuse 3 Violett auf Graphit.
+### 4.3 Einordnung im DC Learning Ecosystem
 
-## 5. Loesungskonzept
-
-### 5.1 Leitidee: Aus Einfachem wird ein Baustein
-
-Jede Stufe hat dieselbe Form: eine Leitfrage (»Wie kann ein Rechner zwei Zahlen addieren?«), ein Bauauftrag auf der Werkbank, eine Pruefung und am Ende ein neuer Chip. Was das Kind gebaut hat, benutzt es danach als Werkzeug, ohne sich um sein Inneres kuemmern zu muessen, und kann trotzdem jederzeit hineinsehen.
-
-| Ebene | Bausteine | Ergebnis (neuer Chip) |
+| Linie | Produkte | Rolle von Zuse |
 |---|---|---|
-| Gatter | Schalter, Laempchen, NAND | NOT, AND, OR, XOR |
-| Rechnen | Gatter | Halbaddierer, Volladdierer, 4-Bit-Addierer, ALU |
-| Speichern | Gatter, Rueckkopplung | Flipflop, Register, Zaehler, RAM 16 × 4 |
-| Steuern | Register, Zaehler, Decoder | Befehlszaehler, Steuerwerk |
-| Rechner | alle eigenen Chips | Zuse-4 auf der Systemplatine |
+| Kernlinie | Volta 1–3 → **Zuse 1–3** → MCU Explorer | Brücke vom Schaltkreis (Volta) zur programmierbaren Hardware (MCU Explorer): Logik, Speicher, Befehl, Programm |
+| IT-Linie | PC Explorer → OS Explorer → Network Explorer → Internet & Cloud Explorer | Zuse liefert das Grundverständnis von CPU, Speicher und Befehl, auf dem der PC Explorer aufbaut |
+| DC Learning Suite | gemeinsame Lernumgebung über alle Module | Zuse als Fachmodul mit der Digital-Engine (`logic/`); jede App bleibt einzeln nutzbar |
 
-### 5.2 Werkbank
+Gemeinsame Grundlage ist der **DC Learning Design Standard** (Volta als Referenz, Zuse wird angeglichen, Abschnitt 6.1). Die Bibliothek `logic/` ist die Digital-Engine des Ecosystems; die Kopplung Digital ↔ Analog über einen Simulations-Koordinator betrifft vor allem den MCU Explorer.
 
-![Entwurf Werkbank: Volladdierer aus Gattern, Pruefung mit Wahrheitstabelle, »Chip erstellen«](zuse/entwurf_werkbank.png)
+## 5. Lösungskonzept
 
-_Entwurf Werkbank: Volladdierer aus Gattern, Pruefung mit Wahrheitstabelle, »Chip erstellen«_
+### 5.1 Leitidee: Frage – Ausprobieren – Benennen – Benutzen
 
-- **Baustein-Grenze:** Der entstehende Chip hat einen Rahmen. Eingaenge links, Ausgaenge rechts; jeder Anschluss hat einen Namen und eine Breite (1, 4 oder 8 Bit).
-- **Bausteine** sind gross (mindestens 96 × 64 dp) und tragen Schaltzeichen nach DIN EN 60617 (&, =1, ≥1, 1). Selbst gebaute Chips tragen ein eigenes Kuerzel und einen Stern (★).
-- **Leitungen und Busse:** Eine Leitung traegt ein Bit, ein Bus 4 oder 8 Bit; Busse zeigen ihren Wert binaer, hex oder dezimal. Aufteilen und Zusammenfassen ueber eigene Bausteine (Splitter).
-- **Pegel nie nur ueber Farbe:** 1 in der Akzentfarbe und durchgezogen, 0 grau und gestrichelt, unbestimmt als »?« mit Punktlinie.
-- **Eingaenge bedienen:** Tippen schaltet einen Eingang um; die Simulation laeuft sofort mit.
-- **Pruefen:** kombinatorische Bausteine ueber die vollstaendige Wahrheitstabelle, Speicher und Steuerwerke ueber Testfolgen Takt fuer Takt. Jede Zeile laeuft durch die Simulation; Abweichungen werden markiert und lassen sich Schritt fuer Schritt nachvollziehen.
-- **Chip erstellen:** erst nach bestandener Pruefung. Der Chip erhaelt Kuerzel und Anschlussbild und wird lokal gespeichert. Aenderungen erzeugen eine neue Version; verbaute Chips behalten ihre Version, bis das Kind sie aktualisiert.
-- **Blick hinein:** Doppeltippen oeffnet einen Chip auf seiner eigenen Werkbank; die Pfadanzeige oben zeigt die Ebene (z. B. Systemplatine › ALU4 › VA).
+Jede Stufe folgt demselben Ablauf:
 
-### 5.3 Systemplatine
+1. **Frage:** eine kleine Alltagssituation mit Bedeutung für Schalter und LEDs (»Schlüssel 1«, »Tresor offen«).
+2. **Ausprobieren:** Rätselkisten testen oder eine Schaltung bauen; die Tabelle »Was passiert?« füllt sich mit dem, was das Kind beobachtet.
+3. **Benennen:** Erst nach der richtigen Lösung erscheinen Name, Normzeichen und Merksatz (»ODER: Eins reicht schon.«).
+4. **Benutzen:** Das Ergebnis liegt als Werkzeug in der Werkzeugkiste und löst die nächsten Aufgaben.
 
-![Entwurf Systemplatine: selbst gebaute Chips am Datenbus, Programm und Taktschritt](zuse/entwurf_systemplatine.png)
+### 5.2 Rätselkisten (Entdecken)
 
-_Entwurf Systemplatine: selbst gebaute Chips am Datenbus, Programm und Taktschritt_
+![Prototyp: Der Tresor – Kiste 1 ist eingesetzt](zuse/prototyp_z0_raetselkiste.png)
 
-- Hauptplatine mit Datenbus, Adressbus (ab Zuse 2) und Steuerleitungen; Steckplaetze fuer Takt, Befehlszaehler, Speicher, Steuerwerk, Register A und B, ALU und Anzeige.
-- Gesteckt werden nur gepruefte eigene Chips. Fehlt einer, zeigt der Steckplatz, welche Stufe ihn liefert. Im freien Labor gibt es gekennzeichnete Werkstatt-Chips als Ersatz.
-- Takt mit waehlbarer Geschwindigkeit (0,5–50 Hz) und Einzelschritt; Taktphasen holen, dekodieren, ausfuehren. In jedem Takt sind die aktiven Bausteine und der Buswert hervorgehoben; ein Satz erklaert, was geschieht (»RAM legt 1001 auf den Bus, die Anzeige uebernimmt den Wert«).
-- Logikanalysator fuer frei waehlbare Leitungen, Speicheransicht, Ausgabe ueber Laempchen, Siebensegmentanzeige und (Zuse 2) Pixelmatrix.
+- Zwischen Schaltern und LED steht ein Steckplatz; darunter liegen drei verschlossene Kisten mit »?«.
+- Das Kind setzt eine Kiste ein, schaltet und beobachtet. Ohne eingesetzte Kiste ist die LED nicht angeschlossen (unbestimmt).
+- Die Tabelle zeigt nur, was mit der eingesetzten Kiste ausprobiert wurde; das Soll bleibt verborgen.
+- »Diese Kiste passt!« prüft die Wahl. Bei einer falschen Kiste nennt Zetti die erste Schalterstellung, in der sie versagt (»Bei Schlüssel 1 aus, Schlüssel 2 an ist Tresor offen mit dieser Kiste an – es soll aber aus sein.«).
+- Nach der richtigen Wahl öffnet sich die Kiste und zeigt Zeichen und Namen.
 
-### 5.4 Programmierebene
+### 5.3 Werkbank, Werkzeugkiste und Erfindungen (Bauen)
 
-- **Zuse 1:** Programmtabelle in Maschinensprache fuer den eigenen Befehlssatz »Zuse-4« (Arbeitsentwurf: LDA, ADD, SUB, STA, OUT, JMP, JZ, HLT; 16 Speicherworte zu 4 Bit). Jede Zeile zeigt Befehl, Binaercode und Wirkung; der Befehlszeiger laeuft im Takt mit.
-- **Zuse 2:** Assembler mit Marken und Kommentaren; die Uebersetzung ist Zeile fuer Zeile sichtbar. Eigene Befehle lassen sich im Steuerwerk ergaenzen.
-- **Zuse 3:** Bloecke und Text fuer einen virtuellen Mikrocontroller; Peripherie ueber die Anschluss-Leiste. Eine Bruecke zu realer Hardware (z. B. ESP32) nur ohne Netz ueber USB und nach eigener Entscheidung (Abschnitt 15).
+![Prototyp: Die Alarmanlage – Werkzeuge links, Zahlenleiste unten](zuse/prototyp_z0_alarmanlage.png)
+
+- **Werkzeugkiste:** alle entdeckten Regeln (NICHT, UND, ODER) mit Merksatz und alle eingepackten Erfindungen.
+- **Werkbank:** Schalter links, LEDs rechts, jeweils mit Bedeutung. Werkzeuge antippen oder hineinziehen, Leitungen von Lötpad zu Lötpad ziehen. Jede Änderung ist ein Befehl mit Rückgängig/Wiederholen.
+- **Prüfen:** Die Wahrheitstabelle läuft durch die Simulation; abweichende Zeilen sind mit ✗ und Rahmen markiert (nie nur Farbe).
+- **Erfindung einpacken** (ersetzt »Chip erstellen«): nach bestandener Prüfung wird die Schaltung zum Werkzeug mit Namen (»Alarmanlage«) und steht in späteren Stufen bereit.
+- **Blick hinein:** Doppeltippen öffnet eine Erfindung mit den echten Pegeln von außen, über alle Ebenen bis zum Gatter.
+- **Hilfen:** Tipp in Zettis Sprechblase, als letzte Stufe die Musterlösung (danach selbst nachbauen).
+- Zwei Ausgänge auf einer Leitung werden mit Erklärung abgelehnt.
+
+### 5.4 Zahlensysteme
+
+![Prototyp: Zetti erklärt die Zahlensysteme](zuse/prototyp_z0_zahlensysteme.png)
+
+- **Zahlenleiste** unter der Arbeitsfläche, standardmäßig an und jederzeit abschaltbar: Schalter und LEDs als Binärzahl mit Stellenwerten (8 4 2 1), dezimal und hexadezimal. Erster Schalter = höchstes Bit.
+- **»Warum?«** öffnet Zettis Erklärung:
+  - **Dezimal** (Basis 10): So zählen Menschen – mit zehn Ziffern.
+  - **Binär** (Basis 2): Ein Computer kennt nur zwei Zustände; zwei Zustände lassen sich mit Schaltern und Transistoren sicher unterscheiden, auch wenn die Spannung schwankt. Deshalb rechnet ein Computer binär.
+  - **Hexadezimal** (Basis 16): Je vier Bits ergeben genau eine Hex-Ziffer (0–9, A–F). Hex macht lange Binärzahlen für Menschen lesbar (Speicheradressen, Maschinenbefehle, Farben); der Computer rechnet weiter binär.
+- Vergleichstabelle 0–15 (dezimal, binär, hex) mit der aktuellen Schalterstellung hervorgehoben.
+
+### 5.5 Bedienfeld – Leitbild der Reihe
+
+Vorbild ist das Bedienfeld der ersten Bausatz-Rechner (Altair 8800, 1975): Programme und Daten wurden mit Kippschaltern eingegeben und an LEDs abgelesen. Übernommen wird nur das Prinzip, nicht Name, Aussehen oder Befehlssatz.
+
+| Element | Zuse 1 | Zuse 2 |
+|---|---|---|
+| Datenschalter | 4 (D3–D0) | 8 (D7–D0) |
+| Adressschalter | 4 (16 Speicherplätze) | 8 (256 Speicherplätze) |
+| LEDs | Adresse, Daten, Übertrag (C), Null (Z), Lauf/Halt | zusätzlich Status (Lesen, Schreiben, Ein-/Ausgabe, Stapel) |
+| Taster | Untersuchen, Ablegen, Ablegen-weiter, Einzelschritt, Start/Stopp, Rücksetzen | wie Zuse 1, dazu Untersuchen-weiter |
+
+Zuse 1 hat **keinen eigenen Adressbus**: Die Adressschalter laden das Adressregister über den gemeinsamen 4-Bit-Bus (Busbreite 4 Bit durchgehend, Adressen 0–15), wie bei didaktischen Lehrrechnern. Ein separater Adressbus kommt erst mit Zuse 2.
+
+Das Bedienfeld entsteht schrittweise: Stufe 0 (ein Schalter, eine LED), Stufe 7 (vier Schalter, vier LEDs), Stufe 12 (Adressschalter und Speicher), Stufe 13 (der vollständige Rechner).
+
+### 5.6 Programmierebene
+
+- **Zuse 1:** Programm über das Bedienfeld eintippen (Adresse wählen, Befehl einstellen, Ablegen) und im Einzelschritt verfolgen; eine Programmtabelle zeigt Befehl, Binärcode und Wirkung. Befehlssatz Zuse-4 (Arbeitsentwurf, in der Tradition didaktischer Lehrrechner): LDA, ADD, SUB, STA, OUT, JMP, JZ, HLT; 16 Speicherworte zu 4 Bit.
+- **Zuse 2:** Assembler mit Marken neben dem Bedienfeld; Programme als Intel HEX.
+- **Zuse 3:** Assembler mit Unterbrechungsroutinen und Ein-/Ausgabe über Register am eigenen Prozessorkern; die Programmierung echter Mikrocontroller in C/C++ übernimmt der MCU Explorer.
 
 ```text
 ; Zuse-4: zwei Zahlen addieren und ausgeben (Arbeitsentwurf)
-0  LDA 14     ; A <- RAM[14]
-1  ADD 15     ; A <- A + RAM[15]
+0  LDA 14     ; A <- Speicher[14]
+1  ADD 15     ; A <- A + Speicher[15]
 2  OUT        ; Anzeige <- A
 3  HLT
 14 0110       ; 6
 15 0011       ; 3   -> Anzeige 1001 (9)
 ```
 
-### 5.5 Bedienung und Gesten
+### 5.7 Bedienung und Gesten
 
 | Aktion | Touch/Stift | Maus/Tastatur |
 |---|---|---|
-| Baustein setzen | aus dem Fach ziehen | ziehen |
-| Leitung oder Bus ziehen | von Anschluss zu Anschluss ziehen | ziehen |
-| Eingang umschalten | tippen | klicken, Leertaste bei Fokus |
-| Blick hinein | doppeltippen | Doppelklick, Eingabetaste |
-| Kontextmenue | langer Druck | Rechtsklick |
-| Zoom / Verschieben | zwei Finger | Strg + Mausrad / Leertaste + Ziehen, mittlere Maustaste |
-| Rueckgaengig / Wiederholen | Knoepfe in der Werkzeugleiste | Strg+Z / Strg+Y |
-| Takt / Einzelschritt | Knoepfe im Pult | Strg+Eingabe / Pfeil rechts |
+| Kippschalter umlegen | tippen | klicken |
+| Taster drücken | gedrückt halten | Maustaste halten |
+| Rätselkiste einsetzen | Kiste antippen | klicken |
+| Werkzeug setzen | aus der Leiste ziehen oder antippen | ziehen oder klicken |
+| Leitung ziehen | von Lötpad zu Lötpad ziehen | ziehen |
+| Blick hinein | doppeltippen | Doppelklick |
+| Rückgängig / Wiederholen | Knöpfe oben | Strg+Z / Strg+Y |
+| Entfernen | auswählen, »Entfernen« | Entf |
 
-- Mindestgroessen wie Volta: Bedienelemente ≥ 48 dp, Anschluesse ≥ 56 dp; Touch startet in Originalgroesse, ein Knopf wechselt zur Uebersicht.
-- Unter 1280 dp Breite (Hochformat, iPad) schmale Werkzeugleiste; im Hochformat liegt das Bauteilfach unten, Seitenfelder liegen eingeklappt ueber der Arbeitsflaeche.
-- Pfadanzeige (Werkbank › Baustein) und »Zurueck« fuehren zwischen den Ebenen.
+Mindestgrößen wie Volta: Bedienelemente ≥ 48 dp, Anschlüsse ≥ 56 dp. Seitenleisten werden auf kleinen Bildschirmen einklappbar. Begriffe und Symbole für Betrieb, Pause, Einzelschritt, Rückgängig und Reset sind über Volta, Zuse und MCU Explorer gleich (Design Standard).
 
-## 6. Gestaltung der Zuse-Linie
+## 6. Gestaltung
 
-![Gestaltungsentwurf: Symbole und Farben von Zuse 1, 2 und 3](zuse/entwurf_linie_zuse.png)
+### 6.1 Angleichung an den DC Learning Design Standard
 
-_Gestaltungsentwurf: Symbole und Farben von Zuse 1, 2 und 3_
+Volta ist die gestalterische und interaktive Referenz; Zuse übernimmt Grundnavigation und Interaktionsmuster und behält seine Fachansichten (Werkbank, Rätselkisten, Bedienfeld, Register, Logikanalysator).
+
+| Bereich | Design Standard | Zuse (Prototyp Z0) | Angleichung |
+|---|---|---|---|
+| Kopfzeile | dunkelblau, Produkt, Lernstufe, Betrieb, globale Aktionen | weiß mit Stufen-Nummern | auf Dunkelblau umstellen, Aufbau wie Volta |
+| Layout | Bibliothek links, Arbeitsfläche Mitte, Aufgaben rechts, optionale Leiste unten | Erzählung links, Werkzeuge mittig links, Tabelle rechts, Zahlenleiste unten | Werkzeuge links, Aufgabe mit Zetti und Tabelle rechts, Zahlenleiste als untere Messleiste |
+| Lernzyklus | Forscherfrage → Vermutung → Aufbau → Betrieb → Beobachtung → Erklärung → Reflexion | Frage → Ausprobieren → Benennen → Benutzen | »Vermutung« ergänzen: Vor dem Ausprobieren tippt das Kind, welche Kiste passt |
+| Hilfe | Frage, Hinweis, nächster Prüfschritt, Lösung nur auf Wunsch | Tipp, Rückmeldung mit Schalterstellung, Musterlösung auf Knopfdruck | entspricht; Hinweisfolge stufen |
+| Akzent | Cyan für Zuse | Cyan | entspricht |
+| Projekte | Öffnen, Speichern, Export, gemeinsames Format (.dclearn) | lokale Ablage | Export und Import im gemeinsamen Format |
+| Lehrkräfte | Präsentationsmodus, QR-Aufgaben, Forscherheft | – | wie Volta übernehmen |
+
+### 6.2 Gestaltungselemente
+
+![Maskottchen Zetti](../zuse/resources/zetti/zetti_zeigend.png)
 
 | Element | Gestaltung |
 |---|---|
-| Grundton | dunkel: Graphit #0E1217, Flaechen #161C24, Platine #10161D mit Punktraster |
-| Anschluesse | goldene Loetpads (#C9A45C) statt beiger Kontaktfelder |
-| Akzent je Band | Zuse 1 Cyan #22D3EE · Zuse 2 Lindgruen #A3E635 · Zuse 3 Violett #C4A1FF |
-| Schrift | Monospace fuer Werte, Anschluesse, Programme und Ueberschriften im Code-Stil (»// Bausteine«); Sans fuer erklaerende Texte |
-| Symbol | Chip mit »Z« aus Leiterbahnen und Durchkontaktierungen; drei LEDs zeigen die Bandnummer binaer (001, 010, 011) |
-| Pegel | 1 = Akzent und durchgezogen, 0 = grau und gestrichelt, ? = Punktlinie |
-| Werkzeugleiste | Symbol, Stufenauswahl (»05 · Volladdierer«), Rueckgaengig/Wiederholen, Pfadanzeige, Logikanalysator, Programm, BIN\|HEX; oben rechts Sprache, Info, Einstellungen wie Volta |
-| Barrierefreiheit | Kontrast ≥ 4,5 : 1 fuer Texte; helle Variante fuer Praesentation und Druck; Animationen reduzierbar |
+| Grundton | hell und freundlich wie Volta 1: Seite Hellgrau-Blau, Flächen Weiß |
+| Akzent Zuse 1 | Cyan (#06B6D4, für Schrift #0E7490); Knöpfe in Zettis Mützenblau (#2E4A7D) |
+| Bedienfeld | Kippschalter und Taster in Metallgrau, rote LEDs mit Schein, goldene Lötpads |
+| Pegel | 1 = Akzent und durchgezogen, 0 = grau und gestrichelt, unbestimmt = gepunktet bzw. »?«; Wert zusätzlich als 1/0 |
+| Rätselkisten | warme Kartonfarbe mit Fragezeichen, gewählte Kiste mit Rahmen und Haken |
+| Werkzeugkiste | Regeln in Hellcyan, Erfindungen in Hellgold mit Stern |
+| Maskottchen | **Zetti**: neugieriger kleiner Roboter mit Messingbrille, Mütze, Glühbirnen-Antenne und »Z« auf der Brust; erzählt in einer Sprechblase, tritt klein in den Hintergrund; zehn Posen und Mimiken (zeigend, erklärend, bauen, nachdenklich, losgehts, begeistert, fröhlich, freundlich, grübelnd, überrascht) |
+| Symbol | Chip mit »Z« aus Leiterbahnen und Durchkontaktierungen; drei LEDs zeigen die Bandnummer binär (001, 010, 011) |
+| Akzent je Band | Zuse 1 Cyan, Zuse 2 Lindgrün, Zuse 3 Violett |
+| Schaltzeichen | DIN EN 60617-12 als Vorgabe, US-Formen (IEEE Std 91) zuschaltbar |
+
+Zetti wurde mit einem KI-Bildwerkzeug erzeugt und ist austauschbar (Rechteübersicht, Branding-Konzept für Partnerausgaben).
 
 ## 7. Lernpfade
 
-### 7.1 Zuse 1 (Arbeitsentwurf)
+### 7.1 Zuse 1
 
-| Stufe | Leitfrage | Neuer Chip |
-|---|---|---|
-| 0 | Wie speichert ein Schalter eine Information? | – (Bit, Schalter, Laempchen) |
-| 1 | Wann leuchtet die Lampe, wenn zwei Schalter mitreden? | NOT, AND, OR aus NAND |
-| 2 | Wie erkennt ein Rechner »ungleich«? | XOR |
-| 3 | Wie addiert man zwei Bits? | Halbaddierer (HA) |
-| 4 | Und wenn ein Uebertrag dazukommt? | Volladdierer (VA) |
-| 5 | Wie rechnet man mit Zahlen bis 15? | 4-Bit-Addierer, ALU4 (Addieren, Subtrahieren) |
-| 6 | Wie merkt sich eine Schaltung etwas? | Flipflop, Register (REG4) |
-| 7 | Wie zaehlt ein Rechner? | Takt, Zaehler, Befehlszaehler (PC) |
-| 8 | Wo wohnen Programm und Daten? | Decoder, RAM 16 × 4 |
-| 9 | Wer sagt den Bausteinen, was sie tun sollen? | Steuerwerk (STW) |
-| 10 | Laeuft er? | Zuse-4 auf der Systemplatine, erstes Programm |
+| Stufe | Frage | Art | Ergebnis | Stand |
+|---|---|---|---|---|
+| 0 | Licht an! Wie sagt man einem Rechner Ja oder Nein? | bauen | Bit; Kippschalter und Taster | Prototyp |
+| 1 | Das Nachtlicht soll angehen, wenn es nicht hell ist | entdecken | NICHT | Prototyp |
+| 2 | Der Tresor darf nur mit beiden Schlüsseln aufgehen | entdecken | UND | Prototyp |
+| 3 | Die Klingel soll an beiden Türen läuten | entdecken | ODER | Prototyp |
+| 4 | Die Alarmanlage | bauen | erste Erfindung | Prototyp |
+| 5 | Das Treppenhauslicht mit zwei Schaltern | bauen | XODER | Prototyp |
+| 6 | 1 + 1 = 10 | bauen | Halbaddierer | Prototyp |
+| 7 | Wie zählt ein Rechner mit vier Lampen? | bauen | Binärzahlen am 4-Bit-Bedienfeld | geplant |
+| 8 | Geht alles mit einem einzigen Baustein? | entdecken | NAND (Bonus) | geplant |
+| 9 | Rechnen bis 15 – und was, wenn es nicht mehr passt? | bauen | Volladdierer, 4-Bit-Addierer, Übertrags-LED | geplant |
+| 10 | Hat jemand geklingelt, während ich weg war? | bauen | Speicher: Flipflop, Register | geplant |
+| 11 | Wie zählt ein Rechner von allein? | bauen | Takt (prellender Taster), Zähler, Befehlszähler | geplant |
+| 12 | Wo wohnt ein Programm? | bauen | Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld | geplant |
+| 13 | Läuft er? | bauen | Zuse-4: Programm eintippen, Einzelschritt, Start | geplant |
 
-Freischaltung wie Volta: Eine Stufe oeffnet sich, wenn die vorige geschafft ist. Gestufte Hilfen fuehren bis zur Musterloesung; wer sie ansieht, baut den Chip trotzdem selbst nach, damit er im Fach landet.
+Freischaltung wie Volta: Eine Stufe öffnet sich, wenn die vorige geschafft ist. In Stufe 13 ist das Steuerwerk teilweise vorgegeben (R2).
 
 ### 7.2 Zuse 2 (Skizze)
 
 | Stufe | Thema | Ergebnis |
 |---|---|---|
-| 1 | Von 4 auf 8 Bit: Busse verbreitern, Splitter | ALU8, REG8 |
-| 2 | Mehr Speicher: Adressbus, Adressdecoder | RAM 256 × 8 |
-| 3 | Entscheidungen: Flags (Null, Uebertrag), bedingte Spruenge | erweitertes Steuerwerk |
-| 4 | Stapel und Unterprogramme | Stapelzeiger, CALL/RET |
-| 5 | Ein- und Ausgabe: Ports, Tasten, Pixelmatrix | Port-Chips |
-| 6 | Assembler: Marken, Kommentare, Uebersetzung | Programme statt Tabellen |
+| 1 | Vom Bedienfeld mit 4 zu 8 Bit; Busse und Splitter | Rechenwerk und Register mit 8 Bit |
+| 2 | Mehr Speicher: Adressbus, Adressdecoder | Speicher 256 × 8 |
+| 3 | Entscheidungen: Null und Übertrag, bedingte Sprünge | erweitertes Steuerwerk |
+| 4 | Stapel und Unterprogramme | Stapelzeiger |
+| 5 | Ein- und Ausgabe: Ports, Tasten, Pixelmatrix | Port-Bausteine |
+| 6 | Vom Schalter zum Assembler | Programme als Text, Intel HEX |
 | 7 | Eigene Befehle im Steuerwerk | erweiterter Befehlssatz |
 | 8 | Projekt: kleines Spiel auf der Pixelmatrix | Zuse-8 |
 
-### 7.3 Zuse 3 (Skizze)
+### 7.3 Zuse 3 (Skizze, neu ausgerichtet)
+
+Zuse 3 vertieft die Rechnerarchitektur und endet dort, wo der MCU Explorer beginnt.
 
 | Stufe | Thema | Ergebnis |
 |---|---|---|
-| 1 | Der Mikrocontroller als Chip: alles auf einem Baustein | Anschluss-Leiste |
-| 2 | Digitale Ein- und Ausgaenge: Taster, LED | erste Blockprogramme |
-| 3 | Analoge Eingaenge: Lichtsensor, Temperatur (ueber den Volta-Kern) | Analog-Digital-Wandler |
-| 4 | Pulsweite: LED dimmen, Motor regeln | PWM |
-| 5 | Zeitgeber und Unterbrechungen | Blinker ohne Warteschleife |
-| 6 | Von Bloecken zu Text | gleiches Programm in Textform |
-| 7 | Projekt: Nachtlicht, Messstation oder Ampel | eigenes Geraet (virtuell) |
+| 1 | Warum wartet der Rechner nicht? Unterbrechungen | Unterbrechungseingang, Rücksprungadresse |
+| 2 | Zeit messen ohne Warteschleife | Zeitgeber-Baustein |
+| 3 | Ein- und Ausgabe über Register | Ports als Speicheradressen |
+| 4 | Programm und Daten getrennt? Von-Neumann und Harvard | zwei Speicherbusse im Vergleich |
+| 5 | Schneller rechnen: Befehle überlappen | einfaches Fließband (Pipeline) und seine Konflikte |
+| 6 | Alles auf einem Chip | Zuse-K: kleiner Prozessorkern mit Zeitgeber und Ports |
+| 7 | Ausblick: der echte Mikrocontroller | Übergang zum MCU Explorer |
 
 ## 8. Technische Architektur
 
 ### 8.1 Schichten
 
-- **logic/**: neue, Qt-freie C++17-Bibliothek (nur Standardbibliothek) fuer die Logiksimulation, parallel zu `core/`; wiederverwendbar wie der Volta-Kern.
-- **Modell:** Baustein-Definitionen, Werkbank, Systemplatine, Befehle, Pruefung; gemeinsam genutzte Dienste aus `app/src/services` (Inhalte, Fortschritt, Sprache, Einstellungen).
-- **Oberflaeche:** eigenes QML-Modul »Zuse« (Werkbank, Systemplatine, Logikanalysator, Programmeditor) mit eigenem Theme; gemeinsame Bausteine (Werkzeugleiste oben rechts, Info, Startseite mit Lernpfad) werden aus dem Volta-Modul uebernommen oder herausgeloest.
-- **Editionen:** `VOLTA_EDITION=zuse1|zuse2|zuse3` im selben Repository (Vorschlag); eigene App-ID (`com.dcsoftwareengineering.zuse1` …), eigener Name, eigenes Symbol, eigene Inhaltspakete.
+- **logic/**: Qt-freie C++17-Bibliothek für die Logiksimulation, parallel zu `core/` (umgesetzt).
+- **Modell** (`zuse/src`): Stufen, Rätselkisten, Werkbank, Werkzeugkiste, Befehle, Prüfung, Zahlen, Ablage.
+- **Oberfläche** (`zuse/qml`): QML-Modul »Zuse« mit eigenem Theme; später Bedienfeld, Logikanalysator, Programmtabelle.
+- **App** `zuse1` neben Volta im selben Repository; eigene App-ID `com.dcsoftwareengineering.zuse1`, eigenes Symbol, eigene Auslieferung (`deploy_release.py --zuse`, `build_android.py --zuse`).
 
 ### 8.2 Logiksimulation
 
-- Ereignisgesteuert mit Einheitsverzoegerung je Gatter; Werte 0, 1 und unbestimmt (X), fuer Busse zusaetzlich hochohmig (Z) mit Bustreibern. Buskonflikte werden angezeigt, nicht verschwiegen.
-- Hierarchie bleibt erhalten: Chips laufen wahlweise flach (Gatter) oder als Verhaltensmodell. Ein Verhaltensmodell entsteht nur aus einer bestandenen Pruefung desselben Chips und wird bei Abweichungen verworfen.
-- Darstellungstakt bis 50 Hz, schneller im Hintergrund (Programmlauf). Zielgroessen: Zuse-4 mit ca. 500 Gattern flach, Zuse 2 mit ca. 5.000 Gattern ueber Verhaltensmodelle.
-- Zuse 3: Kopplung an den Volta-Kern an den Anschluss-Pins ueber Schwellwerte (Logik → Spannungsquelle, Spannung → Pegel) in festen Zeitschritten des Volta-Kerns.
-- Leistungsmessung wie im Volta-Kern (eigenes Messprogramm, Referenztablet).
+- Ereignisgesteuert mit Einheitsverzögerung je Gatter; Pegel 0, 1, X; Z mit Bustreibern ab Bus und Speicher. Kurze Störimpulse entstehen echt; Schaltungen, die nicht zur Ruhe kommen, werden erkannt.
+- Chips werden bis zum Gatter aufgelöst; die Hierarchie bleibt für »Blick hinein« erhalten. Verhaltensmodelle für große Bausteine (Zuse 2) entstehen nur aus einer bestandenen Prüfung desselben Bausteins.
+- Rätselkisten sind durch ihre Wahrheitstabelle beschrieben; nach dem Entdecken wird die Regel als echtes Gatter simuliert.
+- Zielgrößen: Zuse-4 mit ca. 500 Gattern flach bei 50 Hz Darstellungstakt; Zuse 2 mit ca. 5.000 Gattern über Verhaltensmodelle.
+- Die Kopplung an den analogen Volta-Kern (Schwellwerte, feste Zeitschritte, Simulations-Koordinator) gehört im Ecosystem zum MCU Explorer; Zuse bleibt rein digital.
 
 ### 8.3 Datenformate
 
-Baustein-Definitionen sind JSON mit deutschen Schluesseln (wie die Volta-Inhaltspakete), versioniert, mit Schema in `content/schema/`. Arbeitsentwurf:
-
-```json
-{
-  "schema_version": 1,
-  "kuerzel": "VA",
-  "name": "baustein.volladdierer",
-  "version": 2,
-  "anschluesse": [
-    {"name": "A", "richtung": "ein", "breite": 1},
-    {"name": "B", "richtung": "ein", "breite": 1},
-    {"name": "Cin", "richtung": "ein", "breite": 1},
-    {"name": "S", "richtung": "aus", "breite": 1},
-    {"name": "Cout", "richtung": "aus", "breite": 1}
-  ],
-  "bausteine": [
-    {"id": "x1", "typ": "XOR"}, {"id": "x2", "typ": "XOR"},
-    {"id": "u1", "typ": "AND"}, {"id": "u2", "typ": "AND"}, {"id": "o1", "typ": "OR"}
-  ],
-  "verbindungen": [["A", "x1.a"], ["B", "x1.b"], ["x1.y", "x2.a"], ["Cin", "x2.b"], ["x2.y", "S"]],
-  "pruefung": {"art": "wahrheitstabelle"}
-}
-```
-
-- **Eigene Chips** lokal unter `QStandardPaths::AppDataLocation`, atomar gespeichert (QSaveFile); Export und Import als Datei fuer den Geraetewechsel.
-- **Programme** als Textdatei (Assembler) bzw. JSON (Bloecke); **Stufen** wie Volta (`stufen.json`, Erfolg = Pruefung bestanden).
-- **Inhaltspakete** (Stufen, Texte, Musterloesungen, Werkstatt-Chips) als Qt-Ressource eingebettet (ADR-0011).
+- **Stufen** (`zuse/content/stufen.json`, deutsche Schlüssel): Art (entdecken/bauen), Titel, Geschichte, Frage, Hilfe, Merksatz, Ein- und Ausgänge mit Bedeutung und Art (Kippschalter/Taster), Rätselkisten mit Wahrheitstabelle und richtiger Kiste, freigeschaltetes Werkzeug, erlaubte Werkzeuge, Wahrheitstabelle, Musterlösung.
+- **Bausteine und Erfindungen:** JSON mit Kürzel, Version, Anschlüssen, Bausteinen (mit Lage) und Verbindungen.
+- **Ablage:** eigene Erfindungen, Entwürfe, geschaffte Stufen und Einstellungen (Schaltzeichen, Zahlenleiste) in `werkbank.json` unter `AppDataLocation`, atomar gespeichert; Export als Datei folgt.
+- **Programme:** Speicherabbild am Bedienfeld; ab Zuse 2 Assembler-Text und Intel HEX.
 
 ### 8.4 Befehlsmuster
 
-Jede Aenderung auf Werkbank und Systemplatine (Baustein setzen, verschieben, entfernen; Leitung oder Bus ziehen; Anschluss anlegen; Chip stecken; Chip-Version aktualisieren) ist ein Befehl mit Rueckgaengig/Wiederholen (ADR-0005). Eingaenge umschalten, Takt und Einzelschritt sind Bedienhandlungen und keine Befehle.
+Jede Änderung auf der Werkbank (Werkzeug setzen, verschieben, entfernen; Leitung ziehen oder entfernen; Werkbank leeren; Musterlösung) ist ein Befehl mit Rückgängig/Wiederholen (ADR-0005). Schalter umlegen, Taster drücken, Kiste einsetzen, Takt und Einzelschritt sind Bedienhandlungen und keine Befehle.
 
 ### 8.5 Normen und Konventionen
 
-Stand 14.10.2026, nach Abgleich eines Normenvorschlags mit der Zielgruppe. Uebernommen wird nur, was Kindern und
-Lehrkraeften nuetzt oder den spaeteren Umstieg auf echte Werkzeuge erleichtert.
-
 | Norm / Konvention | Umsetzung | Band |
 |---|---|---|
-| DIN EN 60617-12 (IEC 60617-12), Schaltzeichen binaerer Logikelemente | Standarddarstellung: Rechteck mit &, ≥1, =1, 1; Negation als Kreis am Ausgang | Zuse 1–3 |
-| IEEE Std 91 (US-Gatterformen, »distinctive shape«) | Umschalter DIN/US in den Einstellungen (englischsprachige Partner und Maerkte) | Zuse 1–3 |
-| IEEE Std 1164 (mehrwertige Logik) | Pegel 0, 1, X (unbestimmt, Konflikt) und Z (hochohmig, mit Bustreibern am gemeinsamen Bus); keine 9-wertige Logik. Buskonflikte werden als X gezeigt, nie verschwiegen | Zuse 1 (Z ab Bus und Speicher) |
-| Bus-Schreibweise nach VHDL/Verilog | Bits 0 bis n-1, Bit 0 rechts (niederwertigstes), Busse als D[3:0]; Richtungen in, out, inout und Taktflanke nur in einer Expertenansicht | Zuse 1 (Konvention), Zuse 2 (Ansicht) |
-| Intel HEX | Programme exportieren und importieren (Speicherabbild), spaeter Bruecke zu echter Hardware | Zuse 2, 3 |
-| Bedienfeld fruehe Rechner (Altair 8800: EXAMINE, DEPOSIT, SINGLE STEP) | Einzelschritt, Speicher ansehen und beschreiben ueber Kippschalter und LEDs statt eines Debuggers | Zuse 1 (Finale), Zuse 2 |
-| JEDEC JESD8 (Logikpegel als Spannungen) | Schwellen an der Kopplung Logik ↔ Volta-Kern | Zuse 3, Volta 3 |
+| DIN EN 60617-12 (IEC 60617-12) | Standarddarstellung: Rechteck mit &, ≥1, =1, 1; Negation als Kreis | Zuse 1–3 |
+| IEEE Std 91 (US-Gatterformen) | Umschalter DIN/US in der Werkzeugkiste (umgesetzt) | Zuse 1–3 |
+| IEEE Std 1164 (mehrwertige Logik) | Pegel 0, 1, X, Z; keine 9-wertige Logik; Buskonflikte sichtbar | Zuse 1 |
+| Bus-Schreibweise nach VHDL/Verilog | Bit 0 rechts (niederwertigstes), Busse als D[3:0]; Expertenansicht mit in/out/inout | Zuse 1 (Konvention), Zuse 2 (Ansicht) |
+| Intel HEX | Programme exportieren und importieren | Zuse 2, 3 |
+| Bedienfeld früher Bausatz-Rechner | Untersuchen, Ablegen, Einzelschritt statt Debugger | Zuse 1, 2 |
+| JEDEC JESD8 (Logikpegel als Spannungen) | Schwellen an der Kopplung Logik ↔ Volta-Kern | MCU Explorer, Volta 3 |
 
-Bewusst nicht uebernommen:
-
-- **IEEE 1497 (SDF, Laufzeitmodell):** Die Einheitsverzoegerung je Gatter zeigt Stoerimpulse und Laufzeiten (z. B.
-  Ripple-Carry) bereits ehrlich; getrennte Anstiegs- und Abfallzeiten bringen der Zielgruppe nichts.
-- **RISC-V (RV32I), 6502, Z80:** fuer 4 und 8 Bit zu umfangreich. Zuse-4 bleibt ein eigener Befehlssatz in der
-  Tradition didaktischer Lehrrechner (SAP-1 nach Malvino: LDA, ADD, SUB, OUT, HLT); Befehle, Texte und Stufen sind
-  Eigenentwicklungen (Nicht-Ziel 3.2).
-- **Zuse 3** orientiert sich an den in Schulen verbreiteten Mikrocontrollern (Calliope mini, micro:bit,
-  Block-Programmierung), nicht an einer Prozessorarchitektur.
-- **IEEE 1685 (IP-XACT), IEEE 1149.1 (JTAG):** fuer die Zielgruppe zu technisch; Speicherbelegung im eigenen
-  JSON-Format, Fehlersuche ueber Einzelschritt und Bedienfeld.
-- **Statusflags:** N, Z, C, V sind Herstellerkonvention (keine Norm; ISO/IEC 10967 regelt Arithmetik fuer
-  Programmiersprachen, keine Statusregister). Zuse-4 braucht zuerst nur Null (Z, fuer JZ) und Uebertrag (C).
+Bewusst nicht übernommen: IEEE 1497 (Laufzeitmodell; die Einheitsverzögerung zeigt Laufzeiteffekte bereits), RISC-V/6502/Z80 (für 4 und 8 Bit zu umfangreich; eigener Befehlssatz), IEEE 1685 und IEEE 1149.1 (für die Zielgruppe zu technisch). Statusflags N, Z, C, V sind Herstellerkonvention, keine Norm; Zuse-4 braucht zuerst Null und Übertrag.
 
 ## 9. Plattformen und Paketierung
 
-Zuse nutzt die Plattformarbeit von Volta unveraendert (Stand: Pull Request #1 »Mobil: Android- und iPad-Version vorbereiten«):
-
 | Plattform | Stand und Vorgehen |
 |---|---|
-| Android | Tablet zuerst; minSdk 26; Manifest ohne Berechtigungen (kein INTERNET), keine Cloud-Sicherung; App Bundle mit arm64-v8a und armeabi-v7a; adaptives Symbol und Startthema aus tools/make_icons.py |
-| iPadOS | nur iPad, alle Ausrichtungen, Split View; Info.plist, Datenschutz-Manifest, LaunchScreen; baubar nur auf macOS mit Xcode; Qt-Lizenzweg fuer iOS vor Veroeffentlichung entscheiden |
-| macOS | App-Bundle mit Info.plist und .icns, macdeployqt; Weitergabe nur signiert (Developer ID) und notarisiert |
-| Windows, Linux | Desktop-Ausgabe mit Startbildschirm, Mindestfenster 1280 × 720, volle Tastaturbedienung |
+| Android | Tablet zuerst; minSdk 26; keine Berechtigungen, keine Cloud-Sicherung; Test-APK des Prototyps vorhanden |
+| Windows | Programm mit eigener Qt-Laufzeit in `ZUSE/Release` (Prototyp) |
+| iPadOS, macOS | wie Volta: nur auf macOS mit Xcode baubar; Qt-Lizenzweg für iOS vor Veröffentlichung klären |
+| Linux | Desktop-Ausgabe wie Volta |
 
-- Entwicklung auf einem (auch geliehenen) Mac: eigenes Benutzerkonto, eigene Apple-ID, Xcode, Qt 6.11 fuer macOS und iOS, Claude Code im Repository; Schritte in docs/platforms.md.
-- Groessenziel < 80 MB je Plattform; Leistung 60 fps auf dem Referenztablet.
-- Store-Einordnung: Kinder- bzw. Bildungskategorie, Altersstufe je Band.
+Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenztablet; Store-Einordnung Bildung, Altersstufe je Band.
 
 ## 10. Datenschutz und Kindersicherheit
 
-- Vollstaendig offline; kein Konto, keine Analyse, keine Werbung, keine Kaeufe in der App (ADR-0006).
-- Eigene Chips, Programme und Fortschritt bleiben auf dem Geraet; Weitergabe nur als Datei durch das Kind oder die Eltern.
-- Keine Netzwerkfunktionen, auch nicht fuer Zuse 3: eine Bruecke zu realer Hardware hoechstens ueber USB.
-- Externe Links nur hinter der Elternschranke; Supportangaben ohne Namen, Profile oder Inhalte.
-- Verwaltete Konfiguration fuer Schulen wie Volta (Sprache, freigegebene Stufen, Elternbereich).
+- Vollständig offline; kein Konto, keine Analyse, keine Werbung, keine Käufe in der App (ADR-0006).
+- Erfindungen, Fortschritt und Einstellungen bleiben auf dem Gerät; Weitergabe nur als Datei.
+- Keine Netzwerkfunktionen; eine Brücke zu realer Hardware ist Sache des MCU Explorers und dort nur über USB.
+- Externe Links nur hinter der Elternschranke; verwaltete Konfiguration für Schulen wie Volta.
 
 ## 11. Anforderungen an Zuse 1
 
-| ID | Bereich | Anforderung | Prioritaet |
-|---|---|---|---|
-| F1 | Werkbank | Bausteine setzen, verbinden, Anschluesse anlegen; Rueckgaengig/Wiederholen | MUSS |
-| F2 | Pruefen | Wahrheitstabelle und Testfolge laufen durch die Simulation, Abweichungen sichtbar | MUSS |
-| F3 | Chip | Chip nur nach bestandener Pruefung; Versionen; Blick hinein ueber alle Ebenen | MUSS |
-| F4 | Platine | Systemplatine mit Bus, Steckplaetzen, Takt, Einzelschritt, Hervorhebung | MUSS |
-| F5 | Programm | Programmtabelle Zuse-4 mit Befehlszeiger und Binaeransicht | MUSS |
-| F6 | Anzeige | Busse und Register wahlweise binaer, hex, dezimal | SOLL |
-| F7 | Lernpfad | Stufen 0–10 mit Leitfrage, Hilfen, Musterloesung, Freischaltung | MUSS |
-| F8 | Logikanalysator | frei waehlbare Leitungen ueber die letzten 32 Takte | SOLL |
-| F9 | Export | eigene Chips als Datei exportieren und importieren | SOLL |
-| N1 | Leistung | Zuse-4 flach mit 50 Hz Darstellungstakt, 60 fps auf dem Referenztablet | MUSS |
-| N2 | Bedienung | Ziele ≥ 48 dp, Anschluesse ≥ 56 dp; Finger, Stift, Maus; Pegel nie nur Farbe | MUSS |
-| N3 | Datenschutz | offline, keine Datenerhebung, Chips nur lokal (ADR-0006) | MUSS |
-| N4 | Sprachen | DE, FR, EN, LU wie Volta | MUSS |
-| N5 | Groesse | Installationsgroesse < 80 MB | SOLL |
-| N6 | Formate | Hoch- und Querformat, Fenster ab 1280 × 720 auf dem Desktop | MUSS |
+| ID | Bereich | Anforderung | Priorität | Stand |
+|---|---|---|---|---|
+| F1 | Stufen | Jede Stufe mit Geschichte, Frage, Hilfe, Merksatz, Freischaltung | MUSS | umgesetzt |
+| F2 | Rätselkisten | Kisten einsetzen und ausprobieren, Beobachtungstabelle, Rückmeldung mit konkreter Schalterstellung | MUSS | umgesetzt |
+| F3 | Werkzeugkiste | entdeckte Regeln und eingepackte Erfindungen mit Merksatz; als Werkzeuge in späteren Stufen | MUSS | umgesetzt |
+| F4 | Werkbank | Werkzeuge setzen, verbinden; Rückgängig/Wiederholen; Prüfen mit Wahrheitstabelle | MUSS | umgesetzt |
+| F5 | Blick hinein | jede Erfindung bis zum Gatter mit Live-Pegeln | MUSS | umgesetzt |
+| F6 | Zahlensysteme | Zahlenleiste binär/dezimal/hex, zuschaltbar; Erklärung und Vergleichstabelle | MUSS | umgesetzt |
+| F7 | Bedienfeld | 4 Daten-, 4 Adressschalter, LEDs, Untersuchen/Ablegen/Einzelschritt/Start | MUSS | geplant |
+| F8 | Speicher und Takt | Flipflop, Register, Zähler, Speicher 16 × 4; Testfolgen Takt für Takt | MUSS | geplant |
+| F9 | Programm | Programmtabelle Zuse-4 mit Befehlszeiger und Binäransicht | MUSS | geplant |
+| F10 | Schaltzeichen | DIN und US umschaltbar | SOLL | umgesetzt |
+| F11 | Logikanalysator | frei wählbare Leitungen über die letzten 32 Takte | SOLL | geplant |
+| F12 | Export | Erfindungen als Datei exportieren und importieren | SOLL | geplant |
+| F13 | Unterricht | Lehrerhandreichung mit Lehrplanbezug je Stufe | SOLL | geplant |
+| N1 | Leistung | Zuse-4 flach mit 50 Hz Darstellungstakt, 60 fps auf dem Referenztablet | MUSS | offen |
+| N2 | Bedienung | Ziele ≥ 48 dp, Anschlüsse ≥ 56 dp; Finger, Stift, Maus; Pegel nie nur Farbe | MUSS | teilweise |
+| N3 | Datenschutz | offline, keine Datenerhebung (ADR-0006) | MUSS | umgesetzt |
+| N4 | Sprachen | DE, FR, EN, LU wie Volta | MUSS | DE/EN |
+| N5 | Größe | Installationsgröße < 80 MB | SOLL | erfüllt |
+| N6 | Formate | Hoch- und Querformat, Fenster ab 1280 × 720 | MUSS | Querformat |
 
 ## 12. Bewertete Alternativen
 
 | Option | Beschreibung | Pro | Contra | Entscheidung |
 |---|---|---|---|---|
-| A | Volta-Grundplatte mit Gatter-Bausteinen und Rechnerpult (Entwurf 2.2) | Wiedererkennung, vorhandene Oberflaeche | ab dem Addierer unuebersichtlich; Rechner nicht baubar | verworfen |
-| B | Steckbrett mit 74xx-Chips | authentisch, nah an echter Hardware | kleinteilig, sehr viele Leitungen, Nicht-Ziel der Reihe | verworfen |
-| C | Werkbank und Systemplatine mit selbst gebauten Chips und Bussen | Abstraktion erlebbar, tablettauglich, traegt drei Baende | neue Oberflaeche und Simulation | **gewaehlt** |
-| D | reines Programmierspiel ohne Hardwareebene | schnell umsetzbar | verfehlt das Lernziel »wie ein Rechner funktioniert« | verworfen |
+| A | Volta-Grundplatte mit Gatter-Bausteinen | Wiedererkennung | ab dem Addierer unübersichtlich | verworfen (v0.1) |
+| B | Steckbrett mit 74xx-Chips | authentisch | kleinteilig, Nicht-Ziel | verworfen |
+| C | Werkbank zuerst, Chips aus NAND, dunkle Gestaltung | Abstraktion konsequent | zu abstrakt für den Einstieg; »Chip erstellen« unverständlich | ersetzt durch E (v0.3) |
+| D | reines Programmierspiel ohne Hardwareebene | schnell umsetzbar | verfehlt das Lernziel | verworfen |
+| E | Alltagsfrage, Rätselkisten, Werkzeugkiste, Bedienfeld als Leitbild, hell | eingängig, schultauglich, trägt drei Bände | mehr Inhaltsarbeit je Stufe | **gewählt** |
 
-## 13. Risiken und Massnahmen
+## 13. Risiken und Maßnahmen
 
-| Nr. | Risiko | Eintritt | Auswirkung | Massnahme |
+| Nr. | Risiko | Eintritt | Auswirkung | Maßnahme |
 |---|---|---|---|---|
-| R1 | Name »Zuse« markenrechtlich nicht verfuegbar | MITTEL | HOCH | Recherche DPMA/EUIPO vor Beginn; Ersatzname vorhalten |
-| R2 | Stufen 8–10 (Speicher, Steuerwerk) fuer 12-Jaehrige zu schwer | MITTEL | HOCH | Erprobung mit Prototyp; Werkstatt-Chips; Steuerwerk teilweise vorgegeben |
-| R3 | Eigener fehlerhafter Chip blockiert den Lernpfad | HOCH | MITTEL | Chip nur nach Pruefung; gezielte Hilfe bei Abweichung; Musterloesung |
-| R4 | Leistung der flachen Simulation in Zuse 2 | MITTEL | MITTEL | gepruefte Verhaltensmodelle; Leistungsmessung |
-| R5 | Systemplatine im Hochformat zu eng | MITTEL | MITTEL | Zoom/Verschieben, zweireihige Steckplaetze, scrollbare Platine |
-| R6 | Aehnlichkeit zu bestehenden Lernangeboten | NIEDRIG | MITTEL | eigene Stufen, eigener Befehlssatz, eigene Texte und Gestaltung |
-| R7 | Aufwand bindet Kapazitaet vor Volta 1.0 | MITTEL | HOCH | Zuse erst nach Veroeffentlichung von Volta 1; vorher nur Konzept und Prototyp |
-| R8 | Qt-Lizenzweg fuer iOS ungeklaert | MITTEL | MITTEL | gemeinsame Entscheidung mit Volta vor Phase 5b |
+| R1 | Name »Zuse« markenrechtlich nicht verfügbar | MITTEL | HOCH | Recherche DPMA/EUIPO; Ersatzname vorhalten |
+| R2 | Stufen 10–13 (Speicher, Steuerwerk) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Steuerwerk teilweise vorgegeben; Rätselkisten auch für Speicher |
+| R3 | Rätselkisten werden durch Raten gelöst statt durch Ausprobieren | MITTEL | MITTEL | Rückmeldung mit konkreter Schalterstellung; später: alle Zeilen ausprobieren, bevor geprüft wird |
+| R4 | Arbeitsfläche auf dem Tablet zu klein (Seitenleisten, Zahlenleiste) | MITTEL | MITTEL | einklappbare Seitenleisten, Zoom; Erprobung auf 10" |
+| R5 | Bedarf der Verlage weicht ab (z. B. nur Mikrocontroller) | MITTEL | HOCH | Rückmeldung der angefragten Verlage abwarten; MCU Explorer im Ecosystem vorziehen möglich |
+| R10 | Zuse und Volta wirken wie zwei verschiedene Produkte | MITTEL | MITTEL | Angleichung nach Design Standard (Abschnitt 6.1); UX-Review und Nutzertest als Abnahme |
+| R6 | Name eines historischen Rechners im Produkt | NIEDRIG | MITTEL | nur Prinzip übernehmen; Name höchstens sachlich im Geschichtsfenster |
+| R7 | Maskottchen (KI-erzeugt) nicht schützbar | MITTEL | NIEDRIG | Figur austauschbar; eigene Figur für Partnerausgaben |
+| R8 | Aufwand bindet Kapazität vor Volta 1.0 | MITTEL | HOCH | weitere Phasen erst nach Verlagsrückmeldung |
+| R9 | Qt-Lizenzweg für iOS ungeklärt | MITTEL | MITTEL | gemeinsame Entscheidung mit Volta |
 
 ## 14. Umsetzungsplan
 
-| Phase | Inhalt | Grobschaetzung | Ergebnis |
+| Phase | Inhalt | Grobschätzung | Stand |
 |---|---|---|---|
-| Z0 | Markenrecherche; Prototyp Werkbank: Logikkern, 5 Gatter, Pruefen, Chip erstellen, Blick hinein; Erprobung mit 3–5 Jugendlichen | 20–25 PT | Entscheidung ueber Fortsetzung |
-| Z1 | Logikbibliothek vollstaendig (X/Z, Busse, Verhaltensmodelle), Lernpfad Stufen 0–5 | 40–50 PT | Rechnen funktioniert |
-| Z2 | Speicher, Takt, Zaehler, RAM; Logikanalysator; Stufen 6–8 | 30–40 PT | Speichern funktioniert |
-| Z3 | Systemplatine, Steuerwerk, Zuse-4, Programmtabelle; Stufen 9–10 | 35–45 PT | erster Programmlauf |
-| Z4 | Gestaltung, Uebersetzungen, Erprobung, Paketierung | 20–25 PT | Zuse 1 Version 1.0 |
+| Z0 | Prototyp: Logikbibliothek, Werkbank, Rätselkisten, Werkzeugkiste, Zetti, Zahlensysteme, Stufen 0–6, Android-Testversion | 20–25 PT | weitgehend umgesetzt (Okt. 2026) |
+| Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung); Stufen 7–9 (Bedienfeld 4 Bit, NAND, Addierer); Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | nächster Schritt (Ecosystem P1: Prototyp besteht UX-Review und Nutzertest) |
+| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Stufen 10–11 | 30–40 PT | nach Verlagsrückmeldung |
+| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Stufen 12–13 | 35–45 PT | |
+| Z3 | Übersetzungen (FR, LU), Lehrerhandreichung, Hochformat, Erprobung, Paketierung | 20–25 PT | Zuse 1 Version 1.0 |
 
-Summe Zuse 1: ca. 145–185 PT (Grobschaetzung vor dem Prototyp). Zuse 2 und 3 werden nach Zuse 1 geschaetzt. Phasen Z1 ff. beginnen nach Veroeffentlichung von Volta 1; Z0 fruehestens nach dem Android-Pilot von Volta 1.
+Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
 
 ## 15. Offene Entscheidungen
 
-| Entscheidung | Spaetestens |
+| Entscheidung | Spätestens |
 |---|---|
-| ADR-0010 annehmen (Zuse als eigene Linie) | vor Phase Z0 |
-| Ergebnis Markenrecherche »Zuse«; Produktzusaetze fuer Zuse 2 und 3 | vor Phase Z0 |
-| Befehlssatz Zuse-4 (Umfang, Breite der Adressen) | Ende Phase Z0 |
-| Repository: im Volta-Repository (Vorschlag) oder eigenes Repository mit gemeinsamer Bibliothek | vor Phase Z1 |
-| Farbwerte der Linien endgueltig (u. a. Bernstein in Volta 2 nahe der gelben Leitung) | vor Phase Z4 |
-| Bruecke zu realer Hardware in Zuse 3 (USB, ohne Netz) ja/nein; Anbindung UBBE | Konzept Zuse 3 |
-| Qt-Lizenzweg fuer iOS (gemeinsam mit Volta) | vor Phase 5b / iPad-Ausgabe |
-| Verwertungsweg (wie Volta) | vor Veroeffentlichung Zuse 1 |
+| Richtung v0.3 festschreiben (ADR-0010 ergänzen) | vor Phase Z1 |
+| Markenrecherche »Zuse« und »Zetti«; Produktzusätze Zuse 2 und 3 | vor Veröffentlichung |
+| Altersangabe Zuse 1 (10–14) und Lehrplanbezug je Bundesland | vor Phase Z3 |
+| Befehlssatz Zuse-4 (Umfang, Adressbreite) | Phase Z2 |
+| Zuschnitt Zuse 3 gegenüber dem MCU Explorer bestätigen | vor Konzept Zuse 3 |
+| Gemeinsames Projektformat (.dclearn) und gemeinsame QML-Komponenten mit Volta | vor Phase Z3 |
+| Qt-Lizenzweg für iOS (gemeinsam mit Volta) | vor iPad-Ausgabe |
 
 ## 16. Fazit und Empfehlung
 
-Die Zuse-Reihe gewinnt durch die Trennung von Volta mehr, als sie verliert. Die Volta-Grundplatte bleibt das richtige Werkzeug fuer Elektrik und Elektronik; Computertechnik braucht eine Arbeitsflaeche, die Abstraktion zum Prinzip macht. Werkbank und Systemplatine leisten das, bleiben auf dem Tablet bedienbar und tragen drei Baende. Geteilt wird alles, was nicht vom Fach abhaengt: Plattform, Lernpfad, Inhalte, Sprachen, Regeln.
+Version 0.3 behält die tragfähige Technik von v0.2 – Logiksimulation, Prüfung, Blick hinein, Abstraktionsleiter – und gibt ihr einen Einstieg, den Kinder nachvollziehen können: erst eine Frage aus dem Alltag, dann Ausprobieren, dann der Name, dann das Werkzeug. Das Bedienfeld der ersten Bausatz-Rechner verbindet die drei Bände zu einer Geschichte, die mit einem Schalter und einer LED beginnt und mit einem selbst gebauten, über Schalter programmierten Rechner endet. Die Zahlensysteme sind von Anfang an sichtbar, die Gestaltung ist auf einer Linie mit Volta 1.
 
-**Naechste Schritte:** (1) ADR-0010 annehmen. (2) Markenrecherche »Zuse« beauftragen. (3) Prototyp der Werkbank (Phase Z0) nach dem Android-Pilot von Volta 1. (4) Konzept Volta v3.0 beim naechsten Stand auf dieses Konzept verweisen lassen (Abschnitte 4.3, 6.3, 11.2).
+**Nächste Schritte:** (1) Richtung v0.3 bestätigen und ADR-0010 ergänzen. (2) Prototyp an den DC Learning Design Standard angleichen (Kopfzeile, Layout, Vermutung). (3) Stufen 7–9 mit dem 4-Bit-Bedienfeld bauen. (4) Erprobung mit drei bis fünf Kindern auf dem Tablet. (5) Rückmeldung der Verlage einarbeiten (Altersstufe, Schulbuchbezug, Reihenfolge der Bände).
 
 ## Anhang A: Begriffe
 
 | Begriff | Bedeutung |
 |---|---|
-| Baustein | alles, was auf Werkbank oder Platine gesetzt werden kann (Gatter, Chip, Ein-/Ausgabe) |
-| Chip | vom Kind gebauter und gepruefter Baustein mit Kuerzel, Anschlussbild und Version |
-| Werkstatt-Chip | vorgefertigter, gekennzeichneter Chip fuer das freie Labor |
-| Werkbank | Arbeitsflaeche, auf der ein neuer Baustein entsteht |
-| Systemplatine | Hauptplatine mit Bus und Steckplaetzen, auf der der Rechner entsteht |
-| Bus | Buendel aus 4 oder 8 Leitungen mit einem gemeinsamen Wert |
+| Stufe | eine Aufgabe des Lernpfads mit Frage, Geschichte und Merksatz |
+| Rätselkiste | verschlossener Baustein mit unbekannter Regel, der ausprobiert wird |
+| Regel | entdeckte Verknüpfung (NICHT, UND, ODER) |
+| Werkzeugkiste | Sammlung der entdeckten Regeln und eingepackten Erfindungen |
+| Erfindung | auf der Werkbank gebaute, geprüfte und eingepackte Schaltung (früher »Chip«) |
+| Werkbank | Arbeitsfläche, auf der eine Erfindung entsteht |
+| Bedienfeld | Kippschalter, Taster und LEDs für Daten, Adressen und Ablauf |
+| Zahlenleiste | Anzeige der Schalter und LEDs als Binär-, Dezimal- und Hexadezimalzahl |
 | Pegel | Zustand einer Leitung: 0, 1, unbestimmt (X), hochohmig (Z) |
-| Pruefung | Wahrheitstabelle oder Testfolge, die ein Baustein bestehen muss |
-| Blick hinein | Oeffnen eines Chips auf seiner eigenen Werkbank |
-| Zuse-4 | der 4-Bit-Rechner aus Zuse 1 mit eigenem Befehlssatz |
-| Zuse-8 | der 8-Bit-Rechner aus Zuse 2 |
+| Blick hinein | Öffnen einer Erfindung bis zum Gatter |
+| Zetti | Maskottchen der Zuse-Reihe |
+| Zuse-4 / Zuse-8 / Zuse-K | 4-Bit-Rechner (Zuse 1), 8-Bit-Rechner (Zuse 2), kleiner Prozessorkern (Zuse 3) |
 
 ## Anhang B: Referenzen
 
-- Konzept Volta – Das Elektronik-Labor v3.0 (`docs/Konzept_Volta_v3.0.pdf`)
+- DC Learning Ecosystem – Gesamtkonzept v1.1 und DC Learning Design Standard v1.0 (15.10.2026, Projektordner »Learning ECOSYSTEM«)
+- Konzept Volta – Das Elektronik-Labor v3.0
 - ADR-0010: Zuse als eigene Produktlinie (`docs/adr/0010-zuse-eigene-linie.md`)
 - ADR-0001 Qt 6, ADR-0005 Befehlsmuster, ADR-0006 keine Datenerhebung, ADR-0011 Inhalte als Qt-Ressource
-- Plattformen und Mac-Einrichtung: `docs/platforms.md`; Bedienung: `docs/ui-spec.md`
-- Entwuerfe: `docs/zuse/entwurf_werkbank.png`, `entwurf_systemplatine.png`, `entwurf_linie_zuse.png`, `entwurf_alternative_grundplatte.png`
+- Ergänzungen und Fahrplan: `docs/zuse1-planung.md`; Rechte und Marken: `docs/partner/rechte-und-lizenzen.md`
+- Informatik-Monitor 2025/26 (Gesellschaft für Informatik), Lehrpläne der Länder
+- Prototyp: `logic/`, `zuse/`; Bildschirmfotos in `docs/zuse/`

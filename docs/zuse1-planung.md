@@ -1,7 +1,7 @@
 # Zuse 1 – Ergaenzungen zum Konzept Zuse v0.2
 
-Massgeblich ist **`docs/Konzept_Zuse.md`** (v0.2, 13.10.2026; PDF `docs/Konzept_Zuse_v0.2.pdf`, Entwuerfe in
-`docs/zuse/`) mit **ADR-0010** (Zuse als eigene Linie mit Werkbank und Systemplatine). Diese Datei sammelt nur, was
+Massgeblich ist **`docs/Konzept_Zuse.md`** (v0.3, 15.10.2026; PDF `docs/Konzept_Zuse_v0.3.pdf` mit
+`tools/konzept_pdf.py`, Entwuerfe und Bildschirmfotos in `docs/zuse/`); die Punkte unten sind dort eingearbeitet, mit **ADR-0010** (Zuse als eigene Linie mit Werkbank und Systemplatine). Diese Datei sammelt nur, was
 seitdem dazugekommen ist: Entscheidungen des Inhabers und die Auswertung einer Quelle. Ein frueherer Entwurf in
 dieser Datei (Zuse auf der Volta-Grundplatte mit Modulleiste, 74xx-Bausteinen und eigener Stufenliste) ist durch
 das Konzept ueberholt und entfernt.
@@ -102,9 +102,7 @@ Ergaenzungen, die das Konzept noch nicht nennt (Vorschlag, Zuordnung zu den Stuf
 | Konrad Zuse als Urheber des gespeicherten Rechenablaufs | Geschichtsfenster zu Z1 und Z3 in Stufe 10 | 10 |
 
 ## Weitere Punkte zum Konzept
-- Das PDF `docs/Konzept_Zuse_v0.2.pdf` nennt noch ADR-0009 fuer die Inhalts-Einbettung; im Repository ist das
-  ADR-0011 (ADR-0009 beschreibt hier die Tonausgabe). Markdown und ADR-0010 sind angepasst, das PDF beim naechsten
-  Stand neu erzeugen.
+- Das fruehere PDF v0.2 nannte ADR-0009 fuer die Inhalts-Einbettung; richtig ist ADR-0011 (in v0.3 behoben).
 - Konzept Abschnitt 9 bezieht sich auf den Cloud-Zweig `claude/mobile-android-ipad-0w8lbc` (Pull Request #1). Dieser
   Zweig setzt auf einem alten Stand auf; die Android-Arbeit ist lokal inzwischen auf anderem Weg erledigt (Test-APK,
   AAB, armv7). Touch-Bedienung (Zoom mit zwei Fingern, Hochformat), iPadOS- und macOS-Paketierung aus dem Zweig sind
