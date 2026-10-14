@@ -285,6 +285,35 @@ Baustein-Definitionen sind JSON mit deutschen Schluesseln (wie die Volta-Inhalts
 
 Jede Aenderung auf Werkbank und Systemplatine (Baustein setzen, verschieben, entfernen; Leitung oder Bus ziehen; Anschluss anlegen; Chip stecken; Chip-Version aktualisieren) ist ein Befehl mit Rueckgaengig/Wiederholen (ADR-0005). Eingaenge umschalten, Takt und Einzelschritt sind Bedienhandlungen und keine Befehle.
 
+### 8.5 Normen und Konventionen
+
+Stand 14.10.2026, nach Abgleich eines Normenvorschlags mit der Zielgruppe. Uebernommen wird nur, was Kindern und
+Lehrkraeften nuetzt oder den spaeteren Umstieg auf echte Werkzeuge erleichtert.
+
+| Norm / Konvention | Umsetzung | Band |
+|---|---|---|
+| DIN EN 60617-12 (IEC 60617-12), Schaltzeichen binaerer Logikelemente | Standarddarstellung: Rechteck mit &, ≥1, =1, 1; Negation als Kreis am Ausgang | Zuse 1–3 |
+| IEEE Std 91 (US-Gatterformen, »distinctive shape«) | Umschalter DIN/US in den Einstellungen (englischsprachige Partner und Maerkte) | Zuse 1–3 |
+| IEEE Std 1164 (mehrwertige Logik) | Pegel 0, 1, X (unbestimmt, Konflikt) und Z (hochohmig, mit Bustreibern am gemeinsamen Bus); keine 9-wertige Logik. Buskonflikte werden als X gezeigt, nie verschwiegen | Zuse 1 (Z ab Bus und Speicher) |
+| Bus-Schreibweise nach VHDL/Verilog | Bits 0 bis n-1, Bit 0 rechts (niederwertigstes), Busse als D[3:0]; Richtungen in, out, inout und Taktflanke nur in einer Expertenansicht | Zuse 1 (Konvention), Zuse 2 (Ansicht) |
+| Intel HEX | Programme exportieren und importieren (Speicherabbild), spaeter Bruecke zu echter Hardware | Zuse 2, 3 |
+| Bedienfeld fruehe Rechner (Altair 8800: EXAMINE, DEPOSIT, SINGLE STEP) | Einzelschritt, Speicher ansehen und beschreiben ueber Kippschalter und LEDs statt eines Debuggers | Zuse 1 (Finale), Zuse 2 |
+| JEDEC JESD8 (Logikpegel als Spannungen) | Schwellen an der Kopplung Logik ↔ Volta-Kern | Zuse 3, Volta 3 |
+
+Bewusst nicht uebernommen:
+
+- **IEEE 1497 (SDF, Laufzeitmodell):** Die Einheitsverzoegerung je Gatter zeigt Stoerimpulse und Laufzeiten (z. B.
+  Ripple-Carry) bereits ehrlich; getrennte Anstiegs- und Abfallzeiten bringen der Zielgruppe nichts.
+- **RISC-V (RV32I), 6502, Z80:** fuer 4 und 8 Bit zu umfangreich. Zuse-4 bleibt ein eigener Befehlssatz in der
+  Tradition didaktischer Lehrrechner (SAP-1 nach Malvino: LDA, ADD, SUB, OUT, HLT); Befehle, Texte und Stufen sind
+  Eigenentwicklungen (Nicht-Ziel 3.2).
+- **Zuse 3** orientiert sich an den in Schulen verbreiteten Mikrocontrollern (Calliope mini, micro:bit,
+  Block-Programmierung), nicht an einer Prozessorarchitektur.
+- **IEEE 1685 (IP-XACT), IEEE 1149.1 (JTAG):** fuer die Zielgruppe zu technisch; Speicherbelegung im eigenen
+  JSON-Format, Fehlersuche ueber Einzelschritt und Bedienfeld.
+- **Statusflags:** N, Z, C, V sind Herstellerkonvention (keine Norm; ISO/IEC 10967 regelt Arithmetik fuer
+  Programmiersprachen, keine Statusregister). Zuse-4 braucht zuerst nur Null (Z, fuer JZ) und Uebertrag (C).
+
 ## 9. Plattformen und Paketierung
 
 Zuse nutzt die Plattformarbeit von Volta unveraendert (Stand: Pull Request #1 »Mobil: Android- und iPad-Version vorbereiten«):
