@@ -50,6 +50,31 @@ ein spielerischer, heller Einstieg wie bei Volta 1. Umgesetzt:
   und Erklaerung »Warum rechnet ein Computer binaer, wozu Hex?« mit Vergleichstabelle 0–15.
 - Helles Design, Akzent Cyan, Knoepfe in Zettis Muetzenblau; NAND wird spaeter als Bonus-Entdeckung eingefuehrt.
 
+## Leitbild Bedienfeld (nach dem Altair 8800) – Fahrplan der Reihe (Entwurf 15.10.2026)
+Der Inhaber bestaetigt die Linie (Geschichten, Raetselkisten, Werkzeugkiste, Zahlensysteme, Zetti klein) als
+gemeinsame Basis mit Volta 1. Weiterentwicklung der Reihe am Vorbild der ersten Bausatz-Rechner: Ein Bedienfeld aus
+Kippschaltern (Adresse, Daten), LEDs (Adresse, Daten, Zustand) und Tastern (Untersuchen, Ablegen, Einzelschritt,
+Start/Stopp, Ruecksetzen) waechst mit jedem Band. Nur das Prinzip wird uebernommen; der Name »Altair« erscheint nicht
+im Produkt, hoechstens sachlich in einem Geschichtsfenster (neben Konrad Zuse, Z1/Z3).
+
+| Band | Bedienfeld | Rechner | Neu |
+|---|---|---|---|
+| Zuse 1 | 4 Datenschalter, 4 Adressschalter, LEDs fuer Adresse, Daten, Uebertrag, Null, Lauf/Halt | Zuse-4 (4 Bit, 16 Speicherplaetze) aus selbst gebauten Werkzeugen | Programm per Schalter eintippen (Ablegen, Weiter) und im Einzelschritt laufen lassen |
+| Zuse 2 | 8 Daten-, 8 Adressschalter, Status-LEDs | Zuse-8 (8 Bit, eigener Befehlssatz, Stapel, Ein-/Ausgabe-Ports, Pixelmatrix) | Assembler neben dem Bedienfeld, Intel HEX |
+| Zuse 3 | Bedienfeld wird zur Anschlussleiste | Mikrocontroller als fertiger Chip | Bloecke und Text, Sensoren und Aktoren ueber den Volta-Kern |
+
+Stufen Zuse 1 nach dem aktuellen Prototyp (0 bis 6), Vorschlag:
+
+| Stufe | Frage | Ergebnis |
+|---|---|---|
+| 7 | Wie zaehlt ein Rechner mit vier Lampen? | Binaerzahlen am 4-Bit-Bedienfeld (Zahlenleiste) |
+| 8 | Geht alles mit einem einzigen Baustein? | NAND als Bonus-Entdeckung |
+| 9 | Rechnen bis 15 – und was, wenn es nicht mehr passt? | Volladdierer, 4-Bit-Addierer, Uebertrags-LED |
+| 10 | Hat jemand geklingelt, waehrend ich weg war? | Speicher: Flipflop, Register |
+| 11 | Wie zaehlt ein Rechner von allein? | Takt (Taster prellt), Zaehler, Befehlszaehler |
+| 12 | Wo wohnt ein Programm? | Speicher 16 x 4 mit Adressschaltern: Untersuchen und Ablegen am Bedienfeld |
+| 13 | Laeuft er? | Zuse-4: Programm eintippen, Einzelschritt, Start (Steuerwerk teilweise vorgegeben) |
+
 ## Quelle: ELRAD-Lehrgang »Digitaltechnik im Experiment« (Auswertung 13.10.2026)
 Lehrgang Elektronische Datenverarbeitung von H. Weidner (ELRAD 11/77–05/82, Sonderheft Heise 2005; private
 Sammlung, `I:\ELRAD\pdf\sonderhefte\digitaltechnik\`, nicht im Repository). Zehn Teile vom UND/ODER mit Schaltern
