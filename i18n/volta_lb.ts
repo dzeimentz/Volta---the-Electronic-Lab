@@ -4017,4 +4017,23 @@
         <translation>Zwee Transistoren schalte sech géigesäiteg – d'Liichtdioden blénken ofwiesselnd.</translation>
     </message>
 </context>
+<context>
+    <name>TitleBar</name>
+    <message>
+        <source>Minimieren</source>
+        <translation>Minimiséieren</translation>
+    </message>
+    <message>
+        <source>Maximieren</source>
+        <translation>Maximiséieren</translation>
+    </message>
+    <message>
+        <source>Verkleinern</source>
+        <translation>Verklengeren</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Zoumaachen</translation>
+    </message>
+</context>
 </TS>

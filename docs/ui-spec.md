@@ -381,3 +381,14 @@ Profils bleiben unberuehrt; alle Stufen sind offen. Alle Karten gleich hoch; Ant
 in der Leistenfarbe (auch in der Praesentationsleiste): »Andere Vorfuehrung« und »Beenden«
 (zurueck zur Startseite; der eigene Laborstand ist sofort wieder geladen – das gilt jetzt auch fuer das Ende des
 Praesentationsmodus). Entwicklerhilfe: `VOLTA_DEMO_SHOW=1|<Experiment-ID>`.
+
+## Fensterleiste der Windows-Ausgabe (10/2026)
+Eigene Titelleiste (`TitleBar.qml`, Entwurf C aus `Gfx/Fensterleiste/`): Verlauf von oben nach unten #1A3A5C ->
+#4A8CCC -> #1A3A5C, darueber ein dunkelgraues Schaltplanmuster (Leiterbahnen, Widerstand, Kondensator, Diode,
+Knoten; Kachel aus `tools/make_titlebar.py`, doppelte Aufloesung), Programmsymbol und Titel in Weiss, gezeichnete
+Knoepfe Minimieren, Maximieren/Verkleinern, Schliessen (Schliessen beim Zeigen rot). Das Fenster ist dafuer
+rahmenlos: Ziehen an der Leiste verschiebt (System, mit Andocken), Doppelklick maximiert, 5 dp breite Raender und
+die Ecken aendern die Groesse. Im Vollbild (Praesentation) ist die Leiste ausgeblendet. Fenster 1280 x 840
+(Arbeitsflaeche wie bisher 1280 x 800), Mindesthoehe 760. Mac und Linux behalten die Systemleiste.
+Bildschirmfotos der Entwicklerhilfen behalten die Systemleiste; `VOLTA_TITLEBAR=1|0` erzwingt bzw. verbietet sie.
+Nicht nachgebildet: das Andock-Menue von Windows 11 beim Zeigen auf »Maximieren«.

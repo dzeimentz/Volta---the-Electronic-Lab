@@ -4085,4 +4085,23 @@
         <translation>Two transistors switch each other – the LEDs blink in turn.</translation>
     </message>
 </context>
+<context>
+    <name>TitleBar</name>
+    <message>
+        <source>Minimieren</source>
+        <translation>Minimize</translation>
+    </message>
+    <message>
+        <source>Maximieren</source>
+        <translation>Maximize</translation>
+    </message>
+    <message>
+        <source>Verkleinern</source>
+        <translation>Restore down</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Close</translation>
+    </message>
+</context>
 </TS>

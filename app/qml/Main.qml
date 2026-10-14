@@ -6,17 +6,56 @@ import Volta
 
 ApplicationWindow {
     id: root
+    // Windows: eigene Fensterleiste (TitleBar.qml, main.cpp setzt volta_customTitleBar); das Fenster ist dann
+    // rahmenlos und um die Leiste hoeher, damit die Arbeitsflaeche gleich gross bleibt
+    readonly property bool customTitle: typeof volta_customTitleBar !== "undefined" && volta_customTitleBar
+    readonly property int titleHeight: customTitle ? 40 : 0
+    flags: customTitle ? (Qt.Window | Qt.FramelessWindowHint) : Qt.Window
     width: 1280
-    height: 800
+    height: 800 + titleHeight
     // Desktop: Mindestgroesse 1280 x 720. Android: Bildschirm ohne Mindestgroesse (sonst ragt das Fenster unter die
     // Navigationsleiste) und im Vollbild; die Systemleisten kommen per Wischen vom Rand zurueck.
     readonly property bool mobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
     minimumWidth: mobile ? 0 : 1280
-    minimumHeight: mobile ? 0 : 720
+    minimumHeight: mobile ? 0 : 720 + titleHeight
     visibility: mobile ? Window.FullScreen : Window.AutomaticVisibility
     visible: true
     title: Qt.application.name
     color: Theme.board
+
+    header: TitleBar {
+        window: root
+        visible: root.customTitle && root.visibility !== Window.FullScreen
+        height: visible ? 40 : 0
+        // oberer Rand und obere Ecken zum Groessenaendern (nicht maximiert)
+        ResizeEdge { edges: Qt.TopEdge; x: 8; width: parent.width - 16; height: 5 }
+        ResizeEdge { edges: Qt.TopEdge | Qt.LeftEdge; width: 8; height: 8 }
+        ResizeEdge { edges: Qt.TopEdge | Qt.RightEdge; x: parent.width - 8; width: 8; height: 8 }
+    }
+    // Rand zum Groessenaendern des rahmenlosen Fensters: Ziehen uebergibt an das System
+    component ResizeEdge: Item {
+        property int edges: Qt.LeftEdge
+        visible: root.customTitle && root.visibility === Window.Windowed
+        z: 3000
+        HoverHandler {
+            cursorShape: (parent.edges === (Qt.TopEdge | Qt.LeftEdge) || parent.edges === (Qt.BottomEdge | Qt.RightEdge))
+                         ? Qt.SizeFDiagCursor
+                         : (parent.edges === (Qt.TopEdge | Qt.RightEdge) || parent.edges === (Qt.BottomEdge | Qt.LeftEdge))
+                           ? Qt.SizeBDiagCursor
+                           : (parent.edges === Qt.LeftEdge || parent.edges === Qt.RightEdge) ? Qt.SizeHorCursor
+                                                                                               : Qt.SizeVerCursor
+        }
+        DragHandler {
+            target: null
+            grabPermissions: PointerHandler.CanTakeOverFromAnything
+            onActiveChanged: if (active) root.startSystemResize(parent.edges)
+        }
+    }
+    ResizeEdge { edges: Qt.LeftEdge; y: 0; width: 5; height: parent.height - 8 }
+    ResizeEdge { edges: Qt.RightEdge; x: parent.width - 5; width: 5; height: parent.height - 8 }
+    ResizeEdge { edges: Qt.BottomEdge; x: 8; y: parent.height - 5; width: parent.width - 16; height: 5 }
+    ResizeEdge { edges: Qt.BottomEdge | Qt.LeftEdge; y: parent.height - 8; width: 8; height: 8 }
+    ResizeEdge { edges: Qt.BottomEdge | Qt.RightEdge; x: parent.width - 8; y: parent.height - 8; width: 8; height: 8 }
 
     readonly property var languageService: typeof volta_languageService !== "undefined" ? volta_languageService : null
     readonly property var settings: typeof volta_settings !== "undefined" ? volta_settings : null

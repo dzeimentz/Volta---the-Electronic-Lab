@@ -120,6 +120,17 @@ int main(int argc, char* argv[]) {
     const bool splash = volta::AppSettings::splashAvailable() && settings.showSplash() &&
                         qEnvironmentVariableIntValue("VOLTA_NO_SPLASH") != 1;
     engine.rootContext()->setContextProperty(QStringLiteral("volta_showSplash"), splash);
+    // Eigene Fensterleiste (Verlauf mit Schaltplanmuster, TitleBar.qml) nur in der Windows-Ausgabe. Bildschirmfotos der
+    // Entwicklerhilfen (Anleitungen, Store) behalten die Systemleiste und 1280 x 800; VOLTA_TITLEBAR=1 zeigt sie dort
+    // trotzdem, VOLTA_TITLEBAR=0 schaltet sie ab
+#ifdef Q_OS_WIN
+    const bool customTitle = qEnvironmentVariable("VOLTA_TITLEBAR", qEnvironmentVariableIsEmpty("VOLTA_SCREENSHOT")
+                                                                        ? QStringLiteral("1") : QStringLiteral("0"))
+                             == QLatin1String("1");
+#else
+    const bool customTitle = false;
+#endif
+    engine.rootContext()->setContextProperty(QStringLiteral("volta_customTitleBar"), customTitle);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
     engine.loadFromModule("Volta", "Main");

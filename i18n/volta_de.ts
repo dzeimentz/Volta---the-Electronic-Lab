@@ -4013,4 +4013,23 @@
         <translation>Zwei Transistoren schalten sich gegenseitig – die Leuchtdioden blinken im Wechsel.</translation>
     </message>
 </context>
+<context>
+    <name>TitleBar</name>
+    <message>
+        <source>Minimieren</source>
+        <translation>Minimieren</translation>
+    </message>
+    <message>
+        <source>Maximieren</source>
+        <translation>Maximieren</translation>
+    </message>
+    <message>
+        <source>Verkleinern</source>
+        <translation>Verkleinern</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Schließen</translation>
+    </message>
+</context>
 </TS>

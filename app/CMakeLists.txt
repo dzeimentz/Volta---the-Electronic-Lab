@@ -140,6 +140,7 @@ qt_add_qml_module(volta_ui
         qml/HelpDialog.qml
         qml/QuickGuide.qml
         qml/DemoDialog.qml
+        qml/TitleBar.qml
         qml/GuideIcon.qml
         qml/TroublePopup.qml
         qml/QrCanvas.qml
@@ -183,6 +184,7 @@ qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
 # Startbild (nur Desktop-Ausgabe; Android/iPadOS zeigen den Startbildschirm des Systems)
 if(NOT ANDROID AND NOT IOS)
     qt_add_resources(volta_ui "splash" PREFIX "/brand" BASE resources/brand FILES resources/brand/splash.jpg)
+    qt_add_resources(volta_ui "titlebar" PREFIX "/brand" BASE resources/brand FILES resources/brand/titlebar_pattern.png)
 endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/brand/dc_logo.png")
     qt_add_resources(volta_ui "brand" PREFIX "/brand" BASE resources/brand FILES resources/brand/dc_logo.png)

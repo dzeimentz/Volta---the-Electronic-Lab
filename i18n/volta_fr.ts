@@ -4085,4 +4085,23 @@
         <translation>Deux transistors se commandent l'un l'autre – les LED clignotent en alternance.</translation>
     </message>
 </context>
+<context>
+    <name>TitleBar</name>
+    <message>
+        <source>Minimieren</source>
+        <translation>Réduire</translation>
+    </message>
+    <message>
+        <source>Maximieren</source>
+        <translation>Agrandir</translation>
+    </message>
+    <message>
+        <source>Verkleinern</source>
+        <translation>Restaurer</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+</context>
 </TS>
