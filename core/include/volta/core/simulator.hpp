@@ -70,6 +70,8 @@ private:
     Circuit m_circuit;
     MnaSystem m_sys;
     DenseLu m_lu;
+    std::vector<double> m_luMatrix; // zuletzt zerlegte Matrix (Zerlegung wiederverwenden, solange gleich)
+    bool m_luValid = false;
     std::vector<double> m_accepted; // letzter angenommener Zustand
     std::vector<double> m_iter;     // aktuelle Newton-Naeherung
     std::vector<double> m_next;     // naechste Newton-Naeherung

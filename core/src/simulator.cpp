@@ -35,6 +35,8 @@ Status Simulator::setCircuit(Circuit circuit) {
         m_sys.resize(nextInternal, branches);
         const std::size_t n = m_sys.size();
         m_lu.resize(n);
+        m_luMatrix.assign(n * n, 0.0);
+        m_luValid = false;
         m_accepted.assign(n, 0.0);
         m_iter.assign(n, 0.0);
         m_next.assign(n, 0.0);
@@ -99,7 +101,14 @@ Status Simulator::newton(const StampContext& ctx, bool warmStart, bool allowEarl
         m_sys.stampGmin(m_circuit.nodeCount(), kGmin);
         for (std::size_t i = 0; i < count; ++i) m_circuit.component(i).stamp(m_sys, ctx);
 
-        if (!m_lu.factor(m_sys.matrix())) return Status::Singular;
+        // Lineare Teile und eingeschwungene Modelle stempeln oft dieselbe Matrix: dann nur vorwaerts/rueckwaerts
+        // einsetzen (O(n^2) statt O(n^3)). Vergleich exakt, das Ergebnis ist bitgleich zur neuen Zerlegung.
+        if (!m_luValid || m_sys.matrix() != m_luMatrix) {
+            m_luValid = false;
+            if (!m_lu.factor(m_sys.matrix())) return Status::Singular;
+            std::copy(m_sys.matrix().begin(), m_sys.matrix().end(), m_luMatrix.begin());
+            m_luValid = true;
+        }
         if (!m_lu.solve(m_sys.rhs(), m_next)) return Status::Singular;
 
         if (m_nonlinear.empty()) { // lineares System: eine Loesung ist exakt
