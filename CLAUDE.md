@@ -92,6 +92,7 @@ python3 tools/check_all.py
 
 # Lokales Release (lauffaehiges Programm mit Qt-Laufzeit und Inhalten in Release/, nicht im Repository)
 python3 tools/deploy_release.py
+python3 tools/deploy_release.py --zuse    # Zuse 1 (Prototyp) nach ../ZUSE/Release (Projektordner der Zuse-Linie)
 
 # Anleitungen als PDF (ausfuehrlich und Kurzanleitung, mit Bildschirmfotos) nach Release/Anleitung/
 python3 tools/manual_pdfs.py            # --bilder nimmt die Bildschirmfotos neu auf
@@ -104,13 +105,13 @@ python3 tools/build_testpaket.py        # -> Release/Testpaket/Volta1-<version>-
 #   ZUSE_SCREENSHOT=<bild.png>, ZUSE_SIZE=<b>x<h>, ZUSE_DATA_DIR=<ordner>, ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen mit
 #   Musterloesung), ZUSE_DEMO_ON=A,B (Eingaenge an), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein)
 
-# App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
+# App-Symbole: Quellen app/resources/icons/volta.svg und zuse/resources/icons/zuse1.svg; PNG, ICO und Android daraus
 python3 tools/make_icons.py
 python3 tools/make_titlebar.py          # Schaltplanmuster der Fensterleiste (Windows)
 
 # Android-Test-APK (bauen, ausduennen, pruefen; --install spielt sie auf angeschlossene Tablets)
 python3 tools/build_android.py --install
-python3 tools/build_android.py --zuse --install   # Zuse-Prototyp (eigene APK com.dcsoftwareengineering.zuse1)
+python3 tools/build_android.py --zuse --install   # Zuse-Prototyp (APK com.dcsoftwareengineering.zuse1 -> ../ZUSE/Release/android)
 
 # Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
 cmake --preset android-arm64

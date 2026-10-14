@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Symbol Zuse 1 (Konzept Zuse, Abschnitt 6): Chip mit »Z« aus Leiterbahnen und Durchkontaktierungen,
+     goldene Anschluesse, drei LEDs zeigen die Bandnummer binaer (001). Akzent Zuse 1: Cyan #22D3EE.
+     Fuer Zuse 2/3 nur Akzentfarbe (#A3E635 / #C4A1FF) und LED-Muster (010 / 011) aendern. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1C2530"/>
+      <stop offset="1" stop-color="#0E1217"/>
+    </linearGradient>
+  </defs>
+  <rect x="16" y="16" width="992" height="992" rx="220" fill="url(#bg)"/>
+  <!-- Anschluesse links und rechts -->
+  <g fill="#C9A45C">
+    <rect x="178" y="292" width="96" height="30" rx="8"/>
+    <rect x="178" y="377" width="96" height="30" rx="8"/>
+    <rect x="178" y="462" width="96" height="30" rx="8"/>
+    <rect x="178" y="547" width="96" height="30" rx="8"/>
+    <rect x="178" y="632" width="96" height="30" rx="8"/>
+    <rect x="750" y="292" width="96" height="30" rx="8"/>
+    <rect x="750" y="377" width="96" height="30" rx="8"/>
+    <rect x="750" y="462" width="96" height="30" rx="8"/>
+    <rect x="750" y="547" width="96" height="30" rx="8"/>
+    <rect x="750" y="632" width="96" height="30" rx="8"/>
+  </g>
+  <!-- Chipgehaeuse -->
+  <rect x="262" y="222" width="500" height="510" rx="44" fill="#101820" stroke="#22D3EE" stroke-width="14"/>
+  <!-- Z aus Leiterbahnen -->
+  <polyline points="356,326 668,326 356,628 668,628" fill="none" stroke="#22D3EE" stroke-width="62"
+            stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Durchkontaktierungen an den Enden und Knicken -->
+  <g fill="#101820" stroke="#22D3EE" stroke-width="20">
+    <circle cx="356" cy="326" r="42"/>
+    <circle cx="668" cy="326" r="42"/>
+    <circle cx="356" cy="628" r="42"/>
+    <circle cx="668" cy="628" r="42"/>
+  </g>
+  <!-- Bandnummer binaer: 001 -->
+  <circle cx="452" cy="842" r="22" fill="#2C3744"/>
+  <circle cx="512" cy="842" r="22" fill="#2C3744"/>
+  <circle cx="572" cy="842" r="22" fill="#22D3EE"/>
+</svg>

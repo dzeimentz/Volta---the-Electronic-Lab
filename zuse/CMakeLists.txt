@@ -37,6 +37,14 @@ qt_add_qml_module(zuse_app
         qml/TruthPanel.qml
         qml/ZButton.qml
 )
+# Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
+if(WIN32)
+    add_library(zuse_app_rc OBJECT resources/zuse1.rc) # ohne Include-Pfade: windres scheitert an Leerzeichen
+    set_target_properties(zuse_app_rc PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)
+    target_sources(zuse_app PRIVATE $<TARGET_OBJECTS:zuse_app_rc>)
+endif()
+qt_add_resources(zuse_app "zuse_icons" PREFIX "/zuse" BASE resources/icons FILES
+    resources/icons/zuse1_64.png resources/icons/zuse1_256.png)
 qt_add_resources(zuse_app "zuse_content" PREFIX "/zuse" BASE content FILES content/stufen.json)
 target_link_libraries(zuse_app PRIVATE zuse_model Qt6::Quick Qt6::QuickControls2)
 

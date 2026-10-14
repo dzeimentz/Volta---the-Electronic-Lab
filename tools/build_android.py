@@ -7,7 +7,7 @@ Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/build_android.py --install  # zusaetzlich auf alle per adb angeschlossenen Geraete spielen
     python3 tools/build_android.py --armv7    # Test-APK fuer aeltere 32-Bit-Tablets (...-armv7-debug.apk)
     python3 tools/build_android.py --aab      # Release/android/Volta1-<version>-release-unsigned.aab
-    python3 tools/build_android.py --zuse     # Zuse-Prototyp Z0: Release/android/Zuse1-Prototyp-arm64-debug.apk
+    python3 tools/build_android.py --zuse     # Zuse-Prototyp Z0: ../ZUSE/Release/android/Zuse1-Prototyp-arm64-debug.apk
 
 AAB: Release-Bau fuer arm64-v8a und armeabi-v7a in einem Paket (build/android-release, QT_ANDROID_ABIS), Gradle
 bundleRelease ohne Signatur. Signieren mit dem eigenen Upload-Schluessel ist Sache des Inhabers (CLAUDE.md: keine
@@ -171,7 +171,7 @@ def main() -> int:
     shutil.rmtree(ANDROID_BUILD / "build" / "intermediates" / "incremental" / "packageDebug", ignore_errors=True)
     run([str(ANDROID_BUILD / gradlew), "assembleDebug", "--no-daemon", "--console=plain"], env, BUILD / "gradle.log",
         cwd=ANDROID_BUILD)
-    target = ROOT / "Release" / "android"
+    target = (ROOT.parent / "ZUSE" / "Release" if ZUSE else ROOT / "Release") / "android"
     target.mkdir(parents=True, exist_ok=True)
     apk = target / ("Zuse1-Prototyp-arm64-debug.apk" if ZUSE
                     else f"Volta1-{version()}-{'armv7' if ARMV7 else 'arm64'}-debug.apk")

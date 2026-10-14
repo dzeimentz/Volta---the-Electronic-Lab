@@ -2,7 +2,8 @@
 """Baut Volta 1 als Release (Desktop) und legt ein lauffaehiges Programm im Ordner Release/ ab.
 
 Aufruf (aus dem Repository-Wurzelverzeichnis):
-    python3 tools/deploy_release.py
+    python3 tools/deploy_release.py           # Volta 1 -> Release/
+    python3 tools/deploy_release.py --zuse    # Zuse 1 (Prototyp) -> ../ZUSE/Release/ (Projektordner der Zuse-Linie)
 
 Ablauf: Preset desktop-release konfigurieren (beim ersten Mal) und bauen, volta1(.exe) nach Release/ kopieren,
 Qt-Laufzeit mit windeployqt daneben legen (nur Windows) und die Inhaltspakete nach Release/content kopieren
@@ -20,7 +21,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_all import IS_WINDOWS, ROOT, environment, tail  # noqa: E402
 
 PRESET = "desktop-release"
-TARGET = ROOT / "Release"
+ZUSE = "--zuse" in sys.argv
+TARGET = ROOT.parent / "ZUSE" / "Release" if ZUSE else ROOT / "Release"
+APP_DIR, APP_NAME, QML_DIR = ("zuse", "zuse1", "zuse/qml") if ZUSE else ("app", "volta1", "app/qml")
 
 
 def run(cmd: list[str], env: dict[str, str]) -> None:
@@ -42,31 +45,24 @@ def main() -> int:
     run(configure, env)
     run(["cmake", "--build", "--preset", PRESET], env)
 
-    exe_name = "volta1.exe" if IS_WINDOWS else "volta1"
-    exe = ROOT / "build" / PRESET / "app" / exe_name
+    exe_name = f"{APP_NAME}.exe" if IS_WINDOWS else APP_NAME
+    exe = ROOT / "build" / PRESET / APP_DIR / exe_name
     if not exe.exists():
         print(f"{exe} fehlt nach dem Bauen.")
         return 1
-    TARGET.mkdir(exist_ok=True)
+    TARGET.mkdir(parents=True, exist_ok=True)
     try:
         shutil.copy2(exe, TARGET / exe_name)
     except PermissionError:
-        print(f"{TARGET / exe_name} ist in Benutzung - bitte Volta beenden und erneut aufrufen.")
+        print(f"{TARGET / exe_name} ist in Benutzung - bitte das Programm beenden und erneut aufrufen.")
         return 1
     if IS_WINDOWS:
         deploy = shutil.which("windeployqt", path=env["PATH"]) or str(qt_root / "bin" / "windeployqt.exe")
-        run([deploy, "--release", "--qmldir", str(ROOT / "app" / "qml"), "--no-translations",
+        run([deploy, "--release", "--qmldir", str(ROOT / QML_DIR), "--no-translations",
              "--no-system-d3d-compiler", "--no-opengl-sw",
              # nicht benoetigt: Netzwerkinformation, QML-Debugger (kein Netz, docs/privacy-safety.md)
              "--skip-plugin-types", "networkinformation,qmltooling,tls",
              str(TARGET / exe_name)], env)
-        # Zuse-Prototyp (Phase Z0) teilt sich die Qt-Laufzeit mit Volta
-        zuse = ROOT / "build" / PRESET / "zuse" / "zuse1.exe"
-        if zuse.exists():
-            shutil.copy2(zuse, TARGET / "zuse1.exe")
-            run([deploy, "--release", "--qmldir", str(ROOT / "zuse" / "qml"), "--no-translations",
-                 "--no-system-d3d-compiler", "--no-opengl-sw", "--skip-plugin-types", "networkinformation,qmltooling,tls",
-                 str(TARGET / "zuse1.exe")], env)
         # Tonausgabe ueber das Windows-Backend: FFmpeg-Plugin und -Bibliotheken (koennten Netzprotokolle) und das
         # Test-Plugin der Sprachausgabe werden nicht ausgeliefert (docs/adr/0009-tonausgabe-und-vorlesen.md)
         unwanted = [TARGET / "multimedia" / "ffmpegmediaplugin.dll", TARGET / "texttospeech" / "qtexttospeech_mock.dll"]
@@ -87,6 +83,11 @@ def main() -> int:
         for f in unwanted:
             if f.exists():
                 f.unlink()
+    if ZUSE:  # Stufen sind in die App eingebettet (Qt-Ressource), keine Inhalte daneben
+        size_mb = sum(f.stat().st_size for f in TARGET.rglob("*")
+                      if f.is_file() and "android" not in f.relative_to(TARGET).parts) / 1e6
+        print(f"Release: {TARGET / exe_name} ({size_mb:.0f} MB mit Laufzeit, ohne Android-APK)")
+        return 0
     content = TARGET / "content"
     if content.exists():
         shutil.rmtree(content)

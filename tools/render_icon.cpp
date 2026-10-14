@@ -1,6 +1,7 @@
 // Rendert das App-Symbol (SVG) in PNG-Dateien verschiedener Groessen (Qt Svg, ohne Fenster).
 // Aufruf: render_icon <eingabe.svg> <ausgabeverzeichnis> <groesse>...
 // Erzeugt <ausgabeverzeichnis>/volta_<groesse>.png. Das ICO fuer Windows baut tools/make_icons.py daraus.
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QImage>
 #include <QPainter>
@@ -28,7 +29,9 @@ int main(int argc, char* argv[]) {
         p.setRenderHint(QPainter::SmoothPixmapTransform);
         svg.render(&p);
         p.end();
-        const QString out = QStringLiteral("%1/volta_%2.png").arg(QString::fromLocal8Bit(argv[2])).arg(size);
+        // Dateiname nach dem SVG: volta.svg -> volta_<n>.png, zuse1.svg -> zuse1_<n>.png
+        const QString base = QFileInfo(QString::fromLocal8Bit(argv[1])).completeBaseName();
+        const QString out = QStringLiteral("%1/%2_%3.png").arg(QString::fromLocal8Bit(argv[2]), base).arg(size);
         if (!img.save(out)) return 1;
     }
     return 0;

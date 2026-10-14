@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Erzeugt die App-Symbole aus app/resources/icons/volta.svg (Quelle, von Hand gepflegt).
+"""Erzeugt die App-Symbole aus app/resources/icons/volta.svg und zuse/resources/icons/zuse1.svg (Quellen, von Hand
+gepflegt).
 
 Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/make_icons.py
@@ -41,20 +42,22 @@ def main() -> int:
            f"-L{qt_root / 'lib'}", "-lQt6Svg", "-lQt6Gui", "-lQt6Core"]
     if subprocess.run(cmd, env=env).returncode != 0:
         return 1
-    if subprocess.run([str(exe), str(ICONS / "volta.svg"), str(ICONS)] + [str(s) for s in SIZES],
-                      env=env).returncode != 0:
-        return 1
-    base = Image.open(ICONS / "volta_256.png")
-    # Pillow verkleinert selbst; fuer kleine Groessen die von Qt gerenderten (schaerferen) Bilder verwenden
-    frames = [Image.open(ICONS / f"volta_{s}.png").convert("RGBA") for s in ICO_SIZES]
-    base.save(ICONS / "volta.ico", sizes=[(s, s) for s in ICO_SIZES], append_images=frames)
-    # Android-Startsymbole (packaging/android/res/mipmap-*/ic_launcher.png)
-    big = Image.open(ICONS / "volta_1024.png").convert("RGBA")
-    for name, size in {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}.items():
-        target = ROOT / "packaging" / "android" / "res" / f"mipmap-{name}"
-        target.mkdir(parents=True, exist_ok=True)
-        big.resize((size, size), Image.LANCZOS).save(target / "ic_launcher.png")
-    print(f"Symbole erzeugt in {ICONS} und packaging/android/res")
+    for icons, name, android in ((ICONS, "volta", "android"),
+                                 (ROOT / "zuse" / "resources" / "icons", "zuse1", "android-zuse")):
+        if subprocess.run([str(exe), str(icons / f"{name}.svg"), str(icons)] + [str(s) for s in SIZES],
+                          env=env).returncode != 0:
+            return 1
+        base = Image.open(icons / f"{name}_256.png")
+        # Pillow verkleinert selbst; fuer kleine Groessen die von Qt gerenderten (schaerferen) Bilder verwenden
+        frames = [Image.open(icons / f"{name}_{s}.png").convert("RGBA") for s in ICO_SIZES]
+        base.save(icons / f"{name}.ico", sizes=[(s, s) for s in ICO_SIZES], append_images=frames)
+        # Android-Startsymbole (packaging/<android>/res/mipmap-*/ic_launcher.png)
+        big = Image.open(icons / f"{name}_1024.png").convert("RGBA")
+        for density, size in {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}.items():
+            target = ROOT / "packaging" / android / "res" / f"mipmap-{density}"
+            target.mkdir(parents=True, exist_ok=True)
+            big.resize((size, size), Image.LANCZOS).save(target / "ic_launcher.png")
+    print("Symbole erzeugt: app/resources/icons, zuse/resources/icons, packaging/android*/res")
     return 0
 
 

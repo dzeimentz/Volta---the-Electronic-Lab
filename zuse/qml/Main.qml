@@ -38,23 +38,12 @@ ApplicationWindow {
             anchors.leftMargin: 16
             anchors.rightMargin: 16
             spacing: 10
-            Rectangle { // Symbol: Chip mit Z, Bandnummer binaer (001)
-                width: 44; height: 44; radius: 8
-                color: ZTheme.board
-                border.color: ZTheme.accent; border.width: 2
-                Text {
-                    anchors.centerIn: parent
-                    text: "Z"; color: ZTheme.accent
-                    font.family: ZTheme.mono; font.pixelSize: 26; font.bold: true
-                }
-                Row {
-                    anchors { bottom: parent.bottom; bottomMargin: 4; horizontalCenter: parent.horizontalCenter }
-                    spacing: 3
-                    Repeater {
-                        model: [false, false, true]
-                        Rectangle { required property bool modelData; width: 5; height: 5; radius: 2.5; color: modelData ? ZTheme.accent : ZTheme.line }
-                    }
-                }
+            Image { // Symbol Zuse 1 (zuse/resources/icons/zuse1.svg)
+                source: "qrc:/zuse/zuse1_64.png"
+                sourceSize: Qt.size(64, 64)
+                Layout.preferredWidth: 48
+                Layout.preferredHeight: 48
+                smooth: true
             }
             Text {
                 text: "// " + qsTr("Werkbank")

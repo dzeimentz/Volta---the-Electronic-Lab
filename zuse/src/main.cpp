@@ -5,6 +5,7 @@
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs).
 #include <QDir>
 #include <QGuiApplication>
+#include <QIcon>
 #include <QLocale>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -20,6 +21,10 @@ int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
     QGuiApplication::setOrganizationName(QStringLiteral("DC Software Engineering"));
     QGuiApplication::setApplicationName(QStringLiteral("Zuse 1"));
+    QIcon icon;
+    icon.addFile(QStringLiteral(":/zuse/zuse1_64.png"));
+    icon.addFile(QStringLiteral(":/zuse/zuse1_256.png"));
+    QGuiApplication::setWindowIcon(icon);
 
     QString language = qEnvironmentVariable("ZUSE_LANG");
     if (language.isEmpty()) language = QLocale().language() == QLocale::German ? "de" : "en";

@@ -1,0 +1,2 @@
+// Windows-Ressourcen: Programmsymbol (Explorer, Taskleiste). Erzeugt aus icons/zuse1.svg (tools/make_icons.py).
+IDI_ICON1 ICON "icons/zuse1.ico"
