@@ -11,6 +11,18 @@ using volta::logic::Level;
 namespace {
 const QString kStages = QStringLiteral(ZUSE_CONTENT_DIR "/stufen.json");
 
+// Stufe 0: Schalter direkt an die LEDs (ergibt keinen Chip)
+void finishBit(WorkbenchController& w) {
+    QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
+    QVERIFY(w.connectPins("A", "X"));
+    QVERIFY(w.connectPins("B", "Y"));
+    w.check();
+    QCOMPARE(w.checkState(), QStringLiteral("passed"));
+    QVERIFY(w.createChip());
+    QVERIFY(!w.library().find("BIT"));
+    QVERIFY(w.selectStage(1));
+}
+
 // baut NICHT aus einem NAND und erstellt den Chip
 void buildNot(WorkbenchController& w) {
     const QString n = w.addPart("NAND", 400, 250);
@@ -30,17 +42,39 @@ private slots:
     void stagesLoadAndUnlockInOrder() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        QCOMPARE(w.stages().size(), 5);
+        QCOMPARE(w.stages().size(), 6);
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
+        QVERIFY(!w.stageMakesChip());
+        QVERIFY(!w.selectStage(1)); // NICHT erst nach Stufe 0
+        QCOMPARE(w.palette().size(), 0);
+        const QVariantList ports = w.ports();
+        QCOMPARE(ports.size(), 4);
+        QCOMPARE(ports[0].toMap()["kind"].toString(), QStringLiteral("kipp"));
+        QCOMPARE(ports[1].toMap()["kind"].toString(), QStringLiteral("taster"));
+        QCOMPARE(ports[2].toMap()["kind"].toString(), QStringLiteral("led"));
+        finishBit(w);
         QCOMPARE(w.stageKuerzel(), QStringLiteral("NICHT"));
-        QVERIFY(!w.selectStage(1)); // UND erst nach NICHT
-        QCOMPARE(w.palette().size(), 1);
-        QCOMPARE(w.ports().size(), 2);
         QVERIFY(w.stageQuestion().contains("NAND"));
+    }
+
+    void pushButtonOnlyWhilePressed() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        QVERIFY(w.connectPins("B", "Y"));
+        QCOMPARE(w.levelAt("Y"), Level::Zero);
+        w.setInput("B", true); // Taster gedrueckt
+        QCOMPARE(w.levelAt("Y"), Level::One);
+        w.setInput("B", false); // losgelassen
+        QCOMPARE(w.levelAt("Y"), Level::Zero);
+        w.toggleInput("A"); // Kippschalter bleibt stehen
+        QVERIFY(w.connectPins("A", "X"));
+        QCOMPARE(w.levelAt("X"), Level::One);
     }
 
     void buildCheckAndUndo() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
         const QString n = w.addPart("NAND", 400, 250);
         QCOMPARE(n, QStringLiteral("n1"));
         QVERIFY(w.connectPins("A", "n1.a"));
@@ -79,9 +113,10 @@ private slots:
     void chipLadderAndLookInside() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
         buildNot(w);
         QVERIFY(w.isDone("NICHT"));
-        QVERIFY(w.selectStage(1));
+        QVERIFY(w.selectStage(2));
         QCOMPARE(w.stageKuerzel(), QStringLiteral("UND"));
         QCOMPARE(w.palette().size(), 2); // NAND und der eigene NICHT-Chip
         const QString n = w.addPart("NAND", 300, 150);
@@ -112,7 +147,7 @@ private slots:
     void solutionsPassEveryStage() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        for (int s = 0; s < 5; ++s) {
+        for (int s = 0; s < 6; ++s) {
             QVERIFY(w.selectStage(s));
             w.showSolution();
             w.check();
@@ -133,8 +168,9 @@ private slots:
         QTemporaryDir dir;
         {
             WorkbenchController w(kStages, dir.path(), "de");
+            finishBit(w);
             buildNot(w);
-            QVERIFY(w.selectStage(1));
+            QVERIFY(w.selectStage(2));
             w.addPart("NAND", 300, 150);
         }
         WorkbenchController w(kStages, dir.path(), "en");

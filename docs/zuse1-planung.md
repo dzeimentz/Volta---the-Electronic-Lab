@@ -25,6 +25,11 @@ Umgesetzt im Repository (eigene App `zuse1` neben Volta, Edition-Frage fuer Z1 o
   der neue Chip erscheint mit Stern im Fach der naechsten Stufe; »Blick hinein« per Doppeltippen ueber alle Ebenen
   mit Live-Pegeln; Musterloesung als letzte Hilfe; eigene Chips und Entwuerfe lokal (AppDataLocation, QSaveFile).
 - Gestaltung nach Konzept 6: Graphit, goldene Loetpads, Cyan; Pegel 1 durchgezogen, 0 gestrichelt, ? gepunktet.
+- 14.10.2026, Entscheidung des Inhabers: **Eingaenge sind Kippschalter und Taster, Ausgaenge rote LEDs** – wie auf
+  dem Bedienfeld der ersten Rechner-Bausaetze (Vorbild Altair 8800). Kippschalter rastet, Taster gilt nur solange er
+  gedrueckt ist; jede LED zeigt zusaetzlich 1/0. Neue Stufe 0 »Ein Bit«: Schalter und Taster direkt an LEDs, ohne
+  Gatter und ohne Chip. Offen: Reihenfolge der Gatter (NAND zuerst oder UND/ODER/NICHT fertig vorgeben, NAND spaeter
+  als Entdeckung) und Alltagsgeschichten je Stufe (Tresor, Klingel, Treppenhauslicht).
 - Tests: 11 Testfaelle Logik (Catch2), 5 Werkbank (Qt Test, u. a. alle Musterloesungen bestehen).
 
 Offen fuer die Erprobung mit Jugendlichen: Uebersetzungen (FR, LU; Texte DE/EN vorhanden, .ts-Dateien fehlen),

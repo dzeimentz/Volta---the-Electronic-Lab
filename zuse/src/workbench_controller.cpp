@@ -87,6 +87,11 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         s.hint = localized(o.value("hilfe"), language);
         for (const QJsonValue& x : o.value("eingaenge").toArray()) s.inputs << x.toString();
         for (const QJsonValue& x : o.value("ausgaenge").toArray()) s.outputs << x.toString();
+        const QJsonArray kinds = o.value("eingabearten").toArray();
+        for (qsizetype i = 0; i < s.inputs.size(); ++i)
+            s.inputKinds << (i < kinds.size() && kinds.at(i).toString() == "taster" ? QStringLiteral("taster")
+                                                                                   : QStringLiteral("kipp"));
+        s.makesChip = o.value("chip").toBool(true);
         for (const QJsonValue& x : o.value("bausteine").toArray()) s.palette << x.toString();
         for (const QJsonValue& x : o.value("wahrheitstabelle").toArray()) s.table.push_back(parseLevels(x.toString()));
         QJsonObject sol = o.value("loesung").toObject();
@@ -236,7 +241,7 @@ QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
     qreal w = 0, h = 0;
     partSize(t, w, h);
     ChipDef after = m_def;
-    after.parts.push_back({id, t, std::clamp<qreal>(x, 40.0, kFrameWidth - 40.0 - w),
+    after.parts.push_back({id, t, std::clamp<qreal>(x, kPartMargin, kFrameWidth - kPartMargin - w),
                            std::clamp<qreal>(y, 8.0, kFrameHeight - 8.0 - h)});
     push(after, tr("Baustein setzen"));
     return QString::fromStdString(id);
@@ -249,7 +254,7 @@ void WorkbenchController::movePart(const QString& id, qreal x, qreal y) {
         if (p.id != id.toStdString()) continue;
         qreal w = 0, h = 0;
         partSize(p.type, w, h);
-        x = std::clamp<qreal>(x, 40.0, kFrameWidth - 40.0 - w);
+        x = std::clamp<qreal>(x, kPartMargin, kFrameWidth - kPartMargin - w);
         y = std::clamp<qreal>(y, 8.0, kFrameHeight - 8.0 - h);
         if (qFuzzyCompare(p.x, x) && qFuzzyCompare(p.y, y)) return;
         p.x = x;
@@ -340,8 +345,17 @@ void WorkbenchController::toggleInput(const QString& name) {
     if (inside() || m_stages.empty()) return;
     const qsizetype i = m_stages[size_t(m_stage)].inputs.indexOf(name);
     if (i < 0) return;
+    setInput(name, m_inputs[size_t(i)] != Level::One);
+}
+
+void WorkbenchController::setInput(const QString& name, bool on) {
+    if (inside() || m_stages.empty()) return;
+    const qsizetype i = m_stages[size_t(m_stage)].inputs.indexOf(name);
+    if (i < 0) return;
     Level& l = m_inputs[size_t(i)];
-    l = l == Level::One ? Level::Zero : Level::One;
+    const Level next = on ? Level::One : Level::Zero;
+    if (l == next) return;
+    l = next;
     if (m_netOk) {
         m_sim.setInput(size_t(i), l);
         m_sim.settle();
@@ -368,7 +382,9 @@ void WorkbenchController::check() {
     }
     m_check = checkTruthTable(m_netlist, m_stages[size_t(m_stage)].table);
     m_checkDone = true;
-    if (m_check.passed)
+    if (m_check.passed && !m_stages[size_t(m_stage)].makesChip)
+        setMessage(tr("Alle Zeilen stimmen! Schalter und LEDs machen, was sie sollen."));
+    else if (m_check.passed)
         setMessage(tr("Alle Zeilen stimmen! Du kannst jetzt einen Chip daraus machen."));
     else if (m_check.oscillating)
         setMessage(tr("Die Schaltung kommt nicht zur Ruhe – sie schwingt."));
@@ -406,6 +422,15 @@ QString WorkbenchController::checkState() const {
 bool WorkbenchController::createChip() {
     if (!chipReady() || m_stages.empty()) return false;
     const Stage& s = m_stages[size_t(m_stage)];
+    if (!s.makesChip) { // Stufe ohne Chip: nur geschafft
+        m_done.insert(s.kuerzel);
+        save();
+        setMessage(tr("Geschafft! Weiter geht es mit der nächsten Stufe."));
+        m_checkDone = false;
+        emit checkChanged();
+        emit stagesChanged();
+        return true;
+    }
     ChipDef chip = m_def;
     const ChipDef* old = m_library.find(chip.kuerzel);
     chip.version = old ? old->version + 1 : 1;
@@ -500,13 +525,13 @@ bool WorkbenchController::pinPos(const ChipDef& def, const std::string& endpoint
         const std::vector<std::string> ins = def.inputNames(), outs = def.outputNames();
         const auto inIt = std::find(ins.begin(), ins.end(), endpoint);
         if (inIt != ins.end()) {
-            x = 0.0;
+            x = kPortInset;
             y = kFrameHeight * qreal(inIt - ins.begin() + 1) / qreal(ins.size() + 1);
             return true;
         }
         const auto outIt = std::find(outs.begin(), outs.end(), endpoint);
         if (outIt == outs.end()) return false;
-        x = kFrameWidth;
+        x = kFrameWidth - kPortInset;
         y = kFrameHeight * qreal(outIt - outs.begin() + 1) / qreal(outs.size() + 1);
         return true;
     }
@@ -577,8 +602,18 @@ QVariantList WorkbenchController::ports() const {
     for (const Port& p : def->ports) {
         qreal x = 0, y = 0;
         pinPos(*def, p.name, x, y);
+        QString kind = QStringLiteral("led");
+        if (p.direction == Direction::In) {
+            kind = QStringLiteral("kipp");
+            if (!inside() && !m_stages.empty()) {
+                const Stage& s = m_stages[size_t(m_stage)];
+                const qsizetype i = s.inputs.indexOf(QString::fromStdString(p.name));
+                if (i >= 0) kind = s.inputKinds.value(i, kind);
+            }
+        }
         list.append(QVariantMap{{"name", QString::fromStdString(p.name)},
                                 {"input", p.direction == Direction::In},
+                                {"kind", kind},
                                 {"x", x},
                                 {"y", y},
                                 {"level", levelString(p.name)}});

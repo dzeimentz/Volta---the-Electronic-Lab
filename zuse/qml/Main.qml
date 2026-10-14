@@ -267,7 +267,7 @@ ApplicationWindow {
                 }
                 ZButton {
                     Layout.fillWidth: true
-                    text: "★ " + qsTr("Chip erstellen")
+                    text: workbench.stageMakesChip ? "★ " + qsTr("Chip erstellen") : qsTr("Geschafft – weiter")
                     primary: workbench.chipReady
                     enabled: workbench.chipReady
                     onClicked: workbench.createChip()

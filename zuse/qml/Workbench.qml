@@ -128,7 +128,7 @@ Item {
             }
         }
 
-        // Anschluesse am Rahmen: Eingaenge links (antippen schaltet um), Ausgaenge rechts
+        // Anschluesse am Rahmen: Kippschalter und Taster links, LEDs rechts
         Repeater {
             model: workbench.ports
             delegate: Item {
@@ -143,27 +143,13 @@ Item {
                     level: port.modelData.level
                     highlight: bench.dragTarget === port.modelData.name
                 }
-                Rectangle { // Name und Wert: Schalter (Eingang) bzw. Anzeige (Ausgang)
+                PanelPort { // Kippschalter/Taster links neben dem Loetpad, LED rechts daneben
                     anchors.verticalCenter: parent.verticalCenter
-                    x: port.modelData.input ? port.width - 2 : -width + 2
-                    width: label.implicitWidth + 20
-                    height: 34
-                    radius: 8
-                    color: port.modelData.level === "1" ? ZTheme.accent : ZTheme.surfaceHigh
-                    border.color: port.modelData.level === "1" ? ZTheme.accent : ZTheme.line
-                    Text {
-                        id: label
-                        anchors.centerIn: parent
-                        text: port.modelData.name + " = " + port.modelData.level
-                        color: port.modelData.level === "1" ? ZTheme.graphite : ZTheme.text
-                        font.family: ZTheme.mono
-                        font.pixelSize: 16
-                        font.bold: true
-                    }
-                }
-                TapHandler {
-                    enabled: port.modelData.input && bench.editable
-                    onTapped: workbench.toggleInput(port.modelData.name)
+                    x: port.modelData.input ? -width + 4 : port.width - 4
+                    name: port.modelData.name
+                    kind: port.modelData.kind
+                    level: port.modelData.level
+                    enabled: bench.editable
                 }
                 DragHandler {
                     target: null

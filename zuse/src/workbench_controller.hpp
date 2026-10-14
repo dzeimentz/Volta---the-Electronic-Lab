@@ -27,7 +27,9 @@ struct Stage {
     QString question;
     QString hint;
     QStringList inputs;
-    QStringList outputs;
+    QStringList inputKinds; // je Eingang "kipp" (Kippschalter, rastet) oder "taster" (nur solange gedrueckt)
+    QStringList outputs;    // Ausgaenge sind LEDs
+    bool makesChip = true;  // Stufe 0 (Schalter direkt an LEDs) ergibt keinen Chip
     QStringList palette;
     std::vector<std::vector<volta::logic::Level>> table;
     volta::logic::ChipDef solution; // Musterloesung (Teile und Verbindungen)
@@ -44,6 +46,7 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList palette READ palette NOTIFY stageChanged)
     Q_PROPERTY(QStringList stageInputs READ stageInputs NOTIFY stageChanged)
     Q_PROPERTY(QStringList stageOutputs READ stageOutputs NOTIFY stageChanged)
+    Q_PROPERTY(bool stageMakesChip READ stageMakesChip NOTIFY stageChanged)
     Q_PROPERTY(QVariantList parts READ parts NOTIFY viewChanged)
     Q_PROPERTY(QVariantList ports READ ports NOTIFY viewChanged)
     Q_PROPERTY(QVariantList wires READ wires NOTIFY viewChanged)
@@ -67,6 +70,8 @@ public:
     static constexpr qreal kFrameHeight = 600.0;
     static constexpr qreal kPinPitch = 56.0; // Anschluesse >= 56 dp
     static constexpr qreal kPartWidth = 120.0;
+    static constexpr qreal kPortInset = 104.0;  // Schalter und LEDs sitzen im Rand des Rahmens
+    static constexpr qreal kPartMargin = 150.0; // Bausteine bleiben zwischen Schaltern und LEDs
 
     QVariantList stages() const;
     int stageIndex() const { return m_stage; }
@@ -77,6 +82,7 @@ public:
     QVariantList palette() const;
     QStringList stageInputs() const { return m_stages.empty() ? QStringList() : m_stages[size_t(m_stage)].inputs; }
     QStringList stageOutputs() const { return m_stages.empty() ? QStringList() : m_stages[size_t(m_stage)].outputs; }
+    bool stageMakesChip() const { return m_stages.empty() || m_stages[size_t(m_stage)].makesChip; }
     QVariantList parts() const;
     QVariantList ports() const;
     QVariantList wires() const;
@@ -98,7 +104,8 @@ public:
     Q_INVOKABLE bool connectPins(const QString& a, const QString& b);
     Q_INVOKABLE void removeWire(int index);
     Q_INVOKABLE void clearBench();
-    Q_INVOKABLE void toggleInput(const QString& name);
+    Q_INVOKABLE void toggleInput(const QString& name);           // Kippschalter
+    Q_INVOKABLE void setInput(const QString& name, bool on);     // Taster: druecken und loslassen
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
     Q_INVOKABLE void check();
