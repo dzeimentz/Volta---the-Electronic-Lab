@@ -90,6 +90,8 @@ python3 tools/deploy_release.py
 
 # Anleitungen als PDF (ausfuehrlich und Kurzanleitung, mit Bildschirmfotos) nach Release/Anleitung/
 python3 tools/manual_pdfs.py            # --bilder nimmt die Bildschirmfotos neu auf
+# Produkt-Flyer (6 Seiten, Plattformuebersicht) nach Release/Flyer/
+python3 tools/flyer_pdf.py              # --bilder nimmt die Bildschirmfotos neu auf
 
 # App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
 python3 tools/make_icons.py
