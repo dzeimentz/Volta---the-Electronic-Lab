@@ -19,12 +19,13 @@ Popup {
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
     background: Rectangle { radius: 12; color: "#FFFDF7"; border.color: Theme.navy; border.width: 2 }
 
-    // Auswahl: je Stufe mindestens ein Aufbau; recorder = Feld fuer Kanal 1 des Zeitschreibers
+    // Auswahl: je Stufe mindestens ein Aufbau; recorder = Feld fuer Kanal 1 des Zeitschreibers; burn = Leuchtdiode
+    // ohne Schutzwiderstand (der Musteraufbau ist die reparierte Fassung, die Vorfuehrung zeigt das Durchbrennen)
     readonly property var entries: [
         { id: "volta1.0.1", text: qsTr("Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.") },
         { id: "volta1.1.9", text: qsTr("Taster drücken: Summer und Lämpchen melden sich zugleich.") },
         { id: "volta1.2.6", text: qsTr("Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.") },
-        { id: "volta1.2.4", text: qsTr("Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.") },
+        { id: "volta1.2.4", burn: true, text: qsTr("Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.") },
         { id: "volta1.2.14", text: qsTr("Ein Magnet an der Tür startet eine Melodie.") },
         { id: "volta1.3.12", text: qsTr("Der Zeitschreiber zeichnet auf, wie sich ein Kondensator füllt."), recorder: "B4" },
         { id: "volta1.3.15", text: qsTr("Ein kleiner Strom schaltet über das Relais einen großen.") },
@@ -45,6 +46,18 @@ Popup {
     function start(entry) {
         close()
         if (!controller.startDemo(entry.id)) return
+        if (entry.burn) {
+            // Widerstand heraus, Plus direkt an die Leuchtdiode (Anode B4): sie brennt beim Einschalten durch;
+            // »Rueckgaengig« nimmt die Leitung zurueck und macht sie wieder heil
+            controller.mainSwitch = false
+            controller.removePart("R1")
+            const wires = controller.wires
+            for (let w = 0; w < wires.length; ++w)
+                if ((wires[w].from === "P:+9V" && wires[w].to === "B3") || (wires[w].to === "P:+9V" && wires[w].from === "B3"))
+                    controller.removeWire(wires[w].id)
+            controller.addWire("P:+9V", "B4", "rot")
+            controller.mainSwitch = true
+        }
         if (entry.recorder) {
             controller.setRecorderChannel(0, entry.recorder)
             controller.recorderWindow = 10
@@ -110,7 +123,17 @@ Popup {
                 width: parent.width
                 columns: width > 640 ? 2 : 1
                 spacing: 10
+                // alle Karten so hoch wie die hoechste (Titel und Text unterschiedlich lang)
+                readonly property real cardHeight: {
+                    let h = 88
+                    for (let i = 0; i < cards.count; ++i) {
+                        const c = cards.itemAt(i)
+                        if (c) h = Math.max(h, c.needed)
+                    }
+                    return h
+                }
                 Repeater {
+                    id: cards
                     model: demo.entries
                     Rectangle {
                         id: card
@@ -119,7 +142,8 @@ Popup {
                         readonly property var meta: demo.info(modelData.id)
                         objectName: "demo_" + modelData.id
                         width: (grid.width - (grid.columns - 1) * grid.spacing) / grid.columns
-                        height: Math.max(88, cardCol.implicitHeight + 20)
+                        readonly property real needed: cardCol.implicitHeight + 20
+                        height: grid.cardHeight
                         radius: 12
                         color: cardTap.pressed ? "#F2C894" : "#F7E3C2"
                         border.color: Theme.navy
@@ -162,7 +186,12 @@ Popup {
                                 color: "#4A5866"
                             }
                         }
-                        TapHandler { id: cardTap; onTapped: demo.start(card.modelData) }
+                        // Antippen auch bei leichter Fingerbewegung (nicht als Bildlauf verstehen)
+                        TapHandler {
+                            id: cardTap
+                            gesturePolicy: TapHandler.WithinBounds
+                            onTapped: demo.start(card.modelData)
+                        }
                         Accessible.role: Accessible.Button
                         Accessible.name: qsTr("Stufe %1: %2").arg(card.meta.stage).arg(card.meta.title)
                     }

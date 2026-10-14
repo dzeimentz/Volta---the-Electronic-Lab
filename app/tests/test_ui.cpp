@@ -1437,11 +1437,27 @@ private slots:
         QTRY_VERIFY(dlg->property("opened").toBool());
         QQuickItem* card = item(QStringLiteral("demo_volta1.2.6"));
         QTRY_VERIFY(card && card->isVisible());
+        // alle Karten gleich hoch
+        const double cardHeight = card->height();
+        for (const char* id : {"volta1.0.1", "volta1.2.4", "volta1.3.15", "volta1.4.10"}) {
+            QQuickItem* other = item(QStringLiteral("demo_") + QLatin1String(id));
+            QVERIFY(other);
+            QCOMPARE(other->height(), cardHeight);
+        }
         QTest::qWait(150);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(card));
         QTRY_VERIFY(m_lab->demo());
         QTRY_VERIFY(root->property("inLab").toBool());
         QCOMPARE(m_lab->experimentId(), QStringLiteral("volta1.2.6"));
+        // Leuchtdiode ohne Schutzwiderstand: brennt in der Vorfuehrung durch, »Rueckgaengig« macht sie wieder heil
+        const QVariantList entries = dlg->property("entries").toList();
+        for (const QVariant& e : entries)
+            if (e.toMap().value(QStringLiteral("id")).toString() == QStringLiteral("volta1.2.4"))
+                QMetaObject::invokeMethod(dlg, "start", Q_ARG(QVariant, e));
+        QCOMPARE(m_lab->experimentId(), QStringLiteral("volta1.2.4"));
+        QTRY_VERIFY(m_lab->partState(QStringLiteral("D1")).value(QStringLiteral("destroyed")).toBool());
+        m_lab->undo();
+        QTRY_VERIFY(!m_lab->partState(QStringLiteral("D1")).value(QStringLiteral("destroyed")).toBool());
         QQuickItem* end = item(QStringLiteral("demoEnd"));
         QTRY_VERIFY(end && end->isVisible());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(end));

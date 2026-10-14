@@ -165,6 +165,29 @@ ApplicationWindow {
             labView.recorderVisible = experimentId === "volta1.3.12" // Ladekurve im Zeitschreiber
         }
     }
+    // Knopf in den Leisten unten links (Vorfuehrung, Praesentation): runde Pille in der Farbe der Leiste
+    component BannerButton: Button {
+        id: bannerButton
+        height: Theme.control - 8
+        leftPadding: 16
+        rightPadding: 16
+        font.pixelSize: 15
+        font.bold: true
+        contentItem: Label {
+            text: bannerButton.text
+            font: bannerButton.font
+            color: "white"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+        background: Rectangle {
+            radius: height / 2
+            color: bannerButton.down ? "#2E5C8A" : (bannerButton.hovered ? "#1F4670" : "#14304D")
+            border.color: Theme.solderAmber
+            border.width: bannerButton.visualFocus ? 3 : 1.5
+        }
+        Accessible.name: text
+    }
     // Vorfuehrung laeuft: Hinweis unten links mit »Andere Vorführung« und »Beenden« (zurueck zur Startseite)
     Rectangle {
         objectName: "demoBanner"
@@ -191,15 +214,13 @@ ApplicationWindow {
                 font.bold: true
                 font.pixelSize: 15
             }
-            Button {
+            BannerButton {
                 objectName: "demoOther"
-                height: Theme.control - 6
                 text: qsTr("Andere Vorführung")
                 onClicked: demoDialog.open()
             }
-            Button {
+            BannerButton {
                 objectName: "demoEnd"
-                height: Theme.control - 6
                 text: qsTr("Beenden")
                 onClicked: { labController.endDemo(); root.inLab = false; root.inJournal = false }
             }
@@ -316,9 +337,8 @@ ApplicationWindow {
                 font.bold: true
                 font.pixelSize: 15
             }
-            Button {
+            BannerButton {
                 objectName: "presentationEnd"
-                height: Theme.control - 6
                 text: qsTr("Beenden")
                 onClicked: labController.presentation = false
             }

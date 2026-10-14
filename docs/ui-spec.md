@@ -370,12 +370,14 @@ das iPad).
 Fuer die Schule und Gespraeche (z. B. mit Verlagen): Kachel »Vorfuehrung« auf der Startseite, im Elternbereich
 abschaltbar (Einstellung `anzeige/vorfuehrung`, Vorgabe an). Die Auswahl (`DemoDialog.qml`) zeigt zehn fertige
 Aufbauten aus allen Stufen mit Stufennummer, Titel aus den Inhalten und einem Satz, was zu sehen ist:
-0.1 Blinklicht, 1.9 Klingel mit Lampe, 2.6 Treppenhaus-Wechselschaltung, 2.4 LED ohne Schutzwiderstand (brennt
-durch, »Rueckgaengig« heilt), 2.14 Tuer-Melodie, 3.12 Kondensator laden (Zeitschreiber offen, Kanal 1 an B4),
+0.1 Blinklicht, 1.9 Klingel mit Lampe, 2.6 Treppenhaus-Wechselschaltung, 2.4 LED ohne Schutzwiderstand (der
+Musteraufbau ist die reparierte Fassung; die Vorfuehrung nimmt den Widerstand heraus und legt Plus direkt an die
+LED, sie brennt durch, »Rueckgaengig« heilt), 2.14 Tuer-Melodie, 3.12 Kondensator laden (Zeitschreiber offen, Kanal 1 an B4),
 3.15 Relais, 4.3 Nachtlicht (Raumlicht aendern), 4.8 Treppenhauslicht mit Zeitmodul, 4.10 Wechselblinker aus
 Transistoren.
 Antippen startet das Experiment mit Musteraufbau und eingeschaltetem Hauptschalter (`LabController::startDemo`).
 Wie im Praesentationsmodus laeuft alles in einem leeren Datenordner: Fortschritt, Forscherheft und Laborstand des
-Profils bleiben unberuehrt; alle Stufen sind offen. Leiste unten links: »Andere Vorfuehrung« und »Beenden«
+Profils bleiben unberuehrt; alle Stufen sind offen. Alle Karten gleich hoch; Antippen gilt auch bei leichter Fingerbewegung. Leiste unten links mit runden Knoepfen
+in der Leistenfarbe (auch in der Praesentationsleiste): »Andere Vorfuehrung« und »Beenden«
 (zurueck zur Startseite; der eigene Laborstand ist sofort wieder geladen – das gilt jetzt auch fuer das Ende des
 Praesentationsmodus). Entwicklerhilfe: `VOLTA_DEMO_SHOW=1|<Experiment-ID>`.
