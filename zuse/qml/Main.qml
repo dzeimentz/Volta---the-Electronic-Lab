@@ -113,10 +113,14 @@ ApplicationWindow {
                     border.color: modelData.own ? ZTheme.accentDim : ZTheme.line
                     border.width: 2
                     opacity: workbench.inside ? 0.5 : 1
-                    Text {
-                        anchors { left: parent.left; leftMargin: 16; verticalCenter: parent.verticalCenter }
-                        text: tile.modelData.symbol + (tile.modelData.inverted ? "○" : "")
-                        color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 30; font.bold: true
+                    GateShape {
+                        anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
+                        width: 66; height: 56
+                        symbol: tile.modelData.symbol
+                        inverted: tile.modelData.inverted
+                        us: workbench.symbolStyle === "us"
+                        stroke: ZTheme.muted
+                        fontSize: 22
                     }
                     Text {
                         anchors { right: parent.right; rightMargin: 12; verticalCenter: parent.verticalCenter }
@@ -146,6 +150,28 @@ ApplicationWindow {
                 }
             }
             Item { Layout.fillHeight: true }
+            Text {
+                text: "// " + qsTr("Schaltzeichen")
+                color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 14
+            }
+            RowLayout { // Schaltzeichen nach DIN oder US
+                Layout.fillWidth: true
+                spacing: 4
+                ZButton {
+                    Layout.fillWidth: true
+                    text: "DIN"
+                    primary: workbench.symbolStyle === "din"
+                    onClicked: workbench.symbolStyle = "din"
+                    ToolTip.visible: hovered; ToolTip.text: qsTr("Schaltzeichen nach DIN EN 60617")
+                }
+                ZButton {
+                    Layout.fillWidth: true
+                    text: "US"
+                    primary: workbench.symbolStyle === "us"
+                    onClicked: workbench.symbolStyle = "us"
+                    ToolTip.visible: hovered; ToolTip.text: qsTr("Schaltzeichen nach IEEE Std 91 (US)")
+                }
+            }
             ZButton {
                 Layout.fillWidth: true
                 text: qsTr("Entfernen")

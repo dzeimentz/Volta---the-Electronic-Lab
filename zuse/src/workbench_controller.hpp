@@ -60,6 +60,8 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QString checkState READ checkState NOTIFY checkChanged)
     Q_PROPERTY(bool chipReady READ chipReady NOTIFY checkChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
+    // Schaltzeichen: "din" (DIN EN 60617-12, Vorgabe) oder "us" (IEEE Std 91); Einstellung, kein Befehl
+    Q_PROPERTY(QString symbolStyle READ symbolStyle WRITE setSymbolStyle NOTIFY symbolStyleChanged)
 
 public:
     // stagesFile: Inhaltsdatei (Vorgabe Ressource), dataDir: Ablage der eigenen Chips und Entwuerfe
@@ -96,6 +98,8 @@ public:
     QString checkState() const;
     bool chipReady() const { return m_checkDone && m_check.passed; }
     QString message() const { return m_message; }
+    QString symbolStyle() const { return m_symbolStyle; }
+    void setSymbolStyle(const QString& style);
 
     Q_INVOKABLE bool selectStage(int index);
     Q_INVOKABLE QString addPart(const QString& type, qreal x, qreal y);
@@ -128,6 +132,7 @@ signals:
     void historyChanged();
     void checkChanged();
     void messageChanged();
+    void symbolStyleChanged();
 
 private:
     bool loadStages(const QString& file, const QString& language);
@@ -161,6 +166,7 @@ private:
     bool m_checkDone = false;
     std::vector<std::string> m_path; // Teil-IDs beim Blick hinein
     QString m_message;
+    QString m_symbolStyle = QStringLiteral("din");
 };
 
 } // namespace zuse

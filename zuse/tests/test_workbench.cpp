@@ -179,6 +179,10 @@ private slots:
         QCOMPARE(w.stageKuerzel(), QStringLiteral("UND")); // erste offene Stufe
         QCOMPARE(w.def().parts.size(), size_t(1));         // Entwurf ist noch da
         QCOMPARE(w.stageTitle(), QStringLiteral("The AND gate"));
+        QCOMPARE(w.symbolStyle(), QStringLiteral("din"));
+        w.setSymbolStyle("us");
+        WorkbenchController again(kStages, dir.path(), "de");
+        QCOMPARE(again.symbolStyle(), QStringLiteral("us")); // Einstellung bleibt erhalten
     }
 };
 

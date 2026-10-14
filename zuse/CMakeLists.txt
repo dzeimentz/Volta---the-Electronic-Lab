@@ -32,6 +32,7 @@ qt_add_qml_module(zuse_app
         qml/ZTheme.qml
         qml/Workbench.qml
         qml/GateBody.qml
+        qml/GateShape.qml
         qml/PinPad.qml
         qml/PanelPort.qml
         qml/TruthPanel.qml

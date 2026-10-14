@@ -2,7 +2,8 @@
 // Offline, keine Datenerhebung: eigene Chips und Entwuerfe liegen nur in AppDataLocation.
 // Entwicklerhilfen: ZUSE_SCREENSHOT=<bild.png> (Bildschirmfoto statt Bedienung), ZUSE_SIZE=<b>x<h>,
 // ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|en, ZUSE_DEMO=<Stufen 1..5 mit Musterloesung>,
-// ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs).
+// ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
+// ZUSE_SYMBOLS=din|us (Schaltzeichen).
 #include <QDir>
 #include <QGuiApplication>
 #include <QIcon>
@@ -43,6 +44,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    if (qEnvironmentVariableIsSet("ZUSE_SYMBOLS")) workbench.setSymbolStyle(qEnvironmentVariable("ZUSE_SYMBOLS"));
     for (const QString& name : qEnvironmentVariable("ZUSE_DEMO_ON").split(',', Qt::SkipEmptyParts))
         workbench.toggleInput(name);
     for (const QString& id : qEnvironmentVariable("ZUSE_DEMO_INSIDE").split('/', Qt::SkipEmptyParts))

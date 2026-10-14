@@ -111,6 +111,7 @@ void WorkbenchController::load() {
         if (chipFromJson(v.toObject(), d)) m_library.add(d);
     }
     for (const QJsonValue& v : root.value("geschafft").toArray()) m_done.insert(v.toString());
+    if (root.value("schaltzeichen").toString() == "us") m_symbolStyle = QStringLiteral("us");
     const QJsonObject drafts = root.value("entwuerfe").toObject();
     for (auto it = drafts.begin(); it != drafts.end(); ++it) {
         ChipDef d;
@@ -129,7 +130,8 @@ void WorkbenchController::save() const {
     for (const auto& d : m_drafts) drafts.insert(d.first, chipToJson(d.second));
     QSaveFile f(QDir(m_dataDir).filePath("werkbank.json"));
     if (!f.open(QIODevice::WriteOnly)) return;
-    f.write(QJsonDocument(QJsonObject{{"schema_version", 1}, {"chips", chips}, {"geschafft", done}, {"entwuerfe", drafts}})
+    f.write(QJsonDocument(QJsonObject{{"schema_version", 1}, {"chips", chips}, {"geschafft", done}, {"entwuerfe", drafts},
+                                         {"schaltzeichen", m_symbolStyle}})
                 .toJson());
     f.commit();
 }
@@ -637,6 +639,14 @@ QVariantList WorkbenchController::wires() const {
                                 {"level", levelString(c.from)}});
     }
     return list;
+}
+
+void WorkbenchController::setSymbolStyle(const QString& style) {
+    const QString next = style == "us" ? QStringLiteral("us") : QStringLiteral("din");
+    if (next == m_symbolStyle) return;
+    m_symbolStyle = next;
+    save();
+    emit symbolStyleChanged();
 }
 
 void WorkbenchController::setMessage(const QString& text) {
