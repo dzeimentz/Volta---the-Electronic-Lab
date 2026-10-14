@@ -110,6 +110,7 @@ python3 tools/make_titlebar.py          # Schaltplanmuster der Fensterleiste (Wi
 
 # Android-Test-APK (bauen, ausduennen, pruefen; --install spielt sie auf angeschlossene Tablets)
 python3 tools/build_android.py --install
+python3 tools/build_android.py --zuse --install   # Zuse-Prototyp (eigene APK com.dcsoftwareengineering.zuse1)
 
 # Android (benoetigt QT_ROOT_ANDROID, QT_HOST_PATH, ANDROID_NDK_ROOT, ANDROID_SDK_ROOT)
 cmake --preset android-arm64
