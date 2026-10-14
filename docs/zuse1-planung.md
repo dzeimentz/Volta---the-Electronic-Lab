@@ -14,6 +14,23 @@ das Konzept ueberholt und entfernt.
   **zwei parallele Linien** (Volta und Zuse). Die Entscheidung wartet auf die Antwort eines Verlags, den der
   Inhaber angeschrieben hat. Bis dahin gilt das Konzept (Z0 nach dem Android-Pilot von Volta 1).
 
+## Prototyp Z0 (Stand 14.10.2026)
+Umgesetzt im Repository (eigene App `zuse1` neben Volta, Edition-Frage fuer Z1 offen):
+- `logic/`: Qt-freie Logiksimulation. Chip-Definition aus Anschluessen, Teilen (NAND, AND, OR, NOT, XOR oder eigene
+  Chips) und Verbindungen; Aufloesung bis zum Gatter mit erhaltener Hierarchie; ereignisgesteuert mit
+  Einheitsverzoegerung und Pegeln 0/1/X (Stoerimpulse entstehen echt, Schwingen wird erkannt); Pruefung mit
+  vollstaendiger Wahrheitstabelle; Fehler fuer doppelte Treiber, unbekannte Anschluesse und Rekursion.
+- `zuse/`: Werkbank mit fuenf Stufen (NICHT, UND, ODER aus NAND, XODER, Halbaddierer); jede Aenderung ein Befehl
+  (Rueckgaengig/Wiederholen), Eingaenge antippen, Pruefen, »Chip erstellen« nur nach bestandener Pruefung,
+  der neue Chip erscheint mit Stern im Fach der naechsten Stufe; »Blick hinein« per Doppeltippen ueber alle Ebenen
+  mit Live-Pegeln; Musterloesung als letzte Hilfe; eigene Chips und Entwuerfe lokal (AppDataLocation, QSaveFile).
+- Gestaltung nach Konzept 6: Graphit, goldene Loetpads, Cyan; Pegel 1 durchgezogen, 0 gestrichelt, ? gepunktet.
+- Tests: 11 Testfaelle Logik (Catch2), 5 Werkbank (Qt Test, u. a. alle Musterloesungen bestehen).
+
+Offen fuer die Erprobung mit Jugendlichen: Uebersetzungen (FR, LU; Texte DE/EN vorhanden, .ts-Dateien fehlen),
+Android-APK des Prototyps (Ziel `zuse_app`, Option `VOLTA_BUILD_ZUSE` im Android-Build), eigenes Symbol,
+Hoch- und Querformat, Zoom mit zwei Fingern, Tastaturbedienung der Anschluesse, Testfolgen fuer Speicher (Stufe 6).
+
 ## Quelle: ELRAD-Lehrgang »Digitaltechnik im Experiment« (Auswertung 13.10.2026)
 Lehrgang Elektronische Datenverarbeitung von H. Weidner (ELRAD 11/77–05/82, Sonderheft Heise 2005; private
 Sammlung, `I:\ELRAD\pdf\sonderhefte\digitaltechnik\`, nicht im Repository). Zehn Teile vom UND/ODER mit Schaltern

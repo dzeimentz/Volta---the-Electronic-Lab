@@ -60,6 +60,13 @@ def main() -> int:
              # nicht benoetigt: Netzwerkinformation, QML-Debugger (kein Netz, docs/privacy-safety.md)
              "--skip-plugin-types", "networkinformation,qmltooling,tls",
              str(TARGET / exe_name)], env)
+        # Zuse-Prototyp (Phase Z0) teilt sich die Qt-Laufzeit mit Volta
+        zuse = ROOT / "build" / PRESET / "zuse" / "zuse1.exe"
+        if zuse.exists():
+            shutil.copy2(zuse, TARGET / "zuse1.exe")
+            run([deploy, "--release", "--qmldir", str(ROOT / "zuse" / "qml"), "--no-translations",
+                 "--no-system-d3d-compiler", "--no-opengl-sw", "--skip-plugin-types", "networkinformation,qmltooling,tls",
+                 str(TARGET / "zuse1.exe")], env)
         # Tonausgabe ueber das Windows-Backend: FFmpeg-Plugin und -Bibliotheken (koennten Netzprotokolle) und das
         # Test-Plugin der Sprachausgabe werden nicht ausgeliefert (docs/adr/0009-tonausgabe-und-vorlesen.md)
         unwanted = [TARGET / "multimedia" / "ffmpegmediaplugin.dll", TARGET / "texttospeech" / "qtexttospeech_mock.dll"]

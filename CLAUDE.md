@@ -39,6 +39,8 @@ app/                      Qt-Anwendung                       -> app/CLAUDE.md
   src/model/              Schaltungsmodell, Befehle (Undo/Redo), Feldbelegung
   src/services/           Inhaltspakete, Profile, Sicherung, Konfiguration, Audio, Sprache
   qml/                    Oberflaeche (Grundplatte, Pult, Werkzeugkasten, Readme, Info)
+logic/                    Logiksimulation der Zuse-Reihe (C++17, Qt-frei, ereignisgesteuert, Pegel 0/1/X)
+zuse/                     Zuse-Prototyp Z0: Werkbank-App zuse1 (Modell, QML-Modul Zuse, Stufen in zuse/content)
 content/                  Inhaltspakete (JSON)               -> content/CLAUDE.md
   schema/                 JSON-Schemata
   catalog/                Bauteil- und Modulkatalog
@@ -97,6 +99,10 @@ python3 tools/manual_pdfs.py            # --bilder nimmt die Bildschirmfotos neu
 python3 tools/flyer_pdf.py              # --bilder nimmt die Bildschirmfotos neu auf
 # Testpaket fuer Partner/Verlage: Windows-Installer (NSIS, packaging/windows/volta1.nsi), Test-APK, PDFs, LIESMICH
 python3 tools/build_testpaket.py        # -> Release/Testpaket/Volta1-<version>-Testpaket.zip
+
+# Zuse-Prototyp Z0 (Werkbank, docs/zuse1-planung.md): build/desktop-debug/zuse/zuse1.exe; Entwicklerhilfen
+#   ZUSE_SCREENSHOT=<bild.png>, ZUSE_SIZE=<b>x<h>, ZUSE_DATA_DIR=<ordner>, ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen mit
+#   Musterloesung), ZUSE_DEMO_ON=A,B (Eingaenge an), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein)
 
 # App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
 python3 tools/make_icons.py
