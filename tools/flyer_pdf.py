@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """Produkt-Flyer Volta 1 als PDF (deutsch), fuer Schulen, Eltern und Gespraeche mit Partnern:
 
-    python3 tools/flyer_pdf.py            # Release/Flyer/Volta1-Produktflyer-de.pdf
+    python3 tools/flyer_pdf.py            # Release/Flyer/Volta1-Produktflyer-de.pdf und -en.pdf
+    python3 tools/flyer_pdf.py --sprache en
     python3 tools/flyer_pdf.py --bilder   # vorher die Bildschirmfotos neu aufnehmen
+
+Sprachen: Deutsch ist die Quelle; die Uebersetzungen stehen in tools/flyer_texte.py (Schluessel = deutscher Text).
+Alle sichtbaren Texte laufen durch Page.text/para (und chip/band/feature); fehlt eine Uebersetzung, bricht das
+Skript mit der Liste der fehlenden Texte ab. Bildschirmfotos je Sprache (VOLTA_DEMO_LANG).
 
 Fuenf Seiten A4: Titel mit Tablet-Ansicht und Eckdaten, Forschen im Labor, Messen und Verstehen, Schule und Eltern,
 Plattformen und Reihe. Bildschirmfotos 1920 x 1200 (Fenster 1280 x 800, Skalierung 1,5) ueber die Entwicklerhilfen
@@ -25,9 +30,30 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas as pdfcanvas
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from flyer_texte import TEXTE, MUSTER  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "Release" / "Flyer"
-SHOTS = OUT / "bilder"
+SHOTS = OUT / "bilder" # je Sprache ein Unterordner
+LANG = "de"
+FEHLT: set = set()
+
+
+def T(s: str) -> str:
+    """Text in der Flyer-Sprache (Deutsch ist die Quelle); dynamische Zeilen ueber Muster."""
+    if LANG == "de" or not s.strip():
+        return s
+    table = TEXTE.get(LANG, {})
+    if s in table:
+        return table[s]
+    if s in table.values():  # schon uebersetzt (z. B. Kachel misst und zeichnet denselben Text)
+        return s
+    for pattern, repl in MUSTER.get(LANG, []):
+        if re.fullmatch(pattern, s):
+            return re.sub(pattern, repl, s)
+    FEHLT.add(s)
+    return s
 EXE = ROOT / "build" / "desktop-debug" / "app" / ("volta1.exe" if os.name == "nt" else "volta1")
 FONTS = Path("C:/Windows/Fonts")
 TICK = ROOT / "app" / "resources" / "tick"
@@ -68,18 +94,18 @@ def version() -> str:
 
 
 def take_screenshots(force: bool):
-    SHOTS.mkdir(parents=True, exist_ok=True)
+    (SHOTS / LANG).mkdir(parents=True, exist_ok=True)
     for name, extra in SCENES.items():
-        target = SHOTS / f"{name}.png"
+        target = SHOTS / LANG / f"{name}.png"
         if target.exists() and not force:
             continue
         env = dict(os.environ)
-        env.update({"VOLTA_NO_SPLASH": "1", "VOLTA_DEMO_LANG": "de", "QT_SCALE_FACTOR": "1.5",
+        env.update({"VOLTA_NO_SPLASH": "1", "VOLTA_DEMO_LANG": LANG, "QT_SCALE_FACTOR": "1.5",
                     "VOLTA_SCREENSHOT": str(target)})
         env.update(extra)
         subprocess.run([str(EXE)], env=env, timeout=60, check=False,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        print(f"  Bild {name}: {'ok' if target.exists() else 'FEHLT'}")
+        print(f"  Bild {LANG}/{name}: {'ok' if target.exists() else 'FEHLT'}")
 
 
 def tablet(src: Path, dst: Path):
@@ -104,6 +130,7 @@ class Page:
         self.W, self.H = A4
 
     def text(self, x, y, s, size=10, font="Segoe", color=NAVY, anchor="l"):
+        s = T(s)
         c = self.c
         c.setFont(font, size)
         c.setFillColor(color)
@@ -112,6 +139,7 @@ class Page:
     def para(self, x, y, width, s, size=10, leading=None, font="Segoe", color=NAVY):
         """Einfacher Zeilenumbruch; gibt die y-Position unter dem Absatz zurueck."""
         leading = leading or size * 1.38
+        s = T(s)
         c = self.c
         c.setFont(font, size)
         c.setFillColor(color)
@@ -177,6 +205,7 @@ class Page:
         return y
 
     def chip(self, x, y, label, fill=YELLOW, color=NAVY, size=9.5):
+        label = T(label)
         w = pdfmetrics.stringWidth(label, "Segoe-Bold", size) + 7 * mm
         self.c.setFillColor(fill)
         self.c.roundRect(x, y - 2.2 * mm, w, 7 * mm, 3.5 * mm, fill=1, stroke=0)
@@ -191,7 +220,7 @@ def fonts():
 
 
 def img(name):
-    return SHOTS / f"{name}.png"
+    return SHOTS / LANG / f"{name}.png"
 
 
 # ---------------------------------------------------------------- Seiten
@@ -214,7 +243,7 @@ def page_cover(p: Page, ver: str):
     p.text(18 * mm, H - 59 * mm, "Ein virtueller Elektronik-Experimentierkasten für Kinder von 8 bis 12 Jahren.",
            11, "Segoe", colors.HexColor("#CFE3F7"))
     # Tablet mit laufendem Experiment
-    framed = OUT / "bilder" / "_tablet_blinker.png"
+    framed = SHOTS / LANG / "_tablet_blinker.png"
     tablet(img("blinker"), framed)
     tw = W - 36 * mm
     iw, ih = PILImage.open(framed).size
@@ -241,7 +270,7 @@ def page_cover(p: Page, ver: str):
     x, yc = 18 * mm, yb - 9 * mm
     for label in ("Lernpfad mit Forscherfrage", "Ehrliche Simulation", "Tick hilft", "Aufgaben per QR-Code",
                   "Vorführung für die Klasse"):
-        wch = pdfmetrics.stringWidth(label, "Segoe-Bold", 9) + 7 * mm
+        wch = pdfmetrics.stringWidth(T(label), "Segoe-Bold", 9) + 7 * mm
         if x + wch > W - 52 * mm:
             x, yc = 18 * mm, yc - 9 * mm
         x += p.chip(x, yc, label, colors.Color(1, 1, 1, alpha=0.18), colors.white, 9) + 2.5 * mm
@@ -413,7 +442,7 @@ def page_platforms(p: Page):
          "ohne Berechtigungen. Geplant über Google Play, auch für Schulen (verwaltete Geräte).", GREEN),
         ("monitor", "Windows", "Testversion verfügbar",
          "Windows 10 und 11 (64 Bit), Maus, Tastatur und Touchscreen. Eigene Fensterleiste im Volta-Design. "
-         "Installationspaket (MSIX/MSI) und Microsoft Store in Vorbereitung.", GREEN),
+         "Installationsprogramm für die Testversion; Microsoft Store in Vorbereitung.", GREEN),
         ("tablet", "iPad", "in Vorbereitung",
          "iPadOS, Finger und Stift gleichwertig, alle Ausrichtungen. Paketierung vorbereitet; Veröffentlichung "
          "im App Store (Kinderkategorie, Apple School Manager) folgt.", ORANGE),
@@ -429,7 +458,7 @@ def page_platforms(p: Page):
         c.roundRect(18 * mm, y - 30 * mm, W - 36 * mm, 32 * mm, 3 * mm, fill=1, stroke=0)
         device(c, 23 * mm, y - 25 * mm, kind, 30 * mm, 21 * mm)
         p.text(60 * mm, y - 6 * mm, name, 15, "Segoe-Bold", NAVY)
-        p.chip(60 * mm + pdfmetrics.stringWidth(name, "Segoe-Bold", 15) + 4 * mm, y - 6 * mm, status, col,
+        p.chip(60 * mm + pdfmetrics.stringWidth(T(name), "Segoe-Bold", 15) + 4 * mm, y - 6 * mm, status, col,
                colors.white, 8.5)
         p.para(60 * mm, y - 13 * mm, W - 84 * mm, text, 9.5)
         y -= 36 * mm
@@ -482,25 +511,41 @@ def page_series(p: Page, ver: str):
     p.footer(6)
 
 
-def main() -> int:
-    take_screenshots("--bilder" in sys.argv)
+def build(lang: str, force: bool) -> int:
+    global LANG
+    LANG = lang
+    FEHLT.clear()
+    take_screenshots(force)
     missing = [n for n in SCENES if not img(n).exists()]
     if missing:
         print("Bilder fehlen:", ", ".join(missing))
         return 1
-    fonts()
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / "Volta1-Produktflyer-de.pdf"
+    path = OUT / f"Volta1-Produktflyer-{lang}.pdf"
     c = pdfcanvas.Canvas(str(path), pagesize=A4)
-    c.setTitle("Volta 1 – Das Elektronik-Labor · Produktinformation")
+    c.setTitle(T("Volta 1 – Das Elektronik-Labor · Produktinformation"))
     c.setAuthor("DC Software Engineering")
     ver = version()
     for draw in (lambda p: page_cover(p, ver), page_lab, page_measure, page_school, page_platforms,
                  lambda p: page_series(p, ver)):
         draw(Page(c))
         c.showPage()
+    if FEHLT:
+        print(f"Uebersetzung fehlt ({lang}):")
+        for f in sorted(FEHLT):
+            print("   ", repr(f))
+        return 1
     c.save()
     print("Flyer:", path)
+    return 0
+
+
+def main() -> int:
+    fonts()
+    langs = [sys.argv[sys.argv.index("--sprache") + 1]] if "--sprache" in sys.argv else ["de", "en"]
+    for lang in langs:
+        if build(lang, "--bilder" in sys.argv):
+            return 1
     return 0
 
 
