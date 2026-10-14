@@ -1,7 +1,8 @@
-// Zuse-Prototyp Z0 (docs/Konzept_Zuse.md): Werkbank mit fuenf Stufen aus NAND bis zum Halbaddierer.
+// Zuse-Prototyp Z0 (docs/Konzept_Zuse.md): Stufen mit Geschichte, Raetselkisten, Werkbank und Werkzeugkiste.
 // Offline, keine Datenerhebung: eigene Chips und Entwuerfe liegen nur in AppDataLocation.
 // Entwicklerhilfen: ZUSE_SCREENSHOT=<bild.png> (Bildschirmfoto statt Bedienung), ZUSE_SIZE=<b>x<h>,
-// ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|en, ZUSE_DEMO=<Stufen 1..5 mit Musterloesung>,
+// ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen loesen und zur letzten gehen),
+// ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=numbers|toolbox (Fenster oeffnen),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_SYMBOLS=din|us (Schaltzeichen).
 #include <QDir>
@@ -37,14 +38,20 @@ int main(int argc, char* argv[]) {
     const int demo = qEnvironmentVariableIntValue("ZUSE_DEMO");
     for (int s = 0; s < demo && s < workbench.stages().size(); ++s) {
         workbench.selectStage(s);
-        if (!workbench.isDone(workbench.stageKuerzel())) {
+        if (workbench.isDone(workbench.stageKuerzel()) || s + 1 >= demo) continue;
+        if (workbench.stageKind() == QStringLiteral("entdecken")) {
+            for (const QVariant& b : workbench.boxes())
+                if (!b.toMap().value("symbol").toString().isEmpty()) workbench.selectBox(b.toMap().value("index").toInt());
+            workbench.confirmBox();
+        } else {
             workbench.showSolution();
             workbench.check();
-            if (s + 1 < demo) workbench.createChip();
+            workbench.createChip();
         }
     }
 
     if (qEnvironmentVariableIsSet("ZUSE_SYMBOLS")) workbench.setSymbolStyle(qEnvironmentVariable("ZUSE_SYMBOLS"));
+    if (qEnvironmentVariableIsSet("ZUSE_DEMO_BOX")) workbench.selectBox(qEnvironmentVariableIntValue("ZUSE_DEMO_BOX"));
     for (const QString& name : qEnvironmentVariable("ZUSE_DEMO_ON").split(',', Qt::SkipEmptyParts))
         workbench.toggleInput(name);
     for (const QString& id : qEnvironmentVariable("ZUSE_DEMO_INSIDE").split('/', Qt::SkipEmptyParts))
@@ -63,6 +70,9 @@ int main(int argc, char* argv[]) {
         window->setWidth(size[0].toInt());
         window->setHeight(size[1].toInt());
     }
+    const QString popup = qEnvironmentVariable("ZUSE_DEMO_POPUP");
+    if (window && !popup.isEmpty())
+        if (QObject* p = window->findChild<QObject*>(popup)) QMetaObject::invokeMethod(p, "open");
     const QString shot = qEnvironmentVariable("ZUSE_SCREENSHOT");
     if (window && !shot.isEmpty()) {
         QTimer::singleShot(1200, &app, [window, shot] {

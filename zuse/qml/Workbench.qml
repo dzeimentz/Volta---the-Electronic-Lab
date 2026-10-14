@@ -147,6 +147,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     x: port.modelData.input ? -width + 4 : port.width - 4
                     name: port.modelData.name
+                    label: port.modelData.label || ""
                     kind: port.modelData.kind
                     level: port.modelData.level
                     enabled: bench.editable

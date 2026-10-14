@@ -85,13 +85,30 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         s.title = localized(o.value("titel"), language);
         s.question = localized(o.value("frage"), language);
         s.hint = localized(o.value("hilfe"), language);
-        for (const QJsonValue& x : o.value("eingaenge").toArray()) s.inputs << x.toString();
-        for (const QJsonValue& x : o.value("ausgaenge").toArray()) s.outputs << x.toString();
-        const QJsonArray kinds = o.value("eingabearten").toArray();
-        for (qsizetype i = 0; i < s.inputs.size(); ++i)
-            s.inputKinds << (i < kinds.size() && kinds.at(i).toString() == "taster" ? QStringLiteral("taster")
-                                                                                   : QStringLiteral("kipp"));
-        s.makesChip = o.value("chip").toBool(true);
+        s.kind = o.value("art").toString("bauen");
+        s.story = localized(o.value("geschichte"), language);
+        s.merksatz = localized(o.value("merksatz"), language);
+        s.name = localized(o.value("name"), language);
+        s.tool = o.value("werkzeug").toString();
+        // Eingaenge: {"name", "bezeichnung", "art"} oder nur der Name (aeltere Stufen)
+        for (const QJsonValue& x : o.value("eingaenge").toArray()) {
+            const QJsonObject e = x.toObject();
+            s.inputs << (x.isString() ? x.toString() : e.value("name").toString());
+            s.inputLabels << (x.isString() ? QString() : localized(e.value("bezeichnung"), language));
+            s.inputKinds << (e.value("art").toString() == "taster" ? QStringLiteral("taster") : QStringLiteral("kipp"));
+        }
+        for (const QJsonValue& x : o.value("ausgaenge").toArray()) {
+            const QJsonObject e = x.toObject();
+            s.outputs << (x.isString() ? x.toString() : e.value("name").toString());
+            s.outputLabels << (x.isString() ? QString() : localized(e.value("bezeichnung"), language));
+        }
+        for (const QJsonValue& k : o.value("kisten").toArray()) {
+            std::vector<std::vector<Level>> table;
+            for (const QJsonValue& row : k.toObject().value("tabelle").toArray()) table.push_back(parseLevels(row.toString()));
+            s.boxes.push_back(table);
+        }
+        s.rightBox = o.value("richtig").toInt(-1);
+        s.makesChip = s.kind == "bauen" && o.value("chip").toBool(true);
         for (const QJsonValue& x : o.value("bausteine").toArray()) s.palette << x.toString();
         for (const QJsonValue& x : o.value("wahrheitstabelle").toArray()) s.table.push_back(parseLevels(x.toString()));
         QJsonObject sol = o.value("loesung").toObject();
@@ -112,6 +129,7 @@ void WorkbenchController::load() {
     }
     for (const QJsonValue& v : root.value("geschafft").toArray()) m_done.insert(v.toString());
     if (root.value("schaltzeichen").toString() == "us") m_symbolStyle = QStringLiteral("us");
+    m_numbersVisible = root.value("zahlen").toBool(true);
     const QJsonObject drafts = root.value("entwuerfe").toObject();
     for (auto it = drafts.begin(); it != drafts.end(); ++it) {
         ChipDef d;
@@ -131,7 +149,7 @@ void WorkbenchController::save() const {
     QSaveFile f(QDir(m_dataDir).filePath("werkbank.json"));
     if (!f.open(QIODevice::WriteOnly)) return;
     f.write(QJsonDocument(QJsonObject{{"schema_version", 1}, {"chips", chips}, {"geschafft", done}, {"entwuerfe", drafts},
-                                         {"schaltzeichen", m_symbolStyle}})
+                                         {"schaltzeichen", m_symbolStyle}, {"zahlen", m_numbersVisible}})
                 .toJson());
     f.commit();
 }
@@ -170,11 +188,15 @@ QVariantList WorkbenchController::palette() const {
     QVariantList list;
     if (m_stages.empty()) return list;
     for (const QString& type : m_stages[size_t(m_stage)].palette) {
-        const bool chip = !primitiveFromName(type.toStdString());
-        if (chip && !m_library.find(type.toStdString())) continue; // noch nicht gebaut
+        const QString name = toolName(type); // leer: noch nicht entdeckt bzw. gebaut
+        if (name.isEmpty()) continue;
         bool inv = false;
         const QString sym = symbolOf(type, &inv);
-        list.append(QVariantMap{{"type", type}, {"symbol", sym}, {"inverted", inv}, {"own", chip}});
+        list.append(QVariantMap{{"type", type},
+                                {"name", name},
+                                {"symbol", sym},
+                                {"inverted", inv},
+                                {"own", !primitiveFromName(type.toStdString()).has_value()}});
     }
     return list;
 }
@@ -205,7 +227,9 @@ void WorkbenchController::startStage(int index) {
     m_undo.clear();
     m_checkDone = false;
     m_check = CheckResult{};
-    setMessage(QString());
+    m_box = -1;
+    m_seen.assign(s.table.size(), 0);
+    setMessage(QString(), s.kind == "entdecken" ? QStringLiteral("erklaerend") : QStringLiteral("zeigend"));
     rebuild();
     emit stageChanged();
     emit stagesChanged();
@@ -232,7 +256,7 @@ void WorkbenchController::push(const ChipDef& after, const QString& text) {
 QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
     if (inside() || m_stages.empty() || !m_stages[size_t(m_stage)].palette.contains(type)) return {};
     const std::string t = type.toStdString();
-    if (!primitiveFromName(t) && !m_library.find(t)) return {};
+    if (toolName(type).isEmpty()) return {}; // Werkzeug noch nicht in der Kiste
     // ID: Anfangsbuchstabe des Typs und laufende Nummer
     const std::string prefix(1, char(std::tolower(static_cast<unsigned char>(t[0]))));
     std::string id;
@@ -320,7 +344,8 @@ void WorkbenchController::showSolution() {
     after.parts = m_stages[size_t(m_stage)].solution.parts;
     after.connections = m_stages[size_t(m_stage)].solution.connections;
     push(after, tr("Musterlösung"));
-    setMessage(tr("Das ist die Musterlösung. Prüfe sie – und baue sie danach gern selbst nach."));
+    setMessage(tr("So könnte es gehen. Prüfe die Lösung – und bau sie danach gern selbst nach."),
+               QStringLiteral("erklaerend"));
 }
 
 void WorkbenchController::undo() {
@@ -362,10 +387,17 @@ void WorkbenchController::setInput(const QString& name, bool on) {
         m_sim.setInput(size_t(i), l);
         m_sim.settle();
     }
+    if (isDiscover() && m_box >= 0 && currentRow() < m_seen.size()) m_seen[currentRow()] = 1; // ausprobiert
     emit viewChanged();
 }
 
 Level WorkbenchController::levelAt(const QString& endpoint) const {
+    if (isDiscover()) { // keine Werkbank: Schalter und die eingesetzte Raetselkiste
+        const Stage& s = m_stages[size_t(m_stage)];
+        const qsizetype in = s.inputs.indexOf(endpoint), out = s.outputs.indexOf(endpoint);
+        if (in >= 0) return m_inputs[size_t(in)];
+        return out >= 0 ? boxOutput(size_t(out)) : Level::X;
+    }
     const Scope* scope = shownScope();
     if (!m_netOk || !scope) return Level::X;
     const auto it = scope->endpoints.find(endpoint.toStdString());
@@ -385,13 +417,16 @@ void WorkbenchController::check() {
     m_check = checkTruthTable(m_netlist, m_stages[size_t(m_stage)].table);
     m_checkDone = true;
     if (m_check.passed && !m_stages[size_t(m_stage)].makesChip)
-        setMessage(tr("Alle Zeilen stimmen! Schalter und LEDs machen, was sie sollen."));
+        setMessage(tr("Alles richtig! Schalter und LEDs machen, was sie sollen."), QStringLiteral("froehlich"));
     else if (m_check.passed)
-        setMessage(tr("Alle Zeilen stimmen! Du kannst jetzt einen Chip daraus machen."));
+        setMessage(tr("Alles richtig! Pack deine Erfindung ein, dann kannst du sie immer wieder benutzen."),
+                   QStringLiteral("froehlich"));
     else if (m_check.oscillating)
-        setMessage(tr("Die Schaltung kommt nicht zur Ruhe – sie schwingt."));
+        setMessage(tr("Die Schaltung kommt nicht zur Ruhe – sie schwingt."), QStringLiteral("ueberrascht"));
     else
-        setMessage(tr("Noch nicht ganz: Die markierten Zeilen weichen ab. Schalte die Eingänge so und sieh nach."));
+        setMessage(tr("Noch nicht ganz: Die markierten Zeilen stimmen nicht. Stell die Schalter so ein und schau, "
+                      "was passiert."),
+                   QStringLiteral("gruebelnd"));
     emit checkChanged();
 }
 
@@ -404,7 +439,13 @@ QVariantList WorkbenchController::checkRows() const {
         QString in;
         for (qsizetype i = 0; i < s.inputs.size(); ++i) in += ((r >> (s.inputs.size() - 1 - i)) & 1u) ? '1' : '0';
         QVariantMap row{{"inputs", in}, {"expected", joinLevels(s.table[r])}};
-        if (m_checkDone && r < m_check.rows.size()) {
+        if (s.kind == "entdecken") { // was die eingesetzte Kiste bisher gezeigt hat; das Soll findet das Kind selbst
+            const bool seen = m_box >= 0 && r < m_seen.size() && m_seen[r];
+            row.insert("expected", QString());
+            row.insert("actual", seen ? joinLevels(s.boxes[size_t(m_box)][r]) : QString());
+            row.insert("ok", true);
+            row.insert("current", r == currentRow());
+        } else if (m_checkDone && r < m_check.rows.size()) {
             row.insert("actual", joinLevels(m_check.rows[r].actual));
             row.insert("ok", m_check.rows[r].ok);
         } else {
@@ -427,7 +468,7 @@ bool WorkbenchController::createChip() {
     if (!s.makesChip) { // Stufe ohne Chip: nur geschafft
         m_done.insert(s.kuerzel);
         save();
-        setMessage(tr("Geschafft! Weiter geht es mit der nächsten Stufe."));
+        setMessage(tr("Geschafft! Weiter geht es mit der nächsten Stufe."), QStringLiteral("begeistert"));
         m_checkDone = false;
         emit checkChanged();
         emit stagesChanged();
@@ -439,7 +480,8 @@ bool WorkbenchController::createChip() {
     m_library.add(chip);
     m_done.insert(s.kuerzel);
     save();
-    setMessage(tr("Neuer Chip im Fach: %1 ★").arg(s.kuerzel));
+    setMessage(tr("Eingepackt! »%1« liegt jetzt in deiner Werkzeugkiste.").arg(s.name.isEmpty() ? s.kuerzel : s.name),
+               QStringLiteral("begeistert"));
     m_checkDone = false;
     emit checkChanged();
     emit stagesChanged();
@@ -613,7 +655,15 @@ QVariantList WorkbenchController::ports() const {
                 if (i >= 0) kind = s.inputKinds.value(i, kind);
             }
         }
+        QString label;
+        if (!inside() && !m_stages.empty()) {
+            const Stage& s = m_stages[size_t(m_stage)];
+            const QString n = QString::fromStdString(p.name);
+            label = p.direction == Direction::In ? s.inputLabels.value(s.inputs.indexOf(n))
+                                                 : s.outputLabels.value(s.outputs.indexOf(n));
+        }
         list.append(QVariantMap{{"name", QString::fromStdString(p.name)},
+                                {"label", label},
                                 {"input", p.direction == Direction::In},
                                 {"kind", kind},
                                 {"x", x},
@@ -641,6 +691,39 @@ QVariantList WorkbenchController::wires() const {
     return list;
 }
 
+QVariantMap WorkbenchController::numberOf(const std::vector<Level>& bits) {
+    QString bin;
+    bool known = true;
+    int value = 0;
+    for (Level l : bits) {
+        bin += QChar(toChar(l));
+        known = known && l != Level::X;
+        value = value * 2 + (l == Level::One ? 1 : 0);
+    }
+    const QString q = QStringLiteral("?");
+    return QVariantMap{{"bits", int(bits.size())},
+                       {"bin", bin},
+                       {"dec", known ? QString::number(value) : q},
+                       {"hex", known ? QString::number(value, 16).toUpper() : q},
+                       {"value", known ? value : -1}};
+}
+
+QVariantMap WorkbenchController::inputNumber() const { return numberOf(m_inputs); }
+
+QVariantMap WorkbenchController::outputNumber() const {
+    std::vector<Level> bits;
+    if (!m_stages.empty())
+        for (const QString& o : m_stages[size_t(m_stage)].outputs) bits.push_back(levelAt(o));
+    return numberOf(bits);
+}
+
+void WorkbenchController::setNumbersVisible(bool on) {
+    if (on == m_numbersVisible) return;
+    m_numbersVisible = on;
+    save();
+    emit numbersVisibleChanged();
+}
+
 void WorkbenchController::setSymbolStyle(const QString& style) {
     const QString next = style == "us" ? QStringLiteral("us") : QStringLiteral("din");
     if (next == m_symbolStyle) return;
@@ -649,10 +732,139 @@ void WorkbenchController::setSymbolStyle(const QString& style) {
     emit symbolStyleChanged();
 }
 
-void WorkbenchController::setMessage(const QString& text) {
-    if (m_message == text) return;
+void WorkbenchController::setMessage(const QString& text, const QString& pose) {
+    if (m_message == text && (pose.isEmpty() || pose == m_pose)) return;
     m_message = text;
+    if (!pose.isEmpty()) m_pose = pose;
     emit messageChanged();
+}
+
+// ---- Entdecken: Raetselkisten ----
+
+size_t WorkbenchController::currentRow() const {
+    size_t row = 0;
+    for (Level l : m_inputs) row = (row << 1) | (l == Level::One ? 1u : 0u);
+    return row;
+}
+
+Level WorkbenchController::boxOutput(size_t output) const {
+    if (!isDiscover() || m_box < 0) return Level::X; // keine Kiste eingesetzt: nichts angeschlossen
+    const auto& table = m_stages[size_t(m_stage)].boxes[size_t(m_box)];
+    const size_t row = currentRow();
+    return row < table.size() && output < table[row].size() ? table[row][output] : Level::X;
+}
+
+QVariantList WorkbenchController::boxes() const {
+    QVariantList list;
+    if (!isDiscover()) return list;
+    const Stage& s = m_stages[size_t(m_stage)];
+    const bool solved = m_done.contains(s.kuerzel);
+    for (size_t i = 0; i < s.boxes.size(); ++i) {
+        const bool right = int(i) == s.rightBox;
+        list.append(QVariantMap{{"index", int(i)},
+                                {"selected", int(i) == m_box},
+                                {"revealed", solved && right}, // nach dem Loesen zeigt die richtige Kiste ihr Zeichen
+                                {"symbol", right ? s.symbol : QString()},
+                                {"name", right ? s.kuerzel : QString()},
+                                {"inverted", right && s.inverted}});
+    }
+    return list;
+}
+
+void WorkbenchController::selectBox(int index) {
+    if (!isDiscover() || index < 0 || index >= int(m_stages[size_t(m_stage)].boxes.size()) || index == m_box) return;
+    m_box = index;
+    std::fill(m_seen.begin(), m_seen.end(), 0); // neue Kiste: neu ausprobieren
+    if (currentRow() < m_seen.size()) m_seen[currentRow()] = 1;
+    setMessage(tr("Kiste %1 ist eingesetzt. Probier die Schalter aus!").arg(index + 1), QStringLiteral("losgehts"));
+    emit viewChanged();
+    emit checkChanged();
+}
+
+bool WorkbenchController::confirmBox() {
+    if (!isDiscover()) return false;
+    const Stage& s = m_stages[size_t(m_stage)];
+    if (m_box < 0) {
+        setMessage(tr("Setz zuerst eine Kiste ein."), QStringLiteral("nachdenklich"));
+        return false;
+    }
+    if (m_box == s.rightBox) {
+        m_done.insert(s.kuerzel);
+        save();
+        setMessage(tr("Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.")
+                       .arg(s.kuerzel, s.merksatz),
+                   QStringLiteral("begeistert"));
+        emit stagesChanged();
+        emit viewChanged();
+        return true;
+    }
+    // erste Schalterstellung, in der die Kiste etwas anderes tut als verlangt: konkret erklaeren
+    const auto& table = s.boxes[size_t(m_box)];
+    for (size_t r = 0; r < s.table.size() && r < table.size(); ++r) {
+        if (table[r] == s.table[r]) continue;
+        QStringList setting;
+        for (qsizetype i = 0; i < s.inputs.size(); ++i) {
+            const bool on = (r >> (s.inputs.size() - 1 - i)) & 1u;
+            setting << QStringLiteral("%1 %2").arg(s.inputLabels.value(i, s.inputs[i]), on ? tr("an") : tr("aus"));
+        }
+        const QString label = s.outputLabels.value(0, s.outputs.value(0));
+        const QString does = table[r][0] == Level::One ? tr("an") : tr("aus");
+        const QString should = s.table[r][0] == Level::One ? tr("an") : tr("aus");
+        setMessage(tr("Fast! Bei »%1« ist %2 mit dieser Kiste %3 – es soll aber %4 sein. Probier eine andere Kiste.")
+                       .arg(setting.join(", "), label, does, should),
+                   QStringLiteral("nachdenklich"));
+        return false;
+    }
+    return false;
+}
+
+QString WorkbenchController::toolName(const QString& type) const {
+    if (primitiveFromName(type.toStdString())) {
+        for (const Stage& s : m_stages)
+            if (s.tool == type && m_done.contains(s.kuerzel)) return s.kuerzel; // entdeckt: UND, ODER, NICHT
+        return {};
+    }
+    return m_library.find(type.toStdString()) ? type : QString();
+}
+
+QVariantList WorkbenchController::tools() const {
+    QVariantList list;
+    for (const Stage& s : m_stages) {
+        if (!m_done.contains(s.kuerzel)) continue;
+        const bool discovered = s.kind == "entdecken" && !s.tool.isEmpty();
+        const bool invention = s.kind == "bauen" && s.makesChip && m_library.find(s.kuerzel.toStdString());
+        if (!discovered && !invention) continue;
+        list.append(QVariantMap{{"type", discovered ? s.tool : s.kuerzel},
+                                {"name", discovered ? s.kuerzel : (s.name.isEmpty() ? s.kuerzel : s.name)},
+                                {"merksatz", s.merksatz},
+                                {"symbol", s.symbol},
+                                {"inverted", s.inverted},
+                                {"invention", invention}});
+    }
+    return list;
+}
+
+QVariantList WorkbenchController::panelInputs() const {
+    QVariantList list;
+    if (m_stages.empty()) return list;
+    const Stage& s = m_stages[size_t(m_stage)];
+    for (qsizetype i = 0; i < s.inputs.size(); ++i)
+        list.append(QVariantMap{{"name", s.inputs[i]},
+                                {"label", s.inputLabels.value(i)},
+                                {"kind", s.inputKinds.value(i, QStringLiteral("kipp"))},
+                                {"level", levelChar(m_inputs[size_t(i)])}});
+    return list;
+}
+
+QVariantList WorkbenchController::panelOutputs() const {
+    QVariantList list;
+    if (m_stages.empty()) return list;
+    const Stage& s = m_stages[size_t(m_stage)];
+    for (qsizetype i = 0; i < s.outputs.size(); ++i)
+        list.append(QVariantMap{{"name", s.outputs[i]},
+                                {"label", s.outputLabels.value(i)},
+                                {"level", levelChar(levelAt(s.outputs[i]))}});
+    return list;
 }
 
 } // namespace zuse

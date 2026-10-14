@@ -2,21 +2,25 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-// Zuse-Prototyp Z0: Werkbank mit Stufen (Bauteilfach links, Werkbank Mitte, Aufgabe und Pruefung rechts)
+// Zuse 1 (Prototyp Z0): Zetti erzaehlt links, in der Mitte Raetselkisten (entdecken) oder Werkbank (bauen),
+// rechts die Tabelle mit Pruefen bzw. »Diese Kiste passt«. Oben: Stufen, Zahlen, Werkzeugkiste, Rueckgaengig.
+// Unter der Mitte (zuschaltbar): Schalter und LEDs als Binaer-, Dezimal- und Hexadezimalzahl.
 ApplicationWindow {
     id: win
     width: 1280
     height: 800
-    minimumWidth: 960
-    minimumHeight: 600
+    minimumWidth: 1024
+    minimumHeight: 640
     visible: true
     color: ZTheme.graphite
-    title: qsTr("Zuse 1 – Werkbank (Prototyp)")
+    title: qsTr("Zuse 1 – Computertechnik für Einsteiger (Prototyp)")
 
-    property bool hintVisible: false
+    readonly property bool building: workbench.stageKind === "bauen"
+    readonly property bool hasNext: workbench.stageIndex + 1 < workbench.stages.length
+
     Connections {
         target: workbench
-        function onStageChanged() { win.hintVisible = false; bench.clearSelection() }
+        function onStageChanged() { bench.clearSelection() }
     }
 
     function removeSelection() {
@@ -24,6 +28,7 @@ ApplicationWindow {
         else if (bench.selectedWire >= 0) workbench.removeWire(bench.selectedWire)
         bench.clearSelection()
     }
+    function next() { workbench.selectStage(workbench.stageIndex + 1) }
 
     Shortcut { sequence: StandardKey.Undo; onActivated: workbench.undo() }
     Shortcut { sequences: [StandardKey.Redo, "Ctrl+Y"]; onActivated: workbench.redo() }
@@ -31,41 +36,62 @@ ApplicationWindow {
     Shortcut { sequence: "Escape"; onActivated: workbench.inside ? workbench.leaveTo(workbench.path.length - 2) : bench.clearSelection() }
 
     header: Rectangle {
-        height: 68
+        height: 72
         color: ZTheme.surface
+        Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: ZTheme.line }
         RowLayout {
             anchors.fill: parent
             anchors.leftMargin: 16
             anchors.rightMargin: 16
-            spacing: 10
-            Image { // Symbol Zuse 1 (zuse/resources/icons/zuse1.svg)
+            spacing: 12
+            Image {
                 source: "qrc:/zuse/zuse1_64.png"
                 sourceSize: Qt.size(64, 64)
-                Layout.preferredWidth: 48
-                Layout.preferredHeight: 48
-                smooth: true
+                Layout.preferredWidth: 48; Layout.preferredHeight: 48
             }
             Text {
-                text: "// " + qsTr("Werkbank")
-                color: ZTheme.text
-                font.family: ZTheme.mono; font.pixelSize: 20
+                text: "Zuse 1"
+                color: ZTheme.navy
+                font.pixelSize: 24; font.bold: true
             }
             Item { Layout.preferredWidth: 12 }
-            Repeater { // Stufen
+            Repeater { // Stufen als Nummern: geschafft mit Haken, gesperrt blass
                 model: workbench.stages
-                delegate: ZButton {
+                delegate: Rectangle {
+                    id: dot
                     required property var modelData
-                    text: (modelData.index + 1).toString().padStart(2, "0") + " · " + modelData.kuerzel
-                          + (modelData.done ? " ✓" : "")
-                    enabled: modelData.unlocked
-                    primary: modelData.index === workbench.stageIndex
-                    onClicked: workbench.selectStage(modelData.index)
-                    ToolTip.visible: hovered
+                    readonly property bool current: modelData.index === workbench.stageIndex
+                    width: 48; height: 48; radius: 24
+                    color: current ? ZTheme.navy : modelData.done ? ZTheme.okBg : ZTheme.surface
+                    border.width: 2
+                    border.color: current ? ZTheme.navy : modelData.done ? ZTheme.ok : ZTheme.line
+                    opacity: modelData.unlocked ? 1 : 0.45
+                    Text {
+                        anchors.centerIn: parent
+                        text: dot.modelData.done && !dot.current ? "✓" : String(dot.modelData.index)
+                        color: dot.current ? ZTheme.textOnAccent : dot.modelData.done ? ZTheme.ok : ZTheme.text
+                        font.pixelSize: 20; font.bold: true
+                    }
+                    HoverHandler { id: dotHover }
+                    ToolTip.visible: dotHover.hovered
                     ToolTip.text: modelData.title + (modelData.unlocked ? "" : " – " + qsTr("noch gesperrt"))
+                    TapHandler { enabled: dot.modelData.unlocked; onTapped: workbench.selectStage(dot.modelData.index) }
                 }
             }
             Item { Layout.fillWidth: true }
+            ZButton { // Zahlenleiste ein/aus
+                text: "0b 0x"
+                primary: workbench.numbersVisible
+                onClicked: workbench.numbersVisible = !workbench.numbersVisible
+                Accessible.name: qsTr("Zahlensysteme anzeigen")
+                ToolTip.visible: hovered; ToolTip.text: qsTr("Zahlen binär, dezimal und hexadezimal anzeigen")
+            }
             ZButton {
+                text: qsTr("Werkzeugkiste") + " (" + workbench.tools.length + ")"
+                onClicked: toolbox.open()
+            }
+            ZButton {
+                visible: win.building
                 text: "↶"
                 font.family: "Segoe UI Symbol"
                 font.pixelSize: 24
@@ -75,6 +101,7 @@ ApplicationWindow {
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Rückgängig")
             }
             ZButton {
+                visible: win.building
                 text: "↷"
                 font.family: "Segoe UI Symbol"
                 font.pixelSize: 24
@@ -91,107 +118,26 @@ ApplicationWindow {
         anchors.margins: 12
         spacing: 12
 
-        // Bauteilfach: antippen setzt den Baustein, ziehen legt ihn an die Stelle
-        ColumnLayout {
-            Layout.preferredWidth: 150
+        StoryPanel {
+            Layout.preferredWidth: 300
             Layout.fillWidth: false
             Layout.fillHeight: true
-            spacing: 10
-            Text {
-                text: "// " + qsTr("Bausteine")
-                color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 16
-            }
-            Repeater {
-                model: workbench.palette
-                delegate: Rectangle {
-                    id: tile
-                    required property var modelData
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 84
-                    radius: ZTheme.radius
-                    color: ZTheme.surface
-                    border.color: modelData.own ? ZTheme.accentDim : ZTheme.line
-                    border.width: 2
-                    opacity: workbench.inside ? 0.5 : 1
-                    GateShape {
-                        anchors { left: parent.left; leftMargin: 10; verticalCenter: parent.verticalCenter }
-                        width: 66; height: 56
-                        symbol: tile.modelData.symbol
-                        inverted: tile.modelData.inverted
-                        us: workbench.symbolStyle === "us"
-                        stroke: ZTheme.muted
-                        fontSize: 22
-                    }
-                    Text {
-                        anchors { right: parent.right; rightMargin: 12; verticalCenter: parent.verticalCenter }
-                        text: (tile.modelData.own ? "★ " : "") + tile.modelData.type
-                        color: tile.modelData.own ? ZTheme.accent : ZTheme.muted
-                        font.family: ZTheme.mono; font.pixelSize: 14
-                    }
-                    TapHandler { enabled: !workbench.inside; onTapped: bench.placePart(tile.modelData.type) }
-                    DragHandler {
-                        id: paletteDrag
-                        target: null
-                        enabled: !workbench.inside
-                        onActiveChanged: {
-                            if (active) {
-                                ghost.symbol = tile.modelData.symbol
-                                ghost.visible = true
-                            } else {
-                                ghost.visible = false
-                                bench.dropPart(tile.modelData.type, centroid.scenePosition.x, centroid.scenePosition.y)
-                            }
-                        }
-                        onCentroidChanged: if (active) {
-                            ghost.x = centroid.scenePosition.x - ghost.width / 2
-                            ghost.y = centroid.scenePosition.y - ghost.height / 2
-                        }
-                    }
-                }
-            }
-            Item { Layout.fillHeight: true }
-            Text {
-                text: "// " + qsTr("Schaltzeichen")
-                color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 14
-            }
-            RowLayout { // Schaltzeichen nach DIN oder US
-                Layout.fillWidth: true
-                spacing: 4
-                ZButton {
-                    Layout.fillWidth: true
-                    text: "DIN"
-                    primary: workbench.symbolStyle === "din"
-                    onClicked: workbench.symbolStyle = "din"
-                    ToolTip.visible: hovered; ToolTip.text: qsTr("Schaltzeichen nach DIN EN 60617")
-                }
-                ZButton {
-                    Layout.fillWidth: true
-                    text: "US"
-                    primary: workbench.symbolStyle === "us"
-                    onClicked: workbench.symbolStyle = "us"
-                    ToolTip.visible: hovered; ToolTip.text: qsTr("Schaltzeichen nach IEEE Std 91 (US)")
-                }
-            }
-            ZButton {
-                Layout.fillWidth: true
-                text: qsTr("Entfernen")
-                enabled: !workbench.inside && (bench.selectedPart !== "" || bench.selectedWire >= 0)
-                onClicked: win.removeSelection()
-            }
-            ZButton {
-                Layout.fillWidth: true
-                text: qsTr("Leeren")
-                enabled: !workbench.inside && workbench.parts.length > 0
-                onClicked: workbench.clearBench()
-            }
         }
 
-        // Werkbank mit Pfadanzeige (Blick hinein)
+        // Mitte: Raetselkisten oder Werkbank mit Werkzeugen, darunter die Zahlenleiste
         ColumnLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: 8
-            RowLayout {
+
+            DiscoverStage {
+                visible: !win.building
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+
+            RowLayout { // Pfad beim Blick hinein
+                visible: win.building
                 spacing: 6
                 Repeater {
                     model: workbench.path
@@ -199,10 +145,7 @@ ApplicationWindow {
                         required property string modelData
                         required property int index
                         spacing: 6
-                        Text {
-                            visible: index > 0
-                            text: "›"; color: ZTheme.muted; font.pixelSize: 22
-                        }
+                        Text { visible: index > 0; text: "›"; color: ZTheme.muted; font.pixelSize: 22 }
                         ZButton {
                             text: modelData
                             primary: index === workbench.path.length - 1
@@ -212,68 +155,124 @@ ApplicationWindow {
                 }
                 Text {
                     Layout.leftMargin: 8
-                    text: workbench.inside ? qsTr("Zurück: auf den Pfad tippen") : qsTr("Doppelt tippen: Blick in einen ★-Chip")
-                    color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 14
+                    text: workbench.inside ? qsTr("Zurück: auf den Pfad tippen")
+                                           : qsTr("Doppelt tippen: in eine ★-Erfindung hineinschauen")
+                    color: ZTheme.muted; font.pixelSize: 14
                 }
             }
-            Workbench {
-                id: bench
+            RowLayout {
+                visible: win.building
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                spacing: 10
+                ColumnLayout { // Werkzeuge der Stufe: antippen setzt, ziehen legt ab
+                    Layout.preferredWidth: 120
+                    Layout.fillWidth: false
+                    Layout.fillHeight: true
+                    spacing: 8
+                    Repeater {
+                        model: workbench.palette
+                        delegate: Rectangle {
+                            id: tile
+                            required property var modelData
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: 96
+                            radius: 14
+                            color: modelData.own ? "#FFF7E6" : "#ECFAFD"
+                            border.color: modelData.own ? ZTheme.pad : ZTheme.accentDim
+                            border.width: 2
+                            opacity: workbench.inside ? 0.5 : 1
+                            GateShape {
+                                anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 6 }
+                                width: 70; height: 56
+                                symbol: tile.modelData.symbol
+                                inverted: tile.modelData.inverted
+                                us: workbench.symbolStyle === "us"
+                                stroke: ZTheme.navy
+                                fontSize: tile.modelData.symbol.length > 2 ? 16 : 22
+                            }
+                            Text {
+                                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 6 }
+                                text: (tile.modelData.own ? "★ " : "") + tile.modelData.name
+                                color: ZTheme.navy
+                                font.pixelSize: 14; font.bold: true
+                            }
+                            TapHandler { enabled: !workbench.inside; onTapped: bench.placePart(tile.modelData.type) }
+                            DragHandler {
+                                target: null
+                                enabled: !workbench.inside
+                                onActiveChanged: {
+                                    if (active) {
+                                        ghost.symbol = tile.modelData.symbol
+                                        ghost.visible = true
+                                    } else {
+                                        ghost.visible = false
+                                        bench.dropPart(tile.modelData.type, centroid.scenePosition.x, centroid.scenePosition.y)
+                                    }
+                                }
+                                onCentroidChanged: if (active) {
+                                    ghost.x = centroid.scenePosition.x - ghost.width / 2
+                                    ghost.y = centroid.scenePosition.y - ghost.height / 2
+                                }
+                            }
+                        }
+                    }
+                    Item { Layout.fillHeight: true }
+                    ZButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Entfernen")
+                        enabled: !workbench.inside && (bench.selectedPart !== "" || bench.selectedWire >= 0)
+                        onClicked: win.removeSelection()
+                    }
+                    ZButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Leeren")
+                        enabled: !workbench.inside && workbench.parts.length > 0
+                        onClicked: workbench.clearBench()
+                    }
+                }
+                Workbench {
+                    id: bench
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+            }
+
+            NumberStrip {
+                visible: workbench.numbersVisible
+                Layout.fillWidth: true
+                onExplain: numbers.open()
             }
         }
 
-        // Aufgabe, Wahrheitstabelle, Pruefen, Chip erstellen
+        // Rechts: Tabelle und Aktion
         Rectangle {
-            Layout.preferredWidth: 300
+            Layout.preferredWidth: 280
+            Layout.fillWidth: false
             Layout.fillHeight: true
-            radius: 14
+            radius: 18
             color: ZTheme.surface
+            border.color: ZTheme.line
             ColumnLayout {
                 anchors.fill: parent
                 anchors.margins: 16
-                spacing: 12
+                spacing: 10
                 Text {
-                    Layout.fillWidth: true
-                    text: workbench.stageTitle
-                    color: ZTheme.text; font.pixelSize: 22; font.bold: true
-                    wrapMode: Text.WordWrap
+                    text: win.building ? qsTr("Wahrheitstabelle") : qsTr("Was passiert?")
+                    color: ZTheme.navy
+                    font.pixelSize: 20; font.bold: true
                 }
-                Text {
-                    Layout.fillWidth: true
-                    text: workbench.stageQuestion
-                    color: ZTheme.accent; font.pixelSize: 17
-                    wrapMode: Text.WordWrap
-                }
-                Text {
-                    Layout.fillWidth: true
-                    visible: win.hintVisible
-                    text: workbench.stageHint
-                    color: ZTheme.text; font.pixelSize: 15
-                    wrapMode: Text.WordWrap
-                }
-                RowLayout {
-                    ZButton { text: win.hintVisible ? qsTr("Tipp aus") : qsTr("Tipp"); onClicked: win.hintVisible = !win.hintVisible }
-                    ZButton { text: qsTr("Lösung"); enabled: !workbench.inside; onClicked: workbench.showSolution() }
-                }
-                Text {
-                    text: "// " + qsTr("Wahrheitstabelle")
-                    color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15
-                }
-                TruthPanel {
-                    Layout.fillWidth: true
-                    inputNames: workbench.stageInputs
-                    outputNames: workbench.stageOutputs
-                }
+                TruthPanel { Layout.fillWidth: true }
                 Item { Layout.fillHeight: true }
-                Text {
+                ZButton { // entdecken
+                    visible: !win.building && !workbench.stageDone
                     Layout.fillWidth: true
-                    text: workbench.message
-                    color: workbench.checkState === "failed" ? ZTheme.bad : ZTheme.text
-                    font.pixelSize: 15
-                    wrapMode: Text.WordWrap
+                    text: qsTr("Diese Kiste passt!")
+                    primary: workbench.boxIndex >= 0
+                    onClicked: workbench.confirmBox()
                 }
-                ZButton {
+                ZButton { // bauen
+                    visible: win.building && !workbench.stageDone
                     Layout.fillWidth: true
                     text: qsTr("Prüfen")
                     primary: !workbench.chipReady
@@ -281,24 +280,35 @@ ApplicationWindow {
                     onClicked: workbench.check()
                 }
                 ZButton {
+                    visible: win.building && !workbench.stageDone
                     Layout.fillWidth: true
-                    text: workbench.stageMakesChip ? "★ " + qsTr("Chip erstellen") : qsTr("Geschafft – weiter")
+                    text: workbench.stageMakesChip ? qsTr("Erfindung einpacken") : qsTr("Geschafft!")
                     primary: workbench.chipReady
                     enabled: workbench.chipReady
                     onClicked: workbench.createChip()
+                }
+                ZButton {
+                    visible: workbench.stageDone && win.hasNext
+                    Layout.fillWidth: true
+                    text: qsTr("Weiter") + " →"
+                    primary: true
+                    onClicked: win.next()
                 }
             }
         }
     }
 
-    Rectangle { // Baustein, der gerade aus dem Fach gezogen wird
+    ToolboxPopup { id: toolbox; objectName: "toolbox" }
+    NumbersPopup { id: numbers; objectName: "numbers" }
+
+    Rectangle { // Werkzeug, das gerade auf die Werkbank gezogen wird
         id: ghost
         property string symbol
         visible: false
         z: 100
         width: 120; height: 112
         radius: ZTheme.radius
-        color: ZTheme.surfaceHigh
+        color: ZTheme.surface
         border.color: ZTheme.accent; border.width: 2
         opacity: 0.85
         Text {

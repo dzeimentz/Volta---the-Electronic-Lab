@@ -33,6 +33,11 @@ qt_add_qml_module(zuse_app
         qml/Workbench.qml
         qml/GateBody.qml
         qml/GateShape.qml
+        qml/DiscoverStage.qml
+        qml/StoryPanel.qml
+        qml/ToolboxPopup.qml
+        qml/NumberStrip.qml
+        qml/NumbersPopup.qml
         qml/PinPad.qml
         qml/PanelPort.qml
         qml/TruthPanel.qml
@@ -46,6 +51,9 @@ if(WIN32)
 endif()
 qt_add_resources(zuse_app "zuse_icons" PREFIX "/zuse" BASE resources/icons FILES
     resources/icons/zuse1_64.png resources/icons/zuse1_256.png)
+# Maskottchen Zetti (tools/make_zetti.py)
+file(GLOB zuse_zetti RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" CONFIGURE_DEPENDS resources/zetti/*.png)
+qt_add_resources(zuse_app "zuse_zetti" PREFIX "/zuse" BASE resources FILES ${zuse_zetti})
 qt_add_resources(zuse_app "zuse_content" PREFIX "/zuse" BASE content FILES content/stufen.json)
 target_link_libraries(zuse_app PRIVATE zuse_model Qt6::Quick Qt6::QuickControls2)
 

@@ -1,34 +1,65 @@
 {
- "schema_version": 1,
- "hinweis": "Prototyp Z0 der Werkbank (docs/Konzept_Zuse.md, Stufen 1-3). Wahrheitstabelle: Ausgaenge je Zeile, Eingaenge binaer aufsteigend.",
+ "schema_version": 2,
+ "hinweis": "Zuse 1 Prototyp: jede Stufe beginnt mit einer Geschichte; »entdecken« mit Raetselkisten, »bauen« auf der Werkbank. Wahrheitstabelle: Ausgaenge je Zeile, Eingaenge binaer aufsteigend (erster Eingang hoechstes Bit).",
  "stufen": [
   {
    "kuerzel": "BIT",
-   "symbol": "",
+   "art": "bauen",
    "chip": false,
+   "symbol": "",
    "titel": {
-    "de": "Ein Bit: Schalter und LED",
-    "en": "One bit: switch and LED"
+    "de": "Licht an!",
+    "en": "Lights on!"
+   },
+   "geschichte": {
+    "de": "Ein Rechner kennt nur zwei Zustände: an und aus – genau wie ein Lichtschalter.",
+    "en": "A computer only knows two states: on and off – just like a light switch."
    },
    "frage": {
-    "de": "Wie zeigt ein Rechner, ob etwas an oder aus ist?",
-    "en": "How does a computer show whether something is on or off?"
+    "de": "Wie sagt man einem Rechner »Ja« oder »Nein«?",
+    "en": "How do you tell a computer »yes« or »no«?"
    },
    "hilfe": {
-    "de": "Zieh eine Leitung vom Kippschalter A zur LED X und vom Taster B zur LED Y. Ein Kippschalter bleibt stehen, ein Taster nur solange du drückst.",
-    "en": "Draw a wire from toggle switch A to LED X and from push button B to LED Y. A toggle switch stays put, a push button only while you press it."
+    "de": "Zieh eine Leitung vom Lichtschalter zur Lampe und vom Klingelknopf zur Klingel. Der Kippschalter bleibt stehen, der Taster nur, solange du drückst.",
+    "en": "Draw a wire from the light switch to the lamp and from the bell button to the bell. The toggle switch stays put, the push button only while you press it."
+   },
+   "merksatz": {
+    "de": "An ist 1, aus ist 0 – das ist ein Bit.",
+    "en": "On is 1, off is 0 – that is one bit."
    },
    "eingaenge": [
-    "A",
-    "B"
-   ],
-   "eingabearten": [
-    "kipp",
-    "taster"
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Lichtschalter",
+      "en": "Light switch"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Klingelknopf",
+      "en": "Bell button"
+     },
+     "art": "taster"
+    }
    ],
    "ausgaenge": [
-    "X",
-    "Y"
+    {
+     "name": "X",
+     "bezeichnung": {
+      "de": "Lampe",
+      "en": "Lamp"
+     }
+    },
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Klingel",
+      "en": "Bell"
+     }
+    }
    ],
    "bausteine": [],
    "wahrheitstabelle": [
@@ -53,157 +84,320 @@
   },
   {
    "kuerzel": "NICHT",
+   "art": "entdecken",
+   "werkzeug": "NOT",
    "symbol": "1",
    "invertiert": true,
    "titel": {
-    "de": "Das NICHT-Gatter",
-    "en": "The NOT gate"
+    "de": "Das Nachtlicht",
+    "en": "The night light"
+   },
+   "geschichte": {
+    "de": "Lenas Nachtlicht hat einen Lichtsensor. Es soll leuchten, wenn es im Zimmer dunkel ist – und ausgehen, sobald es hell wird.",
+    "en": "Lena's night light has a light sensor. It should glow when the room is dark – and switch off as soon as it gets bright."
    },
    "frage": {
-    "de": "Wie dreht man ein Bit um, wenn man nur NAND hat?",
-    "en": "How do you flip a bit if all you have is NAND?"
+    "de": "Welche Kiste schaltet das Nachtlicht richtig?",
+    "en": "Which box switches the night light correctly?"
    },
    "hilfe": {
-    "de": "Ein NAND liefert nur dann 0, wenn beide Eingänge 1 sind. Was passiert, wenn beide Eingänge dasselbe Signal bekommen?",
-    "en": "A NAND only outputs 0 when both inputs are 1. What happens if both inputs get the same signal?"
+    "de": "Stell den Sensor auf hell und auf dunkel. Wann soll das Nachtlicht leuchten?",
+    "en": "Set the sensor to bright and to dark. When should the night light glow?"
+   },
+   "merksatz": {
+    "de": "NICHT dreht um: Aus 1 wird 0, aus 0 wird 1.",
+    "en": "NOT flips it: 1 becomes 0, 0 becomes 1."
    },
    "eingaenge": [
-    "A"
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Es ist hell",
+      "en": "It is bright"
+     },
+     "art": "kipp"
+    }
    ],
    "ausgaenge": [
-    "Y"
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Nachtlicht",
+      "en": "Night light"
+     }
+    }
    ],
-   "bausteine": [
-    "NAND"
+   "kisten": [
+    {
+     "tabelle": [
+      "0",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "1",
+      "0"
+     ]
+    },
+    {
+     "tabelle": [
+      "1",
+      "1"
+     ]
+    }
    ],
+   "richtig": 1,
    "wahrheitstabelle": [
     "1",
     "0"
-   ],
-   "loesung": {
-    "bausteine": [
-     {
-      "id": "n1",
-      "typ": "NAND",
-      "x": 440,
-      "y": 264
-     }
-    ],
-    "verbindungen": [
-     [
-      "A",
-      "n1.a"
-     ],
-     [
-      "A",
-      "n1.b"
-     ],
-     [
-      "n1.y",
-      "Y"
-     ]
-    ]
-   }
+   ]
   },
   {
    "kuerzel": "UND",
+   "art": "entdecken",
+   "werkzeug": "AND",
    "symbol": "&",
    "titel": {
-    "de": "Das UND-Gatter",
-    "en": "The AND gate"
+    "de": "Der Tresor",
+    "en": "The safe"
+   },
+   "geschichte": {
+    "de": "Der Tresor der Bank hat zwei Schlösser. Er darf nur aufgehen, wenn beide Schlüssel gedreht sind – sonst käme ein Dieb mit einem Schlüssel allein hinein.",
+    "en": "The bank's safe has two locks. It may only open when both keys are turned – otherwise a thief with just one key could get in."
    },
    "frage": {
-    "de": "Wann leuchtet die LED, wenn beide Schalter mitreden müssen?",
-    "en": "When does the LED light up if both switches have a say?"
+    "de": "Welche Kiste schützt den Tresor?",
+    "en": "Which box protects the safe?"
    },
    "hilfe": {
-    "de": "UND ist das Gegenteil von NAND. Du hast gerade ein Bauteil gebaut, das umdreht.",
-    "en": "AND is the opposite of NAND. You have just built a part that flips a bit."
+    "de": "Probier alle vier Möglichkeiten: kein Schlüssel, nur einer, nur der andere, beide.",
+    "en": "Try all four possibilities: no key, one, only the other, both."
+   },
+   "merksatz": {
+    "de": "UND: Beide müssen an sein.",
+    "en": "AND: Both must be on."
    },
    "eingaenge": [
-    "A",
-    "B"
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Schlüssel 1",
+      "en": "Key 1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Schlüssel 2",
+      "en": "Key 2"
+     },
+     "art": "kipp"
+    }
    ],
    "ausgaenge": [
-    "Y"
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Tresor offen",
+      "en": "Safe open"
+     }
+    }
    ],
-   "bausteine": [
-    "NAND",
-    "NICHT"
+   "kisten": [
+    {
+     "tabelle": [
+      "0",
+      "1",
+      "1",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "0",
+      "0",
+      "1",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "0",
+      "0",
+      "0",
+      "1"
+     ]
+    }
    ],
+   "richtig": 2,
    "wahrheitstabelle": [
     "0",
     "0",
     "0",
     "1"
-   ],
-   "loesung": {
-    "bausteine": [
-     {
-      "id": "n1",
-      "typ": "NAND",
-      "x": 300,
-      "y": 157
-     },
-     {
-      "id": "i1",
-      "typ": "NICHT",
-      "x": 620,
-      "y": 157
-     }
-    ],
-    "verbindungen": [
-     [
-      "A",
-      "n1.a"
-     ],
-     [
-      "B",
-      "n1.b"
-     ],
-     [
-      "n1.y",
-      "i1.A"
-     ],
-     [
-      "i1.Y",
-      "Y"
-     ]
-    ]
-   },
-   "eingabearten": [
-    "kipp",
-    "kipp"
    ]
   },
   {
    "kuerzel": "ODER",
+   "art": "entdecken",
+   "werkzeug": "OR",
    "symbol": "≥1",
    "titel": {
-    "de": "Das ODER-Gatter",
-    "en": "The OR gate"
+    "de": "Die Klingel",
+    "en": "The doorbell"
+   },
+   "geschichte": {
+    "de": "Familie Berger hat zwei Türen, aber nur eine Klingel. Sie soll läuten, wenn vorne an der Haustür oder hinten am Gartentor jemand drückt.",
+    "en": "The Berger family has two doors but only one bell. It should ring when someone presses at the front door or at the garden gate."
    },
    "frage": {
-    "de": "Wie leuchtet die LED, wenn schon ein Schalter genügt?",
-    "en": "How does the LED light up when one switch is enough?"
+    "de": "Welche Kiste lässt die Klingel richtig läuten?",
+    "en": "Which box makes the bell ring correctly?"
    },
    "hilfe": {
-    "de": "Dreh beide Eingänge um, bevor sie in ein NAND gehen.",
-    "en": "Flip both inputs before they go into a NAND."
+    "de": "Halte die Taster gedrückt – einzeln und beide zusammen.",
+    "en": "Hold the buttons down – one at a time and both together."
+   },
+   "merksatz": {
+    "de": "ODER: Eins reicht schon.",
+    "en": "OR: One is enough."
    },
    "eingaenge": [
-    "A",
-    "B"
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Haustür",
+      "en": "Front door"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Gartentor",
+      "en": "Garden gate"
+     },
+     "art": "taster"
+    }
    ],
    "ausgaenge": [
-    "Y"
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Klingel",
+      "en": "Bell"
+     }
+    }
+   ],
+   "kisten": [
+    {
+     "tabelle": [
+      "0",
+      "0",
+      "0",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "0",
+      "1",
+      "1",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "0",
+      "0",
+      "1",
+      "1"
+     ]
+    }
+   ],
+   "richtig": 1,
+   "wahrheitstabelle": [
+    "0",
+    "1",
+    "1",
+    "1"
+   ]
+  },
+  {
+   "kuerzel": "ALARM",
+   "art": "bauen",
+   "symbol": "ALARM",
+   "name": {
+    "de": "Alarmanlage",
+    "en": "Alarm system"
+   },
+   "titel": {
+    "de": "Die Alarmanlage",
+    "en": "The alarm system"
+   },
+   "geschichte": {
+    "de": "Jetzt bist du der Erfinder! Die Sirene soll heulen, wenn die Alarmanlage eingeschaltet ist und ein Fenster oder die Tür aufgeht. Tagsüber, wenn die Anlage aus ist, bleibt sie still.",
+    "en": "Now you are the inventor! The siren should wail when the alarm is switched on and a window or the door opens. During the day, when the alarm is off, it stays quiet."
+   },
+   "frage": {
+    "de": "Baue die Alarmanlage aus deinen Werkzeugen.",
+    "en": "Build the alarm system from your tools."
+   },
+   "hilfe": {
+    "de": "Fasse erst Fenster ODER Tür zusammen – und schicke das dann mit »Anlage an« durch ein UND.",
+    "en": "First combine window OR door – then pass it with »alarm on« through an AND."
+   },
+   "merksatz": {
+    "de": "Werkzeuge lassen sich kombinieren – so entstehen Erfindungen.",
+    "en": "Tools can be combined – that's how inventions are made."
+   },
+   "eingaenge": [
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Anlage an",
+      "en": "Alarm on"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "F",
+     "bezeichnung": {
+      "de": "Fenster offen",
+      "en": "Window open"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Tür offen",
+      "en": "Door open"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "S",
+     "bezeichnung": {
+      "de": "Sirene",
+      "en": "Siren"
+     }
+    }
    ],
    "bausteine": [
-    "NAND",
-    "NICHT",
-    "UND"
+    "AND",
+    "OR",
+    "NOT"
    ],
    "wahrheitstabelle": [
+    "0",
+    "0",
+    "0",
+    "0",
     "0",
     "1",
     "1",
@@ -212,75 +406,101 @@
    "loesung": {
     "bausteine": [
      {
-      "id": "i1",
-      "typ": "NICHT",
+      "id": "o1",
+      "typ": "OR",
       "x": 260,
-      "y": 157
+      "y": 330
      },
      {
-      "id": "i2",
-      "typ": "NICHT",
-      "x": 260,
-      "y": 371
-     },
-     {
-      "id": "n1",
-      "typ": "NAND",
-      "x": 640,
-      "y": 264
+      "id": "u1",
+      "typ": "AND",
+      "x": 500,
+      "y": 220
      }
     ],
     "verbindungen": [
      [
+      "F",
+      "o1.a"
+     ],
+     [
+      "T",
+      "o1.b"
+     ],
+     [
       "A",
-      "i1.A"
+      "u1.a"
      ],
      [
-      "B",
-      "i2.A"
+      "o1.y",
+      "u1.b"
      ],
      [
-      "i1.Y",
-      "n1.a"
-     ],
-     [
-      "i2.Y",
-      "n1.b"
-     ],
-     [
-      "n1.y",
-      "Y"
+      "u1.y",
+      "S"
      ]
     ]
    }
   },
   {
    "kuerzel": "XODER",
+   "art": "bauen",
    "symbol": "=1",
+   "name": {
+    "de": "Treppenlicht-Schaltung",
+    "en": "Stairway switch"
+   },
    "titel": {
-    "de": "Ungleich erkennen: XODER",
-    "en": "Spotting a difference: XOR"
+    "de": "Das Treppenhauslicht",
+    "en": "The stairway light"
+   },
+   "geschichte": {
+    "de": "Im Treppenhaus gibt es unten und oben einen Schalter. Mit jedem kann man das Licht an- und ausmachen. Es brennt, wenn die beiden Schalter verschieden stehen.",
+    "en": "The staircase has a switch downstairs and one upstairs. Either one turns the light on and off. It is on when the two switches are in different positions."
    },
    "frage": {
-    "de": "Wie erkennt ein Rechner, dass zwei Bits verschieden sind?",
-    "en": "How does a computer notice that two bits differ?"
+    "de": "Wie merkt eine Schaltung, dass zwei Schalter verschieden stehen?",
+    "en": "How does a circuit notice that two switches are in different positions?"
    },
    "hilfe": {
-    "de": "Verschieden heißt: A oder B – aber nicht beide. Mit ODER, NAND und UND geht es in drei Bausteinen.",
-    "en": "Different means: A or B – but not both. OR, NAND and AND do it with three parts."
+    "de": "Verschieden heißt: einer ODER der andere – aber NICHT beide (UND).",
+    "en": "Different means: one OR the other – but NOT both (AND)."
+   },
+   "merksatz": {
+    "de": "XODER: Verschieden ergibt 1.",
+    "en": "XOR: Different gives 1."
    },
    "eingaenge": [
-    "A",
-    "B"
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Schalter unten",
+      "en": "Switch downstairs"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Schalter oben",
+      "en": "Switch upstairs"
+     },
+     "art": "kipp"
+    }
    ],
    "ausgaenge": [
-    "Y"
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Treppenlicht",
+      "en": "Stair light"
+     }
+    }
    ],
    "bausteine": [
-    "NAND",
-    "NICHT",
-    "UND",
-    "ODER"
+    "AND",
+    "OR",
+    "NOT"
    ],
    "wahrheitstabelle": [
     "0",
@@ -292,50 +512,60 @@
     "bausteine": [
      {
       "id": "o1",
-      "typ": "ODER",
-      "x": 300,
-      "y": 100
-     },
-     {
-      "id": "n1",
-      "typ": "NAND",
-      "x": 300,
-      "y": 400
+      "typ": "OR",
+      "x": 230,
+      "y": 90
      },
      {
       "id": "u1",
-      "typ": "UND",
-      "x": 620,
-      "y": 250
+      "typ": "AND",
+      "x": 230,
+      "y": 370
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 390,
+      "y": 370
+     },
+     {
+      "id": "u2",
+      "typ": "AND",
+      "x": 560,
+      "y": 230
      }
     ],
     "verbindungen": [
      [
       "A",
-      "o1.A"
+      "o1.a"
      ],
      [
       "B",
-      "o1.B"
+      "o1.b"
      ],
      [
       "A",
-      "n1.a"
+      "u1.a"
      ],
      [
       "B",
-      "n1.b"
+      "u1.b"
      ],
      [
-      "o1.Y",
-      "u1.A"
+      "u1.y",
+      "n1.a"
+     ],
+     [
+      "o1.y",
+      "u2.a"
      ],
      [
       "n1.y",
-      "u1.B"
+      "u2.b"
      ],
      [
-      "u1.Y",
+      "u2.y",
       "Y"
      ]
     ]
@@ -343,32 +573,70 @@
   },
   {
    "kuerzel": "HA",
+   "art": "bauen",
    "symbol": "HA",
+   "name": {
+    "de": "Halbaddierer",
+    "en": "Half adder"
+   },
    "titel": {
-    "de": "Zwei Bits addieren: der Halbaddierer",
-    "en": "Adding two bits: the half adder"
+    "de": "1 + 1 = 10",
+    "en": "1 + 1 = 10"
+   },
+   "geschichte": {
+    "de": "Rechner zählen nur mit 0 und 1. Kommen zwei Einsen zusammen, wird es eng: 1 + 1 ergibt »10« – eine 0 und ein Übertrag in die nächste Stelle, wie beim Zehnerübergang.",
+    "en": "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 and a carry to the next place, just like carrying a ten."
    },
    "frage": {
-    "de": "1 + 1 = 10 – wie rechnet ein Rechner das aus?",
-    "en": "1 + 1 = 10 – how does a computer work that out?"
+    "de": "Baue eine Schaltung, die zwei Bits addiert.",
+    "en": "Build a circuit that adds two bits."
    },
    "hilfe": {
-    "de": "Die Summe S ist 1, wenn die Bits verschieden sind. Der Übertrag C ist 1, wenn beide 1 sind.",
-    "en": "The sum S is 1 when the bits differ. The carry C is 1 when both are 1."
+    "de": "Die Summe ist 1, wenn die Bits verschieden sind. Der Übertrag ist 1, wenn beide 1 sind.",
+    "en": "The sum is 1 when the bits differ. The carry is 1 when both are 1."
+   },
+   "merksatz": {
+    "de": "Summe und Übertrag – so rechnet ein Computer.",
+    "en": "Sum and carry – that's how a computer adds."
    },
    "eingaenge": [
-    "A",
-    "B"
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Bit A",
+      "en": "Bit A"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Bit B",
+      "en": "Bit B"
+     },
+     "art": "kipp"
+    }
    ],
    "ausgaenge": [
-    "S",
-    "C"
+    {
+     "name": "S",
+     "bezeichnung": {
+      "de": "Summe",
+      "en": "Sum"
+     }
+    },
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "Übertrag",
+      "en": "Carry"
+     }
+    }
    ],
    "bausteine": [
-    "NAND",
-    "NICHT",
-    "UND",
-    "ODER",
+    "AND",
+    "OR",
+    "NOT",
     "XODER"
    ],
    "wahrheitstabelle": [
@@ -382,14 +650,14 @@
      {
       "id": "x1",
       "typ": "XODER",
-      "x": 500,
+      "x": 400,
       "y": 100
      },
      {
       "id": "u1",
-      "typ": "UND",
-      "x": 500,
-      "y": 400
+      "typ": "AND",
+      "x": 400,
+      "y": 380
      }
     ],
     "verbindungen": [
@@ -403,18 +671,18 @@
      ],
      [
       "A",
-      "u1.A"
+      "u1.a"
      ],
      [
       "B",
-      "u1.B"
+      "u1.b"
      ],
      [
       "x1.Y",
       "S"
      ],
      [
-      "u1.Y",
+      "u1.y",
       "C"
      ]
     ]

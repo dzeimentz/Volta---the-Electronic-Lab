@@ -5,26 +5,32 @@ import QtQuick
 Item {
     id: root
     property string name
+    property string label // Bedeutung, z. B. »Haustuer«; sonst der Name
     property string kind: "kipp" // kipp | taster | led
     property string level: "0"
     property bool enabled: true
     readonly property bool on: level === "1"
-    width: 84
-    height: 120
+    width: 124
+    height: 132
 
-    Text { // Bezeichnung oben
+    Text { // Bezeichnung oben (bis zwei Zeilen)
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 0
-        text: root.name
+        anchors.bottom: parent.top
+        anchors.bottomMargin: -36
+        width: parent.width
+        horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
+        maximumLineCount: 2
+        text: root.label !== "" ? root.label : root.name
         color: ZTheme.text
-        font.family: ZTheme.mono; font.pixelSize: 18; font.bold: true
+        font.pixelSize: 15; font.bold: true
     }
 
     // Kippschalter: Metallplatte, Hebel oben = 1, unten = 0
     Rectangle {
         visible: root.kind === "kipp"
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 26
+        y: 40
         width: 52; height: 68; radius: 10
         color: "#3A434D"
         border.color: "#8E99A4"; border.width: 2
@@ -47,7 +53,7 @@ Item {
     Rectangle {
         visible: root.kind === "taster"
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 28
+        y: 42
         width: 62; height: 62; radius: 31
         color: "#3A434D"
         border.color: "#8E99A4"; border.width: 2
@@ -62,7 +68,7 @@ Item {
     Item {
         visible: root.kind === "led"
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 28
+        y: 42
         width: 62; height: 62
         Rectangle { // Schein
             anchors.centerIn: parent
@@ -73,8 +79,8 @@ Item {
         Rectangle {
             anchors.centerIn: parent
             width: 36; height: 36; radius: 18
-            color: root.on ? "#FF453A" : "#4A1A18"
-            border.color: root.on ? "#FFB3AD" : "#7A2E2A"; border.width: 2
+            color: root.on ? "#FF3B30" : "#F3C9C6"
+            border.color: root.on ? "#B91C1C" : "#D49A95"; border.width: 2
         }
     }
 
@@ -82,7 +88,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         text: root.level
-        color: root.on ? (root.kind === "led" ? "#FF8A80" : ZTheme.accent) : ZTheme.muted
+        color: root.on ? (root.kind === "led" ? "#B91C1C" : ZTheme.accentText) : ZTheme.muted
         font.family: ZTheme.mono; font.pixelSize: 18; font.bold: true
     }
 

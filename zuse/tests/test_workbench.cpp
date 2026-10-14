@@ -1,5 +1,5 @@
-// Werkbank des Zuse-Prototyps: Stufen, Befehle mit Rueckgaengig, Pruefen, Chip erstellen, Blick hinein, Ablage.
-#include <QSignalSpy>
+// Werkbank des Zuse-Prototyps: Geschichte, Raetselkisten (entdecken), Werkzeugkiste, Bauen mit Rueckgaengig,
+// Pruefen, Erfindung einpacken, Blick hinein, Ablage.
 #include <QTemporaryDir>
 #include <QtTest>
 
@@ -11,7 +11,7 @@ using volta::logic::Level;
 namespace {
 const QString kStages = QStringLiteral(ZUSE_CONTENT_DIR "/stufen.json");
 
-// Stufe 0: Schalter direkt an die LEDs (ergibt keinen Chip)
+// Stufe 0: Schalter direkt an die LEDs (ergibt keine Erfindung)
 void finishBit(WorkbenchController& w) {
     QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
     QVERIFY(w.connectPins("A", "X"));
@@ -20,18 +20,25 @@ void finishBit(WorkbenchController& w) {
     QCOMPARE(w.checkState(), QStringLiteral("passed"));
     QVERIFY(w.createChip());
     QVERIFY(!w.library().find("BIT"));
-    QVERIFY(w.selectStage(1));
 }
 
-// baut NICHT aus einem NAND und erstellt den Chip
-void buildNot(WorkbenchController& w) {
-    const QString n = w.addPart("NAND", 400, 250);
-    QVERIFY(!n.isEmpty());
-    QVERIFY(w.connectPins("A", n + ".a"));
-    QVERIFY(w.connectPins("A", n + ".b"));
-    QVERIFY(w.connectPins(n + ".y", "Y"));
+// Entdeckerstufe mit der richtigen Kiste abschliessen
+void discover(WorkbenchController& w, int stage) {
+    QVERIFY(w.selectStage(stage));
+    QCOMPARE(w.stageKind(), QStringLiteral("entdecken"));
+    for (const QVariant& b : w.boxes()) {
+        const QVariantMap box = b.toMap();
+        if (box["symbol"].toString().isEmpty()) continue; // nur die richtige Kiste hat ein Zeichen
+        w.selectBox(box["index"].toInt());
+    }
+    QVERIFY(w.confirmBox());
+}
+
+void solveAndPack(WorkbenchController& w, int stage) {
+    QVERIFY(w.selectStage(stage));
+    w.showSolution();
     w.check();
-    QCOMPARE(w.checkState(), QStringLiteral("passed"));
+    QVERIFY2(w.checkState() == "passed", qPrintable(w.stageKuerzel()));
     QVERIFY(w.createChip());
 }
 } // namespace
@@ -39,150 +46,172 @@ void buildNot(WorkbenchController& w) {
 class WorkbenchTest : public QObject {
     Q_OBJECT
 private slots:
-    void stagesLoadAndUnlockInOrder() {
+    void stagesStartWithAStory() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        QCOMPARE(w.stages().size(), 6);
+        QCOMPARE(w.stages().size(), 7);
         QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
+        QVERIFY(!w.stageStory().isEmpty());
         QVERIFY(!w.stageMakesChip());
-        QVERIFY(!w.selectStage(1)); // NICHT erst nach Stufe 0
-        QCOMPARE(w.palette().size(), 0);
-        const QVariantList ports = w.ports();
-        QCOMPARE(ports.size(), 4);
-        QCOMPARE(ports[0].toMap()["kind"].toString(), QStringLiteral("kipp"));
-        QCOMPARE(ports[1].toMap()["kind"].toString(), QStringLiteral("taster"));
-        QCOMPARE(ports[2].toMap()["kind"].toString(), QStringLiteral("led"));
-        finishBit(w);
-        QCOMPARE(w.stageKuerzel(), QStringLiteral("NICHT"));
-        QVERIFY(w.stageQuestion().contains("NAND"));
+        QVERIFY(!w.selectStage(1)); // Nachtlicht erst nach Stufe 0
+        const QVariantList in = w.panelInputs();
+        QCOMPARE(in.size(), 2);
+        QCOMPARE(in[0].toMap()["label"].toString(), QStringLiteral("Lichtschalter"));
+        QCOMPARE(in[1].toMap()["kind"].toString(), QStringLiteral("taster"));
+        QCOMPARE(w.panelOutputs()[1].toMap()["label"].toString(), QStringLiteral("Klingel"));
+        QCOMPARE(w.ports()[0].toMap()["label"].toString(), QStringLiteral("Lichtschalter"));
+        QCOMPARE(w.tools().size(), 0);
     }
 
     void pushButtonOnlyWhilePressed() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
         QVERIFY(w.connectPins("B", "Y"));
-        QCOMPARE(w.levelAt("Y"), Level::Zero);
-        w.setInput("B", true); // Taster gedrueckt
+        w.setInput("B", true);
         QCOMPARE(w.levelAt("Y"), Level::One);
-        w.setInput("B", false); // losgelassen
+        w.setInput("B", false);
         QCOMPARE(w.levelAt("Y"), Level::Zero);
-        w.toggleInput("A"); // Kippschalter bleibt stehen
-        QVERIFY(w.connectPins("A", "X"));
-        QCOMPARE(w.levelAt("X"), Level::One);
     }
 
-    void buildCheckAndUndo() {
+    void puzzleBoxesTeachTheRule() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
         finishBit(w);
-        const QString n = w.addPart("NAND", 400, 250);
-        QCOMPARE(n, QStringLiteral("n1"));
-        QVERIFY(w.connectPins("A", "n1.a"));
-        QVERIFY(w.connectPins("n1.y", "Y"));
-        // b offen: bei A = 0 entscheidet die 0, bei A = 1 bleibt Y unbestimmt
-        QCOMPARE(w.levelAt("Y"), Level::One);
-        w.toggleInput("A");
-        QCOMPARE(w.levelAt("Y"), Level::X);
-        w.check();
-        QCOMPARE(w.checkState(), QStringLiteral("failed"));
-        QVERIFY(!w.chipReady());
-        QVERIFY(w.connectPins("A", "n1.b"));
-        QCOMPARE(w.checkState(), QStringLiteral("none")); // Aenderung verlangt neue Pruefung
-        QCOMPARE(w.levelAt("Y"), Level::Zero);
-        w.check();
-        QVERIFY(w.chipReady());
-        // Rueckgaengig nimmt die letzte Leitung weg, Wiederholen bringt sie zurueck
-        QCOMPARE(w.def().connections.size(), size_t(3));
-        w.undo();
-        QCOMPARE(w.def().connections.size(), size_t(2));
-        QVERIFY(!w.chipReady());
-        w.redo();
-        QCOMPARE(w.def().connections.size(), size_t(3));
-        // doppelte Leitung und zwei Ausgaenge auf einer Leitung werden abgelehnt
-        QVERIFY(!w.connectPins("n1.a", "A"));
-        const QString n2 = w.addPart("NAND", 600, 400);
-        QVERIFY(!w.connectPins(n2 + ".y", "n1.y"));
-        QVERIFY(!w.message().isEmpty());
-        // Baustein entfernen nimmt seine Leitungen mit
-        w.removePart("n1");
-        QCOMPARE(w.def().connections.size(), size_t(0));
-        w.undo();
-        QCOMPARE(w.def().connections.size(), size_t(3));
-    }
-
-    void chipLadderAndLookInside() {
-        QTemporaryDir dir;
-        WorkbenchController w(kStages, dir.path(), "de");
-        finishBit(w);
-        buildNot(w);
-        QVERIFY(w.isDone("NICHT"));
+        QVERIFY(w.selectStage(1));
+        QVERIFY(!w.selectStage(2)); // Tresor erst nach dem Nachtlicht
+        discover(w, 1);
         QVERIFY(w.selectStage(2));
         QCOMPARE(w.stageKuerzel(), QStringLiteral("UND"));
-        QCOMPARE(w.palette().size(), 2); // NAND und der eigene NICHT-Chip
-        const QString n = w.addPart("NAND", 300, 150);
-        const QString i = w.addPart("NICHT", 640, 150);
-        QCOMPARE(i, QStringLiteral("n2")); // gleiche Anfangsbuchstaben: laufende Nummer
-        QVERIFY(w.connectPins("A", n + ".a"));
-        QVERIFY(w.connectPins("B", n + ".b"));
-        QVERIFY(w.connectPins(n + ".y", i + ".A"));
-        QVERIFY(w.connectPins(i + ".Y", "Y"));
+        QCOMPARE(w.boxes().size(), 3);
+        // ohne Kiste ist die LED nicht angeschlossen
+        QCOMPARE(w.levelAt("Y"), Level::X);
+        QVERIFY(!w.confirmBox());
+        // Kiste 1 (ODER) oeffnet schon mit einem Schluessel: falsch, mit konkreter Erklaerung
+        w.selectBox(0);
         w.toggleInput("A");
+        QCOMPARE(w.levelAt("Y"), Level::One);
+        QVERIFY(!w.confirmBox());
+        QVERIFY(w.message().contains("Schlüssel 1 aus, Schlüssel 2 an")); // erste Stellung, die nicht passt
+        QCOMPARE(w.zettiPose(), QStringLiteral("nachdenklich"));
+        // ausprobierte Zeilen erscheinen in der Tabelle, das Soll bleibt verborgen
+        const QVariantList rows = w.checkRows();
+        QCOMPARE(rows[2].toMap()["actual"].toString(), QStringLiteral("1"));
+        QCOMPARE(rows[3].toMap()["actual"].toString(), QString());
+        QCOMPARE(rows[2].toMap()["expected"].toString(), QString());
+        // Kiste 3 ist UND
+        w.selectBox(2);
+        QCOMPARE(w.levelAt("Y"), Level::Zero);
         w.toggleInput("B");
         QCOMPARE(w.levelAt("Y"), Level::One);
-        // Blick hinein: im NICHT-Chip liegt am Eingang die 0 aus dem NAND
-        QVERIFY(!w.lookInside(n)); // Grundgatter haben kein Inneres
-        QVERIFY(w.lookInside(i));
-        QVERIFY(w.inside());
-        QCOMPARE(w.path(), (QStringList{"UND", "NICHT"}));
-        QCOMPARE(w.levelAt("A"), Level::Zero);
-        QCOMPARE(w.levelAt("Y"), Level::One);
-        QCOMPARE(w.parts().size(), 1);
-        QVERIFY(w.addPart("NAND", 100, 100).isEmpty()); // innen nur ansehen
-        w.leaveTo(0);
-        QVERIFY(!w.inside());
-        w.check();
-        QVERIFY(w.createChip());
+        QVERIFY(w.confirmBox());
+        QCOMPARE(w.zettiPose(), QStringLiteral("begeistert"));
+        // die Werkzeugkiste kennt jetzt NICHT und UND
+        const QVariantList tools = w.tools();
+        QCOMPARE(tools.size(), 2);
+        QCOMPARE(tools[1].toMap()["name"].toString(), QStringLiteral("UND"));
+        QCOMPARE(tools[1].toMap()["type"].toString(), QStringLiteral("AND"));
+        QVERIFY(!tools[1].toMap()["merksatz"].toString().isEmpty());
+        QVERIFY(w.boxes()[2].toMap()["revealed"].toBool());
     }
 
-    void solutionsPassEveryStage() {
+    void buildInventionFromTools() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        for (int s = 0; s < 6; ++s) {
-            QVERIFY(w.selectStage(s));
-            w.showSolution();
-            w.check();
-            QVERIFY2(w.checkState() == "passed", qPrintable(w.stageKuerzel()));
-            QVERIFY(w.createChip());
-        }
-        // Halbaddierer ist bis zum NAND aufgeloest und zeigt 1 + 1 = 10
+        finishBit(w);
+        discover(w, 1);
+        discover(w, 2);
+        discover(w, 3);
+        QVERIFY(w.selectStage(4));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("ALARM"));
+        QCOMPARE(w.palette().size(), 3); // UND, ODER, NICHT aus der Werkzeugkiste
+        const QString o = w.addPart("OR", 330, 330);
+        const QString u = w.addPart("AND", 560, 220);
+        QVERIFY(w.connectPins("F", o + ".a"));
+        QVERIFY(w.connectPins("T", o + ".b"));
+        QVERIFY(w.connectPins("A", u + ".a"));
+        QVERIFY(w.connectPins(o + ".y", u + ".b"));
+        QVERIFY(w.connectPins(u + ".y", "S"));
+        w.check();
+        QCOMPARE(w.checkState(), QStringLiteral("passed"));
+        // letzte Leitung rueckgaengig: Pruefung verfaellt und schlaegt fehl
+        w.undo();
+        QCOMPARE(w.checkState(), QStringLiteral("none"));
+        w.check();
+        QCOMPARE(w.checkState(), QStringLiteral("failed"));
+        QCOMPARE(w.zettiPose(), QStringLiteral("gruebelnd"));
+        w.redo();
+        w.check();
+        QVERIFY(w.chipReady());
+        QVERIFY(w.createChip());
+        QVERIFY(w.message().contains("Alarmanlage"));
+        QCOMPARE(w.tools().size(), 4);
+        QVERIFY(w.tools()[3].toMap()["invention"].toBool());
+        // Sirene nur, wenn die Anlage an ist und ein Fenster offen
+        w.toggleInput("F");
+        QCOMPARE(w.levelAt("S"), Level::Zero);
+        w.toggleInput("A");
+        QCOMPARE(w.levelAt("S"), Level::One);
+        // zwei Ausgaenge auf einer Leitung werden abgelehnt
+        const QString o2 = w.addPart("OR", 330, 100);
+        QVERIFY(!w.connectPins(o2 + ".y", o + ".y"));
+    }
+
+    void solutionsPassAndLookInside() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
+        discover(w, 1);
+        discover(w, 2);
+        discover(w, 3);
+        solveAndPack(w, 4);
+        solveAndPack(w, 5);
+        solveAndPack(w, 6);
+        // Halbaddierer mit der selbst gebauten Treppenlicht-Schaltung: 1 + 1 = 10
         w.toggleInput("A");
         w.toggleInput("B");
         QCOMPARE(w.levelAt("S"), Level::Zero);
         QCOMPARE(w.levelAt("C"), Level::One);
         QVERIFY(w.lookInside("x1"));
-        QVERIFY(w.lookInside("o1"));
-        QCOMPARE(w.path(), (QStringList{"HA", "XODER", "ODER"}));
+        QCOMPARE(w.path(), (QStringList{"HA", "XODER"}));
+        QCOMPARE(w.parts().size(), 4);
+        QVERIFY(w.addPart("AND", 100, 100).isEmpty()); // innen nur ansehen
+        w.leaveTo(0);
+        QVERIFY(!w.inside());
     }
 
-    void chipsAndDraftsArePersisted() {
+    void numberSystems() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        QVariantMap n = w.inputNumber();
+        QCOMPARE(n["bin"].toString(), QStringLiteral("00"));
+        w.toggleInput("A"); // erster Schalter = hoechstes Bit
+        n = w.inputNumber();
+        QCOMPARE(n["bin"].toString(), QStringLiteral("10"));
+        QCOMPARE(n["dec"].toString(), QStringLiteral("2"));
+        QCOMPARE(w.outputNumber()["dec"].toString(), QStringLiteral("?")); // LEDs noch nicht verbunden
+        const QVariantMap big = WorkbenchController::numberOf({Level::One, Level::One, Level::One, Level::One});
+        QCOMPARE(big["dec"].toString(), QStringLiteral("15"));
+        QCOMPARE(big["hex"].toString(), QStringLiteral("F"));
+        QVERIFY(w.numbersVisible());
+        w.setNumbersVisible(false);
+        WorkbenchController again(kStages, dir.path(), "de");
+        QVERIFY(!again.numbersVisible());
+    }
+
+    void progressIsPersisted() {
         QTemporaryDir dir;
         {
             WorkbenchController w(kStages, dir.path(), "de");
             finishBit(w);
-            buildNot(w);
+            discover(w, 1);
             QVERIFY(w.selectStage(2));
-            w.addPart("NAND", 300, 150);
+            w.setSymbolStyle("us");
         }
         WorkbenchController w(kStages, dir.path(), "en");
-        QVERIFY(w.isDone("NICHT"));
-        QVERIFY(w.library().find("NICHT"));
         QCOMPARE(w.stageKuerzel(), QStringLiteral("UND")); // erste offene Stufe
-        QCOMPARE(w.def().parts.size(), size_t(1));         // Entwurf ist noch da
-        QCOMPARE(w.stageTitle(), QStringLiteral("The AND gate"));
-        QCOMPARE(w.symbolStyle(), QStringLiteral("din"));
-        w.setSymbolStyle("us");
-        WorkbenchController again(kStages, dir.path(), "de");
-        QCOMPARE(again.symbolStyle(), QStringLiteral("us")); // Einstellung bleibt erhalten
+        QCOMPARE(w.stageTitle(), QStringLiteral("The safe"));
+        QCOMPARE(w.tools().size(), 1);
+        QCOMPARE(w.symbolStyle(), QStringLiteral("us"));
     }
 };
 

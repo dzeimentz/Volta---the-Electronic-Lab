@@ -1,30 +1,44 @@
 import QtQuick
 import QtQuick.Layouts
 
-// Wahrheitstabelle der Stufe: Soll und (nach dem Pruefen) Ist je Zeile; Abweichungen mit ✗ und Rahmen,
-// nicht nur mit Farbe.
+// Tabelle der Stufe. Entdecken: was die eingesetzte Kiste bei jeder ausprobierten Schalterstellung gemacht hat
+// (aktuelle Stellung umrandet). Bauen: Soll und nach dem Pruefen Ist; Abweichungen mit ✗ und Rahmen, nicht nur Farbe.
 ColumnLayout {
     id: root
-    spacing: 4
-    property var inputNames: []
-    property var outputNames: []
+    spacing: 6
+    readonly property bool discover: workbench.stageKind === "entdecken"
+    readonly property var inputs: workbench.panelInputs
+    readonly property var outputs: workbench.panelOutputs
 
+    // Legende: Buchstabe = Bedeutung
+    Repeater {
+        model: root.inputs.concat(root.outputs)
+        delegate: Text {
+            required property var modelData
+            visible: modelData.label !== ""
+            text: modelData.name + " = " + modelData.label
+            color: ZTheme.muted
+            font.pixelSize: 14
+        }
+    }
+    Item { Layout.preferredHeight: 4 }
     RowLayout {
         Layout.fillWidth: true
         Text {
-            Layout.preferredWidth: 90
-            text: root.inputNames.join(" ")
-            color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15
+            Layout.preferredWidth: 92
+            text: root.inputs.map(p => p.name).join(" ")
+            color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15; font.bold: true
         }
         Text {
-            Layout.preferredWidth: 70
+            visible: !root.discover
+            Layout.preferredWidth: 64
             text: qsTr("soll")
-            color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15
+            color: ZTheme.muted; font.pixelSize: 15; font.bold: true
         }
         Text {
-            Layout.preferredWidth: 70
-            text: qsTr("ist")
-            color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15
+            Layout.preferredWidth: 64
+            text: root.discover ? root.outputs.map(p => p.name).join(" ") : qsTr("ist")
+            color: ZTheme.muted; font.pixelSize: 15; font.bold: true
         }
     }
     Repeater {
@@ -32,34 +46,39 @@ ColumnLayout {
         delegate: Rectangle {
             id: row
             required property var modelData
-            readonly property bool checked: modelData.actual !== ""
+            readonly property bool filled: modelData.actual !== ""
+            readonly property bool wrong: !root.discover && filled && !modelData.ok
             Layout.fillWidth: true
-            implicitHeight: 34
-            radius: 6
-            color: checked ? (modelData.ok ? "#14321F" : "#3A1A1D") : ZTheme.surface
-            border.width: checked && !modelData.ok ? 2 : 0
-            border.color: ZTheme.bad
+            implicitHeight: 36
+            radius: 8
+            color: root.discover ? (filled ? "#ECFAFD" : ZTheme.surfaceHigh)
+                                 : (filled ? (modelData.ok ? ZTheme.okBg : ZTheme.badBg) : ZTheme.surfaceHigh)
+            border.width: wrong || (root.discover && !!modelData.current) ? 2 : 0
+            border.color: wrong ? ZTheme.bad : ZTheme.accent
             RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 8
+                anchors.leftMargin: 10
                 Text {
-                    Layout.preferredWidth: 82
+                    Layout.preferredWidth: 84
                     text: row.modelData.inputs.split("").join(" ")
-                    color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 17
+                    color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
                 }
                 Text {
-                    Layout.preferredWidth: 70
+                    visible: !root.discover
+                    Layout.preferredWidth: 64
                     text: row.modelData.expected
                     color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 17
                 }
                 Text {
-                    Layout.preferredWidth: 50
-                    text: row.modelData.actual
-                    color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 17
+                    Layout.preferredWidth: 64
+                    text: row.filled ? row.modelData.actual : (root.discover ? "?" : "")
+                    color: row.filled ? ZTheme.text : ZTheme.muted
+                    font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
                 }
                 Text {
                     Layout.fillWidth: true
-                    text: row.checked ? (row.modelData.ok ? "✓" : "✗") : ""
+                    visible: !root.discover
+                    text: row.filled ? (row.modelData.ok ? "✓" : "✗") : ""
                     color: row.modelData.ok ? ZTheme.ok : ZTheme.bad
                     font.pixelSize: 20; font.bold: true
                 }

@@ -36,6 +36,20 @@ Offen fuer die Erprobung mit Jugendlichen: Uebersetzungen (FR, LU; Texte DE/EN v
 Android-APK des Prototyps (Ziel `zuse_app`, Option `VOLTA_BUILD_ZUSE` im Android-Build), eigenes Symbol,
 Hoch- und Querformat, Zoom mit zwei Fingern, Tastaturbedienung der Anschluesse, Testfolgen fuer Speicher (Stufe 6).
 
+## Neuausrichtung des Prototyps (15.10.2026)
+Rueckmeldung des Inhabers: Werkbank und »Chip erstellen« waren technisch richtig, aber zu abstrakt; gewuenscht ist
+ein spielerischer, heller Einstieg wie bei Volta 1. Umgesetzt:
+- **Jede Stufe beginnt mit einer Frage aus dem Alltag** (Licht an, Nachtlicht, Tresor, Klingel, Alarmanlage,
+  Treppenhauslicht, 1 + 1 = 10); Schalter und LEDs tragen Bedeutungen (»Haustuer«, »Klingel«).
+- **Entdecken mit Raetselkisten:** NICHT, UND, ODER werden nicht vorgegeben, sondern durch Ausprobieren dreier
+  verschlossener Kisten gefunden; falsche Kisten erklaeren konkret, wo sie versagen. Erst danach Name und Zeichen.
+- **Werkzeugkiste statt »Chip erstellen«:** Entdeckte Regeln (mit Merksatz) und eingepackte Erfindungen
+  (»Alarmanlage«) sind Werkzeuge fuer spaetere Stufen; Bauen kommt erst, wenn ein Problem es verlangt.
+- **Maskottchen Zetti** (eigene Figur der Zuse-Linie) erzaehlt in einer Sprechblase, zeigt Stimmungen.
+- **Zahlensysteme:** zuschaltbare Zahlenleiste (Schalter und LEDs binaer mit Stellenwerten, dezimal, hexadezimal)
+  und Erklaerung »Warum rechnet ein Computer binaer, wozu Hex?« mit Vergleichstabelle 0–15.
+- Helles Design, Akzent Cyan, Knoepfe in Zettis Muetzenblau; NAND wird spaeter als Bonus-Entdeckung eingefuehrt.
+
 ## Quelle: ELRAD-Lehrgang »Digitaltechnik im Experiment« (Auswertung 13.10.2026)
 Lehrgang Elektronische Datenverarbeitung von H. Weidner (ELRAD 11/77–05/82, Sonderheft Heise 2005; private
 Sammlung, `I:\ELRAD\pdf\sonderhefte\digitaltechnik\`, nicht im Repository). Zehn Teile vom UND/ODER mit Schaltern

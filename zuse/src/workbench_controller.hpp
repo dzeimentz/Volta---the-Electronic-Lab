@@ -1,14 +1,18 @@
 #pragma once
 
-// Werkbank des Zuse-Prototyps (Phase Z0): Stufe waehlen, Bausteine setzen und verbinden (jede Aenderung ein Befehl
-// mit Rueckgaengig), Eingaenge umschalten (Bedienhandlung), mit der Wahrheitstabelle pruefen, Chip erstellen,
-// Blick hinein. Geometrie (dp) wird hier berechnet, die Oberflaeche zeichnet nur.
+// Werkbank des Zuse-Prototyps (Phase Z0). Jede Stufe beginnt mit einer Geschichte und ist entweder
+// - »entdecken«: Raetselkisten zwischen Schaltern und LEDs ausprobieren und die passende Regel finden; die Regel
+//   (NICHT, UND, ODER) kommt als Werkzeug in die Werkzeugkiste, oder
+// - »bauen«: aus den Werkzeugen eine Schaltung bauen (jede Aenderung ein Befehl mit Rueckgaengig), mit der
+//   Wahrheitstabelle pruefen und als Erfindung einpacken (wird selbst zum Werkzeug); Blick hinein.
+// Eingaenge umschalten ist eine Bedienhandlung. Geometrie (dp) wird hier berechnet, die Oberflaeche zeichnet nur.
 #include <QObject>
 #include <QSet>
 #include <QString>
 #include <QStringList>
 #include <QUndoStack>
 #include <QVariantList>
+#include <QVariantMap>
 #include <map>
 #include <string>
 #include <vector>
@@ -21,6 +25,15 @@ namespace zuse {
 
 struct Stage {
     QString kuerzel;
+    QString kind = QStringLiteral("bauen"); // "entdecken" oder "bauen"
+    QString story;     // Geschichte zum Einstieg
+    QString merksatz;  // was das Kind am Ende mitnimmt
+    QString name;      // Name der Erfindung (bauen), z. B. »Alarmanlage«
+    QString tool;      // Grundgatter, das die Entdeckung freischaltet (entdecken), z. B. "AND"
+    QStringList inputLabels;  // Bedeutung je Eingang, z. B. »Haustuer«
+    QStringList outputLabels; // Bedeutung je LED, z. B. »Klingel«
+    std::vector<std::vector<std::vector<volta::logic::Level>>> boxes; // Raetselkisten: Wahrheitstabelle je Kiste
+    int rightBox = -1;
     QString symbol;
     bool inverted = false;
     QString title;
@@ -47,6 +60,22 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QStringList stageInputs READ stageInputs NOTIFY stageChanged)
     Q_PROPERTY(QStringList stageOutputs READ stageOutputs NOTIFY stageChanged)
     Q_PROPERTY(bool stageMakesChip READ stageMakesChip NOTIFY stageChanged)
+    Q_PROPERTY(QString stageKind READ stageKind NOTIFY stageChanged)
+    Q_PROPERTY(QString stageStory READ stageStory NOTIFY stageChanged)
+    Q_PROPERTY(QString stageMerksatz READ stageMerksatz NOTIFY stageChanged)
+    Q_PROPERTY(QString stageName READ stageName NOTIFY stageChanged)
+    Q_PROPERTY(bool stageDone READ stageDone NOTIFY stagesChanged)
+    Q_PROPERTY(QVariantList tools READ tools NOTIFY stagesChanged)        // Werkzeugkiste
+    Q_PROPERTY(QVariantList panelInputs READ panelInputs NOTIFY viewChanged)   // Schalter mit Bedeutung und Pegel
+    Q_PROPERTY(QVariantList panelOutputs READ panelOutputs NOTIFY viewChanged) // LEDs mit Bedeutung und Pegel
+    Q_PROPERTY(QVariantList boxes READ boxes NOTIFY viewChanged)
+    Q_PROPERTY(int boxIndex READ boxIndex NOTIFY viewChanged)
+    Q_PROPERTY(QString zettiPose READ zettiPose NOTIFY messageChanged)
+    // Zahlensysteme: Schalter bzw. LEDs als Zahl (erster Anschluss = hoechstes Bit) binaer, dezimal, hexadezimal;
+    // Anzeige zuschaltbar (Einstellung, Vorgabe an)
+    Q_PROPERTY(QVariantMap inputNumber READ inputNumber NOTIFY viewChanged)
+    Q_PROPERTY(QVariantMap outputNumber READ outputNumber NOTIFY viewChanged)
+    Q_PROPERTY(bool numbersVisible READ numbersVisible WRITE setNumbersVisible NOTIFY numbersVisibleChanged)
     Q_PROPERTY(QVariantList parts READ parts NOTIFY viewChanged)
     Q_PROPERTY(QVariantList ports READ ports NOTIFY viewChanged)
     Q_PROPERTY(QVariantList wires READ wires NOTIFY viewChanged)
@@ -72,8 +101,8 @@ public:
     static constexpr qreal kFrameHeight = 600.0;
     static constexpr qreal kPinPitch = 56.0; // Anschluesse >= 56 dp
     static constexpr qreal kPartWidth = 120.0;
-    static constexpr qreal kPortInset = 104.0;  // Schalter und LEDs sitzen im Rand des Rahmens
-    static constexpr qreal kPartMargin = 150.0; // Bausteine bleiben zwischen Schaltern und LEDs
+    static constexpr qreal kPortInset = 144.0;  // Schalter und LEDs sitzen im Rand des Rahmens
+    static constexpr qreal kPartMargin = 190.0; // Bausteine bleiben zwischen Schaltern und LEDs
 
     QVariantList stages() const;
     int stageIndex() const { return m_stage; }
@@ -85,6 +114,23 @@ public:
     QStringList stageInputs() const { return m_stages.empty() ? QStringList() : m_stages[size_t(m_stage)].inputs; }
     QStringList stageOutputs() const { return m_stages.empty() ? QStringList() : m_stages[size_t(m_stage)].outputs; }
     bool stageMakesChip() const { return m_stages.empty() || m_stages[size_t(m_stage)].makesChip; }
+    QString stageKind() const { return m_stages.empty() ? QString() : m_stages[size_t(m_stage)].kind; }
+    QString stageStory() const { return m_stages.empty() ? QString() : m_stages[size_t(m_stage)].story; }
+    QString stageMerksatz() const { return m_stages.empty() ? QString() : m_stages[size_t(m_stage)].merksatz; }
+    QString stageName() const { return m_stages.empty() ? QString() : m_stages[size_t(m_stage)].name; }
+    bool stageDone() const { return !m_stages.empty() && m_done.contains(m_stages[size_t(m_stage)].kuerzel); }
+    QVariantList tools() const;
+    QVariantList panelInputs() const;
+    QVariantList panelOutputs() const;
+    QVariantList boxes() const;
+    int boxIndex() const { return m_box; }
+    QString zettiPose() const { return m_pose; }
+    QVariantMap inputNumber() const;
+    QVariantMap outputNumber() const;
+    bool numbersVisible() const { return m_numbersVisible; }
+    void setNumbersVisible(bool on);
+    // Bits (hoechstes zuerst) als Zahl: {"bin", "dec", "hex", "value", "bits"}; mit unbestimmtem Bit "?"
+    static QVariantMap numberOf(const std::vector<volta::logic::Level>& bits);
     QVariantList parts() const;
     QVariantList ports() const;
     QVariantList wires() const;
@@ -117,6 +163,8 @@ public:
     Q_INVOKABLE bool lookInside(const QString& partId);
     Q_INVOKABLE void leaveTo(int depth); // 0 = zurueck auf die eigene Werkbank
     Q_INVOKABLE void showSolution();     // Musterloesung (gestufte Hilfe, letzte Stufe)
+    Q_INVOKABLE void selectBox(int index); // Raetselkiste einsetzen (entdecken)
+    Q_INVOKABLE bool confirmBox();         // »Diese Kiste passt«
 
     // fuer Befehle und Tests
     const volta::logic::ChipDef& def() const { return m_def; }
@@ -133,6 +181,7 @@ signals:
     void checkChanged();
     void messageChanged();
     void symbolStyleChanged();
+    void numbersVisibleChanged();
 
 private:
     bool loadStages(const QString& file, const QString& language);
@@ -141,7 +190,11 @@ private:
     void startStage(int index);
     void rebuild();
     void push(const volta::logic::ChipDef& after, const QString& text);
-    void setMessage(const QString& text);
+    void setMessage(const QString& text, const QString& pose = QString());
+    bool isDiscover() const { return !m_stages.empty() && m_stages[size_t(m_stage)].kind == "entdecken"; }
+    size_t currentRow() const; // Zeile der Wahrheitstabelle zur aktuellen Schalterstellung
+    volta::logic::Level boxOutput(size_t output) const;
+    QString toolName(const QString& type) const;
     bool unlocked(int index) const;
     const volta::logic::ChipDef* shownDef() const; // eigene Werkbank oder geoeffneter Chip
     const volta::logic::Scope* shownScope() const;
@@ -166,7 +219,11 @@ private:
     bool m_checkDone = false;
     std::vector<std::string> m_path; // Teil-IDs beim Blick hinein
     QString m_message;
+    QString m_pose = QStringLiteral("zeigend");
+    int m_box = -1;             // eingesetzte Raetselkiste
+    std::vector<char> m_seen;   // Zeilen, die mit dieser Kiste schon ausprobiert wurden
     QString m_symbolStyle = QStringLiteral("din");
+    bool m_numbersVisible = true;
 };
 
 } // namespace zuse
