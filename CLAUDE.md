@@ -92,6 +92,8 @@ python3 tools/deploy_release.py
 python3 tools/manual_pdfs.py            # --bilder nimmt die Bildschirmfotos neu auf
 # Produkt-Flyer (6 Seiten, Plattformuebersicht) nach Release/Flyer/
 python3 tools/flyer_pdf.py              # --bilder nimmt die Bildschirmfotos neu auf
+# Testpaket fuer Partner/Verlage: Windows-Installer (NSIS, packaging/windows/volta1.nsi), Test-APK, PDFs, LIESMICH
+python3 tools/build_testpaket.py        # -> Release/Testpaket/Volta1-<version>-Testpaket.zip
 
 # App-Symbol: Quelle app/resources/icons/volta.svg; PNG (16-1024 px) und volta.ico daraus neu erzeugen
 python3 tools/make_icons.py

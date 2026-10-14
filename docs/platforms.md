@@ -33,6 +33,9 @@
 
 ## Desktop Windows und Linux x86-64 (Phase 5a, Entwicklungsziel ab Phase 0)
 - Windows 10/11 x86-64: MSIX und MSI (WiX), signiert; optional Microsoft Store.
+- Testversion (10/2026): NSIS-Installer `packaging/windows/volta1.nsi` ueber `tools/build_testpaket.py`; Installation je
+  Benutzer ohne Administratorrechte nach %LOCALAPPDATA%\Programs\Volta 1, Startmenue/Desktop, Deinstallation ueber
+  Apps; nicht signiert (SmartScreen). Geprueft: stille Installation, Start ohne Qt im Suchpfad, Deinstallation.
 - Linux x86-64: AppImage, optional Flatpak.
 - Fenster frei skalierbar, Mindestgroesse 1280 × 720, hohe DPI, Vollbild fuer Praesentationsmodus.
 - Vollstaendige Maus- und Tastaturbedienung (siehe `docs/ui-spec.md`).
