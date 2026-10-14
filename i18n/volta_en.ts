@@ -1008,6 +1008,14 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Demo</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten zum Zeigen – es wird nichts gespeichert</source>
+        <translation>Ten ready-made builds to show – nothing is saved</translation>
+    </message>
+    <message>
         <source>Kurzanleitung</source>
         <translation>Quick guide</translation>
     </message>
@@ -1686,6 +1694,14 @@
 <context>
     <name>Main</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Demo</translation>
+    </message>
+    <message>
+        <source>Andere Vorführung</source>
+        <translation>Another demo</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Main.qml" line="174" />
         <source>Fortschritt übernehmen?</source>
         <translation>Take over progress?</translation>
@@ -2198,6 +2214,18 @@
 </context>
 <context>
     <name>ParentArea</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Demo</translation>
+    </message>
+    <message>
+        <source>Auf der Startseite gibt es eine Vorführung mit zehn fertigen Aufbauten aus allen Stufen – gedacht für die Schule oder ein Gespräch. Sie läuft ohne Spuren: Fortschritt, Forscherheft und Aufbau bleiben unberührt. Hier lässt sie sich ausblenden.</source>
+        <translation>The home page offers a demo with ten ready-made builds from all levels – meant for school or a meeting. It leaves no traces: progress, research notebook and build stay untouched. You can hide it here.</translation>
+    </message>
+    <message>
+        <source>Vorführung auf der Startseite anbieten</source>
+        <translation>Offer the demo on the home page</translation>
+    </message>
     <message>
         <source>Deutschland</source>
         <translation>Germany</translation>
@@ -3976,6 +4004,65 @@
     <message>
         <source>Kurzanleitung</source>
         <translation>Quick guide</translation>
+    </message>
+</context>
+<context>
+    <name>DemoDialog</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Demo</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <source>Stufe %1: %2</source>
+        <translation>Level %1: %2</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten aus allen Stufen. Antippen baut den Aufbau auf und schaltet ein. Es wird nichts gespeichert: Fortschritt, Forscherheft und der eigene Aufbau bleiben, wie sie sind.</source>
+        <translation>Ten ready-made builds from all levels. Tap one to build it and switch it on. Nothing is saved: progress, research notebook and your own build stay as they are.</translation>
+    </message>
+    <message>
+        <source>Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.</source>
+        <translation>The flasher module makes an LED blink – real transistors work inside.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Summer und Lämpchen melden sich zugleich.</source>
+        <translation>Press the button: the buzzer and the bulb respond at the same time.</translation>
+    </message>
+    <message>
+        <source>Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.</source>
+        <translation>Two changeover switches: the light can be switched from both ends of the hallway.</translation>
+    </message>
+    <message>
+        <source>Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.</source>
+        <translation>Without a protective resistor the LED burns out – “Undo” makes it whole again.</translation>
+    </message>
+    <message>
+        <source>Ein Magnet an der Tür startet eine Melodie.</source>
+        <translation>A magnet on the door starts a tune.</translation>
+    </message>
+    <message>
+        <source>Der Zeitschreiber zeichnet auf, wie sich ein Kondensator füllt.</source>
+        <translation>The chart recorder shows how a capacitor fills up.</translation>
+    </message>
+    <message>
+        <source>Ein kleiner Strom schaltet über das Relais einen großen.</source>
+        <translation>A small current switches a large one through the relay.</translation>
+    </message>
+    <message>
+        <source>Wird es dunkel, schaltet der Transistor das Licht ein. Unten bei »Licht, Wärme, Wasser« das Raumlicht ändern.</source>
+        <translation>When it gets dark, the transistor switches the light on. Change the room light below under “Light, heat, water”.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Das Licht bleibt eine Weile an und geht von selbst wieder aus.</source>
+        <translation>Press the button: the light stays on for a while and goes out by itself.</translation>
+    </message>
+    <message>
+        <source>Zwei Transistoren schalten sich gegenseitig – die Leuchtdioden blinken im Wechsel.</source>
+        <translation>Two transistors switch each other – the LEDs blink in turn.</translation>
     </message>
 </context>
 </TS>

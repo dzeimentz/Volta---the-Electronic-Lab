@@ -562,11 +562,51 @@ void LabController::setPresentation(bool on) {
         activateDataDir(QString(), true); // Stand des Profils sichern; danach liegt nichts mehr auf der Platte
         m_unlockAll = true;
     } else {
+        if (m_demo) { // eine Vorfuehrung in der Praesentation endet mit ihr
+            m_demo = false;
+            emit demoChanged();
+        }
         m_unlockAll = m_presentationUnlock;
         activateDataDir(m_presentationDir, false); // Praesentationsaufbau verwerfen, Profil wieder laden
+        resumeSession();                           // eigener Laborstand wieder da (»Weitermachen«)
     }
     m_presentation = on;
     emit presentationChanged();
+    emit progressChanged();
+}
+
+bool LabController::startDemo(const QString& experimentId) {
+    if (!m_demo) {
+        // in der Praesentation liegt ohnehin nichts auf der Platte; sonst Stand sichern und leeren Ordner nehmen
+        if (!m_presentation) {
+            m_demoDir = m_dataDir;
+            m_demoUnlock = m_unlockAll;
+            activateDataDir(QString(), true);
+        }
+        m_unlockAll = true;
+        m_demo = true;
+        emit demoChanged();
+        emit progressChanged();
+    }
+    if (!startExperiment(experimentId)) return false;
+    chooseGuess(0);
+    while (moreHints()) nextHint(); // der Musteraufbau kommt erst nach allen Hilfen
+    showTemplate();
+    setMainSwitch(true);
+    return true;
+}
+
+void LabController::endDemo() {
+    if (!m_demo) return;
+    m_demo = false;
+    if (m_presentation) {
+        activateDataDir(QString(), false); // Praesentation laeuft weiter, leer
+    } else {
+        m_unlockAll = m_demoUnlock;
+        activateDataDir(m_demoDir, false); // Vorfuehrung verwerfen, Profil wieder laden
+        resumeSession();                   // eigener Laborstand wieder da (»Weitermachen«)
+    }
+    emit demoChanged();
     emit progressChanged();
 }
 

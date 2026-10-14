@@ -71,6 +71,8 @@ class LabController : public QObject {
     // Praesentationsmodus (Lehrkraft am Beamer, aus dem Elternbereich): alle Stufen offen, nichts wird gespeichert -
     // Fortschritt, Forscherheft und Laborstand des Profils bleiben unberuehrt; beim Beenden ist alles wie vorher
     Q_PROPERTY(bool presentation READ presentation WRITE setPresentation NOTIFY presentationChanged)
+    // Vorfuehrung: fertiger Musteraufbau im Betrieb, ohne Fortschritt, Forscherheft und Laborstand zu beruehren
+    Q_PROPERTY(bool demo READ demo NOTIFY demoChanged)
     Q_PROPERTY(QStringList errors READ errors NOTIFY boardChanged)
     Q_PROPERTY(QString lastEditError READ lastEditError NOTIFY editFailed)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
@@ -267,6 +269,10 @@ public:
     QVariantMap task() const; // aktuelle Aufgabe wie readTask (leer: keine)
     bool presentation() const { return m_presentation; }
     void setPresentation(bool on);
+    bool demo() const { return m_demo; }
+    // Experiment mit Musteraufbau starten und einschalten (beim ersten Aufruf auf leeren Datenordner umschalten)
+    Q_INVOKABLE bool startDemo(const QString& experimentId);
+    Q_INVOKABLE void endDemo(); // Vorfuehrung verwerfen, Profil wieder laden
     bool autoColumns() const { return m_autoColumns; }
     void setAutoColumns(bool on);
     bool meterDocked() const { return m_meterDocked; }
@@ -430,6 +436,7 @@ signals:
     void taskLinkReceived(const QString& link);
     void taskChanged();
     void presentationChanged();
+    void demoChanged();
 
 public slots:
     // Link-Handler fuer das Schema volta1 (QDesktopServices::setUrlHandler in main.cpp)
@@ -471,6 +478,9 @@ private:
     bool m_presentation = false;
     QString m_presentationDir;      // Datenordner vor der Praesentation
     bool m_presentationUnlock = false;
+    bool m_demo = false;
+    QString m_demoDir;              // Datenordner vor der Vorfuehrung
+    bool m_demoUnlock = false;
     bool m_buildComplete = false;
     bool m_canFinish = false;
     bool m_guideActive = false;

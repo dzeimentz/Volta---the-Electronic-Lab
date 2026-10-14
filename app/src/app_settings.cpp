@@ -42,6 +42,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_silverFields = s.value(QStringLiteral("anzeige/felder_silber"), true).toBool();
     m_profilesEnabled = s.value(QStringLiteral("profile/aktiv"), false).toBool();
     m_tickEnabled = s.value(QStringLiteral("anzeige/tick"), true).toBool();
+    m_demoEnabled = s.value(QStringLiteral("anzeige/vorfuehrung"), true).toBool();
     m_pinHash = s.value(QStringLiteral("eltern/pin_pruefwert")).toString();
     m_pinSalt = s.value(QStringLiteral("eltern/pin_salz")).toString();
     m_pinFailures = s.value(QStringLiteral("eltern/fehlversuche"), 0).toInt();

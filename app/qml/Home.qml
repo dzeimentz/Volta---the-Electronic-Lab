@@ -18,6 +18,7 @@ Rectangle {
     signal helpRequested()
     signal quickGuideRequested()
     signal taskRequested()
+    signal demoRequested() // Vorfuehrung (abschaltbar im Elternbereich)
     signal parentAreaRequested()
 
     color: Theme.board
@@ -237,6 +238,14 @@ Rectangle {
                     title: qsTr("Freies Labor")
                     subtitle: qsTr("Eigene Ideen ausprobieren – mit allen freigeschalteten Bauteilen")
                     onActivated: home.freeLabRequested()
+                }
+                Tile {
+                    objectName: "tileDemo"
+                    visible: home.settings ? home.settings.demoEnabled : true
+                    icon: "🎬"
+                    title: qsTr("Vorführung")
+                    subtitle: qsTr("Zehn fertige Aufbauten zum Zeigen – es wird nichts gespeichert")
+                    onActivated: home.demoRequested()
                 }
                 Tile {
                     objectName: "tileJournal"

@@ -944,6 +944,14 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Virféierung</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten zum Zeigen – es wird nichts gespeichert</source>
+        <translation>Zéng fäerdeg Opbauten zum Weisen – et gëtt näischt gespäichert</translation>
+    </message>
+    <message>
         <source>Kurzanleitung</source>
         <translation>Kuerzuleedung</translation>
     </message>
@@ -1618,6 +1626,14 @@
 <context>
     <name>Main</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Virféierung</translation>
+    </message>
+    <message>
+        <source>Andere Vorführung</source>
+        <translation>Aner Virféierung</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Main.qml" line="174" />
         <source>Fortschritt übernehmen?</source>
         <translation>Fortschrëtt iwwerhuelen?</translation>
@@ -2130,6 +2146,18 @@
 </context>
 <context>
     <name>ParentArea</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Virféierung</translation>
+    </message>
+    <message>
+        <source>Auf der Startseite gibt es eine Vorführung mit zehn fertigen Aufbauten aus allen Stufen – gedacht für die Schule oder ein Gespräch. Sie läuft ohne Spuren: Fortschritt, Forscherheft und Aufbau bleiben unberührt. Hier lässt sie sich ausblenden.</source>
+        <translation>Op der Startsäit gëtt et eng Virféierung mat zéng fäerdegen Opbauten aus alle Stufen – geduecht fir d'Schoul oder e Gespréich. Si leeft ouni Spueren: Fortschrëtt, Fuerscherheft an Opbau bleiwen onberéiert. Hei léisst se sech ausblennen.</translation>
+    </message>
+    <message>
+        <source>Vorführung auf der Startseite anbieten</source>
+        <translation>Virféierung op der Startsäit ubidden</translation>
+    </message>
     <message>
         <source>Deutschland</source>
         <translation>Däitschland</translation>
@@ -3908,6 +3936,65 @@
     <message>
         <source>Kurzanleitung</source>
         <translation>Kuerzuleedung</translation>
+    </message>
+</context>
+<context>
+    <name>DemoDialog</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Virféierung</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Zoumaachen</translation>
+    </message>
+    <message>
+        <source>Stufe %1: %2</source>
+        <translation>Stuf %1: %2</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten aus allen Stufen. Antippen baut den Aufbau auf und schaltet ein. Es wird nichts gespeichert: Fortschritt, Forscherheft und der eigene Aufbau bleiben, wie sie sind.</source>
+        <translation>Zéng fäerdeg Opbauten aus alle Stufen. Tipp een un, da gëtt en opgebaut an ugeschalt. Et gëtt näischt gespäichert: Fortschrëtt, Fuerscherheft an däin eegenen Opbau bleiwen, wéi se sinn.</translation>
+    </message>
+    <message>
+        <source>Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.</source>
+        <translation>De Blénkmodul léisst eng Liichtdiod blénken – dobannen schaffen echt Transistoren.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Summer und Lämpchen melden sich zugleich.</source>
+        <translation>Knäppche drécken: Summer a Luucht mellen sech gläichzäiteg.</translation>
+    </message>
+    <message>
+        <source>Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.</source>
+        <translation>Zwee Wiesselschalter: D'Liicht léisst sech vu béide Enner vum Gank schalten.</translation>
+    </message>
+    <message>
+        <source>Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.</source>
+        <translation>Ouni Schutzwiderstand brennt d'Liichtdiod duerch – »Réckgängeg« mécht se erëm ganz.</translation>
+    </message>
+    <message>
+        <source>Ein Magnet an der Tür startet eine Melodie.</source>
+        <translation>E Magnéit un der Dier start eng Melodie.</translation>
+    </message>
+    <message>
+        <source>Der Zeitschreiber zeichnet auf, wie sich ein Kondensator füllt.</source>
+        <translation>De Zäitschreiwer weist, wéi e Kondensator sech fëllt.</translation>
+    </message>
+    <message>
+        <source>Ein kleiner Strom schaltet über das Relais einen großen.</source>
+        <translation>E klenge Stroum schalt iwwer de Relais e groussen.</translation>
+    </message>
+    <message>
+        <source>Wird es dunkel, schaltet der Transistor das Licht ein. Unten bei »Licht, Wärme, Wasser« das Raumlicht ändern.</source>
+        <translation>Wann et däischter gëtt, schalt den Transistor d'Liicht un. Ënnen bei »Liicht, Wäermt, Waasser« d'Raumliicht änneren.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Das Licht bleibt eine Weile an und geht von selbst wieder aus.</source>
+        <translation>Knäppche drécken: D'Liicht bleift eng Zäit un a geet vum selwen erëm aus.</translation>
+    </message>
+    <message>
+        <source>Zwei Transistoren schalten sich gegenseitig – die Leuchtdioden blinken im Wechsel.</source>
+        <translation>Zwee Transistoren schalte sech géigesäiteg – d'Liichtdioden blénken ofwiesselnd.</translation>
     </message>
 </context>
 </TS>

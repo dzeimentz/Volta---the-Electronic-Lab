@@ -89,10 +89,12 @@ ApplicationWindow {
         onHelpRequested: helpDialog.open()
         onQuickGuideRequested: quickGuide.open()
         onTaskRequested: taskDialog.openTask()
+        onDemoRequested: demoDialog.open()
         onParentAreaRequested: parentGate.ask(() => parentArea.open())
     }
 
     Lab {
+        id: labView
         objectName: "lab"
         anchors.fill: parent
         visible: root.inLab
@@ -153,6 +155,55 @@ ApplicationWindow {
     QuickGuide {
         id: quickGuide
         onHelpRequested: helpDialog.open()
+    }
+    DemoDialog {
+        id: demoDialog
+        controller: labController
+        onDemoStarted: (experimentId) => {
+            root.inJournal = false
+            root.inLab = true
+            labView.recorderVisible = experimentId === "volta1.3.12" // Ladekurve im Zeitschreiber
+        }
+    }
+    // Vorfuehrung laeuft: Hinweis unten links mit »Andere Vorführung« und »Beenden« (zurueck zur Startseite)
+    Rectangle {
+        objectName: "demoBanner"
+        visible: labController.demo
+        z: 900
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.margins: 12
+        anchors.bottomMargin: labController.presentation ? Theme.control + 28 : 12
+        width: demoRow.implicitWidth + 24
+        height: Theme.control + 8
+        radius: height / 2
+        color: Theme.navy
+        border.color: Theme.solderAmber
+        border.width: 2
+        Row {
+            id: demoRow
+            anchors.centerIn: parent
+            spacing: 10
+            Label {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "🎬 " + qsTr("Vorführung")
+                color: "white"
+                font.bold: true
+                font.pixelSize: 15
+            }
+            Button {
+                objectName: "demoOther"
+                height: Theme.control - 6
+                text: qsTr("Andere Vorführung")
+                onClicked: demoDialog.open()
+            }
+            Button {
+                objectName: "demoEnd"
+                height: Theme.control - 6
+                text: qsTr("Beenden")
+                onClicked: { labController.endDemo(); root.inLab = false; root.inJournal = false }
+            }
+        }
     }
     HelpDialog {
         id: helpDialog

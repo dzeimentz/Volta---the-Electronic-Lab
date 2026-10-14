@@ -139,6 +139,7 @@ qt_add_qml_module(volta_ui
         qml/PartsListPanel.qml
         qml/HelpDialog.qml
         qml/QuickGuide.qml
+        qml/DemoDialog.qml
         qml/GuideIcon.qml
         qml/TroublePopup.qml
         qml/QrCanvas.qml

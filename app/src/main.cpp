@@ -439,6 +439,23 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_SHOW=1 oeffnet die Auswahl der Vorfuehrung, VOLTA_DEMO_SHOW=<Experiment-ID> startet
+    // diese Vorfuehrung (wie Antippen in der Auswahl)
+    if (const QString show = qEnvironmentVariable("VOLTA_DEMO_SHOW"); !show.isEmpty())
+        QTimer::singleShot(600, &engine, [&engine, show] {
+            const auto roots = engine.rootObjects();
+            QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("demoDialog"));
+            if (!dlg) return;
+            if (show == u"1") {
+                QMetaObject::invokeMethod(dlg, "open");
+                return;
+            }
+            const QVariantList entries = dlg->property("entries").toList();
+            for (const QVariant& e : entries)
+                if (e.toMap().value(QStringLiteral("id")).toString() == show)
+                    QMetaObject::invokeMethod(dlg, "start", Q_ARG(QVariant, e));
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_GUIDE_SHORT=1 oeffnet die Kurzanleitung (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_GUIDE_SHORT") == 1)
         QTimer::singleShot(600, &engine, [&engine] {

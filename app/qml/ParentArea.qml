@@ -214,6 +214,26 @@ Popup {
                 }
             }
 
+            // ---- Vorfuehrung
+            Heading { text: qsTr("Vorführung") }
+            Body { text: qsTr("Auf der Startseite gibt es eine Vorführung mit zehn fertigen Aufbauten aus allen Stufen – gedacht für die Schule oder ein Gespräch. Sie läuft ohne Spuren: Fortschritt, Forscherheft und Aufbau bleiben unberührt. Hier lässt sie sich ausblenden.") }
+            Row {
+                spacing: 8
+                Switch {
+                    objectName: "parentDemo"
+                    checked: area.settings ? area.settings.demoEnabled : true
+                    enabled: area.settings !== null
+                    onToggled: area.settings.demoEnabled = checked
+                    Accessible.name: qsTr("Vorführung auf der Startseite anbieten")
+                }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Vorführung auf der Startseite anbieten")
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    color: "#1E2B38"
+                }
+            }
+
             // ---- Aufgabe fuer die Klasse (nur Hinweg: QR-Code und Code zum Eintippen)
             Heading { text: qsTr("Aufgabe für die Klasse") }
             Body { text: qsTr("Wählen Sie Experimente aus dem Lernpfad und/oder geben Sie den Aufbau mit, der gerade im Labor steckt. Volta zeigt einen großen QR-Code für den Beamer; die Kinder scannen ihn mit der Kamera-App. Bis zu vier Experimente ohne Text und Aufbau passen auch in einen Code zum Eintippen. Es werden keine Daten übertragen außer der Aufgabe selbst.") }

@@ -944,6 +944,14 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Vorführung</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten zum Zeigen – es wird nichts gespeichert</source>
+        <translation>Zehn fertige Aufbauten zum Zeigen – es wird nichts gespeichert</translation>
+    </message>
+    <message>
         <source>Kurzanleitung</source>
         <translation>Kurzanleitung</translation>
     </message>
@@ -1618,6 +1626,14 @@
 <context>
     <name>Main</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Vorführung</translation>
+    </message>
+    <message>
+        <source>Andere Vorführung</source>
+        <translation>Andere Vorführung</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Main.qml" line="174"/>
         <source>Fortschritt übernehmen?</source>
         <translation type="unfinished"></translation>
@@ -2130,6 +2146,18 @@
 </context>
 <context>
     <name>ParentArea</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Vorführung</translation>
+    </message>
+    <message>
+        <source>Auf der Startseite gibt es eine Vorführung mit zehn fertigen Aufbauten aus allen Stufen – gedacht für die Schule oder ein Gespräch. Sie läuft ohne Spuren: Fortschritt, Forscherheft und Aufbau bleiben unberührt. Hier lässt sie sich ausblenden.</source>
+        <translation>Auf der Startseite gibt es eine Vorführung mit zehn fertigen Aufbauten aus allen Stufen – gedacht für die Schule oder ein Gespräch. Sie läuft ohne Spuren: Fortschritt, Forscherheft und Aufbau bleiben unberührt. Hier lässt sie sich ausblenden.</translation>
+    </message>
+    <message>
+        <source>Vorführung auf der Startseite anbieten</source>
+        <translation>Vorführung auf der Startseite anbieten</translation>
+    </message>
     <message>
         <source>Deutschland</source>
         <translation>Deutschland</translation>
@@ -3904,6 +3932,65 @@
     <message>
         <source>Kurzanleitung</source>
         <translation>Kurzanleitung</translation>
+    </message>
+</context>
+<context>
+    <name>DemoDialog</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Vorführung</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <source>Stufe %1: %2</source>
+        <translation>Stufe %1: %2</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten aus allen Stufen. Antippen baut den Aufbau auf und schaltet ein. Es wird nichts gespeichert: Fortschritt, Forscherheft und der eigene Aufbau bleiben, wie sie sind.</source>
+        <translation>Zehn fertige Aufbauten aus allen Stufen. Antippen baut den Aufbau auf und schaltet ein. Es wird nichts gespeichert: Fortschritt, Forscherheft und der eigene Aufbau bleiben, wie sie sind.</translation>
+    </message>
+    <message>
+        <source>Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.</source>
+        <translation>Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Summer und Lämpchen melden sich zugleich.</source>
+        <translation>Taster drücken: Summer und Lämpchen melden sich zugleich.</translation>
+    </message>
+    <message>
+        <source>Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.</source>
+        <translation>Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.</translation>
+    </message>
+    <message>
+        <source>Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.</source>
+        <translation>Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.</translation>
+    </message>
+    <message>
+        <source>Ein Magnet an der Tür startet eine Melodie.</source>
+        <translation>Ein Magnet an der Tür startet eine Melodie.</translation>
+    </message>
+    <message>
+        <source>Der Zeitschreiber zeichnet auf, wie sich ein Kondensator füllt.</source>
+        <translation>Der Zeitschreiber zeichnet auf, wie sich ein Kondensator füllt.</translation>
+    </message>
+    <message>
+        <source>Ein kleiner Strom schaltet über das Relais einen großen.</source>
+        <translation>Ein kleiner Strom schaltet über das Relais einen großen.</translation>
+    </message>
+    <message>
+        <source>Wird es dunkel, schaltet der Transistor das Licht ein. Unten bei »Licht, Wärme, Wasser« das Raumlicht ändern.</source>
+        <translation>Wird es dunkel, schaltet der Transistor das Licht ein. Unten bei »Licht, Wärme, Wasser« das Raumlicht ändern.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Das Licht bleibt eine Weile an und geht von selbst wieder aus.</source>
+        <translation>Taster drücken: Das Licht bleibt eine Weile an und geht von selbst wieder aus.</translation>
+    </message>
+    <message>
+        <source>Zwei Transistoren schalten sich gegenseitig – die Leuchtdioden blinken im Wechsel.</source>
+        <translation>Zwei Transistoren schalten sich gegenseitig – die Leuchtdioden blinken im Wechsel.</translation>
     </message>
 </context>
 </TS>

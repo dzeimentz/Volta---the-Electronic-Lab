@@ -86,6 +86,19 @@ private:
         return it->mapToScene(QPointF(it->width() / 2, it->height() / 2)).toPoint();
     }
 
+    // In einer Bildlaufflaeche (Startseite) so weit rollen, dass das Element ganz sichtbar ist
+    void scrollIntoView(QQuickItem* it) {
+        for (QQuickItem* p = it ? it->parentItem() : nullptr; p; p = p->parentItem()) {
+            if (!p->inherits("QQuickFlickable")) continue;
+            QQuickItem* content = p->property("contentItem").value<QQuickItem*>();
+            const double y = it->mapToItem(content, QPointF(0, 0)).y();
+            const double maxY = std::max(0.0, p->property("contentHeight").toDouble() - p->height());
+            p->setProperty("contentY", std::clamp(y - 40.0, 0.0, maxY));
+            QCoreApplication::processEvents();
+            return;
+        }
+    }
+
     // Ziehen mit mehreren Zwischenschritten (DragHandler braucht Bewegung ueber die Schwelle)
     void drag(QPoint from, QPoint to, Qt::MouseButton button = Qt::LeftButton) {
         QTest::mousePress(m_window, button, {}, from);
@@ -174,9 +187,11 @@ private slots:
         QVERIFY(home && home->isVisible());
         QVERIFY(m_lab->isUnlocked(QStringLiteral("volta1.1.1")));
         QVERIFY(!m_lab->isUnlocked(QStringLiteral("volta1.2.4")));
+        scrollIntoView(item(QStringLiteral("card_volta1.1.1")));
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("card_volta1.1.1"))));
         QTRY_COMPARE(m_lab->phase(), 1);
         QTRY_VERIFY(!home->isVisible());
+        scrollIntoView(item(QStringLiteral("homeTick"))); // Startseite fuer die folgenden Tests wieder oben
         QVERIFY(board().parts.empty());
         // Bauteilfach des Experiments: nur die freigegebenen Bauteile
         QTRY_VERIFY(item(QStringLiteral("tray_gluehlampe")) != nullptr);
@@ -1374,6 +1389,67 @@ private slots:
         QCOMPARE(lab.parts().first().toMap().value(QStringLiteral("type")).toString(), QStringLiteral("gluehlampe"));
     }
 
+    // Vorfuehrung: fertiger Aufbau im Betrieb, alle Stufen offen, nichts wird gespeichert; danach sind Fortschritt und
+    // eigener Aufbau sofort wieder da (ohne Neustart)
+    void demoKeepsProfileData() {
+        QTemporaryDir dir;
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
+        lab.useDataRoot(dir.path());
+        QVERIFY(lab.importProgressLink(QStringLiteral("volta1://fortschritt?d=1.1")) == 1);
+        lab.startFreeLab();
+        QVERIFY(lab.addPart(QStringLiteral("gluehlampe"), QStringLiteral("B3"), false, false));
+        lab.saveSession();
+        const int stageBefore = lab.unlockedStage();
+        QVERIFY(lab.startDemo(QStringLiteral("volta1.4.10")));
+        QVERIFY(lab.demo());
+        QVERIFY(lab.unlockedStage() > 10);
+        QCOMPARE(lab.experimentId(), QStringLiteral("volta1.4.10"));
+        QVERIFY(lab.mainSwitch());
+        QVERIFY(lab.parts().size() > 3); // Musteraufbau steckt
+        QVERIFY(!lab.isDone(QStringLiteral("volta1.1.1"))); // leerer Stand waehrend der Vorfuehrung
+        QVERIFY(lab.startDemo(QStringLiteral("volta1.0.1"))); // andere Vorfuehrung, weiter ohne Spuren
+        QCOMPARE(lab.experimentId(), QStringLiteral("volta1.0.1"));
+        lab.endDemo();
+        QVERIFY(!lab.demo());
+        QVERIFY(lab.isDone(QStringLiteral("volta1.1.1")));
+        QVERIFY(!lab.isDone(QStringLiteral("volta1.0.1")));
+        QCOMPARE(lab.unlockedStage(), stageBefore);
+        QVERIFY(lab.freeLab()); // eigener Aufbau gleich wieder geladen
+        QCOMPARE(lab.parts().size(), 1);
+        QCOMPARE(lab.parts().first().toMap().value(QStringLiteral("type")).toString(), QStringLiteral("gluehlampe"));
+    }
+
+    // Vorfuehrung in der Oberflaeche: Kachel auf der Startseite (im Elternbereich abschaltbar), Auswahl, Leiste mit
+    // »Beenden« fuehrt zur Startseite zurueck
+    void demoUi() {
+        QObject* root = m_engine->rootObjects().first();
+        root->setProperty("inLab", false);
+        QTRY_VERIFY(item(QStringLiteral("home"))->isVisible());
+        QQuickItem* tile = item(QStringLiteral("tileDemo"));
+        QVERIFY(tile);
+        m_settings->setDemoEnabled(false);
+        QTRY_VERIFY(!tile->isVisible());
+        m_settings->setDemoEnabled(true);
+        QTRY_VERIFY(tile->isVisible());
+        scrollIntoView(tile);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(tile));
+        QObject* dlg = root->findChild<QObject*>(QStringLiteral("demoDialog"));
+        QTRY_VERIFY(dlg->property("opened").toBool());
+        QQuickItem* card = item(QStringLiteral("demo_volta1.2.6"));
+        QTRY_VERIFY(card && card->isVisible());
+        QTest::qWait(150);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(card));
+        QTRY_VERIFY(m_lab->demo());
+        QTRY_VERIFY(root->property("inLab").toBool());
+        QCOMPARE(m_lab->experimentId(), QStringLiteral("volta1.2.6"));
+        QQuickItem* end = item(QStringLiteral("demoEnd"));
+        QTRY_VERIFY(end && end->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(end));
+        QTRY_VERIFY(!m_lab->demo());
+        QTRY_VERIFY(!root->property("inLab").toBool());
+        root->setProperty("inLab", true);
+    }
+
     // Code der Lehrkraft: zwei Haelften mit festem Strich, nach vier Zeichen geht es im zweiten Feld weiter
     void taskCodeTyping() {
         QObject* dlg = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("taskDialog"));
@@ -1562,7 +1638,12 @@ private slots:
         // Leiste fuer Licht und Waerme (Fotowiderstand verfuegbar): eingeklappt, Antippen klappt aus
         QQuickItem* bar = item(QStringLiteral("environmentBar"));
         QVERIFY(bar && bar->isVisible());
-        QVERIFY(!bar->property("expanded").toBool());
+        // Ausgangslage: eingeklappt (eine fruehere Bedienung kann sie noch offen halten - Zeiger weg, kurz warten)
+        QTest::mouseMove(m_window, centerOf(item(QStringLiteral("field_A1"))));
+        bar->setProperty("collapseDelay", 50);
+        QMetaObject::invokeMethod(bar, "poke");
+        QTRY_VERIFY(!bar->property("expanded").toBool());
+        bar->setProperty("collapseDelay", 4000);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("flyoutHandle"))));
         QTRY_VERIFY(bar->property("expanded").toBool());
         QTRY_VERIFY(item(QStringLiteral("roomLightButton"))->isVisible());

@@ -1008,6 +1008,14 @@
 <context>
     <name>Home</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Démonstration</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten zum Zeigen – es wird nichts gespeichert</source>
+        <translation>Dix montages prêts à montrer – rien n'est enregistré</translation>
+    </message>
+    <message>
         <source>Kurzanleitung</source>
         <translation>Guide rapide</translation>
     </message>
@@ -1686,6 +1694,14 @@
 <context>
     <name>Main</name>
     <message>
+        <source>Vorführung</source>
+        <translation>Démonstration</translation>
+    </message>
+    <message>
+        <source>Andere Vorführung</source>
+        <translation>Autre démonstration</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Main.qml" line="174" />
         <source>Fortschritt übernehmen?</source>
         <translation>Reprendre la progression ?</translation>
@@ -2198,6 +2214,18 @@
 </context>
 <context>
     <name>ParentArea</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Démonstration</translation>
+    </message>
+    <message>
+        <source>Auf der Startseite gibt es eine Vorführung mit zehn fertigen Aufbauten aus allen Stufen – gedacht für die Schule oder ein Gespräch. Sie läuft ohne Spuren: Fortschritt, Forscherheft und Aufbau bleiben unberührt. Hier lässt sie sich ausblenden.</source>
+        <translation>La page d'accueil propose une démonstration avec dix montages prêts, de tous les niveaux – pour l'école ou un rendez-vous. Elle ne laisse aucune trace : la progression, le carnet de recherche et le montage restent intacts. Vous pouvez la masquer ici.</translation>
+    </message>
+    <message>
+        <source>Vorführung auf der Startseite anbieten</source>
+        <translation>Proposer la démonstration sur la page d'accueil</translation>
+    </message>
     <message>
         <source>Deutschland</source>
         <translation>Allemagne</translation>
@@ -3976,6 +4004,65 @@
     <message>
         <source>Kurzanleitung</source>
         <translation>Guide rapide</translation>
+    </message>
+</context>
+<context>
+    <name>DemoDialog</name>
+    <message>
+        <source>Vorführung</source>
+        <translation>Démonstration</translation>
+    </message>
+    <message>
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <source>Stufe %1: %2</source>
+        <translation>Niveau %1 : %2</translation>
+    </message>
+    <message>
+        <source>Zehn fertige Aufbauten aus allen Stufen. Antippen baut den Aufbau auf und schaltet ein. Es wird nichts gespeichert: Fortschritt, Forscherheft und der eigene Aufbau bleiben, wie sie sind.</source>
+        <translation>Dix montages prêts, de tous les niveaux. Touche-en un pour le monter et l'allumer. Rien n'est enregistré : la progression, le carnet de recherche et ton propre montage restent tels quels.</translation>
+    </message>
+    <message>
+        <source>Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.</source>
+        <translation>Le module clignotant fait clignoter une LED – de vrais transistors travaillent à l'intérieur.</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Summer und Lämpchen melden sich zugleich.</source>
+        <translation>Appuie sur le bouton : le buzzer et l'ampoule répondent en même temps.</translation>
+    </message>
+    <message>
+        <source>Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.</source>
+        <translation>Deux inverseurs : la lumière s'allume des deux bouts du couloir.</translation>
+    </message>
+    <message>
+        <source>Ohne Schutzwiderstand brennt die Leuchtdiode durch – »Rückgängig« macht sie wieder heil.</source>
+        <translation>Sans résistance de protection, la LED grille – « Annuler » la répare.</translation>
+    </message>
+    <message>
+        <source>Ein Magnet an der Tür startet eine Melodie.</source>
+        <translation>Un aimant sur la porte lance une mélodie.</translation>
+    </message>
+    <message>
+        <source>Der Zeitschreiber zeichnet auf, wie sich ein Kondensator füllt.</source>
+        <translation>L'enregistreur montre comment un condensateur se remplit.</translation>
+    </message>
+    <message>
+        <source>Ein kleiner Strom schaltet über das Relais einen großen.</source>
+        <translation>Un petit courant en commande un grand grâce au relais.</translation>
+    </message>
+    <message>
+        <source>Wird es dunkel, schaltet der Transistor das Licht ein. Unten bei »Licht, Wärme, Wasser« das Raumlicht ändern.</source>
+        <translation>Quand il fait sombre, le transistor allume la lumière. Change l'éclairage de la pièce en bas, sous « Lumière, chaleur, eau ».</translation>
+    </message>
+    <message>
+        <source>Taster drücken: Das Licht bleibt eine Weile an und geht von selbst wieder aus.</source>
+        <translation>Appuie sur le bouton : la lumière reste allumée un moment puis s'éteint toute seule.</translation>
+    </message>
+    <message>
+        <source>Zwei Transistoren schalten sich gegenseitig – die Leuchtdioden blinken im Wechsel.</source>
+        <translation>Deux transistors se commandent l'un l'autre – les LED clignotent en alternance.</translation>
     </message>
 </context>
 </TS>
