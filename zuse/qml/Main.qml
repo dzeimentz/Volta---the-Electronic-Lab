@@ -119,7 +119,7 @@ ApplicationWindow {
         spacing: 12
 
         StoryPanel {
-            Layout.preferredWidth: 300
+            Layout.preferredWidth: 270
             Layout.fillWidth: false
             Layout.fillHeight: true
         }

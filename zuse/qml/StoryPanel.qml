@@ -54,7 +54,7 @@ Rectangle {
             }
             Canvas { // Spitze der Blase zu Zetti
                 width: 28; height: 18
-                x: 40; y: parent.height - 2
+                x: 30; y: parent.height - 2
                 onPaint: {
                     const ctx = getContext("2d")
                     ctx.fillStyle = ZTheme.bubble
@@ -65,17 +65,17 @@ Rectangle {
                 }
             }
         }
-        Image { // Zetti
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.minimumHeight: 120
-            Layout.topMargin: 12
+        Image { // Zetti: klein unter der Sprechblase, begleitet im Hintergrund
+            Layout.preferredWidth: 96
+            Layout.preferredHeight: 120
+            Layout.topMargin: 10
             source: "qrc:/zuse/zetti/zetti_" + workbench.zettiPose + ".png"
             fillMode: Image.PreserveAspectFit
             horizontalAlignment: Image.AlignLeft
             smooth: true
             mipmap: true
         }
+        Item { Layout.fillHeight: true }
         Rectangle { // Merksatz nach dem Schaffen der Stufe
             visible: workbench.stageDone && workbench.stageMerksatz !== ""
             Layout.fillWidth: true
