@@ -556,15 +556,27 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
-            // Farbe fuer neue Leitungen: ein Knopf mit Auswahl (spart Platz in der Werkzeugleiste)
+            // Farbe fuer neue Leitungen: ein Knopf mit Auswahl (spart Platz in der Werkzeugleiste). Das »A« oben rechts
+            // zeigt die Automatik (Plus rot, Minus schwarz): rot = an, grau = aus. Umschalten: Klick auf das »A« (Maus,
+            // Stift) oder langer Druck auf den Knopf (Touch); Antippen oeffnet die Farbauswahl
             ToolButton {
                 id: wireColorButton
                 objectName: "wireColorButton"
+                readonly property bool auto: lab.settings ? lab.settings.autoWireColor : true
+                function toggleAuto() {
+                    if (!lab.settings) return
+                    lab.settings.autoWireColor = !lab.settings.autoWireColor
+                    toast.show(lab.settings.autoWireColor ? qsTr("Leitungsfarbe automatisch: Plus rot, Minus schwarz")
+                                                          : qsTr("Leitungsfarbe automatisch: aus"))
+                }
                 width: Theme.control; height: Theme.control
                 onClicked: wireColorMenu.open()
+                onPressAndHold: toggleAuto()
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Leitungsfarbe: %1").arg(Texts.colorName(lab.newWireColor))
+                ToolTip.text: qsTr("Leitungsfarbe: %1").arg(Texts.colorName(lab.newWireColor)) + " – "
+                              + (auto ? qsTr("Automatik an (Plus rot, Minus schwarz)") : qsTr("Automatik aus"))
                 Accessible.name: ToolTip.text
+                Accessible.description: qsTr("Langer Druck schaltet die Automatik um.")
                 contentItem: Item {
                     Rectangle {
                         anchors.centerIn: parent
@@ -573,8 +585,39 @@ Item {
                         border.color: Theme.solderAmber
                         border.width: 3
                     }
+                    // Automatik-Zeichen: Buchstabe und Farbe (nie Farbe allein: aus = grau und durchgestrichen)
+                    Rectangle {
+                        id: autoBadge
+                        objectName: "wireAutoBadge"
+                        x: parent.width - width + 2
+                        y: -2
+                        width: 17; height: 17; radius: 8.5
+                        color: wireColorButton.auto ? "#D32F2F" : "#7A838C"
+                        border.color: "white"
+                        border.width: 1
+                        Label {
+                            anchors.centerIn: parent
+                            text: "A"
+                            color: "white"
+                            font.pixelSize: 11
+                            font.bold: true
+                            font.strikeout: !wireColorButton.auto
+                        }
+                        // Maus und Stift: Klick auf das »A« schaltet um (nimmt den Druck, die Farbauswahl bleibt zu)
+                        TapHandler {
+                            objectName: "wireAutoTap"
+                            acceptedDevices: PointerDevice.Mouse | PointerDevice.Stylus | PointerDevice.TouchPad
+                            gesturePolicy: TapHandler.WithinBounds
+                            margin: 4
+                            onTapped: wireColorButton.toggleAuto()
+                        }
+                    }
                 }
-                background: Rectangle { radius: 6; color: parent.hovered ? "#2A4A6E" : "transparent" }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.hovered ? "#2A4A6E" : "transparent"
+                    border.color: "#7F93A8"
+                }
                 Menu {
                     id: wireColorMenu
                     margins: 8 // immer ganz im Fenster

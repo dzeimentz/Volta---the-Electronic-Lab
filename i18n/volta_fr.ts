@@ -1333,6 +1333,26 @@
 <context>
     <name>Lab</name>
     <message>
+        <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
+        <translation>Couleur automatique des fils : plus rouge, moins noir</translation>
+    </message>
+    <message>
+        <source>Leitungsfarbe automatisch: aus</source>
+        <translation>Couleur automatique des fils : désactivée</translation>
+    </message>
+    <message>
+        <source>Automatik an (Plus rot, Minus schwarz)</source>
+        <translation>automatique activé (plus rouge, moins noir)</translation>
+    </message>
+    <message>
+        <source>Automatik aus</source>
+        <translation>automatique désactivé</translation>
+    </message>
+    <message>
+        <source>Langer Druck schaltet die Automatik um.</source>
+        <translation>Un appui long active ou désactive l'automatique.</translation>
+    </message>
+    <message>
         <source>Ganze Platte zeigen</source>
         <translation>Afficher toute la plaque</translation>
     </message>

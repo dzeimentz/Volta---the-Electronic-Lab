@@ -1269,6 +1269,26 @@
 <context>
     <name>Lab</name>
     <message>
+        <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
+        <translation>Leitungsfaarf automatesch: Plus rout, Minus schwaarz</translation>
+    </message>
+    <message>
+        <source>Leitungsfarbe automatisch: aus</source>
+        <translation>Leitungsfaarf automatesch: aus</translation>
+    </message>
+    <message>
+        <source>Automatik an (Plus rot, Minus schwarz)</source>
+        <translation>Automatik un (Plus rout, Minus schwaarz)</translation>
+    </message>
+    <message>
+        <source>Automatik aus</source>
+        <translation>Automatik aus</translation>
+    </message>
+    <message>
+        <source>Langer Druck schaltet die Automatik um.</source>
+        <translation>Laangen Drock schalt d'Automatik ëm.</translation>
+    </message>
+    <message>
         <source>Ganze Platte zeigen</source>
         <translation>Ganz Plack weisen</translation>
     </message>

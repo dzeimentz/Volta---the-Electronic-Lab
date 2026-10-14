@@ -1389,6 +1389,32 @@ private slots:
         QCOMPARE(lab.parts().first().toMap().value(QStringLiteral("type")).toString(), QStringLiteral("gluehlampe"));
     }
 
+    // Leitungsfarbe: Knopf oeffnet die Auswahl; das »A« schaltet die Automatik (Klick mit der Maus), langer Druck
+    // (Touch) ebenso
+    void wireColorAutoBadge() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        QQuickItem* button = item(QStringLiteral("wireColorButton"));
+        QQuickItem* badge = item(QStringLiteral("wireAutoBadge"));
+        QVERIFY(button && badge);
+        m_settings->setAutoWireColor(true);
+        QTRY_COMPARE(badge->property("color").value<QColor>(), QColor(QStringLiteral("#D32F2F")));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(badge));
+        QTRY_VERIFY(!m_settings->autoWireColor());
+        QTRY_COMPARE(badge->property("color").value<QColor>(), QColor(QStringLiteral("#7A838C")));
+        // Klick auf das »A« oeffnet die Farbauswahl nicht
+        QQuickItem* red = item(QStringLiteral("wireColor_rot"));
+        QVERIFY(!red || !red->isVisible());
+        QMetaObject::invokeMethod(button, "pressAndHold"); // langer Druck (Touch)
+        QTRY_VERIFY(m_settings->autoWireColor());
+        // Antippen der Mitte oeffnet die Farbauswahl
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, button->mapToScene(QPointF(button->width() / 2 - 6,
+                                                                                   button->height() / 2 + 6)).toPoint());
+        QTRY_VERIFY(item(QStringLiteral("wireColor_rot")) && item(QStringLiteral("wireColor_rot"))->isVisible());
+        QTest::keyClick(m_window, Qt::Key_Escape);
+        QTRY_VERIFY(!item(QStringLiteral("wireColor_rot")) || !item(QStringLiteral("wireColor_rot"))->isVisible());
+    }
+
     // Vorfuehrung: fertiger Aufbau im Betrieb, alle Stufen offen, nichts wird gespeichert; danach sind Fortschritt und
     // eigener Aufbau sofort wieder da (ohne Neustart)
     void demoKeepsProfileData() {

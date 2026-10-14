@@ -1333,6 +1333,26 @@
 <context>
     <name>Lab</name>
     <message>
+        <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
+        <translation>Automatic wire colour: plus red, minus black</translation>
+    </message>
+    <message>
+        <source>Leitungsfarbe automatisch: aus</source>
+        <translation>Automatic wire colour: off</translation>
+    </message>
+    <message>
+        <source>Automatik an (Plus rot, Minus schwarz)</source>
+        <translation>automatic on (plus red, minus black)</translation>
+    </message>
+    <message>
+        <source>Automatik aus</source>
+        <translation>automatic off</translation>
+    </message>
+    <message>
+        <source>Langer Druck schaltet die Automatik um.</source>
+        <translation>Press and hold to switch the automatic on or off.</translation>
+    </message>
+    <message>
         <source>Ganze Platte zeigen</source>
         <translation>Show the whole board</translation>
     </message>
