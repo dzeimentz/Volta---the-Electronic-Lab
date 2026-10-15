@@ -292,7 +292,7 @@ Freischaltung wie Volta: Eine Stufe öffnet sich, wenn die vorige geschafft ist.
 
 ### 7.3 Zuse 3 (Skizze, neu ausgerichtet)
 
-Zuse 3 vertieft die Rechnerarchitektur und endet dort, wo der MCU Explorer beginnt.
+Zuse 3 vertieft die Rechnerarchitektur und endet dort, wo der MCU Explorer beginnt. Unterbrechungen und Zeitgeber werden hier nur auf Bauebene behandelt (aus Gattern und Registern); ihre Benutzung am echten Chip in C/C++ mit elektrischer Umgebung ist Sache des MCU Explorers. Die Arbeitsteilung im Einzelnen steht im Konzept MCU Explorer, Abschnitt 4.
 
 | Stufe | Thema | Ergebnis |
 |---|---|---|
@@ -463,6 +463,7 @@ Version 0.3 behält die tragfähige Technik von v0.2 – Logiksimulation, Prüfu
 ## Anhang B: Referenzen
 
 - DC Learning Ecosystem – Gesamtkonzept v1.1 und DC Learning Design Standard v1.0 (15.10.2026, Projektordner »Learning ECOSYSTEM«)
+- Konzept MCU Explorer v0.1 (`docs/Konzept_MCU_Explorer.md`): Abgrenzung zu Zuse 3
 - Konzept Volta – Das Elektronik-Labor v3.0
 - ADR-0010: Zuse als eigene Produktlinie (`docs/adr/0010-zuse-eigene-linie.md`)
 - ADR-0001 Qt 6, ADR-0005 Befehlsmuster, ADR-0006 keine Datenerhebung, ADR-0011 Inhalte als Qt-Ressource

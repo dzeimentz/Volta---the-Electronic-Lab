@@ -178,6 +178,7 @@ Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach A
 | `docs/roadmap.md` | Phasen, Aufwaende, offene Entscheidungen |
 | `docs/volta2-planung.md` | Entwurf Volta 2: Schwerpunkte, Bedienpult II, Audio-Risiko, Stufen, Timer 555 |
 | `docs/Konzept_Zuse.md` | Konzept der Zuse-Reihe (v0.3): Raetselkisten, Werkzeugkiste, Bedienfeld, Zahlensysteme, Lernpfade, Ecosystem; PDF mit `python3 tools/konzept_pdf.py docs/Konzept_Zuse.md` |
+| `docs/Konzept_MCU_Explorer.md` | Konzept MCU Explorer (v0.1): ATmega328P-Emulator, Kopplung an den Volta-Kern, Toolchain, Lernpfade, Abgrenzung zu Zuse 3 |
 | `docs/zuse1-planung.md` | Ergaenzungen zu Zuse 1: Entscheidungen, Auswertung ELRAD-Lehrgang Digitaltechnik |
 | `docs/partner/rechte-und-lizenzen.md` | Rechteinhaber, Fremdlizenzen, Marken, offene Punkte (fuer Partner/Verlage) |
 | `docs/partner/branding-konzept.md` | Partnerausgaben: was anpassbar ist, was fest bleibt, Aufwand |
