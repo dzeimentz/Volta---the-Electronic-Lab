@@ -182,6 +182,11 @@ def main() -> int:
     if aapt:
         badging = subprocess.run([str(aapt), "dump", "badging", str(apk)], capture_output=True, text=True,
                                  encoding="utf-8", errors="replace").stdout
+        # Paketname pruefen: Zuse und Volta duerfen sich auf dem Geraet nie gegenseitig ersetzen
+        name = re.search(r"package: name='([^']+)'", badging)
+        if not name or name.group(1) != PACKAGE:
+            print(f"FEHLER: Die APK hat den Paketnamen {name.group(1) if name else '?'}, erwartet {PACKAGE}")
+            return 1
         perms = [p for p in re.findall(r"uses-permission: name='([^']+)'", badging)
                  if not p.endswith("DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION")]
         if perms:

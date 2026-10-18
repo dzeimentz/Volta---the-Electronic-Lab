@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<!-- Volta - eigenes Manifest (docs/platforms.md, Android): KEINE Berechtigungen, kein INTERNET.
+<!-- Zuse 1 (Prototyp) - eigenes Manifest wie Volta (docs/platforms.md, Android): KEINE Berechtigungen, kein INTERNET.
      Qt wuerde ueber Multimedia und TextToSpeech sonst INTERNET, CAMERA, RECORD_AUDIO, BLUETOOTH u. a. eintragen;
      der Platzhalter INSERT_PERMISSIONS fehlt deshalb absichtlich, und tools:node="remove" entfernt Berechtigungen,
      die Bibliotheken beim Zusammenfuehren der Manifeste mitbringen. Keine Cloud-Sicherung (Daten der Kinder). -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dcsoftwareengineering.volta1"
+    package="com.dcsoftwareengineering.zuse1"
     android:installLocation="auto"
     android:versionCode="-- %%INSERT_VERSION_CODE%% --"
     android:versionName="-- %%INSERT_VERSION_NAME%% --">

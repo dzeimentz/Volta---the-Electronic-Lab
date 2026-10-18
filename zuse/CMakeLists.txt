@@ -19,7 +19,7 @@ set_target_properties(zuse_app PROPERTIES
     QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android-zuse" # keine Berechtigungen
     QT_ANDROID_PACKAGE_NAME "com.dcsoftwareengineering.zuse1"
     QT_ANDROID_VERSION_NAME "0.1.0"
-    QT_ANDROID_VERSION_CODE 1000 # ueber einem frueheren Probe-Build (900) auf den Testtablets
+    QT_ANDROID_VERSION_CODE 100
     QT_ANDROID_MIN_SDK_VERSION 26
     QT_ANDROID_TARGET_SDK_VERSION 36)
 
