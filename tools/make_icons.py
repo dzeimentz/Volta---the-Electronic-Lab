@@ -23,6 +23,23 @@ SIZES = [16, 24, 32, 48, 64, 128, 256, 512, 1024]
 ICO_SIZES = [16, 24, 32, 48, 64, 128, 256]
 
 
+def apple_icons(Image) -> None:
+    """iPadOS: App-Symbol 1024 px ohne Transparenz (App-Store-Vorgabe) auf dem Navy des Startbildschirms,
+    Startbild-Logo in 1x/2x/3x; macOS: volta.icns. Quelle ist das Volta-Symbol in 1024 px."""
+    big = Image.open(ICONS / "volta_1024.png").convert("RGBA")
+    navy = (10, 37, 64, 255)  # wie LaunchScreen.storyboard
+    ios = ROOT / "packaging" / "ios" / "Assets.xcassets"
+    flat = Image.new("RGBA", big.size, navy)
+    flat.alpha_composite(big)
+    flat.convert("RGB").save(ios / "AppIcon.appiconset" / "AppIcon-1024.png")
+    for name, size in (("LaunchLogo.png", 192), ("LaunchLogo@2x.png", 384), ("LaunchLogo@3x.png", 576)):
+        big.resize((size, size), Image.LANCZOS).save(ios / "LaunchLogo.imageset" / name)
+    mac = ROOT / "packaging" / "macos"
+    mac.mkdir(parents=True, exist_ok=True)
+    big.save(mac / "volta.icns", sizes=[(16, 16), (32, 32), (64, 64), (128, 128), (256, 256), (512, 512),
+                                        (1024, 1024)])
+
+
 def main() -> int:
     try:
         from PIL import Image
@@ -57,7 +74,9 @@ def main() -> int:
             target = ROOT / "packaging" / android / "res" / f"mipmap-{density}"
             target.mkdir(parents=True, exist_ok=True)
             big.resize((size, size), Image.LANCZOS).save(target / "ic_launcher.png")
-    print("Symbole erzeugt: app/resources/icons, zuse/resources/icons, packaging/android*/res")
+    apple_icons(Image)
+    print("Symbole erzeugt: app/resources/icons, zuse/resources/icons, packaging/android*/res, packaging/ios, "
+          "packaging/macos")
     return 0
 
 

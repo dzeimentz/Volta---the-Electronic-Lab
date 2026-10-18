@@ -10,6 +10,9 @@ elseif(VOLTA_EDITION STREQUAL "volta3")
 elseif(VOLTA_EDITION STREQUAL "zuse1")
     set(VOLTA_APP_NAME "Zuse 1 - Computertechnik fuer Einsteiger")
 endif()
+string(REGEX REPLACE " - .*" "" VOLTA_APP_SHORT_NAME "${VOLTA_APP_NAME}") # Name unter dem Symbol (iPadOS, macOS)
+# App-ID (Android-Paketname, iOS-Bundle-ID); vor der ersten Veroeffentlichung festlegen, danach unveraenderlich
+set(VOLTA_APP_ID "com.dcsoftwareengineering.${VOLTA_EDITION}" CACHE STRING "App-ID fuer Android und Apple")
 
 # Schaltungsmodell und Dienste: ohne Oberflaeche testbar (Qt Core fuer JSON)
 add_library(volta_model STATIC
@@ -66,15 +69,21 @@ set_target_properties(volta_app PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
     QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android" # eigenes Manifest: keine Berechtigungen
-    QT_ANDROID_PACKAGE_NAME "com.dcsoftwareengineering.${VOLTA_EDITION}"
+    QT_ANDROID_PACKAGE_NAME "${VOLTA_APP_ID}"
     QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
     QT_ANDROID_VERSION_CODE ${VOLTA_VERSION_CODE}
     QT_ANDROID_MIN_SDK_VERSION 26
     QT_ANDROID_TARGET_SDK_VERSION 36)
 
-# Inhaltspakete als Ressource (:/content): auf Android Pflicht (kein Dateisystem neben der App), auf dem Desktop
-# abschaltbar, damit Inhalte waehrend der Entwicklung ohne Neubau aus dem Quellbaum kommen
-option(VOLTA_EMBED_CONTENT "Inhaltspakete in die App einbetten" ${ANDROID})
+# Inhaltspakete als Ressource (:/content): auf Android und Apple (App-Bundle) Pflicht, weil es dort keinen Ordner neben
+# der ausfuehrbaren Datei gibt; auf dem Desktop abschaltbar, damit Inhalte waehrend der Entwicklung ohne Neubau aus
+# dem Quellbaum kommen
+if(ANDROID OR APPLE)
+    set(_volta_embed_default ON)
+else()
+    set(_volta_embed_default OFF)
+endif()
+option(VOLTA_EMBED_CONTENT "Inhaltspakete in die App einbetten" ${_volta_embed_default})
 if(VOLTA_EMBED_CONTENT)
     file(GLOB_RECURSE volta_content_files RELATIVE "${PROJECT_SOURCE_DIR}/content" CONFIGURE_DEPENDS
          "${PROJECT_SOURCE_DIR}/content/catalog/*.json" "${PROJECT_SOURCE_DIR}/content/volta1/*.json")
@@ -82,6 +91,39 @@ if(VOLTA_EMBED_CONTENT)
     qt_add_resources(volta_app "volta_content" PREFIX "/content" BASE "${PROJECT_SOURCE_DIR}/content"
                      FILES ${volta_content_files})
     target_compile_definitions(volta_app PRIVATE VOLTA_EMBEDDED_CONTENT)
+endif()
+
+# iPadOS (Vorrang vor macOS): nur iPad, alle Ausrichtungen, Startbildschirm des Systems, Datenschutz-Manifest,
+# App-Symbol ohne Transparenz (packaging/ios, Symbole aus tools/make_icons.py). Signierung in Xcode (Team).
+if(IOS)
+    set(_ios "${PROJECT_SOURCE_DIR}/packaging/ios")
+    target_sources(volta_app PRIVATE "${_ios}/Assets.xcassets" "${_ios}/PrivacyInfo.xcprivacy")
+    set_source_files_properties("${_ios}/Assets.xcassets" "${_ios}/PrivacyInfo.xcprivacy"
+                                PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(volta_app PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${_ios}/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
+        MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        QT_IOS_LAUNCH_SCREEN "${_ios}/LaunchScreen.storyboard"
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${VOLTA_APP_ID}"
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2" # nur iPad
+        XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+endif()
+
+# macOS: App-Bundle mit Info.plist und Symbol (packaging/macos); Laufzeit mit tools/deploy_release.py (macdeployqt)
+if(APPLE AND NOT IOS)
+    set(_mac "${PROJECT_SOURCE_DIR}/packaging/macos")
+    target_sources(volta_app PRIVATE "${_mac}/volta.icns")
+    set_source_files_properties("${_mac}/volta.icns" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(volta_app PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${_mac}/Info.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
+        MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
+        MACOSX_BUNDLE_ICON_FILE "volta.icns"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
 endif()
 
 target_compile_definitions(volta_app PRIVATE

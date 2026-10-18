@@ -34,6 +34,26 @@ def run(cmd: list[str], env: dict[str, str]) -> None:
         raise SystemExit(1)
 
 
+def deploy_macos(env: dict[str, str]) -> int:
+    """macOS: App-Bundle (<name>.app, Inhalte eingebettet) nach Release/ kopieren und die Qt-Laufzeit mit
+    macdeployqt hineinlegen. Nicht signiert: Weitergabe an andere Macs erst nach Signierung und Notarisierung."""
+    bundle = ROOT / "build" / PRESET / APP_DIR / f"{APP_NAME}.app"
+    if not bundle.exists():
+        print(f"{bundle} fehlt nach dem Bauen.")
+        return 1
+    TARGET.mkdir(parents=True, exist_ok=True)
+    target = TARGET / bundle.name
+    if target.exists():
+        shutil.rmtree(target)
+    shutil.copytree(bundle, target, symlinks=True)
+    deploy = shutil.which("macdeployqt", path=env.get("PATH")) or str(
+        Path(env.get("QT_ROOT_DESKTOP", "")) / "bin" / "macdeployqt")
+    run([deploy, str(target), f"-qmldir={ROOT / QML_DIR}"], env)
+    size_mb = sum(f.stat().st_size for f in target.rglob("*") if f.is_file()) / 1e6
+    print(f"Release: {target} ({size_mb:.0f} MB mit Laufzeit und Inhalten, nicht signiert)")
+    return 0
+
+
 def main() -> int:
     env, qt_root, use_mingw = environment()
     if qt_root is None:
@@ -45,6 +65,8 @@ def main() -> int:
     run(configure, env)
     run(["cmake", "--build", "--preset", PRESET], env)
 
+    if sys.platform == "darwin":
+        return deploy_macos(env)
     exe_name = f"{APP_NAME}.exe" if IS_WINDOWS else APP_NAME
     exe = ROOT / "build" / PRESET / APP_DIR / exe_name
     if not exe.exists():
