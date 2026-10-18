@@ -32,6 +32,7 @@ Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, dana
 |---|---|
 | ~~Referenztablet fuer Leistungstests~~ Meswoa MES-B3 15,6" (Entwicklung), A10 10,1" (Pruefung); Messung offen | Beginn Phase 0 |
 | Ergebnis Markenrecherche, ggf. Anmeldung – Vorrecherche erledigt (`docs/store/markenpruefung.md`), anwaltliche Bewertung offen | vor 1.0 |
+| App-Symbol auf die Reihenregel umstellen (`docs/design/symbole/volta1.svg`, LED-Balkenanzeige Band 1); bis dahin bleibt das bisherige Symbol | mit 1.0 |
 | Geraetelage Zielschulen, Reihenfolge Android/Desktop/iPad | Ende Phase 0 |
 | ~~Gestalt und Name der Begleitfigur~~ entschieden: Tick (`docs/maskottchen-tick.md`) | Ende Phase 1 |
 | Verwertungsweg (frei, Einmalkauf, Schullizenz) | vor dem Store-Eintrag |

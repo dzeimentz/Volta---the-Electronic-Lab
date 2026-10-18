@@ -107,6 +107,7 @@ Bedienung nach dem DC Learning Design Standard, Volta als Referenz:
 - **Links:** Bauteilfach aus dem Volta-Katalog (LED, Widerstand, Taster, Potentiometer, LDR, NTC, Summer, Lautsprecher, Transistor, Diode, Motor; später Servo, Schieberegister, Siebensegment).
 - **Rechts:** Aufgabe mit Forscherfrage und Hilfe (Maskottchen oder neutrales Hilfesystem, offen).
 - **Unten (umschaltbar):** Code-Editor, serieller Monitor, Registeransicht, Logikanalysator/Oszilloskop.
+- **Symbol:** M als Leiterbahn auf grüner Platine, deren Enden in die Steckleiste führen; Band als LED-Balkenanzeige (Regel für die ganze Reihe: `docs/design/symbole/README.md`).
 - **Kopfzeile:** Prüfen/Übersetzen, Hochladen, Start, Pause, Einzelschritt, Reset – gleiche Symbole wie Volta und Zuse.
 
 ### 5.2 Programmieren
