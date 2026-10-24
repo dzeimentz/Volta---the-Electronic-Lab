@@ -21,6 +21,7 @@
 #include "app_settings.hpp"
 #include "language_service.hpp"
 #include "volta/core/version.hpp"
+#include "volta_paths.hpp"
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 

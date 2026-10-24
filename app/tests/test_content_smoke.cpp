@@ -12,6 +12,7 @@
 #include "services/content_repository.hpp"
 #include "volta/core/components/switch.hpp"
 #include "volta/core/simulator.hpp"
+#include "volta_paths.hpp"
 
 using namespace volta;
 

@@ -10,6 +10,7 @@
 #include "services/content_repository.hpp"
 #include "sim/simulation_bridge.hpp"
 #include "volta/core/components/capacitor.hpp"
+#include "volta_paths.hpp"
 
 using namespace volta;
 

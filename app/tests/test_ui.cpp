@@ -24,6 +24,7 @@
 #include "language_service.hpp"
 #include "services/progress_store.hpp"
 #include "services/journal_store.hpp"
+#include "volta_paths.hpp"
 #include <QImage>
 #include <QImageReader>
 

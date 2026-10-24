@@ -24,6 +24,7 @@
 #include "volta/core/components/capacitor.hpp"
 #include "volta/core/components/meter.hpp"
 #include "volta/core/simulator.hpp"
+#include "volta_paths.hpp"
 
 using namespace volta;
 using model::AnchorKind;

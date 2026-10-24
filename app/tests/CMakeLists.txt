@@ -5,7 +5,7 @@ function(volta_qt_test name source)
     qt_add_executable(${name} ${source})
     target_link_libraries(${name} PRIVATE volta_model Qt6::Test)
     set_target_properties(${name} PROPERTIES WIN32_EXECUTABLE OFF) # Konsolenprogramm: Testausgabe sichtbar
-    target_compile_definitions(${name} PRIVATE VOLTA_CONTENT_DIR="${PROJECT_SOURCE_DIR}/content")
+    target_include_directories(${name} PRIVATE "${VOLTA_GENERATED_DIR}") # volta_paths.hpp (VOLTA_CONTENT_DIR)
     add_test(NAME ${name} COMMAND ${name})
     # Qt-Bibliotheken fuer den Testlauf auffindbar machen (Windows: PATH)
     if(WIN32)

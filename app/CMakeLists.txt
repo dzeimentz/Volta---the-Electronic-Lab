@@ -129,8 +129,14 @@ endif()
 target_compile_definitions(volta_app PRIVATE
     VOLTA_EDITION="${VOLTA_EDITION}"
     VOLTA_APP_NAME="${VOLTA_APP_NAME}"
-    VOLTA_VERSION="${PROJECT_VERSION}"
-    VOLTA_CONTENT_DIR="${PROJECT_SOURCE_DIR}/content")
+    VOLTA_VERSION="${PROJECT_VERSION}")
+
+# Pfad zu content/ als erzeugter Header statt als Compiler-Definition: CMake verwirft Definitionen, deren Wert ein
+# '#' enthaelt (z. B. Klon unter "DC LEARNING#"), stillschweigend
+set(VOLTA_GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+file(CONFIGURE OUTPUT "${VOLTA_GENERATED_DIR}/volta_paths.hpp"
+    CONTENT "#pragma once\n#define VOLTA_CONTENT_DIR \"@PROJECT_SOURCE_DIR@/content\"\n" @ONLY)
+target_include_directories(volta_app PRIVATE "${VOLTA_GENERATED_DIR}")
 
 # Oberflaeche als statische QML-Bibliothek (URI Volta): von der App und von den Oberflaechentests genutzt
 set_source_files_properties(qml/Theme.qml qml/Texts.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
