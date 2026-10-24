@@ -4,6 +4,7 @@
 #include <QtTest>
 
 #include "workbench_controller.hpp"
+#include "zuse_paths.hpp"
 
 using namespace zuse;
 using volta::logic::Level;
