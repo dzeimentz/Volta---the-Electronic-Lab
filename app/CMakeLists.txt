@@ -253,6 +253,12 @@ target_link_libraries(volta_app PRIVATE
     volta_ui volta_uiplugin
     Qt6::Quick Qt6::QuickControls2 Qt6::Multimedia Qt6::TextToSpeech Qt6::Svg)
 
+# iOS: Qt Multimedia mit dem nativen Darwin-Backend statt FFmpeg (die FFmpeg-xcframeworks aus der Qt-Installation
+# werden beim Xcode-Build nicht mitgelinkt; ausserdem deutlich kleiner, Ziel < 80 MB)
+if(IOS)
+    qt_import_plugins(volta_app INCLUDE Qt6::QDarwinMediaPlugin EXCLUDE Qt6::QFFmpegMediaPlugin)
+endif()
+
 if(VOLTA_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
