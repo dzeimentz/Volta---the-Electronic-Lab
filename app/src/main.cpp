@@ -29,6 +29,9 @@ int main(int argc, char* argv[]) {
 #ifdef Q_OS_WIN
     // Tonausgabe ueber das Windows-eigene Backend (ohne FFmpeg, docs/adr/0009-tonausgabe-und-vorlesen.md)
     if (qEnvironmentVariableIsEmpty("QT_MEDIA_BACKEND")) qputenv("QT_MEDIA_BACKEND", "windows");
+#elif defined(Q_OS_MACOS)
+    // macOS ebenso ueber das systemeigene Backend (AVFoundation); FFmpeg wird nicht ausgeliefert
+    if (qEnvironmentVariableIsEmpty("QT_MEDIA_BACKEND")) qputenv("QT_MEDIA_BACKEND", "darwin");
 #endif
     QGuiApplication app(argc, argv);
 #ifdef Q_OS_ANDROID

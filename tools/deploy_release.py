@@ -34,6 +34,49 @@ def run(cmd: list[str], env: dict[str, str]) -> None:
         raise SystemExit(1)
 
 
+def prune_macos(app: Path) -> None:
+    """Wie unter Windows nur Benoetigtes ausliefern: Ton ueber das Darwin-Backend (ohne FFmpeg), Stil Basic,
+    kein Netz (networkinformation, tls), keine Datenbank; danach Frameworks entfernen, die nichts mehr laedt."""
+    contents = app / "Contents"
+    plugins, frameworks, qml = contents / "PlugIns", contents / "Frameworks", contents / "Resources" / "qml"
+    unwanted = [plugins / "multimedia" / "libffmpegmediaplugin.dylib",
+                plugins / "texttospeech" / "libqtexttospeech_mock.dylib",
+                plugins / "networkinformation", plugins / "tls", plugins / "sqldrivers",
+                plugins / "imageformats" / "libqgif.dylib", plugins / "imageformats" / "libqico.dylib",
+                plugins / "quick" / "libqtquickcontrols2nativestyleplugin.dylib",
+                plugins / "quick" / "libqmllocalstorageplugin.dylib",
+                plugins / "quick" / "libqmlxmllistmodelplugin.dylib",
+                plugins / "quick" / "libparticlesplugin.dylib",
+                qml / "QtQuick" / "NativeStyle", qml / "QtQuick" / "LocalStorage", qml / "QtQuick" / "Particles",
+                qml / "QtQml" / "XmlListModel", qml / "QtQuick" / "Controls" / "designer"]
+    unwanted += list(frameworks.glob("libav*.dylib")) + list(frameworks.glob("libsw*.dylib"))
+    for style in ("Fusion", "Imagine", "Material", "Universal", "FluentWinUI3", "iOS", "macOS"):
+        unwanted += list(plugins.glob(f"quick/libqtquickcontrols2{style.lower()}style*plugin.dylib"))
+        unwanted.append(qml / "QtQuick" / "Controls" / style)
+    for f in unwanted:
+        if f.is_dir() and not f.is_symlink():
+            shutil.rmtree(f)
+        elif f.exists() or f.is_symlink():
+            f.unlink()
+    # Frameworks behalten, die vom Programm oder einem verbliebenen Plugin (auch mittelbar) geladen werden
+    def deps(binary: Path) -> set[str]:
+        out = subprocess.run(["otool", "-L", str(binary)], capture_output=True, text=True).stdout
+        return {line.split()[0].split("/")[-1] for line in out.splitlines()[1:] if "@" in line}
+    binaries = {f"{fw.stem}": fw / fw.stem for fw in frameworks.glob("*.framework")}
+    binaries.update({lib.name: lib for lib in frameworks.glob("*.dylib")})
+    pending = [contents / "MacOS" / app.stem] + list(plugins.rglob("*.dylib"))
+    needed: set[str] = set()
+    while pending:
+        for name in deps(pending.pop()):
+            if name in binaries and name not in needed:
+                needed.add(name)
+                pending.append(binaries[name])
+    for name, binary in binaries.items():
+        if name not in needed:
+            target = binary.parent if binary.parent.suffix == ".framework" else binary
+            shutil.rmtree(target) if target.is_dir() else target.unlink()
+
+
 def deploy_macos(env: dict[str, str]) -> int:
     """macOS: App-Bundle (<name>.app, Inhalte eingebettet) nach Release/ kopieren und die Qt-Laufzeit mit
     macdeployqt hineinlegen. Nicht signiert: Weitergabe an andere Macs erst nach Signierung und Notarisierung."""
@@ -49,7 +92,10 @@ def deploy_macos(env: dict[str, str]) -> int:
     deploy = shutil.which("macdeployqt", path=env.get("PATH")) or str(
         Path(env.get("QT_ROOT_DESKTOP", "")) / "bin" / "macdeployqt")
     run([deploy, str(target), f"-qmldir={ROOT / QML_DIR}"], env)
-    size_mb = sum(f.stat().st_size for f in target.rglob("*") if f.is_file()) / 1e6
+    prune_macos(target)
+    # Nach dem Entfernen neu ad-hoc signieren (Apple Silicon startet nur signierte Programme; kein Zertifikat)
+    run(["codesign", "--force", "--deep", "--sign", "-", str(target)], env)
+    size_mb = sum(f.stat().st_size for f in target.rglob("*") if f.is_file() and not f.is_symlink()) / 1e6
     print(f"Release: {target} ({size_mb:.0f} MB mit Laufzeit und Inhalten, nicht signiert)")
     return 0
 
