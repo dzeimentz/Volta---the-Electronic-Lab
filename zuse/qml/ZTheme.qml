@@ -15,6 +15,11 @@ QtObject {
     readonly property color accentText: "#0E7490" // Akzent fuer Schrift (Kontrast auf Weiss)
     readonly property color accentDim: "#A5E3EF"
     readonly property color navy: "#2E4A7D"       // Muetze von Zetti
+    // Grundschale wie Volta (DC Learning Design Standard): dunkelblaue Kopfzeile, Bibliothek links
+    readonly property color shell: "#0A2540"
+    readonly property color library: "#1A3A5C"
+    readonly property color textOnShell: "#FFFFFF"
+    readonly property color textOnShellMuted: "#B8C7D9"
     readonly property color text: "#14213D"
     readonly property color textOnAccent: "#FFFFFF"
     readonly property color muted: "#5B6B7C"

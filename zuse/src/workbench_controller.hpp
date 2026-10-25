@@ -70,6 +70,7 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList panelOutputs READ panelOutputs NOTIFY viewChanged) // LEDs mit Bedeutung und Pegel
     Q_PROPERTY(QVariantList boxes READ boxes NOTIFY viewChanged)
     Q_PROPERTY(int boxIndex READ boxIndex NOTIFY viewChanged)
+    Q_PROPERTY(bool guessing READ guessing NOTIFY checkChanged) // Entdecken: erst vermuten, dann ausprobieren
     Q_PROPERTY(QString zettiPose READ zettiPose NOTIFY messageChanged)
     // Zahlensysteme: Schalter bzw. LEDs als Zahl (erster Anschluss = hoechstes Bit) binaer, dezimal, hexadezimal;
     // Anzeige zuschaltbar (Einstellung, Vorgabe an)
@@ -124,6 +125,7 @@ public:
     QVariantList panelOutputs() const;
     QVariantList boxes() const;
     int boxIndex() const { return m_box; }
+    bool guessing() const;
     QString zettiPose() const { return m_pose; }
     QVariantMap inputNumber() const;
     QVariantMap outputNumber() const;
@@ -165,6 +167,8 @@ public:
     Q_INVOKABLE void showSolution();     // Musterloesung (gestufte Hilfe, letzte Stufe)
     Q_INVOKABLE void selectBox(int index); // Raetselkiste einsetzen (entdecken)
     Q_INVOKABLE bool confirmBox();         // »Diese Kiste passt«
+    Q_INVOKABLE void toggleGuess(int row); // Vermutung einer Zeile: ? -> 1 -> 0 -> 1 ...
+    Q_INVOKABLE void skipGuess();          // ohne Vermutung ausprobieren
 
     // fuer Befehle und Tests
     const volta::logic::ChipDef& def() const { return m_def; }
@@ -222,6 +226,8 @@ private:
     QString m_pose = QStringLiteral("zeigend");
     int m_box = -1;             // eingesetzte Raetselkiste
     std::vector<char> m_seen;   // Zeilen, die mit dieser Kiste schon ausprobiert wurden
+    std::vector<volta::logic::Level> m_guess; // Vermutung je Zeile (X = noch offen)
+    bool m_guessSkipped = false;
     QString m_symbolStyle = QStringLiteral("din");
     bool m_numbersVisible = true;
 };

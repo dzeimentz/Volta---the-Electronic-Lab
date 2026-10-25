@@ -1,13 +1,13 @@
 import QtQuick
 import QtQuick.Shapes
 
-// Entdeckerstufe: Schalter links, Steckplatz mit der eingesetzten Raetselkiste in der Mitte, LED rechts; unten die
-// Kisten zur Auswahl. Das Kind probiert aus und findet die Regel (NICHT, UND, ODER) selbst. Koordinaten in dp eines
-// Rahmens von 900 x 600, auf die verfuegbare Flaeche skaliert.
+// Entdeckerstufe: Schalter links, Steckplatz mit der eingesetzten Raetselkiste in der Mitte, LED rechts; die Kisten
+// liegen in der Bibliothek links. Das Kind probiert aus und findet die Regel (NICHT, UND, ODER) selbst. Koordinaten
+// in dp eines Rahmens von 900 x 440, auf die verfuegbare Flaeche skaliert.
 Item {
     id: root
     readonly property real fw: 900
-    readonly property real fh: 600
+    readonly property real fh: 440
     readonly property real s: Math.min(width / fw, height / fh)
 
     readonly property var inputs: workbench.panelInputs
@@ -17,7 +17,7 @@ Item {
 
     // Steckplatz
     readonly property real sx: 380
-    readonly property real sy: 120
+    readonly property real sy: 100
     readonly property real sw: 160
     readonly property real sh: 200
 
@@ -164,49 +164,6 @@ Item {
                                                              : qsTr("Kiste %1").arg(root.current.index + 1)) : ""
                 color: ZTheme.text
                 font.pixelSize: 18; font.bold: true
-            }
-        }
-
-        // Auswahl der Kisten
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-            y: 440
-            spacing: 24
-            Repeater {
-                model: root.boxList
-                delegate: Rectangle {
-                    id: card
-                    required property var modelData
-                    width: 150; height: 120
-                    radius: 16
-                    color: modelData.selected ? "#FFF7E6" : ZTheme.surface
-                    border.width: modelData.selected ? 4 : 2
-                    border.color: modelData.selected ? ZTheme.pad : ZTheme.line
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 4
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: card.modelData.revealed ? card.modelData.name : "?"
-                            color: card.modelData.revealed ? ZTheme.accentText : ZTheme.padDark
-                            font.pixelSize: card.modelData.revealed ? 28 : 48; font.bold: true
-                        }
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: qsTr("Kiste %1").arg(card.modelData.index + 1)
-                            color: ZTheme.muted
-                            font.pixelSize: 15
-                        }
-                    }
-                    Text { // gewaehlt: nicht nur ueber die Farbe
-                        visible: card.modelData.selected
-                        anchors { top: parent.top; right: parent.right; margins: 8 }
-                        text: "✓"
-                        color: ZTheme.padDark
-                        font.pixelSize: 20; font.bold: true
-                    }
-                    TapHandler { onTapped: workbench.selectBox(card.modelData.index) }
-                }
             }
         }
     }

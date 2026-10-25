@@ -26,6 +26,7 @@ void finishBit(WorkbenchController& w) {
 void discover(WorkbenchController& w, int stage) {
     QVERIFY(w.selectStage(stage));
     QCOMPARE(w.stageKind(), QStringLiteral("entdecken"));
+    w.skipGuess();
     for (const QVariant& b : w.boxes()) {
         const QVariantMap box = b.toMap();
         if (box["symbol"].toString().isEmpty()) continue; // nur die richtige Kiste hat ein Zeichen
@@ -86,6 +87,14 @@ private slots:
         // ohne Kiste ist die LED nicht angeschlossen
         QCOMPARE(w.levelAt("Y"), Level::X);
         QVERIFY(!w.confirmBox());
+        // erst vermuten, dann ausprobieren: ohne Vermutung laesst sich keine Kiste einsetzen
+        QVERIFY(w.guessing());
+        w.selectBox(0);
+        QCOMPARE(w.boxIndex(), -1);
+        for (int r = 0; r < 4; ++r) w.toggleGuess(r); // vermutet: immer offen (1)
+        w.toggleGuess(0);                             // ... ausser ohne Schluessel (0)
+        QVERIFY(!w.guessing());
+        QCOMPARE(w.checkRows()[0].toMap()["guess"].toString(), QStringLiteral("0"));
         // Kiste 1 (ODER) oeffnet schon mit einem Schluessel: falsch, mit konkreter Erklaerung
         w.selectBox(0);
         w.toggleInput("A");
@@ -98,6 +107,8 @@ private slots:
         QCOMPARE(rows[2].toMap()["actual"].toString(), QStringLiteral("1"));
         QCOMPARE(rows[3].toMap()["actual"].toString(), QString());
         QCOMPARE(rows[2].toMap()["expected"].toString(), QString());
+        QCOMPARE(rows[2].toMap()["match"].toString(), QStringLiteral("=")); // wie vermutet
+        QCOMPARE(rows[3].toMap()["match"].toString(), QString());          // noch nicht ausprobiert
         // Kiste 3 ist UND
         w.selectBox(2);
         QCOMPARE(w.levelAt("Y"), Level::Zero);
@@ -105,6 +116,8 @@ private slots:
         QCOMPARE(w.levelAt("Y"), Level::One);
         QVERIFY(w.confirmBox());
         QCOMPARE(w.zettiPose(), QStringLiteral("begeistert"));
+        QVERIFY(w.message().contains("2 Zeilen kam es anders")); // Vermutung 0111, UND ist 0001
+        QVERIFY(!w.guessing());
         // die Werkzeugkiste kennt jetzt NICHT und UND
         const QVariantList tools = w.tools();
         QCOMPARE(tools.size(), 2);

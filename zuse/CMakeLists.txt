@@ -34,7 +34,10 @@ qt_add_qml_module(zuse_app
         qml/GateBody.qml
         qml/GateShape.qml
         qml/DiscoverStage.qml
-        qml/StoryPanel.qml
+        qml/TaskPanel.qml
+        qml/LibraryPanel.qml
+        qml/StagePicker.qml
+        qml/HeaderButton.qml
         qml/ToolboxPopup.qml
         qml/NumberStrip.qml
         qml/NumbersPopup.qml

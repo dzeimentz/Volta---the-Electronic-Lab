@@ -227,9 +227,9 @@ Volta ist die gestalterische und interaktive Referenz; Zuse übernimmt Grundnavi
 
 | Bereich | Design Standard | Zuse (Prototyp Z0) | Angleichung |
 |---|---|---|---|
-| Kopfzeile | dunkelblau, Produkt, Lernstufe, Betrieb, globale Aktionen | weiß mit Stufen-Nummern | auf Dunkelblau umstellen, Aufbau wie Volta |
-| Layout | Bibliothek links, Arbeitsfläche Mitte, Aufgaben rechts, optionale Leiste unten | Erzählung links, Werkzeuge mittig links, Tabelle rechts, Zahlenleiste unten | Werkzeuge links, Aufgabe mit Zetti und Tabelle rechts, Zahlenleiste als untere Messleiste |
-| Lernzyklus | Forscherfrage → Vermutung → Aufbau → Betrieb → Beobachtung → Erklärung → Reflexion | Frage → Ausprobieren → Benennen → Benutzen | »Vermutung« ergänzen: Vor dem Ausprobieren tippt das Kind, welche Kiste passt |
+| Kopfzeile | dunkelblau, Produkt, Lernstufe, Betrieb, globale Aktionen | weiß mit Stufen-Nummern | **umgesetzt:** dunkelblau, Stufenauswahl als Liste mit Frage, Haken und Schloss |
+| Layout | Bibliothek links, Arbeitsfläche Mitte, Aufgaben rechts, optionale Leiste unten | Erzählung links, Werkzeuge mittig links, Tabelle rechts, Zahlenleiste unten | **umgesetzt:** Bibliothek links (Werkzeuge bzw. Rätselkisten), Aufgabe mit Zetti und Tabelle rechts, Zahlenleiste unten |
+| Lernzyklus | Forscherfrage → Vermutung → Aufbau → Betrieb → Beobachtung → Erklärung → Reflexion | Frage → Ausprobieren → Benennen → Benutzen | **umgesetzt (Entdecken):** Vor dem Ausprobieren trägt das Kind in die Tabelle ein, was bei jeder Schalterstellung passieren soll; die Kisten öffnen sich danach (»Weiß ich nicht« möglich); beim Ausprobieren zeigt »=« / »≠« den Vergleich mit der eigenen Vermutung, am Ende ein Vergleich ohne Wertung |
 | Hilfe | Frage, Hinweis, nächster Prüfschritt, Lösung nur auf Wunsch | Tipp, Rückmeldung mit Schalterstellung, Musterlösung auf Knopfdruck | entspricht; Hinweisfolge stufen |
 | Akzent | Cyan für Zuse | Cyan | entspricht |
 | Projekte | Öffnen, Speichern, Export, gemeinsames Format (.dclearn) | lokale Ablage | Export und Import im gemeinsamen Format |

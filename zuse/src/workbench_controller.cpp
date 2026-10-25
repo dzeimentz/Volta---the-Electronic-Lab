@@ -169,6 +169,7 @@ QVariantList WorkbenchController::stages() const {
                                 {"kuerzel", s.kuerzel},
                                 {"symbol", s.symbol},
                                 {"title", s.title},
+                                {"question", s.question},
                                 {"unlocked", unlocked(int(i))},
                                 {"done", m_done.contains(s.kuerzel)}});
     }
@@ -229,6 +230,8 @@ void WorkbenchController::startStage(int index) {
     m_check = CheckResult{};
     m_box = -1;
     m_seen.assign(s.table.size(), 0);
+    m_guess.assign(s.table.size(), Level::X);
+    m_guessSkipped = false;
     setMessage(QString(), s.kind == "entdecken" ? QStringLiteral("erklaerend") : QStringLiteral("zeigend"));
     rebuild();
     emit stageChanged();
@@ -445,6 +448,10 @@ QVariantList WorkbenchController::checkRows() const {
             row.insert("actual", seen ? joinLevels(s.boxes[size_t(m_box)][r]) : QString());
             row.insert("ok", true);
             row.insert("current", r == currentRow());
+            const QString guess = r < m_guess.size() && m_guess[r] != Level::X ? joinLevels({m_guess[r]}) : QString();
+            row.insert("guess", guess);
+            // Vergleich mit der eigenen Vermutung (nicht mit dem Soll): "=" oder "≠", leer solange offen
+            row.insert("match", seen && !guess.isEmpty() ? (row["actual"].toString() == guess ? "=" : "≠") : QString());
         } else if (m_checkDone && r < m_check.rows.size()) {
             row.insert("actual", joinLevels(m_check.rows[r].actual));
             row.insert("ok", m_check.rows[r].ok);
@@ -773,6 +780,11 @@ QVariantList WorkbenchController::boxes() const {
 
 void WorkbenchController::selectBox(int index) {
     if (!isDiscover() || index < 0 || index >= int(m_stages[size_t(m_stage)].boxes.size()) || index == m_box) return;
+    if (guessing()) {
+        setMessage(tr("Erst vermuten: Tippe in der Tabelle für jede Schalterstellung 1 (an) oder 0 (aus)."),
+                   QStringLiteral("nachdenklich"));
+        return;
+    }
     m_box = index;
     std::fill(m_seen.begin(), m_seen.end(), 0); // neue Kiste: neu ausprobieren
     if (currentRow() < m_seen.size()) m_seen[currentRow()] = 1;
@@ -791,8 +803,19 @@ bool WorkbenchController::confirmBox() {
     if (m_box == s.rightBox) {
         m_done.insert(s.kuerzel);
         save();
-        setMessage(tr("Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.")
-                       .arg(s.kuerzel, s.merksatz),
+        // Vermutung mit dem Ergebnis vergleichen, ohne zu werten
+        QString guessNote;
+        if (!m_guessSkipped) {
+            int differ = 0;
+            for (size_t r = 0; r < s.table.size() && r < m_guess.size(); ++r)
+                if (s.table[r].empty() || m_guess[r] != s.table[r][0]) ++differ;
+            guessNote = differ == 0 ? tr("Deine Vermutung hat gestimmt!") + QLatin1Char(' ')
+                    : (differ == 1 ? tr("Überraschung: In einer Zeile kam es anders, als du vermutet hast.")
+                                   : tr("Überraschung: In %1 Zeilen kam es anders, als du vermutet hast.").arg(differ))
+                          + QLatin1Char(' ');
+        }
+        setMessage(guessNote + tr("Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.")
+                                   .arg(s.kuerzel, s.merksatz),
                    QStringLiteral("begeistert"));
         emit stagesChanged();
         emit viewChanged();
@@ -816,6 +839,28 @@ bool WorkbenchController::confirmBox() {
         return false;
     }
     return false;
+}
+
+bool WorkbenchController::guessing() const {
+    if (!isDiscover() || m_guessSkipped || stageDone()) return false;
+    return std::any_of(m_guess.begin(), m_guess.end(), [](Level l) { return l == Level::X; });
+}
+
+void WorkbenchController::toggleGuess(int row) {
+    if (!isDiscover() || stageDone() || row < 0 || row >= int(m_guess.size())) return;
+    Level& g = m_guess[size_t(row)];
+    g = g == Level::One ? Level::Zero : Level::One;
+    if (!guessing() && m_box < 0)
+        setMessage(tr("Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!"),
+                   QStringLiteral("losgehts"));
+    emit checkChanged();
+}
+
+void WorkbenchController::skipGuess() {
+    if (!guessing()) return;
+    m_guessSkipped = true;
+    setMessage(tr("Gut, dann probier einfach aus! Setz eine Kiste ein."), QStringLiteral("losgehts"));
+    emit checkChanged();
 }
 
 QString WorkbenchController::toolName(const QString& type) const {

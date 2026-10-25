@@ -2,7 +2,7 @@
 // Offline, keine Datenerhebung: eigene Chips und Entwuerfe liegen nur in AppDataLocation.
 // Entwicklerhilfen: ZUSE_SCREENSHOT=<bild.png> (Bildschirmfoto statt Bedienung), ZUSE_SIZE=<b>x<h>,
 // ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen loesen und zur letzten gehen),
-// ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=numbers|toolbox (Fenster oeffnen),
+// ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=numbers|toolbox (Fenster oeffnen),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_SYMBOLS=din|us (Schaltzeichen).
 #include <QDir>
@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
         workbench.selectStage(s);
         if (workbench.isDone(workbench.stageKuerzel()) || s + 1 >= demo) continue;
         if (workbench.stageKind() == QStringLiteral("entdecken")) {
+            workbench.skipGuess();
             for (const QVariant& b : workbench.boxes())
                 if (!b.toMap().value("symbol").toString().isEmpty()) workbench.selectBox(b.toMap().value("index").toInt());
             workbench.confirmBox();
@@ -51,7 +52,13 @@ int main(int argc, char* argv[]) {
     }
 
     if (qEnvironmentVariableIsSet("ZUSE_SYMBOLS")) workbench.setSymbolStyle(qEnvironmentVariable("ZUSE_SYMBOLS"));
-    if (qEnvironmentVariableIsSet("ZUSE_DEMO_BOX")) workbench.selectBox(qEnvironmentVariableIntValue("ZUSE_DEMO_BOX"));
+    const QString guess = qEnvironmentVariable("ZUSE_DEMO_GUESS"); // z. B. "10": Vermutung je Zeile, "-" = offen
+    for (qsizetype r = 0; r < guess.size(); ++r)
+        for (int t = guess[r] == '1' ? 1 : guess[r] == '0' ? 2 : 0; t > 0; --t) workbench.toggleGuess(int(r));
+    if (qEnvironmentVariableIsSet("ZUSE_DEMO_BOX")) {
+        workbench.skipGuess();
+        workbench.selectBox(qEnvironmentVariableIntValue("ZUSE_DEMO_BOX"));
+    }
     for (const QString& name : qEnvironmentVariable("ZUSE_DEMO_ON").split(',', Qt::SkipEmptyParts))
         workbench.toggleInput(name);
     for (const QString& id : qEnvironmentVariable("ZUSE_DEMO_INSIDE").split('/', Qt::SkipEmptyParts))
