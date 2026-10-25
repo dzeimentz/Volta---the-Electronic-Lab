@@ -112,6 +112,11 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         s.makesChip = s.kind == "bauen" && o.value("chip").toBool(true);
         for (const QJsonValue& x : o.value("bausteine").toArray()) s.palette << x.toString();
         for (const QJsonValue& x : o.value("wahrheitstabelle").toArray()) s.table.push_back(parseLevels(x.toString()));
+        for (const QJsonValue& x : o.value("aufgaben").toArray()) s.targets.push_back(x.toInt());
+        for (const QJsonValue& x : o.value("eingabegruppen").toArray())
+            s.inputGroups.emplace_back(x.toObject().value("name").toString(), x.toObject().value("bits").toInt());
+        for (const QJsonValue& x : o.value("proben").toArray())
+            s.samples.emplace_back(size_t(x.toArray().at(0).toInt()), x.toArray().at(1).toString());
         QJsonObject sol = o.value("loesung").toObject();
         sol.insert("kuerzel", s.kuerzel);
         chipFromJson(sol, s.solution);
@@ -214,7 +219,10 @@ void WorkbenchController::startStage(int index) {
     m_stage = index;
     const Stage& s = m_stages[size_t(index)];
     const auto draft = m_drafts.find(s.kuerzel);
-    if (draft != m_drafts.end()) {
+    if (s.kind == "zahlen") { // fest verdrahtet: Schalter direkt an den LEDs
+        m_def = s.solution;
+        m_def.kuerzel = s.kuerzel.toStdString();
+    } else if (draft != m_drafts.end()) {
         m_def = draft->second;
     } else {
         m_def = ChipDef{};
@@ -233,6 +241,7 @@ void WorkbenchController::startStage(int index) {
     m_seen.assign(s.table.size(), 0);
     m_guess.assign(s.table.size(), Level::X);
     m_guessSkipped = false;
+    m_task = 0;
     setMessage(QString(), s.kind == "entdecken" ? QStringLiteral("erklaerend") : QStringLiteral("zeigend"));
     rebuild();
     emit stageChanged();
@@ -258,6 +267,7 @@ void WorkbenchController::push(const ChipDef& after, const QString& text) {
 }
 
 QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
+    if (isCounting()) return {}; // fest verdrahtetes Bedienfeld
     if (inside() || m_stages.empty() || !m_stages[size_t(m_stage)].palette.contains(type)) return {};
     const std::string t = type.toStdString();
     if (toolName(type).isEmpty()) return {}; // Werkzeug noch nicht in der Kiste
@@ -279,6 +289,7 @@ QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
 }
 
 void WorkbenchController::movePart(const QString& id, qreal x, qreal y) {
+    if (isCounting()) return; // fest verdrahtetes Bedienfeld
     if (inside()) return;
     ChipDef after = m_def;
     for (Part& p : after.parts) {
@@ -295,6 +306,7 @@ void WorkbenchController::movePart(const QString& id, qreal x, qreal y) {
 }
 
 void WorkbenchController::removePart(const QString& id) {
+    if (isCounting()) return; // fest verdrahtetes Bedienfeld
     if (inside()) return;
     const std::string pid = id.toStdString();
     ChipDef after = m_def;
@@ -310,6 +322,7 @@ void WorkbenchController::removePart(const QString& id) {
 }
 
 bool WorkbenchController::connectPins(const QString& a, const QString& b) {
+    if (isCounting()) return false; // fest verdrahtetes Bedienfeld
     if (inside() || a == b) return false;
     const std::string from = a.toStdString(), to = b.toStdString();
     for (const Connection& c : m_def.connections)
@@ -328,6 +341,7 @@ bool WorkbenchController::connectPins(const QString& a, const QString& b) {
 }
 
 void WorkbenchController::removeWire(int index) {
+    if (isCounting()) return; // fest verdrahtetes Bedienfeld
     if (inside() || index < 0 || index >= int(m_def.connections.size())) return;
     ChipDef after = m_def;
     after.connections.erase(after.connections.begin() + index);
@@ -335,6 +349,7 @@ void WorkbenchController::removeWire(int index) {
 }
 
 void WorkbenchController::clearBench() {
+    if (isCounting()) return; // fest verdrahtetes Bedienfeld
     if (inside() || (m_def.parts.empty() && m_def.connections.empty())) return;
     ChipDef after = m_def;
     after.parts.clear();
@@ -343,6 +358,7 @@ void WorkbenchController::clearBench() {
 }
 
 void WorkbenchController::showSolution() {
+    if (isCounting()) return; // fest verdrahtetes Bedienfeld
     if (inside() || m_stages.empty()) return;
     ChipDef after = m_def;
     after.parts = m_stages[size_t(m_stage)].solution.parts;
@@ -394,6 +410,44 @@ void WorkbenchController::setInput(const QString& name, bool on) {
     }
     if (isDiscover() && m_box >= 0 && currentRow() < m_seen.size()) m_seen[currentRow()] = 1; // ausprobiert
     emit viewChanged();
+    if (isCounting()) checkTarget();
+}
+
+void WorkbenchController::checkTarget() {
+    const Stage& s = m_stages[size_t(m_stage)];
+    if (stageDone() || m_task >= s.targets.size()) return;
+    const QVariantMap shown = outputNumber();
+    const int target = s.targets[m_task];
+    if (shown.value("value").toInt() != target) return;
+    ++m_task;
+    if (m_task < s.targets.size()) {
+        setMessage(tr("Richtig: %1 ist binär %2. Jetzt zeig die %3!")
+                       .arg(target)
+                       .arg(shown.value("bin").toString())
+                       .arg(s.targets[m_task]),
+                   QStringLiteral("froehlich"));
+    } else {
+        m_done.insert(s.kuerzel);
+        save();
+        setMessage(tr("Super! %1 ist binär %2. Du kannst jetzt mit vier Lampen bis 15 zählen.")
+                       .arg(target)
+                       .arg(shown.value("bin").toString()),
+                   QStringLiteral("begeistert"));
+        emit stagesChanged();
+    }
+    emit checkChanged();
+}
+
+QVariantList WorkbenchController::tasks() const {
+    QVariantList list;
+    if (!isCounting()) return list;
+    const Stage& s = m_stages[size_t(m_stage)];
+    const bool solved = stageDone();
+    for (size_t i = 0; i < s.targets.size(); ++i)
+        list.append(QVariantMap{{"value", s.targets[i]},
+                                {"done", solved || i < m_task},
+                                {"current", !solved && i == m_task}});
+    return list;
 }
 
 Level WorkbenchController::levelAt(const QString& endpoint) const {
@@ -440,10 +494,17 @@ QVariantList WorkbenchController::checkRows() const {
     if (m_stages.empty()) return rows;
     const Stage& s = m_stages[size_t(m_stage)];
     const size_t n = size_t(1) << s.inputs.size();
-    for (size_t r = 0; r < n && r < s.table.size(); ++r) {
+    std::vector<size_t> shown;
+    for (const auto& sample : s.samples) shown.push_back(sample.first);
+    if (shown.empty())
+        for (size_t r = 0; r < n && r < s.table.size(); ++r) shown.push_back(r);
+    for (size_t k = 0; k < shown.size(); ++k) {
+        const size_t r = shown[k];
+        if (r >= s.table.size()) continue;
         QString in;
         for (qsizetype i = 0; i < s.inputs.size(); ++i) in += ((r >> (s.inputs.size() - 1 - i)) & 1u) ? '1' : '0';
         QVariantMap row{{"inputs", in}, {"expected", joinLevels(s.table[r])}};
+        if (k < s.samples.size()) row.insert("note", s.samples[k].second); // z. B. »3 + 5 = 8«
         if (s.kind == "entdecken") { // was die eingesetzte Kiste bisher gezeigt hat; das Soll findet das Kind selbst
             const bool seen = m_box >= 0 && r < m_seen.size() && m_seen[r];
             row.insert("expected", QString());
@@ -739,6 +800,23 @@ QVariantMap WorkbenchController::numberOf(const std::vector<Level>& bits) {
 }
 
 QVariantMap WorkbenchController::inputNumber() const { return numberOf(m_inputs); }
+
+QVariantList WorkbenchController::inputNumbers() const {
+    QVariantList list;
+    const std::vector<std::pair<QString, int>> groups =
+        m_stages.empty() || m_stages[size_t(m_stage)].inputGroups.empty()
+            ? std::vector<std::pair<QString, int>>{{QString(), int(m_inputs.size())}}
+            : m_stages[size_t(m_stage)].inputGroups;
+    size_t at = 0;
+    for (const auto& [title, bits] : groups) {
+        const size_t end = std::min(m_inputs.size(), at + size_t(bits));
+        QVariantMap number = numberOf(std::vector<Level>(m_inputs.begin() + long(at), m_inputs.begin() + long(end)));
+        number.insert("title", title);
+        list.append(number);
+        at = end;
+    }
+    return list;
+}
 
 QVariantMap WorkbenchController::outputNumber() const {
     std::vector<Level> bits;

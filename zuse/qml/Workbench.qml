@@ -8,7 +8,7 @@ Item {
     id: bench
     property string selectedPart: ""
     property int selectedWire: -1
-    readonly property bool editable: !workbench.inside
+    readonly property bool editable: !workbench.inside && !workbench.benchLocked
     readonly property real s: Math.min(width / workbench.frameWidth, height / workbench.frameHeight)
 
     // Leitung im Entstehen
@@ -142,7 +142,7 @@ Item {
                     kind: port.modelData.kind
                     level: port.modelData.level
                     compact: !!port.modelData.compact
-                    enabled: bench.editable
+                    enabled: !workbench.inside // Schalter bedienen geht auch am fest verdrahteten Bedienfeld
                 }
                 DragHandler {
                     target: null

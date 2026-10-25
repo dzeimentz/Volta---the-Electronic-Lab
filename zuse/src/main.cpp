@@ -44,6 +44,11 @@ int main(int argc, char* argv[]) {
             for (const QVariant& b : workbench.boxes())
                 if (!b.toMap().value("symbol").toString().isEmpty()) workbench.selectBox(b.toMap().value("index").toInt());
             workbench.confirmBox();
+        } else if (workbench.stageKind() == QStringLiteral("zahlen")) { // jede Aufgabe an den Schaltern einstellen
+            const QStringList in = workbench.stageInputs();
+            for (const QVariant& t : workbench.tasks())
+                for (qsizetype i = 0; i < in.size(); ++i)
+                    workbench.setInput(in[i], (t.toMap().value("value").toInt() >> (in.size() - 1 - i)) & 1);
         } else {
             workbench.showSolution();
             workbench.check();

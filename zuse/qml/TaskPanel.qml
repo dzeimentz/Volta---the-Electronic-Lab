@@ -9,6 +9,7 @@ Rectangle {
     id: root
     property bool hintVisible: false
     readonly property bool building: workbench.stageKind === "bauen"
+    readonly property bool counting: workbench.stageKind === "zahlen"
     readonly property bool hasNext: workbench.stageIndex + 1 < workbench.stages.length
     color: ZTheme.surface
     Rectangle { anchors { left: parent.left; top: parent.top; bottom: parent.bottom } width: 1; color: ZTheme.line }
@@ -112,8 +113,9 @@ Rectangle {
                 spacing: 8
                 Text {
                     Layout.fillWidth: true
-                    text: root.building ? qsTr("Wahrheitstabelle")
-                                        : workbench.guessing ? qsTr("Was vermutest du?") : qsTr("Was passiert?")
+                    text: root.counting ? qsTr("Aufgaben")
+                        : root.building ? qsTr("Wahrheitstabelle")
+                        : workbench.guessing ? qsTr("Was vermutest du?") : qsTr("Was passiert?")
                     color: ZTheme.navy
                     font.pixelSize: 18; font.bold: true
                 }
@@ -125,7 +127,36 @@ Rectangle {
                     font.pixelSize: 14
                     wrapMode: Text.WordWrap
                 }
-                TruthPanel { Layout.fillWidth: true }
+                TruthPanel { visible: !root.counting; Layout.fillWidth: true }
+                Repeater { // Art »zahlen«: Zahlen, die an den Lampen erscheinen sollen
+                    model: workbench.tasks
+                    delegate: Rectangle {
+                        id: task
+                        required property var modelData
+                        Layout.fillWidth: true
+                        implicitHeight: 44
+                        radius: 8
+                        color: modelData.done ? ZTheme.okBg : ZTheme.surfaceHigh
+                        border.width: modelData.current ? 2 : 0
+                        border.color: ZTheme.accent
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 12
+                            Text {
+                                Layout.fillWidth: true
+                                text: qsTr("Zeige die %1").arg(task.modelData.value)
+                                color: ZTheme.text
+                                font.pixelSize: 16; font.bold: task.modelData.current
+                            }
+                            Text { // binaer erst, wenn geschafft – sonst waere die Loesung verraten
+                                text: task.modelData.done ? (task.modelData.value + 16).toString(2).slice(1) + "  ✓" : ""
+                                color: ZTheme.ok
+                                font.family: ZTheme.mono; font.pixelSize: 16; font.bold: true
+                            }
+                        }
+                    }
+                }
                 Rectangle { // Merksatz nach dem Schaffen der Stufe
                     visible: workbench.stageDone && workbench.stageMerksatz !== ""
                     Layout.fillWidth: true
@@ -154,7 +185,7 @@ Rectangle {
             onClicked: workbench.skipGuess()
         }
         ZButton { // entdecken
-            visible: !root.building && !workbench.stageDone && !workbench.guessing
+            visible: workbench.stageKind === "entdecken" && !workbench.stageDone && !workbench.guessing
             Layout.fillWidth: true
             text: qsTr("Diese Kiste passt!")
             primary: workbench.boxIndex >= 0

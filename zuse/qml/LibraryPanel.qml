@@ -9,6 +9,7 @@ Rectangle {
     required property Item bench   // Werkbank (placePart, dropPart, Auswahl)
     required property Item ghost   // Vorschau beim Ziehen
     readonly property bool building: workbench.stageKind === "bauen"
+    readonly property bool discovering: workbench.stageKind === "entdecken"
     color: ZTheme.library
 
     signal removeSelection()
@@ -20,7 +21,7 @@ Rectangle {
 
         Text {
             Layout.fillWidth: true
-            text: root.building ? qsTr("Werkzeuge") : qsTr("Rätselkisten")
+            text: root.discovering ? qsTr("Rätselkisten") : qsTr("Werkzeuge")
             color: ZTheme.textOnShell
             font.pixelSize: 18; font.bold: true
             horizontalAlignment: Text.AlignHCenter
@@ -76,9 +77,18 @@ Rectangle {
             }
         }
 
+        Text { // Bedienfeld fest verdrahtet: keine Werkzeuge noetig
+            visible: workbench.benchLocked
+            Layout.fillWidth: true
+            text: qsTr("Hier brauchst du keine Werkzeuge – nur die Schalter am Bedienfeld.")
+            color: ZTheme.textOnShellMuted
+            font.pixelSize: 14
+            wrapMode: Text.WordWrap
+        }
+
         // ---- Entdecken: Raetselkisten
         Text {
-            visible: !root.building && workbench.guessing
+            visible: root.discovering && workbench.guessing
             Layout.fillWidth: true
             text: "🔒 " + qsTr("Erst vermuten – dann gehen die Kisten auf.")
             color: ZTheme.textOnShellMuted
@@ -86,7 +96,7 @@ Rectangle {
             wrapMode: Text.WordWrap
         }
         Repeater {
-            model: root.building ? [] : workbench.boxes
+            model: root.discovering ? workbench.boxes : []
             delegate: Rectangle {
                 id: card
                 required property var modelData

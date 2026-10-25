@@ -6,7 +6,6 @@ import QtQuick.Layouts
 Rectangle {
     id: root
     signal explain()
-    implicitHeight: 92
     radius: 16
     color: ZTheme.surface
     border.color: ZTheme.line
@@ -60,15 +59,28 @@ Rectangle {
         }
     }
 
+    // Zahlen als Fluss: reicht die Breite nicht (z. B. A, B und fuenf LEDs), rutschen sie in eine zweite Zeile
+    implicitHeight: Math.max(92, numbers.implicitHeight + 24)
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 16
         anchors.rightMargin: 10
-        spacing: 14
-        NumberBlock { title: qsTr("Schalter"); number: workbench.inputNumber }
-        Rectangle { width: 1; Layout.fillHeight: true; Layout.margins: 12; color: ZTheme.line }
-        NumberBlock { title: qsTr("LEDs"); number: workbench.outputNumber }
-        Item { Layout.fillWidth: true }
+        spacing: 10
+        Flow {
+            id: numbers
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignVCenter
+            spacing: 18
+            Repeater { // Schalter als eine Zahl oder in Gruppen (z. B. A und B)
+                model: workbench.inputNumbers
+                delegate: NumberBlock {
+                    required property var modelData
+                    title: modelData.title !== "" ? modelData.title : qsTr("Schalter")
+                    number: modelData
+                }
+            }
+            NumberBlock { title: qsTr("LEDs"); number: workbench.outputNumber }
+        }
         ZButton { text: qsTr("Warum?"); onClicked: root.explain() }
         ZButton {
             text: "×"

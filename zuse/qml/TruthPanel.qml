@@ -10,11 +10,15 @@ ColumnLayout {
     readonly property bool discover: workbench.stageKind === "entdecken"
     readonly property var inputs: workbench.panelInputs
     readonly property var outputs: workbench.panelOutputs
-    readonly property int inWidth: Math.max(60, inputs.length * 24 + 12)
+    // Proben grosser Tabellen: statt der Schalterbits steht die Rechnung in der ersten Spalte
+    readonly property bool withNotes: workbench.checkRows.length > 0 && (workbench.checkRows[0].note ?? "") !== ""
+    readonly property int inWidth: withNotes ? 112 : Math.max(60, inputs.length * 24 + 12)
     readonly property int colWidth: 76
 
-    // Legende: Buchstabe = Bedeutung, platzsparend nebeneinander
+    // Legende: Buchstabe = Bedeutung, platzsparend nebeneinander; bei vielen Anschluessen weggelassen (die
+    // Bezeichnungen stehen dann an den Schaltern und LEDs selbst)
     Flow {
+        visible: root.inputs.length + root.outputs.length <= 6
         Layout.fillWidth: true
         spacing: 12
         Repeater {
@@ -35,7 +39,7 @@ ColumnLayout {
         spacing: 6
         Text {
             Layout.preferredWidth: root.inWidth
-            text: root.inputs.map(p => p.name).join(" ")
+            text: root.withNotes ? qsTr("Rechnung") : root.inputs.map(p => p.name).join(" ")
             color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15; font.bold: true
         }
         Text {
@@ -75,7 +79,7 @@ ColumnLayout {
                 spacing: 6
                 Text {
                     Layout.preferredWidth: root.inWidth
-                    text: row.modelData.inputs.split("").join(" ")
+                    text: root.withNotes ? row.modelData.note : row.modelData.inputs.split("").join(" ")
                     color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
                 }
                 Item { // Soll (bauen) bzw. Vermutung (entdecken, antippbar solange die Stufe offen ist)

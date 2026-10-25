@@ -46,6 +46,12 @@ struct Stage {
     QStringList palette;
     std::vector<std::vector<volta::logic::Level>> table;
     volta::logic::ChipDef solution; // Musterloesung (Teile und Verbindungen)
+    // Art »zahlen«: fest verdrahtetes Bedienfeld, das Kind stellt nacheinander diese Zahlen an den LEDs ein
+    std::vector<int> targets;
+    // Schalter als mehrere Zahlen lesen (z. B. A und B je 4 Bit); leer = alle Schalter eine Zahl
+    std::vector<std::pair<QString, int>> inputGroups;
+    // grosse Tabellen (ab 6 Eingaengen): nur diese Zeilen zeigen, mit Rechnung; geprueft wird trotzdem alles
+    std::vector<std::pair<size_t, QString>> samples;
 };
 
 class WorkbenchController : public QObject {
@@ -76,6 +82,9 @@ class WorkbenchController : public QObject {
     // Anzeige zuschaltbar (Einstellung, Vorgabe an)
     Q_PROPERTY(QVariantMap inputNumber READ inputNumber NOTIFY viewChanged)
     Q_PROPERTY(QVariantMap outputNumber READ outputNumber NOTIFY viewChanged)
+    Q_PROPERTY(QVariantList inputNumbers READ inputNumbers NOTIFY viewChanged) // je Zahlengruppe mit "title"
+    Q_PROPERTY(QVariantList tasks READ tasks NOTIFY checkChanged)              // Art »zahlen«: Aufgaben
+    Q_PROPERTY(bool benchLocked READ benchLocked NOTIFY stageChanged)          // fest verdrahtet (Art »zahlen«)
     Q_PROPERTY(bool numbersVisible READ numbersVisible WRITE setNumbersVisible NOTIFY numbersVisibleChanged)
     Q_PROPERTY(QVariantList parts READ parts NOTIFY viewChanged)
     Q_PROPERTY(QVariantList ports READ ports NOTIFY viewChanged)
@@ -137,6 +146,9 @@ public:
     QString zettiPose() const { return m_pose; }
     QVariantMap inputNumber() const;
     QVariantMap outputNumber() const;
+    QVariantList inputNumbers() const;
+    QVariantList tasks() const;
+    bool benchLocked() const { return isCounting(); }
     bool numbersVisible() const { return m_numbersVisible; }
     void setNumbersVisible(bool on);
     // Bits (hoechstes zuerst) als Zahl: {"bin", "dec", "hex", "value", "bits"}; mit unbestimmtem Bit "?"
@@ -207,6 +219,8 @@ private:
     void push(const volta::logic::ChipDef& after, const QString& text);
     void setMessage(const QString& text, const QString& pose = QString());
     bool isDiscover() const { return !m_stages.empty() && m_stages[size_t(m_stage)].kind == "entdecken"; }
+    bool isCounting() const { return !m_stages.empty() && m_stages[size_t(m_stage)].kind == "zahlen"; }
+    void checkTarget(); // Art »zahlen«: aktuelle Aufgabe erfuellt?
     size_t currentRow() const; // Zeile der Wahrheitstabelle zur aktuellen Schalterstellung
     volta::logic::Level boxOutput(size_t output) const;
     QString toolName(const QString& type) const;
@@ -241,6 +255,7 @@ private:
     std::vector<char> m_seen;   // Zeilen, die mit dieser Kiste schon ausprobiert wurden
     std::vector<volta::logic::Level> m_guess; // Vermutung je Zeile (X = noch offen)
     bool m_guessSkipped = false;
+    size_t m_task = 0; // Art »zahlen«: aktuelle Aufgabe
     QString m_symbolStyle = QStringLiteral("din");
     bool m_numbersVisible = true;
 };

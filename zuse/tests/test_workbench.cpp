@@ -50,7 +50,7 @@ private slots:
     void stagesStartWithAStory() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        QCOMPARE(w.stages().size(), 7);
+        QCOMPARE(w.stages().size(), 12);
         QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
         QVERIFY(!w.stageStory().isEmpty());
         QVERIFY(!w.stageMakesChip());
@@ -190,6 +190,69 @@ private slots:
         QVERIFY(w.addPart("AND", 100, 100).isEmpty()); // innen nur ansehen
         w.leaveTo(0);
         QVERIFY(!w.inside());
+    }
+
+    // Stufen 7 bis 11: Zahlen am Bedienfeld, NAND, alles aus NAND, Volladdierer, 4-Bit-Addierer mit Ueberlauf
+    void countingNandAndAdders() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
+        for (int s : {1, 2, 3}) discover(w, s);
+        for (int s : {4, 5, 6}) solveAndPack(w, s);
+
+        // 7: fest verdrahtetes Bedienfeld, Zahlen nacheinander einstellen
+        QVERIFY(w.selectStage(7));
+        QCOMPARE(w.stageKind(), QStringLiteral("zahlen"));
+        QVERIFY(w.benchLocked());
+        QVERIFY(!w.connectPins("D0", "L1")); // Verdrahtung gesperrt
+        QVERIFY(w.addPart("AND", 300, 300).isEmpty());
+        QCOMPARE(w.tasks().size(), 5);
+        QVERIFY(w.ports()[0].toMap()["compact"].toBool()); // vier Schalter: flache Form
+        auto show = [&](int value) {
+            for (int bit = 0; bit < 4; ++bit) {
+                const QString name = QStringLiteral("D%1").arg(bit);
+                const bool want = (value >> bit) & 1;
+                if ((w.levelAt(name) == Level::One) != want) w.toggleInput(name);
+            }
+        };
+        show(3); // falsche Zahl: nichts passiert
+        QVERIFY(w.tasks()[0].toMap()["current"].toBool());
+        show(2);
+        QVERIFY(w.tasks()[0].toMap()["done"].toBool());
+        QVERIFY(w.message().contains("0010"));
+        for (int v : {5, 8, 11}) show(v);
+        QVERIFY(!w.stageDone());
+        show(15);
+        QVERIFY(w.stageDone());
+
+        // 8: NAND entdecken
+        discover(w, 8);
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("NAND"));
+        // 9: UND nur aus NAND (keine Erfindung)
+        QVERIFY(w.selectStage(9));
+        QCOMPARE(w.palette().size(), 1);
+        QVERIFY(!w.addPart("NAND", 300, 200).isEmpty());
+        QVERIFY(w.addPart("AND", 300, 400).isEmpty()); // nur NAND erlaubt
+        w.clearBench();
+        solveAndPack(w, 9);
+        QVERIFY(!w.library().find("NANDUND"));
+        // 10: Volladdierer aus zwei Halbaddierern
+        solveAndPack(w, 10);
+        QVERIFY(w.library().find("VA"));
+        // 11: 4-Bit-Addierer; gezeigt werden nur die Proben, geprueft werden alle 256 Zeilen
+        QVERIFY(w.selectStage(11));
+        const QVariantList numbers = w.inputNumbers();
+        QCOMPARE(numbers.size(), 2);
+        QCOMPARE(numbers[1].toMap()["title"].toString(), QStringLiteral("B"));
+        QCOMPARE(w.checkRows().size(), 8);
+        QCOMPARE(w.checkRows()[2].toMap()["note"].toString(), QStringLiteral("3 + 5 = 8"));
+        QCOMPARE(w.checkRows()[2].toMap()["expected"].toString(), QStringLiteral("01000"));
+        solveAndPack(w, 11);
+        // 9 + 9 = 18: passt nicht in vier Bit, der Uebertrag leuchtet
+        for (const QString& in : {"A3", "A0", "B3", "B0"}) w.toggleInput(in);
+        QCOMPARE(w.inputNumbers()[0].toMap()["dec"].toString(), QStringLiteral("9"));
+        QCOMPARE(w.outputNumber()["dec"].toString(), QStringLiteral("18"));
+        QCOMPARE(w.levelAt("C"), Level::One);
     }
 
     void numberSystems() {

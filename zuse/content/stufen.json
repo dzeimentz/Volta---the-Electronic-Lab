@@ -687,6 +687,1005 @@
      ]
     ]
    }
+  },
+  {
+   "kuerzel": "ZAEHLEN",
+   "art": "zahlen",
+   "chip": false,
+   "symbol": "",
+   "titel": {
+    "de": "Vier Lampen",
+    "en": "Four lamps"
+   },
+   "geschichte": {
+    "de": "Mit einer Lampe kann man nur 0 und 1 zeigen. Mit vier Lampen nebeneinander geht viel mehr: Jede Lampe hat einen Wert – 8, 4, 2 und 1. Die Werte der leuchtenden Lampen werden zusammengezählt. So haben die ersten Heimcomputer Zahlen gezeigt: Schalter einstellen, Lampen ablesen.",
+    "en": "One lamp can only show 0 and 1. With four lamps side by side you can do much more: each lamp has a value – 8, 4, 2 and 1. The values of the lit lamps are added up. That is how the first home computers showed numbers: set the switches, read the lamps."
+   },
+   "frage": {
+    "de": "Wie zählt ein Rechner mit vier Lampen?",
+    "en": "How does a computer count with four lamps?"
+   },
+   "hilfe": {
+    "de": "Fang bei der größten Lampe an: Passt die 8 hinein? Dann Achter an, den Rest bildest du mit 4, 2 und 1. Beispiel: 5 = 4 + 1.",
+    "en": "Start with the biggest lamp: does 8 fit? Then switch on the eight and make the rest with 4, 2 and 1. Example: 5 = 4 + 1."
+   },
+   "merksatz": {
+    "de": "Jede Stelle ist doppelt so viel wert wie die rechts daneben: 8, 4, 2, 1. Mit 4 Bit zählt man von 0 bis 15.",
+    "en": "Each place is worth twice the one to its right: 8, 4, 2, 1. With 4 bits you count from 0 to 15."
+   },
+   "eingaenge": [
+    {
+     "name": "D3",
+     "bezeichnung": {
+      "de": "Achter",
+      "en": "Eights"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D2",
+     "bezeichnung": {
+      "de": "Vierer",
+      "en": "Fours"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D1",
+     "bezeichnung": {
+      "de": "Zweier",
+      "en": "Twos"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D0",
+     "bezeichnung": {
+      "de": "Einer",
+      "en": "Ones"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "L3",
+     "bezeichnung": {
+      "de": "Lampe 8",
+      "en": "Lamp 8"
+     }
+    },
+    {
+     "name": "L2",
+     "bezeichnung": {
+      "de": "Lampe 4",
+      "en": "Lamp 4"
+     }
+    },
+    {
+     "name": "L1",
+     "bezeichnung": {
+      "de": "Lampe 2",
+      "en": "Lamp 2"
+     }
+    },
+    {
+     "name": "L0",
+     "bezeichnung": {
+      "de": "Lampe 1",
+      "en": "Lamp 1"
+     }
+    }
+   ],
+   "aufgaben": [
+    2,
+    5,
+    8,
+    11,
+    15
+   ],
+   "bausteine": [],
+   "wahrheitstabelle": [
+    "0000",
+    "0001",
+    "0010",
+    "0011",
+    "0100",
+    "0101",
+    "0110",
+    "0111",
+    "1000",
+    "1001",
+    "1010",
+    "1011",
+    "1100",
+    "1101",
+    "1110",
+    "1111"
+   ],
+   "loesung": {
+    "bausteine": [],
+    "verbindungen": [
+     [
+      "D3",
+      "L3"
+     ],
+     [
+      "D2",
+      "L2"
+     ],
+     [
+      "D1",
+      "L1"
+     ],
+     [
+      "D0",
+      "L0"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "NAND",
+   "art": "entdecken",
+   "werkzeug": "NAND",
+   "symbol": "&",
+   "invertiert": true,
+   "titel": {
+    "de": "Die Fensterwarnung",
+    "en": "The window warning"
+   },
+   "geschichte": {
+    "de": "Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
+    "en": "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a warning lamp should glow as long as not both windows are closed."
+   },
+   "frage": {
+    "de": "Welche Kiste warnt richtig?",
+    "en": "Which box warns correctly?"
+   },
+   "hilfe": {
+    "de": "Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
+    "en": "Try all four settings. When may the warning lamp be off?"
+   },
+   "merksatz": {
+    "de": "NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
+    "en": "NAND means NOT-AND: only when all inputs are 1 is the output 0."
+   },
+   "eingaenge": [
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Fenster 1 zu",
+      "en": "Window 1 closed"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Fenster 2 zu",
+      "en": "Window 2 closed"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Warnlampe",
+      "en": "Warning lamp"
+     }
+    }
+   ],
+   "kisten": [
+    {
+     "tabelle": [
+      "0",
+      "0",
+      "0",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "1",
+      "1",
+      "1",
+      "0"
+     ]
+    },
+    {
+     "tabelle": [
+      "1",
+      "0",
+      "0",
+      "0"
+     ]
+    }
+   ],
+   "richtig": 1,
+   "wahrheitstabelle": [
+    "1",
+    "1",
+    "1",
+    "0"
+   ]
+  },
+  {
+   "kuerzel": "NANDUND",
+   "art": "bauen",
+   "chip": false,
+   "symbol": "",
+   "titel": {
+    "de": "Alles aus einem Baustein",
+    "en": "Everything from one part"
+   },
+   "geschichte": {
+    "de": "Chipfabriken mögen den NAND-Baustein besonders: Aus ihm allein lässt sich jede andere Schaltung bauen. Probier es aus – baue ein UND nur aus NAND-Bausteinen.",
+    "en": "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – build an AND from NAND parts only."
+   },
+   "frage": {
+    "de": "Geht alles mit einem einzigen Baustein?",
+    "en": "Can everything be done with a single part?"
+   },
+   "hilfe": {
+    "de": "Verbindest du beide Eingänge eines NAND, dreht er um wie NICHT. Und NICHT hinter NICHT-UND ergibt …?",
+    "en": "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?"
+   },
+   "merksatz": {
+    "de": "Ein NAND mit verbundenen Eingängen ist ein NICHT. Zwei NAND ergeben ein UND – aus NAND lässt sich alles bauen.",
+    "en": "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND."
+   },
+   "eingaenge": [
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Schalter A",
+      "en": "Switch A"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Schalter B",
+      "en": "Switch B"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Lampe",
+      "en": "Lamp"
+     }
+    }
+   ],
+   "bausteine": [
+    "NAND"
+   ],
+   "wahrheitstabelle": [
+    "0",
+    "0",
+    "0",
+    "1"
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "n1",
+      "typ": "NAND",
+      "x": 280,
+      "y": 196
+     },
+     {
+      "id": "n2",
+      "typ": "NAND",
+      "x": 476,
+      "y": 196
+     }
+    ],
+    "verbindungen": [
+     [
+      "A",
+      "n1.a"
+     ],
+     [
+      "B",
+      "n1.b"
+     ],
+     [
+      "n1.y",
+      "n2.a"
+     ],
+     [
+      "n1.y",
+      "n2.b"
+     ],
+     [
+      "n2.y",
+      "Y"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "VA",
+   "art": "bauen",
+   "symbol": "VA",
+   "name": {
+    "de": "Volladdierer",
+    "en": "Full adder"
+   },
+   "titel": {
+    "de": "Drei Bits auf einmal",
+    "en": "Three bits at once"
+   },
+   "geschichte": {
+    "de": "Beim schriftlichen Addieren kommt von rechts manchmal ein Übertrag dazu. Dann müssen drei Bits zusammengezählt werden: A, B und der Übertrag. Das schafft ein Halbaddierer allein nicht.",
+    "en": "When adding on paper, sometimes a carry comes in from the right. Then three bits have to be added: A, B and the carry. A half adder alone cannot do that."
+   },
+   "frage": {
+    "de": "Baue eine Schaltung, die drei Bits addiert.",
+    "en": "Build a circuit that adds three bits."
+   },
+   "hilfe": {
+    "de": "Addiere erst A und B mit einem Halbaddierer, dann dessen Summe und den Übertrag mit einem zweiten. Liefert einer der beiden einen Übertrag, gibt es einen Übertrag raus – das ist ein ODER.",
+    "en": "First add A and B with a half adder, then its sum and the carry with a second one. If either of them gives a carry, there is a carry out – that is an OR."
+   },
+   "merksatz": {
+    "de": "Ein Volladdierer addiert drei Bits: A, B und den Übertrag von rechts.",
+    "en": "A full adder adds three bits: A, B and the carry from the right."
+   },
+   "eingaenge": [
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Bit A",
+      "en": "Bit A"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Bit B",
+      "en": "Bit B"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "Ci",
+     "bezeichnung": {
+      "de": "Übertrag rein",
+      "en": "Carry in"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "S",
+     "bezeichnung": {
+      "de": "Summe",
+      "en": "Sum"
+     }
+    },
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "Übertrag raus",
+      "en": "Carry out"
+     }
+    }
+   ],
+   "bausteine": [
+    "HA",
+    "OR",
+    "AND",
+    "XODER"
+   ],
+   "wahrheitstabelle": [
+    "00",
+    "10",
+    "10",
+    "01",
+    "10",
+    "01",
+    "01",
+    "11"
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "h1",
+      "typ": "HA",
+      "x": 224,
+      "y": 140
+     },
+     {
+      "id": "h2",
+      "typ": "HA",
+      "x": 392,
+      "y": 280
+     },
+     {
+      "id": "o1",
+      "typ": "OR",
+      "x": 560,
+      "y": 112
+     }
+    ],
+    "verbindungen": [
+     [
+      "A",
+      "h1.A"
+     ],
+     [
+      "B",
+      "h1.B"
+     ],
+     [
+      "h1.S",
+      "h2.A"
+     ],
+     [
+      "Ci",
+      "h2.B"
+     ],
+     [
+      "h2.S",
+      "S"
+     ],
+     [
+      "h1.C",
+      "o1.a"
+     ],
+     [
+      "h2.C",
+      "o1.b"
+     ],
+     [
+      "o1.y",
+      "C"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "ADD4",
+   "art": "bauen",
+   "symbol": "Σ4",
+   "name": {
+    "de": "4-Bit-Addierer",
+    "en": "4-bit adder"
+   },
+   "titel": {
+    "de": "Rechnen bis 15",
+    "en": "Adding up to 15"
+   },
+   "geschichte": {
+    "de": "Jetzt rechnest du wie ein echtes Rechenwerk: Mit den oberen vier Schaltern stellst du die Zahl A ein, mit den unteren die Zahl B. Deine Schaltung zeigt A + B an den Lampen. Und wenn das Ergebnis größer als 15 wird? Dann muss die Übertrags-Lampe »Ü 16« helfen.",
+    "en": "Now you calculate like a real arithmetic unit: the upper four switches set number A, the lower four set number B. Your circuit shows A + B on the lamps. And if the result is bigger than 15? Then the carry lamp »C 16« has to help."
+   },
+   "frage": {
+    "de": "Was passiert, wenn das Ergebnis nicht mehr in vier Lampen passt?",
+    "en": "What happens when the result no longer fits into four lamps?"
+   },
+   "hilfe": {
+    "de": "Rechne Stelle für Stelle wie beim schriftlichen Addieren: Für die Einer reicht ein Halbaddierer. Sein Übertrag geht in den Volladdierer der Zweier, dessen Übertrag zu den Vierern und so weiter. Der letzte Übertrag leuchtet an »Ü 16«.",
+    "en": "Work place by place as when adding on paper: a half adder is enough for the ones. Its carry goes into the full adder for the twos, its carry on to the fours, and so on. The last carry lights »C 16«."
+   },
+   "merksatz": {
+    "de": "Ein 4-Bit-Addierer rechnet bis 15 + 15 = 30. Passt das Ergebnis nicht in vier Bit, zeigt es der Übertrag an – Rechner nennen das Überlauf.",
+    "en": "A 4-bit adder calculates up to 15 + 15 = 30. If the result does not fit into four bits, the carry shows it – computers call this overflow."
+   },
+   "eingaenge": [
+    {
+     "name": "A3",
+     "bezeichnung": {
+      "de": "A 8",
+      "en": "A 8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A2",
+     "bezeichnung": {
+      "de": "A 4",
+      "en": "A 4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A1",
+     "bezeichnung": {
+      "de": "A 2",
+      "en": "A 2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A0",
+     "bezeichnung": {
+      "de": "A 1",
+      "en": "A 1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B3",
+     "bezeichnung": {
+      "de": "B 8",
+      "en": "B 8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B2",
+     "bezeichnung": {
+      "de": "B 4",
+      "en": "B 4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B1",
+     "bezeichnung": {
+      "de": "B 2",
+      "en": "B 2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B0",
+     "bezeichnung": {
+      "de": "B 1",
+      "en": "B 1"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "Ü 16",
+      "en": "C 16"
+     }
+    },
+    {
+     "name": "S3",
+     "bezeichnung": {
+      "de": "8",
+      "en": "8"
+     }
+    },
+    {
+     "name": "S2",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     }
+    },
+    {
+     "name": "S1",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     }
+    },
+    {
+     "name": "S0",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     }
+    }
+   ],
+   "eingabegruppen": [
+    {
+     "name": "A",
+     "bits": 4
+    },
+    {
+     "name": "B",
+     "bits": 4
+    }
+   ],
+   "proben": [
+    [
+     0,
+     "0 + 0 = 0"
+    ],
+    [
+     17,
+     "1 + 1 = 2"
+    ],
+    [
+     53,
+     "3 + 5 = 8"
+    ],
+    [
+     120,
+     "7 + 8 = 15"
+    ],
+    [
+     105,
+     "6 + 9 = 15"
+    ],
+    [
+     153,
+     "9 + 9 = 18"
+    ],
+    [
+     241,
+     "15 + 1 = 16"
+    ],
+    [
+     255,
+     "15 + 15 = 30"
+    ]
+   ],
+   "bausteine": [
+    "VA",
+    "HA"
+   ],
+   "wahrheitstabelle": [
+    "00000",
+    "00001",
+    "00010",
+    "00011",
+    "00100",
+    "00101",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "00001",
+    "00010",
+    "00011",
+    "00100",
+    "00101",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "00010",
+    "00011",
+    "00100",
+    "00101",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "00011",
+    "00100",
+    "00101",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "00100",
+    "00101",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "00101",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "00110",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "00111",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "01000",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "01001",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "01010",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "11001",
+    "01011",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "11001",
+    "11010",
+    "01100",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "11001",
+    "11010",
+    "11011",
+    "01101",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "11001",
+    "11010",
+    "11011",
+    "11100",
+    "01110",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "11001",
+    "11010",
+    "11011",
+    "11100",
+    "11101",
+    "01111",
+    "10000",
+    "10001",
+    "10010",
+    "10011",
+    "10100",
+    "10101",
+    "10110",
+    "10111",
+    "11000",
+    "11001",
+    "11010",
+    "11011",
+    "11100",
+    "11101",
+    "11110"
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "h1",
+      "typ": "HA",
+      "x": 224,
+      "y": 448
+     },
+     {
+      "id": "v1",
+      "typ": "VA",
+      "x": 224,
+      "y": 224
+     },
+     {
+      "id": "v2",
+      "typ": "VA",
+      "x": 448,
+      "y": 336
+     },
+     {
+      "id": "v3",
+      "typ": "VA",
+      "x": 448,
+      "y": 56
+     }
+    ],
+    "verbindungen": [
+     [
+      "A0",
+      "h1.A"
+     ],
+     [
+      "B0",
+      "h1.B"
+     ],
+     [
+      "h1.S",
+      "S0"
+     ],
+     [
+      "A1",
+      "v1.A"
+     ],
+     [
+      "B1",
+      "v1.B"
+     ],
+     [
+      "h1.C",
+      "v1.Ci"
+     ],
+     [
+      "v1.S",
+      "S1"
+     ],
+     [
+      "A2",
+      "v2.A"
+     ],
+     [
+      "B2",
+      "v2.B"
+     ],
+     [
+      "v1.C",
+      "v2.Ci"
+     ],
+     [
+      "v2.S",
+      "S2"
+     ],
+     [
+      "A3",
+      "v3.A"
+     ],
+     [
+      "B3",
+      "v3.B"
+     ],
+     [
+      "v2.C",
+      "v3.Ci"
+     ],
+     [
+      "v3.S",
+      "S3"
+     ],
+     [
+      "v3.C",
+      "C"
+     ]
+    ]
+   }
   }
  ]
 }

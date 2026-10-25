@@ -16,6 +16,7 @@ ApplicationWindow {
     title: qsTr("Zuse 1 – Computertechnik für Einsteiger (Prototyp)")
 
     readonly property bool building: workbench.stageKind === "bauen"
+    readonly property bool discovering: workbench.stageKind === "entdecken"
 
     Connections {
         target: workbench
@@ -109,7 +110,7 @@ ApplicationWindow {
             spacing: 8
 
             DiscoverStage {
-                visible: !win.building
+                visible: win.discovering
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
@@ -140,7 +141,7 @@ ApplicationWindow {
             }
             Workbench {
                 id: bench
-                visible: win.building
+                visible: !win.discovering
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }

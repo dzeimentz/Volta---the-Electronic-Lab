@@ -29,7 +29,7 @@ Im **DC Learning Ecosystem** ist Zuse das Mittelstück der Kernlinie **Volta →
 
 Die Gestaltung ist hell und freundlich wie Volta 1 und folgt dem DC Learning Design Standard. Gemeinsam mit Volta bleiben Qt-Stapel, Plattformen, Lernpfad, Inhaltspakete, Mehrsprachigkeit, Befehlsmuster und alle Regeln zu Datenschutz, Kindersicherheit und Barrierefreiheit.
 
-**Empfehlung:** Die Richtung von v0.3 als Grundlage festschreiben, den Prototyp um die Stufen 7 (Zählen am Bedienfeld) bis 9 (Rechnen bis 15) erweitern und ihn mit drei bis fünf Kindern der Zielgruppe erproben. Weitere Phasen erst nach der Rückmeldung der angefragten Verlage.
+**Empfehlung:** Die Richtung von v0.3 als Grundlage festschreiben, den Prototyp (inzwischen Stufen 0–11 bis zum 4-Bit-Addierer) mit drei bis fünf Kindern der Zielgruppe erproben. Weitere Phasen erst nach der Rückmeldung der angefragten Verlage.
 
 ## 2. Ausgangslage und Entstehung
 
@@ -186,7 +186,7 @@ Vorbild ist das Bedienfeld der ersten Bausatz-Rechner (Altair 8800, 1975): Progr
 
 Zuse 1 hat **keinen eigenen Adressbus**: Die Adressschalter laden das Adressregister über den gemeinsamen 4-Bit-Bus (Busbreite 4 Bit durchgehend, Adressen 0–15), wie bei didaktischen Lehrrechnern. Ein separater Adressbus kommt erst mit Zuse 2.
 
-Das Bedienfeld entsteht schrittweise: Stufe 0 (ein Schalter, eine LED), Stufe 7 (vier Schalter, vier LEDs), Stufe 12 (Adressschalter und Speicher), Stufe 13 (der vollständige Rechner).
+Das Bedienfeld entsteht schrittweise: Stufe 0 (ein Schalter, eine LED), Stufe 7 (vier Schalter, vier LEDs), Stufe 11 (zwei Zahlen mit je vier Schaltern, fünf LEDs mit Übertrag), Stufe 14 (Adressschalter und Speicher), Stufe 15 (der vollständige Rechner).
 
 ### 5.6 Programmierebene
 
@@ -283,15 +283,19 @@ Entscheidung des Inhabers (25.10.2026): Alle Zuse-Bände verwenden dieselbe Bild
 | 4 | Die Alarmanlage | bauen | erste Erfindung | Prototyp |
 | 5 | Das Treppenhauslicht mit zwei Schaltern | bauen | XODER | Prototyp |
 | 6 | 1 + 1 = 10 | bauen | Halbaddierer | Prototyp |
-| 7 | Wie zählt ein Rechner mit vier Lampen? | bauen | Binärzahlen am 4-Bit-Bedienfeld | geplant |
-| 8 | Geht alles mit einem einzigen Baustein? | entdecken | NAND (Bonus) | geplant |
-| 9 | Rechnen bis 15 – und was, wenn es nicht mehr passt? | bauen | Volladdierer, 4-Bit-Addierer, Übertrags-LED | geplant |
-| 10 | Hat jemand geklingelt, während ich weg war? | bauen | Speicher: Flipflop, Register | geplant |
-| 11 | Wie zählt ein Rechner von allein? | bauen | Takt (prellender Taster), Zähler, Befehlszähler | geplant |
-| 12 | Wo wohnt ein Programm? | bauen | Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld | geplant |
-| 13 | Läuft er? | bauen | Zuse-4: Programm eintippen, Einzelschritt, Start | geplant |
+| 7 | Wie zählt ein Rechner mit vier Lampen? | zahlen | Binärzahlen am 4-Bit-Bedienfeld: fünf Zahlen einstellen (Stellenwerte 8, 4, 2, 1) | Prototyp |
+| 8 | Die Fensterwarnung | entdecken | NAND | Prototyp |
+| 9 | Geht alles mit einem einzigen Baustein? | bauen | UND nur aus NAND (keine Erfindung) | Prototyp |
+| 10 | Drei Bits auf einmal | bauen | Volladdierer aus zwei Halbaddierern und ODER | Prototyp |
+| 11 | Rechnen bis 15 – und was, wenn es nicht mehr passt? | bauen | 4-Bit-Addierer, Übertrags-LED »Ü 16«; Tabelle zeigt Rechnungen als Proben, geprüft werden alle 256 Zeilen | Prototyp |
+| 12 | Hat jemand geklingelt, während ich weg war? | bauen | Speicher: Flipflop, Register | geplant |
+| 13 | Wie zählt ein Rechner von allein? | bauen | Takt (prellender Taster), Zähler, Befehlszähler | geplant |
+| 14 | Wo wohnt ein Programm? | bauen | Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld | geplant |
+| 15 | Läuft er? | bauen | Zuse-4: Programm eintippen, Einzelschritt, Start | geplant |
 
-Freischaltung wie Volta: Eine Stufe öffnet sich, wenn die vorige geschafft ist. In Stufe 13 ist das Steuerwerk teilweise vorgegeben (R2).
+Freischaltung wie Volta: Eine Stufe öffnet sich, wenn die vorige geschafft ist. In Stufe 15 ist das Steuerwerk teilweise vorgegeben (R2). Die früheren Stufen 8 (NAND) und 9 (Addierer) wurden bei der Umsetzung geteilt, damit jede Stufe nur einen neuen Gedanken bringt; die Stufen ab dem Speicher rücken dadurch um zwei auf.
+
+Stufenarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle), **zahlen** (fest verdrahtetes Bedienfeld, Zahlen einstellen).
 
 ### 7.2 Zuse 2 (Skizze)
 
@@ -390,7 +394,7 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | F4 | Werkbank | Werkzeuge setzen, verbinden; Rückgängig/Wiederholen; Prüfen mit Wahrheitstabelle | MUSS | umgesetzt |
 | F5 | Blick hinein | jede Erfindung bis zum Gatter mit Live-Pegeln | MUSS | umgesetzt |
 | F6 | Zahlensysteme | Zahlenleiste binär/dezimal/hex, zuschaltbar; Erklärung und Vergleichstabelle | MUSS | umgesetzt |
-| F7 | Bedienfeld | 4 Daten-, 4 Adressschalter, LEDs, Untersuchen/Ablegen/Einzelschritt/Start | MUSS | geplant |
+| F7 | Bedienfeld | 4 Daten-, 4 Adressschalter, LEDs, Untersuchen/Ablegen/Einzelschritt/Start | MUSS | teilweise (4 Bit, zwei Zahlen, Übertrag) |
 | F8 | Speicher und Takt | Flipflop, Register, Zähler, Speicher 16 × 4; Testfolgen Takt für Takt | MUSS | geplant |
 | F9 | Programm | Programmtabelle Zuse-4 mit Befehlszeiger und Binäransicht | MUSS | geplant |
 | F10 | Schaltzeichen | DIN und US umschaltbar | SOLL | umgesetzt |
@@ -419,7 +423,7 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | Nr. | Risiko | Eintritt | Auswirkung | Maßnahme |
 |---|---|---|---|---|
 | R1 | Name »Zuse« markenrechtlich nicht verfügbar | MITTEL | HOCH | Recherche DPMA/EUIPO; Ersatzname vorhalten |
-| R2 | Stufen 10–13 (Speicher, Steuerwerk) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Steuerwerk teilweise vorgegeben; Rätselkisten auch für Speicher |
+| R2 | Stufen 12–15 (Speicher, Steuerwerk) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Steuerwerk teilweise vorgegeben; Rätselkisten auch für Speicher |
 | R3 | Rätselkisten werden durch Raten gelöst statt durch Ausprobieren | MITTEL | MITTEL | Rückmeldung mit konkreter Schalterstellung; später: alle Zeilen ausprobieren, bevor geprüft wird |
 | R4 | Arbeitsfläche auf dem Tablet zu klein (Seitenleisten, Zahlenleiste) | MITTEL | MITTEL | einklappbare Seitenleisten, Zoom; Erprobung auf 10" |
 | R5 | Bedarf der Verlage weicht ab (z. B. nur Mikrocontroller) | MITTEL | HOCH | Rückmeldung der angefragten Verlage abwarten; MCU Explorer im Ecosystem vorziehen möglich |
@@ -434,9 +438,9 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | Phase | Inhalt | Grobschätzung | Stand |
 |---|---|---|---|
 | Z0 | Prototyp: Logikbibliothek, Werkbank, Rätselkisten, Werkzeugkiste, Zetti, Zahlensysteme, Stufen 0–6, Android-Testversion | 20–25 PT | weitgehend umgesetzt (Okt. 2026) |
-| Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung); Stufen 7–9 (Bedienfeld 4 Bit, NAND, Addierer); Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | nächster Schritt (Ecosystem P1: Prototyp besteht UX-Review und Nutzertest) |
-| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Stufen 10–11 | 30–40 PT | nach Verlagsrückmeldung |
-| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Stufen 12–13 | 35–45 PT | |
+| Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung, drei Schichten); Stufen 7–11 (Bedienfeld 4 Bit, NAND, Addierer); Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | Angleichung und Stufen 7–11 umgesetzt (Okt. 2026); offen: Erprobung, Markenrecherche |
+| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Stufen 12–13 | 30–40 PT | nach Verlagsrückmeldung |
+| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Stufen 14–15 | 35–45 PT | |
 | Z3 | Übersetzungen (FR, LU), Lehrerhandreichung, Hochformat, Erprobung, Paketierung | 20–25 PT | Zuse 1 Version 1.0 |
 
 Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
@@ -457,7 +461,7 @@ Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
 
 Version 0.3 behält die tragfähige Technik von v0.2 – Logiksimulation, Prüfung, Blick hinein, Abstraktionsleiter – und gibt ihr einen Einstieg, den Kinder nachvollziehen können: erst eine Frage aus dem Alltag, dann Ausprobieren, dann der Name, dann das Werkzeug. Das Bedienfeld der ersten Bausatz-Rechner verbindet die drei Bände zu einer Geschichte, die mit einem Schalter und einer LED beginnt und mit einem selbst gebauten, über Schalter programmierten Rechner endet. Die Zahlensysteme sind von Anfang an sichtbar, die Gestaltung ist auf einer Linie mit Volta 1.
 
-**Nächste Schritte:** (1) Richtung v0.3 bestätigen und ADR-0010 ergänzen. (2) Prototyp an den DC Learning Design Standard angleichen (Kopfzeile, Layout, Vermutung). (3) Stufen 7–9 mit dem 4-Bit-Bedienfeld bauen. (4) Erprobung mit drei bis fünf Kindern auf dem Tablet. (5) Rückmeldung der Verlage einarbeiten (Altersstufe, Schulbuchbezug, Reihenfolge der Bände).
+**Nächste Schritte:** (1) Richtung v0.3 bestätigen und ADR-0010 ergänzen. (2) und (3): Angleichung an den Design Standard und Stufen 7–11 mit dem 4-Bit-Bedienfeld sind umgesetzt (Oktober 2026). (4) Erprobung mit drei bis fünf Kindern auf dem Tablet. (5) Rückmeldung der Verlage einarbeiten (Altersstufe, Schulbuchbezug, Reihenfolge der Bände).
 
 ## Anhang A: Begriffe
 
