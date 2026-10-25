@@ -106,7 +106,7 @@ python3 tools/build_testpaket.py        # -> Release/Testpaket/Volta1-<version>-
 #   Musterloesung), ZUSE_DEMO_ON=A,B (Eingaenge an), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein)
 #   ZUSE_DEMO_GUESS=0111 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Kiste einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (ZUSE_DEMO_TAB=<n> Reiter der Werkzeugkiste), ZUSE_DEMO_COMIC=und|oder|nicht|nand|nor|xoder (Erklaer-Comic),
 #   ZUSE_DEMO_PRESS=x,y[,los] (Maus an Fensterposition druecken, mit »los« wieder loslassen; z. B. Taster)
-#   ZUSE_PAGE=home|lab|journal (Startseite, Experiment bzw. Forscherheft), ZUSE_DEMO_FREE=1 (Freies Labor), ZUSE_DEMO_SHOW=<n> (Vorfuehrung)
+#   ZUSE_PAGE=home|lab|journal|history (Startseite, Experiment, Forscherheft bzw. Historische Entwicklung; ZUSE_DEMO_HISTORY=<n> Station), ZUSE_DEMO_FREE=1 (Freies Labor), ZUSE_DEMO_SHOW=<n> (Vorfuehrung)
 #   ZUSE_DEMO_PROFILES=1|gewaehlt (Forscherprofile mit drei Beispielen, mit »gewaehlt« das erste aktiv), ZUSE_DEMO_PARENT=gate|area (Elternschranke bzw. Elternbereich)
 #   ZUSE_DEMO_TASK=<Code|Link|-> (Aufgabe der Lehrkraft annehmen und zeigen, »-«: Code eingeben), ZUSE_DEMO_TASKQR=2.1,4.7 (QR-Ansicht der Lehrkraft)
 python3 tools/zuse_stufen.py           # Zuse-Stufen (Texte, Tabellen, Musterloesungen) -> zuse/content/stufen.json

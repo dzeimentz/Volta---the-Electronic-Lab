@@ -860,115 +860,779 @@
     </message>
 </context>
 <context>
+    <name>HistoryPage</name>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="18" />
+        <source>um 350 v. Chr.</source>
+        <translation>vers 350 av. J.-C.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="18" />
+        <source>Wahr oder falsch</source>
+        <translation>Vrai ou faux</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="19" />
+        <source>Schon vor über 2000 Jahren fragte sich der griechische Denker Aristoteles: Nach welchen Regeln denken wir richtig? Er stellte fest: Eine Aussage ist entweder wahr oder falsch – etwas Drittes gibt es nicht. Genau so arbeiten Rechner bis heute.</source>
+        <translation>Il y a plus de 2000 ans, le penseur grec Aristote se demandait : selon quelles règles pense-t-on correctement ? Il a constaté qu’une affirmation est soit vraie, soit fausse – il n’y a pas de troisième possibilité. Les ordinateurs fonctionnent encore exactement ainsi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="20" />
+        <source>In Zuse 1: Eine Lampe ist an oder aus – wie wahr und falsch.</source>
+        <translation>Dans Zuse 1 : une lampe est allumée ou éteinte – comme vrai et faux.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="21" />
+        <source>Rechnen mit 0 und 1</source>
+        <translation>Compter avec 0 et 1</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="22" />
+        <source>Gottfried Wilhelm Leibniz zeigte, dass man alle Zahlen nur mit den Ziffern 0 und 1 schreiben kann: das Zweiersystem. Damals ahnte niemand, dass Rechner einmal genau so zählen würden. Zähl selbst mit drei Lampen!</source>
+        <translation>Gottfried Wilhelm Leibniz a montré qu’on peut écrire tous les nombres avec seulement les chiffres 0 et 1 : le système binaire. Personne ne se doutait alors que les ordinateurs compteraient un jour exactement ainsi. Compte toi-même avec trois lampes !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="23" />
+        <source>In Zuse 1: Stufe 3 »Zahlen und Rechnen«.</source>
+        <translation>Dans Zuse 1 : niveau 3 « Nombres et calcul ».</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="24" />
+        <source>Logik wird Mathematik</source>
+        <translation>La logique devient mathématique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="25" />
+        <source>George Boole schrieb »wahr« als 1 und »falsch« als 0 und rechnete damit wie mit Zahlen. Aus »Es regnet UND ich habe einen Schirm« wurde eine Rechnung. Das war reine Mathematik – mit Strom hatte es noch nichts zu tun.</source>
+        <translation>George Boole a écrit « vrai » comme 1 et « faux » comme 0, et a calculé avec comme avec des nombres. « Il pleut ET j’ai un parapluie » est devenu un calcul. C’étaient de pures mathématiques – l’électricité n’y jouait encore aucun rôle.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="26" />
+        <source>In Zuse 1: Die Tabellen in Stufe 1 sind Boolesche Rechnungen.</source>
+        <translation>Dans Zuse 1 : les tableaux du niveau 1 sont des calculs booléens.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="27" />
+        <source>Ein Baustein für alles</source>
+        <translation>Une seule brique pour tout</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="28" />
+        <source>Charles Sanders Peirce entdeckte um 1880: Mit einer einzigen Verknüpfung lassen sich alle anderen bauen. Er veröffentlichte es kaum. 1913 zeigte Henry Sheffer dasselbe für die Verknüpfung, die wir heute NAND nennen.</source>
+        <translation>Vers 1880, Charles Sanders Peirce a découvert qu’avec une seule opération, on peut construire toutes les autres. Il ne l’a presque pas publié. En 1913, Henry Sheffer a montré la même chose pour l’opération qu’on appelle aujourd’hui NAND.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="29" />
+        <source>In Zuse 1: Experiment 2.3 »Alles aus einem Baustein«.</source>
+        <translation>Dans Zuse 1 : expérience 2.3 « Tout à partir d’une brique ».</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="30" />
+        <source>Schalter können denken</source>
+        <translation>Les interrupteurs pensent</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="31" />
+        <source>Der Student Claude Shannon entdeckte: Boolesche Logik passt genau auf Schalter! Zwei Schalter hintereinander – die Lampe leuchtet nur, wenn A UND B geschlossen sind. Nebeneinander reicht A ODER B. Ein Öffner dreht um: NICHT. Ähnliches fanden zur selben Zeit Forscher in Japan und der Sowjetunion. Probier es aus!</source>
+        <translation>L’étudiant Claude Shannon a découvert que la logique booléenne correspond exactement aux interrupteurs ! Deux interrupteurs l’un après l’autre – la lampe ne s’allume que si A ET B sont fermés. Côte à côte, A OU B suffit. Un contact à ouverture inverse : NON. Des chercheurs au Japon et en Union soviétique ont trouvé quelque chose de semblable à la même époque. Essaie !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="32" />
+        <source>In Zuse 1: Stufe 0 und Stufe 1.</source>
+        <translation>Dans Zuse 1 : niveaux 0 et 1.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="33" />
+        <source>Konrad Zuse baut Rechner</source>
+        <translation>Konrad Zuse construit des ordinateurs</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="34" />
+        <source>In Berlin baute Konrad Zuse im Wohnzimmer seiner Eltern die Z1. Sie rechnete schon mit 0 und 1, aber mechanisch: mit Tausenden dünner Blechteile, die sich verschoben. 1941 lief seine Z3 mit rund 2000 Relais – der erste funktionierende frei programmierbare Rechner der Welt. Ein Relais ist ein Schalter, den ein Elektromagnet umlegt.</source>
+        <translation>À Berlin, Konrad Zuse a construit la Z1 dans le salon de ses parents. Elle calculait déjà avec 0 et 1, mais de façon mécanique : avec des milliers de fines plaques de métal qui coulissaient. En 1941, sa Z3 fonctionnait avec environ 2000 relais – le premier ordinateur librement programmable en état de marche au monde. Un relais est un interrupteur actionné par un électroaimant.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="35" />
+        <source>Nach Konrad Zuse heißt diese App – und ich, Zetti, auch ein bisschen.</source>
+        <translation>Cette application porte le nom de Konrad Zuse – et moi, Zetti, un peu aussi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="36" />
+        <source>Röhren statt Relais</source>
+        <translation>Des tubes au lieu de relais</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="37" />
+        <source>In den USA startete der ENIAC mit fast 18 000 Elektronenröhren. Röhren schalten ohne bewegliche Teile und sind dadurch etwa tausendmal schneller als Relais. Aber sie werden heiß, brauchen viel Strom und brennen immer wieder durch.</source>
+        <translation>Aux États-Unis, l’ENIAC a démarré avec près de 18 000 tubes électroniques. Les tubes commutent sans pièces mobiles et sont donc environ mille fois plus rapides que les relais. Mais ils chauffent, consomment beaucoup de courant et grillent régulièrement.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="39" />
+        <source>Der Transistor</source>
+        <translation>Le transistor</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="40" />
+        <source>John Bardeen, Walter Brattain und William Shockley erfanden in den Bell Labs den Transistor: einen Schalter ohne Mechanik und ohne Glühen – klein, kühl und langlebig. Seitdem werden Schalter immer kleiner und schneller. Schau, wie schnell sie umschalten können!</source>
+        <translation>Aux Bell Labs, John Bardeen, Walter Brattain et William Shockley ont inventé le transistor : un interrupteur sans mécanique et sans incandescence – petit, froid et durable. Depuis, les interrupteurs deviennent toujours plus petits et plus rapides. Regarde à quelle vitesse ils peuvent commuter !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="42" />
+        <source>ab 1958</source>
+        <translation>dès 1958</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="42" />
+        <source>Vier NAND in einem Chip</source>
+        <translation>Quatre NAND dans une puce</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="43" />
+        <source>1958 brachte Jack Kilby mehrere Bauteile auf ein einziges Stück Halbleiter: den ersten Chip. Ab Mitte der 1960er Jahre wurde die 74er-Reihe von Texas Instruments zum Standard. Der berühmte 7400 enthält vier NAND-Gatter. Weil man aus NAND alles bauen kann, steckte er fast überall drin.</source>
+        <translation>En 1958, Jack Kilby a réuni plusieurs composants sur un seul morceau de semi-conducteur : la première puce. À partir du milieu des années 1960, la série 74 de Texas Instruments est devenue la norme. Le célèbre 7400 contient quatre portes NAND. Comme on peut tout construire avec des NAND, on le trouvait presque partout.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="44" />
+        <source>In Zuse 1: Die Werkzeugkiste ist wie eine Kiste voller Chips.</source>
+        <translation>Dans Zuse 1 : la boîte à outils est comme une boîte pleine de puces.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="45" />
+        <source>1950er</source>
+        <translation>années 1950</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="45" />
+        <source>Rechnen mit XODER</source>
+        <translation>Calculer avec le OU exclusif</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="46" />
+        <source>Rechenwerke brauchen ein besonderes Gatter: XODER, »entweder – oder«. Rechnet man 1 + 1 im Zweiersystem, kommt 10 heraus. XODER liefert die Stelle, UND den Übertrag. Das ist der Halbaddierer. XODER hilft auch, Fehler in Daten zu erkennen.</source>
+        <translation>Les unités de calcul ont besoin d’une porte spéciale : le OU exclusif, « soit – soit ». Si on calcule 1 + 1 en binaire, on obtient 10. Le OU exclusif donne le chiffre, ET donne la retenue. C’est le demi-additionneur. Le OU exclusif aide aussi à détecter des erreurs dans les données.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="47" />
+        <source>In Zuse 1: Treppenlicht in Stufe 2, Halbaddierer in Stufe 3.</source>
+        <translation>Dans Zuse 1 : va-et-vient au niveau 2, demi-additionneur au niveau 3.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="48" />
+        <source>Strom sparen mit CMOS</source>
+        <translation>Économiser le courant avec le CMOS</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="49" />
+        <source>Mit den CMOS-Chips der 4000er-Reihe brauchen Gatter fast nur beim Umschalten Strom, im Ruhezustand beinahe keinen. Erst dadurch wurden Taschenrechner, Digitaluhren und später Handys möglich, die lange mit einer Batterie auskommen.</source>
+        <translation>Avec les puces CMOS de la série 4000, les portes ne consomment du courant presque qu’en commutant, et quasiment rien au repos. C’est ce qui a rendu possibles les calculatrices, les montres numériques et plus tard les téléphones portables qui tiennent longtemps sur une pile.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="51" />
+        <source>Gatter zum Umprogrammieren</source>
+        <translation>Des portes reprogrammables</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="52" />
+        <source>Bei programmierbaren Chips legt man selbst fest, welche Gatter wie verbunden sind – mit einem Programm statt mit dem Lötkolben. 1985 kam der erste FPGA auf den Markt. Tippe auf die Zellen und mach daraus andere Gatter!</source>
+        <translation>Avec les puces programmables, on décide soi-même quelles portes sont reliées et comment – avec un programme au lieu d’un fer à souder. Le premier FPGA est arrivé sur le marché en 1985. Touche les cellules et transforme-les en d’autres portes !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="53" />
+        <source>In Zuse 1: Auf der Werkbank verbindest du Gatter selbst – fast wie in einem FPGA.</source>
+        <translation>Dans Zuse 1 : sur l’établi, tu relies toi-même des portes – presque comme dans un FPGA.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="54" />
+        <source>heute</source>
+        <translation>aujourd’hui</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="54" />
+        <source>Milliarden Gatter</source>
+        <translation>Des milliards de portes</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="55" />
+        <source>Der Chip in einem Handy hat viele Milliarden Transistoren. Sie sind nur wenige Nanometer groß: Mehr als tausend passen nebeneinander in die Breite eines Haares. Und doch macht jedes Gatter darin genau das, was du in Zuse 1 entdeckst: UND, ODER, NICHT.</source>
+        <translation>La puce d’un téléphone portable compte des milliards de transistors. Ils ne mesurent que quelques nanomètres : plus de mille tiennent côte à côte dans l’épaisseur d’un cheveu. Et pourtant, chaque porte y fait exactement ce que tu découvres dans Zuse 1 : ET, OU, NON.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="56" />
+        <source>In Zuse 1: Fang beim Lernpfad an – genau wie die Geschichte.</source>
+        <translation>Dans Zuse 1 : commence par le parcours – exactement comme l’histoire.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="57" />
+        <source>Überblick</source>
+        <translation>Vue d’ensemble</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="58" />
+        <source>Hier siehst du noch einmal alle Gatter: woher die Idee kommt, womit man sie zuerst gebaut hat und wofür man sie braucht.</source>
+        <translation>Voici encore une fois toutes les portes : d’où vient l’idée, avec quoi on les a construites d’abord et à quoi elles servent.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="155" />
+        <source>hintereinander = UND</source>
+        <translation>en série = ET</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="156" />
+        <source>nebeneinander = ODER</source>
+        <translation>en parallèle = OU</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="156" />
+        <source>Öffner = NICHT</source>
+        <translation>contact à ouverture = NON</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="215" />
+        <source>Schalter A</source>
+        <translation>Interrupteur A</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="215" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="223" />
+        <source>gedrückt</source>
+        <translation>appuyé</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="223" />
+        <source>Schalter B</source>
+        <translation>Interrupteur B</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="226" />
+        <source>leuchtet</source>
+        <translation>allumée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="226" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="244" />
+        <source>aus</source>
+        <translation>éteinte</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="240" />
+        <source>»Die Lampe leuchtet.«</source>
+        <translation>« La lampe est allumée. »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="244" />
+        <source>an</source>
+        <translation>allumée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="256" />
+        <source>wahr</source>
+        <translation>vrai</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="256" />
+        <source>falsch</source>
+        <translation>faux</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="264" />
+        <source>Lampe umschalten</source>
+        <translation>Changer la lampe</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="283" />
+        <source>%1er</source>
+        <translation>les %1</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="293" />
+        <source>Jede Lampe ist doppelt so viel wert wie die rechts daneben.</source>
+        <translation>Chaque lampe vaut deux fois plus que celle à sa droite.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="298" />
+        <source>Auf 0</source>
+        <translation>Remettre à 0</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="311" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="355" />
+        <source>UND</source>
+        <translation>ET</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="312" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="356" />
+        <source>ODER</source>
+        <translation>OU</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="313" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="354" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <source>NICHT</source>
+        <translation>NON</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="346" />
+        <source>1 bedeutet wahr, 0 bedeutet falsch. Zum Beispiel UND: Nur 1 und 1 ergibt 1.</source>
+        <translation>1 veut dire vrai, 0 veut dire faux. Par exemple ET : seuls 1 et 1 donnent 1.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="354" />
+        <source>1 NAND, beide Eingänge verbunden</source>
+        <translation>1 NAND, les deux entrées reliées</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="355" />
+        <source>NAND, danach ein NAND als NICHT</source>
+        <translation>NAND, puis un NAND comme NON</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="356" />
+        <source>beide Eingänge umdrehen, dann NAND</source>
+        <translation>inverser les deux entrées, puis NAND</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="357" />
+        <source>Mit genug NAND-Gattern lässt sich jede Schaltung bauen – sogar ein ganzer Rechner.</source>
+        <translation>Avec assez de portes NAND, on peut construire n’importe quel circuit – même un ordinateur entier.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="372" />
+        <source>▼ = Taster gedrückt (1), ▲ = losgelassen (0). Der Öffner unterbricht den Strom, wenn man ihn drückt.</source>
+        <translation>▼ = bouton appuyé (1), ▲ = relâché (0). Le contact à ouverture coupe le courant quand on appuie dessus.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="399" />
+        <source>Spule</source>
+        <translation>Bobine</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="406" />
+        <source>Anker</source>
+        <translation>Armature</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="412" />
+        <source>Kontakt</source>
+        <translation>Contact</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="430" />
+        <source>Strom in der Spule: an</source>
+        <translation>Courant dans la bobine : oui</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="430" />
+        <source>Strom in der Spule: aus</source>
+        <translation>Courant dans la bobine : non</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="433" />
+        <source>Fließt Strom durch die Spule, wird sie zum Magneten und zieht den Anker an. Der Anker schließt den Kontakt – die Lampe leuchtet. Das dauert ein paar Tausendstel Sekunden.</source>
+        <translation>Quand le courant traverse la bobine, elle devient un aimant et attire l’armature. L’armature ferme le contact – la lampe s’allume. Cela prend quelques millièmes de seconde.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <source>17 468</source>
+        <translation>17 468</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <source>Röhren</source>
+        <translation>tubes</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <source>27 Tonnen</source>
+        <translation>27 tonnes</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <source>schwer, so viel wie vier bis fünf Elefanten</source>
+        <translation>de poids, autant que quatre à cinq éléphants</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="463" />
+        <source>150 Kilowatt</source>
+        <translation>150 kilowatts</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="463" />
+        <source>Strom, so viel wie viele Herdplatten zugleich</source>
+        <translation>de puissance, autant que de nombreuses plaques de cuisson à la fois</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="491" />
+        <source>So oft können sie in einer Sekunde umschalten (ungefähr):</source>
+        <translation>Combien de fois ils peuvent commuter en une seconde (environ) :</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <source>Relais</source>
+        <translation>Relais</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <source>100-mal</source>
+        <translation>100 fois</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <source>Röhre</source>
+        <translation>Tube</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <source>1 Million Mal</source>
+        <translation>1 million de fois</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
+        <source>Transistor im Chip heute</source>
+        <translation>Transistor dans une puce aujourd’hui</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
+        <source>100 Milliarden Mal</source>
+        <translation>100 milliards de fois</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="522" />
+        <source>Jedes Kästchen bedeutet: zehnmal so oft.</source>
+        <translation>Chaque case signifie : dix fois plus souvent.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="577" />
+        <source>Der 7400 von oben: 14 Beinchen, darin vier NAND-Gatter. Beinchen 14 bekommt +5 Volt, Beinchen 7 ist Masse (GND).</source>
+        <translation>Le 7400 vu de dessus : 14 broches, avec quatre portes NAND à l’intérieur. La broche 14 reçoit +5 volts, la broche 7 est la masse (GND).</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="602" />
+        <source>Stelle</source>
+        <translation>Chiffre</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="606" />
+        <source>Übertrag</source>
+        <translation>Retenue</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="612" />
+        <source>dezimal %1</source>
+        <translation>en décimal %1</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="627" />
+        <source>Taschenrechner</source>
+        <translation>Calculatrice</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="627" />
+        <source>Digitaluhr</source>
+        <translation>Montre numérique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="627" />
+        <source>Handy</source>
+        <translation>Téléphone portable</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="641" />
+        <source>Ein CMOS-Gatter ist wie eine Tür mit zwei Flügeln: Immer ist genau einer zu. Deshalb fließt im Ruhezustand fast kein Strom.</source>
+        <translation>Une porte CMOS est comme une porte à deux battants : il y en a toujours exactement un de fermé. C’est pourquoi presque aucun courant ne circule au repos.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="677" />
+        <source>Logikzelle %1 umprogrammieren</source>
+        <translation>Reprogrammer la cellule logique %1</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="681" />
+        <source>Ein echter FPGA hat Tausende bis Millionen solcher Zellen.</source>
+        <translation>Un vrai FPGA possède des milliers à des millions de ces cellules.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="690" />
+        <source>viele Milliarden</source>
+        <translation>des milliards</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="690" />
+        <source>Transistoren auf einem Handy-Chip</source>
+        <translation>de transistors sur une puce de téléphone</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="691" />
+        <source>wenige Nanometer</source>
+        <translation>quelques nanomètres</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="691" />
+        <source>klein sind ihre feinsten Teile – ein Nanometer ist ein Millionstel Millimeter</source>
+        <translation>c’est la taille de leurs plus fines parties – un nanomètre est un millionième de millimètre</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="692" />
+        <source>Milliarden Mal</source>
+        <translation>des milliards de fois</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="692" />
+        <source>pro Sekunde kann ein Gatter umschalten</source>
+        <translation>par seconde, une porte peut commuter</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <source>Gatter</source>
+        <translation>Porte</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <source>Idee aus der Mathematik</source>
+        <translation>Idée mathématique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <source>Zuerst gebaut mit</source>
+        <translation>D’abord construite avec</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <source>Wofür?</source>
+        <translation>À quoi ça sert ?</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <source>Verneinung (Aristoteles, Boole)</source>
+        <translation>négation (Aristote, Boole)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <source>Relais-Öffner, Röhre</source>
+        <translation>contact à ouverture de relais, tube</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <source>ein Signal umdrehen</source>
+        <translation>inverser un signal</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <source>UND, ODER</source>
+        <translation>ET, OU</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <source>Boolesche Algebra (1854)</source>
+        <translation>algèbre de Boole (1854)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <source>Schaltern, Relais, Dioden</source>
+        <translation>des interrupteurs, relais, diodes</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <source>Bedingungen prüfen, Maschinen steuern</source>
+        <translation>vérifier des conditions, commander des machines</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <source>NAND, NOR</source>
+        <translation>NAND, NOR</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <source>Sheffer-Strich (1913), Peirce-Pfeil (um 1880)</source>
+        <translation>barre de Sheffer (1913), flèche de Peirce (vers 1880)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <source>Transistoren, Chips wie dem 7400</source>
+        <translation>des transistors, des puces comme le 7400</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <source>alles aus einem einzigen Baustein bauen</source>
+        <translation>tout construire avec une seule brique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <source>XODER</source>
+        <translation>OU exclusif</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <source>Rechnen mit Rest 2</source>
+        <translation>calcul avec reste 2 (modulo 2)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <source>mehreren Gattern zusammen</source>
+        <translation>plusieurs portes ensemble</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <source>addieren, Fehler erkennen, verschlüsseln</source>
+        <translation>additionner, détecter des erreurs, chiffrer</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="776" />
+        <source>Zurück</source>
+        <translation>Retour</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="779" />
+        <source>Historische Entwicklung</source>
+        <translation>Évolution historique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="784" />
+        <source>Station %1 von %2</source>
+        <translation>Étape %1 sur %2</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="836" />
+        <source>ausgewählt</source>
+        <translation>sélectionnée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="921" />
+        <source>Vorherige Station</source>
+        <translation>Étape précédente</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="929" />
+        <source>Nächste Station</source>
+        <translation>Étape suivante</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="935" />
+        <source>Zum Lernpfad</source>
+        <translation>Vers le parcours</translation>
+    </message>
+</context>
+<context>
     <name>Home</name>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="101" />
+        <location filename="../zuse/qml/Home.qml" line="102" />
         <source>Hallo %1! Schön, dass du wieder forschst. Mach im Lernpfad weiter oder probiere im freien Labor eigene Ideen aus.</source>
         <translation>Bonjour %1 ! Content que tu reviennes faire des recherches. Continue le parcours ou essaie tes propres idées dans le labo libre.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="103" />
+        <location filename="../zuse/qml/Home.qml" line="104" />
         <source>Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis zur Rechenmaschine. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.</source>
         <translation>Bonjour ! Je suis Zetti. Je te montre comment pense un ordinateur – de l’interrupteur à la machine à calculer. Commence par le parcours ou essaie tes propres idées dans le labo libre.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="132" />
-        <location filename="../zuse/qml/Home.qml" line="140" />
+        <location filename="../zuse/qml/Home.qml" line="133" />
+        <location filename="../zuse/qml/Home.qml" line="141" />
         <source>Profil wechseln</source>
         <translation>Changer de profil</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="151" />
+        <location filename="../zuse/qml/Home.qml" line="152" />
         <source>Weitermachen</source>
         <translation>Continuer</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="159" />
+        <location filename="../zuse/qml/Home.qml" line="160" />
         <source>Deine Aufgabe</source>
         <translation>Ta mission</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="159" />
+        <location filename="../zuse/qml/Home.qml" line="160" />
         <source>Aufgabe</source>
         <translation>Mission</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="161" />
+        <location filename="../zuse/qml/Home.qml" line="162" />
         <source>Antippen und loslegen</source>
         <translation>Touche et c’est parti</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="162" />
+        <location filename="../zuse/qml/Home.qml" line="163" />
         <source>Code der Lehrkraft eingeben</source>
         <translation>Saisir le code de l’enseignant</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="168" />
+        <location filename="../zuse/qml/Home.qml" line="169" />
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="169" />
+        <location filename="../zuse/qml/Home.qml" line="170" />
         <source>Eigene Ideen ausprobieren – mit allen deinen Werkzeugen</source>
         <translation>Essaie tes propres idées – avec tous tes outils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="175" />
+        <location filename="../zuse/qml/Home.qml" line="176" />
         <source>Forscherheft</source>
         <translation>Cahier de recherche</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="176" />
+        <location filename="../zuse/qml/Home.qml" line="177" />
         <source>Deine Vermutungen, Entdeckungen und Notizen</source>
         <translation>Tes hypothèses, découvertes et notes</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="177" />
+        <location filename="../zuse/qml/Home.qml" line="178" />
         <source>Vermutungen, Entdeckungen und Notizen (%1)</source>
         <translation>Hypothèses, découvertes et notes (%1)</translation>
     </message>
     <message>
         <location filename="../zuse/qml/Home.qml" line="184" />
+        <source>Historische Entwicklung</source>
+        <translation>Évolution historique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Home.qml" line="185" />
+        <source>Mit Zetti durch die Geschichte der Gatter</source>
+        <translation>L’histoire des portes avec Zetti</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Home.qml" line="192" />
         <source>Vorführung</source>
         <translation>Démonstration</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="185" />
+        <location filename="../zuse/qml/Home.qml" line="193" />
         <source>%1 fertige Aufbauten zum Zeigen – es wird nichts gespeichert</source>
         <translation>%1 montages terminés à montrer – rien n’est enregistré</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="192" />
+        <location filename="../zuse/qml/Home.qml" line="200" />
         <source>Lernpfad</source>
         <translation>Parcours</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="237" />
+        <location filename="../zuse/qml/Home.qml" line="245" />
         <source>Stufe %1: %2</source>
         <translation>Niveau %1 : %2</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="255" />
+        <location filename="../zuse/qml/Home.qml" line="263" />
         <source>%1 von %2 geschafft</source>
         <translation>%1 sur %2 réussies</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="275" />
+        <location filename="../zuse/qml/Home.qml" line="283" />
         <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
         <translation>Encore verrouillé – réussis d’abord les expériences du niveau %1.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="335" />
+        <location filename="../zuse/qml/Home.qml" line="343" />
         <source>geschafft</source>
         <translation>réussie</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="336" />
+        <location filename="../zuse/qml/Home.qml" line="344" />
         <source>Aufgabe deiner Lehrkraft</source>
         <translation>Mission de ton enseignant</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="353" />
+        <location filename="../zuse/qml/Home.qml" line="361" />
         <source>folgt</source>
         <translation>bientôt</translation>
     </message>
@@ -1253,87 +1917,87 @@
         <translation>Zuse 1 – L’informatique pour débutants (prototype)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="67" />
+        <location filename="../zuse/qml/Main.qml" line="72" />
         <source>Zuse 1 – Computertechnik für Einsteiger</source>
         <translation>Zuse 1 – L’informatique pour débutants</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="78" />
-        <location filename="../zuse/qml/Main.qml" line="79" />
+        <location filename="../zuse/qml/Main.qml" line="83" />
+        <location filename="../zuse/qml/Main.qml" line="84" />
         <source>Startseite</source>
         <translation>Accueil</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="89" />
-        <location filename="../zuse/qml/Main.qml" line="90" />
+        <location filename="../zuse/qml/Main.qml" line="94" />
+        <location filename="../zuse/qml/Main.qml" line="95" />
         <source>Rückgängig</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="99" />
-        <location filename="../zuse/qml/Main.qml" line="100" />
+        <location filename="../zuse/qml/Main.qml" line="104" />
+        <location filename="../zuse/qml/Main.qml" line="105" />
         <source>Wiederholen</source>
         <translation>Rétablir</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="109" />
+        <location filename="../zuse/qml/Main.qml" line="114" />
         <source>Zahlenleiste zeigen</source>
         <translation>Afficher la barre des nombres</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="110" />
+        <location filename="../zuse/qml/Main.qml" line="115" />
         <source>Zahlenleiste: Schalter und Lampen als Zahl lesen (binär, dezimal, hexadezimal)</source>
         <translation>Barre des nombres : lire les interrupteurs et les lampes comme un nombre (binaire, décimal, hexadécimal)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="118" />
-        <location filename="../zuse/qml/Main.qml" line="119" />
+        <location filename="../zuse/qml/Main.qml" line="123" />
+        <location filename="../zuse/qml/Main.qml" line="124" />
         <source>Forscherheft</source>
         <translation>Cahier de recherche</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="124" />
+        <location filename="../zuse/qml/Main.qml" line="129" />
         <source>Schaltplan</source>
         <translation>Schéma</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="127" />
+        <location filename="../zuse/qml/Main.qml" line="132" />
         <source>Schaltplan ausblenden</source>
         <translation>Masquer le schéma</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="127" />
+        <location filename="../zuse/qml/Main.qml" line="132" />
         <source>Schaltplan zeigen</source>
         <translation>Afficher le schéma</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="135" />
-        <location filename="../zuse/qml/Main.qml" line="136" />
+        <location filename="../zuse/qml/Main.qml" line="140" />
+        <location filename="../zuse/qml/Main.qml" line="141" />
         <source>Werkzeugkiste</source>
         <translation>Boîte à outils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="239" />
+        <location filename="../zuse/qml/Main.qml" line="253" />
         <source>Zurück: auf den Pfad tippen</source>
         <translation>Retour : tape sur le chemin</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="240" />
+        <location filename="../zuse/qml/Main.qml" line="254" />
         <source>Doppelt tippen: in eine ★-Erfindung hineinschauen</source>
         <translation>Double-tape : regarder dans une invention ★</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="319" />
+        <location filename="../zuse/qml/Main.qml" line="333" />
         <source>Vorführung</source>
         <translation>Démonstration</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="326" />
+        <location filename="../zuse/qml/Main.qml" line="340" />
         <source>Andere Vorführung</source>
         <translation>Autre démonstration</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="331" />
+        <location filename="../zuse/qml/Main.qml" line="345" />
         <source>Beenden</source>
         <translation>Terminer</translation>
     </message>
@@ -2742,64 +3406,69 @@
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="34" />
+        <location filename="../zuse/qml/TopBar.qml" line="35" />
         <source>Schrift kleiner</source>
         <translation>Texte plus petit</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="34" />
+        <location filename="../zuse/qml/TopBar.qml" line="35" />
         <source>Schrift größer</source>
         <translation>Texte plus grand</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="49" />
+        <location filename="../zuse/qml/TopBar.qml" line="50" />
         <source>Anzeigesprache wählen</source>
         <translation>Choisir la langue</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="98" />
-        <location filename="../zuse/qml/TopBar.qml" line="151" />
+        <location filename="../zuse/qml/TopBar.qml" line="99" />
+        <location filename="../zuse/qml/TopBar.qml" line="152" />
         <source>Hilfe</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="105" />
-        <location filename="../zuse/qml/TopBar.qml" line="158" />
+        <location filename="../zuse/qml/TopBar.qml" line="106" />
+        <location filename="../zuse/qml/TopBar.qml" line="159" />
         <source>Kurzanleitung</source>
         <translation>Guide rapide</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="111" />
+        <location filename="../zuse/qml/TopBar.qml" line="112" />
         <source>Info</source>
         <translation>Infos</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="130" />
+        <location filename="../zuse/qml/TopBar.qml" line="131" />
         <source>Einstellungen</source>
         <translation>Réglages</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="167" />
+        <location filename="../zuse/qml/TopBar.qml" line="168" />
         <source>Profil wechseln</source>
         <translation>Changer de profil</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="174" />
+        <location filename="../zuse/qml/TopBar.qml" line="175" />
         <source>Forscherheft</source>
         <translation>Cahier de recherche</translation>
     </message>
     <message>
         <location filename="../zuse/qml/TopBar.qml" line="182" />
+        <source>Historische Entwicklung</source>
+        <translation>Évolution historique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/TopBar.qml" line="190" />
         <source>Zahlenleiste anzeigen</source>
         <translation>Afficher la barre des nombres</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="189" />
+        <location filename="../zuse/qml/TopBar.qml" line="197" />
         <source>Schaltzeichen nach US-Norm (IEEE)</source>
         <translation>Symboles selon la norme américaine (IEEE)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="195" />
+        <location filename="../zuse/qml/TopBar.qml" line="203" />
         <source>Elternbereich</source>
         <translation>Espace parents</translation>
     </message>

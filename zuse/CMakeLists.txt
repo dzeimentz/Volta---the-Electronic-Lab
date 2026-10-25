@@ -73,6 +73,7 @@ qt_add_qml_module(zuse_app
         qml/QrCanvas.qml
         qml/TaskDialog.qml
         qml/TaskQrDialog.qml
+        qml/HistoryPage.qml
 )
 # Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)

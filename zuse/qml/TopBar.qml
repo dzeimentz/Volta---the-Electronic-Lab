@@ -12,6 +12,7 @@ Row {
     signal infoRequested()
     signal journalRequested()
     signal parentAreaRequested()
+    signal historyRequested()
     spacing: 4
 
     component BarButton: ToolButton {
@@ -174,6 +175,13 @@ Row {
                 text: "📓  " + qsTr("Forscherheft")
                 font.bold: true
                 onTriggered: bar.journalRequested()
+            }
+            MenuItem {
+                objectName: "menuHistory"
+                height: ZTheme.control
+                text: "🏛  " + qsTr("Historische Entwicklung")
+                font.bold: true
+                onTriggered: bar.historyRequested()
             }
             MenuItem {
                 height: ZTheme.control

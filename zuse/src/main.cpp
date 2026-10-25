@@ -5,10 +5,11 @@
 // ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (Fenster oeffnen), ZUSE_DEMO_TAB=<n> (Reiter der Werkzeugkiste),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen),
-// ZUSE_PAGE=home|lab|journal (Startseite bzw. Experiment; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
+// ZUSE_PAGE=home|lab|journal|history (Startseite, Experiment, Forscherheft bzw. Geschichte; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
 // ZUSE_DEMO_SHOW=<n> (Vorfuehrung des Experiments n), ZUSE_DEMO_PROFILES=1|gewaehlt (Forscherprofile mit Beispielen),
 // ZUSE_DEMO_PARENT=gate|area (Elternschranke bzw. Elternbereich), ZUSE_DEMO_TASK=<Code|Link|-> (Aufgabe der Lehrkraft),
-// ZUSE_DEMO_TASKQR=4.7,1.2 (QR-Ansicht der Lehrkraft).
+// ZUSE_DEMO_TASKQR=4.7,1.2 (QR-Ansicht der Lehrkraft), ZUSE_DEMO_HISTORY=<n> (Station der historischen Entwicklung,
+// mit ZUSE_PAGE=history).
 #include <QDir>
 #include <QGuiApplication>
 #include <QIcon>
@@ -166,6 +167,10 @@ int main(int argc, char* argv[]) {
             QMetaObject::invokeMethod(d, "showTask", Q_ARG(QVariant, workbench.makeTaskLink(labels, {}, false, {})),
                                       Q_ARG(QVariant, workbench.makeTaskCode(labels)));
     }
+    // ZUSE_DEMO_HISTORY=<n>: Station n der historischen Entwicklung (mit ZUSE_PAGE=history)
+    if (window && qEnvironmentVariableIsSet("ZUSE_DEMO_HISTORY"))
+        if (QObject* h = window->findChild<QObject*>("historyPage"))
+            h->setProperty("current", qEnvironmentVariableIntValue("ZUSE_DEMO_HISTORY"));
     // ZUSE_DEMO_PARENT=gate|area: Elternschranke bzw. Elternbereich oeffnen
     if (const QString parent = qEnvironmentVariable("ZUSE_DEMO_PARENT"); window && !parent.isEmpty()) {
         if (parent == QStringLiteral("gate")) {

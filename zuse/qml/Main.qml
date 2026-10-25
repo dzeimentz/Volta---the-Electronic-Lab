@@ -17,12 +17,17 @@ ApplicationWindow {
 
     Binding { target: ZTheme; property: "fontScale"; value: settings.fontScale }
 
-    property string page: startPage // "home" (Startseite), "lab" (Experiment, Freies Labor, Vorfuehrung), "journal"
+    property string page: startPage // "home" (Startseite), "lab" (Experiment, Freies Labor, Vorfuehrung), "journal", "history"
     property string journalReturn: "home" // von hier aus wurde das Forscherheft geoeffnet
     readonly property bool building: workbench.stageKind === "bauen"
     readonly property bool inLab: page === "lab"
     readonly property bool choosingProfile: workbench.profilesEnabled && workbench.currentProfile.id === undefined
 
+    property string historyReturn: "home"
+    function openHistory() {
+        if (page !== "history" && page !== "journal") historyReturn = page
+        page = "history"
+    }
     function openJournal() {
         if (page !== "journal") journalReturn = page
         page = "journal"
@@ -168,9 +173,17 @@ ApplicationWindow {
                 onQuickGuideRequested: quickGuide.open()
                 onInfoRequested: info.open()
                 onJournalRequested: win.openJournal()
+                onHistoryRequested: win.openHistory()
                 onParentAreaRequested: parentGate.ask(() => parentArea.open())
             }
         }
+    }
+
+    HistoryPage {
+        id: history
+        anchors.fill: parent
+        visible: win.page === "history"
+        onBackRequested: win.page = win.historyReturn
     }
 
     JournalPage {
@@ -186,6 +199,7 @@ ApplicationWindow {
         visible: win.page === "home"
         onJournalRequested: win.openJournal()
         onTaskRequested: taskDialog.open()
+        onHistoryRequested: win.openHistory()
         onExperimentRequested: index => { workbench.selectStage(index); win.page = "lab" }
         onFreeLabRequested: { workbench.startFreeLab(); win.page = "lab" }
         onDemoRequested: demoPicker.open()

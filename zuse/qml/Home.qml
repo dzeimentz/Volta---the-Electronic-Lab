@@ -14,6 +14,7 @@ Rectangle {
     signal demoRequested()
     signal journalRequested()
     signal taskRequested()
+    signal historyRequested()
 
     // Karte oben (Weitermachen, Freies Labor, Vorfuehrung)
     component Tile: Rectangle {
@@ -176,6 +177,13 @@ Rectangle {
                     subtitle: workbench.journal.length === 0 ? qsTr("Deine Vermutungen, Entdeckungen und Notizen")
                               : qsTr("Vermutungen, Entdeckungen und Notizen (%1)").arg(workbench.journal.length)
                     onActivated: home.journalRequested()
+                }
+                Tile {
+                    objectName: "tileHistory"
+                    icon: "🏛"
+                    title: qsTr("Historische Entwicklung")
+                    subtitle: qsTr("Mit Zetti durch die Geschichte der Gatter")
+                    onActivated: home.historyRequested()
                 }
                 Tile {
                     objectName: "tileDemo"
