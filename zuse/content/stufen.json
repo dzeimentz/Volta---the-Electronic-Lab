@@ -69,30 +69,43 @@
   {
    "nr": 4,
    "titel": {
-    "de": "Speichern und Programmieren",
-    "en": "Memory and programs"
+    "de": "Speichern und Zählen",
+    "en": "Memory and counting"
    },
    "frage": {
-    "de": "Wie merkt sich ein Rechner etwas – und wie läuft ein Programm?",
-    "en": "How does a computer remember – and how does a program run?"
+    "de": "Wie merkt sich ein Rechner etwas – und wie zählt er?",
+    "en": "How does a computer remember something – and how does it count?"
    },
    "experimente": [
     "MERKER",
     "SBIT",
+    "TBIT",
     "REG4",
+    "LAUF",
     "TFF",
-    "ZAEHLER"
-   ],
-   "geplant": [
-    {
-     "de": "Wo wohnt ein Programm?",
-     "en": "Where does a program live?"
-    },
-    {
-     "de": "Läuft er?",
-     "en": "Does it run?"
-    }
+    "ZAEHLER",
+    "TAKT"
    ]
+  },
+  {
+   "nr": 5,
+   "titel": {
+    "de": "Die Rechenmaschine",
+    "en": "The calculating machine"
+   },
+   "frage": {
+    "de": "Wie rechnet eine Maschine – und wer sagt ihr, was sie tun soll?",
+    "en": "How does a machine calculate – and who tells it what to do?"
+   },
+   "experimente": [
+    "GLEICH",
+    "RW",
+    "STEUER"
+   ],
+   "ausblick": {
+    "de": "Weiter in Zuse 2: Der Rechner bekommt einen Speicher für sein Programm und steuert sich selbst.",
+    "en": "Continued in Zuse 2: the computer gets a memory for its program and controls itself."
+   }
   }
  ],
  "stufen": [
@@ -2130,6 +2143,264 @@
    }
   },
   {
+   "kuerzel": "TBIT",
+   "art": "bauen",
+   "symbol": "DT",
+   "name": {
+    "de": "Taktbit",
+    "en": "Clock bit"
+   },
+   "titel": {
+    "de": "Genau im Moment des Drückens",
+    "en": "Exactly at the moment of pressing"
+   },
+   "geschichte": {
+    "de": "Dein Schnappschuss hat einen Haken: Solange »Merken« gedrückt ist, folgt die Lampe dem Schalter. Ein Rechner braucht Speicher, die nur im Moment des Drückens übernehmen – wie der Auslöser einer Kamera. Und einen Knopf zum Löschen.",
+    "en": "Your snapshot has a catch: as long as »store« is held, the lamp follows the switch. A computer needs memory that takes over only at the moment of pressing – like a camera shutter. And a clear button."
+   },
+   "frage": {
+    "de": "Wie übernimmt ein Speicher genau im Moment des Takts?",
+    "en": "How does a memory take over exactly at the moment of the clock?"
+   },
+   "hilfe": {
+    "de": "Zuerst ohne Löschen: zwei Speicherbits hintereinander. Das erste merkt, solange der Takt NICHT gedrückt ist, das zweite beim Drücken. Dann das Löschen: Es öffnet beide Speicherbits (ODER) und gibt beiden eine 0 (UND NICHT Löschen).",
+    "en": "First without clearing: two memory bits in a row. The first stores while the clock is NOT pressed, the second on pressing. Then clearing: it opens both memory bits (OR) and gives both a 0 (AND NOT clear)."
+   },
+   "merksatz": {
+    "de": "Ein Taktbit übernimmt nur im Moment des Takts. Danach kann sich der Schalter ändern, die Lampe bleibt. Echte Speicher starten beim Einschalten zufällig – deshalb gibt es »Löschen«.",
+    "en": "A clock bit takes over only at the moment of the clock. Afterwards the switch may change, the lamp stays. Real memories start randomly when switched on – that is why there is »clear«."
+   },
+   "eingaenge": [
+    {
+     "name": "D",
+     "bezeichnung": {
+      "de": "Schalter",
+      "en": "Switch"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Takt",
+      "en": "Clock"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q",
+     "bezeichnung": {
+      "de": "Lampe",
+      "en": "Lamp"
+     }
+    }
+   ],
+   "bausteine": [
+    "SBIT",
+    "AND",
+    "OR",
+    "NOT"
+   ],
+   "ablauf": [
+    {
+     "ein": "100",
+     "soll": "0",
+     "text": {
+      "de": "Schalter an – noch kein Takt",
+      "en": "Switch on – no clock yet"
+     }
+    },
+    {
+     "ein": "110",
+     "soll": "1",
+     "text": {
+      "de": "Takt drücken: übernommen",
+      "en": "Press clock: taken over"
+     }
+    },
+    {
+     "ein": "010",
+     "soll": "1",
+     "text": {
+      "de": "Schalter aus, Takt noch gedrückt – die Lampe bleibt",
+      "en": "Switch off, clock still held – the lamp stays"
+     }
+    },
+    {
+     "ein": "000",
+     "soll": "1",
+     "text": {
+      "de": "Takt loslassen",
+      "en": "Release clock"
+     }
+    },
+    {
+     "ein": "001",
+     "soll": "0",
+     "text": {
+      "de": "Löschen drücken",
+      "en": "Press clear"
+     }
+    },
+    {
+     "ein": "000",
+     "soll": "0",
+     "text": {
+      "de": "Löschen loslassen",
+      "en": "Release clear"
+     }
+    },
+    {
+     "ein": "100",
+     "soll": "0"
+    },
+    {
+     "ein": "110",
+     "soll": "1",
+     "text": {
+      "de": "Schalter an, Takt",
+      "en": "Switch on, clock"
+     }
+    },
+    {
+     "ein": "100",
+     "soll": "1"
+    },
+    {
+     "ein": "101",
+     "soll": "0",
+     "text": {
+      "de": "Löschen, obwohl der Schalter an ist",
+      "en": "Clear although the switch is on"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 196,
+      "y": 168
+     },
+     {
+      "id": "o1",
+      "typ": "OR",
+      "x": 196,
+      "y": 336
+     },
+     {
+      "id": "n2",
+      "typ": "NOT",
+      "x": 196,
+      "y": 476
+     },
+     {
+      "id": "a1",
+      "typ": "AND",
+      "x": 364,
+      "y": 28
+     },
+     {
+      "id": "o2",
+      "typ": "OR",
+      "x": 364,
+      "y": 196
+     },
+     {
+      "id": "a2",
+      "typ": "AND",
+      "x": 364,
+      "y": 420
+     },
+     {
+      "id": "s1",
+      "typ": "SBIT",
+      "x": 560,
+      "y": 56
+     },
+     {
+      "id": "s2",
+      "typ": "SBIT",
+      "x": 560,
+      "y": 308
+     }
+    ],
+    "verbindungen": [
+     [
+      "T",
+      "n1.a"
+     ],
+     [
+      "n1.y",
+      "o2.a"
+     ],
+     [
+      "L",
+      "o2.b"
+     ],
+     [
+      "o2.y",
+      "s1.M"
+     ],
+     [
+      "T",
+      "o1.a"
+     ],
+     [
+      "L",
+      "o1.b"
+     ],
+     [
+      "o1.y",
+      "s2.M"
+     ],
+     [
+      "L",
+      "n2.a"
+     ],
+     [
+      "D",
+      "a1.a"
+     ],
+     [
+      "n2.y",
+      "a1.b"
+     ],
+     [
+      "a1.y",
+      "s1.D"
+     ],
+     [
+      "s1.Q",
+      "a2.a"
+     ],
+     [
+      "n2.y",
+      "a2.b"
+     ],
+     [
+      "a2.y",
+      "s2.D"
+     ],
+     [
+      "s2.Q",
+      "Q"
+     ]
+    ]
+   }
+  },
+  {
    "kuerzel": "REG4",
    "art": "bauen",
    "symbol": "REG",
@@ -2142,20 +2413,20 @@
     "en": "Storing four bits"
    },
    "geschichte": {
-    "de": "Mit vier Speicherbits nebeneinander merkt sich ein Rechner eine ganze Zahl von 0 bis 15. So etwas heißt Register. Alle vier hören auf denselben Knopf »Merken«.",
-    "en": "With four memory bits side by side, a computer stores a whole number from 0 to 15. This is called a register. All four listen to the same »store« button."
+    "de": "Mit vier Taktbits nebeneinander merkt sich ein Rechner eine ganze Zahl von 0 bis 15. So etwas heißt Register. Alle vier hören auf denselben Takt und denselben Löschknopf.",
+    "en": "With four clock bits side by side, a computer stores a whole number from 0 to 15. This is called a register. All four listen to the same clock and the same clear button."
    },
    "frage": {
     "de": "Wie merkt sich ein Rechner eine ganze Zahl?",
     "en": "How does a computer store a whole number?"
    },
    "hilfe": {
-    "de": "Jeder Schalter bekommt sein eigenes Speicherbit. Den Knopf »Merken« verbindest du mit allen vier.",
-    "en": "Every switch gets its own memory bit. Connect the »store« button to all four."
+    "de": "Jeder Schalter bekommt sein eigenes Taktbit. Takt und Löschen verbindest du mit allen vier.",
+    "en": "Every switch gets its own clock bit. Connect clock and clear to all four."
    },
    "merksatz": {
-    "de": "Ein Register besteht aus mehreren Speicherbits, die gemeinsam merken. Eins mit 4 Bit hält eine Zahl von 0 bis 15.",
-    "en": "A register consists of several memory bits that store together. One with 4 bits holds a number from 0 to 15."
+    "de": "Ein Register besteht aus mehreren Taktbits, die gemeinsam übernehmen. Eins mit 4 Bit hält eine Zahl von 0 bis 15.",
+    "en": "A register consists of several clock bits that take over together. One with 4 bits holds a number from 0 to 15."
    },
    "eingaenge": [
     {
@@ -2191,10 +2462,18 @@
      "art": "kipp"
     },
     {
-     "name": "M",
+     "name": "T",
      "bezeichnung": {
       "de": "Merken",
       "en": "Store"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
      },
      "art": "taster"
     }
@@ -2235,16 +2514,24 @@
      "bits": 4
     },
     {
-     "name": "M",
+     "name": "T",
+     "bits": 1
+    },
+    {
+     "name": "L",
      "bits": 1
     }
    ],
    "bausteine": [
-    "SBIT"
+    "TBIT"
    ],
    "ablauf": [
     {
-     "ein": "01011",
+     "ein": "010100",
+     "soll": "0000"
+    },
+    {
+     "ein": "010110",
      "soll": "0101",
      "text": {
       "de": "5 einstellen und merken",
@@ -2252,15 +2539,11 @@
      }
     },
     {
-     "ein": "01010",
-     "soll": "0101",
-     "text": {
-      "de": "Loslassen",
-      "en": "Release"
-     }
+     "ein": "010100",
+     "soll": "0101"
     },
     {
-     "ein": "11000",
+     "ein": "110000",
      "soll": "0101",
      "text": {
       "de": "12 einstellen – es bleibt 5",
@@ -2268,7 +2551,7 @@
      }
     },
     {
-     "ein": "11001",
+     "ein": "110010",
      "soll": "1100",
      "text": {
       "de": "Merken drücken",
@@ -2276,7 +2559,7 @@
      }
     },
     {
-     "ein": "00000",
+     "ein": "000000",
      "soll": "1100",
      "text": {
       "de": "Alle Schalter aus – es bleibt 12",
@@ -2284,45 +2567,53 @@
      }
     },
     {
-     "ein": "10011",
+     "ein": "000001",
+     "soll": "0000",
+     "text": {
+      "de": "Löschen",
+      "en": "Clear"
+     }
+    },
+    {
+     "ein": "000000",
+     "soll": "0000"
+    },
+    {
+     "ein": "100100",
+     "soll": "0000"
+    },
+    {
+     "ein": "100110",
      "soll": "1001",
      "text": {
       "de": "9 einstellen und merken",
       "en": "Set 9 and store"
-     }
-    },
-    {
-     "ein": "10010",
-     "soll": "1001",
-     "text": {
-      "de": "Loslassen",
-      "en": "Release"
      }
     }
    ],
    "loesung": {
     "bausteine": [
      {
-      "id": "s3",
-      "typ": "SBIT",
+      "id": "t3",
+      "typ": "TBIT",
       "x": 392,
       "y": 28
      },
      {
-      "id": "s2",
-      "typ": "SBIT",
+      "id": "t2",
+      "typ": "TBIT",
       "x": 392,
       "y": 168
      },
      {
-      "id": "s1",
-      "typ": "SBIT",
+      "id": "t1",
+      "typ": "TBIT",
       "x": 392,
       "y": 308
      },
      {
-      "id": "s0",
-      "typ": "SBIT",
+      "id": "t0",
+      "typ": "TBIT",
       "x": 392,
       "y": 448
      }
@@ -2330,51 +2621,355 @@
     "verbindungen": [
      [
       "D3",
-      "s3.D"
+      "t3.D"
      ],
      [
       "D2",
-      "s2.D"
+      "t2.D"
      ],
      [
       "D1",
-      "s1.D"
+      "t1.D"
      ],
      [
       "D0",
-      "s0.D"
+      "t0.D"
      ],
      [
-      "M",
-      "s3.M"
+      "T",
+      "t0.T"
      ],
      [
-      "M",
-      "s2.M"
+      "T",
+      "t1.T"
      ],
      [
-      "M",
-      "s1.M"
+      "T",
+      "t2.T"
      ],
      [
-      "M",
-      "s0.M"
+      "T",
+      "t3.T"
      ],
      [
-      "s3.Q",
+      "L",
+      "t0.L"
+     ],
+     [
+      "L",
+      "t1.L"
+     ],
+     [
+      "L",
+      "t2.L"
+     ],
+     [
+      "L",
+      "t3.L"
+     ],
+     [
+      "t3.Q",
       "Q3"
      ],
      [
-      "s2.Q",
+      "t2.Q",
       "Q2"
      ],
      [
-      "s1.Q",
+      "t1.Q",
       "Q1"
      ],
      [
-      "s0.Q",
+      "t0.Q",
       "Q0"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "LAUF",
+   "art": "bauen",
+   "symbol": "SR",
+   "name": {
+    "de": "Schieberegister",
+    "en": "Shift register"
+   },
+   "titel": {
+    "de": "Das Lauflicht",
+    "en": "The running light"
+   },
+   "geschichte": {
+    "de": "Bei einem Lauflicht wandert ein Licht von Lampe zu Lampe. Dahinter steckt ein Register, in dem jedes Bit bei jedem Takt einen Platz weiterrückt – ein Schieberegister.",
+    "en": "In a running light, a light moves from lamp to lamp. Behind it is a register in which every bit moves one place on with every clock – a shift register."
+   },
+   "frage": {
+    "de": "Wie wandert ein Bit von Lampe zu Lampe?",
+    "en": "How does a bit move from lamp to lamp?"
+   },
+   "hilfe": {
+    "de": "Vier Taktbits in einer Reihe: Das erste bekommt den Eingang, jedes weitere den Ausgang seines Vordermanns. Takt und Löschen gehen an alle.",
+    "en": "Four clock bits in a row: the first gets the input, every other one the output of the one before. Clock and clear go to all of them."
+   },
+   "merksatz": {
+    "de": "In einem Schieberegister rückt jedes Bit bei jedem Takt einen Platz weiter. Schiebt man eine Zahl um eine Stelle, wird sie doppelt oder halb so groß.",
+    "en": "In a shift register every bit moves one place on with each clock. Shifting a number by one place doubles or halves it."
+   },
+   "eingaenge": [
+    {
+     "name": "E",
+     "bezeichnung": {
+      "de": "Eingang",
+      "en": "Input"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Takt",
+      "en": "Clock"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Y1",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     }
+    },
+    {
+     "name": "Y2",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     }
+    },
+    {
+     "name": "Y3",
+     "bezeichnung": {
+      "de": "3",
+      "en": "3"
+     }
+    },
+    {
+     "name": "Y4",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     }
+    }
+   ],
+   "bausteine": [
+    "TBIT"
+   ],
+   "ablauf": [
+    {
+     "ein": "100",
+     "soll": "0000"
+    },
+    {
+     "ein": "110",
+     "soll": "1000",
+     "text": {
+      "de": "Eingang an, Takt: das erste Licht geht an",
+      "en": "Input on, clock: the first light goes on"
+     }
+    },
+    {
+     "ein": "100",
+     "soll": "1000"
+    },
+    {
+     "ein": "000",
+     "soll": "1000"
+    },
+    {
+     "ein": "010",
+     "soll": "0100",
+     "text": {
+      "de": "Eingang aus, Takt: das Licht wandert",
+      "en": "Input off, clock: the light moves"
+     }
+    },
+    {
+     "ein": "000",
+     "soll": "0100"
+    },
+    {
+     "ein": "010",
+     "soll": "0010",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "000",
+     "soll": "0010"
+    },
+    {
+     "ein": "010",
+     "soll": "0001",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "000",
+     "soll": "0001"
+    },
+    {
+     "ein": "010",
+     "soll": "0000",
+     "text": {
+      "de": "Takt: es fällt hinten heraus",
+      "en": "Clock: it drops out at the end"
+     }
+    },
+    {
+     "ein": "000",
+     "soll": "0000"
+    },
+    {
+     "ein": "100",
+     "soll": "0000"
+    },
+    {
+     "ein": "110",
+     "soll": "1000",
+     "text": {
+      "de": "Eingang an, Takt",
+      "en": "Input on, clock"
+     }
+    },
+    {
+     "ein": "100",
+     "soll": "1000"
+    },
+    {
+     "ein": "110",
+     "soll": "1100",
+     "text": {
+      "de": "Takt mit Eingang an",
+      "en": "Clock with input on"
+     }
+    },
+    {
+     "ein": "100",
+     "soll": "1100"
+    },
+    {
+     "ein": "101",
+     "soll": "0000",
+     "text": {
+      "de": "Löschen",
+      "en": "Clear"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "t1",
+      "typ": "TBIT",
+      "x": 224,
+      "y": 56
+     },
+     {
+      "id": "t2",
+      "typ": "TBIT",
+      "x": 336,
+      "y": 196
+     },
+     {
+      "id": "t3",
+      "typ": "TBIT",
+      "x": 448,
+      "y": 336
+     },
+     {
+      "id": "t4",
+      "typ": "TBIT",
+      "x": 560,
+      "y": 476
+     }
+    ],
+    "verbindungen": [
+     [
+      "E",
+      "t1.D"
+     ],
+     [
+      "t1.Q",
+      "t2.D"
+     ],
+     [
+      "t2.Q",
+      "t3.D"
+     ],
+     [
+      "t3.Q",
+      "t4.D"
+     ],
+     [
+      "T",
+      "t1.T"
+     ],
+     [
+      "T",
+      "t2.T"
+     ],
+     [
+      "T",
+      "t3.T"
+     ],
+     [
+      "T",
+      "t4.T"
+     ],
+     [
+      "L",
+      "t1.L"
+     ],
+     [
+      "L",
+      "t2.L"
+     ],
+     [
+      "L",
+      "t3.L"
+     ],
+     [
+      "L",
+      "t4.L"
+     ],
+     [
+      "t1.Q",
+      "Y1"
+     ],
+     [
+      "t2.Q",
+      "Y2"
+     ],
+     [
+      "t3.Q",
+      "Y3"
+     ],
+     [
+      "t4.Q",
+      "Y4"
      ]
     ]
    }
@@ -2392,20 +2987,20 @@
     "en": "One button for on and off"
    },
    "geschichte": {
-    "de": "Viele Geräte haben nur einen Knopf: Einmal drücken – an. Noch einmal drücken – aus. Dafür muss sich die Schaltung merken, wie sie gerade steht, und beim nächsten Druck das Gegenteil nehmen.",
-    "en": "Many devices have just one button: press once – on. Press again – off. For that the circuit has to remember its state and take the opposite on the next press."
+    "de": "Viele Geräte haben nur einen Knopf: Einmal drücken – an. Noch einmal drücken – aus. Dafür muss sich die Schaltung merken, wie sie gerade steht, und beim nächsten Takt das Gegenteil nehmen.",
+    "en": "Many devices have just one button: press once – on. Press again – off. For that the circuit has to remember its state and take the opposite on the next clock."
    },
    "frage": {
     "de": "Wie wechselt eine Lampe mit jedem Druck?",
     "en": "How does a lamp change with every press?"
    },
    "hilfe": {
-    "de": "Nimm zwei Speicherbits. Das erste merkt sich, solange der Knopf oben ist, das Gegenteil der Lampe (Merken = NICHT Knopf). Beim Drücken übernimmt das zweite diesen Wert (Merken = Knopf) und schaltet die Lampe.",
-    "en": "Use two memory bits. While the button is up, the first one stores the opposite of the lamp (store = NOT button). On pressing, the second one takes that value (store = button) and drives the lamp."
+    "de": "Ein Taktbit genügt: Gib ihm als Schalter das Gegenteil seiner eigenen Lampe (NICHT). Dann übernimmt es bei jedem Takt das Gegenteil.",
+    "en": "One clock bit is enough: give it the opposite of its own lamp as the switch (NOT). Then it takes the opposite on every clock."
    },
    "merksatz": {
-    "de": "Zwei Speicherbits hintereinander, die abwechselnd merken, ergeben einen Umschalter: Er wechselt bei jedem Druck genau einmal.",
-    "en": "Two memory bits in a row that store in turn make a toggle: it changes exactly once per press."
+    "de": "Ein Taktbit, das bei jedem Takt sein eigenes Gegenteil übernimmt, ist ein Umschalter: Er wechselt bei jedem Druck genau einmal.",
+    "en": "A clock bit that takes its own opposite on every clock is a toggle: it changes exactly once per press."
    },
    "eingaenge": [
     {
@@ -2413,6 +3008,14 @@
      "bezeichnung": {
       "de": "Knopf",
       "en": "Button"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Ganz aus",
+      "en": "All off"
      },
      "art": "taster"
     }
@@ -2427,12 +3030,12 @@
     }
    ],
    "bausteine": [
-    "SBIT",
+    "TBIT",
     "NOT"
    ],
    "ablauf": [
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0",
      "text": {
       "de": "Einschalten: Lampe aus",
@@ -2440,7 +3043,7 @@
      }
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1",
      "text": {
       "de": "Drücken – an",
@@ -2448,7 +3051,7 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1",
      "text": {
       "de": "Loslassen – bleibt an",
@@ -2456,7 +3059,7 @@
      }
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0",
      "text": {
       "de": "Drücken – aus",
@@ -2464,7 +3067,7 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0",
      "text": {
       "de": "Loslassen – bleibt aus",
@@ -2472,68 +3075,60 @@
      }
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1",
      "text": {
       "de": "Drücken – an",
       "en": "Press – on"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "1"
+    },
+    {
+     "ein": "01",
+     "soll": "0",
+     "text": {
+      "de": "Ganz aus",
+      "en": "All off"
      }
     }
    ],
    "loesung": {
     "bausteine": [
      {
-      "id": "n2",
-      "typ": "NOT",
-      "x": 224,
-      "y": 112
-     },
-     {
-      "id": "s1",
-      "typ": "SBIT",
-      "x": 392,
-      "y": 112
-     },
-     {
-      "id": "s2",
-      "typ": "SBIT",
-      "x": 588,
+      "id": "b1",
+      "typ": "TBIT",
+      "x": 420,
       "y": 252
      },
      {
       "id": "n1",
       "typ": "NOT",
-      "x": 392,
-      "y": 392
+      "x": 252,
+      "y": 112
      }
     ],
     "verbindungen": [
      [
-      "s2.Q",
+      "b1.Q",
       "n1.a"
      ],
      [
       "n1.y",
-      "s1.D"
+      "b1.D"
      ],
      [
       "T",
-      "n2.a"
+      "b1.T"
      ],
      [
-      "n2.y",
-      "s1.M"
+      "L",
+      "b1.L"
      ],
      [
-      "s1.Q",
-      "s2.D"
-     ],
-     [
-      "T",
-      "s2.M"
-     ],
-     [
-      "s2.Q",
+      "b1.Q",
       "Q"
      ]
     ]
@@ -2560,8 +3155,8 @@
     "en": "How does a computer count on with every tick?"
    },
    "hilfe": {
-    "de": "Die Einerstelle wechselt bei jedem Takt. Die nächste Stelle wechselt immer dann, wenn die vorige von 1 auf 0 fällt – so wie beim Zählen die Zehner weiterspringen. Ein NICHT dazwischen macht aus dem Fallen ein Drücken.",
-    "en": "The ones place changes on every tick. The next place changes whenever the one before falls from 1 to 0 – just like the tens move on when you count. A NOT in between turns falling into pressing."
+    "de": "Die Einerstelle wechselt bei jedem Takt. Die nächste Stelle wechselt immer dann, wenn die vorige von 1 auf 0 fällt – so wie beim Zählen die Zehner weiterspringen. Ein NICHT dazwischen macht aus dem Fallen ein Drücken. Löschen geht an alle.",
+    "en": "The ones place changes on every tick. The next place changes whenever the one before falls from 1 to 0 – just like the tens move on when you count. A NOT in between turns falling into pressing. Clear goes to all."
    },
    "merksatz": {
     "de": "Vier Umschalter hintereinander zählen von 0 bis 15. Nach 15 kommt wieder 0 – der Zähler läuft über.",
@@ -2573,6 +3168,14 @@
      "bezeichnung": {
       "de": "Takt",
       "en": "Clock"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
      },
      "art": "taster"
     }
@@ -2613,7 +3216,7 @@
    ],
    "ablauf": [
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0001",
      "text": {
       "de": "Takt",
@@ -2621,11 +3224,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0001"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0010",
      "text": {
       "de": "Takt",
@@ -2633,11 +3236,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0010"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0011",
      "text": {
       "de": "Takt",
@@ -2645,11 +3248,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0011"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0100",
      "text": {
       "de": "Takt",
@@ -2657,11 +3260,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0100"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0101",
      "text": {
       "de": "Takt",
@@ -2669,11 +3272,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0101"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0110",
      "text": {
       "de": "Takt",
@@ -2681,11 +3284,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0110"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0111",
      "text": {
       "de": "Takt",
@@ -2693,11 +3296,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0111"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1000",
      "text": {
       "de": "Takt",
@@ -2705,11 +3308,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1000"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1001",
      "text": {
       "de": "Takt",
@@ -2717,11 +3320,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1001"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1010",
      "text": {
       "de": "Takt",
@@ -2729,11 +3332,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1010"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1011",
      "text": {
       "de": "Takt",
@@ -2741,11 +3344,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1011"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1100",
      "text": {
       "de": "Takt",
@@ -2753,11 +3356,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1100"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1101",
      "text": {
       "de": "Takt",
@@ -2765,11 +3368,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1101"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1110",
      "text": {
       "de": "Takt",
@@ -2777,11 +3380,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1110"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "1111",
      "text": {
       "de": "Takt",
@@ -2789,11 +3392,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "1111"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0000",
      "text": {
       "de": "Takt – Überlauf",
@@ -2801,11 +3404,11 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0000"
     },
     {
-     "ein": "1",
+     "ein": "10",
      "soll": "0001",
      "text": {
       "de": "Takt",
@@ -2813,8 +3416,28 @@
      }
     },
     {
-     "ein": "0",
+     "ein": "00",
      "soll": "0001"
+    },
+    {
+     "ein": "01",
+     "soll": "0000",
+     "text": {
+      "de": "Löschen",
+      "en": "Clear"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "0000"
+    },
+    {
+     "ein": "10",
+     "soll": "0001",
+     "text": {
+      "de": "Takt nach dem Löschen",
+      "en": "Clock after clearing"
+     }
     }
    ],
    "loesung": {
@@ -2906,6 +3529,1963 @@
      [
       "t3.Q",
       "Q3"
+     ],
+     [
+      "L",
+      "t0.L"
+     ],
+     [
+      "L",
+      "t1.L"
+     ],
+     [
+      "L",
+      "t2.L"
+     ],
+     [
+      "L",
+      "t3.L"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "TAKT",
+   "art": "bauen",
+   "symbol": "÷4",
+   "name": {
+    "de": "Teiler",
+    "en": "Divider"
+   },
+   "titel": {
+    "de": "Der Taktgeber",
+    "en": "The clock generator"
+   },
+   "geschichte": {
+    "de": "Jetzt drückt niemand mehr: Links tickt ein Taktgeber von allein. Für eine Uhr ist er aber viel zu schnell. Bau einen Teiler: Die zweite Lampe soll halb so schnell blinken, die dritte noch einmal halb so schnell.",
+    "en": "Now nobody presses any more: on the left a clock generator ticks by itself. For a clock it is far too fast, though. Build a divider: the second lamp should blink half as fast, the third half as fast again."
+   },
+   "frage": {
+    "de": "Wie wird aus einem schnellen Takt ein langsamer?",
+    "en": "How does a fast clock become a slow one?"
+   },
+   "hilfe": {
+    "de": "Ein Umschalter am Taktgeber wechselt bei jedem Tick – er blinkt also halb so schnell. Ein zweiter Umschalter dahinter (mit NICHT wie beim Zähler) halbiert noch einmal.",
+    "en": "A toggle on the clock generator changes on every tick – so it blinks half as fast. A second toggle behind it (with NOT as in the counter) halves it again."
+   },
+   "merksatz": {
+    "de": "Jeder Umschalter teilt den Takt durch 2. So entstehen aus einem schnellen Takt Sekunden, Minuten und Stunden.",
+    "en": "Every toggle divides the clock by 2. That is how seconds, minutes and hours come from a fast clock."
+   },
+   "eingaenge": [
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "Taktgeber",
+      "en": "Clock generator"
+     },
+     "art": "takt"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "C1",
+     "bezeichnung": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "name": "C2",
+     "bezeichnung": {
+      "de": "halb",
+      "en": "half"
+     }
+    },
+    {
+     "name": "C4",
+     "bezeichnung": {
+      "de": "Viertel",
+      "en": "quarter"
+     }
+    }
+   ],
+   "bausteine": [
+    "TFF",
+    "NOT"
+   ],
+   "ablauf": [
+    {
+     "ein": "10",
+     "soll": "110",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "010"
+    },
+    {
+     "ein": "10",
+     "soll": "101",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "001"
+    },
+    {
+     "ein": "10",
+     "soll": "111",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "011"
+    },
+    {
+     "ein": "10",
+     "soll": "100",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "000"
+    },
+    {
+     "ein": "10",
+     "soll": "110",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "010"
+    },
+    {
+     "ein": "10",
+     "soll": "101",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "001"
+    },
+    {
+     "ein": "10",
+     "soll": "111",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "011"
+    },
+    {
+     "ein": "10",
+     "soll": "100",
+     "text": {
+      "de": "Tick",
+      "en": "Tick"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "000"
+    },
+    {
+     "ein": "01",
+     "soll": "000",
+     "text": {
+      "de": "Löschen",
+      "en": "Clear"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "000"
+    },
+    {
+     "ein": "10",
+     "soll": "110",
+     "text": {
+      "de": "Tick nach dem Löschen",
+      "en": "Tick after clearing"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "t1",
+      "typ": "TFF",
+      "x": 280,
+      "y": 336
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 448,
+      "y": 336
+     },
+     {
+      "id": "t2",
+      "typ": "TFF",
+      "x": 588,
+      "y": 476
+     }
+    ],
+    "verbindungen": [
+     [
+      "C",
+      "C1"
+     ],
+     [
+      "C",
+      "t1.T"
+     ],
+     [
+      "L",
+      "t1.L"
+     ],
+     [
+      "t1.Q",
+      "C2"
+     ],
+     [
+      "t1.Q",
+      "n1.a"
+     ],
+     [
+      "n1.y",
+      "t2.T"
+     ],
+     [
+      "L",
+      "t2.L"
+     ],
+     [
+      "t2.Q",
+      "C4"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "GLEICH",
+   "art": "bauen",
+   "symbol": "=",
+   "name": {
+    "de": "Vergleicher",
+    "en": "Comparator"
+   },
+   "titel": {
+    "de": "Das Zahlenschloss",
+    "en": "The combination lock"
+   },
+   "geschichte": {
+    "de": "Ein Zahlenschloss geht nur auf, wenn die eingestellte Zahl genau die Geheimzahl ist. Oben stellst du die Zahl A ein, unten die Geheimzahl B. Die Lampe »offen« soll nur leuchten, wenn beide gleich sind.",
+    "en": "A combination lock only opens if the number set is exactly the secret number. At the top you set number A, below the secret number B. The lamp »open« should only glow when both are equal."
+   },
+   "frage": {
+    "de": "Woran erkennt ein Rechner, dass zwei Zahlen gleich sind?",
+    "en": "How does a computer recognise that two numbers are equal?"
+   },
+   "hilfe": {
+    "de": "Vergleiche Stelle für Stelle: Deine Treppenlicht-Schaltung (XODER) meldet 1, wenn zwei Bits verschieden sind. Fasse die vier Meldungen mit ODER zusammen – und dreh das Ergebnis mit NICHT um.",
+    "en": "Compare place by place: your stairway circuit (XOR) reports 1 when two bits differ. Combine the four reports with OR – and turn the result round with NOT."
+   },
+   "merksatz": {
+    "de": "Zwei Zahlen sind gleich, wenn sich keine Stelle unterscheidet. XODER findet Unterschiede, NICHT-ODER meldet »keiner«.",
+    "en": "Two numbers are equal when no place differs. XOR finds differences, NOT-OR reports »none«."
+   },
+   "eingaenge": [
+    {
+     "name": "A3",
+     "bezeichnung": {
+      "de": "A 8",
+      "en": "A 8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A2",
+     "bezeichnung": {
+      "de": "A 4",
+      "en": "A 4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A1",
+     "bezeichnung": {
+      "de": "A 2",
+      "en": "A 2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A0",
+     "bezeichnung": {
+      "de": "A 1",
+      "en": "A 1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B3",
+     "bezeichnung": {
+      "de": "B 8",
+      "en": "B 8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B2",
+     "bezeichnung": {
+      "de": "B 4",
+      "en": "B 4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B1",
+     "bezeichnung": {
+      "de": "B 2",
+      "en": "B 2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B0",
+     "bezeichnung": {
+      "de": "B 1",
+      "en": "B 1"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "G",
+     "bezeichnung": {
+      "de": "offen",
+      "en": "open"
+     }
+    }
+   ],
+   "eingabegruppen": [
+    {
+     "name": "A",
+     "bits": 4
+    },
+    {
+     "name": "B",
+     "bits": 4
+    }
+   ],
+   "proben": [
+    [
+     85,
+     "5 und 5"
+    ],
+    [
+     84,
+     "5 und 4"
+    ],
+    [
+     204,
+     "12 und 12"
+    ],
+    [
+     150,
+     "9 und 6"
+    ],
+    [
+     0,
+     "0 und 0"
+    ],
+    [
+     254,
+     "15 und 14"
+    ],
+    [
+     129,
+     "8 und 1"
+    ],
+    [
+     51,
+     "3 und 3"
+    ]
+   ],
+   "bausteine": [
+    "XODER",
+    "OR",
+    "NOT"
+   ],
+   "wahrheitstabelle": [
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "1"
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "x3",
+      "typ": "XODER",
+      "x": 224,
+      "y": 28
+     },
+     {
+      "id": "x2",
+      "typ": "XODER",
+      "x": 224,
+      "y": 168
+     },
+     {
+      "id": "x1",
+      "typ": "XODER",
+      "x": 224,
+      "y": 308
+     },
+     {
+      "id": "x0",
+      "typ": "XODER",
+      "x": 224,
+      "y": 448
+     },
+     {
+      "id": "o1",
+      "typ": "OR",
+      "x": 420,
+      "y": 98
+     },
+     {
+      "id": "o2",
+      "typ": "OR",
+      "x": 420,
+      "y": 378
+     },
+     {
+      "id": "o3",
+      "typ": "OR",
+      "x": 560,
+      "y": 238
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 588,
+      "y": 448
+     }
+    ],
+    "verbindungen": [
+     [
+      "A3",
+      "x3.A"
+     ],
+     [
+      "B3",
+      "x3.B"
+     ],
+     [
+      "A2",
+      "x2.A"
+     ],
+     [
+      "B2",
+      "x2.B"
+     ],
+     [
+      "A1",
+      "x1.A"
+     ],
+     [
+      "B1",
+      "x1.B"
+     ],
+     [
+      "A0",
+      "x0.A"
+     ],
+     [
+      "B0",
+      "x0.B"
+     ],
+     [
+      "x3.Y",
+      "o1.a"
+     ],
+     [
+      "x2.Y",
+      "o1.b"
+     ],
+     [
+      "x1.Y",
+      "o2.a"
+     ],
+     [
+      "x0.Y",
+      "o2.b"
+     ],
+     [
+      "o1.y",
+      "o3.a"
+     ],
+     [
+      "o2.y",
+      "o3.b"
+     ],
+     [
+      "o3.y",
+      "n1.a"
+     ],
+     [
+      "n1.y",
+      "G"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "RW",
+   "art": "bauen",
+   "symbol": "±",
+   "name": {
+    "de": "Rechenwerk",
+    "en": "Arithmetic unit"
+   },
+   "titel": {
+    "de": "Plus und Minus",
+    "en": "Plus and minus"
+   },
+   "geschichte": {
+    "de": "Ein Rechner kann eigentlich nur addieren – und zieht trotzdem ab. Der Trick: Alle Bits von B umdrehen und noch 1 dazuzählen. Mit dem Schalter »Minus« soll dein Rechenwerk wahlweise A + B oder A − B rechnen.",
+    "en": "A computer can really only add – and still subtracts. The trick: flip all the bits of B and add 1. With the »minus« switch your arithmetic unit should compute either A + B or A − B."
+   },
+   "frage": {
+    "de": "Wie zieht ein Rechner ab, wenn er nur addieren kann?",
+    "en": "How does a computer subtract if it can only add?"
+   },
+   "hilfe": {
+    "de": "Nimm vier Volladdierer wie beim Rechnen bis 15. Jedes Bit von B geht durch ein XODER mit »Minus« – das dreht es um, wenn Minus an ist. Und »Minus« ist zugleich der Übertrag in die Einerstelle: das »+ 1«.",
+    "en": "Use four full adders as for adding up to 15. Every bit of B goes through an XOR with »minus« – that flips it when minus is on. And »minus« is also the carry into the ones place: the »+ 1«."
+   },
+   "merksatz": {
+    "de": "A − B = A + (B umgedreht) + 1. Ist dabei Ü = 1, ging die Rechnung auf; ist Ü = 0, war B größer als A.",
+    "en": "A − B = A + (B flipped) + 1. If C = 1, the result is fine; if C = 0, B was larger than A."
+   },
+   "eingaenge": [
+    {
+     "name": "A3",
+     "bezeichnung": {
+      "de": "A 8",
+      "en": "A 8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A2",
+     "bezeichnung": {
+      "de": "A 4",
+      "en": "A 4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A1",
+     "bezeichnung": {
+      "de": "A 2",
+      "en": "A 2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "A0",
+     "bezeichnung": {
+      "de": "A 1",
+      "en": "A 1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B3",
+     "bezeichnung": {
+      "de": "B 8",
+      "en": "B 8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B2",
+     "bezeichnung": {
+      "de": "B 4",
+      "en": "B 4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B1",
+     "bezeichnung": {
+      "de": "B 2",
+      "en": "B 2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B0",
+     "bezeichnung": {
+      "de": "B 1",
+      "en": "B 1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "M",
+     "bezeichnung": {
+      "de": "Minus",
+      "en": "Minus"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "Ü",
+      "en": "C"
+     }
+    },
+    {
+     "name": "S3",
+     "bezeichnung": {
+      "de": "8",
+      "en": "8"
+     }
+    },
+    {
+     "name": "S2",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     }
+    },
+    {
+     "name": "S1",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     }
+    },
+    {
+     "name": "S0",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     }
+    }
+   ],
+   "eingabegruppen": [
+    {
+     "name": "A",
+     "bits": 4
+    },
+    {
+     "name": "B",
+     "bits": 4
+    },
+    {
+     "name": "−",
+     "bits": 1
+    }
+   ],
+   "proben": [
+    [
+     106,
+     "3 + 5"
+    ],
+    [
+     304,
+     "9 + 8"
+    ],
+    [
+     297,
+     "9 − 4"
+    ],
+    [
+     239,
+     "7 − 7"
+    ],
+    [
+     395,
+     "12 − 5"
+    ],
+    [
+     482,
+     "15 + 1"
+    ],
+    [
+     75,
+     "2 − 5"
+    ],
+    [
+     327,
+     "10 − 3"
+    ]
+   ],
+   "bausteine": [
+    "VA",
+    "XODER"
+   ],
+   "wahrheitstabelle": [
+    "00000",
+    "10000",
+    "00001",
+    "01111",
+    "00010",
+    "01110",
+    "00011",
+    "01101",
+    "00100",
+    "01100",
+    "00101",
+    "01011",
+    "00110",
+    "01010",
+    "00111",
+    "01001",
+    "01000",
+    "01000",
+    "01001",
+    "00111",
+    "01010",
+    "00110",
+    "01011",
+    "00101",
+    "01100",
+    "00100",
+    "01101",
+    "00011",
+    "01110",
+    "00010",
+    "01111",
+    "00001",
+    "00001",
+    "10001",
+    "00010",
+    "10000",
+    "00011",
+    "01111",
+    "00100",
+    "01110",
+    "00101",
+    "01101",
+    "00110",
+    "01100",
+    "00111",
+    "01011",
+    "01000",
+    "01010",
+    "01001",
+    "01001",
+    "01010",
+    "01000",
+    "01011",
+    "00111",
+    "01100",
+    "00110",
+    "01101",
+    "00101",
+    "01110",
+    "00100",
+    "01111",
+    "00011",
+    "10000",
+    "00010",
+    "00010",
+    "10010",
+    "00011",
+    "10001",
+    "00100",
+    "10000",
+    "00101",
+    "01111",
+    "00110",
+    "01110",
+    "00111",
+    "01101",
+    "01000",
+    "01100",
+    "01001",
+    "01011",
+    "01010",
+    "01010",
+    "01011",
+    "01001",
+    "01100",
+    "01000",
+    "01101",
+    "00111",
+    "01110",
+    "00110",
+    "01111",
+    "00101",
+    "10000",
+    "00100",
+    "10001",
+    "00011",
+    "00011",
+    "10011",
+    "00100",
+    "10010",
+    "00101",
+    "10001",
+    "00110",
+    "10000",
+    "00111",
+    "01111",
+    "01000",
+    "01110",
+    "01001",
+    "01101",
+    "01010",
+    "01100",
+    "01011",
+    "01011",
+    "01100",
+    "01010",
+    "01101",
+    "01001",
+    "01110",
+    "01000",
+    "01111",
+    "00111",
+    "10000",
+    "00110",
+    "10001",
+    "00101",
+    "10010",
+    "00100",
+    "00100",
+    "10100",
+    "00101",
+    "10011",
+    "00110",
+    "10010",
+    "00111",
+    "10001",
+    "01000",
+    "10000",
+    "01001",
+    "01111",
+    "01010",
+    "01110",
+    "01011",
+    "01101",
+    "01100",
+    "01100",
+    "01101",
+    "01011",
+    "01110",
+    "01010",
+    "01111",
+    "01001",
+    "10000",
+    "01000",
+    "10001",
+    "00111",
+    "10010",
+    "00110",
+    "10011",
+    "00101",
+    "00101",
+    "10101",
+    "00110",
+    "10100",
+    "00111",
+    "10011",
+    "01000",
+    "10010",
+    "01001",
+    "10001",
+    "01010",
+    "10000",
+    "01011",
+    "01111",
+    "01100",
+    "01110",
+    "01101",
+    "01101",
+    "01110",
+    "01100",
+    "01111",
+    "01011",
+    "10000",
+    "01010",
+    "10001",
+    "01001",
+    "10010",
+    "01000",
+    "10011",
+    "00111",
+    "10100",
+    "00110",
+    "00110",
+    "10110",
+    "00111",
+    "10101",
+    "01000",
+    "10100",
+    "01001",
+    "10011",
+    "01010",
+    "10010",
+    "01011",
+    "10001",
+    "01100",
+    "10000",
+    "01101",
+    "01111",
+    "01110",
+    "01110",
+    "01111",
+    "01101",
+    "10000",
+    "01100",
+    "10001",
+    "01011",
+    "10010",
+    "01010",
+    "10011",
+    "01001",
+    "10100",
+    "01000",
+    "10101",
+    "00111",
+    "00111",
+    "10111",
+    "01000",
+    "10110",
+    "01001",
+    "10101",
+    "01010",
+    "10100",
+    "01011",
+    "10011",
+    "01100",
+    "10010",
+    "01101",
+    "10001",
+    "01110",
+    "10000",
+    "01111",
+    "01111",
+    "10000",
+    "01110",
+    "10001",
+    "01101",
+    "10010",
+    "01100",
+    "10011",
+    "01011",
+    "10100",
+    "01010",
+    "10101",
+    "01001",
+    "10110",
+    "01000",
+    "01000",
+    "11000",
+    "01001",
+    "10111",
+    "01010",
+    "10110",
+    "01011",
+    "10101",
+    "01100",
+    "10100",
+    "01101",
+    "10011",
+    "01110",
+    "10010",
+    "01111",
+    "10001",
+    "10000",
+    "10000",
+    "10001",
+    "01111",
+    "10010",
+    "01110",
+    "10011",
+    "01101",
+    "10100",
+    "01100",
+    "10101",
+    "01011",
+    "10110",
+    "01010",
+    "10111",
+    "01001",
+    "01001",
+    "11001",
+    "01010",
+    "11000",
+    "01011",
+    "10111",
+    "01100",
+    "10110",
+    "01101",
+    "10101",
+    "01110",
+    "10100",
+    "01111",
+    "10011",
+    "10000",
+    "10010",
+    "10001",
+    "10001",
+    "10010",
+    "10000",
+    "10011",
+    "01111",
+    "10100",
+    "01110",
+    "10101",
+    "01101",
+    "10110",
+    "01100",
+    "10111",
+    "01011",
+    "11000",
+    "01010",
+    "01010",
+    "11010",
+    "01011",
+    "11001",
+    "01100",
+    "11000",
+    "01101",
+    "10111",
+    "01110",
+    "10110",
+    "01111",
+    "10101",
+    "10000",
+    "10100",
+    "10001",
+    "10011",
+    "10010",
+    "10010",
+    "10011",
+    "10001",
+    "10100",
+    "10000",
+    "10101",
+    "01111",
+    "10110",
+    "01110",
+    "10111",
+    "01101",
+    "11000",
+    "01100",
+    "11001",
+    "01011",
+    "01011",
+    "11011",
+    "01100",
+    "11010",
+    "01101",
+    "11001",
+    "01110",
+    "11000",
+    "01111",
+    "10111",
+    "10000",
+    "10110",
+    "10001",
+    "10101",
+    "10010",
+    "10100",
+    "10011",
+    "10011",
+    "10100",
+    "10010",
+    "10101",
+    "10001",
+    "10110",
+    "10000",
+    "10111",
+    "01111",
+    "11000",
+    "01110",
+    "11001",
+    "01101",
+    "11010",
+    "01100",
+    "01100",
+    "11100",
+    "01101",
+    "11011",
+    "01110",
+    "11010",
+    "01111",
+    "11001",
+    "10000",
+    "11000",
+    "10001",
+    "10111",
+    "10010",
+    "10110",
+    "10011",
+    "10101",
+    "10100",
+    "10100",
+    "10101",
+    "10011",
+    "10110",
+    "10010",
+    "10111",
+    "10001",
+    "11000",
+    "10000",
+    "11001",
+    "01111",
+    "11010",
+    "01110",
+    "11011",
+    "01101",
+    "01101",
+    "11101",
+    "01110",
+    "11100",
+    "01111",
+    "11011",
+    "10000",
+    "11010",
+    "10001",
+    "11001",
+    "10010",
+    "11000",
+    "10011",
+    "10111",
+    "10100",
+    "10110",
+    "10101",
+    "10101",
+    "10110",
+    "10100",
+    "10111",
+    "10011",
+    "11000",
+    "10010",
+    "11001",
+    "10001",
+    "11010",
+    "10000",
+    "11011",
+    "01111",
+    "11100",
+    "01110",
+    "01110",
+    "11110",
+    "01111",
+    "11101",
+    "10000",
+    "11100",
+    "10001",
+    "11011",
+    "10010",
+    "11010",
+    "10011",
+    "11001",
+    "10100",
+    "11000",
+    "10101",
+    "10111",
+    "10110",
+    "10110",
+    "10111",
+    "10101",
+    "11000",
+    "10100",
+    "11001",
+    "10011",
+    "11010",
+    "10010",
+    "11011",
+    "10001",
+    "11100",
+    "10000",
+    "11101",
+    "01111",
+    "01111",
+    "11111",
+    "10000",
+    "11110",
+    "10001",
+    "11101",
+    "10010",
+    "11100",
+    "10011",
+    "11011",
+    "10100",
+    "11010",
+    "10101",
+    "11001",
+    "10110",
+    "11000",
+    "10111",
+    "10111",
+    "11000",
+    "10110",
+    "11001",
+    "10101",
+    "11010",
+    "10100",
+    "11011",
+    "10011",
+    "11100",
+    "10010",
+    "11101",
+    "10001",
+    "11110",
+    "10000"
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "x0",
+      "typ": "XODER",
+      "x": 196,
+      "y": 448
+     },
+     {
+      "id": "x1",
+      "typ": "XODER",
+      "x": 196,
+      "y": 308
+     },
+     {
+      "id": "x2",
+      "typ": "XODER",
+      "x": 196,
+      "y": 168
+     },
+     {
+      "id": "x3",
+      "typ": "XODER",
+      "x": 196,
+      "y": 28
+     },
+     {
+      "id": "v0",
+      "typ": "VA",
+      "x": 588,
+      "y": 420
+     },
+     {
+      "id": "v1",
+      "typ": "VA",
+      "x": 392,
+      "y": 308
+     },
+     {
+      "id": "v2",
+      "typ": "VA",
+      "x": 588,
+      "y": 168
+     },
+     {
+      "id": "v3",
+      "typ": "VA",
+      "x": 392,
+      "y": 28
+     }
+    ],
+    "verbindungen": [
+     [
+      "B0",
+      "x0.A"
+     ],
+     [
+      "B1",
+      "x1.A"
+     ],
+     [
+      "B2",
+      "x2.A"
+     ],
+     [
+      "B3",
+      "x3.A"
+     ],
+     [
+      "M",
+      "x0.B"
+     ],
+     [
+      "M",
+      "x1.B"
+     ],
+     [
+      "M",
+      "x2.B"
+     ],
+     [
+      "M",
+      "x3.B"
+     ],
+     [
+      "A0",
+      "v0.A"
+     ],
+     [
+      "A1",
+      "v1.A"
+     ],
+     [
+      "A2",
+      "v2.A"
+     ],
+     [
+      "A3",
+      "v3.A"
+     ],
+     [
+      "x0.Y",
+      "v0.B"
+     ],
+     [
+      "x1.Y",
+      "v1.B"
+     ],
+     [
+      "x2.Y",
+      "v2.B"
+     ],
+     [
+      "x3.Y",
+      "v3.B"
+     ],
+     [
+      "M",
+      "v0.Ci"
+     ],
+     [
+      "v0.C",
+      "v1.Ci"
+     ],
+     [
+      "v1.C",
+      "v2.Ci"
+     ],
+     [
+      "v2.C",
+      "v3.Ci"
+     ],
+     [
+      "v3.C",
+      "C"
+     ],
+     [
+      "v0.S",
+      "S0"
+     ],
+     [
+      "v1.S",
+      "S1"
+     ],
+     [
+      "v2.S",
+      "S2"
+     ],
+     [
+      "v3.S",
+      "S3"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "STEUER",
+   "art": "zahlen",
+   "chip": false,
+   "symbol": "",
+   "titel": {
+    "de": "Du bist das Steuerwerk",
+    "en": "You are the control unit"
+   },
+   "geschichte": {
+    "de": "Hier ist eine fertige Rechenmaschine aus deinen Erfindungen: dein Rechenwerk und ein Register, der Akku, der sich das Ergebnis merkt. Was sie rechnen soll, sagst du ihr Schritt für Schritt: Zahl einstellen, Plus oder Minus wählen, »Rechnen« drücken. Du bist das Steuerwerk!",
+    "en": "Here is a finished calculating machine made of your inventions: your arithmetic unit and a register, the accumulator, which remembers the result. You tell it step by step what to compute: set a number, choose plus or minus, press »compute«. You are the control unit!"
+   },
+   "frage": {
+    "de": "Wer sagt der Rechenmaschine, was sie tun soll?",
+    "en": "Who tells the calculating machine what to do?"
+   },
+   "hilfe": {
+    "de": "Der Akku zeigt immer das Zwischenergebnis. Jeder Druck auf »Rechnen« rechnet Akku + Zahl (oder Akku − Zahl, wenn Minus an ist) und merkt sich das Ergebnis.",
+    "en": "The accumulator always shows the intermediate result. Every press on »compute« computes accumulator + number (or accumulator − number with minus on) and stores the result."
+   },
+   "merksatz": {
+    "de": "Eine Rechenmaschine braucht jemanden, der ihr die Schritte nacheinander gibt – das Steuerwerk. Konrad Zuses große Idee: Die Schritte selbst in einem Speicher ablegen, dann rechnet die Maschine von allein. Das ist ein Programm.",
+    "en": "A calculating machine needs someone to give it the steps one after another – the control unit. Konrad Zuse's great idea: store the steps themselves in a memory, then the machine calculates by itself. That is a program."
+   },
+   "eingaenge": [
+    {
+     "name": "D3",
+     "bezeichnung": {
+      "de": "8",
+      "en": "8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D2",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D1",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D0",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "M",
+     "bezeichnung": {
+      "de": "Minus",
+      "en": "Minus"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Rechnen",
+      "en": "Compute"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "L",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q3",
+     "bezeichnung": {
+      "de": "Akku 8",
+      "en": "Acc 8"
+     }
+    },
+    {
+     "name": "Q2",
+     "bezeichnung": {
+      "de": "Akku 4",
+      "en": "Acc 4"
+     }
+    },
+    {
+     "name": "Q1",
+     "bezeichnung": {
+      "de": "Akku 2",
+      "en": "Acc 2"
+     }
+    },
+    {
+     "name": "Q0",
+     "bezeichnung": {
+      "de": "Akku 1",
+      "en": "Acc 1"
+     }
+    }
+   ],
+   "eingabegruppen": [
+    {
+     "name": "Zahl",
+     "bits": 4
+    },
+    {
+     "name": "−",
+     "bits": 1
+    },
+    {
+     "name": "T",
+     "bits": 1
+    },
+    {
+     "name": "L",
+     "bits": 1
+    }
+   ],
+   "aufgaben": [
+    3,
+    8,
+    6,
+    13
+   ],
+   "aufgabentexte": [
+    {
+     "de": "0 + 3: Lade 3 in den Akku",
+     "en": "0 + 3: load 3 into the accumulator"
+    },
+    {
+     "de": "3 + 5",
+     "en": "3 + 5"
+    },
+    {
+     "de": "8 − 2",
+     "en": "8 − 2"
+    },
+    {
+     "de": "6 + 7",
+     "en": "6 + 7"
+    }
+   ],
+   "erfolg": {
+    "de": "Geschafft: 3 + 5 − 2 + 7 = 13! Du hast die Maschine Schritt für Schritt gesteuert. Genau das macht in einem Rechner das Steuerwerk – von allein, nach einem Programm.",
+    "en": "Done: 3 + 5 − 2 + 7 = 13! You controlled the machine step by step. That is exactly what the control unit does in a computer – by itself, following a program."
+   },
+   "ablauf": [
+    {
+     "ein": "0011000",
+     "soll": "0000"
+    },
+    {
+     "ein": "0011010",
+     "soll": "0011"
+    },
+    {
+     "ein": "0011000",
+     "soll": "0011"
+    },
+    {
+     "ein": "0101000",
+     "soll": "0011"
+    },
+    {
+     "ein": "0101010",
+     "soll": "1000"
+    },
+    {
+     "ein": "0101000",
+     "soll": "1000"
+    },
+    {
+     "ein": "0010100",
+     "soll": "1000"
+    },
+    {
+     "ein": "0010110",
+     "soll": "0110"
+    },
+    {
+     "ein": "0010100",
+     "soll": "0110"
+    },
+    {
+     "ein": "0111000",
+     "soll": "0110"
+    },
+    {
+     "ein": "0111010",
+     "soll": "1101"
+    },
+    {
+     "ein": "0111000",
+     "soll": "1101"
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "rw",
+      "typ": "RW",
+      "x": 252,
+      "y": 28
+     },
+     {
+      "id": "ak",
+      "typ": "REG4",
+      "x": 532,
+      "y": 140
+     }
+    ],
+    "verbindungen": [
+     [
+      "D0",
+      "rw.B0"
+     ],
+     [
+      "D1",
+      "rw.B1"
+     ],
+     [
+      "D2",
+      "rw.B2"
+     ],
+     [
+      "D3",
+      "rw.B3"
+     ],
+     [
+      "M",
+      "rw.M"
+     ],
+     [
+      "rw.S0",
+      "ak.D0"
+     ],
+     [
+      "rw.S1",
+      "ak.D1"
+     ],
+     [
+      "rw.S2",
+      "ak.D2"
+     ],
+     [
+      "rw.S3",
+      "ak.D3"
+     ],
+     [
+      "T",
+      "ak.T"
+     ],
+     [
+      "L",
+      "ak.L"
+     ],
+     [
+      "ak.Q0",
+      "Q0"
+     ],
+     [
+      "ak.Q1",
+      "Q1"
+     ],
+     [
+      "ak.Q2",
+      "Q2"
+     ],
+     [
+      "ak.Q3",
+      "Q3"
+     ],
+     [
+      "ak.Q0",
+      "rw.A0"
+     ],
+     [
+      "ak.Q1",
+      "rw.A1"
+     ],
+     [
+      "ak.Q2",
+      "rw.A2"
+     ],
+     [
+      "ak.Q3",
+      "rw.A3"
      ]
     ]
    }
@@ -2976,6 +5556,14 @@
       "en": "Button"
      },
      "art": "taster"
+    },
+    {
+     "name": "TG",
+     "bezeichnung": {
+      "de": "Taktgeber",
+      "en": "Clock"
+     },
+     "art": "takt"
     }
    ],
    "ausgaenge": [
@@ -3016,6 +5604,10 @@
     {
      "name": "T",
      "bits": 1
+    },
+    {
+     "name": "TG",
+     "bits": 1
     }
    ],
    "bausteine": [
@@ -3030,9 +5622,14 @@
     "ALARM",
     "MERKER",
     "SBIT",
+    "TBIT",
     "REG4",
+    "LAUF",
     "TFF",
-    "ZAEHLER"
+    "ZAEHLER",
+    "TAKT",
+    "GLEICH",
+    "RW"
    ],
    "loesung": {
     "bausteine": [],

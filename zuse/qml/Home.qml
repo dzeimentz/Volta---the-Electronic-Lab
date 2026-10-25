@@ -95,7 +95,8 @@ Rectangle {
                         color: ZTheme.text
                         font.pixelSize: 15
                         text: qsTr("Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis "
-                                   + "zum Zähler. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.")
+                                   + "zur Rechenmaschine. Fang beim Lernpfad an oder probiere im freien Labor eigene "
+                                   + "Ideen aus.")
                     }
                 }
             }
@@ -291,6 +292,14 @@ Rectangle {
                                     }
                                 }
                             }
+                        }
+                        Text { // Ausblick am Ende der Stufe (z. B. auf Zuse 2)
+                            visible: level.modelData.outlook !== ""
+                            Layout.fillWidth: true
+                            text: "→ " + level.modelData.outlook
+                            color: ZTheme.muted
+                            font.pixelSize: 14; font.italic: true
+                            wrapMode: Text.WordWrap
                         }
                     }
                 }

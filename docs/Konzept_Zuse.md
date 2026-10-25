@@ -10,10 +10,10 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Zuse_v0.3.pdf` (
 | Version | 0.3 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
-| Datum | 15.10.2026 |
+| Datum | 25.10.2026 |
 | Bezug | DC Learning Ecosystem – Gesamtkonzept v1.1 und DC Learning Design Standard v1.0 (15.10.2026); Konzept Volta v3.0; ADR-0001, ADR-0005, ADR-0006, ADR-0010, ADR-0011 |
 | Zielplattformen | Android (Tablet), iPadOS, Windows und Linux x86-64, macOS |
-| Änderungen zu v0.2 | Ausrichtung am Bedarf der Schulen (Sek. I) und der Verlage; spielerischer Einstieg mit Alltagsfragen, Rätselkisten und Werkzeugkiste statt »Chip erstellen«; Maskottchen Zetti; Zahlensysteme (binär, dezimal, hexadezimal); Bedienfeld früher Bausatz-Rechner als Leitbild der Reihe; helle Gestaltung wie Volta; Normen und Konventionen; Stand des Prototyps Z0; neue Stufenfolge Zuse 1 (0–13); Einordnung in das DC Learning Ecosystem (Kernlinie Volta → Zuse → MCU Explorer); Zuse 3 als vertiefte Rechnerarchitektur statt Mikrocontroller; Angleichung an den DC Learning Design Standard |
+| Änderungen zu v0.2 | Ausrichtung am Bedarf der Schulen (Sek. I) und der Verlage; spielerischer Einstieg mit Alltagsfragen, Rätselkisten und Werkzeugkiste statt »Chip erstellen«; Maskottchen Zetti; Zahlensysteme (binär, dezimal, hexadezimal); Bedienfeld früher Bausatz-Rechner als Leitbild der Reihe; helle Gestaltung wie Volta; Normen und Konventionen; Stand des Prototyps Z0; neue Stufenfolge Zuse 1 (0–13); Einordnung in das DC Learning Ecosystem (Kernlinie Volta → Zuse → MCU Explorer); Zuse 3 als vertiefte Rechnerarchitektur statt Mikrocontroller; Angleichung an den DC Learning Design Standard; Nachtrag 25.10.2026: Abgleich mit dem ELRAD-Lehrgang, Zuse 1 mit sechs Lernstufen (Speichern und Zählen, Rechenmaschine), Abgrenzung der Bände (Abschnitt 4.1) |
 
 ![Symbol Zuse 1](../zuse/resources/icons/zuse1_256.png)
 
@@ -99,9 +99,23 @@ Die Angaben beruhen auf öffentlichen Übersichten (u. a. Informatik-Monitor 202
 
 | Band | Alter | Schwerpunkte | Bedienfeld | Rechner |
 |---|---|---|---|---|
-| Zuse 1 | 10–14 (Kl. 5–8) | Bit, Zahlensysteme, NICHT/UND/ODER/XODER, Addierer, Speicher, Takt, Zähler, Programm | 4 Daten-, 4 Adressschalter; LEDs für Adresse, Daten, Übertrag, Null, Lauf/Halt | Zuse-4: 4 Bit, 16 Speicherplätze, aus eigenen Erfindungen |
-| Zuse 2 | 13–16 | eigene CPU aus eigenen Bausteinen, 8-Bit-Datenweg, Sprünge, Stapel, Ein-/Ausgabe, Assembler | 8 Daten-, 8 Adressschalter, Status-LEDs | Zuse-8: 8 Bit, eigener Befehlssatz, Pixelmatrix |
+| Zuse 1 | 10–14 (Kl. 5–8) | Bit, Zahlensysteme, NICHT/UND/ODER/XODER/NAND, Addierer, Speicher mit Takt und Löschen, Schieberegister, Zähler, Taktgeber, Vergleicher, Plus und Minus | 4 Datenschalter, Taster für Takt und Löschen, Taktgeber; LEDs für Daten, Übertrag, Akku | Rechenmaschine aus eigenem Rechenwerk und Akku – das Kind ist das Steuerwerk |
+| Zuse 2 | 12–16 | der gespeicherte Ablauf: Decoder, Speicher mit Adressen, Bus, Steuerwerk, Befehle; dann 8-Bit-Datenweg, Sprünge, Stapel, Ein-/Ausgabe, Assembler | 4 bzw. 8 Daten-, 4 bzw. 8 Adressschalter; Untersuchen, Ablegen, Einzelschritt, Start; Status-LEDs | Zuse-4 (4 Bit, 16 Speicherplätze), dann Zuse-8 (8 Bit, eigener Befehlssatz, Pixelmatrix) |
 | Zuse 3 | 14–16 | vertiefte Rechnerarchitektur: Unterbrechungen, Zeitgeber, Ein-/Ausgabe über Register, Von-Neumann und Harvard, eigener kleiner Prozessorkern | Bedienfeld mit Ein-/Ausgabe-Registern und Unterbrechungs-LEDs | Zuse-K: kleiner Prozessorkern als Brücke zum MCU Explorer |
+
+**Abgrenzung der Bände (logische Kette).** Jeder Band endet mit einer Frage, die erst der nächste beantwortet; so
+wiederholt kein Band den vorigen und keiner setzt voraus, was erst später kommt:
+
+| Band | Kernfrage | Endpunkt | offene Frage am Ende |
+|---|---|---|---|
+| Zuse 1 | Wie rechnet und merkt sich eine Maschine etwas? | Rechenmaschine aus eigenen Erfindungen (Rechenwerk, Register, Zähler), Schritt für Schritt von Hand gesteuert (»Du bist das Steuerwerk«) | Wer gibt die Schritte, wenn niemand am Bedienfeld steht? |
+| Zuse 2 | Wie steuert sich ein Rechner selbst? | Konrad Zuses Idee des gespeicherten Ablaufs: Speicher mit Adressen, Steuerwerk, Befehle; Zuse-4, dann Zuse-8 mit Assembler | Wie reagiert ein Rechner auf die Welt, ohne ständig nachzufragen? |
+| Zuse 3 | Wie ist ein echter Prozessor aufgebaut? | Unterbrechungen, Zeitgeber, Ports, Von-Neumann/Harvard, Fließband; Zuse-K | Wie programmiert man einen echten Chip? → MCU Explorer |
+
+Zuse 1 behandelt also alles bis zur von Hand bedienten Rechenmaschine, aber noch kein Programm im Speicher. Der
+Decoder »1 aus 4«, der Speicher mit Adressen und der Zuse-4 – im Entwurf vom 15.10.2026 noch Stufe 4 von Zuse 1 –
+bilden den Einstieg in Zuse 2. Damit bleibt Zuse 1 für 10- bis 14-Jährige in einem Band zu schaffen, und Zuse 2 hat
+einen klaren eigenen Auftrag.
 
 Mikrocontroller mit Arduino-Hardware, C/C++, Sensoren und Aktoren gehören nicht zu Zuse, sondern zur eigenen Linie MCU Explorer (Abschnitt 4.3).
 
@@ -274,7 +288,7 @@ Entscheidung des Inhabers (25.10.2026): Alle Zuse-Bände verwenden dieselbe Bild
 
 ### 7.1 Zuse 1
 
-Wie bei Volta ist Zuse 1 in Lernstufen gegliedert; jede Stufe hat eine Leitfrage und mehrere Experimente. Ausgangspunkt ist ein Kind, das noch nie etwas von Digitaltechnik gehört hat: Es beginnt mit Schalter und Lampe, entdeckt dann die Grundbausteine, kombiniert sie zu eigenen Erfindungen und rechnet zuletzt mit Zahlen. Jede Stufe ist anspruchsvoller als die vorige, jedes Experiment bringt nur einen neuen Gedanken.
+Wie bei Volta ist Zuse 1 in Lernstufen gegliedert; jede Stufe hat eine Leitfrage und mehrere Experimente. Ausgangspunkt ist ein Kind, das noch nie etwas von Digitaltechnik gehört hat: Es beginnt mit Schalter und Lampe, entdeckt dann die Grundbausteine, kombiniert sie zu eigenen Erfindungen, rechnet mit Zahlen, baut Speicher und Zähler und steuert zuletzt eine Rechenmaschine aus eigenen Erfindungen von Hand. Jede Stufe ist anspruchsvoller als die vorige, jedes Experiment bringt nur einen neuen Gedanken.
 
 | Stufe | Leitfrage | Experimente (Art, Ergebnis) | Stand |
 |---|---|---|---|
@@ -282,30 +296,35 @@ Wie bei Volta ist Zuse 1 in Lernstufen gegliedert; jede Stufe hat eine Leitfrage
 | 1 Logik entdecken | Wie entscheidet ein Rechner? | 1.1 Das Nachtlicht (entdecken: NICHT) · 1.2 Der Tresor (UND) · 1.3 Die Klingel (ODER) · 1.4 Die Fensterwarnung (NAND) | Prototyp |
 | 2 Erfinden mit Bausteinen | Was kann ich aus meinen Bausteinen bauen? | 2.1 Die Alarmanlage (bauen: erste Erfindung) · 2.2 Das Treppenhauslicht (XODER) · 2.3 Alles aus einem Baustein (UND nur aus NAND, keine Erfindung) | Prototyp |
 | 3 Zahlen und Rechnen | Wie rechnet ein Rechner mit 0 und 1? | 3.1 Vier Lampen (zahlen: Binärzahlen am 4-Bit-Bedienfeld, Stellenwerte 8, 4, 2, 1) · 3.2 1 + 1 = 10 (Halbaddierer) · 3.3 Drei Bits auf einmal (Volladdierer) · 3.4 Rechnen bis 15 (4-Bit-Addierer, Übertrags-LED »Ü 16«; Tabelle zeigt Rechnungen als Proben, geprüft werden alle 256 Zeilen) | Prototyp |
-| 4 Speichern und Programmieren | Wie merkt sich ein Rechner etwas – und wie läuft ein Programm? | 4.1 Hat jemand geklingelt? (Merker: Ausgang zurück an den Eingang) · 4.2 Der Schnappschuss (Speicherbit, merkt nur auf Knopfdruck) · 4.3 Vier Bits merken (Register) · 4.4 Ein Knopf für An und Aus (Umschalter aus zwei Speicherbits) · 4.5 Der Zähler (vier Umschalter, Takt per Taster, Überlauf nach 15) – alle geprüft als Ablauf Schritt für Schritt · 4.6 Wo wohnt ein Programm? (Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld) · 4.7 Läuft er? (Zuse-4: Programm eintippen, Einzelschritt, Start) | 4.1–4.5 Prototyp, 4.6–4.7 geplant |
+| 4 Speichern und Zählen | Wie merkt sich ein Rechner etwas – und wie zählt er? | 4.1 Hat jemand geklingelt? (Merker: Ausgang zurück an den Eingang) · 4.2 Der Schnappschuss (Speicherbit, merkt solange »Merken« gedrückt ist) · 4.3 Genau im Moment des Drückens (Taktbit aus zwei Speicherbits, mit »Löschen«) · 4.4 Vier Bits merken (Register mit Takt und Löschen) · 4.5 Das Lauflicht (Schieberegister) · 4.6 Ein Knopf für An und Aus (Umschalter: Taktbit mit NICHT) · 4.7 Der Zähler (vier Umschalter, Überlauf nach 15, Löschen) · 4.8 Der Taktgeber (tickt von allein; Teiler durch 2 und 4) – alle geprüft als Ablauf Schritt für Schritt | Prototyp |
+| 5 Die Rechenmaschine | Wie rechnet eine Maschine – und wer sagt ihr, was sie tun soll? | 5.1 Das Zahlenschloss (Vergleicher: zwei 4-Bit-Zahlen gleich?) · 5.2 Plus und Minus (Rechenwerk: A − B = A + B umgedreht + 1) · 5.3 Du bist das Steuerwerk (zahlen: fest verdrahtete Rechenmaschine aus eigenem Rechenwerk und Register als Akku; das Kind rechnet 3 + 5 − 2 + 7 Schritt für Schritt) · Ausblick: weiter in Zuse 2 | Prototyp |
 
-Freischaltung wie Volta: Ein Experiment öffnet sich, wenn das vorige geschafft ist, denn die Werkzeuge bauen aufeinander auf (die Alarmanlage braucht UND, ODER und NICHT, der Halbaddierer das Treppenhauslicht). In der Stufenauswahl erscheinen die Lernstufen mit Leitfrage, darunter ihre Experimente (0.1, 1.1 …); die Kopfzeile zeigt »Stufe n: Experiment«. In Experiment 4.7 ist das Steuerwerk teilweise vorgegeben (R2).
+Freischaltung wie Volta: Ein Experiment öffnet sich, wenn das vorige geschafft ist, denn die Werkzeuge bauen aufeinander auf (die Alarmanlage braucht UND, ODER und NICHT, der Halbaddierer das Treppenhauslicht). In der Stufenauswahl erscheinen die Lernstufen mit Leitfrage, darunter ihre Experimente (0.1, 1.1 …); die Kopfzeile zeigt »Stufe n: Experiment«. In Experiment 5.3 ist die Rechenmaschine fest verdrahtet; das Kind gibt die Steuersignale selbst (R2).
 
-Schaltungen mit Speicher prüft Zuse als **Ablauf**: Nach dem Einschalten (alle Speicher starten mit 0 – eine Vereinfachung, echte Bausteine starten zufällig) werden die Schritte der Reihe nach an Schaltern und Tastern eingestellt, nach jedem Schritt müssen die Lampen stimmen. Speicher entsteht dabei echt aus der Rückkopplung in der Logiksimulation, nicht aus einem hinterlegten Verhalten.
+Schaltungen mit Speicher prüft Zuse als **Ablauf**: Nach dem Einschalten (alle Speicher starten mit 0 – eine Vereinfachung, echte Bausteine starten zufällig; deshalb haben Taktbit, Register und Zähler wie im ELRAD-Lehrgang einen Eingang »Löschen«, und der Merksatz sagt es) werden die Schritte der Reihe nach an Schaltern und Tastern eingestellt, nach jedem Schritt müssen die Lampen stimmen. Wie bei echten Bausteinen werden die Schalter vor dem Takt eingestellt; ändern sie sich im selben Augenblick, ist das Ergebnis auch in der Simulation unbestimmt. Speicher entsteht dabei echt aus der Rückkopplung in der Logiksimulation, nicht aus einem hinterlegten Verhalten.
+
+Der **Taktgeber** (ab 4.8 und im Freien Labor) schaltet einen Eingang von allein um (alle 0,7 s); Antippen hält ihn an und lässt ihn weiterlaufen. Er steht im Bedienfeld als eigenes Element mit Rechteckwelle und »läuft«/»Pause« (nie nur über die Farbe).
 
 Gegenüber der ersten Fassung (Stufen 0–15 ohne Gruppierung) rückt die NAND-Entdeckung zu den anderen Grundbausteinen in Stufe 1 und das Zählen mit vier Lampen vor den Halbaddierer, damit »1 + 1 = 10« auf dem Zählen aufbaut.
 
-Experimentarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle), **zahlen** (fest verdrahtetes Bedienfeld, Zahlen einstellen).
+Experimentarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle bzw. Ablauf), **zahlen** (fest verdrahtetes Bedienfeld: Zahlen einstellen bzw. Rechenschritte geben).
 
-Aufbau der App wie Volta 1: Die **Startseite** begrüßt mit Zetti und bietet die Karten **Weitermachen** (zuletzt bearbeitetes Experiment), **Freies Labor** (Werkbank mit vier Kippschaltern, einem Taster und vier LEDs, alle bisher entdeckten und erfundenen Werkzeuge, keine Aufgabe, Aufbau wird gespeichert) und **Vorführung** (alle Musterlösungen mit Bausteinen als fertige Aufbauten zum Zeigen, auch noch nicht geschaffte; bedienbar, aber nicht veränderbar, es wird nichts gespeichert). Darunter folgt der **Lernpfad** mit den Lernstufen (Leitfrage, »n von m geschafft«) und ihren Experimenten. Im Experiment führt der Knopf ⌂ in der Kopfzeile zurück zur Startseite. Offen gegenüber Volta: Aufgabe der Lehrkraft (Code), Forscherheft, Hilfe und Kurzanleitung, Info, Schriftgröße und Sprache in der Kopfzeile, Profile und Elternbereich.
+Aufbau der App wie Volta 1: Die **Startseite** begrüßt mit Zetti und bietet die Karten **Weitermachen** (zuletzt bearbeitetes Experiment), **Freies Labor** (Werkbank mit vier Kippschaltern, einem Taster, einem Taktgeber und vier LEDs, alle bisher entdeckten und erfundenen Werkzeuge, keine Aufgabe, Aufbau wird gespeichert) und **Vorführung** (alle Musterlösungen mit Bausteinen als fertige Aufbauten zum Zeigen, auch noch nicht geschaffte; bedienbar, aber nicht veränderbar, es wird nichts gespeichert). Darunter folgt der **Lernpfad** mit den Lernstufen (Leitfrage, »n von m geschafft«) und ihren Experimenten. Im Experiment führt der Knopf ⌂ in der Kopfzeile zurück zur Startseite. Offen gegenüber Volta: Aufgabe der Lehrkraft (Code), Forscherheft, Hilfe und Kurzanleitung, Info, Schriftgröße und Sprache in der Kopfzeile, Profile und Elternbereich.
 
 ### 7.2 Zuse 2 (Skizze)
 
+Zuse 2 knüpft an das Ende von Zuse 1 an: Die Erfindungen aus Zuse 1 (Register, Zähler, Rechenwerk, Vergleicher) werden übernommen bzw. zu Beginn kurz wiederholt.
+
 | Stufe | Thema | Ergebnis |
 |---|---|---|
-| 1 | Vom Bedienfeld mit 4 zu 8 Bit; Busse und Splitter | Rechenwerk und Register mit 8 Bit |
-| 2 | Mehr Speicher: Adressbus, Adressdecoder | Speicher 256 × 8 |
-| 3 | Entscheidungen: Null und Übertrag, bedingte Sprünge | erweitertes Steuerwerk |
-| 4 | Stapel und Unterprogramme | Stapelzeiger |
-| 5 | Ein- und Ausgabe: Ports, Tasten, Pixelmatrix | Port-Bausteine |
-| 6 | Vom Schalter zum Assembler | Programme als Text, Intel HEX |
-| 7 | Eigene Befehle im Steuerwerk | erweiterter Befehlssatz |
-| 8 | Projekt: kleines Spiel auf der Pixelmatrix | Zuse-8 |
+| 1 | Konrad Zuses Idee: die Schritte selbst speichern; welcher Platz ist gemeint? | Decoder »1 aus 4«, Speicher 16 × 4 mit Adressen, Untersuchen und Ablegen am Bedienfeld |
+| 2 | Ein Bus für alle | Bus mit Freigabe (Zustand Z), Datenweg der Rechenmaschine |
+| 3 | Das Steuerwerk: Befehl holen, ausführen | Befehlszähler, Befehlsregister, Steuerwerk (teilweise vorgegeben) |
+| 4 | Läuft er? | Zuse-4: Programm eintippen, Einzelschritt, Start; Befehle Laden, Addieren, Subtrahieren, Speichern, Halt |
+| 5 | Entscheidungen: Null und Übertrag, bedingte Sprünge | Sprungbefehle (der Vergleicher aus Zuse 1 kehrt wieder) |
+| 6 | Vom Bedienfeld mit 4 zu 8 Bit; Busse und Splitter | Rechenwerk, Register und Speicher mit 8 Bit |
+| 7 | Stapel, Unterprogramme, Ein- und Ausgabe | Stapelzeiger, Ports, Tasten, Pixelmatrix |
+| 8 | Vom Schalter zum Assembler; Projekt | Programme als Text; Zuse-8 mit kleinem Spiel |
 
 ### 7.3 Zuse 3 (Skizze, neu ausgerichtet)
 
@@ -391,9 +410,9 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | F4 | Werkbank | Werkzeuge setzen, verbinden; Rückgängig/Wiederholen; Prüfen mit Wahrheitstabelle | MUSS | umgesetzt |
 | F5 | Blick hinein | jede Erfindung bis zum Gatter mit Live-Pegeln | MUSS | umgesetzt |
 | F6 | Zahlensysteme | Zahlenleiste binär/dezimal/hex, zuschaltbar; Erklärung und Vergleichstabelle | MUSS | umgesetzt |
-| F7 | Bedienfeld | 4 Daten-, 4 Adressschalter, LEDs, Untersuchen/Ablegen/Einzelschritt/Start | MUSS | teilweise (4 Bit, zwei Zahlen, Übertrag) |
-| F8 | Speicher und Takt | Flipflop, Register, Zähler, Speicher 16 × 4; Testfolgen Takt für Takt | MUSS | teilweise (Merker, Speicherbit, Register, Umschalter, Zähler; Prüfung als Ablauf) |
-| F9 | Programm | Programmtabelle Zuse-4 mit Befehlszeiger und Binäransicht | MUSS | geplant |
+| F7 | Bedienfeld | 4 Datenschalter, Taster für Takt und Löschen, Taktgeber, LEDs für Daten, Übertrag und Akku | MUSS | umgesetzt |
+| F8 | Speicher und Takt | Merker, Speicherbit, Taktbit mit Löschen, Register, Schieberegister, Umschalter, Zähler, Taktgeber mit Teiler; Prüfung als Ablauf Takt für Takt | MUSS | umgesetzt |
+| F9 | Rechenmaschine | Vergleicher, Rechenwerk für Plus und Minus, von Hand gesteuerte Rechenmaschine mit Akku (Speicher mit Adressen und Programm: Zuse 2) | MUSS | umgesetzt |
 | F10 | Schaltzeichen | DIN und US umschaltbar | SOLL | umgesetzt |
 | F11 | Logikanalysator | frei wählbare Leitungen über die letzten 32 Takte | SOLL | geplant |
 | F12 | Export | Erfindungen als Datei exportieren und importieren | SOLL | geplant |
@@ -420,7 +439,7 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | Nr. | Risiko | Eintritt | Auswirkung | Maßnahme |
 |---|---|---|---|---|
 | R1 | Name »Zuse« markenrechtlich nicht verfügbar | MITTEL | HOCH | Recherche DPMA/EUIPO; Ersatzname vorhalten |
-| R2 | Stufe 4 (Speicher, Steuerwerk) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Steuerwerk teilweise vorgegeben; Rätselkisten auch für Speicher |
+| R2 | Stufen 4 und 5 (Speicher, Rechenmaschine) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Rechenmaschine fest verdrahtet, das Kind ist das Steuerwerk; gestufte Hilfe und Musterlösung; Programm im Speicher erst in Zuse 2 |
 | R3 | Rätselkisten werden durch Raten gelöst statt durch Ausprobieren | MITTEL | MITTEL | Rückmeldung mit konkreter Schalterstellung; später: alle Zeilen ausprobieren, bevor geprüft wird |
 | R4 | Arbeitsfläche auf dem Tablet zu klein (Seitenleisten, Zahlenleiste) | MITTEL | MITTEL | einklappbare Seitenleisten, Zoom; Erprobung auf 10" |
 | R5 | Bedarf der Verlage weicht ab (z. B. nur Mikrocontroller) | MITTEL | HOCH | Rückmeldung der angefragten Verlage abwarten; MCU Explorer im Ecosystem vorziehen möglich |
@@ -436,11 +455,11 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 |---|---|---|---|
 | Z0 | Prototyp: Logikbibliothek, Werkbank, Rätselkisten, Werkzeugkiste, Zetti, Zahlensysteme, erste sieben Experimente, Android-Testversion | 20–25 PT | weitgehend umgesetzt (Okt. 2026) |
 | Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung, drei Schichten, Lernstufen 0–3); Bedienfeld 4 Bit, NAND, Addierer; Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | Angleichung und Stufen 7–11 umgesetzt (Okt. 2026); offen: Erprobung, Markenrecherche |
-| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Experimente 4.1–4.5 (umgesetzt ohne Bus und Logikanalysator) | 30–40 PT | nach Verlagsrückmeldung |
-| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Experimente 4.6–4.7 | 35–45 PT | |
+| Z1 | Speicher, Takt, Zähler, Taktgeber, Vergleicher, Rechenwerk, Rechenmaschine; Experimente 4.1–5.3 | 30–40 PT | als Prototyp umgesetzt (Okt. 2026); offen: Logikanalysator, Erprobung |
+| Z2 | Feinschliff Zuse 1: Logikanalysator, Hilfe, Forscherheft, Aufgabe der Lehrkraft, Profile wie Volta | 20–30 PT | |
 | Z3 | Übersetzungen (FR, LU), Lehrerhandreichung, Hochformat, Erprobung, Paketierung | 20–25 PT | Zuse 1 Version 1.0 |
 
-Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
+Summe Zuse 1: ca. 100–135 PT (Speicher mit Adressen, Steuerwerk und Zuse-4 sind nach Zuse 2 gewandert). Zuse 2 und 3 werden nach Zuse 1 geschätzt.
 
 ## 15. Offene Entscheidungen
 
@@ -449,7 +468,8 @@ Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
 | Richtung v0.3 festschreiben (ADR-0010 ergänzen) | vor Phase Z1 |
 | Markenrecherche »Zuse« und »Zetti«; Produktzusätze Zuse 2 und 3 | vor Veröffentlichung |
 | Altersangabe Zuse 1 (10–14) und Lehrplanbezug je Bundesland | vor Phase Z3 |
-| Befehlssatz Zuse-4 (Umfang, Adressbreite) | Phase Z2 |
+| Abgrenzung der Bände bestätigen: Zuse 1 endet mit der von Hand gesteuerten Rechenmaschine, Programm im Speicher ab Zuse 2 (Abschnitt 4.1) | jetzt |
+| Befehlssatz Zuse-4 (Umfang, Adressbreite) | Konzept Zuse 2 |
 | Zuschnitt Zuse 3 gegenüber dem MCU Explorer bestätigen | vor Konzept Zuse 3 |
 | Gemeinsames Projektformat (.dclearn) und gemeinsame QML-Komponenten mit Volta | vor Phase Z3 |
 | Qt-Lizenzweg für iOS (gemeinsam mit Volta) | vor iPad-Ausgabe |

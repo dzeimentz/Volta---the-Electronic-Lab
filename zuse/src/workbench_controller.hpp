@@ -10,6 +10,7 @@
 #include <QSet>
 #include <QString>
 #include <QStringList>
+#include <QTimer>
 #include <QUndoStack>
 #include <QVariantList>
 #include <QVariantMap>
@@ -40,7 +41,9 @@ struct Stage {
     QString question;
     QString hint;
     QStringList inputs;
-    QStringList inputKinds; // je Eingang "kipp" (Kippschalter, rastet) oder "taster" (nur solange gedrueckt)
+    // je Eingang "kipp" (Kippschalter, rastet), "taster" (nur solange gedrueckt) oder "takt" (Taktgeber, schaltet
+    // von allein im Takt um)
+    QStringList inputKinds;
     QStringList outputs;    // Ausgaenge sind LEDs
     bool makesChip = true;  // Stufe 0 (Schalter direkt an LEDs) ergibt keinen Chip
     bool free = false;      // Freies Labor: keine Aufgabe, alle eigenen Werkzeuge, nicht im Lernpfad
@@ -49,6 +52,8 @@ struct Stage {
     volta::logic::ChipDef solution; // Musterloesung (Teile und Verbindungen)
     // Art »zahlen«: fest verdrahtetes Bedienfeld, das Kind stellt nacheinander diese Zahlen an den LEDs ein
     std::vector<int> targets;
+    QStringList taskTexts; // Text je Aufgabe (sonst »Zeige die n«)
+    QString successText;   // Zetti nach der letzten Aufgabe (sonst Text zum Zaehlen bis 15)
     // Schalter als mehrere Zahlen lesen (z. B. A und B je 4 Bit); leer = alle Schalter eine Zahl
     std::vector<std::pair<QString, int>> inputGroups;
     // grosse Tabellen (ab 6 Eingaengen): nur diese Zeilen zeigen, mit Rechnung; geprueft wird trotzdem alles
@@ -66,6 +71,7 @@ struct LearningLevel {
     QString question;     // Leitfrage der Stufe
     QStringList kuerzel;  // Experimente der Stufe in Reihenfolge; leer = geplant
     QStringList upcoming; // Titel geplanter Experimente (erscheinen gesperrt mit »folgt«)
+    QString outlook;      // Ausblick am Ende der Stufe (z. B. auf Zuse 2)
 };
 
 class WorkbenchController : public QObject {
@@ -105,6 +111,8 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList inputNumbers READ inputNumbers NOTIFY viewChanged) // je Zahlengruppe mit "title"
     Q_PROPERTY(QVariantList tasks READ tasks NOTIFY checkChanged)              // Art »zahlen«: Aufgaben
     Q_PROPERTY(bool benchLocked READ benchLocked NOTIFY stageChanged)          // fest verdrahtet (Art »zahlen«)
+    Q_PROPERTY(bool hasClock READ hasClock NOTIFY stageChanged)                // Stufe hat einen Taktgeber
+    Q_PROPERTY(bool clockRunning READ clockRunning NOTIFY clockChanged)
     Q_PROPERTY(bool numbersVisible READ numbersVisible WRITE setNumbersVisible NOTIFY numbersVisibleChanged)
     Q_PROPERTY(QVariantList parts READ parts NOTIFY viewChanged)
     Q_PROPERTY(QVariantList ports READ ports NOTIFY viewChanged)
@@ -177,6 +185,8 @@ public:
     QVariantList inputNumbers() const;
     QVariantList tasks() const;
     bool benchLocked() const { return editLocked(); }
+    bool hasClock() const;
+    bool clockRunning() const { return m_clock.isActive(); }
     bool numbersVisible() const { return m_numbersVisible; }
     void setNumbersVisible(bool on);
     // Bits (hoechstes zuerst) als Zahl: {"bin", "dec", "hex", "value", "bits"}; mit unbestimmtem Bit "?"
@@ -209,6 +219,7 @@ public:
     Q_INVOKABLE void clearBench();
     Q_INVOKABLE void toggleInput(const QString& name);           // Kippschalter
     Q_INVOKABLE void setInput(const QString& name, bool on);     // Taster: druecken und loslassen
+    Q_INVOKABLE void toggleClock();                              // Taktgeber anhalten bzw. weiterlaufen lassen
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
     Q_INVOKABLE void check();
@@ -227,6 +238,9 @@ public:
     void applyDef(const volta::logic::ChipDef& def);
     bool isDone(const QString& kuerzel) const { return m_done.contains(kuerzel); }
     volta::logic::Level levelAt(const QString& endpoint) const;
+    void tickClock(); // ein Takt des Taktgebers: alle Eingaenge der Art »takt« schalten um
+    void playSteps(); // Ablauf der Stufe an den Eingaengen nachspielen (Entwicklerhilfe, Tests)
+    static constexpr int kClockMs = 700; // halbe Periode: langsam genug zum Mitverfolgen
 
 signals:
     void stagesChanged();
@@ -237,6 +251,7 @@ signals:
     void messageChanged();
     void symbolStyleChanged();
     void numbersVisibleChanged();
+    void clockChanged();
 
 private:
     bool loadStages(const QString& file, const QString& language);
@@ -253,6 +268,8 @@ private:
     QString stageLabel(int index) const; // »4.5«: Lernstufe und Platz darin
     void endDemo();                      // eigene Werkzeugkiste zurueck
     void checkTarget(); // Art »zahlen«: aktuelle Aufgabe erfuellt?
+    void applyInput(size_t index, volta::logic::Level level); // Eingang setzen (Bedienung oder Taktgeber)
+    void dropStaleChips(); // Erfindungen, deren Anschluesse nicht mehr zur Stufe passen (aeltere Inhalte), verwerfen
     size_t currentRow() const; // Zeile der Wahrheitstabelle zur aktuellen Schalterstellung
     volta::logic::Level boxOutput(size_t output) const;
     QString toolName(const QString& type) const;
@@ -294,6 +311,7 @@ private:
     std::vector<volta::logic::Level> m_guess; // Vermutung je Zeile (X = noch offen)
     bool m_guessSkipped = false;
     size_t m_task = 0; // Art »zahlen«: aktuelle Aufgabe
+    QTimer m_clock;    // Taktgeber
     QString m_symbolStyle = QStringLiteral("din");
     bool m_numbersVisible = true;
 };

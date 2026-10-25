@@ -1,13 +1,13 @@
 import QtQuick
 
 // Ein- und Ausgabe wie auf dem Bedienfeld der ersten Rechner-Bausaetze: Kippschalter (rastet), Taster (nur solange
-// gedrueckt), rote LED. Der Zustand steht immer auch als 1/0 daneben (Farbe nie allein). Flache Form (»compact«,
+// gedrueckt), Taktgeber (schaltet von allein; antippen haelt ihn an), rote LED. Der Zustand steht immer auch als 1/0 daneben (Farbe nie allein). Flache Form (»compact«,
 // 56 dp hoch) fuer Bedienfelder mit vielen Schaltern: Bezeichnung und Wert neben dem Bedienelement.
 Item {
     id: root
     property string name
     property string label // Bedeutung, z. B. »Haustuer«; sonst der Name
-    property string kind: "kipp" // kipp | taster | led
+    property string kind: "kipp" // kipp | taster | takt | led
     property string level: "0"
     property bool enabled: true
     property bool compact: false
@@ -65,6 +65,31 @@ Item {
             anchors.centerIn: parent
             width: root.on ? 40 : 48; height: width; radius: width / 2
             color: root.on ? "#B8C1CA" : "#D5DCE3"
+        }
+    }
+
+    // Taktgeber: Rechteckwelle, bei 1 hell; darunter laeuft bzw. angehalten (nie nur ueber die Farbe)
+    Rectangle {
+        visible: root.big && root.kind === "takt"
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: 42
+        width: 62; height: 62; radius: 10
+        color: root.on ? "#D9F3F8" : "#3A434D"
+        border.color: "#8E99A4"; border.width: 2
+        Text {
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: -6
+            text: "⎍⎍"
+            color: root.on ? ZTheme.navy : "#D5DCE3"
+            font.pixelSize: 22; font.family: "Segoe UI Symbol"
+        }
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 3
+            text: workbench.clockRunning ? qsTr("läuft") : qsTr("Pause")
+            color: root.on ? ZTheme.navy : "#D5DCE3"
+            font.pixelSize: 11; font.bold: true
         }
     }
 
@@ -141,6 +166,19 @@ Item {
                     Behavior on y { NumberAnimation { duration: 90 } }
                 }
             }
+            Rectangle { // Taktgeber
+                visible: root.kind === "takt"
+                anchors.fill: parent
+                radius: 8
+                color: root.on ? "#D9F3F8" : "#3A434D"
+                border.color: "#8E99A4"; border.width: 2
+                Text {
+                    anchors.centerIn: parent
+                    text: workbench.clockRunning ? "⎍" : "⏸"
+                    color: root.on ? ZTheme.navy : "#D5DCE3"
+                    font.pixelSize: 20; font.family: "Segoe UI Symbol"
+                }
+            }
             Rectangle { // Taster
                 visible: root.kind === "taster"
                 anchors.centerIn: parent
@@ -175,6 +213,10 @@ Item {
     TapHandler {
         enabled: root.enabled && root.kind === "kipp"
         onTapped: workbench.toggleInput(root.name)
+    }
+    TapHandler { // Taktgeber anhalten bzw. weiterlaufen lassen
+        enabled: root.enabled && root.kind === "takt"
+        onTapped: workbench.toggleClock()
     }
     TapHandler { // Taster wie bei Volta: druecken = 1, loslassen (oder vom Knopf abrutschen) = 0
         id: push

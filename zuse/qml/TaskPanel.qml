@@ -151,12 +151,16 @@ Rectangle {
                             anchors.rightMargin: 12
                             Text {
                                 Layout.fillWidth: true
-                                text: qsTr("Zeige die %1").arg(task.modelData.value)
+                                text: task.modelData.text ? task.modelData.text
+                                                          : qsTr("Zeige die %1").arg(task.modelData.value)
+                                wrapMode: Text.WordWrap
                                 color: ZTheme.text
                                 font.pixelSize: 16; font.bold: task.modelData.current
                             }
                             Text { // binaer erst, wenn geschafft – sonst waere die Loesung verraten
-                                text: task.modelData.done ? (task.modelData.value + 16).toString(2).slice(1) + "  ✓" : ""
+                                text: !task.modelData.done ? ""
+                                    : task.modelData.text ? "= " + task.modelData.value + "  ✓"
+                                    : (task.modelData.value + 16).toString(2).slice(1) + "  ✓"
                                 color: ZTheme.ok
                                 font.family: ZTheme.mono; font.pixelSize: 16; font.bold: true
                             }

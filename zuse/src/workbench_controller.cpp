@@ -66,6 +66,9 @@ WorkbenchController::WorkbenchController(const QString& stagesFile, const QStrin
     : QObject(parent), m_dataDir(dataDir) {
     loadStages(stagesFile, language);
     load();
+    dropStaleChips();
+    m_clock.setInterval(kClockMs);
+    connect(&m_clock, &QTimer::timeout, this, &WorkbenchController::tickClock);
     connect(&m_undo, &QUndoStack::canUndoChanged, this, &WorkbenchController::historyChanged);
     connect(&m_undo, &QUndoStack::canRedoChanged, this, &WorkbenchController::historyChanged);
     int first = -1; // erste noch offene Stufe (sonst die letzte des Lernpfads)
@@ -100,7 +103,8 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
             const QJsonObject e = x.toObject();
             s.inputs << (x.isString() ? x.toString() : e.value("name").toString());
             s.inputLabels << (x.isString() ? QString() : localized(e.value("bezeichnung"), language));
-            s.inputKinds << (e.value("art").toString() == "taster" ? QStringLiteral("taster") : QStringLiteral("kipp"));
+            const QString art = e.value("art").toString();
+            s.inputKinds << (art == "taster" || art == "takt" ? art : QStringLiteral("kipp"));
         }
         for (const QJsonValue& x : o.value("ausgaenge").toArray()) {
             const QJsonObject e = x.toObject();
@@ -118,6 +122,8 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         for (const QJsonValue& x : o.value("bausteine").toArray()) s.palette << x.toString();
         for (const QJsonValue& x : o.value("wahrheitstabelle").toArray()) s.table.push_back(parseLevels(x.toString()));
         for (const QJsonValue& x : o.value("aufgaben").toArray()) s.targets.push_back(x.toInt());
+        for (const QJsonValue& x : o.value("aufgabentexte").toArray()) s.taskTexts << localized(x, language);
+        s.successText = localized(o.value("erfolg"), language);
         for (const QJsonValue& x : o.value("eingabegruppen").toArray())
             s.inputGroups.emplace_back(x.toObject().value("name").toString(), x.toObject().value("bits").toInt());
         for (const QJsonValue& x : o.value("proben").toArray())
@@ -147,6 +153,7 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         l.question = localized(o.value("frage"), language);
         for (const QJsonValue& k : o.value("experimente").toArray()) l.kuerzel.append(k.toString());
         for (const QJsonValue& k : o.value("geplant").toArray()) l.upcoming.append(localized(k, language));
+        l.outlook = localized(o.value("ausblick"), language);
         m_levels.push_back(l);
     }
     return !m_stages.empty();
@@ -167,6 +174,22 @@ void WorkbenchController::load() {
     for (auto it = drafts.begin(); it != drafts.end(); ++it) {
         ChipDef d;
         if (chipFromJson(it.value().toObject(), d)) m_drafts[it.key()] = d;
+    }
+}
+
+void WorkbenchController::dropStaleChips() {
+    for (const Stage& s : m_stages) {
+        const ChipDef* chip = s.makesChip ? m_library.find(s.kuerzel.toStdString()) : nullptr;
+        if (!chip) continue;
+        std::vector<Port> expected;
+        for (const QString& n : s.inputs) expected.push_back({n.toStdString(), Direction::In});
+        for (const QString& n : s.outputs) expected.push_back({n.toStdString(), Direction::Out});
+        bool same = chip->ports.size() == expected.size();
+        for (size_t i = 0; same && i < expected.size(); ++i)
+            same = chip->ports[i].name == expected[i].name && chip->ports[i].direction == expected[i].direction;
+        if (same) continue;
+        m_library.remove(s.kuerzel.toStdString()); // Experiment ist wieder offen, der Entwurf bleibt
+        m_done.remove(s.kuerzel);
     }
 }
 
@@ -230,6 +253,7 @@ QVariantList WorkbenchController::levels() const {
                                 {"experiments", experiments},
                                 {"planned", experiments.isEmpty()},
                                 {"upcoming", l.upcoming},
+                                {"outlook", l.outlook},
                                 {"unlocked", !experiments.isEmpty() && experiments.first().toMap().value("unlocked").toBool()},
                                 {"done", done}});
     }
@@ -382,6 +406,9 @@ void WorkbenchController::startStage(int index) {
     m_guess.assign(s.table.size(), Level::X);
     m_guessSkipped = false;
     m_task = 0;
+    if (s.inputKinds.contains(QStringLiteral("takt"))) m_clock.start(); // Taktgeber laeuft von allein
+    else m_clock.stop();
+    emit clockChanged();
     setMessage(QString(), s.kind == "entdecken" ? QStringLiteral("erklaerend") : QStringLiteral("zeigend"));
     rebuild();
     emit stageChanged();
@@ -539,13 +566,42 @@ void WorkbenchController::toggleInput(const QString& name) {
 void WorkbenchController::setInput(const QString& name, bool on) {
     if (inside() || m_stages.empty()) return;
     const qsizetype i = m_stages[size_t(m_stage)].inputs.indexOf(name);
-    if (i < 0) return;
-    Level& l = m_inputs[size_t(i)];
-    const Level next = on ? Level::One : Level::Zero;
+    if (i < 0 || m_stages[size_t(m_stage)].inputKinds.value(i) == "takt") return; // Taktgeber schaltet selbst
+    applyInput(size_t(i), on ? Level::One : Level::Zero);
+}
+
+bool WorkbenchController::hasClock() const {
+    return !m_stages.empty() && m_stages[size_t(m_stage)].inputKinds.contains(QStringLiteral("takt"));
+}
+
+void WorkbenchController::toggleClock() {
+    if (!hasClock()) return;
+    if (m_clock.isActive()) m_clock.stop();
+    else m_clock.start();
+    emit clockChanged();
+}
+
+void WorkbenchController::tickClock() {
+    if (m_stages.empty()) return;
+    const Stage& s = m_stages[size_t(m_stage)];
+    for (qsizetype i = 0; i < s.inputKinds.size(); ++i)
+        if (s.inputKinds[i] == "takt") applyInput(size_t(i), m_inputs[size_t(i)] == Level::One ? Level::Zero : Level::One);
+}
+
+void WorkbenchController::playSteps() {
+    if (m_stages.empty() || inside()) return;
+    const Stage& s = m_stages[size_t(m_stage)];
+    for (const SequenceStep& step : s.steps) {
+        for (size_t i = 0; i < step.inputs.size() && i < m_inputs.size(); ++i) applyInput(i, step.inputs[i]);
+    }
+}
+
+void WorkbenchController::applyInput(size_t index, Level next) {
+    Level& l = m_inputs[index];
     if (l == next) return;
     l = next;
     if (m_netOk) {
-        m_sim.setInput(size_t(i), l);
+        m_sim.setInput(index, l);
         m_sim.settle();
     }
     if (isDiscover()) { // ausprobierte Zeile erscheint in der Tabelle, die Umrandung folgt der Schalterstellung
@@ -564,7 +620,10 @@ void WorkbenchController::checkTarget() {
     const int target = s.targets[m_task];
     if (shown.value("value").toInt() != target) return;
     ++m_task;
-    if (m_task < s.targets.size()) {
+    if (!s.taskTexts.isEmpty() && m_task < s.targets.size()) { // Rechenschritte mit eigenem Text
+        setMessage(tr("Richtig: Im Akku steht jetzt %1. Nächster Schritt: %2").arg(target).arg(s.taskTexts.value(m_task)),
+                   QStringLiteral("froehlich"));
+    } else if (m_task < s.targets.size()) {
         setMessage(tr("Richtig: %1 ist binär %2. Jetzt zeig die %3!")
                        .arg(target)
                        .arg(shown.value("bin").toString())
@@ -573,9 +632,10 @@ void WorkbenchController::checkTarget() {
     } else {
         m_done.insert(s.kuerzel);
         save();
-        setMessage(tr("Super! %1 ist binär %2. Du kannst jetzt mit vier Lampen bis 15 zählen.")
-                       .arg(target)
-                       .arg(shown.value("bin").toString()),
+        setMessage(!s.successText.isEmpty() ? s.successText
+                                            : tr("Super! %1 ist binär %2. Du kannst jetzt mit vier Lampen bis 15 zählen.")
+                                                  .arg(target)
+                                                  .arg(shown.value("bin").toString()),
                    QStringLiteral("begeistert"));
         emit stagesChanged();
     }
@@ -589,6 +649,7 @@ QVariantList WorkbenchController::tasks() const {
     const bool solved = stageDone();
     for (size_t i = 0; i < s.targets.size(); ++i)
         list.append(QVariantMap{{"value", s.targets[i]},
+                                {"text", s.taskTexts.value(qsizetype(i))},
                                 {"done", solved || i < m_task},
                                 {"current", !solved && i == m_task}});
     return list;

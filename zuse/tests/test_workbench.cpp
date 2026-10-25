@@ -46,6 +46,11 @@ void solveAndPack(WorkbenchController& w, int stage) {
 void countThrough(WorkbenchController& w, int stage) {
     QVERIFY(w.selectStage(stage));
     QCOMPARE(w.stageKind(), QStringLiteral("zahlen"));
+    if (w.stageSequence()) { // Rechenmaschine: Schritte am Bedienfeld
+        w.playSteps();
+        QVERIFY(w.stageDone());
+        return;
+    }
     const QStringList in = w.stageInputs();
     for (const QVariant& t : w.tasks())
         for (qsizetype i = 0; i < in.size(); ++i)
@@ -60,19 +65,21 @@ private slots:
     void stagesStartWithAStory() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        QCOMPARE(w.stages().size(), 17);
+        QCOMPARE(w.stages().size(), 23);
         QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
         QVERIFY(!w.stageStory().isEmpty());
         QVERIFY(!w.stageMakesChip());
         QVERIFY(!w.selectStage(1)); // Nachtlicht erst nach Stufe 0
-        // Lernstufen wie bei Volta: Auftakt, Logik entdecken, Erfinden, Zahlen und Rechnen, (Speichern geplant)
+        // Lernstufen wie bei Volta: Auftakt, Logik entdecken, Erfinden, Zahlen und Rechnen, Speichern und Zaehlen,
+        // Rechenmaschine (mit Ausblick auf Zuse 2)
         const QVariantList levels = w.levels();
-        QCOMPARE(levels.size(), 5);
+        QCOMPARE(levels.size(), 6);
         QCOMPARE(levels[0].toMap()["experiments"].toList().size(), 1);
         QCOMPARE(levels[1].toMap()["experiments"].toList().size(), 4);
         QVERIFY(levels[1].toMap()["unlocked"].toBool() == false);
-        QCOMPARE(levels[4].toMap()["experiments"].toList().size(), 5);
-        QCOMPARE(levels[4].toMap()["upcoming"].toList().size(), 2); // Programm folgt
+        QCOMPARE(levels[4].toMap()["experiments"].toList().size(), 8);
+        QCOMPARE(levels[5].toMap()["experiments"].toList().size(), 3);
+        QVERIFY(levels[5].toMap()["outlook"].toString().contains("Zuse 2"));
         QCOMPARE(w.stages()[4].toMap()["kuerzel"].toString(), QStringLiteral("NAND"));
         QCOMPARE(w.stages()[4].toMap()["level"].toInt(), 1);
         QCOMPARE(w.stages()[11].toMap()["level"].toInt(), 3);
@@ -318,8 +325,9 @@ private slots:
         QCOMPARE(w.symbolStyle(), QStringLiteral("us"));
     }
 
-    // Lernstufe 4: Merker mit Rueckkopplung, Speicherbit, Register, Umschalter, Zaehler – geprueft als Ablauf
-    void memoryAndCounter() {
+    // Lernstufe 4: Merker, Speicherbit, Taktbit, Register, Lauflicht, Umschalter, Zaehler, Taktgeber – als Ablauf;
+    // Lernstufe 5: Vergleicher, Plus und Minus, »Du bist das Steuerwerk«
+    void memoryAndCalculatingMachine() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
         finishBit(w);
@@ -345,23 +353,99 @@ private slots:
         QCOMPARE(w.levelAt("Q"), Level::One);
         w.setInput("R", true);
         QCOMPARE(w.levelAt("Q"), Level::Zero);
+        solveAndPack(w, 13);
 
-        for (int s : {13, 14}) solveAndPack(w, s);
+        // Taktbit: uebernimmt nur im Moment des Takts, Loeschen gewinnt
+        QVERIFY(w.selectStage(14));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("TBIT"));
+        w.showSolution();
+        w.toggleInput("D");
+        w.setInput("T", true);
+        QCOMPARE(w.levelAt("Q"), Level::One);
+        w.toggleInput("D"); // Schalter aus, Takt noch gedrueckt
+        QCOMPARE(w.levelAt("Q"), Level::One);
+        w.setInput("T", false);
+        w.setInput("L", true);
+        QCOMPARE(w.levelAt("Q"), Level::Zero);
+        w.setInput("L", false);
+        solveAndPack(w, 14);
+        for (int s : {15, 16, 17}) solveAndPack(w, s);
         // Umschalter: wechselt beim Druecken
-        QVERIFY(w.selectStage(15));
+        QVERIFY(w.selectStage(17));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("TFF"));
         w.showSolution();
         w.setInput("T", true);
         QCOMPARE(w.levelAt("Q"), Level::One);
         w.setInput("T", false);
         w.setInput("T", true);
         QCOMPARE(w.levelAt("Q"), Level::Zero);
-        solveAndPack(w, 15);
-        // Zaehler: 17 gezeigte Takte (Loslassen wird mitgeprueft, aber nicht gezeigt)
-        QVERIFY(w.selectStage(16));
-        QCOMPARE(w.checkRows().size(), 17);
-        solveAndPack(w, 16);
-        QVERIFY(w.library().find("ZAEHLER"));
+        // Zaehler: 17 Takte, Loeschen und ein Takt danach (Loslassen wird mitgeprueft, aber nicht gezeigt)
+        QVERIFY(w.selectStage(18));
+        QCOMPARE(w.checkRows().size(), 19);
+        solveAndPack(w, 18);
+        // Taktgeber: tickt von allein, der Teiler halbiert
+        QVERIFY(w.selectStage(19));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("TAKT"));
+        QVERIFY(w.hasClock());
+        QVERIFY(w.clockRunning());
+        QCOMPARE(w.panelInputs()[0].toMap()["kind"].toString(), QStringLiteral("takt"));
+        w.setInput("C", true); // von Hand nicht schaltbar
+        QCOMPARE(w.panelInputs()[0].toMap()["level"].toString(), QStringLiteral("0"));
+        w.showSolution();
+        for (int k = 0; k < 4; ++k) w.tickClock(); // zwei volle Takte
+        QCOMPARE(w.levelAt("C2"), Level::Zero);
+        QCOMPARE(w.levelAt("C4"), Level::One);
+        w.toggleClock();
+        QVERIFY(!w.clockRunning());
+        solveAndPack(w, 19);
         QVERIFY(w.levels()[4].toMap()["done"].toBool());
+
+        // Vergleicher und Rechenwerk: grosse Tabellen nur mit Proben, geprueft wird alles
+        QVERIFY(w.selectStage(20));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("GLEICH"));
+        QVERIFY(!w.clockRunning());
+        solveAndPack(w, 20);
+        solveAndPack(w, 21);
+        QVERIFY(w.selectStage(21));
+        w.showSolution();
+        for (const QString& n : {"A3", "A0", "B2", "M"}) w.toggleInput(n); // 9 - 4
+        QCOMPARE(w.levelAt("C"), Level::One);
+        QCOMPARE(w.outputNumber()["value"].toInt(), 16 + 5);
+
+        // Steuerwerk: fest verdrahtet aus eigenem Rechenwerk und Register, das Kind gibt die Schritte
+        QVERIFY(w.selectStage(22));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("STEUER"));
+        QVERIFY(w.benchLocked());
+        QCOMPARE(w.tasks().size(), 4);
+        QVERIFY(w.tasks()[1].toMap()["text"].toString().contains("3 + 5"));
+        QCOMPARE(w.outputNumber()["value"].toInt(), 0); // Akku startet leer
+        for (const QString& n : {"D1", "D0"}) w.toggleInput(n);
+        w.setInput("T", true);
+        w.setInput("T", false);
+        QCOMPARE(w.outputNumber()["value"].toInt(), 3);
+        QVERIFY(w.tasks()[1].toMap()["current"].toBool());
+        w.setInput("L", true); // Loeschen: wieder 0
+        w.setInput("L", false);
+        QCOMPARE(w.outputNumber()["value"].toInt(), 0);
+        countThrough(w, 22);
+        QVERIFY(w.message().contains("13"));
+        QVERIFY(w.levels()[5].toMap()["done"].toBool());
+    }
+
+    // aeltere Ablage: Erfindung mit anderen Anschluessen (z. B. Register ohne Loeschen) wird verworfen
+    void staleChipsAreDropped() {
+        QTemporaryDir dir;
+        {
+            QFile f(dir.filePath("werkbank.json"));
+            QVERIFY(f.open(QIODevice::WriteOnly));
+            f.write(R"({"schema_version": 1, "geschafft": ["BIT", "REG4"], "chips": [{"kuerzel": "REG4",
+                "anschluesse": [{"name": "D0", "richtung": "ein"}, {"name": "T", "richtung": "ein"},
+                                {"name": "Q0", "richtung": "aus"}], "bausteine": [], "verbindungen": []}]})");
+        }
+        WorkbenchController w(kStages, dir.path(), "de");
+        QVERIFY(w.isDone("BIT"));
+        QVERIFY(!w.isDone("REG4"));
+        QVERIFY(!w.library().find("REG4"));
     }
 
     // wie Volta: Freies Labor (alle eigenen Werkzeuge, nicht im Lernpfad) und Vorfuehrung (nichts wird gespeichert)
@@ -384,7 +468,7 @@ private slots:
             QVERIFY(demos.size() >= 10);
             int counter = -1;
             for (const QVariant& d : demos)
-                if (d.toMap()["label"].toString() == "4.5") counter = d.toMap()["index"].toInt();
+                if (d.toMap()["label"].toString() == "4.7") counter = d.toMap()["index"].toInt();
             QVERIFY(w.startDemo(counter));
             QCOMPARE(w.mode(), QStringLiteral("vorfuehrung"));
             QVERIFY(w.benchLocked());

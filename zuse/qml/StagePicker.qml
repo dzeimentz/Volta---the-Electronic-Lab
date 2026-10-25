@@ -163,6 +163,15 @@ HeaderButton {
                                 }
                             }
                         }
+                        Text { // Ausblick am Ende der Stufe (z. B. auf Zuse 2)
+                            visible: level.modelData.outlook !== ""
+                            Layout.fillWidth: true
+                            Layout.leftMargin: 62
+                            text: "→ " + level.modelData.outlook
+                            color: ZTheme.muted
+                            font.pixelSize: 14; font.italic: true
+                            wrapMode: Text.WordWrap
+                        }
                     }
                 }
             }

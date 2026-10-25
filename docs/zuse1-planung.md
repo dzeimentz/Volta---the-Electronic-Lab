@@ -148,13 +148,27 @@ Grundlage: Sonderheft »Digitaltechnik im Experiment« (elrad 1979, zehn Teile, 
 | Geschichte | Konrad Zuse als Urheber des gespeicherten Ablaufs | Name der Reihe, aber noch kein Geschichtsfenster | Geschichtsfenster in Stufe 4 |
 | Darstellung | H/L-Pegel, Steckbrett, Kabelknaeuel | 0/1, Werkbank mit Raster, Erfindungen als Chips | Zuse-Weg beibehalten |
 
-### Folgerung fuer Stufe 4 (Vorschlag, noch nicht umgesetzt)
+### Folgerung fuer Stufe 4 (umgesetzt 25.10.2026, siehe Konzept 4.1 und 7.1)
 1. Register und Zaehler mit »Loeschen« (ehrlich zum Einschalten).
 2. Neue Experimente in dieser Reihenfolge: Lauflicht (Schieberegister) nach dem Register; Taktgeber mit Teiler nach
    dem Zaehler; Vergleicher (gleich) und Decoder 1 aus 4 als Vorbereitung auf den Speicher.
 3. »Du bist das Steuerwerk« vor »Laeuft er?«.
 4. Wird Stufe 4 damit zu gross (etwa zehn Experimente), sie teilen: Stufe 4 »Speichern und Zaehlen«, Stufe 5 »Der
    Rechenautomat« – Entscheidung des Inhabers.
+
+Umsetzung (Inhaber: »teilen und alle Ergaenzungen umsetzen«):
+- Stufe 4 »Speichern und Zaehlen«: Merker, Speicherbit, Taktbit mit Loeschen (neu), Register, Lauflicht (neu),
+  Umschalter, Zaehler mit Loeschen, Taktgeber mit Teiler (neu, Eingangsart »takt«).
+- Stufe 5 »Die Rechenmaschine«: Vergleicher (neu), Plus und Minus (Subtraktion ueber das Komplement, neu), »Du bist
+  das Steuerwerk« (neu).
+- Decoder »1 aus 4«, Speicher mit Adressen und Zuse-4 wandern nach Zuse 2 (Abgrenzung der Baende, Konzept 4.1):
+  Zuse 1 endet mit der von Hand gesteuerten Rechenmaschine; der gespeicherte Ablauf ist der Einstieg in Zuse 2.
+- Taktbit: »Loeschen« oeffnet beide Speicherbits und gibt beiden eine 0. Die einfachere Form (nur das zweite
+  Speicherbit loeschen) versagt im Zaehler: Wird »Loeschen« losgelassen, waehrend der Takt anliegt, uebernimmt das
+  zweite Bit den alten Wert des ersten. Ablaeufe stellen die Schalter vor dem Takt ein (sonst Wettlauf wie bei
+  echten Bausteinen).
+- Aeltere Ablagen: Erfindungen, deren Anschluesse nicht mehr zur Stufe passen (z. B. Register ohne Loeschen),
+  werden beim Start verworfen; das Experiment ist dann wieder offen, der Entwurf bleibt.
 
 ## Weitere Punkte zum Konzept
 - Das fruehere PDF v0.2 nannte ADR-0009 fuer die Inhalts-Einbettung; richtig ist ADR-0011 (in v0.3 behoben).

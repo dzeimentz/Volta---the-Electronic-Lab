@@ -1,4 +1,4 @@
-// Speicher der Lernstufe 4: Merker mit Rueckkopplung, Speicherbit, Register, Umschalter und Zaehler.
+// Speicher der Lernstufe 4: Merker mit Rueckkopplung, Speicherbit, Taktbit mit Loeschen, Umschalter und Zaehler.
 // Einschalten (powerOn) legt unbestimmte Speicher auf 0; geprueft wird als Ablauf Schritt fuer Schritt.
 #include <catch2/catch_test_macros.hpp>
 
@@ -25,26 +25,38 @@ ChipDef speicherbit() {
                  {"a2.y", "m1.R"}, {"m1.Q", "Q"}});
 }
 
-// Umschalter: zwei Speicherbits hintereinander; beim Druecken uebernimmt das zweite, was das erste vorbereitet hat
+// Taktbit: zwei Speicherbits hintereinander, das erste offen solange T = 0, das zweite beim Takt; Loeschen oeffnet
+// beide und gibt beiden eine 0 (sonst uebernaehme das zweite beim Loslassen einen alten Wert, wenn T noch anliegt)
+ChipDef taktbit() {
+    return chip("TBIT", {"D", "T", "L"}, {"Q"},
+                {{"n1", "NOT"}, {"o1", "OR"}, {"n2", "NOT"}, {"a1", "AND"}, {"o2", "OR"}, {"a2", "AND"},
+                 {"s1", "SBIT"}, {"s2", "SBIT"}},
+                {{"T", "n1.a"}, {"n1.y", "o2.a"}, {"L", "o2.b"}, {"o2.y", "s1.M"}, {"T", "o1.a"}, {"L", "o1.b"},
+                 {"o1.y", "s2.M"}, {"L", "n2.a"}, {"D", "a1.a"}, {"n2.y", "a1.b"}, {"a1.y", "s1.D"},
+                 {"s1.Q", "a2.a"}, {"n2.y", "a2.b"}, {"a2.y", "s2.D"}, {"s2.Q", "Q"}});
+}
+
+// Umschalter: Taktbit, das sein eigenes Gegenteil uebernimmt
 ChipDef umschalter() {
-    return chip("TFF", {"T"}, {"Q"}, {{"s1", "SBIT"}, {"s2", "SBIT"}, {"n1", "NOT"}, {"n2", "NOT"}},
-                {{"s2.Q", "n1.a"}, {"n1.y", "s1.D"}, {"T", "n2.a"}, {"n2.y", "s1.M"}, {"s1.Q", "s2.D"},
-                 {"T", "s2.M"}, {"s2.Q", "Q"}});
+    return chip("TFF", {"T", "L"}, {"Q"}, {{"b1", "TBIT"}, {"n1", "NOT"}},
+                {{"b1.Q", "n1.a"}, {"n1.y", "b1.D"}, {"T", "b1.T"}, {"L", "b1.L"}, {"b1.Q", "Q"}});
 }
 
 // Zaehler mit vier Umschaltern: die naechste Stelle springt, wenn die vorige von 1 auf 0 faellt
 ChipDef zaehler() {
-    return chip("ZAEHLER", {"T"}, {"Q3", "Q2", "Q1", "Q0"},
+    return chip("ZAEHLER", {"T", "L"}, {"Q3", "Q2", "Q1", "Q0"},
                 {{"t0", "TFF"}, {"t1", "TFF"}, {"t2", "TFF"}, {"t3", "TFF"}, {"n0", "NOT"}, {"n1", "NOT"},
                  {"n2", "NOT"}},
                 {{"T", "t0.T"}, {"t0.Q", "n0.a"}, {"n0.y", "t1.T"}, {"t1.Q", "n1.a"}, {"n1.y", "t2.T"},
-                 {"t2.Q", "n2.a"}, {"n2.y", "t3.T"}, {"t0.Q", "Q0"}, {"t1.Q", "Q1"}, {"t2.Q", "Q2"}, {"t3.Q", "Q3"}});
+                 {"t2.Q", "n2.a"}, {"n2.y", "t3.T"}, {"t0.Q", "Q0"}, {"t1.Q", "Q1"}, {"t2.Q", "Q2"}, {"t3.Q", "Q3"},
+                 {"L", "t0.L"}, {"L", "t1.L"}, {"L", "t2.L"}, {"L", "t3.L"}});
 }
 
 Library memoryLibrary() {
     Library lib;
     lib.add(merker());
     lib.add(speicherbit());
+    lib.add(taktbit());
     lib.add(umschalter());
     return lib;
 }
@@ -88,16 +100,27 @@ TEST_CASE("Speicherbit uebernimmt D nur beim Merken", "[logik][speicher]") {
     CHECK(r.passed);
 }
 
+TEST_CASE("Taktbit uebernimmt nur im Moment des Takts, Loeschen gewinnt", "[logik][speicher]") {
+    Netlist net;
+    REQUIRE(elaborate(taktbit(), memoryLibrary(), net).ok());
+    const CheckResult r = checkSequence(net, {step({I, O, O}, {O}), step({I, I, O}, {I}), step({O, I, O}, {I}),
+                                              step({O, O, O}, {I}), step({O, O, I}, {O}), step({O, O, O}, {O}),
+                                              step({I, O, O}, {O}), step({I, I, O}, {I}), step({I, O, O}, {I}),
+                                              step({I, O, I}, {O})});
+    CHECK(r.passed);
+}
+
 TEST_CASE("Umschalter wechselt bei jedem Druck und haelt beim Loslassen", "[logik][speicher]") {
     Netlist net;
     REQUIRE(elaborate(umschalter(), memoryLibrary(), net).ok());
-    const CheckResult r = checkSequence(net, {step({O}, {O}), step({I}, {I}), step({O}, {I}), step({I}, {O}),
-                                              step({O}, {O}), step({I}, {I})});
+    const CheckResult r = checkSequence(net, {step({O, O}, {O}), step({I, O}, {I}), step({O, O}, {I}),
+                                              step({I, O}, {O}), step({O, O}, {O}), step({I, O}, {I}),
+                                              step({O, O}, {I}), step({O, I}, {O})});
     CHECK(r.passed);
     CHECK(!r.oscillating);
 }
 
-TEST_CASE("Zaehler aus vier Umschaltern zaehlt bis 15 und beginnt wieder bei 0", "[logik][speicher]") {
+TEST_CASE("Zaehler aus vier Umschaltern zaehlt bis 15, beginnt wieder bei 0 und laesst sich loeschen", "[logik][speicher]") {
     Netlist net;
     REQUIRE(elaborate(zaehler(), memoryLibrary(), net).ok());
     std::vector<SequenceStep> steps;
@@ -105,9 +128,12 @@ TEST_CASE("Zaehler aus vier Umschaltern zaehlt bis 15 und beginnt wieder bei 0",
         const int v = k % 16;
         std::vector<Level> out;
         for (int b = 3; b >= 0; --b) out.push_back(((v >> b) & 1) ? I : O);
-        steps.push_back({{I}, out});
-        steps.push_back({{O}, out});
+        steps.push_back({{I, O}, out});
+        steps.push_back({{O, O}, out});
     }
+    steps.push_back({{O, I}, {O, O, O, O}}); // Loeschen
+    steps.push_back({{O, O}, {O, O, O, O}});
+    steps.push_back({{I, O}, {O, O, O, I}});
     const CheckResult r = checkSequence(net, steps);
     CHECK(r.passed);
 }
