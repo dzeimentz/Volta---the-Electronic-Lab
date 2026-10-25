@@ -2,6 +2,7 @@
 add_executable(volta_logic_tests
     test_gates.cpp
     test_chips.cpp
+    test_memory.cpp
 )
 target_link_libraries(volta_logic_tests PRIVATE volta::logic Catch2::Catch2WithMain)
 

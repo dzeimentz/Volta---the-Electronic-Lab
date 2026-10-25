@@ -117,6 +117,11 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
             s.inputGroups.emplace_back(x.toObject().value("name").toString(), x.toObject().value("bits").toInt());
         for (const QJsonValue& x : o.value("proben").toArray())
             s.samples.emplace_back(size_t(x.toArray().at(0).toInt()), x.toArray().at(1).toString());
+        for (const QJsonValue& x : o.value("ablauf").toArray()) {
+            const QJsonObject step = x.toObject();
+            s.steps.push_back({parseLevels(step.value("ein").toString()), parseLevels(step.value("soll").toString())});
+            s.stepTexts << localized(step.value("text"), language);
+        }
         QJsonObject sol = o.value("loesung").toObject();
         sol.insert("kuerzel", s.kuerzel);
         chipFromJson(sol, s.solution);
@@ -129,6 +134,7 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         l.title = localized(o.value("titel"), language);
         l.question = localized(o.value("frage"), language);
         for (const QJsonValue& k : o.value("experimente").toArray()) l.kuerzel.append(k.toString());
+        for (const QJsonValue& k : o.value("geplant").toArray()) l.upcoming.append(localized(k, language));
         m_levels.push_back(l);
     }
     return !m_stages.empty();
@@ -208,6 +214,7 @@ QVariantList WorkbenchController::levels() const {
                                 {"question", l.question},
                                 {"experiments", experiments},
                                 {"planned", experiments.isEmpty()},
+                                {"upcoming", l.upcoming},
                                 {"unlocked", !experiments.isEmpty() && experiments.first().toMap().value("unlocked").toBool()},
                                 {"done", done}});
     }
@@ -233,8 +240,10 @@ QVariantList WorkbenchController::palette() const {
     QVariantList list;
     if (m_stages.empty()) return list;
     for (const QString& type : m_stages[size_t(m_stage)].palette) {
-        const QString name = toolName(type); // leer: noch nicht entdeckt bzw. gebaut
+        QString name = toolName(type); // leer: noch nicht entdeckt bzw. gebaut
         if (name.isEmpty()) continue;
+        for (const Stage& st : m_stages) // Erfindung mit ihrem Namen (»Umschalter« statt TFF)
+            if (st.kuerzel == type && !st.name.isEmpty()) name = st.name;
         bool inv = false;
         const QString sym = symbolOf(type, &inv);
         list.append(QVariantMap{{"type", type},
@@ -422,7 +431,7 @@ void WorkbenchController::rebuild() {
     if (m_netOk) {
         m_sim.load(m_netlist);
         for (size_t i = 0; i < m_inputs.size(); ++i) m_sim.setInput(i, m_inputs[i]);
-        m_sim.settle();
+        m_sim.powerOn(); // Speicher starten leer (0), offene Eingaenge bleiben unbestimmt
     }
     emit viewChanged();
 }
@@ -514,7 +523,8 @@ void WorkbenchController::check() {
         setMessage(tr("Der Aufbau lässt sich nicht simulieren."));
         return;
     }
-    m_check = checkTruthTable(m_netlist, m_stages[size_t(m_stage)].table);
+    const Stage& stage = m_stages[size_t(m_stage)];
+    m_check = stage.steps.empty() ? checkTruthTable(m_netlist, stage.table) : checkSequence(m_netlist, stage.steps);
     m_checkDone = true;
     if (m_check.passed && !m_stages[size_t(m_stage)].makesChip)
         setMessage(tr("Alles richtig! Schalter und LEDs machen, was sie sollen."), QStringLiteral("froehlich"));
@@ -523,6 +533,10 @@ void WorkbenchController::check() {
                    QStringLiteral("froehlich"));
     else if (m_check.oscillating)
         setMessage(tr("Die Schaltung kommt nicht zur Ruhe – sie schwingt."), QStringLiteral("ueberrascht"));
+    else if (!stage.steps.empty())
+        setMessage(tr("Noch nicht ganz: Bei den markierten Schritten stimmt die Lampe nicht. Spiel den Ablauf an den "
+                      "Schaltern und Tastern nach."),
+                   QStringLiteral("gruebelnd"));
     else
         setMessage(tr("Noch nicht ganz: Die markierten Zeilen stimmen nicht. Stell die Schalter so ein und schau, "
                       "was passiert."),
@@ -534,6 +548,29 @@ QVariantList WorkbenchController::checkRows() const {
     QVariantList rows;
     if (m_stages.empty()) return rows;
     const Stage& s = m_stages[size_t(m_stage)];
+    if (!s.steps.empty()) { // Ablauf: nummerierte Schritte; ein nicht gezeigter Schritt zaehlt zum vorigen
+        int number = 0;
+        for (size_t i = 0; i < s.steps.size(); ++i) {
+            const bool checked = m_checkDone && i < m_check.rows.size();
+            const bool ok = checked && m_check.rows[i].ok;
+            if (s.stepTexts.value(qsizetype(i)).isEmpty()) {
+                if (!rows.isEmpty() && checked && !ok) {
+                    QVariantMap last = rows.takeLast().toMap();
+                    last.insert("ok", false);
+                    rows.append(last);
+                }
+                continue;
+            }
+            QVariantMap row{{"inputs", joinLevels(s.steps[i].inputs)},
+                            {"expected", joinLevels(s.steps[i].expected)},
+                            {"note", QStringLiteral("%1. %2").arg(++number).arg(s.stepTexts[qsizetype(i)])},
+                            {"step", true},
+                            {"actual", checked ? joinLevels(m_check.rows[i].actual) : QString()},
+                            {"ok", ok}};
+            rows.append(row);
+        }
+        return rows;
+    }
     const size_t n = size_t(1) << s.inputs.size();
     std::vector<size_t> shown;
     for (const auto& sample : s.samples) shown.push_back(sample.first);

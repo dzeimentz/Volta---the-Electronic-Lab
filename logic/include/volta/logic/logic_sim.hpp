@@ -27,6 +27,11 @@ public:
     // Rechnet, bis nichts mehr wechselt, hoechstens maxRounds Runden (sonst schwingt die Schaltung).
     SettleStatus settle(int maxRounds = 10000) noexcept;
     int lastRounds() const noexcept { return m_lastRounds; }
+    // Einschalten: Speicher (Gatter in einer Rueckkopplung), die nach settle() noch unbestimmt sind, starten
+    // nacheinander mit 0 – Vereinfachung, echte Bausteine starten zufaellig. Leitungen ausserhalb von
+    // Rueckkopplungen bleiben unbestimmt, damit offene Eingaenge sichtbar bleiben. Liefert die Zahl der
+    // festgelegten Leitungen.
+    int powerOn() noexcept;
 
 private:
     Netlist m_net;
@@ -37,6 +42,7 @@ private:
     std::vector<std::size_t> m_nextPending;
     std::vector<std::pair<NetId, Level>> m_changes;
     std::vector<char> m_inputNet;                    // von aussen gesetzte Leitung (Eingang)
+    std::vector<char> m_inLoop;                      // Gatter liegt in einer Rueckkopplung (Speicher)
     int m_lastRounds = 0;
 };
 
@@ -56,6 +62,15 @@ struct CheckResult {
 };
 
 CheckResult checkTruthTable(const Netlist& netlist, const std::vector<std::vector<Level>>& expected);
+
+// Pruefung als Ablauf (Schaltungen mit Speicher): nach dem Einschalten (alle Eingaenge 0, powerOn) werden die
+// Schritte der Reihe nach eingestellt; nach jedem Schritt muessen die Ausgaenge stimmen. rows[i] gehoert zu steps[i].
+struct SequenceStep {
+    std::vector<Level> inputs;
+    std::vector<Level> expected;
+};
+
+CheckResult checkSequence(const Netlist& netlist, const std::vector<SequenceStep>& steps);
 
 // Wahrheitstabelle eines Chips (Ausgaenge je Zeile), wie sie die Simulation liefert
 std::vector<std::vector<Level>> truthTable(const Netlist& netlist);

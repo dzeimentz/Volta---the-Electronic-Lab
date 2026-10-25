@@ -45,6 +45,27 @@ def probe(a, b):
     return [a * 16 + b, f"{a} + {b} = {a + b}"]
 
 
+def schritt(ein, soll, de="", en=""):
+    """Ein Schritt im Ablauf (Schaltungen mit Speicher); ohne Text wird er in der Tabelle nicht gezeigt."""
+    st = {"ein": ein, "soll": soll}
+    if de:
+        st["text"] = L(de, en)
+    return st
+
+
+def zaehl_ablauf():
+    """16 Takte und einer mehr: Druecken zeigt die neue Zahl, Loslassen haelt sie (nicht gezeigt)."""
+    steps = []
+    for k in range(1, 18):
+        v = format(k % 16, "04b")
+        if k == 16:
+            steps.append(schritt("1", v, "Takt – Überlauf", "Clock – overflow"))
+        else:
+            steps.append(schritt("1", v, "Takt", "Clock"))
+        steps.append(schritt("0", v))
+    return steps
+
+
 stufen = [
     {"kuerzel": "BIT", "art": "bauen", "chip": False, "symbol": "",
      "titel": L("Licht an!", "Lights on!"),
@@ -259,6 +280,145 @@ stufen = [
                      ("A1", "v1.A"), ("B1", "v1.B"), ("h1.C", "v1.Ci"), ("v1.S", "S1"),
                      ("A2", "v2.A"), ("B2", "v2.B"), ("v1.C", "v2.Ci"), ("v2.S", "S2"),
                      ("A3", "v3.A"), ("B3", "v3.B"), ("v2.C", "v3.Ci"), ("v3.S", "S3"), ("v3.C", "C")])},
+    {"kuerzel": "MERKER", "art": "bauen", "symbol": "M", "name": L("Merker", "Latch"),
+     "titel": L("Hat jemand geklingelt?", "Did someone ring?"),
+     "geschichte": L("Du warst kurz im Garten. Hat in der Zeit jemand geklingelt? Eine normale Klingellampe leuchtet "
+                     "nur, solange jemand drückt. Deine Merklampe soll anbleiben, bis du auf »Löschen« drückst.",
+                     "You were out in the garden for a moment. Did anyone ring meanwhile? A normal bell lamp only glows "
+                     "while someone presses. Your memory lamp should stay on until you press »clear«."),
+     "frage": L("Wie kann sich eine Schaltung etwas merken?", "How can a circuit remember something?"),
+     "hilfe": L("Die Lampe soll an bleiben, wenn sie schon an ist. Führe ihren Ausgang zurück: Lampe = (Klingel ODER "
+                "Lampe) UND NICHT Löschen.",
+                "The lamp should stay on once it is on. Feed its output back: lamp = (bell OR lamp) AND NOT clear."),
+     "merksatz": L("Führt ein Ausgang zurück an den eigenen Eingang, kann sich die Schaltung etwas merken. Das ist ein "
+                   "Speicher für ein Bit.",
+                   "When an output leads back to its own input, the circuit can remember something. That is a memory "
+                   "for one bit."),
+     "eingaenge": [inp("S", "Klingelknopf", "Bell button", "taster"), inp("R", "Löschen", "Clear", "taster")],
+     "ausgaenge": [out("Q", "Merklampe", "Memory lamp")],
+     "bausteine": ["OR", "AND", "NOT"],
+     "ablauf": [schritt("00", "0", "Einschalten: alles aus", "Switch on: all off"),
+                schritt("10", "1", "Jemand klingelt", "Someone rings"),
+                schritt("00", "1", "Klingelknopf loslassen", "Release the bell button"),
+                schritt("01", "0", "Löschen drücken", "Press clear"),
+                schritt("00", "0", "Löschen loslassen", "Release clear"),
+                schritt("10", "1", "Noch einmal klingeln", "Ring again"),
+                schritt("00", "1", "Loslassen", "Release"),
+                schritt("11", "0", "Klingeln und Löschen zugleich", "Ring and clear together")],
+     "loesung": sol([("o1", "OR", 252, 168), ("n1", "NOT", 252, 392), ("a1", "AND", 476, 280)],
+                    [("S", "o1.a"), ("a1.y", "o1.b"), ("R", "n1.a"), ("o1.y", "a1.a"), ("n1.y", "a1.b"),
+                     ("a1.y", "Q")])},
+    {"kuerzel": "SBIT", "art": "bauen", "symbol": "D", "name": L("Speicherbit", "Memory bit"),
+     "titel": L("Der Schnappschuss", "The snapshot"),
+     "geschichte": L("Ein Rechner muss sich Zahlen merken – aber nur dann, wenn er es soll. Wie bei einem Foto: Erst "
+                     "beim Drücken auf »Merken« wird festgehalten, wie der Schalter gerade steht. Danach darfst du ihn "
+                     "umlegen, die Lampe bleibt, wie sie war.",
+                     "A computer has to remember numbers – but only when it is told to. Like a photo: only when you "
+                     "press »store« is the switch position captured. Afterwards you may flip it, the lamp stays as it "
+                     "was."),
+     "frage": L("Wie merkt sich ein Rechner ein Bit genau dann, wenn er soll?",
+                "How does a computer store a bit exactly when it should?"),
+     "hilfe": L("Nimm deinen Merker. Beim Merken mit Schalter an soll er gesetzt werden (Schalter UND Merken), beim "
+                "Merken mit Schalter aus gelöscht (NICHT Schalter UND Merken).",
+                "Use your latch. Storing with the switch on should set it (switch AND store), storing with the switch "
+                "off should clear it (NOT switch AND store)."),
+     "merksatz": L("Ein Speicherbit übernimmt den Wert nur beim Merken. Sonst behält es, was es hat.",
+                   "A memory bit only takes the value when storing. Otherwise it keeps what it has."),
+     "eingaenge": [inp("D", "Schalter", "Switch"), inp("M", "Merken", "Store", "taster")],
+     "ausgaenge": [out("Q", "Lampe", "Lamp")],
+     "bausteine": ["MERKER", "AND", "NOT"],
+     "ablauf": [schritt("10", "0", "Schalter an – noch nicht gemerkt", "Switch on – not stored yet"),
+                schritt("11", "1", "Merken drücken", "Press store"),
+                schritt("10", "1", "Merken loslassen", "Release store"),
+                schritt("00", "1", "Schalter aus – die Lampe bleibt", "Switch off – the lamp stays"),
+                schritt("01", "0", "Merken drücken", "Press store"),
+                schritt("00", "0", "Loslassen", "Release")],
+     "loesung": sol([("a1", "AND", 252, 112), ("n1", "NOT", 252, 336), ("a2", "AND", 420, 392),
+                     ("m1", "MERKER", 560, 224)],
+                    [("D", "a1.a"), ("M", "a1.b"), ("a1.y", "m1.S"), ("D", "n1.a"), ("n1.y", "a2.a"), ("M", "a2.b"),
+                     ("a2.y", "m1.R"), ("m1.Q", "Q")])},
+    {"kuerzel": "REG4", "art": "bauen", "symbol": "REG", "name": L("Register", "Register"),
+     "titel": L("Vier Bits merken", "Storing four bits"),
+     "geschichte": L("Mit vier Speicherbits nebeneinander merkt sich ein Rechner eine ganze Zahl von 0 bis 15. So "
+                     "etwas heißt Register. Alle vier hören auf denselben Knopf »Merken«.",
+                     "With four memory bits side by side, a computer stores a whole number from 0 to 15. This is "
+                     "called a register. All four listen to the same »store« button."),
+     "frage": L("Wie merkt sich ein Rechner eine ganze Zahl?", "How does a computer store a whole number?"),
+     "hilfe": L("Jeder Schalter bekommt sein eigenes Speicherbit. Den Knopf »Merken« verbindest du mit allen vier.",
+                "Every switch gets its own memory bit. Connect the »store« button to all four."),
+     "merksatz": L("Ein Register besteht aus mehreren Speicherbits, die gemeinsam merken. Eins mit 4 Bit hält eine "
+                   "Zahl von 0 bis 15.",
+                   "A register consists of several memory bits that store together. One with 4 bits holds a number "
+                   "from 0 to 15."),
+     "eingaenge": [inp("D3", "8", "8"), inp("D2", "4", "4"), inp("D1", "2", "2"), inp("D0", "1", "1"),
+                   inp("M", "Merken", "Store", "taster")],
+     "ausgaenge": [out("Q3", "8", "8"), out("Q2", "4", "4"), out("Q1", "2", "2"), out("Q0", "1", "1")],
+     "eingabegruppen": [{"name": "Zahl", "bits": 4}, {"name": "M", "bits": 1}],
+     "bausteine": ["SBIT"],
+     "ablauf": [schritt("01011", "0101", "5 einstellen und merken", "Set 5 and store"),
+                schritt("01010", "0101", "Loslassen", "Release"),
+                schritt("11000", "0101", "12 einstellen – es bleibt 5", "Set 12 – it stays 5"),
+                schritt("11001", "1100", "Merken drücken", "Press store"),
+                schritt("00000", "1100", "Alle Schalter aus – es bleibt 12", "All switches off – it stays 12"),
+                schritt("10011", "1001", "9 einstellen und merken", "Set 9 and store"),
+                schritt("10010", "1001", "Loslassen", "Release")],
+     "loesung": sol([("s3", "SBIT", 392, 28), ("s2", "SBIT", 392, 168), ("s1", "SBIT", 392, 308),
+                     ("s0", "SBIT", 392, 448)],
+                    [("D3", "s3.D"), ("D2", "s2.D"), ("D1", "s1.D"), ("D0", "s0.D"), ("M", "s3.M"), ("M", "s2.M"),
+                     ("M", "s1.M"), ("M", "s0.M"), ("s3.Q", "Q3"), ("s2.Q", "Q2"), ("s1.Q", "Q1"), ("s0.Q", "Q0")])},
+    {"kuerzel": "TFF", "art": "bauen", "symbol": "T", "name": L("Umschalter", "Toggle"),
+     "titel": L("Ein Knopf für An und Aus", "One button for on and off"),
+     "geschichte": L("Viele Geräte haben nur einen Knopf: Einmal drücken – an. Noch einmal drücken – aus. Dafür muss "
+                     "sich die Schaltung merken, wie sie gerade steht, und beim nächsten Druck das Gegenteil nehmen.",
+                     "Many devices have just one button: press once – on. Press again – off. For that the circuit has "
+                     "to remember its state and take the opposite on the next press."),
+     "frage": L("Wie wechselt eine Lampe mit jedem Druck?", "How does a lamp change with every press?"),
+     "hilfe": L("Nimm zwei Speicherbits. Das erste merkt sich, solange der Knopf oben ist, das Gegenteil der Lampe "
+                "(Merken = NICHT Knopf). Beim Drücken übernimmt das zweite diesen Wert (Merken = Knopf) und schaltet "
+                "die Lampe.",
+                "Use two memory bits. While the button is up, the first one stores the opposite of the lamp "
+                "(store = NOT button). On pressing, the second one takes that value (store = button) and drives the "
+                "lamp."),
+     "merksatz": L("Zwei Speicherbits hintereinander, die abwechselnd merken, ergeben einen Umschalter: Er wechselt "
+                   "bei jedem Druck genau einmal.",
+                   "Two memory bits in a row that store in turn make a toggle: it changes exactly once per press."),
+     "eingaenge": [inp("T", "Knopf", "Button", "taster")],
+     "ausgaenge": [out("Q", "Lampe", "Lamp")],
+     "bausteine": ["SBIT", "NOT"],
+     "ablauf": [schritt("0", "0", "Einschalten: Lampe aus", "Switch on: lamp off"),
+                schritt("1", "1", "Drücken – an", "Press – on"),
+                schritt("0", "1", "Loslassen – bleibt an", "Release – stays on"),
+                schritt("1", "0", "Drücken – aus", "Press – off"),
+                schritt("0", "0", "Loslassen – bleibt aus", "Release – stays off"),
+                schritt("1", "1", "Drücken – an", "Press – on")],
+     "loesung": sol([("n2", "NOT", 252, 336), ("s1", "SBIT", 420, 140), ("s2", "SBIT", 588, 280),
+                     ("n1", "NOT", 420, 448)],
+                    [("s2.Q", "n1.a"), ("n1.y", "s1.D"), ("T", "n2.a"), ("n2.y", "s1.M"), ("s1.Q", "s2.D"),
+                     ("T", "s2.M"), ("s2.Q", "Q")])},
+    {"kuerzel": "ZAEHLER", "art": "bauen", "symbol": "CTR", "name": L("Zähler", "Counter"),
+     "titel": L("Der Zähler", "The counter"),
+     "geschichte": L("Ein Rechner arbeitet im Takt: Bei jedem Takt geschieht ein Schritt. Damit er weiß, wo er gerade "
+                     "ist, zählt er die Takte mit. Hier bist du der Taktgeber – jeder Druck ist ein Takt.",
+                     "A computer works to a clock: on every tick, one step happens. To know where it is, it counts the "
+                     "ticks. Here you are the clock – every press is a tick."),
+     "frage": L("Wie zählt ein Rechner mit jedem Takt weiter?", "How does a computer count on with every tick?"),
+     "hilfe": L("Die Einerstelle wechselt bei jedem Takt. Die nächste Stelle wechselt immer dann, wenn die vorige von "
+                "1 auf 0 fällt – so wie beim Zählen die Zehner weiterspringen. Ein NICHT dazwischen macht aus dem "
+                "Fallen ein Drücken.",
+                "The ones place changes on every tick. The next place changes whenever the one before falls from 1 "
+                "to 0 – just like the tens move on when you count. A NOT in between turns falling into pressing."),
+     "merksatz": L("Vier Umschalter hintereinander zählen von 0 bis 15. Nach 15 kommt wieder 0 – der Zähler läuft "
+                   "über.",
+                   "Four toggles in a row count from 0 to 15. After 15 comes 0 again – the counter overflows."),
+     "eingaenge": [inp("T", "Takt", "Clock", "taster")],
+     "ausgaenge": [out("Q3", "8", "8"), out("Q2", "4", "4"), out("Q1", "2", "2"), out("Q0", "1", "1")],
+     "bausteine": ["TFF", "NOT"],
+     "ablauf": zaehl_ablauf(),
+     "loesung": sol([("t0", "TFF", 224, 448), ("n0", "NOT", 392, 448), ("t1", "TFF", 392, 308),
+                     ("n1", "NOT", 560, 308), ("t2", "TFF", 560, 168), ("n2", "NOT", 560, 28), ("t3", "TFF", 392, 28)],
+                    [("T", "t0.T"), ("t0.Q", "n0.a"), ("n0.y", "t1.T"), ("t1.Q", "n1.a"), ("n1.y", "t2.T"),
+                     ("t2.Q", "n2.a"), ("n2.y", "t3.T"), ("t0.Q", "Q0"), ("t1.Q", "Q1"), ("t2.Q", "Q2"),
+                     ("t3.Q", "Q3")])},
 ]
 
 # Lernstufen wie bei Volta: einfach beginnen, pro Stufe anspruchsvoller. Ausgangspunkt ist ein Kind, das noch nie etwas
@@ -279,7 +439,9 @@ lernstufen = [
     {"nr": 4, "titel": L("Speichern und Programmieren", "Memory and programs"),
      "frage": L("Wie merkt sich ein Rechner etwas – und wie läuft ein Programm?",
                 "How does a computer remember – and how does a program run?"),
-     "experimente": []},  # geplant (Speicher, Takt, Programm)
+     "experimente": ["MERKER", "SBIT", "REG4", "TFF", "ZAEHLER"],
+     # folgen: Speicher mit Adressen am Bedienfeld, Zuse-4 mit Programm
+     "geplant": [L("Wo wohnt ein Programm?", "Where does a program live?"), L("Läuft er?", "Does it run?")]},
 ]
 assert [k for l in lernstufen for k in l["experimente"]] == [st["kuerzel"] for st in stufen]
 d = {"schema_version": 2,

@@ -76,7 +76,23 @@
     "de": "Wie merkt sich ein Rechner etwas – und wie läuft ein Programm?",
     "en": "How does a computer remember – and how does a program run?"
    },
-   "experimente": []
+   "experimente": [
+    "MERKER",
+    "SBIT",
+    "REG4",
+    "TFF",
+    "ZAEHLER"
+   ],
+   "geplant": [
+    {
+     "de": "Wo wohnt ein Programm?",
+     "en": "Where does a program live?"
+    },
+    {
+     "de": "Läuft er?",
+     "en": "Does it run?"
+    }
+   ]
   }
  ],
  "stufen": [
@@ -1761,6 +1777,1135 @@
      [
       "v3.C",
       "C"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "MERKER",
+   "art": "bauen",
+   "symbol": "M",
+   "name": {
+    "de": "Merker",
+    "en": "Latch"
+   },
+   "titel": {
+    "de": "Hat jemand geklingelt?",
+    "en": "Did someone ring?"
+   },
+   "geschichte": {
+    "de": "Du warst kurz im Garten. Hat in der Zeit jemand geklingelt? Eine normale Klingellampe leuchtet nur, solange jemand drückt. Deine Merklampe soll anbleiben, bis du auf »Löschen« drückst.",
+    "en": "You were out in the garden for a moment. Did anyone ring meanwhile? A normal bell lamp only glows while someone presses. Your memory lamp should stay on until you press »clear«."
+   },
+   "frage": {
+    "de": "Wie kann sich eine Schaltung etwas merken?",
+    "en": "How can a circuit remember something?"
+   },
+   "hilfe": {
+    "de": "Die Lampe soll an bleiben, wenn sie schon an ist. Führe ihren Ausgang zurück: Lampe = (Klingel ODER Lampe) UND NICHT Löschen.",
+    "en": "The lamp should stay on once it is on. Feed its output back: lamp = (bell OR lamp) AND NOT clear."
+   },
+   "merksatz": {
+    "de": "Führt ein Ausgang zurück an den eigenen Eingang, kann sich die Schaltung etwas merken. Das ist ein Speicher für ein Bit.",
+    "en": "When an output leads back to its own input, the circuit can remember something. That is a memory for one bit."
+   },
+   "eingaenge": [
+    {
+     "name": "S",
+     "bezeichnung": {
+      "de": "Klingelknopf",
+      "en": "Bell button"
+     },
+     "art": "taster"
+    },
+    {
+     "name": "R",
+     "bezeichnung": {
+      "de": "Löschen",
+      "en": "Clear"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q",
+     "bezeichnung": {
+      "de": "Merklampe",
+      "en": "Memory lamp"
+     }
+    }
+   ],
+   "bausteine": [
+    "OR",
+    "AND",
+    "NOT"
+   ],
+   "ablauf": [
+    {
+     "ein": "00",
+     "soll": "0",
+     "text": {
+      "de": "Einschalten: alles aus",
+      "en": "Switch on: all off"
+     }
+    },
+    {
+     "ein": "10",
+     "soll": "1",
+     "text": {
+      "de": "Jemand klingelt",
+      "en": "Someone rings"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "1",
+     "text": {
+      "de": "Klingelknopf loslassen",
+      "en": "Release the bell button"
+     }
+    },
+    {
+     "ein": "01",
+     "soll": "0",
+     "text": {
+      "de": "Löschen drücken",
+      "en": "Press clear"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "0",
+     "text": {
+      "de": "Löschen loslassen",
+      "en": "Release clear"
+     }
+    },
+    {
+     "ein": "10",
+     "soll": "1",
+     "text": {
+      "de": "Noch einmal klingeln",
+      "en": "Ring again"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "1",
+     "text": {
+      "de": "Loslassen",
+      "en": "Release"
+     }
+    },
+    {
+     "ein": "11",
+     "soll": "0",
+     "text": {
+      "de": "Klingeln und Löschen zugleich",
+      "en": "Ring and clear together"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "o1",
+      "typ": "OR",
+      "x": 252,
+      "y": 168
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 252,
+      "y": 392
+     },
+     {
+      "id": "a1",
+      "typ": "AND",
+      "x": 476,
+      "y": 280
+     }
+    ],
+    "verbindungen": [
+     [
+      "S",
+      "o1.a"
+     ],
+     [
+      "a1.y",
+      "o1.b"
+     ],
+     [
+      "R",
+      "n1.a"
+     ],
+     [
+      "o1.y",
+      "a1.a"
+     ],
+     [
+      "n1.y",
+      "a1.b"
+     ],
+     [
+      "a1.y",
+      "Q"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "SBIT",
+   "art": "bauen",
+   "symbol": "D",
+   "name": {
+    "de": "Speicherbit",
+    "en": "Memory bit"
+   },
+   "titel": {
+    "de": "Der Schnappschuss",
+    "en": "The snapshot"
+   },
+   "geschichte": {
+    "de": "Ein Rechner muss sich Zahlen merken – aber nur dann, wenn er es soll. Wie bei einem Foto: Erst beim Drücken auf »Merken« wird festgehalten, wie der Schalter gerade steht. Danach darfst du ihn umlegen, die Lampe bleibt, wie sie war.",
+    "en": "A computer has to remember numbers – but only when it is told to. Like a photo: only when you press »store« is the switch position captured. Afterwards you may flip it, the lamp stays as it was."
+   },
+   "frage": {
+    "de": "Wie merkt sich ein Rechner ein Bit genau dann, wenn er soll?",
+    "en": "How does a computer store a bit exactly when it should?"
+   },
+   "hilfe": {
+    "de": "Nimm deinen Merker. Beim Merken mit Schalter an soll er gesetzt werden (Schalter UND Merken), beim Merken mit Schalter aus gelöscht (NICHT Schalter UND Merken).",
+    "en": "Use your latch. Storing with the switch on should set it (switch AND store), storing with the switch off should clear it (NOT switch AND store)."
+   },
+   "merksatz": {
+    "de": "Ein Speicherbit übernimmt den Wert nur beim Merken. Sonst behält es, was es hat.",
+    "en": "A memory bit only takes the value when storing. Otherwise it keeps what it has."
+   },
+   "eingaenge": [
+    {
+     "name": "D",
+     "bezeichnung": {
+      "de": "Schalter",
+      "en": "Switch"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "M",
+     "bezeichnung": {
+      "de": "Merken",
+      "en": "Store"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q",
+     "bezeichnung": {
+      "de": "Lampe",
+      "en": "Lamp"
+     }
+    }
+   ],
+   "bausteine": [
+    "MERKER",
+    "AND",
+    "NOT"
+   ],
+   "ablauf": [
+    {
+     "ein": "10",
+     "soll": "0",
+     "text": {
+      "de": "Schalter an – noch nicht gemerkt",
+      "en": "Switch on – not stored yet"
+     }
+    },
+    {
+     "ein": "11",
+     "soll": "1",
+     "text": {
+      "de": "Merken drücken",
+      "en": "Press store"
+     }
+    },
+    {
+     "ein": "10",
+     "soll": "1",
+     "text": {
+      "de": "Merken loslassen",
+      "en": "Release store"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "1",
+     "text": {
+      "de": "Schalter aus – die Lampe bleibt",
+      "en": "Switch off – the lamp stays"
+     }
+    },
+    {
+     "ein": "01",
+     "soll": "0",
+     "text": {
+      "de": "Merken drücken",
+      "en": "Press store"
+     }
+    },
+    {
+     "ein": "00",
+     "soll": "0",
+     "text": {
+      "de": "Loslassen",
+      "en": "Release"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "a1",
+      "typ": "AND",
+      "x": 252,
+      "y": 112
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 252,
+      "y": 336
+     },
+     {
+      "id": "a2",
+      "typ": "AND",
+      "x": 420,
+      "y": 392
+     },
+     {
+      "id": "m1",
+      "typ": "MERKER",
+      "x": 560,
+      "y": 224
+     }
+    ],
+    "verbindungen": [
+     [
+      "D",
+      "a1.a"
+     ],
+     [
+      "M",
+      "a1.b"
+     ],
+     [
+      "a1.y",
+      "m1.S"
+     ],
+     [
+      "D",
+      "n1.a"
+     ],
+     [
+      "n1.y",
+      "a2.a"
+     ],
+     [
+      "M",
+      "a2.b"
+     ],
+     [
+      "a2.y",
+      "m1.R"
+     ],
+     [
+      "m1.Q",
+      "Q"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "REG4",
+   "art": "bauen",
+   "symbol": "REG",
+   "name": {
+    "de": "Register",
+    "en": "Register"
+   },
+   "titel": {
+    "de": "Vier Bits merken",
+    "en": "Storing four bits"
+   },
+   "geschichte": {
+    "de": "Mit vier Speicherbits nebeneinander merkt sich ein Rechner eine ganze Zahl von 0 bis 15. So etwas heißt Register. Alle vier hören auf denselben Knopf »Merken«.",
+    "en": "With four memory bits side by side, a computer stores a whole number from 0 to 15. This is called a register. All four listen to the same »store« button."
+   },
+   "frage": {
+    "de": "Wie merkt sich ein Rechner eine ganze Zahl?",
+    "en": "How does a computer store a whole number?"
+   },
+   "hilfe": {
+    "de": "Jeder Schalter bekommt sein eigenes Speicherbit. Den Knopf »Merken« verbindest du mit allen vier.",
+    "en": "Every switch gets its own memory bit. Connect the »store« button to all four."
+   },
+   "merksatz": {
+    "de": "Ein Register besteht aus mehreren Speicherbits, die gemeinsam merken. Eins mit 4 Bit hält eine Zahl von 0 bis 15.",
+    "en": "A register consists of several memory bits that store together. One with 4 bits holds a number from 0 to 15."
+   },
+   "eingaenge": [
+    {
+     "name": "D3",
+     "bezeichnung": {
+      "de": "8",
+      "en": "8"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D2",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D1",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D0",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "M",
+     "bezeichnung": {
+      "de": "Merken",
+      "en": "Store"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q3",
+     "bezeichnung": {
+      "de": "8",
+      "en": "8"
+     }
+    },
+    {
+     "name": "Q2",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     }
+    },
+    {
+     "name": "Q1",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     }
+    },
+    {
+     "name": "Q0",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     }
+    }
+   ],
+   "eingabegruppen": [
+    {
+     "name": "Zahl",
+     "bits": 4
+    },
+    {
+     "name": "M",
+     "bits": 1
+    }
+   ],
+   "bausteine": [
+    "SBIT"
+   ],
+   "ablauf": [
+    {
+     "ein": "01011",
+     "soll": "0101",
+     "text": {
+      "de": "5 einstellen und merken",
+      "en": "Set 5 and store"
+     }
+    },
+    {
+     "ein": "01010",
+     "soll": "0101",
+     "text": {
+      "de": "Loslassen",
+      "en": "Release"
+     }
+    },
+    {
+     "ein": "11000",
+     "soll": "0101",
+     "text": {
+      "de": "12 einstellen – es bleibt 5",
+      "en": "Set 12 – it stays 5"
+     }
+    },
+    {
+     "ein": "11001",
+     "soll": "1100",
+     "text": {
+      "de": "Merken drücken",
+      "en": "Press store"
+     }
+    },
+    {
+     "ein": "00000",
+     "soll": "1100",
+     "text": {
+      "de": "Alle Schalter aus – es bleibt 12",
+      "en": "All switches off – it stays 12"
+     }
+    },
+    {
+     "ein": "10011",
+     "soll": "1001",
+     "text": {
+      "de": "9 einstellen und merken",
+      "en": "Set 9 and store"
+     }
+    },
+    {
+     "ein": "10010",
+     "soll": "1001",
+     "text": {
+      "de": "Loslassen",
+      "en": "Release"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "s3",
+      "typ": "SBIT",
+      "x": 392,
+      "y": 28
+     },
+     {
+      "id": "s2",
+      "typ": "SBIT",
+      "x": 392,
+      "y": 168
+     },
+     {
+      "id": "s1",
+      "typ": "SBIT",
+      "x": 392,
+      "y": 308
+     },
+     {
+      "id": "s0",
+      "typ": "SBIT",
+      "x": 392,
+      "y": 448
+     }
+    ],
+    "verbindungen": [
+     [
+      "D3",
+      "s3.D"
+     ],
+     [
+      "D2",
+      "s2.D"
+     ],
+     [
+      "D1",
+      "s1.D"
+     ],
+     [
+      "D0",
+      "s0.D"
+     ],
+     [
+      "M",
+      "s3.M"
+     ],
+     [
+      "M",
+      "s2.M"
+     ],
+     [
+      "M",
+      "s1.M"
+     ],
+     [
+      "M",
+      "s0.M"
+     ],
+     [
+      "s3.Q",
+      "Q3"
+     ],
+     [
+      "s2.Q",
+      "Q2"
+     ],
+     [
+      "s1.Q",
+      "Q1"
+     ],
+     [
+      "s0.Q",
+      "Q0"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "TFF",
+   "art": "bauen",
+   "symbol": "T",
+   "name": {
+    "de": "Umschalter",
+    "en": "Toggle"
+   },
+   "titel": {
+    "de": "Ein Knopf für An und Aus",
+    "en": "One button for on and off"
+   },
+   "geschichte": {
+    "de": "Viele Geräte haben nur einen Knopf: Einmal drücken – an. Noch einmal drücken – aus. Dafür muss sich die Schaltung merken, wie sie gerade steht, und beim nächsten Druck das Gegenteil nehmen.",
+    "en": "Many devices have just one button: press once – on. Press again – off. For that the circuit has to remember its state and take the opposite on the next press."
+   },
+   "frage": {
+    "de": "Wie wechselt eine Lampe mit jedem Druck?",
+    "en": "How does a lamp change with every press?"
+   },
+   "hilfe": {
+    "de": "Nimm zwei Speicherbits. Das erste merkt sich, solange der Knopf oben ist, das Gegenteil der Lampe (Merken = NICHT Knopf). Beim Drücken übernimmt das zweite diesen Wert (Merken = Knopf) und schaltet die Lampe.",
+    "en": "Use two memory bits. While the button is up, the first one stores the opposite of the lamp (store = NOT button). On pressing, the second one takes that value (store = button) and drives the lamp."
+   },
+   "merksatz": {
+    "de": "Zwei Speicherbits hintereinander, die abwechselnd merken, ergeben einen Umschalter: Er wechselt bei jedem Druck genau einmal.",
+    "en": "Two memory bits in a row that store in turn make a toggle: it changes exactly once per press."
+   },
+   "eingaenge": [
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Knopf",
+      "en": "Button"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q",
+     "bezeichnung": {
+      "de": "Lampe",
+      "en": "Lamp"
+     }
+    }
+   ],
+   "bausteine": [
+    "SBIT",
+    "NOT"
+   ],
+   "ablauf": [
+    {
+     "ein": "0",
+     "soll": "0",
+     "text": {
+      "de": "Einschalten: Lampe aus",
+      "en": "Switch on: lamp off"
+     }
+    },
+    {
+     "ein": "1",
+     "soll": "1",
+     "text": {
+      "de": "Drücken – an",
+      "en": "Press – on"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1",
+     "text": {
+      "de": "Loslassen – bleibt an",
+      "en": "Release – stays on"
+     }
+    },
+    {
+     "ein": "1",
+     "soll": "0",
+     "text": {
+      "de": "Drücken – aus",
+      "en": "Press – off"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0",
+     "text": {
+      "de": "Loslassen – bleibt aus",
+      "en": "Release – stays off"
+     }
+    },
+    {
+     "ein": "1",
+     "soll": "1",
+     "text": {
+      "de": "Drücken – an",
+      "en": "Press – on"
+     }
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "n2",
+      "typ": "NOT",
+      "x": 252,
+      "y": 336
+     },
+     {
+      "id": "s1",
+      "typ": "SBIT",
+      "x": 420,
+      "y": 140
+     },
+     {
+      "id": "s2",
+      "typ": "SBIT",
+      "x": 588,
+      "y": 280
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 420,
+      "y": 448
+     }
+    ],
+    "verbindungen": [
+     [
+      "s2.Q",
+      "n1.a"
+     ],
+     [
+      "n1.y",
+      "s1.D"
+     ],
+     [
+      "T",
+      "n2.a"
+     ],
+     [
+      "n2.y",
+      "s1.M"
+     ],
+     [
+      "s1.Q",
+      "s2.D"
+     ],
+     [
+      "T",
+      "s2.M"
+     ],
+     [
+      "s2.Q",
+      "Q"
+     ]
+    ]
+   }
+  },
+  {
+   "kuerzel": "ZAEHLER",
+   "art": "bauen",
+   "symbol": "CTR",
+   "name": {
+    "de": "Zähler",
+    "en": "Counter"
+   },
+   "titel": {
+    "de": "Der Zähler",
+    "en": "The counter"
+   },
+   "geschichte": {
+    "de": "Ein Rechner arbeitet im Takt: Bei jedem Takt geschieht ein Schritt. Damit er weiß, wo er gerade ist, zählt er die Takte mit. Hier bist du der Taktgeber – jeder Druck ist ein Takt.",
+    "en": "A computer works to a clock: on every tick, one step happens. To know where it is, it counts the ticks. Here you are the clock – every press is a tick."
+   },
+   "frage": {
+    "de": "Wie zählt ein Rechner mit jedem Takt weiter?",
+    "en": "How does a computer count on with every tick?"
+   },
+   "hilfe": {
+    "de": "Die Einerstelle wechselt bei jedem Takt. Die nächste Stelle wechselt immer dann, wenn die vorige von 1 auf 0 fällt – so wie beim Zählen die Zehner weiterspringen. Ein NICHT dazwischen macht aus dem Fallen ein Drücken.",
+    "en": "The ones place changes on every tick. The next place changes whenever the one before falls from 1 to 0 – just like the tens move on when you count. A NOT in between turns falling into pressing."
+   },
+   "merksatz": {
+    "de": "Vier Umschalter hintereinander zählen von 0 bis 15. Nach 15 kommt wieder 0 – der Zähler läuft über.",
+    "en": "Four toggles in a row count from 0 to 15. After 15 comes 0 again – the counter overflows."
+   },
+   "eingaenge": [
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Takt",
+      "en": "Clock"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Q3",
+     "bezeichnung": {
+      "de": "8",
+      "en": "8"
+     }
+    },
+    {
+     "name": "Q2",
+     "bezeichnung": {
+      "de": "4",
+      "en": "4"
+     }
+    },
+    {
+     "name": "Q1",
+     "bezeichnung": {
+      "de": "2",
+      "en": "2"
+     }
+    },
+    {
+     "name": "Q0",
+     "bezeichnung": {
+      "de": "1",
+      "en": "1"
+     }
+    }
+   ],
+   "bausteine": [
+    "TFF",
+    "NOT"
+   ],
+   "ablauf": [
+    {
+     "ein": "1",
+     "soll": "0001",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0001"
+    },
+    {
+     "ein": "1",
+     "soll": "0010",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0010"
+    },
+    {
+     "ein": "1",
+     "soll": "0011",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0011"
+    },
+    {
+     "ein": "1",
+     "soll": "0100",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0100"
+    },
+    {
+     "ein": "1",
+     "soll": "0101",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0101"
+    },
+    {
+     "ein": "1",
+     "soll": "0110",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0110"
+    },
+    {
+     "ein": "1",
+     "soll": "0111",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0111"
+    },
+    {
+     "ein": "1",
+     "soll": "1000",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1000"
+    },
+    {
+     "ein": "1",
+     "soll": "1001",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1001"
+    },
+    {
+     "ein": "1",
+     "soll": "1010",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1010"
+    },
+    {
+     "ein": "1",
+     "soll": "1011",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1011"
+    },
+    {
+     "ein": "1",
+     "soll": "1100",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1100"
+    },
+    {
+     "ein": "1",
+     "soll": "1101",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1101"
+    },
+    {
+     "ein": "1",
+     "soll": "1110",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1110"
+    },
+    {
+     "ein": "1",
+     "soll": "1111",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "1111"
+    },
+    {
+     "ein": "1",
+     "soll": "0000",
+     "text": {
+      "de": "Takt – Überlauf",
+      "en": "Clock – overflow"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0000"
+    },
+    {
+     "ein": "1",
+     "soll": "0001",
+     "text": {
+      "de": "Takt",
+      "en": "Clock"
+     }
+    },
+    {
+     "ein": "0",
+     "soll": "0001"
+    }
+   ],
+   "loesung": {
+    "bausteine": [
+     {
+      "id": "t0",
+      "typ": "TFF",
+      "x": 224,
+      "y": 448
+     },
+     {
+      "id": "n0",
+      "typ": "NOT",
+      "x": 392,
+      "y": 448
+     },
+     {
+      "id": "t1",
+      "typ": "TFF",
+      "x": 392,
+      "y": 308
+     },
+     {
+      "id": "n1",
+      "typ": "NOT",
+      "x": 560,
+      "y": 308
+     },
+     {
+      "id": "t2",
+      "typ": "TFF",
+      "x": 560,
+      "y": 168
+     },
+     {
+      "id": "n2",
+      "typ": "NOT",
+      "x": 560,
+      "y": 28
+     },
+     {
+      "id": "t3",
+      "typ": "TFF",
+      "x": 392,
+      "y": 28
+     }
+    ],
+    "verbindungen": [
+     [
+      "T",
+      "t0.T"
+     ],
+     [
+      "t0.Q",
+      "n0.a"
+     ],
+     [
+      "n0.y",
+      "t1.T"
+     ],
+     [
+      "t1.Q",
+      "n1.a"
+     ],
+     [
+      "n1.y",
+      "t2.T"
+     ],
+     [
+      "t2.Q",
+      "n2.a"
+     ],
+     [
+      "n2.y",
+      "t3.T"
+     ],
+     [
+      "t0.Q",
+      "Q0"
+     ],
+     [
+      "t1.Q",
+      "Q1"
+     ],
+     [
+      "t2.Q",
+      "Q2"
+     ],
+     [
+      "t3.Q",
+      "Q3"
      ]
     ]
    }

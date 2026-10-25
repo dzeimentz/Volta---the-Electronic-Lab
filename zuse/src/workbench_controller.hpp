@@ -52,6 +52,10 @@ struct Stage {
     std::vector<std::pair<QString, int>> inputGroups;
     // grosse Tabellen (ab 6 Eingaengen): nur diese Zeilen zeigen, mit Rechnung; geprueft wird trotzdem alles
     std::vector<std::pair<size_t, QString>> samples;
+    // Schaltungen mit Speicher: Pruefung als Ablauf Schritt fuer Schritt statt Wahrheitstabelle; Schritte ohne
+    // Text werden in der Tabelle nicht gezeigt (z. B. Loslassen beim Zaehlen)
+    std::vector<volta::logic::SequenceStep> steps;
+    QStringList stepTexts;
 };
 
 // Lernstufe wie bei Volta: fasst Experimente zusammen (einfach beginnen, pro Stufe anspruchsvoller)
@@ -60,12 +64,14 @@ struct LearningLevel {
     QString title;
     QString question;     // Leitfrage der Stufe
     QStringList kuerzel;  // Experimente der Stufe in Reihenfolge; leer = geplant
+    QStringList upcoming; // Titel geplanter Experimente (erscheinen gesperrt mit »folgt«)
 };
 
 class WorkbenchController : public QObject {
     Q_OBJECT
     Q_PROPERTY(QVariantList stages READ stages NOTIFY stagesChanged)
     Q_PROPERTY(QVariantList levels READ levels NOTIFY stagesChanged) // Lernstufen mit ihren Experimenten
+    Q_PROPERTY(bool stageSequence READ stageSequence NOTIFY stageChanged) // Pruefung als Ablauf (Speicher)
     Q_PROPERTY(int stageIndex READ stageIndex NOTIFY stageChanged)
     Q_PROPERTY(QString stageTitle READ stageTitle NOTIFY stageChanged)
     Q_PROPERTY(QString stageQuestion READ stageQuestion NOTIFY stageChanged)
@@ -133,6 +139,7 @@ public:
 
     QVariantList stages() const;
     QVariantList levels() const;
+    bool stageSequence() const { return !m_stages.empty() && !m_stages[size_t(m_stage)].steps.empty(); }
     int stageIndex() const { return m_stage; }
     QString stageTitle() const;
     QString stageQuestion() const;

@@ -137,6 +137,30 @@ HeaderButton {
                                 }
                             }
                         }
+                        Repeater { // geplante Experimente: sichtbar, aber noch nicht zu haben
+                            model: level.modelData.upcoming
+                            delegate: Rectangle {
+                                required property var modelData
+                                required property int index
+                                Layout.fillWidth: true
+                                implicitHeight: 48
+                                radius: 10
+                                color: ZTheme.surface
+                                border.color: ZTheme.line
+                                opacity: 0.5
+                                Text {
+                                    anchors.left: parent.left
+                                    anchors.leftMargin: 62
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 10
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: parent.modelData + " – " + qsTr("folgt")
+                                    color: ZTheme.text
+                                    font.pixelSize: 15
+                                    elide: Text.ElideRight
+                                }
+                            }
+                        }
                     }
                 }
             }

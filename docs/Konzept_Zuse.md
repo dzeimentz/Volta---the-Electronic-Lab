@@ -186,7 +186,7 @@ Vorbild ist das Bedienfeld der ersten Bausatz-Rechner (Altair 8800, 1975): Progr
 
 Zuse 1 hat **keinen eigenen Adressbus**: Die Adressschalter laden das Adressregister über den gemeinsamen 4-Bit-Bus (Busbreite 4 Bit durchgehend, Adressen 0–15), wie bei didaktischen Lehrrechnern. Ein separater Adressbus kommt erst mit Zuse 2.
 
-Das Bedienfeld entsteht schrittweise: Experiment 0.1 (ein Schalter, eine LED), 3.1 (vier Schalter, vier LEDs), 3.4 (zwei Zahlen mit je vier Schaltern, fünf LEDs mit Übertrag), 4.3 (Adressschalter und Speicher), 4.4 (der vollständige Rechner).
+Das Bedienfeld entsteht schrittweise: Experiment 0.1 (ein Schalter, eine LED), 3.1 (vier Schalter, vier LEDs), 3.4 (zwei Zahlen mit je vier Schaltern, fünf LEDs mit Übertrag), 4.3 (Register mit Taster »Merken«), 4.6 (Adressschalter und Speicher), 4.7 (der vollständige Rechner).
 
 ### 5.6 Programmierebene
 
@@ -282,9 +282,11 @@ Wie bei Volta ist Zuse 1 in Lernstufen gegliedert; jede Stufe hat eine Leitfrage
 | 1 Logik entdecken | Wie entscheidet ein Rechner? | 1.1 Das Nachtlicht (entdecken: NICHT) · 1.2 Der Tresor (UND) · 1.3 Die Klingel (ODER) · 1.4 Die Fensterwarnung (NAND) | Prototyp |
 | 2 Erfinden mit Bausteinen | Was kann ich aus meinen Bausteinen bauen? | 2.1 Die Alarmanlage (bauen: erste Erfindung) · 2.2 Das Treppenhauslicht (XODER) · 2.3 Alles aus einem Baustein (UND nur aus NAND, keine Erfindung) | Prototyp |
 | 3 Zahlen und Rechnen | Wie rechnet ein Rechner mit 0 und 1? | 3.1 Vier Lampen (zahlen: Binärzahlen am 4-Bit-Bedienfeld, Stellenwerte 8, 4, 2, 1) · 3.2 1 + 1 = 10 (Halbaddierer) · 3.3 Drei Bits auf einmal (Volladdierer) · 3.4 Rechnen bis 15 (4-Bit-Addierer, Übertrags-LED »Ü 16«; Tabelle zeigt Rechnungen als Proben, geprüft werden alle 256 Zeilen) | Prototyp |
-| 4 Speichern und Programmieren | Wie merkt sich ein Rechner etwas – und wie läuft ein Programm? | 4.1 Hat jemand geklingelt, während ich weg war? (Flipflop, Register) · 4.2 Wie zählt ein Rechner von allein? (Takt mit prellendem Taster, Zähler, Befehlszähler) · 4.3 Wo wohnt ein Programm? (Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld) · 4.4 Läuft er? (Zuse-4: Programm eintippen, Einzelschritt, Start) | geplant |
+| 4 Speichern und Programmieren | Wie merkt sich ein Rechner etwas – und wie läuft ein Programm? | 4.1 Hat jemand geklingelt? (Merker: Ausgang zurück an den Eingang) · 4.2 Der Schnappschuss (Speicherbit, merkt nur auf Knopfdruck) · 4.3 Vier Bits merken (Register) · 4.4 Ein Knopf für An und Aus (Umschalter aus zwei Speicherbits) · 4.5 Der Zähler (vier Umschalter, Takt per Taster, Überlauf nach 15) – alle geprüft als Ablauf Schritt für Schritt · 4.6 Wo wohnt ein Programm? (Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld) · 4.7 Läuft er? (Zuse-4: Programm eintippen, Einzelschritt, Start) | 4.1–4.5 Prototyp, 4.6–4.7 geplant |
 
-Freischaltung wie Volta: Ein Experiment öffnet sich, wenn das vorige geschafft ist, denn die Werkzeuge bauen aufeinander auf (die Alarmanlage braucht UND, ODER und NICHT, der Halbaddierer das Treppenhauslicht). In der Stufenauswahl erscheinen die Lernstufen mit Leitfrage, darunter ihre Experimente (0.1, 1.1 …); die Kopfzeile zeigt »Stufe n: Experiment«. In Experiment 4.4 ist das Steuerwerk teilweise vorgegeben (R2).
+Freischaltung wie Volta: Ein Experiment öffnet sich, wenn das vorige geschafft ist, denn die Werkzeuge bauen aufeinander auf (die Alarmanlage braucht UND, ODER und NICHT, der Halbaddierer das Treppenhauslicht). In der Stufenauswahl erscheinen die Lernstufen mit Leitfrage, darunter ihre Experimente (0.1, 1.1 …); die Kopfzeile zeigt »Stufe n: Experiment«. In Experiment 4.7 ist das Steuerwerk teilweise vorgegeben (R2).
+
+Schaltungen mit Speicher prüft Zuse als **Ablauf**: Nach dem Einschalten (alle Speicher starten mit 0 – eine Vereinfachung, echte Bausteine starten zufällig) werden die Schritte der Reihe nach an Schaltern und Tastern eingestellt, nach jedem Schritt müssen die Lampen stimmen. Speicher entsteht dabei echt aus der Rückkopplung in der Logiksimulation, nicht aus einem hinterlegten Verhalten.
 
 Gegenüber der ersten Fassung (Stufen 0–15 ohne Gruppierung) rückt die NAND-Entdeckung zu den anderen Grundbausteinen in Stufe 1 und das Zählen mit vier Lampen vor den Halbaddierer, damit »1 + 1 = 10« auf dem Zählen aufbaut.
 
@@ -388,7 +390,7 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | F5 | Blick hinein | jede Erfindung bis zum Gatter mit Live-Pegeln | MUSS | umgesetzt |
 | F6 | Zahlensysteme | Zahlenleiste binär/dezimal/hex, zuschaltbar; Erklärung und Vergleichstabelle | MUSS | umgesetzt |
 | F7 | Bedienfeld | 4 Daten-, 4 Adressschalter, LEDs, Untersuchen/Ablegen/Einzelschritt/Start | MUSS | teilweise (4 Bit, zwei Zahlen, Übertrag) |
-| F8 | Speicher und Takt | Flipflop, Register, Zähler, Speicher 16 × 4; Testfolgen Takt für Takt | MUSS | geplant |
+| F8 | Speicher und Takt | Flipflop, Register, Zähler, Speicher 16 × 4; Testfolgen Takt für Takt | MUSS | teilweise (Merker, Speicherbit, Register, Umschalter, Zähler; Prüfung als Ablauf) |
 | F9 | Programm | Programmtabelle Zuse-4 mit Befehlszeiger und Binäransicht | MUSS | geplant |
 | F10 | Schaltzeichen | DIN und US umschaltbar | SOLL | umgesetzt |
 | F11 | Logikanalysator | frei wählbare Leitungen über die letzten 32 Takte | SOLL | geplant |
@@ -432,8 +434,8 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 |---|---|---|---|
 | Z0 | Prototyp: Logikbibliothek, Werkbank, Rätselkisten, Werkzeugkiste, Zetti, Zahlensysteme, erste sieben Experimente, Android-Testversion | 20–25 PT | weitgehend umgesetzt (Okt. 2026) |
 | Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung, drei Schichten, Lernstufen 0–3); Bedienfeld 4 Bit, NAND, Addierer; Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | Angleichung und Stufen 7–11 umgesetzt (Okt. 2026); offen: Erprobung, Markenrecherche |
-| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Experimente 4.1–4.2 | 30–40 PT | nach Verlagsrückmeldung |
-| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Experimente 4.3–4.4 | 35–45 PT | |
+| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Experimente 4.1–4.5 (umgesetzt ohne Bus und Logikanalysator) | 30–40 PT | nach Verlagsrückmeldung |
+| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Experimente 4.6–4.7 | 35–45 PT | |
 | Z3 | Übersetzungen (FR, LU), Lehrerhandreichung, Hochformat, Erprobung, Paketierung | 20–25 PT | Zuse 1 Version 1.0 |
 
 Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.

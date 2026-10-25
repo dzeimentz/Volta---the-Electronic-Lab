@@ -60,7 +60,7 @@ private slots:
     void stagesStartWithAStory() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
-        QCOMPARE(w.stages().size(), 12);
+        QCOMPARE(w.stages().size(), 17);
         QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
         QVERIFY(!w.stageStory().isEmpty());
         QVERIFY(!w.stageMakesChip());
@@ -71,7 +71,8 @@ private slots:
         QCOMPARE(levels[0].toMap()["experiments"].toList().size(), 1);
         QCOMPARE(levels[1].toMap()["experiments"].toList().size(), 4);
         QVERIFY(levels[1].toMap()["unlocked"].toBool() == false);
-        QVERIFY(levels[4].toMap()["planned"].toBool());
+        QCOMPARE(levels[4].toMap()["experiments"].toList().size(), 5);
+        QCOMPARE(levels[4].toMap()["upcoming"].toList().size(), 2); // Programm folgt
         QCOMPARE(w.stages()[4].toMap()["kuerzel"].toString(), QStringLiteral("NAND"));
         QCOMPARE(w.stages()[4].toMap()["level"].toInt(), 1);
         QCOMPARE(w.stages()[11].toMap()["level"].toInt(), 3);
@@ -315,6 +316,52 @@ private slots:
         QCOMPARE(w.stageTitle(), QStringLiteral("The safe"));
         QCOMPARE(w.tools().size(), 1);
         QCOMPARE(w.symbolStyle(), QStringLiteral("us"));
+    }
+
+    // Lernstufe 4: Merker mit Rueckkopplung, Speicherbit, Register, Umschalter, Zaehler – geprueft als Ablauf
+    void memoryAndCounter() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
+        for (int s : {1, 2, 3, 4}) discover(w, s);
+        for (int s : {5, 6, 7}) solveAndPack(w, s);
+        countThrough(w, 8);
+        for (int s : {9, 10, 11}) solveAndPack(w, s);
+
+        QVERIFY(w.selectStage(12));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("MERKER"));
+        QVERIFY(w.stageSequence());
+        QCOMPARE(w.checkRows().size(), 8);
+        QVERIFY(w.checkRows()[1].toMap()["note"].toString().startsWith("2. "));
+        w.check(); // leere Werkbank: Ablauf stimmt nicht
+        QCOMPARE(w.checkState(), QStringLiteral("failed"));
+        solveAndPack(w, 12);
+        // gemerkt: nach dem Loslassen bleibt die Lampe an
+        QVERIFY(w.selectStage(12));
+        w.showSolution();
+        QCOMPARE(w.levelAt("Q"), Level::Zero); // eingeschaltet: Speicher leer
+        w.setInput("S", true);
+        w.setInput("S", false);
+        QCOMPARE(w.levelAt("Q"), Level::One);
+        w.setInput("R", true);
+        QCOMPARE(w.levelAt("Q"), Level::Zero);
+
+        for (int s : {13, 14}) solveAndPack(w, s);
+        // Umschalter: wechselt beim Druecken
+        QVERIFY(w.selectStage(15));
+        w.showSolution();
+        w.setInput("T", true);
+        QCOMPARE(w.levelAt("Q"), Level::One);
+        w.setInput("T", false);
+        w.setInput("T", true);
+        QCOMPARE(w.levelAt("Q"), Level::Zero);
+        solveAndPack(w, 15);
+        // Zaehler: 17 gezeigte Takte (Loslassen wird mitgeprueft, aber nicht gezeigt)
+        QVERIFY(w.selectStage(16));
+        QCOMPARE(w.checkRows().size(), 17);
+        solveAndPack(w, 16);
+        QVERIFY(w.library().find("ZAEHLER"));
+        QVERIFY(w.levels()[4].toMap()["done"].toBool());
     }
 };
 

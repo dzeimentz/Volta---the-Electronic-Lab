@@ -1,5 +1,6 @@
 #include "volta/logic/logic_sim.hpp"
 
+#include <algorithm>
 #include <utility>
 
 namespace volta::logic {
@@ -23,6 +24,40 @@ void LogicSim::load(const Netlist& netlist) {
     m_changes.clear();
     m_changes.reserve(m_net.gates.size());
     m_lastRounds = 0;
+    // Rueckkopplung: Gatter g erreicht ueber die Leitungen wieder sich selbst
+    m_inLoop.assign(m_net.gates.size(), 0);
+    std::vector<char> seen(m_net.gates.size());
+    std::vector<std::size_t> stack;
+    for (std::size_t g = 0; g < m_net.gates.size(); ++g) {
+        std::fill(seen.begin(), seen.end(), 0);
+        stack.assign(m_fanout[m_net.gates[g].y].begin(), m_fanout[m_net.gates[g].y].end());
+        while (!stack.empty() && !m_inLoop[g]) {
+            const std::size_t h = stack.back();
+            stack.pop_back();
+            if (h == g) m_inLoop[g] = 1;
+            if (seen[h]) continue;
+            seen[h] = 1;
+            for (std::size_t k : m_fanout[m_net.gates[h].y]) stack.push_back(k);
+        }
+    }
+}
+
+int LogicSim::powerOn() noexcept {
+    int fixed = 0;
+    settle();
+    for (std::size_t g = 0; g < m_net.gates.size(); ++g) {
+        const NetId y = m_net.gates[g].y;
+        if (!m_inLoop[g] || m_inputNet[y] || m_value[y] != Level::X) continue;
+        m_value[y] = Level::Zero; // einer nach dem anderen, sonst schwingen ueber Kreuz gekoppelte Gatter
+        for (std::size_t k : m_fanout[y])
+            if (!m_isPending[k]) {
+                m_isPending[k] = 1;
+                m_pending.push_back(k);
+            }
+        settle();
+        ++fixed;
+    }
+    return fixed;
 }
 
 void LogicSim::setInput(std::size_t index, Level level) noexcept {
@@ -102,6 +137,29 @@ CheckResult checkTruthTable(const Netlist& netlist, const std::vector<std::vecto
         for (std::size_t i = 0; i < n; ++i) sim.setInput(i, row.inputs[i]);
         if (sim.settle() != SettleStatus::Stable) result.oscillating = true;
         row.expected = expected[r];
+        for (std::size_t o = 0; o < netlist.outputs.size(); ++o) row.actual.push_back(sim.output(o));
+        row.ok = row.actual == row.expected;
+        result.passed = result.passed && row.ok;
+        result.rows.push_back(std::move(row));
+    }
+    result.passed = result.passed && !result.oscillating;
+    return result;
+}
+
+CheckResult checkSequence(const Netlist& netlist, const std::vector<SequenceStep>& steps) {
+    CheckResult result;
+    const std::size_t n = netlist.inputs.size();
+    LogicSim sim;
+    sim.load(netlist);
+    for (std::size_t i = 0; i < n; ++i) sim.setInput(i, Level::Zero);
+    sim.powerOn();
+    result.passed = !steps.empty();
+    for (const SequenceStep& step : steps) {
+        TruthRow row;
+        row.inputs = step.inputs;
+        for (std::size_t i = 0; i < n && i < step.inputs.size(); ++i) sim.setInput(i, step.inputs[i]);
+        if (sim.settle() != SettleStatus::Stable) result.oscillating = true;
+        row.expected = step.expected;
         for (std::size_t o = 0; o < netlist.outputs.size(); ++o) row.actual.push_back(sim.output(o));
         row.ok = row.actual == row.expected;
         result.passed = result.passed && row.ok;

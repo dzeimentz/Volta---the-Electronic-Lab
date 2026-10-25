@@ -114,7 +114,7 @@ Rectangle {
                 Text {
                     Layout.fillWidth: true
                     text: root.counting ? qsTr("Aufgaben")
-                        : root.building ? qsTr("Wahrheitstabelle")
+                        : root.building ? (workbench.stageSequence ? qsTr("Ablauf") : qsTr("Wahrheitstabelle"))
                         : workbench.guessing ? qsTr("Was vermutest du?") : qsTr("Was passiert?")
                     color: ZTheme.navy
                     font.pixelSize: 18; font.bold: true
