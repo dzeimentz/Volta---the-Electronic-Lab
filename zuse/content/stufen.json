@@ -141,7 +141,17 @@
       "de": "Lichtschalter",
       "en": "Light switch"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Lichtschalter aus",
+       "Lichtschalter an"
+      ],
+      "en": [
+       "Light switch off",
+       "Light switch on"
+      ]
+     }
     },
     {
      "name": "B",
@@ -149,7 +159,17 @@
       "de": "Klingelknopf",
       "en": "Bell button"
      },
-     "art": "taster"
+     "art": "taster",
+     "zustand": {
+      "de": [
+       "Klingelknopf losgelassen",
+       "Klingelknopf gedrückt"
+      ],
+      "en": [
+       "Bell button released",
+       "Bell button pressed"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -158,6 +178,16 @@
      "bezeichnung": {
       "de": "Lampe",
       "en": "Lamp"
+     },
+     "zustand": {
+      "de": [
+       "Lampe aus",
+       "Lampe leuchtet"
+      ],
+      "en": [
+       "Lamp off",
+       "Lamp glows"
+      ]
      }
     },
     {
@@ -165,6 +195,16 @@
      "bezeichnung": {
       "de": "Klingel",
       "en": "Bell"
+     },
+     "zustand": {
+      "de": [
+       "Klingel still",
+       "Klingel läutet"
+      ],
+      "en": [
+       "Bell silent",
+       "Bell rings"
+      ]
      }
     }
    ],
@@ -661,26 +701,56 @@
     {
      "name": "A",
      "bezeichnung": {
-      "de": "Anlage an",
-      "en": "Alarm on"
+      "de": "Anlage",
+      "en": "Alarm"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Anlage aus",
+       "Anlage an"
+      ],
+      "en": [
+       "Alarm off",
+       "Alarm on"
+      ]
+     }
     },
     {
      "name": "F",
      "bezeichnung": {
-      "de": "Fenster offen",
-      "en": "Window open"
+      "de": "Fenster",
+      "en": "Window"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Fenster zu",
+       "Fenster offen"
+      ],
+      "en": [
+       "Window shut",
+       "Window open"
+      ]
+     }
     },
     {
      "name": "T",
      "bezeichnung": {
-      "de": "Tür offen",
-      "en": "Door open"
+      "de": "Tür",
+      "en": "Door"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Tür zu",
+       "Tür offen"
+      ],
+      "en": [
+       "Door shut",
+       "Door open"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -689,6 +759,16 @@
      "bezeichnung": {
       "de": "Sirene",
       "en": "Siren"
+     },
+     "zustand": {
+      "de": [
+       "Sirene still",
+       "Sirene heult"
+      ],
+      "en": [
+       "Siren silent",
+       "Siren wails"
+      ]
      }
     }
    ],
@@ -781,7 +861,17 @@
       "de": "Schalter unten",
       "en": "Switch downstairs"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Schalter unten aus",
+       "Schalter unten an"
+      ],
+      "en": [
+       "Switch downstairs off",
+       "Switch downstairs on"
+      ]
+     }
     },
     {
      "name": "B",
@@ -789,7 +879,17 @@
       "de": "Schalter oben",
       "en": "Switch upstairs"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Schalter oben aus",
+       "Schalter oben an"
+      ],
+      "en": [
+       "Switch upstairs off",
+       "Switch upstairs on"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -798,6 +898,16 @@
      "bezeichnung": {
       "de": "Treppenlicht",
       "en": "Stair light"
+     },
+     "zustand": {
+      "de": [
+       "Treppenlicht aus",
+       "Treppenlicht brennt"
+      ],
+      "en": [
+       "Stair light off",
+       "Stair light on"
+      ]
      }
     }
    ],
@@ -907,7 +1017,17 @@
       "de": "Schalter A",
       "en": "Switch A"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Schalter A aus",
+       "Schalter A an"
+      ],
+      "en": [
+       "Switch A off",
+       "Switch A on"
+      ]
+     }
     },
     {
      "name": "B",
@@ -915,7 +1035,17 @@
       "de": "Schalter B",
       "en": "Switch B"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Schalter B aus",
+       "Schalter B an"
+      ],
+      "en": [
+       "Switch B off",
+       "Switch B on"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -924,6 +1054,16 @@
      "bezeichnung": {
       "de": "Lampe",
       "en": "Lamp"
+     },
+     "zustand": {
+      "de": [
+       "Lampe aus",
+       "Lampe leuchtet"
+      ],
+      "en": [
+       "Lamp off",
+       "Lamp glows"
+      ]
      }
     }
    ],
@@ -1147,7 +1287,17 @@
       "de": "Bit A",
       "en": "Bit A"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "A ist 0",
+       "A ist 1"
+      ],
+      "en": [
+       "A is 0",
+       "A is 1"
+      ]
+     }
     },
     {
      "name": "B",
@@ -1155,7 +1305,17 @@
       "de": "Bit B",
       "en": "Bit B"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "B ist 0",
+       "B ist 1"
+      ],
+      "en": [
+       "B is 0",
+       "B is 1"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -1164,6 +1324,16 @@
      "bezeichnung": {
       "de": "Summe",
       "en": "Sum"
+     },
+     "zustand": {
+      "de": [
+       "Summe 0",
+       "Summe 1"
+      ],
+      "en": [
+       "Sum 0",
+       "Sum 1"
+      ]
      }
     },
     {
@@ -1171,6 +1341,16 @@
      "bezeichnung": {
       "de": "Übertrag",
       "en": "Carry"
+     },
+     "zustand": {
+      "de": [
+       "kein Übertrag",
+       "Übertrag 1"
+      ],
+      "en": [
+       "no carry",
+       "carry 1"
+      ]
      }
     }
    ],
@@ -1264,7 +1444,17 @@
       "de": "Bit A",
       "en": "Bit A"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "A ist 0",
+       "A ist 1"
+      ],
+      "en": [
+       "A is 0",
+       "A is 1"
+      ]
+     }
     },
     {
      "name": "B",
@@ -1272,7 +1462,17 @@
       "de": "Bit B",
       "en": "Bit B"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "B ist 0",
+       "B ist 1"
+      ],
+      "en": [
+       "B is 0",
+       "B is 1"
+      ]
+     }
     },
     {
      "name": "Ci",
@@ -1280,7 +1480,17 @@
       "de": "Übertrag rein",
       "en": "Carry in"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "kein Übertrag rein",
+       "Übertrag rein 1"
+      ],
+      "en": [
+       "no carry in",
+       "carry in 1"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -1289,6 +1499,16 @@
      "bezeichnung": {
       "de": "Summe",
       "en": "Sum"
+     },
+     "zustand": {
+      "de": [
+       "Summe 0",
+       "Summe 1"
+      ],
+      "en": [
+       "Sum 0",
+       "Sum 1"
+      ]
      }
     },
     {
@@ -1296,6 +1516,16 @@
      "bezeichnung": {
       "de": "Übertrag raus",
       "en": "Carry out"
+     },
+     "zustand": {
+      "de": [
+       "kein Übertrag raus",
+       "Übertrag raus 1"
+      ],
+      "en": [
+       "no carry out",
+       "carry out 1"
+      ]
      }
     }
    ],

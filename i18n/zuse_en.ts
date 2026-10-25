@@ -897,42 +897,58 @@
 <context>
     <name>SituationCards</name>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="101" />
+        <location filename="../zuse/qml/SituationCards.qml" line="106" />
         <source>Situation %1</source>
         <translation>Situation %1</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="102" />
+        <location filename="../zuse/qml/SituationCards.qml" line="107" />
         <source>jetzt eingestellt</source>
         <translation>set now</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="152" />
+        <location filename="../zuse/qml/SituationCards.qml" line="158" />
         <source>Vermutet:</source>
         <translation>Guessed:</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="173" />
+        <location filename="../zuse/qml/SituationCards.qml" line="184" />
+        <source>Soll:</source>
+        <translation>Should:</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/SituationCards.qml" line="184" />
+        <source>Ist:</source>
+        <translation>Is:</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/SituationCards.qml" line="203" />
+        <source>unklar (?)</source>
+        <translation>unclear (?)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/SituationCards.qml" line="228" />
         <source>Setz links eine Kiste ein.</source>
         <translation>Insert a box on the left.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="174" />
+        <location filename="../zuse/qml/SituationCards.qml" line="229" />
         <source>Antippen und ausprobieren</source>
         <translation>Tap to try it out</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="180" />
+        <location filename="../zuse/qml/SituationCards.qml" line="235" />
         <source>Kiste:</source>
         <translation>Box:</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="195" />
+        <location filename="../zuse/qml/SituationCards.qml" line="250" />
         <source>wie vermutet</source>
         <translation>as guessed</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/SituationCards.qml" line="195" />
+        <location filename="../zuse/qml/SituationCards.qml" line="214" />
+        <location filename="../zuse/qml/SituationCards.qml" line="250" />
         <source>anders</source>
         <translation>different</translation>
     </message>
@@ -1029,77 +1045,87 @@
         <translation>Sequence</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="143" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="144" />
         <source>Wahrheitstabelle</source>
         <translation>Truth table</translation>
     </message>
     <message>
         <location filename="../zuse/qml/TaskPanel.qml" line="144" />
+        <source>Was soll passieren?</source>
+        <translation>What should happen?</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/TaskPanel.qml" line="145" />
         <source>Was glaubst du?</source>
         <translation>What do you think?</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="145" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="146" />
         <source>Probier es aus!</source>
         <translation>Try it out!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="153" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="154" />
         <source>Lies jede Situation. Was macht die Lampe da? Tippe an, was du glaubst.</source>
         <translation>Read each situation. What does the lamp do there? Tap what you think.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="154" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="155" />
         <source>Setz links eine Kiste ein. Dann tippe eine Situation an – die Schalter stellen sich von selbst.</source>
         <translation>Insert a box on the left. Then tap a situation – the switches set themselves.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="145" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="146" />
         <source>Was passiert?</source>
         <translation>What happens?</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="179" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="163" />
+        <source>Tippe eine Situation an – die Schalter stellen sich von selbst. »Prüfen« testet alle.</source>
+        <translation>Tap a situation – the switches set themselves. “Check” tests them all.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/TaskPanel.qml" line="191" />
         <source>Zeige die %1</source>
         <translation>Show %1</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="206" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="218" />
         <source>Merke: </source>
         <translation>Remember: </translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="218" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="230" />
         <source>Weiß ich nicht – ausprobieren</source>
         <translation>I don’t know – let’s try</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="224" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="236" />
         <source>Diese Kiste passt!</source>
         <translation>This box fits!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="231" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="243" />
         <source>Prüfen</source>
         <translation>Check</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="239" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="251" />
         <source>Erfindung einpacken</source>
         <translation>Pack up invention</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="239" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="251" />
         <source>Geschafft!</source>
         <translation>Done!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="247" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="259" />
         <source>Zur Startseite</source>
         <translation>To the home page</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="253" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="265" />
         <source>Weiter</source>
         <translation>Next</translation>
     </message>
@@ -1499,27 +1525,27 @@
 <context>
     <name>Workbench</name>
     <message>
-        <location filename="../zuse/qml/Workbench.qml" line="231" />
+        <location filename="../zuse/qml/Workbench.qml" line="232" />
         <source>Blick hinein – nur ansehen. Die Werte kommen von außen.</source>
         <translation>Looking inside – view only. The values come from outside.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Workbench.qml" line="279" />
+        <location filename="../zuse/qml/Workbench.qml" line="280" />
         <source>Größeres Feld: mehr Platz, kleinere Bausteine</source>
         <translation>Larger board: more space, smaller parts</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Workbench.qml" line="287" />
+        <location filename="../zuse/qml/Workbench.qml" line="288" />
         <source>Feldgröße %1 von 3</source>
         <translation>Board size %1 of 3</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Workbench.qml" line="295" />
+        <location filename="../zuse/qml/Workbench.qml" line="296" />
         <source>Kleineres Feld: größere Bausteine</source>
         <translation>Smaller board: larger parts</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Workbench.qml" line="296" />
+        <location filename="../zuse/qml/Workbench.qml" line="297" />
         <source>Kleiner geht nicht: Bausteine liegen weiter außen. Schieb sie zuerst zusammen.</source>
         <translation>Can’t get smaller: parts lie further out. Move them together first.</translation>
     </message>
@@ -1622,84 +1648,80 @@
         <translation>Not quite yet: the marked rows are wrong. Set the switches like that and see what happens.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="822" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="833" />
         <source>Geschafft! Weiter geht es mit der nächsten Stufe.</source>
         <translation>Done! On to the next level.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="834" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="845" />
         <source>Eingepackt! »%1« liegt jetzt in deiner Werkzeugkiste.</source>
         <translation>Packed up! “%1” is now in your toolbox.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1197" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1218" />
         <source>Kiste %1 ist eingesetzt. Probier die Schalter aus!</source>
         <translation>Box %1 is inserted. Try the switches!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1206" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1227" />
         <source>Setz zuerst eine Kiste ein.</source>
         <translation>Insert a box first.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1218" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1239" />
         <source>Deine Vermutung hat gestimmt!</source>
         <translation>Your guess was right!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1223" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1244" />
         <source>Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.</source>
         <translation>Right! This box is called %1. %2 It is now in your toolbox.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="792" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="798" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1239" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1243" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1260" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1264" />
         <source>an</source>
         <translation>on</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="792" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="797" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1239" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1243" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1260" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1264" />
         <source>aus</source>
         <translation>off</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1190" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1211" />
         <source>Erst vermuten: Tippe bei jeder Situation an, was die Lampe deiner Meinung nach macht.</source>
         <translation>Guess first: for each situation, tap what you think the lamp does.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1219" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1240" />
         <source>Überraschung: In einer Situation kam es anders, als du vermutet hast.</source>
         <translation>Surprise: in one situation it turned out differently from what you guessed.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1220" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1241" />
         <source>Überraschung: In %1 Situationen kam es anders, als du vermutet hast.</source>
         <translation>Surprise: in %1 situations it turned out differently from what you guessed.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1245" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1266" />
         <source>Fast! Bei »%1« zeigt diese Kiste: »%2«. Richtig wäre: »%3«. Probier eine andere Kiste.</source>
         <translation>Almost! With “%1” this box shows: “%2”. Correct would be: “%3”. Try another box.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1247" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1268" />
         <source>Fast! Bei »%1« ist %2 mit dieser Kiste %3 – es soll aber %4 sein. Probier eine andere Kiste.</source>
         <translation>Almost! At “%1”, %2 is %3 with this box – but it should be %4. Try another box.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1265" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1274" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1286" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1295" />
         <source>Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!</source>
         <translation>That is your guess. Now insert a box and try which one fits!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1290" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1312" />
         <source>Gut, dann probier einfach aus! Setz eine Kiste ein.</source>
         <translation>Fine, then just try it! Insert a box.</translation>
     </message>

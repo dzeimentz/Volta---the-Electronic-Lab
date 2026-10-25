@@ -140,6 +140,7 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY historyChanged)
     Q_PROPERTY(QVariantList checkRows READ checkRows NOTIFY checkChanged)
+    Q_PROPERTY(bool stageInWords READ stageInWords NOTIFY stageChanged) // Tabelle als Situationskarten
     Q_PROPERTY(QString checkState READ checkState NOTIFY checkChanged)
     Q_PROPERTY(bool chipReady READ chipReady NOTIFY checkChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
@@ -227,6 +228,7 @@ public:
     bool canUndo() const { return m_undo.canUndo(); }
     bool canRedo() const { return m_undo.canRedo(); }
     QVariantList checkRows() const;
+    bool stageInWords() const;
     QString checkState() const;
     bool chipReady() const { return m_checkDone && m_check.passed && !m_demo && !isFree(); }
     QString message() const { return m_message; }
@@ -311,6 +313,7 @@ private:
     int requiredBoardSize() const; // kleinste Feldgroesse, in die der gezeigte Aufbau passt
     bool pinPos(const volta::logic::ChipDef& def, const std::string& endpoint, qreal& x, qreal& y) const;
     QString levelString(const std::string& endpoint) const;
+    QString portState(const std::string& name) const; // Zustand eines Schalters bzw. einer LED in Worten
     int levelOf(const QString& kuerzel) const; // Lernstufe eines Experiments, -1 = keine
 
     std::vector<Stage> m_stages;

@@ -140,7 +140,8 @@ Rectangle {
                     visible: !root.free
                     Layout.fillWidth: true
                     text: root.counting ? qsTr("Aufgaben")
-                        : root.building ? (workbench.stageSequence ? qsTr("Ablauf") : qsTr("Wahrheitstabelle"))
+                        : root.building ? (workbench.stageSequence ? qsTr("Ablauf")
+                                           : workbench.stageInWords ? qsTr("Was soll passieren?") : qsTr("Wahrheitstabelle"))
                         : workbench.guessing ? qsTr("Was glaubst du?")
                         : workbench.stageDone ? qsTr("Was passiert?") : qsTr("Probier es aus!")
                     color: ZTheme.navy
@@ -156,8 +157,19 @@ Rectangle {
                     font.pixelSize: Math.round(14 * ZTheme.fontScale)
                     wrapMode: Text.WordWrap
                 }
-                TruthPanel { visible: !root.counting && !root.free && !root.discover; Layout.fillWidth: true }
-                SituationCards { visible: root.discover; Layout.fillWidth: true }
+                Text {
+                    visible: root.building && workbench.stageInWords && !root.free
+                    Layout.fillWidth: true
+                    text: qsTr("Tippe eine Situation an – die Schalter stellen sich von selbst. »Prüfen« testet alle.")
+                    color: ZTheme.muted
+                    font.pixelSize: Math.round(14 * ZTheme.fontScale)
+                    wrapMode: Text.WordWrap
+                }
+                TruthPanel {
+                    visible: !root.counting && !root.free && !workbench.stageInWords
+                    Layout.fillWidth: true
+                }
+                SituationCards { visible: workbench.stageInWords && !root.free; Layout.fillWidth: true }
                 Repeater { // Art »zahlen«: Zahlen, die an den Lampen erscheinen sollen
                     model: workbench.tasks
                     delegate: Rectangle {

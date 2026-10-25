@@ -118,7 +118,7 @@ Item {
         visible: root.big
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        width: root.stateText !== "" ? 150 : implicitWidth
+        width: root.stateText !== "" ? 128 : implicitWidth
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
         text: root.stateText !== "" ? root.stateText : root.level

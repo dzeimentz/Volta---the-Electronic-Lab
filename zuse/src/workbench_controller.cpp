@@ -781,21 +781,6 @@ QVariantList WorkbenchController::checkRows() const {
             row.insert("guess", guess);
             // Vergleich mit der eigenen Vermutung (nicht mit dem Soll): "=" oder "≠", leer solange offen
             row.insert("match", seen && !guess.isEmpty() ? (row["actual"].toString() == guess ? "=" : "≠") : QString());
-            // Situationskarte: jede Schalterstellung in Alltagssprache, dazu die Zustaende der Lampe
-            QVariantList situation;
-            for (qsizetype i = 0; i < s.inputs.size(); ++i) {
-                const bool on = (r >> (s.inputs.size() - 1 - i)) & 1u;
-                const QStringList st = s.inputStates.value(i);
-                const QString label = s.inputLabels.value(i, s.inputs[i]);
-                situation.append(QVariantMap{{"on", on},
-                                             {"text", st.size() == 2 ? st[on ? 1 : 0]
-                                                                     : QStringLiteral("%1: %2").arg(label, on ? tr("an") : tr("aus"))}});
-            }
-            row.insert("situation", situation);
-            const QStringList out = s.outputStates.value(0);
-            const QString lamp = s.outputLabels.value(0, s.outputs.value(0));
-            row.insert("outOff", out.size() == 2 ? out[0] : QStringLiteral("%1 %2").arg(lamp, tr("aus")));
-            row.insert("outOn", out.size() == 2 ? out[1] : QStringLiteral("%1 %2").arg(lamp, tr("an")));
         } else if (m_checkDone && r < m_check.rows.size()) {
             row.insert("actual", joinLevels(m_check.rows[r].actual));
             row.insert("ok", m_check.rows[r].ok);
@@ -803,9 +788,35 @@ QVariantList WorkbenchController::checkRows() const {
             row.insert("actual", QString());
             row.insert("ok", false);
         }
+        if (s.kind != "entdecken") row.insert("current", r == currentRow());
+        if (stageInWords()) { // Situationskarte: Schalterstellung und Lampen in Alltagssprache
+            QVariantList situation;
+            for (qsizetype i = 0; i < s.inputs.size(); ++i) {
+                const bool on = (r >> (s.inputs.size() - 1 - i)) & 1u;
+                situation.append(QVariantMap{{"on", on}, {"text", s.inputStates[i][on ? 1 : 0]}});
+            }
+            row.insert("situation", situation);
+            QVariantList outStates; // je Lampe [aus, an]
+            for (qsizetype i = 0; i < s.outputs.size(); ++i) outStates.append(s.outputStates.value(i));
+            row.insert("outStates", outStates);
+            row.insert("outOff", s.outputStates.value(0).value(0));
+            row.insert("outOn", s.outputStates.value(0).value(1));
+        }
         rows.append(row);
     }
     return rows;
+}
+
+// Tabelle als Situationskarten: alle Schalter und Lampen haben Zustaende in Worten, keine Ablauf- oder Probenstufe
+bool WorkbenchController::stageInWords() const {
+    if (m_stages.empty()) return false;
+    const Stage& s = m_stages[size_t(m_stage)];
+    if (!s.steps.empty() || !s.samples.empty() || s.inputs.isEmpty() || s.outputs.isEmpty()) return false;
+    for (const QStringList& st : s.inputStates)
+        if (st.size() != 2) return false;
+    for (const QStringList& st : s.outputStates)
+        if (st.size() != 2) return false;
+    return s.inputStates.size() == s.inputs.size() && s.outputStates.size() == s.outputs.size();
 }
 
 QString WorkbenchController::checkState() const {
@@ -1064,9 +1075,19 @@ QVariantList WorkbenchController::ports() const {
                                 {"kind", kind},
                                 {"x", x},
                                 {"y", y},
-                                {"level", levelString(p.name)}});
+                                {"level", levelString(p.name)},
+                                {"state", portState(p.name)}});
     }
     return list;
+}
+
+QString WorkbenchController::portState(const std::string& name) const {
+    if (inside() || m_stages.empty()) return {};
+    const Stage& s = m_stages[size_t(m_stage)];
+    const QString n = QString::fromStdString(name);
+    if (const qsizetype i = s.inputs.indexOf(n); i >= 0) return stateText(s.inputStates.value(i), levelAt(n));
+    if (const qsizetype i = s.outputs.indexOf(n); i >= 0) return stateText(s.outputStates.value(i), levelAt(n));
+    return {};
 }
 
 QVariantList WorkbenchController::wires() const {
@@ -1277,8 +1298,9 @@ void WorkbenchController::setGuess(int row, bool on) {
 }
 
 void WorkbenchController::trySituation(int row) {
-    if (!isDiscover() || inside() || row < 0) return;
+    if (m_stages.empty() || inside() || row < 0) return;
     const Stage& s = m_stages[size_t(m_stage)];
+    if (!s.steps.empty() || s.inputKinds.contains(QStringLiteral("takt"))) return;
     if (size_t(row) >= (size_t(1) << s.inputs.size())) return;
     for (qsizetype i = 0; i < s.inputs.size(); ++i)
         applyInput(size_t(i), ((size_t(row) >> (s.inputs.size() - 1 - i)) & 1u) ? Level::One : Level::Zero);

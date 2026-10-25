@@ -172,6 +172,7 @@ Jede Stufe folgt demselben Ablauf:
 - **Werkzeugkiste:** alle entdeckten Regeln (NICHT, UND, ODER) mit Merksatz und alle eingepackten Erfindungen.
 - **Werkbank:** Schalter links, LEDs rechts, jeweils mit Bedeutung. Werkzeuge antippen oder hineinziehen, Leitungen von Lötpad zu Lötpad ziehen. Jede Änderung ist ein Befehl mit Rückgängig/Wiederholen.
 - **Prüfen:** Die Wahrheitstabelle läuft durch die Simulation; abweichende Zeilen sind mit ✗ und Rahmen markiert (nie nur Farbe).
+- **Situationen in Worten** (Entscheidung des Inhabers, 25.10.2026): Bau-Experimente mit kleiner Wahrheitstabelle (Bit, Alarmanlage, Treppenlicht, NAND→UND, Halb- und Volladdierer) zeigen die Tabelle als Situationskarten wie beim Entdecken: Schalterzustände in Alltagssprache, »Soll:« je Lampe in Worten mit Lampenbild, nach »Prüfen« »Ist:« mit ✓ bzw. ✗ und Rahmen. Antippen stellt die Schalter ein. Unter Schaltern und Lampen auf der Werkbank steht der Zustand in Worten. Ablauf-Experimente (Speicher) zeigen ihre Schritte schon in Worten; große Tabellen (4-Bit-Rechnen) zeigen Rechnungen wie »3 + 5 = 8«.
 - **Erfindung einpacken** (ersetzt »Chip erstellen«): nach bestandener Prüfung wird die Schaltung zum Werkzeug mit Namen (»Alarmanlage«) und steht in späteren Stufen bereit.
 - **Blick hinein:** Doppeltippen öffnet eine Erfindung mit den echten Pegeln von außen, über alle Ebenen bis zum Gatter.
 - **Hilfen:** Tipp in Zettis Sprechblase, als letzte Stufe die Musterlösung (danach selbst nachbauen).

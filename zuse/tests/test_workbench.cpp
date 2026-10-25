@@ -195,6 +195,46 @@ private slots:
         QVERIFY(w.message().contains("Deine Vermutung hat gestimmt"));
     }
 
+    // Bauen mit Situationskarten: Soll und Ist je Lampe in Worten; Ablauf- und Probenstufen bleiben Tabellen
+    void buildInWords() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        QVERIFY(w.stageInWords()); // Bit: Lichtschalter und Klingel
+        const QVariantList ok = w.demos();
+        int alarm = -1, adder = -1, memory = -1;
+        for (const QVariant& d : ok) {
+            const QString label = d.toMap()["label"].toString();
+            if (label == "2.1") alarm = d.toMap()["index"].toInt();
+            if (label == "3.4") adder = d.toMap()["index"].toInt();
+            if (label == "4.1") memory = d.toMap()["index"].toInt();
+        }
+        QVERIFY(w.startDemo(alarm));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("ALARM"));
+        QVERIFY(w.stageInWords());
+        const QVariantMap row = w.checkRows()[5].toMap(); // Anlage an, Fenster zu, Tuer offen
+        QStringList texts;
+        for (const QVariant& s : row["situation"].toList()) texts << s.toMap()["text"].toString();
+        QCOMPARE(texts, QStringList({"Anlage an", "Fenster zu", "Tür offen"}));
+        QCOMPARE(row["outStates"].toList()[0].toStringList(), QStringList({"Sirene still", "Sirene heult"}));
+        QCOMPARE(row["expected"].toString(), QStringLiteral("1"));
+        QCOMPARE(row["actual"].toString(), QStringLiteral("1")); // Vorfuehrung ist geprueft
+        w.trySituation(5);
+        QVERIFY(w.checkRows()[5].toMap()["current"].toBool());
+        QCOMPARE(w.levelAt("S"), Level::One);
+        bool found = false;
+        for (const QVariant& p : w.ports())
+            if (p.toMap()["name"] == "S") found = p.toMap()["state"] == "Sirene heult";
+        QVERIFY(found);
+        w.leaveSpecial();
+        QVERIFY(w.startDemo(adder));
+        QVERIFY(!w.stageInWords()); // 4-Bit-Addierer: Rechnungen statt Situationen
+        w.leaveSpecial();
+        QVERIFY(w.startDemo(memory));
+        QVERIFY(!w.stageInWords()); // Speicher: Ablauf in Schritten
+        w.trySituation(1);          // im Ablauf ohne Wirkung
+        w.leaveSpecial();
+    }
+
     void buildInventionFromTools() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");

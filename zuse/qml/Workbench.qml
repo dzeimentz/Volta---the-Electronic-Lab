@@ -145,6 +145,7 @@ Item {
                     label: port.modelData.label || ""
                     kind: port.modelData.kind
                     level: port.modelData.level
+                    stateText: port.modelData.state || ""
                     compact: !!port.modelData.compact
                     enabled: !workbench.inside // Schalter bedienen geht auch am fest verdrahteten Bedienfeld
                 }

@@ -10,6 +10,7 @@ ColumnLayout {
     id: root
     spacing: 8
     readonly property bool open: !workbench.stageDone
+    readonly property bool discover: workbench.stageKind === "entdecken"
 
     component LampIcon: Rectangle { // Lampe als Bild: leuchtet (gelb mit Strahlen) oder aus (grau)
         property bool on: false
@@ -77,13 +78,17 @@ ColumnLayout {
             required property int index
             readonly property bool seen: modelData.actual !== ""
             readonly property bool current: !!modelData.current
-            readonly property bool asking: root.open && workbench.guessing
+            readonly property bool asking: root.discover && root.open && workbench.guessing
+            // Bauen: nach dem Pruefen gruen (stimmt) bzw. rot mit Rahmen (stimmt nicht)
+            readonly property bool checked: !root.discover && card.seen
+            readonly property bool wrong: card.checked && !card.modelData.ok
             Layout.fillWidth: true
             implicitHeight: cardCol.implicitHeight + 20
             radius: 12
-            color: card.current && !card.asking ? "#ECFAFD" : ZTheme.surface
-            border.width: card.current && !card.asking ? 3 : 1
-            border.color: card.current && !card.asking ? ZTheme.accent : ZTheme.line
+            color: card.checked ? (card.wrong ? ZTheme.badBg : ZTheme.okBg)
+                 : card.current && !card.asking ? "#ECFAFD" : ZTheme.surface
+            border.width: card.wrong || (card.current && !card.asking) ? 3 : 1
+            border.color: card.wrong ? ZTheme.bad : card.current && !card.asking ? ZTheme.accent : ZTheme.line
 
             TapHandler { // ausprobieren: Schalter stellen sich wie auf der Karte
                 enabled: !card.asking
@@ -109,19 +114,20 @@ ColumnLayout {
                         font.family: ZTheme.mono; font.pixelSize: Math.round(12 * ZTheme.fontScale)
                     }
                 }
-                Repeater {
-                    model: card.modelData.situation
-                    delegate: RowLayout {
-                        required property var modelData
-                        Layout.fillWidth: true
-                        spacing: 8
-                        SwitchIcon { on: modelData.on }
-                        Text {
-                            Layout.fillWidth: true
-                            text: modelData.text
-                            wrapMode: Text.WordWrap
-                            color: ZTheme.text
-                            font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
+                Flow { // Schalterzustaende nebeneinander, so viele die Breite fasst
+                    Layout.fillWidth: true
+                    spacing: 12
+                    Repeater {
+                        model: card.modelData.situation
+                        delegate: Row {
+                            required property var modelData
+                            spacing: 6
+                            SwitchIcon { on: modelData.on; anchors.verticalCenter: parent.verticalCenter }
+                            Text {
+                                text: modelData.text
+                                color: ZTheme.text
+                                font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
+                            }
                         }
                     }
                 }
@@ -145,7 +151,7 @@ ColumnLayout {
                 }
                 // nach dem Vermuten: Vermutung und was die Kiste getan hat
                 RowLayout {
-                    visible: !card.asking && card.modelData.guess !== ""
+                    visible: root.discover && !card.asking && card.modelData.guess !== ""
                     Layout.fillWidth: true
                     spacing: 6
                     Text {
@@ -162,8 +168,57 @@ ColumnLayout {
                         font.pixelSize: Math.round(13 * ZTheme.fontScale)
                     }
                 }
+                // Bauen: was die Lampen tun sollen und nach dem Pruefen, was die Schaltung tut
+                Repeater {
+                    model: root.discover ? [] : (card.checked ? ["soll", "ist"] : ["soll"])
+                    delegate: RowLayout {
+                        id: line
+                        required property string modelData
+                        readonly property string bits: line.modelData === "soll" ? card.modelData.expected
+                                                                                 : card.modelData.actual
+                        Layout.fillWidth: true
+                        spacing: 6
+                        Text {
+                            Layout.alignment: Qt.AlignTop
+                            Layout.preferredWidth: 40
+                            text: line.modelData === "soll" ? qsTr("Soll:") : qsTr("Ist:")
+                            color: line.modelData === "soll" ? ZTheme.muted : ZTheme.text
+                            font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: line.modelData === "ist"
+                        }
+                        Flow {
+                            Layout.fillWidth: true
+                            spacing: 10
+                            Repeater {
+                                model: card.modelData.outStates || []
+                                delegate: Row {
+                                    id: lampState
+                                    required property var modelData
+                                    required property int index
+                                    readonly property bool on: line.bits.charAt(lampState.index) === "1"
+                                    readonly property bool known: "01".indexOf(line.bits.charAt(lampState.index)) >= 0
+                                    spacing: 4
+                                    LampIcon { on: lampState.on; implicitWidth: 16; implicitHeight: 16; radius: 8 }
+                                    Text {
+                                        text: lampState.known ? lampState.modelData[lampState.on ? 1 : 0]
+                                                              : qsTr("unklar (?)")
+                                        color: ZTheme.text
+                                        font.pixelSize: Math.round(13 * ZTheme.fontScale)
+                                        font.bold: line.modelData === "ist"
+                                    }
+                                }
+                            }
+                        }
+                        Text { // Zeichen und Wort, nicht nur Farbe
+                            visible: line.modelData === "ist"
+                            Layout.alignment: Qt.AlignTop
+                            text: card.modelData.ok ? "✓" : "✗ " + qsTr("anders")
+                            color: card.modelData.ok ? ZTheme.ok : ZTheme.bad
+                            font.pixelSize: Math.round(14 * ZTheme.fontScale); font.bold: true
+                        }
+                    }
+                }
                 RowLayout {
-                    visible: !card.asking
+                    visible: root.discover && !card.asking
                     Layout.fillWidth: true
                     spacing: 6
                     Text {
