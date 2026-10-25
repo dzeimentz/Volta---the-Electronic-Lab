@@ -17,10 +17,15 @@ ApplicationWindow {
 
     Binding { target: ZTheme; property: "fontScale"; value: settings.fontScale }
 
-    property string page: startPage // "home" (Startseite) oder "lab" (Experiment, Freies Labor, Vorfuehrung)
+    property string page: startPage // "home" (Startseite), "lab" (Experiment, Freies Labor, Vorfuehrung), "journal"
+    property string journalReturn: "home" // von hier aus wurde das Forscherheft geoeffnet
     readonly property bool building: workbench.stageKind === "bauen"
     readonly property bool inLab: page === "lab"
 
+    function openJournal() {
+        if (page !== "journal") journalReturn = page
+        page = "journal"
+    }
     function goHome() {
         workbench.leaveSpecial()
         page = "home"
@@ -103,6 +108,15 @@ ApplicationWindow {
                 Accessible.name: qsTr("Zahlenleiste zeigen")
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Zahlenleiste: Schalter und Lampen als Zahl lesen (binär, dezimal, hexadezimal)")
             }
+            HeaderButton { // Forscherheft (Experiment bleibt, wie es ist)
+                objectName: "journalButton"
+                visible: win.inLab && workbench.mode !== "vorfuehrung"
+                text: "📓"
+                font.family: "Segoe UI Emoji"
+                onClicked: win.openJournal()
+                Accessible.name: qsTr("Forscherheft")
+                ToolTip.visible: hovered; ToolTip.text: qsTr("Forscherheft")
+            }
             HeaderButton { // Schaltplan neben der Werkbank ein/aus (wie Volta)
                 objectName: "schematicToggle"
                 visible: win.inLab && win.building
@@ -151,13 +165,23 @@ ApplicationWindow {
                 onHelpRequested: help.show("")
                 onQuickGuideRequested: quickGuide.open()
                 onInfoRequested: info.open()
+                onJournalRequested: win.openJournal()
             }
         }
     }
 
+    JournalPage {
+        objectName: "journalPage"
+        anchors.fill: parent
+        visible: win.page === "journal"
+        onBackRequested: win.page = win.journalReturn
+        onExperimentRequested: index => { workbench.leaveSpecial(); workbench.selectStage(index); win.page = "lab" }
+    }
+
     Home {
         anchors.fill: parent
-        visible: !win.inLab
+        visible: win.page === "home"
+        onJournalRequested: win.openJournal()
         onExperimentRequested: index => { workbench.selectStage(index); win.page = "lab" }
         onFreeLabRequested: { workbench.startFreeLab(); win.page = "lab" }
         onDemoRequested: demoPicker.open()

@@ -157,6 +157,45 @@ private slots:
         QVERIFY(w.boxes()[2].toMap()["revealed"].toBool());
     }
 
+    // Forscherheft: Zetti schreibt Vermutung und Ergebnis, das Kind ergaenzt Notizen; gespeichert im Datenordner
+    void journal() {
+        QTemporaryDir dir;
+        {
+            WorkbenchController w(kStages, dir.path(), "de");
+            QVERIFY(w.journal().isEmpty());
+            finishBit(w);
+            QVERIFY(w.selectStage(1)); // Nachtlicht: Vermutung »dunkel -> leuchtet, hell -> leuchtet«
+            w.setGuess(0, true);
+            QCOMPARE(w.journal().size(), 1); // erst, wenn jede Situation vermutet ist
+            w.setGuess(1, true);
+            QVariantMap e = w.journal()[0].toMap();
+            QCOMPARE(e["id"].toString(), QStringLiteral("NICHT"));
+            QCOMPARE(e["guess"].toString(),
+                     QStringLiteral("Im Zimmer ist es dunkel → Nachtlicht leuchtet\nIm Zimmer ist es hell → Nachtlicht leuchtet"));
+            w.selectBox(1);
+            QVERIFY(w.confirmBox());
+            e = w.journal()[0].toMap();
+            QCOMPARE(e["comparison"].toInt(), 2); // anders als vermutet
+            QVERIFY(e["observation"].toString().contains("Die passende Kiste heißt NICHT."));
+            QVERIFY(e["observation"].toString().contains("Im Zimmer ist es hell → Nachtlicht aus"));
+            QVERIFY(w.addJournalNote("NICHT", "  Das Licht geht aus, wenn es hell ist.  "));
+            QVERIFY(!w.addJournalNote("NICHT", "   ")); // leere Notiz nicht
+        }
+        WorkbenchController w(kStages, dir.path(), "de"); // neu geladen
+        const QVariantList pages = w.journal();
+        QCOMPARE(pages.size(), 2); // Licht an! und Nachtlicht
+        const QVariantMap night = pages[0].toMap();
+        QCOMPARE(night["id"].toString(), QStringLiteral("NICHT"));
+        QCOMPARE(night["notes"].toStringList(), QStringList{"Das Licht geht aus, wenn es hell ist."});
+        QVERIFY(pages[1].toMap()["observation"].toString().startsWith("»Licht an!« gebaut und geprüft."));
+        // Vorfuehrung schreibt nichts
+        QVERIFY(w.startDemo(w.demos()[0].toMap()["index"].toInt()));
+        QVERIFY(!w.addJournalNote("NICHT", "x"));
+        w.leaveSpecial();
+        w.resetJournal();
+        QVERIFY(w.journal().isEmpty());
+    }
+
     // Franzoesisch: Texte, Zustaende und Werkzeugnamen der Stufen in der eingestellten Sprache
     void frenchContent() {
         QTemporaryDir dir;

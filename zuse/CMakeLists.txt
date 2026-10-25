@@ -8,8 +8,10 @@ add_library(zuse_model STATIC
     src/workbench_controller.cpp
     src/schematic.cpp
     src/zuse_settings.cpp
+    src/workbench_journal.cpp
+    ${PROJECT_SOURCE_DIR}/app/src/services/journal_store.cpp # Forscherheft wie Volta (gemeinsamer Speicher)
 )
-target_include_directories(zuse_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(zuse_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/app/src)
 target_link_libraries(zuse_model PUBLIC volta::logic Qt6::Core Qt6::Gui)
 set_target_properties(zuse_model PROPERTIES AUTOMOC ON)
 
@@ -59,6 +61,7 @@ qt_add_qml_module(zuse_app
         qml/QuickGuide.qml
         qml/InfoDialog.qml
         qml/ComicDialog.qml
+        qml/JournalPage.qml
 )
 # Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)

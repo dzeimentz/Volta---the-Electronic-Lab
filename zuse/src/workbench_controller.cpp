@@ -77,7 +77,8 @@ bool isEndpointOfPart(const std::string& endpoint, const std::string& partId) {
 
 WorkbenchController::WorkbenchController(const QString& stagesFile, const QString& dataDir, const QString& language,
                                          QObject* parent)
-    : QObject(parent), m_stagesFile(stagesFile), m_language(language), m_dataDir(dataDir) {
+    : QObject(parent), m_stagesFile(stagesFile), m_language(language), m_dataDir(dataDir),
+      m_journal(journalFile(dataDir)) {
     loadStages(stagesFile, language);
     load();
     dropStaleChips();
@@ -438,6 +439,7 @@ void WorkbenchController::startStage(int index) {
     m_seen.assign(s.table.size(), 0);
     m_guess.assign(s.table.size(), Level::X);
     m_guessSkipped = false;
+    m_solutionShown = false;
     m_task = 0;
     if (s.inputKinds.contains(QStringLiteral("takt"))) m_clock.start(); // Taktgeber laeuft von allein
     else m_clock.stop();
@@ -565,6 +567,7 @@ void WorkbenchController::showSolution() {
     for (Part& p : after.parts) snapPart(p);
     after.connections = m_stages[size_t(m_stage)].solution.connections;
     push(after, tr("Musterlösung"));
+    m_solutionShown = true;
     setMessage(tr("So könnte es gehen. Prüfe die Lösung – und bau sie danach gern selbst nach."),
                QStringLiteral("erklaerend"));
 }
@@ -665,6 +668,7 @@ void WorkbenchController::checkTarget() {
     } else {
         m_done.insert(s.kuerzel);
         save();
+        journalResult();
         setMessage(!s.successText.isEmpty() ? s.successText
                                             : tr("Super! %1 ist binär %2. Du kannst jetzt mit vier Lampen bis 15 zählen.")
                                                   .arg(target)
@@ -830,6 +834,7 @@ bool WorkbenchController::createChip() {
     if (!s.makesChip) { // Stufe ohne Chip: nur geschafft
         m_done.insert(s.kuerzel);
         save();
+        journalResult();
         setMessage(tr("Geschafft! Weiter geht es mit der nächsten Stufe."), QStringLiteral("begeistert"));
         m_checkDone = false;
         emit checkChanged();
@@ -842,6 +847,7 @@ bool WorkbenchController::createChip() {
     m_library.add(chip);
     m_done.insert(s.kuerzel);
     save();
+    journalResult();
     setMessage(tr("Eingepackt! »%1« liegt jetzt in deiner Werkzeugkiste.").arg(s.name.isEmpty() ? s.kuerzel : s.name),
                QStringLiteral("begeistert"));
     m_checkDone = false;
@@ -1205,7 +1211,7 @@ QVariantList WorkbenchController::boxes() const {
                                 {"selected", int(i) == m_box},
                                 {"revealed", solved && right}, // nach dem Loesen zeigt die richtige Kiste ihr Zeichen
                                 {"symbol", right ? s.symbol : QString()},
-                                {"name", right ? s.kuerzel : QString()},
+                                {"name", right ? (s.name.isEmpty() ? s.kuerzel : s.name) : QString()},
                                 {"inverted", right && s.inverted}});
     }
     return list;
@@ -1236,6 +1242,7 @@ bool WorkbenchController::confirmBox() {
     if (m_box == s.rightBox) {
         m_done.insert(s.kuerzel);
         save();
+        journalResult();
         // Vermutung mit dem Ergebnis vergleichen, ohne zu werten
         QString guessNote;
         if (!m_guessSkipped) {
@@ -1248,7 +1255,7 @@ bool WorkbenchController::confirmBox() {
                           + QLatin1Char(' ');
         }
         setMessage(guessNote + tr("Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.")
-                                   .arg(s.kuerzel, s.merksatz),
+                                   .arg(s.name.isEmpty() ? s.kuerzel : s.name, s.merksatz),
                    QStringLiteral("begeistert"));
         emit stagesChanged();
         emit viewChanged();
@@ -1288,6 +1295,7 @@ void WorkbenchController::toggleGuess(int row) {
     if (!isDiscover() || stageDone() || row < 0 || row >= int(m_guess.size())) return;
     Level& g = m_guess[size_t(row)];
     g = g == Level::One ? Level::Zero : Level::One;
+    if (!guessing()) journalGuess();
     if (!guessing() && m_box < 0)
         setMessage(tr("Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!"),
                    QStringLiteral("losgehts"));
@@ -1297,6 +1305,7 @@ void WorkbenchController::toggleGuess(int row) {
 void WorkbenchController::setGuess(int row, bool on) {
     if (!isDiscover() || stageDone() || row < 0 || row >= int(m_guess.size())) return;
     m_guess[size_t(row)] = on ? Level::One : Level::Zero;
+    if (!guessing()) journalGuess();
     if (!guessing() && m_box < 0)
         setMessage(tr("Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!"),
                    QStringLiteral("losgehts"));
@@ -1315,6 +1324,7 @@ void WorkbenchController::trySituation(int row) {
 void WorkbenchController::skipGuess() {
     if (!guessing()) return;
     m_guessSkipped = true;
+    journalGuess();
     setMessage(tr("Gut, dann probier einfach aus! Setz eine Kiste ein."), QStringLiteral("losgehts"));
     emit checkChanged();
 }

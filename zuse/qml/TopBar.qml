@@ -10,6 +10,7 @@ Row {
     signal helpRequested()
     signal quickGuideRequested()
     signal infoRequested()
+    signal journalRequested()
     spacing: 4
 
     component BarButton: ToolButton {
@@ -156,6 +157,14 @@ Row {
                 text: "»  " + qsTr("Kurzanleitung")
                 font.bold: true
                 onTriggered: bar.quickGuideRequested()
+            }
+            MenuItem {
+                objectName: "menuJournal"
+                visible: workbench.mode !== "vorfuehrung"
+                height: visible ? ZTheme.control : 0
+                text: "📓  " + qsTr("Forscherheft")
+                font.bold: true
+                onTriggered: bar.journalRequested()
             }
             MenuItem {
                 height: ZTheme.control

@@ -5,7 +5,7 @@
 // ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (Fenster oeffnen), ZUSE_DEMO_TAB=<n> (Reiter der Werkzeugkiste),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen),
-// ZUSE_PAGE=home|lab (Startseite bzw. Experiment; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
+// ZUSE_PAGE=home|lab|journal (Startseite bzw. Experiment; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
 // ZUSE_DEMO_SHOW=<n> (Vorfuehrung des Experiments n).
 #include <QDir>
 #include <QGuiApplication>

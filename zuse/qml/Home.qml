@@ -12,6 +12,7 @@ Rectangle {
     signal experimentRequested(int index)
     signal freeLabRequested()
     signal demoRequested()
+    signal journalRequested()
 
     // Karte oben (Weitermachen, Freies Labor, Vorfuehrung)
     component Tile: Rectangle {
@@ -119,6 +120,14 @@ Rectangle {
                     title: qsTr("Freies Labor")
                     subtitle: qsTr("Eigene Ideen ausprobieren – mit allen deinen Werkzeugen")
                     onActivated: home.freeLabRequested()
+                }
+                Tile {
+                    objectName: "tileJournal"
+                    icon: "📓"
+                    title: qsTr("Forscherheft")
+                    subtitle: workbench.journal.length === 0 ? qsTr("Deine Vermutungen, Entdeckungen und Notizen")
+                              : qsTr("Vermutungen, Entdeckungen und Notizen (%1)").arg(workbench.journal.length)
+                    onActivated: home.journalRequested()
                 }
                 Tile {
                     objectName: "tileDemo"

@@ -11,6 +11,7 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
+#include <QUrl>
 #include <QUndoStack>
 #include <QVariantList>
 #include <QVariantMap>
@@ -21,6 +22,7 @@
 #include "volta/logic/chip.hpp"
 #include "volta/logic/logic_sim.hpp"
 #include "volta/logic/netlist.hpp"
+#include "services/journal_store.hpp"
 
 namespace zuse {
 
@@ -145,6 +147,7 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(bool chipReady READ chipReady NOTIFY checkChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     // Schaltzeichen: "din" (DIN EN 60617-12, Vorgabe) oder "us" (IEEE Std 91); Einstellung, kein Befehl
+    Q_PROPERTY(QVariantList journal READ journal NOTIFY journalChanged) // Forscherheft, neueste Eintraege zuerst
     Q_PROPERTY(QString symbolStyle READ symbolStyle WRITE setSymbolStyle NOTIFY symbolStyleChanged)
 
 public:
@@ -261,6 +264,13 @@ public:
     Q_INVOKABLE void setGuess(int row, bool on); // Vermutung einer Situation direkt setzen
     Q_INVOKABLE void trySituation(int row);      // Schalter so stellen wie in dieser Zeile (Situationskarte)
     Q_INVOKABLE void skipGuess();          // ohne Vermutung ausprobieren
+    // Forscherheft: Zetti schreibt Vermutung und Ergebnis, das Kind ergaenzt Notizen und Fotos
+    QVariantList journal() const;
+    Q_INVOKABLE bool addJournalNote(const QString& id, const QString& text);
+    Q_INVOKABLE bool addJournalPhoto(const QString& id, const QUrl& source);
+    Q_INVOKABLE bool removeJournalPhoto(const QString& id, const QString& file);
+    Q_INVOKABLE void resetJournal();
+    static QString journalFile(const QString& dataDir);
 
     // fuer Befehle und Tests
     const volta::logic::ChipDef& def() const { return m_def; }
@@ -282,6 +292,7 @@ signals:
     void symbolStyleChanged();
     void numbersVisibleChanged();
     void clockChanged();
+    void journalChanged();
 
 private:
     bool loadStages(const QString& file, const QString& language);
@@ -315,6 +326,9 @@ private:
     QString levelString(const std::string& endpoint) const;
     QString portState(const std::string& name) const; // Zustand eines Schalters bzw. einer LED in Worten
     int levelOf(const QString& kuerzel) const; // Lernstufe eines Experiments, -1 = keine
+    QString situationLine(const Stage& s, size_t row, const std::vector<volta::logic::Level>& outs) const;
+    void journalGuess();  // Vermutung ins Forscherheft
+    void journalResult(); // Ergebnis der Stufe ins Forscherheft
 
     std::vector<Stage> m_stages;
     std::vector<LearningLevel> m_levels;
@@ -344,6 +358,8 @@ private:
     std::vector<char> m_seen;   // Zeilen, die mit dieser Kiste schon ausprobiert wurden
     std::vector<volta::logic::Level> m_guess; // Vermutung je Zeile (X = noch offen)
     bool m_guessSkipped = false;
+    bool m_solutionShown = false; // Musterloesung in dieser Stufe angeschaut (Forscherheft)
+    volta::services::JournalStore m_journal;
     size_t m_task = 0; // Art »zahlen«: aktuelle Aufgabe
     QTimer m_clock;    // Taktgeber
     QString m_symbolStyle = QStringLiteral("din");

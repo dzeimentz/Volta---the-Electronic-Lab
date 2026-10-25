@@ -615,206 +615,236 @@
     </message>
     <message>
         <location filename="../zuse/qml/HelpDialog.qml" line="31" />
+        <source>Danach erklärt dir Zetti die Regel unter »Erklärung« mit einem kleinen Comic – auch in der Werkzeugkiste.</source>
+        <translation>Afterwards Zetti explains the rule under “Explanation” with a little comic – in the toolbox too.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HelpDialog.qml" line="32" />
         <source>Auf der Werkbank bauen</source>
         <translation>Building on the workbench</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="32" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="33" />
         <source>Links liegen deine Werkzeuge. Ziehe eines auf die Werkbank – oder tippe es an, dann landet es in der Mitte.</source>
         <translation>Your tools are on the left. Drag one onto the workbench – or tap it, and it lands in the middle.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="33" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="34" />
         <source>Ziehe von einem goldenen Anschluss zu einem anderen, schon liegt dort eine Leitung.</source>
         <translation>Drag from one golden connector to another, and there is a wire.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="34" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="35" />
         <source>Leitungen mit 1 leuchten blau, Leitungen mit 0 sind grau gestrichelt.</source>
         <translation>Wires carrying 1 light up blue, wires carrying 0 are grey and dashed.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="35" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="36" />
         <source>Tippe einen Baustein oder eine Leitung an und dann auf »Entfernen«. »Leeren« räumt die ganze Werkbank ab.</source>
         <translation>Tap a part or a wire, then “Remove”. “Clear” empties the whole workbench.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="36" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="37" />
         <source>Die gebogenen Pfeile oben machen den letzten Schritt rückgängig oder holen ihn zurück.</source>
         <translation>The curved arrows at the top undo the last step or bring it back.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="37" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="38" />
         <source>Prüfen und einpacken</source>
         <translation>Check and pack up</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="38" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="39" />
         <source>Fertig gebaut? Dann prüfe deine Schaltung!</source>
         <translation>Finished building? Then check your circuit!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="39" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="40" />
         <source>»Prüfen« stellt alle Schalterstellungen ein und vergleicht mit der Wahrheitstabelle. Falsche Zeilen werden markiert.</source>
         <translation>“Check” sets every switch combination and compares with the truth table. Wrong rows are marked.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="40" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="41" />
         <source>Bei Speichern und Zählern prüft Zuse einen Ablauf: Schritt für Schritt, wie du die Schalter und Taster bedienen würdest.</source>
         <translation>For memories and counters, Zuse checks a sequence: step by step, just as you would use the switches and buttons.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="41" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="42" />
         <source>Stimmt alles, packst du deine Erfindung ein. Sie wird selbst zum Werkzeug, mit einem ★.</source>
         <translation>If everything is right, you pack up your invention. It becomes a tool itself, with a ★.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="42" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="43" />
         <source>Tippe zweimal auf eine ★-Erfindung, dann schaust du hinein – bis zum einzelnen Gatter.</source>
         <translation>Tap a ★ invention twice to look inside – down to the single gate.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="43" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="44" />
         <source>Schalter, Taster, Taktgeber</source>
         <translation>Switches, buttons, clock</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="44" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="45" />
         <source>Links auf dem Bedienfeld sind die Eingänge, rechts die Lampen.</source>
         <translation>The inputs are on the left of the panel, the lamps on the right.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="45" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="46" />
         <source>Ein Kippschalter bleibt, wie du ihn stellst. Ein Taster ist nur an, solange du drückst.</source>
         <translation>A toggle switch stays where you put it. A push button is only on while you press it.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="46" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="47" />
         <source>Der Taktgeber schaltet von allein im Takt um. Tippe ihn an, um ihn anzuhalten oder weiterlaufen zu lassen.</source>
         <translation>The clock generator switches by itself in time. Tap it to stop it or let it run again.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="47" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="48" />
         <source>Neben jedem Schalter und jeder Lampe steht der Wert als 1 oder 0.</source>
         <translation>Next to every switch and every lamp, the value is shown as 1 or 0.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="48" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="49" />
         <source>Zahlen: binär, dezimal, hex</source>
         <translation>Numbers: binary, decimal, hex</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="49" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="50" />
         <source>Ein Rechner schreibt Zahlen nur mit 0 und 1. Die Zahlenleiste unter der Werkbank übersetzt für dich.</source>
         <translation>A computer writes numbers with 0 and 1 only. The number bar below the workbench translates for you.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="50" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="51" />
         <source>Jede Stelle hat einen Wert: 8, 4, 2, 1. Leuchten 4 und 1, ist das 5.</source>
         <translation>Every place has a value: 8, 4, 2, 1. If 4 and 1 are lit, that is 5.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="51" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="52" />
         <source>Die Zahlenleiste zeigt Schalter und Lampen binär, dezimal und hexadezimal. Tippe auf »Warum?«, dann erkläre ich es.</source>
         <translation>The number bar shows switches and lamps in binary, decimal and hexadecimal. Tap “Why?” and I’ll explain.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="52" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="53" />
         <source>Die Leiste schaltest du mit »0b 0x« oben oder im Menü ein und aus.</source>
         <translation>Switch the bar on and off with “0b 0x” at the top or in the menu.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="53" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="54" />
         <source>Wenn es nicht klappt</source>
         <translation>If it doesn’t work</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="54" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="55" />
         <source>Hängst du fest? Das gehört zum Forschen dazu!</source>
         <translation>Stuck? That’s part of exploring!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="55" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="56" />
         <source>Tippe auf »Tipp«. Ich gebe dir einen Hinweis, ohne die Lösung zu verraten.</source>
         <translation>Tap “Hint”. I’ll give you a clue without giving away the solution.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="56" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="57" />
         <source>Spiel die markierten Zeilen der Tabelle an den Schaltern nach und schau, welche Leitung nicht stimmt.</source>
         <translation>Replay the marked rows of the table on the switches and see which wire is wrong.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="57" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="58" />
         <source>Ganz zum Schluss hilft »Lösung zeigen«. Bau sie danach gern selbst nach.</source>
         <translation>At the very end, “Show solution” helps. Feel free to rebuild it yourself afterwards.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="58" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="59" />
+        <source>Forscherheft</source>
+        <translation>Research notebook</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HelpDialog.qml" line="60" />
+        <source>Im Forscherheft hältst du fest, was du vermutet und herausgefunden hast.</source>
+        <translation>In the research notebook you record what you guessed and found out.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HelpDialog.qml" line="61" />
+        <source>Ich schreibe deine Vermutung hinein und nach dem Lösen, wie es wirklich war – auch, wenn es anders kam.</source>
+        <translation>I write down your guess and, once you’ve solved it, what really happened – even if it turned out differently.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HelpDialog.qml" line="62" />
+        <source>Mit »Notiz schreiben« fügst du eigene Gedanken hinzu, mit »Foto hinzufügen« ein Bild von deinem echten Aufbau.</source>
+        <translation>“Write a note” adds your own thoughts, “Add photo” a picture of your real setup.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HelpDialog.qml" line="63" />
+        <source>Du öffnest das Heft auf der Startseite, im Experiment mit 📓 oben oder im Menü. Es bleibt auf deinem Gerät.</source>
+        <translation>You open the notebook on the start page, with 📓 at the top of an experiment, or in the menu. It stays on your device.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HelpDialog.qml" line="64" />
         <source>Oben rechts</source>
         <translation>Top right</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="59" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="65" />
         <source>Oben rechts stellst du Zuse so ein, wie es dir gefällt.</source>
         <translation>At the top right you set up Zuse the way you like it.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="60" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="66" />
         <source>A− und A+ machen die Schrift kleiner oder größer.</source>
         <translation>A− and A+ make the text smaller or larger.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="61" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="67" />
         <source>Die Flagge wählt die Sprache: Deutsch, Français oder English.</source>
         <translation>The flag chooses the language: Deutsch, Français or English.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="62" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="68" />
         <source>Das Fragezeichen öffnet diese Hilfe, das Blatt die Kurzanleitung. Im Experiment findest du beide im Menü mit den drei Strichen.</source>
         <translation>The question mark opens this help, the sheet the quick guide. In an experiment you find both in the menu with the three lines.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="63" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="69" />
         <source>Das i zeigt Infos über Zuse 1. Im Menü schaltest du die Zahlenleiste und die Schaltzeichen um.</source>
         <translation>The i shows information about Zuse 1. In the menu you switch the number bar and the circuit symbols.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="64" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="70" />
         <source>Für Eltern und Lehrkräfte</source>
         <translation>For parents and teachers</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="65" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="71" />
         <source>Zuse 1 richtet sich an Kinder von 10 bis 14 Jahren (Klasse 5 bis 8).</source>
         <translation>Zuse 1 is meant for children from 10 to 14 years (grades 5 to 8).</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="66" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="72" />
         <source>Der Lernpfad führt in sechs Stufen von Schalter und Lampe über Logik, Binärzahlen und Addierer bis zu Speicher, Zähler und einer von Hand gesteuerten Rechenmaschine.</source>
         <translation>The learning path leads in six levels from switch and lamp via logic, binary numbers and adders to memory, counters and a hand-controlled calculating machine.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="67" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="73" />
         <source>Das Programm im Speicher – Konrad Zuses große Idee – ist Thema von Zuse 2.</source>
         <translation>The program in memory – Konrad Zuse’s great idea – is the topic of Zuse 2.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="68" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="74" />
         <source>Alles, was die Lampen zeigen, berechnet eine echte Logiksimulation. Vereinfachung: Speicher starten beim Einschalten mit 0; echte Bausteine starten zufällig, deshalb gibt es »Löschen«.</source>
         <translation>Everything the lamps show is computed by a real logic simulation. Simplification: memories start at 0 when switched on; real chips start randomly, which is why there is “Clear”.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="69" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="75" />
         <source>Zuse 1 erhebt keine Daten und braucht kein Internet. Fortschritt und Erfindungen bleiben auf dem Gerät.</source>
         <translation>Zuse 1 collects no data and needs no internet. Progress and inventions stay on the device.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="107" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="113" />
         <source>Hilfe</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HelpDialog.qml" line="118" />
+        <location filename="../zuse/qml/HelpDialog.qml" line="124" />
         <source>Schließen</source>
         <translation>Close</translation>
     </message>
@@ -822,62 +852,77 @@
 <context>
     <name>Home</name>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="97" />
+        <location filename="../zuse/qml/Home.qml" line="98" />
         <source>Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis zur Rechenmaschine. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.</source>
         <translation>Hello! I’m Zetti. I’ll show you how a computer thinks – from the light switch to the calculating machine. Start with the learning path or try your own ideas in the free lab.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="111" />
+        <location filename="../zuse/qml/Home.qml" line="112" />
         <source>Weitermachen</source>
         <translation>Continue</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="119" />
+        <location filename="../zuse/qml/Home.qml" line="120" />
         <source>Freies Labor</source>
         <translation>Free lab</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="120" />
+        <location filename="../zuse/qml/Home.qml" line="121" />
         <source>Eigene Ideen ausprobieren – mit allen deinen Werkzeugen</source>
         <translation>Try your own ideas – with all your tools</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="126" />
+        <location filename="../zuse/qml/Home.qml" line="127" />
+        <source>Forscherheft</source>
+        <translation>Research notebook</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Home.qml" line="128" />
+        <source>Deine Vermutungen, Entdeckungen und Notizen</source>
+        <translation>Your guesses, discoveries and notes</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Home.qml" line="129" />
+        <source>Vermutungen, Entdeckungen und Notizen (%1)</source>
+        <translation>Guesses, discoveries and notes (%1)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Home.qml" line="135" />
         <source>Vorführung</source>
         <translation>Demonstration</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="127" />
+        <location filename="../zuse/qml/Home.qml" line="136" />
         <source>%1 fertige Aufbauten zum Zeigen – es wird nichts gespeichert</source>
         <translation>%1 finished circuits to show – nothing is saved</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="134" />
+        <location filename="../zuse/qml/Home.qml" line="143" />
         <source>Lernpfad</source>
         <translation>Learning path</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="179" />
+        <location filename="../zuse/qml/Home.qml" line="188" />
         <source>Stufe %1: %2</source>
         <translation>Level %1: %2</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="197" />
+        <location filename="../zuse/qml/Home.qml" line="206" />
         <source>%1 von %2 geschafft</source>
         <translation>%1 of %2 done</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="217" />
+        <location filename="../zuse/qml/Home.qml" line="226" />
         <source>Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.</source>
         <translation>Still locked – first finish the experiments of level %1.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="271" />
+        <location filename="../zuse/qml/Home.qml" line="280" />
         <source>geschafft</source>
         <translation>done</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Home.qml" line="288" />
+        <location filename="../zuse/qml/Home.qml" line="297" />
         <source>folgt</source>
         <translation>coming soon</translation>
     </message>
@@ -981,6 +1026,119 @@
     </message>
 </context>
 <context>
+    <name>JournalPage</name>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="23" />
+        <source>Bilder (*.jpg *.jpeg *.png)</source>
+        <translation>Images (*.jpg *.jpeg *.png)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="25" />
+        <source>Dieses Bild konnte Zuse nicht lesen.</source>
+        <translation>Zuse could not read this image.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="57" />
+        <source>Foto wirklich entfernen?</source>
+        <translation>Really remove the photo?</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="63" />
+        <source>Ja, entfernen</source>
+        <translation>Yes, remove</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="63" />
+        <source>Foto entfernen</source>
+        <translation>Remove photo</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="70" />
+        <source>Schließen</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="93" />
+        <source>Zurück</source>
+        <translation>Back</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="96" />
+        <source>Forscherheft</source>
+        <translation>Research notebook</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="125" />
+        <source>Noch leer. Sobald du bei einem Experiment eine Vermutung abgibst oder etwas baust, schreibe ich es hier hinein. Deine eigenen Notizen und Fotos kommen dazu.</source>
+        <translation>Still empty. As soon as you make a guess in an experiment or build something, I’ll write it in here. Your own notes and photos go here too.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="127" />
+        <source>Hier steht, was du vermutet und herausgefunden hast. Schreib dazu, was dir aufgefallen ist – oder füge ein Foto von deinem echten Aufbau hinzu.</source>
+        <translation>Here is what you guessed and found out. Add what you noticed – or a photo of your real setup.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="189" />
+        <source>Meine Vermutung</source>
+        <translation>My guess</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="190" />
+        <source>Was ich herausgefunden habe</source>
+        <translation>What I found out</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="193" />
+        <source>Die Vermutung hat gestimmt.</source>
+        <translation>The guess was right.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="194" />
+        <source>Es kam anders als vermutet.</source>
+        <translation>It turned out differently than I guessed.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="195" />
+        <source>Jetzt weiß ich es.</source>
+        <translation>Now I know.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="241" />
+        <source>Foto %1 ansehen</source>
+        <translation>View photo %1</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="255" />
+        <source>Was ist dir aufgefallen?</source>
+        <translation>What did you notice?</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="262" />
+        <source>Eintragen</source>
+        <translation>Add</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="272" />
+        <source>Abbrechen</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="281" />
+        <source>Notiz schreiben</source>
+        <translation>Write a note</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="286" />
+        <source>Foto hinzufügen</source>
+        <translation>Add photo</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/JournalPage.qml" line="291" />
+        <source>Experiment öffnen</source>
+        <translation>Open experiment</translation>
+    </message>
+</context>
+<context>
     <name>LayerFrame</name>
     <message>
         <location filename="../zuse/qml/LayerFrame.qml" line="53" />
@@ -1049,81 +1207,87 @@
         <translation>Zuse 1 – Computer Engineering for Beginners (prototype)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="61" />
+        <location filename="../zuse/qml/Main.qml" line="66" />
         <source>Zuse 1 – Computertechnik für Einsteiger</source>
         <translation>Zuse 1 – Computer Engineering for Beginners</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="72" />
-        <location filename="../zuse/qml/Main.qml" line="73" />
+        <location filename="../zuse/qml/Main.qml" line="77" />
+        <location filename="../zuse/qml/Main.qml" line="78" />
         <source>Startseite</source>
         <translation>Home</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="83" />
-        <location filename="../zuse/qml/Main.qml" line="84" />
+        <location filename="../zuse/qml/Main.qml" line="88" />
+        <location filename="../zuse/qml/Main.qml" line="89" />
         <source>Rückgängig</source>
         <translation>Undo</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="93" />
-        <location filename="../zuse/qml/Main.qml" line="94" />
+        <location filename="../zuse/qml/Main.qml" line="98" />
+        <location filename="../zuse/qml/Main.qml" line="99" />
         <source>Wiederholen</source>
         <translation>Redo</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="103" />
+        <location filename="../zuse/qml/Main.qml" line="108" />
         <source>Zahlenleiste zeigen</source>
         <translation>Show number bar</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="104" />
+        <location filename="../zuse/qml/Main.qml" line="109" />
         <source>Zahlenleiste: Schalter und Lampen als Zahl lesen (binär, dezimal, hexadezimal)</source>
         <translation>Number bar: read switches and lamps as a number (binary, decimal, hexadecimal)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="109" />
+        <location filename="../zuse/qml/Main.qml" line="117" />
+        <location filename="../zuse/qml/Main.qml" line="118" />
+        <source>Forscherheft</source>
+        <translation>Research notebook</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Main.qml" line="123" />
         <source>Schaltplan</source>
         <translation>Circuit diagram</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="112" />
+        <location filename="../zuse/qml/Main.qml" line="126" />
         <source>Schaltplan ausblenden</source>
         <translation>Hide circuit diagram</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="112" />
+        <location filename="../zuse/qml/Main.qml" line="126" />
         <source>Schaltplan zeigen</source>
         <translation>Show circuit diagram</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="119" />
-        <location filename="../zuse/qml/Main.qml" line="120" />
+        <location filename="../zuse/qml/Main.qml" line="133" />
+        <location filename="../zuse/qml/Main.qml" line="134" />
         <source>Werkzeugkiste</source>
         <translation>Toolbox</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="211" />
+        <location filename="../zuse/qml/Main.qml" line="235" />
         <source>Zurück: auf den Pfad tippen</source>
         <translation>Back: tap the path</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="212" />
+        <location filename="../zuse/qml/Main.qml" line="236" />
         <source>Doppelt tippen: in eine ★-Erfindung hineinschauen</source>
         <translation>Double-tap: look inside a ★ invention</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="291" />
+        <location filename="../zuse/qml/Main.qml" line="315" />
         <source>Vorführung</source>
         <translation>Demo</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="298" />
+        <location filename="../zuse/qml/Main.qml" line="322" />
         <source>Andere Vorführung</source>
         <translation>Another demo</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="303" />
+        <location filename="../zuse/qml/Main.qml" line="327" />
         <source>Beenden</source>
         <translation>End</translation>
     </message>
@@ -2002,49 +2166,54 @@
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="32" />
+        <location filename="../zuse/qml/TopBar.qml" line="33" />
         <source>Schrift kleiner</source>
         <translation>Smaller text</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="32" />
+        <location filename="../zuse/qml/TopBar.qml" line="33" />
         <source>Schrift größer</source>
         <translation>Larger text</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="47" />
+        <location filename="../zuse/qml/TopBar.qml" line="48" />
         <source>Anzeigesprache wählen</source>
         <translation>Choose display language</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="96" />
-        <location filename="../zuse/qml/TopBar.qml" line="149" />
+        <location filename="../zuse/qml/TopBar.qml" line="97" />
+        <location filename="../zuse/qml/TopBar.qml" line="150" />
         <source>Hilfe</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="103" />
-        <location filename="../zuse/qml/TopBar.qml" line="156" />
+        <location filename="../zuse/qml/TopBar.qml" line="104" />
+        <location filename="../zuse/qml/TopBar.qml" line="157" />
         <source>Kurzanleitung</source>
         <translation>Quick guide</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="109" />
+        <location filename="../zuse/qml/TopBar.qml" line="110" />
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="128" />
+        <location filename="../zuse/qml/TopBar.qml" line="129" />
         <source>Einstellungen</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="164" />
+        <location filename="../zuse/qml/TopBar.qml" line="165" />
+        <source>Forscherheft</source>
+        <translation>Research notebook</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/TopBar.qml" line="173" />
         <source>Zahlenleiste anzeigen</source>
         <translation>Show number bar</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TopBar.qml" line="171" />
+        <location filename="../zuse/qml/TopBar.qml" line="180" />
         <source>Schaltzeichen nach US-Norm (IEEE)</source>
         <translation>Circuit symbols to US standard (IEEE)</translation>
     </message>
@@ -2113,175 +2282,175 @@
 <context>
     <name>zuse::WorkbenchController</name>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="352" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="353" />
         <source>Vorführung: So sieht eine fertige Lösung aus. Probier die Schalter aus – hier wird nichts gespeichert.</source>
         <translation>Demonstration: this is what a finished solution looks like. Try the switches – nothing is saved here.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="487" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="489" />
         <source>Baustein setzen</source>
         <translation>Place part</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="503" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="505" />
         <source>Baustein verschieben</source>
         <translation>Move a part</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="521" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="523" />
         <source>Baustein entfernen</source>
         <translation>Remove part</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="534" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="536" />
         <source>Zwei Ausgänge an einer Leitung würden gegeneinander arbeiten. Verbinde einen Ausgang mit Eingängen.</source>
         <translation>Two outputs on one wire would work against each other. Connect an output to inputs.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="538" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="540" />
         <source>Leitung ziehen</source>
         <translation>Draw wire</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="548" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="550" />
         <source>Leitung entfernen</source>
         <translation>Remove wire</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="557" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="559" />
         <source>Werkbank leeren</source>
         <translation>Clear workbench</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="567" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="569" />
         <source>Musterlösung</source>
         <translation>Sample solution</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="568" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="571" />
         <source>So könnte es gehen. Prüfe die Lösung – und bau sie danach gern selbst nach.</source>
         <translation>This is one way it could work. Check the solution – and feel free to rebuild it yourself afterwards.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="657" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="660" />
         <source>Richtig: Im Akku steht jetzt %1. Nächster Schritt: %2</source>
         <translation>Right: the accumulator now holds %1. Next step: %2</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="660" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="663" />
         <source>Richtig: %1 ist binär %2. Jetzt zeig die %3!</source>
         <translation>Right: %1 is %2 in binary. Now show %3!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="669" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="673" />
         <source>Super! %1 ist binär %2. Du kannst jetzt mit vier Lampen bis 15 zählen.</source>
         <translation>Great! %1 is %2 in binary. Now you can count to 15 with four lamps.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="711" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="715" />
         <source>Der Aufbau lässt sich nicht simulieren.</source>
         <translation>This circuit cannot be simulated.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="718" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="722" />
         <source>Alles richtig! Schalter und LEDs machen, was sie sollen.</source>
         <translation>All correct! Switches and LEDs do what they should.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="720" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="724" />
         <source>Alles richtig! Pack deine Erfindung ein, dann kannst du sie immer wieder benutzen.</source>
         <translation>All correct! Pack up your invention, then you can use it again and again.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="723" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="727" />
         <source>Die Schaltung kommt nicht zur Ruhe – sie schwingt.</source>
         <translation>The circuit doesn’t settle – it oscillates.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="725" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="729" />
         <source>Noch nicht ganz: Bei den markierten Schritten stimmt die Lampe nicht. Spiel den Ablauf an den Schaltern und Tastern nach.</source>
         <translation>Not quite yet: in the marked steps the lamp is wrong. Replay the sequence on the switches and buttons.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="729" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="733" />
         <source>Noch nicht ganz: Die markierten Zeilen stimmen nicht. Stell die Schalter so ein und schau, was passiert.</source>
         <translation>Not quite yet: the marked rows are wrong. Set the switches like that and see what happens.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="833" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="838" />
         <source>Geschafft! Weiter geht es mit der nächsten Stufe.</source>
         <translation>Done! On to the next level.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="845" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="851" />
         <source>Eingepackt! »%1« liegt jetzt in deiner Werkzeugkiste.</source>
         <translation>Packed up! “%1” is now in your toolbox.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1218" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1230" />
         <source>Kiste %1 ist eingesetzt. Probier die Schalter aus!</source>
         <translation>Box %1 is inserted. Try the switches!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1227" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1239" />
         <source>Setz zuerst eine Kiste ein.</source>
         <translation>Insert a box first.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1239" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1252" />
         <source>Deine Vermutung hat gestimmt!</source>
         <translation>Your guess was right!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1244" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1257" />
         <source>Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.</source>
         <translation>Right! This box is called %1. %2 It is now in your toolbox.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1260" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1264" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1273" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1277" />
         <source>an</source>
         <translation>on</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1260" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1264" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1273" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1277" />
         <source>aus</source>
         <translation>off</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1211" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1223" />
         <source>Erst vermuten: Tippe bei jeder Situation an, was die Lampe deiner Meinung nach macht.</source>
         <translation>Guess first: for each situation, tap what you think the lamp does.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1240" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1253" />
         <source>Überraschung: In einer Situation kam es anders, als du vermutet hast.</source>
         <translation>Surprise: in one situation it turned out differently from what you guessed.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1241" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1254" />
         <source>Überraschung: In %1 Situationen kam es anders, als du vermutet hast.</source>
         <translation>Surprise: in %1 situations it turned out differently from what you guessed.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1266" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1279" />
         <source>Fast! Bei »%1« zeigt diese Kiste: »%2«. Richtig wäre: »%3«. Probier eine andere Kiste.</source>
         <translation>Almost! With “%1” this box shows: “%2”. Correct would be: “%3”. Try another box.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1268" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1281" />
         <source>Fast! Bei »%1« ist %2 mit dieser Kiste %3 – es soll aber %4 sein. Probier eine andere Kiste.</source>
         <translation>Almost! At “%1”, %2 is %3 with this box – but it should be %4. Try another box.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1286" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1295" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1300" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1310" />
         <source>Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!</source>
         <translation>That is your guess. Now insert a box and try which one fits!</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1312" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1328" />
         <source>Gut, dann probier einfach aus! Setz eine Kiste ein.</source>
         <translation>Fine, then just try it! Insert a box.</translation>
     </message>
@@ -2304,6 +2473,41 @@
         <location filename="../zuse/src/schematic.cpp" line="335" />
         <source>Die Lampe »%1« hat keine Leitung.</source>
         <translation>The lamp “%1” has no wire.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="48" />
+        <source>Keine Vermutung – ich habe gleich ausprobiert.</source>
+        <translation>No guess – I tried it out straight away.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="64" />
+        <source>Die passende Kiste heißt %1. %2</source>
+        <translation>The matching box is called %1. %2</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="72" />
+        <source>So war es wirklich:</source>
+        <translation>This is what really happened:</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="75" />
+        <source>»%1« geschafft. %2</source>
+        <translation>“%1” done. %2</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="77" />
+        <source>»%1« erfunden, geprüft und eingepackt.</source>
+        <translation>“%1” invented, checked and packed away.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="77" />
+        <source>»%1« gebaut und geprüft.</source>
+        <translation>“%1” built and checked.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/workbench_journal.cpp" line="79" />
+        <source>Dabei habe ich mir die Musterlösung angeschaut.</source>
+        <translation>I looked at the sample solution along the way.</translation>
     </message>
 </context>
 </TS>

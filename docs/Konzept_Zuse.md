@@ -250,7 +250,7 @@ Volta ist die gestalterische und interaktive Referenz; Zuse übernimmt Grundnavi
 | Hilfe | Frage, Hinweis, nächster Prüfschritt, Lösung nur auf Wunsch | Tipp, Rückmeldung mit Schalterstellung, Musterlösung auf Knopfdruck | entspricht; Hinweisfolge stufen |
 | Akzent | Cyan für Zuse | Cyan | entspricht |
 | Projekte | Öffnen, Speichern, Export, gemeinsames Format (.dclearn) | lokale Ablage | Export und Import im gemeinsamen Format |
-| Lehrkräfte | Präsentationsmodus, QR-Aufgaben, Forscherheft | – | wie Volta übernehmen |
+| Lehrkräfte | Präsentationsmodus, QR-Aufgaben, Forscherheft | Forscherheft und Vorführung vorhanden | Aufgabe der Lehrkraft (QR) folgt |
 
 ### 6.2 Gestaltungselemente
 
@@ -312,7 +312,9 @@ Gegenüber der ersten Fassung (Stufen 0–15 ohne Gruppierung) rückt die NAND-E
 
 Experimentarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle bzw. Ablauf), **zahlen** (fest verdrahtetes Bedienfeld: Zahlen einstellen bzw. Rechenschritte geben).
 
-Aufbau der App wie Volta 1: Die **Startseite** begrüßt mit Zetti und bietet die Karten **Weitermachen** (zuletzt bearbeitetes Experiment), **Freies Labor** (Werkbank mit vier Kippschaltern, einem Taster, einem Taktgeber und vier LEDs, alle bisher entdeckten und erfundenen Werkzeuge, keine Aufgabe, Aufbau wird gespeichert) und **Vorführung** (alle Musterlösungen mit Bausteinen als fertige Aufbauten zum Zeigen, auch noch nicht geschaffte; bedienbar, aber nicht veränderbar, es wird nichts gespeichert). Darunter folgt der **Lernpfad** mit den Lernstufen (Leitfrage, »n von m geschafft«) und ihren Experimenten. Im Experiment führt der Knopf ⌂ in der Kopfzeile zurück zur Startseite. Offen gegenüber Volta: Aufgabe der Lehrkraft (Code), Forscherheft, Hilfe und Kurzanleitung, Info, Schriftgröße und Sprache in der Kopfzeile, Profile und Elternbereich.
+Aufbau der App wie Volta 1: Die **Startseite** begrüßt mit Zetti und bietet die Karten **Weitermachen** (zuletzt bearbeitetes Experiment), **Freies Labor** (Werkbank mit vier Kippschaltern, einem Taster, einem Taktgeber und vier LEDs, alle bisher entdeckten und erfundenen Werkzeuge, keine Aufgabe, Aufbau wird gespeichert) **Forscherheft** und **Vorführung** (alle Musterlösungen mit Bausteinen als fertige Aufbauten zum Zeigen, auch noch nicht geschaffte; bedienbar, aber nicht veränderbar, es wird nichts gespeichert). Darunter folgt der **Lernpfad** mit den Lernstufen (Leitfrage, »n von m geschafft«) und ihren Experimenten. Im Experiment führt der Knopf ⌂ in der Kopfzeile zurück zur Startseite. Offen gegenüber Volta: Aufgabe der Lehrkraft (Code), Profile und Elternbereich.
+
+**Forscherheft** (wie Volta, 25.10.2026): Je Experiment eine Heftseite, neueste zuerst. Zetti schreibt hinein, was das Kind vermutet hat – als Situationen in Worten (»Fenster 1 offen, Fenster 2 zu → Warnlampe leuchtet«) oder »Keine Vermutung – ich habe gleich ausprobiert« –, und nach dem Lösen, was es herausgefunden hat: die passende Kiste mit Merksatz und die Situationen, in denen es anders kam als vermutet; dazu »✓ Die Vermutung hat gestimmt« bzw. »★ Es kam anders als vermutet« (Zeichen und Wort, nicht nur Farbe). Beim Bauen steht dort, dass die Erfindung gebaut, geprüft und eingepackt wurde, und ob die Musterlösung angeschaut wurde. Das Kind ergänzt eigene Notizen und Fotos seines echten Aufbaus (über die Systemauswahl; verkleinert, ohne Kameradaten). Texte in der Sprache, in der das Kind gerade arbeitet. Erreichbar über die Karte auf der Startseite, den Knopf 📓 in der Kopfzeile des Experiments (das Experiment bleibt, wie es ist) und das Menü. Die Vorführung schreibt nichts. Gespeichert nur lokal (forscherheft.json im App-Speicher, gleicher Speicher wie Volta).
 
 ### 7.2 Zuse 2 (Skizze)
 
