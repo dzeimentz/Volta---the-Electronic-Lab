@@ -98,6 +98,7 @@ Item {
                 label: modelData.label
                 kind: modelData.kind
                 level: modelData.level
+                stateText: modelData.state ?? ""
             }
         }
         // LEDs
@@ -112,6 +113,7 @@ Item {
                 label: modelData.label
                 kind: "led"
                 level: modelData.level
+                stateText: modelData.state ?? ""
             }
         }
 

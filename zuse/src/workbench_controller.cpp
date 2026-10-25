@@ -48,6 +48,20 @@ QString joinLevels(const std::vector<Level>& v) {
     return s;
 }
 
+// Zustaende fuer 0 und 1: {"de": [aus, an], "en": [...]}; leer, wenn keine angegeben sind
+QStringList localizedPair(const QJsonValue& v, const QString& language) {
+    const QJsonObject o = v.toObject();
+    QJsonArray a = o.value(language).toArray();
+    if (a.size() != 2) a = o.value("de").toArray();
+    return a.size() == 2 ? QStringList{a[0].toString(), a[1].toString()} : QStringList();
+}
+
+// Zustand in Worten fuer 0 bzw. 1; leer bei unbestimmtem Pegel oder ohne Angabe (dann zeigt die Oberflaeche 0/1/?)
+QString stateText(const QStringList& states, Level level) {
+    if (states.size() != 2 || level == Level::X) return {};
+    return states[level == Level::One ? 1 : 0];
+}
+
 QString localized(const QJsonValue& v, const QString& language) {
     const QJsonObject o = v.toObject();
     const QString text = o.value(language).toString();
@@ -103,6 +117,7 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
             const QJsonObject e = x.toObject();
             s.inputs << (x.isString() ? x.toString() : e.value("name").toString());
             s.inputLabels << (x.isString() ? QString() : localized(e.value("bezeichnung"), language));
+            s.inputStates << localizedPair(e.value("zustand"), language);
             const QString art = e.value("art").toString();
             s.inputKinds << (art == "taster" || art == "takt" ? art : QStringLiteral("kipp"));
         }
@@ -110,6 +125,7 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
             const QJsonObject e = x.toObject();
             s.outputs << (x.isString() ? x.toString() : e.value("name").toString());
             s.outputLabels << (x.isString() ? QString() : localized(e.value("bezeichnung"), language));
+            s.outputStates << localizedPair(e.value("zustand"), language);
         }
         for (const QJsonValue& k : o.value("kisten").toArray()) {
             std::vector<std::vector<Level>> table;
@@ -765,6 +781,21 @@ QVariantList WorkbenchController::checkRows() const {
             row.insert("guess", guess);
             // Vergleich mit der eigenen Vermutung (nicht mit dem Soll): "=" oder "≠", leer solange offen
             row.insert("match", seen && !guess.isEmpty() ? (row["actual"].toString() == guess ? "=" : "≠") : QString());
+            // Situationskarte: jede Schalterstellung in Alltagssprache, dazu die Zustaende der Lampe
+            QVariantList situation;
+            for (qsizetype i = 0; i < s.inputs.size(); ++i) {
+                const bool on = (r >> (s.inputs.size() - 1 - i)) & 1u;
+                const QStringList st = s.inputStates.value(i);
+                const QString label = s.inputLabels.value(i, s.inputs[i]);
+                situation.append(QVariantMap{{"on", on},
+                                             {"text", st.size() == 2 ? st[on ? 1 : 0]
+                                                                     : QStringLiteral("%1: %2").arg(label, on ? tr("an") : tr("aus"))}});
+            }
+            row.insert("situation", situation);
+            const QStringList out = s.outputStates.value(0);
+            const QString lamp = s.outputLabels.value(0, s.outputs.value(0));
+            row.insert("outOff", out.size() == 2 ? out[0] : QStringLiteral("%1 %2").arg(lamp, tr("aus")));
+            row.insert("outOn", out.size() == 2 ? out[1] : QStringLiteral("%1 %2").arg(lamp, tr("an")));
         } else if (m_checkDone && r < m_check.rows.size()) {
             row.insert("actual", joinLevels(m_check.rows[r].actual));
             row.insert("ok", m_check.rows[r].ok);
@@ -1156,7 +1187,7 @@ QVariantList WorkbenchController::boxes() const {
 void WorkbenchController::selectBox(int index) {
     if (!isDiscover() || index < 0 || index >= int(m_stages[size_t(m_stage)].boxes.size()) || index == m_box) return;
     if (guessing()) {
-        setMessage(tr("Erst vermuten: Tippe in der Tabelle für jede Schalterstellung 1 (an) oder 0 (aus)."),
+        setMessage(tr("Erst vermuten: Tippe bei jeder Situation an, was die Lampe deiner Meinung nach macht."),
                    QStringLiteral("nachdenklich"));
         return;
     }
@@ -1185,8 +1216,8 @@ bool WorkbenchController::confirmBox() {
             for (size_t r = 0; r < s.table.size() && r < m_guess.size(); ++r)
                 if (s.table[r].empty() || m_guess[r] != s.table[r][0]) ++differ;
             guessNote = differ == 0 ? tr("Deine Vermutung hat gestimmt!") + QLatin1Char(' ')
-                    : (differ == 1 ? tr("Überraschung: In einer Zeile kam es anders, als du vermutet hast.")
-                                   : tr("Überraschung: In %1 Zeilen kam es anders, als du vermutet hast.").arg(differ))
+                    : (differ == 1 ? tr("Überraschung: In einer Situation kam es anders, als du vermutet hast.")
+                                   : tr("Überraschung: In %1 Situationen kam es anders, als du vermutet hast.").arg(differ))
                           + QLatin1Char(' ');
         }
         setMessage(guessNote + tr("Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.")
@@ -1203,13 +1234,18 @@ bool WorkbenchController::confirmBox() {
         QStringList setting;
         for (qsizetype i = 0; i < s.inputs.size(); ++i) {
             const bool on = (r >> (s.inputs.size() - 1 - i)) & 1u;
-            setting << QStringLiteral("%1 %2").arg(s.inputLabels.value(i, s.inputs[i]), on ? tr("an") : tr("aus"));
+            const QStringList st = s.inputStates.value(i);
+            setting << (st.size() == 2 ? st[on ? 1 : 0]
+                                       : QStringLiteral("%1 %2").arg(s.inputLabels.value(i, s.inputs[i]), on ? tr("an") : tr("aus")));
         }
         const QString label = s.outputLabels.value(0, s.outputs.value(0));
-        const QString does = table[r][0] == Level::One ? tr("an") : tr("aus");
-        const QString should = s.table[r][0] == Level::One ? tr("an") : tr("aus");
-        setMessage(tr("Fast! Bei »%1« ist %2 mit dieser Kiste %3 – es soll aber %4 sein. Probier eine andere Kiste.")
-                       .arg(setting.join(", "), label, does, should),
+        const QStringList out = s.outputStates.value(0);
+        auto state = [&](Level l) { return out.size() == 2 ? out[l == Level::One ? 1 : 0] : (l == Level::One ? tr("an") : tr("aus")); };
+        setMessage(out.size() == 2
+                       ? tr("Fast! Bei »%1« zeigt diese Kiste: »%2«. Richtig wäre: »%3«. Probier eine andere Kiste.")
+                             .arg(setting.join(", "), state(table[r][0]), state(s.table[r][0]))
+                       : tr("Fast! Bei »%1« ist %2 mit dieser Kiste %3 – es soll aber %4 sein. Probier eine andere Kiste.")
+                             .arg(setting.join(", "), label, state(table[r][0]), state(s.table[r][0])),
                    QStringLiteral("nachdenklich"));
         return false;
     }
@@ -1229,6 +1265,23 @@ void WorkbenchController::toggleGuess(int row) {
         setMessage(tr("Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!"),
                    QStringLiteral("losgehts"));
     emit checkChanged();
+}
+
+void WorkbenchController::setGuess(int row, bool on) {
+    if (!isDiscover() || stageDone() || row < 0 || row >= int(m_guess.size())) return;
+    m_guess[size_t(row)] = on ? Level::One : Level::Zero;
+    if (!guessing() && m_box < 0)
+        setMessage(tr("Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!"),
+                   QStringLiteral("losgehts"));
+    emit checkChanged();
+}
+
+void WorkbenchController::trySituation(int row) {
+    if (!isDiscover() || inside() || row < 0) return;
+    const Stage& s = m_stages[size_t(m_stage)];
+    if (size_t(row) >= (size_t(1) << s.inputs.size())) return;
+    for (qsizetype i = 0; i < s.inputs.size(); ++i)
+        applyInput(size_t(i), ((size_t(row) >> (s.inputs.size() - 1 - i)) & 1u) ? Level::One : Level::Zero);
 }
 
 void WorkbenchController::skipGuess() {
@@ -1272,7 +1325,8 @@ QVariantList WorkbenchController::panelInputs() const {
         list.append(QVariantMap{{"name", s.inputs[i]},
                                 {"label", s.inputLabels.value(i)},
                                 {"kind", s.inputKinds.value(i, QStringLiteral("kipp"))},
-                                {"level", levelChar(m_inputs[size_t(i)])}});
+                                {"level", levelChar(m_inputs[size_t(i)])},
+                                {"state", stateText(s.inputStates.value(i), m_inputs[size_t(i)])}});
     return list;
 }
 
@@ -1283,7 +1337,8 @@ QVariantList WorkbenchController::panelOutputs() const {
     for (qsizetype i = 0; i < s.outputs.size(); ++i)
         list.append(QVariantMap{{"name", s.outputs[i]},
                                 {"label", s.outputLabels.value(i)},
-                                {"level", levelChar(levelAt(s.outputs[i]))}});
+                                {"level", levelChar(levelAt(s.outputs[i]))},
+                                {"state", stateText(s.outputStates.value(i), levelAt(s.outputs[i]))}});
     return list;
 }
 

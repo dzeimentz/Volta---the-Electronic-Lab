@@ -8,12 +8,23 @@ def L(de, en):
     return {"de": de, "en": en}
 
 
-def inp(n, de, en, art="kipp"):
-    return {"name": n, "bezeichnung": L(de, en), "art": art}
+def inp(n, de, en, art="kipp", zustand=None):
+    e = {"name": n, "bezeichnung": L(de, en), "art": art}
+    if zustand:
+        e["zustand"] = zustand
+    return e
 
 
-def out(n, de, en):
-    return {"name": n, "bezeichnung": L(de, en)}
+def out(n, de, en, zustand=None):
+    e = {"name": n, "bezeichnung": L(de, en)}
+    if zustand:
+        e["zustand"] = zustand
+    return e
+
+
+def Z(de0, de1, en0, en1):
+    """Zustaende in Alltagssprache fuer 0 und 1 (Entdeckerstufen: Situationskarten statt Nullen und Einsen)"""
+    return {"de": [de0, de1], "en": [en0, en1]}
 
 
 def sol(parts, wires):
@@ -168,7 +179,10 @@ stufen = [
      "hilfe": L("Stell den Sensor auf hell und auf dunkel. Wann soll das Nachtlicht leuchten?",
                 "Set the sensor to bright and to dark. When should the night light glow?"),
      "merksatz": L("NICHT dreht um: Aus 1 wird 0, aus 0 wird 1.", "NOT flips it: 1 becomes 0, 0 becomes 1."),
-     "eingaenge": [inp("A", "Es ist hell", "It is bright")], "ausgaenge": [out("Y", "Nachtlicht", "Night light")],
+     "eingaenge": [inp("A", "Lichtfühler", "Light sensor",
+                       zustand=Z("Im Zimmer ist es dunkel", "Im Zimmer ist es hell", "The room is dark",
+                                 "The room is bright"))],
+     "ausgaenge": [out("Y", "Nachtlicht", "Night light", Z("Nachtlicht aus", "Nachtlicht leuchtet", "Night light off", "Night light glows"))],
      "kisten": [{"tabelle": ["0", "1"]}, {"tabelle": ["1", "0"]}, {"tabelle": ["1", "1"]}], "richtig": 1,
      "wahrheitstabelle": ["1", "0"]},
     {"kuerzel": "UND", "art": "entdecken", "werkzeug": "AND", "symbol": "&",
@@ -181,8 +195,11 @@ stufen = [
      "hilfe": L("Probier alle vier Möglichkeiten: kein Schlüssel, nur einer, nur der andere, beide.",
                 "Try all four possibilities: no key, one, only the other, both."),
      "merksatz": L("UND: Beide müssen an sein.", "AND: Both must be on."),
-     "eingaenge": [inp("A", "Schlüssel 1", "Key 1"), inp("B", "Schlüssel 2", "Key 2")],
-     "ausgaenge": [out("Y", "Tresor offen", "Safe open")],
+     "eingaenge": [inp("A", "Schlüssel 1", "Key 1", zustand=Z("Schlüssel 1 nicht gedreht", "Schlüssel 1 gedreht",
+                                                              "Key 1 not turned", "Key 1 turned")),
+                   inp("B", "Schlüssel 2", "Key 2", zustand=Z("Schlüssel 2 nicht gedreht", "Schlüssel 2 gedreht",
+                                                              "Key 2 not turned", "Key 2 turned"))],
+     "ausgaenge": [out("Y", "Tresor", "Safe", Z("Tresor bleibt zu", "Tresor geht auf", "Safe stays shut", "Safe opens"))],
      "kisten": [{"tabelle": ["0", "1", "1", "1"]}, {"tabelle": ["0", "0", "1", "1"]},
                 {"tabelle": ["0", "0", "0", "1"]}], "richtig": 2,
      "wahrheitstabelle": ["0", "0", "0", "1"]},
@@ -196,24 +213,33 @@ stufen = [
      "hilfe": L("Halte die Taster gedrückt – einzeln und beide zusammen.",
                 "Hold the buttons down – one at a time and both together."),
      "merksatz": L("ODER: Eins reicht schon.", "OR: One is enough."),
-     "eingaenge": [inp("A", "Haustür", "Front door", "taster"), inp("B", "Gartentor", "Garden gate", "taster")],
-     "ausgaenge": [out("Y", "Klingel", "Bell")],
+     "eingaenge": [inp("A", "Haustür", "Front door", "taster",
+                       Z("An der Haustür drückt niemand", "Jemand drückt an der Haustür",
+                         "Nobody presses at the front door", "Someone presses at the front door")),
+                   inp("B", "Gartentor", "Garden gate", "taster",
+                       Z("Am Gartentor drückt niemand", "Jemand drückt am Gartentor",
+                         "Nobody presses at the garden gate", "Someone presses at the garden gate"))],
+     "ausgaenge": [out("Y", "Klingel", "Bell", Z("Klingel still", "Klingel läutet", "Bell silent", "Bell rings"))],
      "kisten": [{"tabelle": ["0", "0", "0", "1"]}, {"tabelle": ["0", "1", "1", "1"]},
                 {"tabelle": ["0", "0", "1", "1"]}], "richtig": 1,
      "wahrheitstabelle": ["0", "1", "1", "1"]},
     {"kuerzel": "NAND", "art": "entdecken", "werkzeug": "NAND", "symbol": "&", "invertiert": True,
      "titel": L("Die Fensterwarnung", "The window warning"),
-     "geschichte": L("Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme "
-                     "verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
-                     "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a "
-                     "warning lamp should glow as long as not both windows are closed."),
+     "geschichte": L("Im Klassenzimmer hat jedes der beiden Fenster einen Fühler. Im Winter soll keine Wärme "
+                     "verloren gehen: Die Warnlampe leuchtet, solange noch ein Fenster offen ist. Erst wenn beide "
+                     "Fenster zu sind, geht sie aus.",
+                     "Each of the two classroom windows has a sensor. In winter no heat should be lost: the warning "
+                     "lamp glows as long as a window is still open. Only when both windows are shut does it go off."),
      "frage": L("Welche Kiste warnt richtig?", "Which box warns correctly?"),
      "hilfe": L("Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
                 "Try all four settings. When may the warning lamp be off?"),
      "merksatz": L("NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
                    "NAND means NOT-AND: only when all inputs are 1 is the output 0."),
-     "eingaenge": [inp("A", "Fenster 1 zu", "Window 1 closed"), inp("B", "Fenster 2 zu", "Window 2 closed")],
-     "ausgaenge": [out("Y", "Warnlampe", "Warning lamp")],
+     "eingaenge": [inp("A", "Fenster 1", "Window 1",
+                       zustand=Z("Fenster 1 offen", "Fenster 1 zu", "Window 1 open", "Window 1 shut")),
+                   inp("B", "Fenster 2", "Window 2",
+                       zustand=Z("Fenster 2 offen", "Fenster 2 zu", "Window 2 open", "Window 2 shut"))],
+     "ausgaenge": [out("Y", "Warnlampe", "Warning lamp", Z("Warnlampe aus", "Warnlampe leuchtet", "Warning lamp off", "Warning lamp glows"))],
      "kisten": [{"tabelle": ["0", "0", "0", "1"]}, {"tabelle": ["1", "1", "1", "0"]},
                 {"tabelle": ["1", "0", "0", "0"]}], "richtig": 1,
      "wahrheitstabelle": ["1", "1", "1", "0"]},

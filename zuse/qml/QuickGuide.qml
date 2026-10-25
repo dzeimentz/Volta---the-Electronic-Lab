@@ -23,7 +23,7 @@ Popup {
         { title: qsTr("Geschichte lesen"),
           text: qsTr("Rechts erzählt Zetti, worum es geht, und stellt die Forscherfrage.") },
         { title: qsTr("Vermuten"),
-          text: qsTr("Bei Rätselkisten trägst du zuerst deine Vermutung ein – dann gehen die Kisten auf.") },
+          text: qsTr("Bei Rätselkisten tippst du zuerst bei jeder Situation an, was du glaubst – dann gehen die Kisten auf.") },
         { title: qsTr("Bauen"),
           text: qsTr("Ziehe Werkzeuge auf die Werkbank und verbinde die goldenen Anschlüsse mit Leitungen.") },
         { title: qsTr("Ausprobieren und prüfen"),

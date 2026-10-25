@@ -45,6 +45,7 @@ qt_add_qml_module(zuse_app
         qml/LayerFrame.qml
         qml/ToolboxPanel.qml
         qml/SchematicView.qml
+        qml/SituationCards.qml
         qml/NumberStrip.qml
         qml/NumbersPopup.qml
         qml/PinPad.qml

@@ -219,10 +219,20 @@
     {
      "name": "A",
      "bezeichnung": {
-      "de": "Es ist hell",
-      "en": "It is bright"
+      "de": "Lichtfühler",
+      "en": "Light sensor"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Im Zimmer ist es dunkel",
+       "Im Zimmer ist es hell"
+      ],
+      "en": [
+       "The room is dark",
+       "The room is bright"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -231,6 +241,16 @@
      "bezeichnung": {
       "de": "Nachtlicht",
       "en": "Night light"
+     },
+     "zustand": {
+      "de": [
+       "Nachtlicht aus",
+       "Nachtlicht leuchtet"
+      ],
+      "en": [
+       "Night light off",
+       "Night light glows"
+      ]
      }
     }
    ],
@@ -292,7 +312,17 @@
       "de": "Schlüssel 1",
       "en": "Key 1"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Schlüssel 1 nicht gedreht",
+       "Schlüssel 1 gedreht"
+      ],
+      "en": [
+       "Key 1 not turned",
+       "Key 1 turned"
+      ]
+     }
     },
     {
      "name": "B",
@@ -300,15 +330,35 @@
       "de": "Schlüssel 2",
       "en": "Key 2"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Schlüssel 2 nicht gedreht",
+       "Schlüssel 2 gedreht"
+      ],
+      "en": [
+       "Key 2 not turned",
+       "Key 2 turned"
+      ]
+     }
     }
    ],
    "ausgaenge": [
     {
      "name": "Y",
      "bezeichnung": {
-      "de": "Tresor offen",
-      "en": "Safe open"
+      "de": "Tresor",
+      "en": "Safe"
+     },
+     "zustand": {
+      "de": [
+       "Tresor bleibt zu",
+       "Tresor geht auf"
+      ],
+      "en": [
+       "Safe stays shut",
+       "Safe opens"
+      ]
      }
     }
    ],
@@ -378,7 +428,17 @@
       "de": "Haustür",
       "en": "Front door"
      },
-     "art": "taster"
+     "art": "taster",
+     "zustand": {
+      "de": [
+       "An der Haustür drückt niemand",
+       "Jemand drückt an der Haustür"
+      ],
+      "en": [
+       "Nobody presses at the front door",
+       "Someone presses at the front door"
+      ]
+     }
     },
     {
      "name": "B",
@@ -386,7 +446,17 @@
       "de": "Gartentor",
       "en": "Garden gate"
      },
-     "art": "taster"
+     "art": "taster",
+     "zustand": {
+      "de": [
+       "Am Gartentor drückt niemand",
+       "Jemand drückt am Gartentor"
+      ],
+      "en": [
+       "Nobody presses at the garden gate",
+       "Someone presses at the garden gate"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -395,6 +465,16 @@
      "bezeichnung": {
       "de": "Klingel",
       "en": "Bell"
+     },
+     "zustand": {
+      "de": [
+       "Klingel still",
+       "Klingel läutet"
+      ],
+      "en": [
+       "Bell silent",
+       "Bell rings"
+      ]
      }
     }
    ],
@@ -443,8 +523,8 @@
     "en": "The window warning"
    },
    "geschichte": {
-    "de": "Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
-    "en": "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a warning lamp should glow as long as not both windows are closed."
+    "de": "Im Klassenzimmer hat jedes der beiden Fenster einen Fühler. Im Winter soll keine Wärme verloren gehen: Die Warnlampe leuchtet, solange noch ein Fenster offen ist. Erst wenn beide Fenster zu sind, geht sie aus.",
+    "en": "Each of the two classroom windows has a sensor. In winter no heat should be lost: the warning lamp glows as long as a window is still open. Only when both windows are shut does it go off."
    },
    "frage": {
     "de": "Welche Kiste warnt richtig?",
@@ -462,18 +542,38 @@
     {
      "name": "A",
      "bezeichnung": {
-      "de": "Fenster 1 zu",
-      "en": "Window 1 closed"
+      "de": "Fenster 1",
+      "en": "Window 1"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Fenster 1 offen",
+       "Fenster 1 zu"
+      ],
+      "en": [
+       "Window 1 open",
+       "Window 1 shut"
+      ]
+     }
     },
     {
      "name": "B",
      "bezeichnung": {
-      "de": "Fenster 2 zu",
-      "en": "Window 2 closed"
+      "de": "Fenster 2",
+      "en": "Window 2"
      },
-     "art": "kipp"
+     "art": "kipp",
+     "zustand": {
+      "de": [
+       "Fenster 2 offen",
+       "Fenster 2 zu"
+      ],
+      "en": [
+       "Window 2 open",
+       "Window 2 shut"
+      ]
+     }
     }
    ],
    "ausgaenge": [
@@ -482,6 +582,16 @@
      "bezeichnung": {
       "de": "Warnlampe",
       "en": "Warning lamp"
+     },
+     "zustand": {
+      "de": [
+       "Warnlampe aus",
+       "Warnlampe leuchtet"
+      ],
+      "en": [
+       "Warning lamp off",
+       "Warning lamp glows"
+      ]
      }
     }
    ],

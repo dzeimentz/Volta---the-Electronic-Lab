@@ -33,6 +33,9 @@ struct Stage {
     QString tool;      // Grundgatter, das die Entdeckung freischaltet (entdecken), z. B. "AND"
     QStringList inputLabels;  // Bedeutung je Eingang, z. B. »Haustuer«
     QStringList outputLabels; // Bedeutung je LED, z. B. »Klingel«
+    // Entdecken: Zustand in Alltagssprache fuer 0 und 1 je Eingang bzw. LED (»Fenster 1 offen« / »Fenster 1 zu«)
+    QList<QStringList> inputStates;
+    QList<QStringList> outputStates;
     std::vector<std::vector<std::vector<volta::logic::Level>>> boxes; // Raetselkisten: Wahrheitstabelle je Kiste
     int rightBox = -1;
     QString symbol;
@@ -253,6 +256,8 @@ public:
     Q_INVOKABLE void selectBox(int index); // Raetselkiste einsetzen (entdecken)
     Q_INVOKABLE bool confirmBox();         // »Diese Kiste passt«
     Q_INVOKABLE void toggleGuess(int row); // Vermutung einer Zeile: ? -> 1 -> 0 -> 1 ...
+    Q_INVOKABLE void setGuess(int row, bool on); // Vermutung einer Situation direkt setzen
+    Q_INVOKABLE void trySituation(int row);      // Schalter so stellen wie in dieser Zeile (Situationskarte)
     Q_INVOKABLE void skipGuess();          // ohne Vermutung ausprobieren
 
     // fuer Befehle und Tests

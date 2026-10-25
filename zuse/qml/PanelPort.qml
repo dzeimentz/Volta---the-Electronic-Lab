@@ -9,6 +9,7 @@ Item {
     property string label // Bedeutung, z. B. »Haustuer«; sonst der Name
     property string kind: "kipp" // kipp | taster | takt | led
     property string level: "0"
+    property string stateText: "" // Entdecken: Zustand in Worten (»Fenster 1 offen«) statt 0 und 1
     property bool enabled: true
     property bool compact: false
     readonly property bool on: level === "1"
@@ -117,9 +118,13 @@ Item {
         visible: root.big
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        text: root.level
+        width: root.stateText !== "" ? 150 : implicitWidth
+        horizontalAlignment: Text.AlignHCenter
+        wrapMode: Text.WordWrap
+        text: root.stateText !== "" ? root.stateText : root.level
         color: root.on ? (root.kind === "led" ? "#B91C1C" : ZTheme.accentText) : ZTheme.muted
-        font.family: ZTheme.mono; font.pixelSize: 18; font.bold: true
+        font.family: root.stateText !== "" ? Qt.application.font.family : ZTheme.mono
+        font.pixelSize: root.stateText !== "" ? 15 : 18; font.bold: true
     }
 
     // ---- flache Form: Eingang = [Bezeichnung/Wert | Schalter], LED = [LED | Bezeichnung/Wert] (Pad liegt innen)

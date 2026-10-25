@@ -128,7 +128,9 @@ private slots:
         w.toggleInput("A");
         QCOMPARE(w.levelAt("Y"), Level::One);
         QVERIFY(!w.confirmBox());
-        QVERIFY(w.message().contains("Schlüssel 1 aus, Schlüssel 2 an")); // erste Stellung, die nicht passt
+        // erste Situation, die nicht passt, in Alltagssprache
+        QVERIFY(w.message().contains("Schlüssel 1 nicht gedreht, Schlüssel 2 gedreht"));
+        QVERIFY(w.message().contains("»Tresor geht auf«"));
         QCOMPARE(w.zettiPose(), QStringLiteral("nachdenklich"));
         // ausprobierte Zeilen erscheinen in der Tabelle, das Soll bleibt verborgen
         const QVariantList rows = w.checkRows();
@@ -144,7 +146,7 @@ private slots:
         QCOMPARE(w.levelAt("Y"), Level::One);
         QVERIFY(w.confirmBox());
         QCOMPARE(w.zettiPose(), QStringLiteral("begeistert"));
-        QVERIFY(w.message().contains("2 Zeilen kam es anders")); // Vermutung 0111, UND ist 0001
+        QVERIFY(w.message().contains("2 Situationen kam es anders")); // Vermutung 0111, UND ist 0001
         QVERIFY(!w.guessing());
         // die Werkzeugkiste kennt jetzt NICHT und UND
         const QVariantList tools = w.tools();
@@ -153,6 +155,44 @@ private slots:
         QCOMPARE(tools[1].toMap()["type"].toString(), QStringLiteral("AND"));
         QVERIFY(!tools[1].toMap()["merksatz"].toString().isEmpty());
         QVERIFY(w.boxes()[2].toMap()["revealed"].toBool());
+    }
+
+    // Entdecken mit Situationskarten: Alltagssprache statt 0 und 1, Vermutung direkt, Situation per Antippen
+    void situationCards() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
+        discover(w, 1);
+        discover(w, 2);
+        discover(w, 3);
+        QVERIFY(w.selectStage(4));
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("NAND"));
+        const QVariantMap row = w.checkRows()[1].toMap(); // Fenster 1 offen, Fenster 2 zu
+        const QVariantList situation = row["situation"].toList();
+        QCOMPARE(situation.size(), 2);
+        QCOMPARE(situation[0].toMap()["text"].toString(), QStringLiteral("Fenster 1 offen"));
+        QCOMPARE(situation[1].toMap()["text"].toString(), QStringLiteral("Fenster 2 zu"));
+        QVERIFY(situation[1].toMap()["on"].toBool());
+        QCOMPARE(row["outOn"].toString(), QStringLiteral("Warnlampe leuchtet"));
+        QCOMPARE(row["outOff"].toString(), QStringLiteral("Warnlampe aus"));
+        QCOMPARE(w.panelInputs()[0].toMap()["state"].toString(), QStringLiteral("Fenster 1 offen"));
+        QCOMPARE(w.panelOutputs()[0].toMap()["state"].toString(), QString()); // ohne Kiste unbestimmt
+
+        for (int r = 0; r < 4; ++r) w.setGuess(r, r != 3);
+        QVERIFY(!w.guessing());
+        QCOMPARE(w.checkRows()[3].toMap()["guess"].toString(), QStringLiteral("0"));
+        w.selectBox(1);
+        w.trySituation(2); // Fenster 1 zu, Fenster 2 offen: die Schalter stellen sich ein
+        QCOMPARE(w.levelAt("A"), Level::One);
+        QCOMPARE(w.levelAt("B"), Level::Zero);
+        QCOMPARE(w.levelAt("Y"), Level::One);
+        QCOMPARE(w.panelOutputs()[0].toMap()["state"].toString(), QStringLiteral("Warnlampe leuchtet"));
+        const QVariantMap tried = w.checkRows()[2].toMap();
+        QVERIFY(tried["current"].toBool());
+        QCOMPARE(tried["actual"].toString(), QStringLiteral("1"));
+        QCOMPARE(tried["match"].toString(), QStringLiteral("="));
+        QVERIFY(w.confirmBox());
+        QVERIFY(w.message().contains("Deine Vermutung hat gestimmt"));
     }
 
     void buildInventionFromTools() {

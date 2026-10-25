@@ -94,13 +94,14 @@ ApplicationWindow {
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Wiederholen")
             }
             Item { Layout.fillWidth: true }
-            HeaderButton { // Zahlenleiste ein/aus
+            HeaderButton { // Zahlenleiste ein/aus: Symbol »101 = 5« (Bits ergeben eine Zahl)
                 visible: win.inLab
-                text: "0b 0x"
+                text: "101 = 5"
+                font.family: ZTheme.mono
                 on: workbench.numbersVisible
                 onClicked: workbench.numbersVisible = !workbench.numbersVisible
-                Accessible.name: qsTr("Zahlensysteme anzeigen")
-                ToolTip.visible: hovered; ToolTip.text: qsTr("Zahlen binär, dezimal und hexadezimal anzeigen")
+                Accessible.name: qsTr("Zahlenleiste zeigen")
+                ToolTip.visible: hovered; ToolTip.text: qsTr("Zahlenleiste: Schalter und Lampen als Zahl lesen (binär, dezimal, hexadezimal)")
             }
             HeaderButton { // Schaltplan neben der Werkbank ein/aus (wie Volta)
                 objectName: "schematicToggle"
@@ -224,6 +225,10 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 onExplain: numbers.open()
             }
+            Item { // Platz fuer die Vorfuehrungsleiste unten links
+                visible: workbench.mode === "vorfuehrung"
+                Layout.preferredHeight: ZTheme.control + 12
+            }
         }
 
         SchematicView { // Schaltplan parallel zum Aufbau
@@ -239,6 +244,64 @@ ApplicationWindow {
             Layout.fillHeight: true
             onDemoPickerRequested: demoPicker.open()
             onHomeRequested: win.goHome()
+        }
+    }
+
+    // Vorfuehrung laeuft: Leiste unten links wie bei Volta mit »Andere Vorführung« und »Beenden«
+    component BannerButton: Button {
+        id: bannerButton
+        implicitHeight: ZTheme.control - 8
+        leftPadding: 16
+        rightPadding: 16
+        font.pixelSize: 15
+        font.bold: true
+        contentItem: Text {
+            text: bannerButton.text
+            font: bannerButton.font
+            color: "white"
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+        background: Rectangle {
+            radius: height / 2
+            color: bannerButton.down ? "#2E5C8A" : (bannerButton.hovered ? "#1F4670" : "#14304D")
+            border.color: ZTheme.pad
+            border.width: bannerButton.visualFocus ? 3 : 1.5
+        }
+        Accessible.name: text
+    }
+    Rectangle {
+        objectName: "demoBanner"
+        visible: win.inLab && workbench.mode === "vorfuehrung"
+        z: 900
+        anchors { left: parent.left; bottom: parent.bottom; margins: 12 }
+        width: demoRow.implicitWidth + 24
+        height: ZTheme.control + 8
+        radius: height / 2
+        color: ZTheme.navy
+        border.color: ZTheme.pad
+        border.width: 2
+        Row {
+            id: demoRow
+            anchors.centerIn: parent
+            spacing: 10
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "🎬 " + qsTr("Vorführung")
+                color: "white"
+                font.bold: true
+                font.pixelSize: 15
+            }
+            BannerButton {
+                objectName: "demoOther"
+                text: qsTr("Andere Vorführung")
+                onClicked: demoPicker.open()
+            }
+            BannerButton {
+                objectName: "demoEnd"
+                text: qsTr("Beenden")
+                onClicked: win.goHome()
+            }
         }
     }
 

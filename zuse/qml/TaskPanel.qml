@@ -13,6 +13,8 @@ Rectangle {
     readonly property bool hasNext: workbench.stageIndex + 1 < workbench.stages.length
     readonly property bool free: workbench.mode === "frei"
     readonly property bool demo: workbench.mode === "vorfuehrung"
+    readonly property bool discover: workbench.stageKind === "entdecken"
+    property bool unread: false // neue Nachricht von Zetti, waehrend er ausgeblendet ist
 
     signal demoPickerRequested()
     signal homeRequested()
@@ -22,7 +24,10 @@ Rectangle {
     Connections {
         target: workbench
         function onStageChanged() { root.hintVisible = false }
-        function onMessageChanged() { root.hintVisible = false }
+        function onMessageChanged() {
+            root.hintVisible = false
+            if (!settings.zettiVisible && workbench.message !== "") root.unread = true
+        }
     }
 
     ColumnLayout {
@@ -46,6 +51,7 @@ Rectangle {
             wrapMode: Text.WordWrap
         }
         RowLayout {
+            visible: settings.zettiVisible
             Layout.fillWidth: true
             spacing: 4
             Image { // Zetti klein neben der Sprechblase, begleitet im Hintergrund
@@ -93,7 +99,21 @@ Rectangle {
             spacing: 8
             ZButton {
                 text: root.hintVisible ? qsTr("Tipp aus") : qsTr("Tipp")
-                onClicked: root.hintVisible = !root.hintVisible
+                onClicked: {
+                    root.hintVisible = !root.hintVisible
+                    if (root.hintVisible) settings.zettiVisible = true // der Tipp steht in Zettis Sprechblase
+                }
+            }
+            ZButton { // Zetti mit Sprechblase aus- und einblenden; neue Nachricht im ausgeblendeten Zustand: Punkt
+                objectName: "zettiToggle"
+                text: settings.zettiVisible ? qsTr("Zetti aus") : qsTr("Zetti an") + (root.unread ? "  ●" : "")
+                onClicked: {
+                    settings.zettiVisible = !settings.zettiVisible
+                    root.unread = false
+                }
+                Accessible.name: settings.zettiVisible ? qsTr("Zetti und seine Tipps ausblenden")
+                                                       : qsTr("Zetti und seine Tipps zeigen")
+                ToolTip.visible: hovered; ToolTip.text: Accessible.name
             }
             ZButton {
                 visible: root.building && !root.free && !root.demo
@@ -121,19 +141,23 @@ Rectangle {
                     Layout.fillWidth: true
                     text: root.counting ? qsTr("Aufgaben")
                         : root.building ? (workbench.stageSequence ? qsTr("Ablauf") : qsTr("Wahrheitstabelle"))
-                        : workbench.guessing ? qsTr("Was vermutest du?") : qsTr("Was passiert?")
+                        : workbench.guessing ? qsTr("Was glaubst du?")
+                        : workbench.stageDone ? qsTr("Was passiert?") : qsTr("Probier es aus!")
                     color: ZTheme.navy
                     font.pixelSize: Math.round(18 * ZTheme.fontScale); font.bold: true
                 }
                 Text {
-                    visible: workbench.guessing
+                    visible: root.discover && !workbench.stageDone
                     Layout.fillWidth: true
-                    text: qsTr("Tippe in der Spalte »Vermutung« für jede Schalterstellung: 1 = an, 0 = aus.")
+                    text: workbench.guessing
+                          ? qsTr("Lies jede Situation. Was macht die Lampe da? Tippe an, was du glaubst.")
+                          : qsTr("Setz links eine Kiste ein. Dann tippe eine Situation an – die Schalter stellen sich von selbst.")
                     color: ZTheme.muted
                     font.pixelSize: Math.round(14 * ZTheme.fontScale)
                     wrapMode: Text.WordWrap
                 }
-                TruthPanel { visible: !root.counting && !root.free; Layout.fillWidth: true }
+                TruthPanel { visible: !root.counting && !root.free && !root.discover; Layout.fillWidth: true }
+                SituationCards { visible: root.discover; Layout.fillWidth: true }
                 Repeater { // Art »zahlen«: Zahlen, die an den Lampen erscheinen sollen
                     model: workbench.tasks
                     delegate: Rectangle {
@@ -217,17 +241,10 @@ Rectangle {
             enabled: workbench.chipReady
             onClicked: workbench.createChip()
         }
-        ZButton { // Vorfuehrung wie Volta: andere zeigen oder beenden (zurueck zur Startseite)
-            visible: root.demo
+        ZButton { // Vorfuehrung: Leiste unten links wie bei Volta (Main.qml)
+            visible: root.free
             Layout.fillWidth: true
-            text: qsTr("Andere Vorführung")
-            onClicked: root.demoPickerRequested()
-        }
-        ZButton {
-            visible: root.demo || root.free
-            Layout.fillWidth: true
-            text: root.demo ? qsTr("Vorführung beenden") : qsTr("Zur Startseite")
-            primary: root.demo
+            text: qsTr("Zur Startseite")
             onClicked: root.homeRequested()
         }
         ZButton {

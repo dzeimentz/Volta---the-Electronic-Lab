@@ -27,6 +27,7 @@ ZuseSettings::ZuseSettings(const QString& dataDir, const QString& language, QObj
         code = s.value(QStringLiteral("anzeige/sprache"), code).toString();
         m_fontLevel = qBound(0, s.value(QStringLiteral("anzeige/schrift"), 2).toInt(), 2);
         m_schematicVisible = s.value(QStringLiteral("anzeige/schaltplan"), false).toBool();
+        m_zettiVisible = s.value(QStringLiteral("anzeige/zetti"), true).toBool();
     }
     m_language = isAvailable(code) ? code : QStringLiteral("de");
     installTranslator();
@@ -87,6 +88,13 @@ void ZuseSettings::setSchematicVisible(bool on) {
     emit schematicVisibleChanged();
 }
 
+void ZuseSettings::setZettiVisible(bool on) {
+    if (on == m_zettiVisible) return;
+    m_zettiVisible = on;
+    save();
+    emit zettiVisibleChanged();
+}
+
 void ZuseSettings::save() const {
     if (m_file.isEmpty()) return;
     QDir().mkpath(QFileInfo(m_file).absolutePath());
@@ -94,6 +102,7 @@ void ZuseSettings::save() const {
     s.setValue(QStringLiteral("anzeige/sprache"), m_language);
     s.setValue(QStringLiteral("anzeige/schrift"), m_fontLevel);
     s.setValue(QStringLiteral("anzeige/schaltplan"), m_schematicVisible);
+    s.setValue(QStringLiteral("anzeige/zetti"), m_zettiVisible);
 }
 
 } // namespace zuse

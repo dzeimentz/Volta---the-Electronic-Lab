@@ -149,7 +149,7 @@ Gemeinsame Grundlage ist der **DC Learning Design Standard** (Volta als Referenz
 
 Jede Stufe folgt demselben Ablauf:
 
-1. **Frage:** eine kleine Alltagssituation mit Bedeutung für Schalter und LEDs (»Schlüssel 1«, »Tresor offen«).
+1. **Frage:** eine kleine Alltagssituation mit Bedeutung für Schalter und LEDs (»Schlüssel 1«, »Tresor«).
 2. **Ausprobieren:** Rätselkisten testen oder eine Schaltung bauen; die Tabelle »Was passiert?« füllt sich mit dem, was das Kind beobachtet.
 3. **Benennen:** Erst nach der richtigen Lösung erscheinen Name, Normzeichen und Merksatz (»ODER: Eins reicht schon.«).
 4. **Benutzen:** Das Ergebnis liegt als Werkzeug in der Werkzeugkiste und löst die nächsten Aufgaben.
@@ -160,8 +160,9 @@ Jede Stufe folgt demselben Ablauf:
 
 - Zwischen Schaltern und LED steht ein Steckplatz; darunter liegen drei verschlossene Kisten mit »?«.
 - Das Kind setzt eine Kiste ein, schaltet und beobachtet. Ohne eingesetzte Kiste ist die LED nicht angeschlossen (unbestimmt).
-- Die Tabelle zeigt nur, was mit der eingesetzten Kiste ausprobiert wurde; das Soll bleibt verborgen.
-- »Diese Kiste passt!« prüft die Wahl. Bei einer falschen Kiste nennt Zetti die erste Schalterstellung, in der sie versagt (»Bei Schlüssel 1 aus, Schlüssel 2 an ist Tresor offen mit dieser Kiste an – es soll aber aus sein.«).
+- **Situationskarten statt Nullen und Einsen** (Erprobung durch den Inhaber, 25.10.2026: die Tabelle mit A, B, Vermutung und Kiste war für Kinder zu abstrakt): Jede Schalterstellung erscheint als Karte in Alltagssprache (»Fenster 1 offen, Fenster 2 zu«) mit kleinen Schalterbildern. Zum Vermuten tippt das Kind je Karte auf »Warnlampe aus« oder »Warnlampe leuchtet« (Lampenbild). Danach setzt es eine Kiste ein und tippt eine Karte an – die Schalter stellen sich von selbst; die Karte zeigt, was die Kiste getan hat, und »✓ wie vermutet« bzw. »✗ anders«. Unter Schaltern und Lampe steht der Zustand in Worten statt 0/1; die Bits stehen nur klein in der Kartenecke als Brücke zur Zahl.
+- Die Karten zeigen nur, was mit der eingesetzten Kiste ausprobiert wurde; das Soll bleibt verborgen.
+- »Diese Kiste passt!« prüft die Wahl. Bei einer falschen Kiste nennt Zetti die erste Schalterstellung, in der sie versagt (»Bei »Schlüssel 1 nicht gedreht, Schlüssel 2 gedreht« zeigt diese Kiste: »Tresor geht auf«. Richtig wäre: »Tresor bleibt zu«.«).
 - Nach der richtigen Wahl öffnet sich die Kiste und zeigt Zeichen und Namen.
 
 ### 5.3 Werkbank, Werkzeugkiste und Erfindungen (Bauen)
@@ -243,7 +244,7 @@ Volta ist die gestalterische und interaktive Referenz; Zuse übernimmt Grundnavi
 |---|---|---|---|
 | Kopfzeile | dunkelblau, Produkt, Lernstufe, Betrieb, globale Aktionen | weiß mit Stufen-Nummern | **umgesetzt:** dunkelblau, Stufenauswahl als Liste mit Frage, Haken und Schloss |
 | Layout | Bibliothek links, Arbeitsfläche Mitte, Aufgaben rechts, optionale Leiste unten | Erzählung links, Werkzeuge mittig links, Tabelle rechts, Zahlenleiste unten | **umgesetzt:** Bibliothek links (Werkzeuge bzw. Rätselkisten), Aufgabe mit Zetti und Tabelle rechts, Zahlenleiste unten |
-| Lernzyklus | Forscherfrage → Vermutung → Aufbau → Betrieb → Beobachtung → Erklärung → Reflexion | Frage → Ausprobieren → Benennen → Benutzen | **umgesetzt (Entdecken):** Vor dem Ausprobieren trägt das Kind in die Tabelle ein, was bei jeder Schalterstellung passieren soll; die Kisten öffnen sich danach (»Weiß ich nicht« möglich); beim Ausprobieren zeigt »=« / »≠« den Vergleich mit der eigenen Vermutung, am Ende ein Vergleich ohne Wertung |
+| Lernzyklus | Forscherfrage → Vermutung → Aufbau → Betrieb → Beobachtung → Erklärung → Reflexion | Frage → Ausprobieren → Benennen → Benutzen | **umgesetzt (Entdecken):** Vor dem Ausprobieren tippt das Kind auf jeder Situationskarte an, was die Lampe macht; die Kisten öffnen sich danach (»Weiß ich nicht« möglich); beim Ausprobieren zeigt »✓ wie vermutet« / »✗ anders« den Vergleich mit der eigenen Vermutung, am Ende ein Vergleich ohne Wertung |
 | Hilfe | Frage, Hinweis, nächster Prüfschritt, Lösung nur auf Wunsch | Tipp, Rückmeldung mit Schalterstellung, Musterlösung auf Knopfdruck | entspricht; Hinweisfolge stufen |
 | Akzent | Cyan für Zuse | Cyan | entspricht |
 | Projekte | Öffnen, Speichern, Export, gemeinsames Format (.dclearn) | lokale Ablage | Export und Import im gemeinsamen Format |
