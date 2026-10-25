@@ -185,6 +185,7 @@ ApplicationWindow {
         anchors.fill: parent
         visible: win.page === "home"
         onJournalRequested: win.openJournal()
+        onTaskRequested: taskDialog.open()
         onExperimentRequested: index => { workbench.selectStage(index); win.page = "lab" }
         onFreeLabRequested: { workbench.startFreeLab(); win.page = "lab" }
         onDemoRequested: demoPicker.open()
@@ -352,7 +353,13 @@ ApplicationWindow {
     InfoDialog { id: info }
     ComicDialog { id: comic; objectName: "comic" }
     ParentGate { id: parentGate }
-    ParentArea { id: parentArea }
+    TaskDialog {
+        id: taskDialog
+        onExperimentRequested: index => { workbench.leaveSpecial(); workbench.selectStage(index); win.page = "lab" }
+        onBoardRequested: { if (workbench.startTaskBoard()) win.page = "lab" }
+    }
+    ParentArea { id: parentArea; onTaskShowRequested: (link, code) => taskQr.showTask(link, code) }
+    TaskQrDialog { id: taskQr }
 
     // Forscherprofile: ohne gewaehltes Profil fragt Zuse zuerst »Wer forscht heute?«
     ProfileChooser {

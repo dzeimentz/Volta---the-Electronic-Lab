@@ -73,6 +73,7 @@ Popup {
                    qsTr("Das Programm im Speicher – Konrad Zuses große Idee – ist Thema von Zuse 2."),
                    qsTr("Alles, was die Lampen zeigen, berechnet eine echte Logiksimulation. Vereinfachung: Speicher starten beim Einschalten mit 0; echte Bausteine starten zufällig, deshalb gibt es »Löschen«."),
                    qsTr("Im Elternbereich (Menü mit den drei Strichen, 🔒, Start-PIN 1234) geben Sie alle Experimente frei, richten Forscherprofile für Geschwister oder die Klasse ein und setzen Fortschritt oder Forscherheft zurück."),
+                   qsTr("Aufgabe für die Klasse: Im Elternbereich Experimente wählen, Zuse zeigt einen QR-Code und einen Code zum Eintippen. Die Kinder geben ihn auf der Startseite unter »Aufgabe« ein; die Experimente sind dann sofort offen."),
                    qsTr("Zuse 1 erhebt keine Daten und braucht kein Internet. Fortschritt und Erfindungen bleiben auf dem Gerät.")] }
     ]
 

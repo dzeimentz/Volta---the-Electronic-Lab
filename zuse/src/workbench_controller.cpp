@@ -82,6 +82,7 @@ WorkbenchController::WorkbenchController(const QString& stagesFile, const QStrin
     loadStages(stagesFile, language);
     load();
     dropStaleChips();
+    loadTask();
     m_clock.setInterval(kClockMs);
     connect(&m_clock, &QTimer::timeout, this, &WorkbenchController::tickClock);
     connect(&m_undo, &QUndoStack::canUndoChanged, this, &WorkbenchController::historyChanged);
@@ -198,6 +199,7 @@ void WorkbenchController::setLanguage(const QString& language) {
     loadStages(m_stagesFile, language); // gleiche Datei: Reihenfolge und Daten bleiben, nur die Texte wechseln
     if (m_demo) m_library = m_demoLibrary;
     setMessage(QString());
+    emit teacherTaskChanged(); // Titel der Experimente in der neuen Sprache
     emit stagesChanged();
     emit stageChanged();
     emit viewChanged();
@@ -245,6 +247,7 @@ void WorkbenchController::save() const {
 bool WorkbenchController::unlocked(int index) const {
     if (index <= 0) return index == 0;
     if (m_stages[size_t(index)].free || m_unlockAll) return true; // Freigabe im Elternbereich
+    if (m_taskStages.contains(index)) return true;                  // Aufgabe der Lehrkraft
     return m_done.contains(m_stages[size_t(index - 1)].kuerzel);
 }
 
@@ -261,6 +264,7 @@ QVariantList WorkbenchController::stages() const {
                                 {"question", s.question},
                                 {"level", levelOf(s.kuerzel)},
                                 {"unlocked", unlocked(int(i))},
+                                {"task", m_taskStages.contains(int(i))},
                                 {"done", m_done.contains(s.kuerzel)}});
     }
     return list;

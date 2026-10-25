@@ -13,6 +13,7 @@ Rectangle {
     signal freeLabRequested()
     signal demoRequested()
     signal journalRequested()
+    signal taskRequested()
 
     // Karte oben (Weitermachen, Freies Labor, Vorfuehrung)
     component Tile: Rectangle {
@@ -151,6 +152,15 @@ Rectangle {
                     subtitle: workbench.resume.label !== undefined
                               ? workbench.resume.label + " " + workbench.resume.title : ""
                     onActivated: home.experimentRequested(workbench.resume.index)
+                }
+                Tile { // Aufgabe der Lehrkraft: zeigt die aktuelle Aufgabe oder fuehrt zur Eingabe des Codes
+                    objectName: "tileTask"
+                    icon: "📋"
+                    title: workbench.teacherTask.ok === true ? qsTr("Deine Aufgabe") : qsTr("Aufgabe")
+                    subtitle: workbench.teacherTask.ok === true
+                              ? (workbench.teacherTask.text || qsTr("Antippen und loslegen"))
+                              : qsTr("Code der Lehrkraft eingeben")
+                    onActivated: home.taskRequested()
                 }
                 Tile {
                     objectName: "tileFreeLab"
@@ -302,6 +312,12 @@ Rectangle {
                                             maximumLineCount: 2
                                             elide: Text.ElideRight
                                         }
+                                        Text { // gehoert zur Aufgabe der Lehrkraft
+                                            visible: card.modelData.task === true
+                                            text: "📋"
+                                            font.pixelSize: Math.round(18 * ZTheme.fontScale)
+                                            font.family: "Segoe UI Emoji"
+                                        }
                                         Text {
                                             text: card.modelData.done ? "✓" : card.modelData.unlocked ? "›" : "🔒"
                                             color: card.modelData.done ? ZTheme.ok : ZTheme.navy
@@ -317,6 +333,7 @@ Rectangle {
                                     Accessible.role: Accessible.Button
                                     Accessible.name: card.modelData.label + " " + card.modelData.title
                                                      + (card.modelData.done ? ", " + qsTr("geschafft") : "")
+                                                     + (card.modelData.task === true ? ", " + qsTr("Aufgabe deiner Lehrkraft") : "")
                                 }
                             }
                             Repeater {

@@ -7,7 +7,8 @@
 // ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen),
 // ZUSE_PAGE=home|lab|journal (Startseite bzw. Experiment; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
 // ZUSE_DEMO_SHOW=<n> (Vorfuehrung des Experiments n), ZUSE_DEMO_PROFILES=1|gewaehlt (Forscherprofile mit Beispielen),
-// ZUSE_DEMO_PARENT=gate|area (Elternschranke bzw. Elternbereich).
+// ZUSE_DEMO_PARENT=gate|area (Elternschranke bzw. Elternbereich), ZUSE_DEMO_TASK=<Code|Link|-> (Aufgabe der Lehrkraft),
+// ZUSE_DEMO_TASKQR=4.7,1.2 (QR-Ansicht der Lehrkraft).
 #include <QDir>
 #include <QGuiApplication>
 #include <QIcon>
@@ -154,6 +155,17 @@ int main(int argc, char* argv[]) {
     // ZUSE_DEMO_COMIC=und|oder|nicht|nand|nor|xoder: Erklaer-Comic oeffnen
     if (const QString comic = qEnvironmentVariable("ZUSE_DEMO_COMIC"); window && !comic.isEmpty())
         if (QObject* c = window->findChild<QObject*>("comic")) QMetaObject::invokeMethod(c, "show", Q_ARG(QVariant, comic));
+    // ZUSE_DEMO_TASK=<Code oder Link>: Aufgabe der Lehrkraft annehmen und zeigen; ZUSE_DEMO_TASKQR=4.7,1.2: QR-Ansicht
+    if (const QString t = qEnvironmentVariable("ZUSE_DEMO_TASK"); window && !t.isEmpty()) {
+        if (t != QStringLiteral("-")) workbench.acceptTask(t); // "-": Code eingeben
+        if (QObject* d = window->findChild<QObject*>("taskDialog")) QMetaObject::invokeMethod(d, "open");
+    }
+    if (const QString t = qEnvironmentVariable("ZUSE_DEMO_TASKQR"); window && !t.isEmpty()) {
+        const QStringList labels = t.split(',', Qt::SkipEmptyParts);
+        if (QObject* d = window->findChild<QObject*>("taskQrDialog"))
+            QMetaObject::invokeMethod(d, "showTask", Q_ARG(QVariant, workbench.makeTaskLink(labels, {}, false, {})),
+                                      Q_ARG(QVariant, workbench.makeTaskCode(labels)));
+    }
     // ZUSE_DEMO_PARENT=gate|area: Elternschranke bzw. Elternbereich oeffnen
     if (const QString parent = qEnvironmentVariable("ZUSE_DEMO_PARENT"); window && !parent.isEmpty()) {
         if (parent == QStringLiteral("gate")) {

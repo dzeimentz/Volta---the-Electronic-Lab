@@ -10,11 +10,14 @@ add_library(zuse_model STATIC
     src/zuse_settings.cpp
     src/workbench_journal.cpp
     src/workbench_profiles.cpp
+    src/workbench_task.cpp
+    src/zuse_task.cpp
+    ${PROJECT_SOURCE_DIR}/app/src/model/qr_code.cpp # QR-Code fuer die Aufgabe der Lehrkraft (wie Volta)
     ${PROJECT_SOURCE_DIR}/app/src/services/profile_store.cpp
     ${PROJECT_SOURCE_DIR}/app/src/services/journal_store.cpp # Forscherheft wie Volta (gemeinsamer Speicher)
 )
 target_include_directories(zuse_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/app/src)
-target_link_libraries(zuse_model PUBLIC volta::logic Qt6::Core Qt6::Gui)
+target_link_libraries(zuse_model PUBLIC volta::logic Qt6::Core Qt6::Gui PRIVATE qrcodegen)
 set_target_properties(zuse_model PROPERTIES AUTOMOC ON)
 
 qt_add_executable(zuse_app src/main.cpp)
@@ -67,6 +70,9 @@ qt_add_qml_module(zuse_app
         qml/ParentGate.qml
         qml/ParentArea.qml
         qml/ProfileChooser.qml
+        qml/QrCanvas.qml
+        qml/TaskDialog.qml
+        qml/TaskQrDialog.qml
 )
 # Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)

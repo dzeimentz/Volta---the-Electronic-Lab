@@ -24,7 +24,7 @@ void WorkbenchController::useDataDir(const QString& dir) {
     m_journal = volta::services::JournalStore(journalFile(dir));
     if (!dir.isEmpty()) load();
     dropStaleChips();
-    lendChips();
+    loadTask(); // leiht auch die Erfindungen
     startFirstOpen();
     emit journalChanged();
     emit symbolStyleChanged();
@@ -122,17 +122,27 @@ void WorkbenchController::setUnlockAll(bool on) {
     emit viewChanged();
 }
 
+// Geliehen wird: bei der Freigabe alles; mit einer Aufgabe der Lehrkraft die Erfindungen der Stufen vor ihrem letzten
+// Experiment; dazu, was ein Aufbau im freien Labor (aus einer Aufgabe) braucht – jeweils samt der Erfindungen darin.
 void WorkbenchController::lendChips() {
     Library& own = m_demo ? m_ownLibrary : m_library;
     for (const QString& k : std::as_const(m_lent)) own.remove(k.toStdString());
     m_lent.clear();
-    if (!m_unlockAll) return;
-    for (const Stage& s : m_stages) {
-        if (!s.makesChip || own.find(s.kuerzel.toStdString())) continue;
-        if (const ChipDef* chip = m_demoLibrary.find(s.kuerzel.toStdString())) {
-            own.add(*chip);
-            m_lent.insert(s.kuerzel);
-        }
+    QStringList wanted;
+    int last = -1;
+    for (int i : std::as_const(m_taskStages)) last = std::max(last, i);
+    for (size_t i = 0; i < m_stages.size(); ++i)
+        if (m_stages[i].makesChip && (m_unlockAll || int(i) < last)) wanted << m_stages[i].kuerzel;
+    if (const auto free = m_drafts.find(freeKuerzel()); free != m_drafts.end())
+        for (const auto& p : free->second.parts) wanted << QString::fromStdString(p.type);
+    while (!wanted.isEmpty()) {
+        const QString k = wanted.takeFirst();
+        if (own.find(k.toStdString())) continue;
+        const ChipDef* chip = m_demoLibrary.find(k.toStdString());
+        if (!chip) continue; // Grundgatter
+        own.add(*chip);
+        m_lent.insert(k);
+        for (const auto& p : chip->parts) wanted << QString::fromStdString(p.type);
     }
     if (!m_demo) rebuild(); // Aufbauten mit geliehenen Erfindungen neu berechnen
 }

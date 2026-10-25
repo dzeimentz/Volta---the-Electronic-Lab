@@ -8,6 +8,7 @@ import QtQuick.Layouts
 Popup {
     id: area
     objectName: "parentArea"
+    signal taskShowRequested(string link, string code) // grosser QR-Code (Main.qml)
     modal: true
     focus: true
     anchors.centerIn: Overlay.overlay
@@ -192,6 +193,112 @@ Popup {
                 color: ZTheme.muted
             }
 
+            // ---- Aufgabe fuer die Klasse (nur Hinweg: QR-Code und Code zum Eintippen)
+            Heading { text: qsTr("Aufgabe für die Klasse") }
+            Body { text: qsTr("Wählen Sie Experimente aus dem Lernpfad und/oder geben Sie den Aufbau aus dem freien Labor mit. Zuse zeigt einen großen QR-Code für den Beamer. Bis zu vier Experimente ohne Text und Aufbau passen auch in einen Code zum Eintippen. Die Experimente der Aufgabe sind bei den Kindern sofort offen; fehlende Erfindungen leiht Zuse aus. Übertragen wird nur die Aufgabe selbst.") }
+            ColumnLayout {
+                id: taskPicker
+                Layout.fillWidth: true
+                spacing: 2
+                property var chosen: []
+                property int openLevel: -1
+                function toggle(label) {
+                    const list = chosen.slice()
+                    const i = list.indexOf(label)
+                    if (i >= 0) list.splice(i, 1)
+                    else if (list.length < 8) list.push(label)
+                    chosen = list
+                }
+                Repeater {
+                    model: workbench.levels
+                    delegate: ColumnLayout {
+                        id: levelBox
+                        required property var modelData
+                        readonly property int picked: modelData.experiments.filter(e => taskPicker.chosen.indexOf(e.label) >= 0).length
+                        visible: modelData.experiments.length > 0
+                        Layout.fillWidth: true
+                        spacing: 0
+                        ZButton {
+                            objectName: "taskLevel_" + levelBox.modelData.number
+                            Layout.fillWidth: true
+                            text: (taskPicker.openLevel === levelBox.modelData.number ? "▾  " : "▸  ")
+                                  + qsTr("Stufe %1: %2").arg(levelBox.modelData.number).arg(levelBox.modelData.title)
+                                  + (levelBox.picked > 0 ? "  (" + levelBox.picked + ")" : "")
+                            contentItem: Text {
+                                text: parent.text
+                                font: parent.font
+                                color: ZTheme.text
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                            }
+                            onClicked: taskPicker.openLevel = taskPicker.openLevel === levelBox.modelData.number ? -1 : levelBox.modelData.number
+                        }
+                        Repeater {
+                            model: taskPicker.openLevel === levelBox.modelData.number ? levelBox.modelData.experiments : []
+                            delegate: CheckBox {
+                                required property var modelData
+                                objectName: "taskPick_" + modelData.label
+                                Layout.leftMargin: 24
+                                implicitHeight: ZTheme.control
+                                text: modelData.label + "  " + modelData.title
+                                font.pixelSize: Math.round(15 * ZTheme.fontScale)
+                                checked: taskPicker.chosen.indexOf(modelData.label) >= 0
+                                enabled: checked || taskPicker.chosen.length < 8
+                                onClicked: taskPicker.toggle(modelData.label)
+                            }
+                        }
+                    }
+                }
+            }
+            TextField {
+                id: taskText
+                objectName: "taskText"
+                Layout.fillWidth: true
+                implicitHeight: ZTheme.control
+                maximumLength: 160
+                placeholderText: qsTr("Aufgabentext (freiwillig), z. B. »Findet heraus, wann die Lampe leuchtet!«")
+                font.pixelSize: Math.round(15 * ZTheme.fontScale)
+            }
+            CheckBox {
+                id: taskWithBoard
+                objectName: "taskWithBoard"
+                implicitHeight: ZTheme.control
+                enabled: workbench.freeLabParts > 0
+                font.pixelSize: Math.round(15 * ZTheme.fontScale)
+                text: workbench.freeLabParts > 0
+                      ? qsTr("Aufbau aus dem freien Labor mitgeben (%1 Teile)").arg(workbench.freeLabParts)
+                      : qsTr("Aufbau aus dem freien Labor mitgeben (dort steht noch nichts)")
+            }
+            TextField {
+                id: taskTitle
+                objectName: "taskTitle"
+                visible: taskWithBoard.checked
+                Layout.preferredWidth: Math.min(420, column.width)
+                implicitHeight: ZTheme.control
+                maximumLength: 80
+                placeholderText: qsTr("Titel des Aufbaus")
+                font.pixelSize: Math.round(15 * ZTheme.fontScale)
+            }
+            RowLayout {
+                spacing: 12
+                ZButton {
+                    objectName: "taskShow"
+                    primary: true
+                    text: qsTr("Aufgabe zeigen")
+                    enabled: taskPicker.chosen.length > 0 || (taskWithBoard.checked && workbench.freeLabParts > 0)
+                    onClicked: {
+                        const withBoard = taskWithBoard.checked && workbench.freeLabParts > 0
+                        const link = workbench.makeTaskLink(taskPicker.chosen, taskText.text, withBoard, taskTitle.text)
+                        const code = taskText.text.trim() === "" && !withBoard ? workbench.makeTaskCode(taskPicker.chosen) : ""
+                        if (link !== "") area.taskShowRequested(link, code)
+                    }
+                }
+                Text {
+                    text: qsTr("%1 von 8 Experimenten gewählt").arg(taskPicker.chosen.length)
+                    color: ZTheme.muted
+                    font.pixelSize: Math.round(14 * ZTheme.fontScale)
+                }
+            }
             // ---- Forscherprofile
             Heading { text: qsTr("Forscherprofile") }
             Body { text: qsTr("Teilen sich mehrere Kinder ein Gerät, bekommt jedes ein eigenes Profil mit Symbol und Spitznamen – ohne richtigen Namen und ohne Passwort. Fortschritt, Erfindungen und Forscherheft liegen je Profil getrennt.") }

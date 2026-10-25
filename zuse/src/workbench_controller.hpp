@@ -154,6 +154,9 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList profiles READ profiles NOTIFY profilesChanged)
     Q_PROPERTY(QVariantMap currentProfile READ currentProfile NOTIFY profilesChanged)
     Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY stagesChanged)
+    // Aufgabe der Lehrkraft (zuse_task): {ok, experiments [{index, label, title, done}], title, text, hasBoard}
+    Q_PROPERTY(QVariantMap teacherTask READ teacherTask NOTIFY teacherTaskChanged)
+    Q_PROPERTY(int freeLabParts READ freeLabParts NOTIFY viewChanged) // Teile im freien Labor (Aufgabe mitgeben)
     Q_PROPERTY(QString symbolStyle READ symbolStyle WRITE setSymbolStyle NOTIFY symbolStyleChanged)
 
 public:
@@ -293,6 +296,19 @@ public:
     void setUnlockAll(bool on);
     Q_INVOKABLE void resetProgress(); // Lernpfad, Erfindungen und Aufbauten zuruecksetzen (Elternbereich)
 
+    // Aufgabe der Lehrkraft (wie Volta): nur Hinweg, per QR-Code (Link) oder Code zum Eintippen. Experimente der
+    // Aufgabe sind offen; fehlende Erfindungen dafuer leiht Zuse aus den Musterloesungen (wie bei der Freigabe).
+    Q_INVOKABLE QVariantMap qrCode(const QString& text) const; // {size, cells "0"/"1"}
+    Q_INVOKABLE QString makeTaskLink(const QStringList& labels, const QString& text, bool withBoard,
+                                     const QString& title) const;
+    Q_INVOKABLE QString makeTaskCode(const QStringList& labels) const; // leer, wenn es nicht in einen Code passt
+    Q_INVOKABLE QVariantMap readTask(const QString& linkOrCode) const;
+    Q_INVOKABLE bool acceptTask(const QString& linkOrCode); // wird zur aktuellen Aufgabe (je Profil gespeichert)
+    Q_INVOKABLE bool startTaskBoard();                      // Aufbau der Aufgabe ins freie Labor
+    Q_INVOKABLE void clearTask();
+    QVariantMap teacherTask() const;
+    int freeLabParts() const;
+
     // fuer Befehle und Tests
     const volta::logic::ChipDef& def() const { return m_def; }
     const volta::logic::Library& library() const { return m_library; }
@@ -315,6 +331,7 @@ signals:
     void clockChanged();
     void journalChanged();
     void profilesChanged();
+    void teacherTaskChanged();
 
 private:
     bool loadStages(const QString& file, const QString& language);
@@ -390,7 +407,13 @@ private:
     bool m_profilesEnabled = false;
     QString m_currentProfile;
     bool m_unlockAll = false;
-    QSet<QString> m_lent; // geliehene Erfindungen (Freigabe), werden nicht gespeichert
+    QSet<QString> m_lent; // geliehene Erfindungen (Freigabe, Aufgabe), werden nicht gespeichert
+    QString m_taskLink;    // Aufgabe der Lehrkraft als Link (aufgabe.txt)
+    QSet<int> m_taskStages; // Stufen der Aufgabe (offen)
+    void loadTask();
+    void setTaskLink(const QString& link);
+    QString freeKuerzel() const;
+    bool boardUsable(const volta::logic::ChipDef& board) const; // nur Gatter und Erfindungen der Stufen
     size_t m_task = 0; // Art »zahlen«: aktuelle Aufgabe
     QTimer m_clock;    // Taktgeber
     QString m_symbolStyle = QStringLiteral("din");

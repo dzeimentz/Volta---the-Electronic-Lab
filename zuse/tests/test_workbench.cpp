@@ -5,6 +5,7 @@
 
 #include "workbench_controller.hpp"
 #include "zuse_settings.hpp"
+#include "zuse_task.hpp"
 
 using namespace zuse;
 using volta::logic::Level;
@@ -794,6 +795,105 @@ private slots:
         for (int i = 0; i < 5; ++i) QVERIFY(!s.checkParentPin("0000"));
         QVERIFY(s.parentPinLockSeconds() > 0);
         QVERIFY(!s.checkParentPin("4711")); // gesperrt
+    }
+    // Aufgabe der Lehrkraft: Code zum Eintippen (wie Volta, Band zuse1) und Link mit Aufbau
+    void taskCodes() {
+        task::Task t;
+        t.experiments = {"1.2", "2.3"};
+        const QString code = task::toCode(t);
+        QCOMPARE(code.size(), 9);
+        task::Task back;
+        QVERIFY(task::fromCode(code.toLower().replace('-', ' '), back));
+        QCOMPARE(back.band, QStringLiteral("zuse1"));
+        QCOMPARE(back.experiments, t.experiments);
+        QString typo = code;
+        typo[0] = typo[0] == QLatin1Char('A') ? QLatin1Char('B') : QLatin1Char('A');
+        QVERIFY(!task::fromCode(typo, back)); // Pruefziffer
+        QVERIFY(task::toLink(t).endsWith("?c=" + code));
+        t.text = QStringLiteral("Baut eine Alarmanlage!"); // passt nicht mehr in den Code
+        QVERIFY(task::toCode(t).isEmpty());
+        QVERIFY(task::fromLink(task::toLink(t), back));
+        QCOMPARE(back.text, t.text);
+
+        task::Task volta;
+        volta.band = QStringLiteral("volta1");
+        volta.experiments = {"2.4"};
+        QTemporaryDir data;
+        WorkbenchController w(kStages, data.path(), "de");
+        const QVariantMap other = w.readTask(task::toCode(volta));
+        QVERIFY(!other["ok"].toBool());
+        QVERIFY(other["otherBand"].toBool());
+        QVERIFY(!w.acceptTask(QStringLiteral("ABCD-EFGH")));
+    }
+
+    void teacherTaskOpensExperiments() {
+        QTemporaryDir dir;
+        int alarm = -1, counter = -1;
+        {
+            WorkbenchController w(kStages, dir.path(), "de");
+            for (const QVariant& v : w.stages()) {
+                const QVariantMap s = v.toMap();
+                if (s["kuerzel"] == "ALARM") alarm = s["index"].toInt();
+                if (s["label"] == "4.7") counter = s["index"].toInt();
+            }
+            QVERIFY(alarm > 0 && counter > 0);
+            const QString code = w.makeTaskCode({"4.7"});
+            QVERIFY(!code.isEmpty());
+            QVERIFY(w.teacherTask().isEmpty());
+            QVERIFY(w.acceptTask(code));
+            const QVariantMap t = w.teacherTask();
+            QVERIFY(t["ok"].toBool());
+            QCOMPARE(t["experiments"].toList().first().toMap()["index"].toInt(), counter);
+            for (const QVariant& v : w.stages()) {
+                const QVariantMap s = v.toMap();
+                if (s["index"] == counter) QVERIFY(s["unlocked"].toBool() && s["task"].toBool()); // offen durch die Aufgabe
+                if (s["index"] == alarm) QVERIFY(!s["unlocked"].toBool());                       // der Rest nicht
+            }
+            QVERIFY(w.selectStage(counter));
+            QVERIFY(w.library().find("XODER")); // Erfindungen davor geliehen
+        }
+        WorkbenchController again(kStages, dir.path(), "de"); // Aufgabe bleibt, Leihgaben werden nicht gespeichert
+        QVERIFY(again.teacherTask()["ok"].toBool());
+        QVERIFY(again.library().find("XODER"));
+        again.clearTask();
+        QVERIFY(again.teacherTask().isEmpty());
+        QVERIFY(!again.library().find("XODER"));
+        WorkbenchController third(kStages, dir.path(), "de");
+        QVERIFY(third.teacherTask().isEmpty());
+        QVERIFY(!third.library().find("XODER"));
+    }
+
+    // Aufbau aus dem freien Labor der Lehrkraft kommt ins freie Labor des Kindes, samt geliehener Erfindungen
+    void teacherTaskBoard() {
+        QTemporaryDir teacherDir, childDir;
+        QString link;
+        {
+            WorkbenchController teacher(kStages, teacherDir.path(), "de");
+            teacher.setUnlockAll(true);
+            teacher.startFreeLab();
+            QCOMPARE(teacher.mode(), QStringLiteral("frei"));
+            QVERIFY(!teacher.addPart("XODER", 200, 200).isEmpty());
+            QVERIFY(!teacher.addPart("NOT", 400, 200).isEmpty());
+            QCOMPARE(teacher.freeLabParts(), 2);
+            QVERIFY(teacher.makeTaskLink({}, "", false, "").isEmpty()); // nichts gewaehlt
+            link = teacher.makeTaskLink({"1.1"}, QStringLiteral("Was macht diese Schaltung?"), true, QStringLiteral("Rätsel"));
+            QVERIFY(link.startsWith("zuse1://aufgabe?d="));
+            QVERIFY(teacher.makeTaskCode({"1.1", "1.2", "1.3", "1.4", "2.1"}).isEmpty()); // zu viele fuer den Code
+        }
+        WorkbenchController child(kStages, childDir.path() + "/neu", "de"); // Ordner gibt es noch nicht
+        const QVariantMap t = child.readTask(link);
+        QVERIFY(t["ok"].toBool());
+        QVERIFY(t["hasBoard"].toBool());
+        QCOMPARE(t["title"].toString(), QStringLiteral("Rätsel"));
+        QCOMPARE(t["text"].toString(), QStringLiteral("Was macht diese Schaltung?"));
+        QVERIFY(child.acceptTask(link));
+        QVERIFY(child.startTaskBoard());
+        QCOMPARE(child.mode(), QStringLiteral("frei"));
+        QCOMPARE(child.def().parts.size(), size_t(2));
+        QVERIFY(child.library().find("XODER")); // geliehen
+        QCOMPARE(child.freeLabParts(), 2);
+        WorkbenchController again(kStages, childDir.path() + "/neu", "de");
+        QVERIFY(again.teacherTask()["hasBoard"].toBool());
     }
 };
 
