@@ -6,11 +6,13 @@
    "nr": 0,
    "titel": {
     "de": "Auftakt",
-    "en": "Warm-up"
+    "en": "Warm-up",
+    "fr": "Mise en route"
    },
    "frage": {
     "de": "Was versteht ein Rechner überhaupt?",
-    "en": "What does a computer understand at all?"
+    "en": "What does a computer understand at all?",
+    "fr": "Que comprend un ordinateur, au fond ?"
    },
    "experimente": [
     "BIT"
@@ -20,11 +22,13 @@
    "nr": 1,
    "titel": {
     "de": "Logik entdecken",
-    "en": "Discovering logic"
+    "en": "Discovering logic",
+    "fr": "Découvrir la logique"
    },
    "frage": {
     "de": "Wie entscheidet ein Rechner?",
-    "en": "How does a computer decide?"
+    "en": "How does a computer decide?",
+    "fr": "Comment un ordinateur décide-t-il ?"
    },
    "experimente": [
     "NICHT",
@@ -37,11 +41,13 @@
    "nr": 2,
    "titel": {
     "de": "Erfinden mit Bausteinen",
-    "en": "Inventing with parts"
+    "en": "Inventing with parts",
+    "fr": "Inventer avec des pièces"
    },
    "frage": {
     "de": "Was kann ich aus meinen Bausteinen bauen?",
-    "en": "What can I build from my parts?"
+    "en": "What can I build from my parts?",
+    "fr": "Que puis-je construire avec mes pièces ?"
    },
    "experimente": [
     "ALARM",
@@ -53,11 +59,13 @@
    "nr": 3,
    "titel": {
     "de": "Zahlen und Rechnen",
-    "en": "Numbers and adding"
+    "en": "Numbers and adding",
+    "fr": "Nombres et calcul"
    },
    "frage": {
     "de": "Wie rechnet ein Rechner mit 0 und 1?",
-    "en": "How does a computer calculate with 0 and 1?"
+    "en": "How does a computer calculate with 0 and 1?",
+    "fr": "Comment un ordinateur calcule-t-il avec 0 et 1 ?"
    },
    "experimente": [
     "ZAEHLEN",
@@ -70,11 +78,13 @@
    "nr": 4,
    "titel": {
     "de": "Speichern und Zählen",
-    "en": "Memory and counting"
+    "en": "Memory and counting",
+    "fr": "Mémoriser et compter"
    },
    "frage": {
     "de": "Wie merkt sich ein Rechner etwas – und wie zählt er?",
-    "en": "How does a computer remember something – and how does it count?"
+    "en": "How does a computer remember something – and how does it count?",
+    "fr": "Comment un ordinateur retient-il quelque chose – et comment compte-t-il ?"
    },
    "experimente": [
     "MERKER",
@@ -91,11 +101,13 @@
    "nr": 5,
    "titel": {
     "de": "Die Rechenmaschine",
-    "en": "The calculating machine"
+    "en": "The calculating machine",
+    "fr": "La machine à calculer"
    },
    "frage": {
     "de": "Wie rechnet eine Maschine – und wer sagt ihr, was sie tun soll?",
-    "en": "How does a machine calculate – and who tells it what to do?"
+    "en": "How does a machine calculate – and who tells it what to do?",
+    "fr": "Comment une machine calcule-t-elle – et qui lui dit ce qu’elle doit faire ?"
    },
    "experimente": [
     "GLEICH",
@@ -104,7 +116,8 @@
    ],
    "ausblick": {
     "de": "Weiter in Zuse 2: Der Rechner bekommt einen Speicher für sein Programm und steuert sich selbst.",
-    "en": "Continued in Zuse 2: the computer gets a memory for its program and controls itself."
+    "en": "Continued in Zuse 2: the computer gets a memory for its program and controls itself.",
+    "fr": "La suite dans Zuse 2 : l’ordinateur reçoit une mémoire pour son programme et se commande lui-même."
    }
   }
  ],
@@ -116,30 +129,36 @@
    "symbol": "",
    "titel": {
     "de": "Licht an!",
-    "en": "Lights on!"
+    "en": "Lights on!",
+    "fr": "Lumière !"
    },
    "geschichte": {
     "de": "Ein Rechner kennt nur zwei Zustände: an und aus – genau wie ein Lichtschalter.",
-    "en": "A computer only knows two states: on and off – just like a light switch."
+    "en": "A computer only knows two states: on and off – just like a light switch.",
+    "fr": "Un ordinateur ne connaît que deux états : allumé et éteint – exactement comme un interrupteur."
    },
    "frage": {
     "de": "Wie sagt man einem Rechner »Ja« oder »Nein«?",
-    "en": "How do you tell a computer »yes« or »no«?"
+    "en": "How do you tell a computer »yes« or »no«?",
+    "fr": "Comment dit-on « oui » ou « non » à un ordinateur ?"
    },
    "hilfe": {
     "de": "Zieh eine Leitung vom Lichtschalter zur Lampe und vom Klingelknopf zur Klingel. Der Kippschalter bleibt stehen, der Taster nur, solange du drückst.",
-    "en": "Draw a wire from the light switch to the lamp and from the bell button to the bell. The toggle switch stays put, the push button only while you press it."
+    "en": "Draw a wire from the light switch to the lamp and from the bell button to the bell. The toggle switch stays put, the push button only while you press it.",
+    "fr": "Tire un fil de l’interrupteur à la lampe et du bouton de sonnette à la sonnette. L’interrupteur reste dans sa position, le bouton-poussoir seulement tant que tu appuies."
    },
    "merksatz": {
     "de": "An ist 1, aus ist 0 – das ist ein Bit.",
-    "en": "On is 1, off is 0 – that is one bit."
+    "en": "On is 1, off is 0 – that is one bit.",
+    "fr": "Allumé, c’est 1, éteint, c’est 0 – c’est un bit."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Lichtschalter",
-      "en": "Light switch"
+      "en": "Light switch",
+      "fr": "Interrupteur"
      },
      "art": "kipp",
      "zustand": {
@@ -150,6 +169,10 @@
       "en": [
        "Light switch off",
        "Light switch on"
+      ],
+      "fr": [
+       "Interrupteur éteint",
+       "Interrupteur allumé"
       ]
      }
     },
@@ -157,7 +180,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Klingelknopf",
-      "en": "Bell button"
+      "en": "Bell button",
+      "fr": "Bouton de sonnette"
      },
      "art": "taster",
      "zustand": {
@@ -168,6 +192,10 @@
       "en": [
        "Bell button released",
        "Bell button pressed"
+      ],
+      "fr": [
+       "Bouton de sonnette relâché",
+       "Bouton de sonnette enfoncé"
       ]
      }
     }
@@ -177,7 +205,8 @@
      "name": "X",
      "bezeichnung": {
       "de": "Lampe",
-      "en": "Lamp"
+      "en": "Lamp",
+      "fr": "Lampe"
      },
      "zustand": {
       "de": [
@@ -187,6 +216,10 @@
       "en": [
        "Lamp off",
        "Lamp glows"
+      ],
+      "fr": [
+       "Lampe éteinte",
+       "Lampe allumée"
       ]
      }
     },
@@ -194,7 +227,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Klingel",
-      "en": "Bell"
+      "en": "Bell",
+      "fr": "Sonnette"
      },
      "zustand": {
       "de": [
@@ -204,6 +238,10 @@
       "en": [
        "Bell silent",
        "Bell rings"
+      ],
+      "fr": [
+       "Sonnette muette",
+       "La sonnette sonne"
       ]
      }
     }
@@ -232,35 +270,46 @@
   {
    "kuerzel": "NICHT",
    "art": "entdecken",
+   "name": {
+    "de": "NICHT",
+    "en": "NOT",
+    "fr": "NON"
+   },
    "werkzeug": "NOT",
    "symbol": "1",
    "invertiert": true,
    "titel": {
     "de": "Das Nachtlicht",
-    "en": "The night light"
+    "en": "The night light",
+    "fr": "La veilleuse"
    },
    "geschichte": {
     "de": "Lenas Nachtlicht hat einen Lichtsensor. Es soll leuchten, wenn es im Zimmer dunkel ist – und ausgehen, sobald es hell wird.",
-    "en": "Lena's night light has a light sensor. It should glow when the room is dark – and switch off as soon as it gets bright."
+    "en": "Lena's night light has a light sensor. It should glow when the room is dark – and switch off as soon as it gets bright.",
+    "fr": "La veilleuse de Léna a un capteur de lumière. Elle doit s’allumer quand il fait noir dans la chambre – et s’éteindre dès qu’il fait jour."
    },
    "frage": {
     "de": "Welche Kiste schaltet das Nachtlicht richtig?",
-    "en": "Which box switches the night light correctly?"
+    "en": "Which box switches the night light correctly?",
+    "fr": "Quelle boîte commande correctement la veilleuse ?"
    },
    "hilfe": {
     "de": "Stell den Sensor auf hell und auf dunkel. Wann soll das Nachtlicht leuchten?",
-    "en": "Set the sensor to bright and to dark. When should the night light glow?"
+    "en": "Set the sensor to bright and to dark. When should the night light glow?",
+    "fr": "Règle le capteur sur clair puis sur sombre. Quand la veilleuse doit-elle s’allumer ?"
    },
    "merksatz": {
     "de": "NICHT dreht um: Aus 1 wird 0, aus 0 wird 1.",
-    "en": "NOT flips it: 1 becomes 0, 0 becomes 1."
+    "en": "NOT flips it: 1 becomes 0, 0 becomes 1.",
+    "fr": "NON inverse : 1 devient 0, 0 devient 1."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Lichtfühler",
-      "en": "Light sensor"
+      "en": "Light sensor",
+      "fr": "Capteur de lumière"
      },
      "art": "kipp",
      "zustand": {
@@ -271,6 +320,10 @@
       "en": [
        "The room is dark",
        "The room is bright"
+      ],
+      "fr": [
+       "Il fait noir dans la chambre",
+       "Il fait clair dans la chambre"
       ]
      }
     }
@@ -280,7 +333,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Nachtlicht",
-      "en": "Night light"
+      "en": "Night light",
+      "fr": "Veilleuse"
      },
      "zustand": {
       "de": [
@@ -290,6 +344,10 @@
       "en": [
        "Night light off",
        "Night light glows"
+      ],
+      "fr": [
+       "Veilleuse éteinte",
+       "Veilleuse allumée"
       ]
      }
     }
@@ -323,34 +381,45 @@
   {
    "kuerzel": "UND",
    "art": "entdecken",
+   "name": {
+    "de": "UND",
+    "en": "AND",
+    "fr": "ET"
+   },
    "werkzeug": "AND",
    "symbol": "&",
    "titel": {
     "de": "Der Tresor",
-    "en": "The safe"
+    "en": "The safe",
+    "fr": "Le coffre-fort"
    },
    "geschichte": {
     "de": "Der Tresor der Bank hat zwei Schlösser. Er darf nur aufgehen, wenn beide Schlüssel gedreht sind – sonst käme ein Dieb mit einem Schlüssel allein hinein.",
-    "en": "The bank's safe has two locks. It may only open when both keys are turned – otherwise a thief with just one key could get in."
+    "en": "The bank's safe has two locks. It may only open when both keys are turned – otherwise a thief with just one key could get in.",
+    "fr": "Le coffre-fort de la banque a deux serrures. Il ne doit s’ouvrir que si les deux clés sont tournées – sinon un voleur pourrait entrer avec une seule clé."
    },
    "frage": {
     "de": "Welche Kiste schützt den Tresor?",
-    "en": "Which box protects the safe?"
+    "en": "Which box protects the safe?",
+    "fr": "Quelle boîte protège le coffre-fort ?"
    },
    "hilfe": {
     "de": "Probier alle vier Möglichkeiten: kein Schlüssel, nur einer, nur der andere, beide.",
-    "en": "Try all four possibilities: no key, one, only the other, both."
+    "en": "Try all four possibilities: no key, one, only the other, both.",
+    "fr": "Essaie les quatre possibilités : aucune clé, une seule, seulement l’autre, les deux."
    },
    "merksatz": {
     "de": "UND: Beide müssen an sein.",
-    "en": "AND: Both must be on."
+    "en": "AND: Both must be on.",
+    "fr": "ET : les deux doivent être allumés."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Schlüssel 1",
-      "en": "Key 1"
+      "en": "Key 1",
+      "fr": "Clé 1"
      },
      "art": "kipp",
      "zustand": {
@@ -361,6 +430,10 @@
       "en": [
        "Key 1 not turned",
        "Key 1 turned"
+      ],
+      "fr": [
+       "Clé 1 pas tournée",
+       "Clé 1 tournée"
       ]
      }
     },
@@ -368,7 +441,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Schlüssel 2",
-      "en": "Key 2"
+      "en": "Key 2",
+      "fr": "Clé 2"
      },
      "art": "kipp",
      "zustand": {
@@ -379,6 +453,10 @@
       "en": [
        "Key 2 not turned",
        "Key 2 turned"
+      ],
+      "fr": [
+       "Clé 2 pas tournée",
+       "Clé 2 tournée"
       ]
      }
     }
@@ -388,7 +466,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Tresor",
-      "en": "Safe"
+      "en": "Safe",
+      "fr": "Coffre-fort"
      },
      "zustand": {
       "de": [
@@ -398,6 +477,10 @@
       "en": [
        "Safe stays shut",
        "Safe opens"
+      ],
+      "fr": [
+       "Le coffre reste fermé",
+       "Le coffre s’ouvre"
       ]
      }
     }
@@ -439,34 +522,45 @@
   {
    "kuerzel": "ODER",
    "art": "entdecken",
+   "name": {
+    "de": "ODER",
+    "en": "OR",
+    "fr": "OU"
+   },
    "werkzeug": "OR",
    "symbol": "≥1",
    "titel": {
     "de": "Die Klingel",
-    "en": "The doorbell"
+    "en": "The doorbell",
+    "fr": "La sonnette"
    },
    "geschichte": {
     "de": "Familie Berger hat zwei Türen, aber nur eine Klingel. Sie soll läuten, wenn vorne an der Haustür oder hinten am Gartentor jemand drückt.",
-    "en": "The Berger family has two doors but only one bell. It should ring when someone presses at the front door or at the garden gate."
+    "en": "The Berger family has two doors but only one bell. It should ring when someone presses at the front door or at the garden gate.",
+    "fr": "La famille Berger a deux portes, mais une seule sonnette. Elle doit sonner quand quelqu’un appuie devant, à la porte d’entrée, ou derrière, au portail du jardin."
    },
    "frage": {
     "de": "Welche Kiste lässt die Klingel richtig läuten?",
-    "en": "Which box makes the bell ring correctly?"
+    "en": "Which box makes the bell ring correctly?",
+    "fr": "Quelle boîte fait sonner correctement la sonnette ?"
    },
    "hilfe": {
     "de": "Halte die Taster gedrückt – einzeln und beide zusammen.",
-    "en": "Hold the buttons down – one at a time and both together."
+    "en": "Hold the buttons down – one at a time and both together.",
+    "fr": "Maintiens les boutons enfoncés – un par un, puis les deux ensemble."
    },
    "merksatz": {
     "de": "ODER: Eins reicht schon.",
-    "en": "OR: One is enough."
+    "en": "OR: One is enough.",
+    "fr": "OU : un seul suffit."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Haustür",
-      "en": "Front door"
+      "en": "Front door",
+      "fr": "Porte d’entrée"
      },
      "art": "taster",
      "zustand": {
@@ -477,6 +571,10 @@
       "en": [
        "Nobody presses at the front door",
        "Someone presses at the front door"
+      ],
+      "fr": [
+       "Personne n’appuie à la porte d’entrée",
+       "Quelqu’un appuie à la porte d’entrée"
       ]
      }
     },
@@ -484,7 +582,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Gartentor",
-      "en": "Garden gate"
+      "en": "Garden gate",
+      "fr": "Portail du jardin"
      },
      "art": "taster",
      "zustand": {
@@ -495,6 +594,10 @@
       "en": [
        "Nobody presses at the garden gate",
        "Someone presses at the garden gate"
+      ],
+      "fr": [
+       "Personne n’appuie au portail",
+       "Quelqu’un appuie au portail"
       ]
      }
     }
@@ -504,7 +607,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Klingel",
-      "en": "Bell"
+      "en": "Bell",
+      "fr": "Sonnette"
      },
      "zustand": {
       "de": [
@@ -514,6 +618,10 @@
       "en": [
        "Bell silent",
        "Bell rings"
+      ],
+      "fr": [
+       "Sonnette muette",
+       "La sonnette sonne"
       ]
      }
     }
@@ -555,35 +663,46 @@
   {
    "kuerzel": "NAND",
    "art": "entdecken",
+   "name": {
+    "de": "NAND",
+    "en": "NAND",
+    "fr": "NON-ET"
+   },
    "werkzeug": "NAND",
    "symbol": "&",
    "invertiert": true,
    "titel": {
     "de": "Die Fensterwarnung",
-    "en": "The window warning"
+    "en": "The window warning",
+    "fr": "L’alerte fenêtre"
    },
    "geschichte": {
     "de": "Im Klassenzimmer hat jedes der beiden Fenster einen Fühler. Im Winter soll keine Wärme verloren gehen: Die Warnlampe leuchtet, solange noch ein Fenster offen ist. Erst wenn beide Fenster zu sind, geht sie aus.",
-    "en": "Each of the two classroom windows has a sensor. In winter no heat should be lost: the warning lamp glows as long as a window is still open. Only when both windows are shut does it go off."
+    "en": "Each of the two classroom windows has a sensor. In winter no heat should be lost: the warning lamp glows as long as a window is still open. Only when both windows are shut does it go off.",
+    "fr": "Dans la salle de classe, chacune des deux fenêtres a un capteur. En hiver, il ne faut pas perdre de chaleur : le voyant d’alerte s’allume tant qu’une fenêtre est encore ouverte. Il ne s’éteint que lorsque les deux fenêtres sont fermées."
    },
    "frage": {
     "de": "Welche Kiste warnt richtig?",
-    "en": "Which box warns correctly?"
+    "en": "Which box warns correctly?",
+    "fr": "Quelle boîte donne la bonne alerte ?"
    },
    "hilfe": {
     "de": "Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
-    "en": "Try all four settings. When may the warning lamp be off?"
+    "en": "Try all four settings. When may the warning lamp be off?",
+    "fr": "Essaie les quatre positions. Quand le voyant d’alerte peut-il être éteint ?"
    },
    "merksatz": {
     "de": "NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
-    "en": "NAND means NOT-AND: only when all inputs are 1 is the output 0."
+    "en": "NAND means NOT-AND: only when all inputs are 1 is the output 0.",
+    "fr": "NON-ET veut dire : la sortie vaut 0 seulement si toutes les entrées valent 1."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Fenster 1",
-      "en": "Window 1"
+      "en": "Window 1",
+      "fr": "Fenêtre 1"
      },
      "art": "kipp",
      "zustand": {
@@ -594,6 +713,10 @@
       "en": [
        "Window 1 open",
        "Window 1 shut"
+      ],
+      "fr": [
+       "Fenêtre 1 ouverte",
+       "Fenêtre 1 fermée"
       ]
      }
     },
@@ -601,7 +724,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Fenster 2",
-      "en": "Window 2"
+      "en": "Window 2",
+      "fr": "Fenêtre 2"
      },
      "art": "kipp",
      "zustand": {
@@ -612,6 +736,10 @@
       "en": [
        "Window 2 open",
        "Window 2 shut"
+      ],
+      "fr": [
+       "Fenêtre 2 ouverte",
+       "Fenêtre 2 fermée"
       ]
      }
     }
@@ -621,7 +749,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Warnlampe",
-      "en": "Warning lamp"
+      "en": "Warning lamp",
+      "fr": "Voyant d’alerte"
      },
      "zustand": {
       "de": [
@@ -631,6 +760,10 @@
       "en": [
        "Warning lamp off",
        "Warning lamp glows"
+      ],
+      "fr": [
+       "Voyant éteint",
+       "Voyant allumé"
       ]
      }
     }
@@ -675,34 +808,41 @@
    "symbol": "ALARM",
    "name": {
     "de": "Alarmanlage",
-    "en": "Alarm system"
+    "en": "Alarm system",
+    "fr": "Alarme"
    },
    "titel": {
     "de": "Die Alarmanlage",
-    "en": "The alarm system"
+    "en": "The alarm system",
+    "fr": "L’alarme"
    },
    "geschichte": {
     "de": "Jetzt bist du der Erfinder! Die Sirene soll heulen, wenn die Alarmanlage eingeschaltet ist und ein Fenster oder die Tür aufgeht. Tagsüber, wenn die Anlage aus ist, bleibt sie still.",
-    "en": "Now you are the inventor! The siren should wail when the alarm is switched on and a window or the door opens. During the day, when the alarm is off, it stays quiet."
+    "en": "Now you are the inventor! The siren should wail when the alarm is switched on and a window or the door opens. During the day, when the alarm is off, it stays quiet.",
+    "fr": "Maintenant, c’est toi l’inventeur ! La sirène doit hurler quand l’alarme est en marche et qu’une fenêtre ou la porte s’ouvre. Dans la journée, quand l’alarme est arrêtée, elle reste muette."
    },
    "frage": {
     "de": "Baue die Alarmanlage aus deinen Werkzeugen.",
-    "en": "Build the alarm system from your tools."
+    "en": "Build the alarm system from your tools.",
+    "fr": "Construis l’alarme avec tes outils."
    },
    "hilfe": {
     "de": "Fasse erst Fenster ODER Tür zusammen – und schicke das dann mit »Anlage an« durch ein UND.",
-    "en": "First combine window OR door – then pass it with »alarm on« through an AND."
+    "en": "First combine window OR door – then pass it with »alarm on« through an AND.",
+    "fr": "Réunis d’abord fenêtre OU porte – puis fais passer le résultat avec « Alarme en marche » dans un ET."
    },
    "merksatz": {
     "de": "Werkzeuge lassen sich kombinieren – so entstehen Erfindungen.",
-    "en": "Tools can be combined – that's how inventions are made."
+    "en": "Tools can be combined – that's how inventions are made.",
+    "fr": "On peut combiner les outils – c’est ainsi que naissent les inventions."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Anlage",
-      "en": "Alarm"
+      "en": "Alarm",
+      "fr": "Alarme"
      },
      "art": "kipp",
      "zustand": {
@@ -713,6 +853,10 @@
       "en": [
        "Alarm off",
        "Alarm on"
+      ],
+      "fr": [
+       "Alarme arrêtée",
+       "Alarme en marche"
       ]
      }
     },
@@ -720,7 +864,8 @@
      "name": "F",
      "bezeichnung": {
       "de": "Fenster",
-      "en": "Window"
+      "en": "Window",
+      "fr": "Fenêtre"
      },
      "art": "kipp",
      "zustand": {
@@ -731,6 +876,10 @@
       "en": [
        "Window shut",
        "Window open"
+      ],
+      "fr": [
+       "Fenêtre fermée",
+       "Fenêtre ouverte"
       ]
      }
     },
@@ -738,7 +887,8 @@
      "name": "T",
      "bezeichnung": {
       "de": "Tür",
-      "en": "Door"
+      "en": "Door",
+      "fr": "Porte"
      },
      "art": "kipp",
      "zustand": {
@@ -749,6 +899,10 @@
       "en": [
        "Door shut",
        "Door open"
+      ],
+      "fr": [
+       "Porte fermée",
+       "Porte ouverte"
       ]
      }
     }
@@ -758,7 +912,8 @@
      "name": "S",
      "bezeichnung": {
       "de": "Sirene",
-      "en": "Siren"
+      "en": "Siren",
+      "fr": "Sirène"
      },
      "zustand": {
       "de": [
@@ -768,6 +923,10 @@
       "en": [
        "Siren silent",
        "Siren wails"
+      ],
+      "fr": [
+       "Sirène muette",
+       "La sirène hurle"
       ]
      }
     }
@@ -832,34 +991,41 @@
    "symbol": "=1",
    "name": {
     "de": "Treppenlicht-Schaltung",
-    "en": "Stairway switch"
+    "en": "Stairway switch",
+    "fr": "Va-et-vient"
    },
    "titel": {
     "de": "Das Treppenhauslicht",
-    "en": "The stairway light"
+    "en": "The stairway light",
+    "fr": "La lumière de l’escalier"
    },
    "geschichte": {
     "de": "Im Treppenhaus gibt es unten und oben einen Schalter. Mit jedem kann man das Licht an- und ausmachen. Es brennt, wenn die beiden Schalter verschieden stehen.",
-    "en": "The staircase has a switch downstairs and one upstairs. Either one turns the light on and off. It is on when the two switches are in different positions."
+    "en": "The staircase has a switch downstairs and one upstairs. Either one turns the light on and off. It is on when the two switches are in different positions.",
+    "fr": "Dans l’escalier, il y a un interrupteur en bas et un en haut. Chacun peut allumer et éteindre la lumière. Elle est allumée quand les deux interrupteurs sont dans des positions différentes."
    },
    "frage": {
     "de": "Wie merkt eine Schaltung, dass zwei Schalter verschieden stehen?",
-    "en": "How does a circuit notice that two switches are in different positions?"
+    "en": "How does a circuit notice that two switches are in different positions?",
+    "fr": "Comment un circuit remarque-t-il que deux interrupteurs sont dans des positions différentes ?"
    },
    "hilfe": {
     "de": "Verschieden heißt: einer ODER der andere – aber NICHT beide (UND).",
-    "en": "Different means: one OR the other – but NOT both (AND)."
+    "en": "Different means: one OR the other – but NOT both (AND).",
+    "fr": "Différent veut dire : l’un OU l’autre – mais PAS les deux (ET)."
    },
    "merksatz": {
     "de": "XODER: Verschieden ergibt 1.",
-    "en": "XOR: Different gives 1."
+    "en": "XOR: Different gives 1.",
+    "fr": "OU exclusif : différent donne 1."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Schalter unten",
-      "en": "Switch downstairs"
+      "en": "Switch downstairs",
+      "fr": "Interrupteur du bas"
      },
      "art": "kipp",
      "zustand": {
@@ -870,6 +1036,10 @@
       "en": [
        "Switch downstairs off",
        "Switch downstairs on"
+      ],
+      "fr": [
+       "Interrupteur du bas éteint",
+       "Interrupteur du bas allumé"
       ]
      }
     },
@@ -877,7 +1047,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Schalter oben",
-      "en": "Switch upstairs"
+      "en": "Switch upstairs",
+      "fr": "Interrupteur du haut"
      },
      "art": "kipp",
      "zustand": {
@@ -888,6 +1059,10 @@
       "en": [
        "Switch upstairs off",
        "Switch upstairs on"
+      ],
+      "fr": [
+       "Interrupteur du haut éteint",
+       "Interrupteur du haut allumé"
       ]
      }
     }
@@ -897,7 +1072,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Treppenlicht",
-      "en": "Stair light"
+      "en": "Stair light",
+      "fr": "Lumière de l’escalier"
      },
      "zustand": {
       "de": [
@@ -907,6 +1083,10 @@
       "en": [
        "Stair light off",
        "Stair light on"
+      ],
+      "fr": [
+       "Lumière éteinte",
+       "Lumière allumée"
       ]
      }
     }
@@ -992,30 +1172,36 @@
    "symbol": "",
    "titel": {
     "de": "Alles aus einem Baustein",
-    "en": "Everything from one part"
+    "en": "Everything from one part",
+    "fr": "Tout avec une seule pièce"
    },
    "geschichte": {
     "de": "Chipfabriken mögen den NAND-Baustein besonders: Aus ihm allein lässt sich jede andere Schaltung bauen. Probier es aus – baue ein UND nur aus NAND-Bausteinen.",
-    "en": "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – build an AND from NAND parts only."
+    "en": "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – build an AND from NAND parts only.",
+    "fr": "Les usines de puces adorent la pièce NON-ET : avec elle seule, on peut construire n’importe quel autre circuit. Essaie – construis un ET uniquement avec des pièces NON-ET."
    },
    "frage": {
     "de": "Geht alles mit einem einzigen Baustein?",
-    "en": "Can everything be done with a single part?"
+    "en": "Can everything be done with a single part?",
+    "fr": "Peut-on tout faire avec une seule pièce ?"
    },
    "hilfe": {
     "de": "Verbindest du beide Eingänge eines NAND, dreht er um wie NICHT. Und NICHT hinter NICHT-UND ergibt …?",
-    "en": "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?"
+    "en": "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?",
+    "fr": "Si tu relies les deux entrées d’un NON-ET, il inverse comme un NON. Et NON après NON-ET donne … ?"
    },
    "merksatz": {
     "de": "Ein NAND mit verbundenen Eingängen ist ein NICHT. Zwei NAND ergeben ein UND – aus NAND lässt sich alles bauen.",
-    "en": "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND."
+    "en": "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND.",
+    "fr": "Un NON-ET aux entrées reliées est un NON. Deux NON-ET font un ET – avec des NON-ET, on peut tout construire."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Schalter A",
-      "en": "Switch A"
+      "en": "Switch A",
+      "fr": "Interrupteur A"
      },
      "art": "kipp",
      "zustand": {
@@ -1026,6 +1212,10 @@
       "en": [
        "Switch A off",
        "Switch A on"
+      ],
+      "fr": [
+       "Interrupteur A éteint",
+       "Interrupteur A allumé"
       ]
      }
     },
@@ -1033,7 +1223,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Schalter B",
-      "en": "Switch B"
+      "en": "Switch B",
+      "fr": "Interrupteur B"
      },
      "art": "kipp",
      "zustand": {
@@ -1044,6 +1235,10 @@
       "en": [
        "Switch B off",
        "Switch B on"
+      ],
+      "fr": [
+       "Interrupteur B éteint",
+       "Interrupteur B allumé"
       ]
      }
     }
@@ -1053,7 +1248,8 @@
      "name": "Y",
      "bezeichnung": {
       "de": "Lampe",
-      "en": "Lamp"
+      "en": "Lamp",
+      "fr": "Lampe"
      },
      "zustand": {
       "de": [
@@ -1063,6 +1259,10 @@
       "en": [
        "Lamp off",
        "Lamp glows"
+      ],
+      "fr": [
+       "Lampe éteinte",
+       "Lampe allumée"
       ]
      }
     }
@@ -1122,30 +1322,36 @@
    "symbol": "",
    "titel": {
     "de": "Vier Lampen",
-    "en": "Four lamps"
+    "en": "Four lamps",
+    "fr": "Quatre lampes"
    },
    "geschichte": {
     "de": "Mit einer Lampe kann man nur 0 und 1 zeigen. Mit vier Lampen nebeneinander geht viel mehr: Jede Lampe hat einen Wert – 8, 4, 2 und 1. Die Werte der leuchtenden Lampen werden zusammengezählt. So haben die ersten Heimcomputer Zahlen gezeigt: Schalter einstellen, Lampen ablesen.",
-    "en": "One lamp can only show 0 and 1. With four lamps side by side you can do much more: each lamp has a value – 8, 4, 2 and 1. The values of the lit lamps are added up. That is how the first home computers showed numbers: set the switches, read the lamps."
+    "en": "One lamp can only show 0 and 1. With four lamps side by side you can do much more: each lamp has a value – 8, 4, 2 and 1. The values of the lit lamps are added up. That is how the first home computers showed numbers: set the switches, read the lamps.",
+    "fr": "Avec une lampe, on ne peut montrer que 0 et 1. Avec quatre lampes côte à côte, on peut faire bien plus : chaque lampe a une valeur – 8, 4, 2 et 1. On additionne les valeurs des lampes allumées. C’est ainsi que les premiers ordinateurs familiaux affichaient les nombres : régler les interrupteurs, lire les lampes."
    },
    "frage": {
     "de": "Wie zählt ein Rechner mit vier Lampen?",
-    "en": "How does a computer count with four lamps?"
+    "en": "How does a computer count with four lamps?",
+    "fr": "Comment un ordinateur compte-t-il avec quatre lampes ?"
    },
    "hilfe": {
     "de": "Fang bei der größten Lampe an: Passt die 8 hinein? Dann Achter an, den Rest bildest du mit 4, 2 und 1. Beispiel: 5 = 4 + 1.",
-    "en": "Start with the biggest lamp: does 8 fit? Then switch on the eight and make the rest with 4, 2 and 1. Example: 5 = 4 + 1."
+    "en": "Start with the biggest lamp: does 8 fit? Then switch on the eight and make the rest with 4, 2 and 1. Example: 5 = 4 + 1.",
+    "fr": "Commence par la plus grande lampe : est-ce que 8 rentre ? Alors allume le 8 et fais le reste avec 4, 2 et 1. Exemple : 5 = 4 + 1."
    },
    "merksatz": {
     "de": "Jede Stelle ist doppelt so viel wert wie die rechts daneben: 8, 4, 2, 1. Mit 4 Bit zählt man von 0 bis 15.",
-    "en": "Each place is worth twice the one to its right: 8, 4, 2, 1. With 4 bits you count from 0 to 15."
+    "en": "Each place is worth twice the one to its right: 8, 4, 2, 1. With 4 bits you count from 0 to 15.",
+    "fr": "Chaque position vaut le double de celle de droite : 8, 4, 2, 1. Avec 4 bits, on compte de 0 à 15."
    },
    "eingaenge": [
     {
      "name": "D3",
      "bezeichnung": {
       "de": "Achter",
-      "en": "Eights"
+      "en": "Eights",
+      "fr": "Huit"
      },
      "art": "kipp"
     },
@@ -1153,7 +1359,8 @@
      "name": "D2",
      "bezeichnung": {
       "de": "Vierer",
-      "en": "Fours"
+      "en": "Fours",
+      "fr": "Quatre"
      },
      "art": "kipp"
     },
@@ -1161,7 +1368,8 @@
      "name": "D1",
      "bezeichnung": {
       "de": "Zweier",
-      "en": "Twos"
+      "en": "Twos",
+      "fr": "Deux"
      },
      "art": "kipp"
     },
@@ -1169,7 +1377,8 @@
      "name": "D0",
      "bezeichnung": {
       "de": "Einer",
-      "en": "Ones"
+      "en": "Ones",
+      "fr": "Un"
      },
      "art": "kipp"
     }
@@ -1179,28 +1388,32 @@
      "name": "L3",
      "bezeichnung": {
       "de": "Lampe 8",
-      "en": "Lamp 8"
+      "en": "Lamp 8",
+      "fr": "Lampe 8"
      }
     },
     {
      "name": "L2",
      "bezeichnung": {
       "de": "Lampe 4",
-      "en": "Lamp 4"
+      "en": "Lamp 4",
+      "fr": "Lampe 4"
      }
     },
     {
      "name": "L1",
      "bezeichnung": {
       "de": "Lampe 2",
-      "en": "Lamp 2"
+      "en": "Lamp 2",
+      "fr": "Lampe 2"
      }
     },
     {
      "name": "L0",
      "bezeichnung": {
       "de": "Lampe 1",
-      "en": "Lamp 1"
+      "en": "Lamp 1",
+      "fr": "Lampe 1"
      }
     }
    ],
@@ -1258,34 +1471,41 @@
    "symbol": "HA",
    "name": {
     "de": "Halbaddierer",
-    "en": "Half adder"
+    "en": "Half adder",
+    "fr": "Demi-additionneur"
    },
    "titel": {
     "de": "1 + 1 = 10",
-    "en": "1 + 1 = 10"
+    "en": "1 + 1 = 10",
+    "fr": "1 + 1 = 10"
    },
    "geschichte": {
     "de": "Rechner zählen nur mit 0 und 1. Kommen zwei Einsen zusammen, wird es eng: 1 + 1 ergibt »10« – eine 0 und ein Übertrag in die nächste Stelle, wie beim Zehnerübergang.",
-    "en": "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 and a carry to the next place, just like carrying a ten."
+    "en": "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 and a carry to the next place, just like carrying a ten.",
+    "fr": "Les ordinateurs ne comptent qu’avec 0 et 1. Quand deux 1 se rencontrent, il n’y a plus de place : 1 + 1 donne « 10 » – un 0 et une retenue dans la position suivante, comme quand on passe la dizaine."
    },
    "frage": {
     "de": "Baue eine Schaltung, die zwei Bits addiert.",
-    "en": "Build a circuit that adds two bits."
+    "en": "Build a circuit that adds two bits.",
+    "fr": "Construis un circuit qui additionne deux bits."
    },
    "hilfe": {
     "de": "Die Summe ist 1, wenn die Bits verschieden sind. Der Übertrag ist 1, wenn beide 1 sind.",
-    "en": "The sum is 1 when the bits differ. The carry is 1 when both are 1."
+    "en": "The sum is 1 when the bits differ. The carry is 1 when both are 1.",
+    "fr": "La somme vaut 1 quand les bits sont différents. La retenue vaut 1 quand les deux valent 1."
    },
    "merksatz": {
     "de": "Summe und Übertrag – so rechnet ein Computer.",
-    "en": "Sum and carry – that's how a computer adds."
+    "en": "Sum and carry – that's how a computer adds.",
+    "fr": "Somme et retenue – c’est ainsi que calcule un ordinateur."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Bit A",
-      "en": "Bit A"
+      "en": "Bit A",
+      "fr": "Bit A"
      },
      "art": "kipp",
      "zustand": {
@@ -1296,6 +1516,10 @@
       "en": [
        "A is 0",
        "A is 1"
+      ],
+      "fr": [
+       "A vaut 0",
+       "A vaut 1"
       ]
      }
     },
@@ -1303,7 +1527,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Bit B",
-      "en": "Bit B"
+      "en": "Bit B",
+      "fr": "Bit B"
      },
      "art": "kipp",
      "zustand": {
@@ -1314,6 +1539,10 @@
       "en": [
        "B is 0",
        "B is 1"
+      ],
+      "fr": [
+       "B vaut 0",
+       "B vaut 1"
       ]
      }
     }
@@ -1323,7 +1552,8 @@
      "name": "S",
      "bezeichnung": {
       "de": "Summe",
-      "en": "Sum"
+      "en": "Sum",
+      "fr": "Somme"
      },
      "zustand": {
       "de": [
@@ -1333,6 +1563,10 @@
       "en": [
        "Sum 0",
        "Sum 1"
+      ],
+      "fr": [
+       "Somme 0",
+       "Somme 1"
       ]
      }
     },
@@ -1340,7 +1574,8 @@
      "name": "C",
      "bezeichnung": {
       "de": "Übertrag",
-      "en": "Carry"
+      "en": "Carry",
+      "fr": "Retenue"
      },
      "zustand": {
       "de": [
@@ -1350,6 +1585,10 @@
       "en": [
        "no carry",
        "carry 1"
+      ],
+      "fr": [
+       "pas de retenue",
+       "retenue 1"
       ]
      }
     }
@@ -1415,34 +1654,41 @@
    "symbol": "VA",
    "name": {
     "de": "Volladdierer",
-    "en": "Full adder"
+    "en": "Full adder",
+    "fr": "Additionneur complet"
    },
    "titel": {
     "de": "Drei Bits auf einmal",
-    "en": "Three bits at once"
+    "en": "Three bits at once",
+    "fr": "Trois bits à la fois"
    },
    "geschichte": {
     "de": "Beim schriftlichen Addieren kommt von rechts manchmal ein Übertrag dazu. Dann müssen drei Bits zusammengezählt werden: A, B und der Übertrag. Das schafft ein Halbaddierer allein nicht.",
-    "en": "When adding on paper, sometimes a carry comes in from the right. Then three bits have to be added: A, B and the carry. A half adder alone cannot do that."
+    "en": "When adding on paper, sometimes a carry comes in from the right. Then three bits have to be added: A, B and the carry. A half adder alone cannot do that.",
+    "fr": "Quand on additionne sur papier, une retenue arrive parfois de la droite. Il faut alors additionner trois bits : A, B et la retenue. Un demi-additionneur seul n’y arrive pas."
    },
    "frage": {
     "de": "Baue eine Schaltung, die drei Bits addiert.",
-    "en": "Build a circuit that adds three bits."
+    "en": "Build a circuit that adds three bits.",
+    "fr": "Construis un circuit qui additionne trois bits."
    },
    "hilfe": {
     "de": "Addiere erst A und B mit einem Halbaddierer, dann dessen Summe und den Übertrag mit einem zweiten. Liefert einer der beiden einen Übertrag, gibt es einen Übertrag raus – das ist ein ODER.",
-    "en": "First add A and B with a half adder, then its sum and the carry with a second one. If either of them gives a carry, there is a carry out – that is an OR."
+    "en": "First add A and B with a half adder, then its sum and the carry with a second one. If either of them gives a carry, there is a carry out – that is an OR.",
+    "fr": "Additionne d’abord A et B avec un demi-additionneur, puis sa somme et la retenue avec un deuxième. Si l’un des deux donne une retenue, il y a une retenue en sortie – c’est un OU."
    },
    "merksatz": {
     "de": "Ein Volladdierer addiert drei Bits: A, B und den Übertrag von rechts.",
-    "en": "A full adder adds three bits: A, B and the carry from the right."
+    "en": "A full adder adds three bits: A, B and the carry from the right.",
+    "fr": "Un additionneur complet additionne trois bits : A, B et la retenue venant de la droite."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "Bit A",
-      "en": "Bit A"
+      "en": "Bit A",
+      "fr": "Bit A"
      },
      "art": "kipp",
      "zustand": {
@@ -1453,6 +1699,10 @@
       "en": [
        "A is 0",
        "A is 1"
+      ],
+      "fr": [
+       "A vaut 0",
+       "A vaut 1"
       ]
      }
     },
@@ -1460,7 +1710,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "Bit B",
-      "en": "Bit B"
+      "en": "Bit B",
+      "fr": "Bit B"
      },
      "art": "kipp",
      "zustand": {
@@ -1471,6 +1722,10 @@
       "en": [
        "B is 0",
        "B is 1"
+      ],
+      "fr": [
+       "B vaut 0",
+       "B vaut 1"
       ]
      }
     },
@@ -1478,7 +1733,8 @@
      "name": "Ci",
      "bezeichnung": {
       "de": "Übertrag rein",
-      "en": "Carry in"
+      "en": "Carry in",
+      "fr": "Retenue en entrée"
      },
      "art": "kipp",
      "zustand": {
@@ -1489,6 +1745,10 @@
       "en": [
        "no carry in",
        "carry in 1"
+      ],
+      "fr": [
+       "pas de retenue en entrée",
+       "retenue en entrée 1"
       ]
      }
     }
@@ -1498,7 +1758,8 @@
      "name": "S",
      "bezeichnung": {
       "de": "Summe",
-      "en": "Sum"
+      "en": "Sum",
+      "fr": "Somme"
      },
      "zustand": {
       "de": [
@@ -1508,6 +1769,10 @@
       "en": [
        "Sum 0",
        "Sum 1"
+      ],
+      "fr": [
+       "Somme 0",
+       "Somme 1"
       ]
      }
     },
@@ -1515,7 +1780,8 @@
      "name": "C",
      "bezeichnung": {
       "de": "Übertrag raus",
-      "en": "Carry out"
+      "en": "Carry out",
+      "fr": "Retenue en sortie"
      },
      "zustand": {
       "de": [
@@ -1525,6 +1791,10 @@
       "en": [
        "no carry out",
        "carry out 1"
+      ],
+      "fr": [
+       "pas de retenue en sortie",
+       "retenue en sortie 1"
       ]
      }
     }
@@ -1608,34 +1878,41 @@
    "symbol": "Σ4",
    "name": {
     "de": "4-Bit-Addierer",
-    "en": "4-bit adder"
+    "en": "4-bit adder",
+    "fr": "Additionneur 4 bits"
    },
    "titel": {
     "de": "Rechnen bis 15",
-    "en": "Adding up to 15"
+    "en": "Adding up to 15",
+    "fr": "Calculer jusqu’à 15"
    },
    "geschichte": {
     "de": "Jetzt rechnest du wie ein echtes Rechenwerk: Mit den oberen vier Schaltern stellst du die Zahl A ein, mit den unteren die Zahl B. Deine Schaltung zeigt A + B an den Lampen. Und wenn das Ergebnis größer als 15 wird? Dann muss die Übertrags-Lampe »Ü 16« helfen.",
-    "en": "Now you calculate like a real arithmetic unit: the upper four switches set number A, the lower four set number B. Your circuit shows A + B on the lamps. And if the result is bigger than 15? Then the carry lamp »C 16« has to help."
+    "en": "Now you calculate like a real arithmetic unit: the upper four switches set number A, the lower four set number B. Your circuit shows A + B on the lamps. And if the result is bigger than 15? Then the carry lamp »C 16« has to help.",
+    "fr": "Maintenant, tu calcules comme une vraie unité de calcul : les quatre interrupteurs du haut règlent le nombre A, ceux du bas le nombre B. Ton circuit affiche A + B sur les lampes. Et si le résultat dépasse 15 ? Alors la lampe de retenue « R 16 » doit aider."
    },
    "frage": {
     "de": "Was passiert, wenn das Ergebnis nicht mehr in vier Lampen passt?",
-    "en": "What happens when the result no longer fits into four lamps?"
+    "en": "What happens when the result no longer fits into four lamps?",
+    "fr": "Que se passe-t-il quand le résultat ne tient plus sur quatre lampes ?"
    },
    "hilfe": {
     "de": "Rechne Stelle für Stelle wie beim schriftlichen Addieren: Für die Einer reicht ein Halbaddierer. Sein Übertrag geht in den Volladdierer der Zweier, dessen Übertrag zu den Vierern und so weiter. Der letzte Übertrag leuchtet an »Ü 16«.",
-    "en": "Work place by place as when adding on paper: a half adder is enough for the ones. Its carry goes into the full adder for the twos, its carry on to the fours, and so on. The last carry lights »C 16«."
+    "en": "Work place by place as when adding on paper: a half adder is enough for the ones. Its carry goes into the full adder for the twos, its carry on to the fours, and so on. The last carry lights »C 16«.",
+    "fr": "Calcule position par position comme sur papier : pour les unités, un demi-additionneur suffit. Sa retenue va dans l’additionneur complet des 2, la retenue de celui-ci aux 4, et ainsi de suite. La dernière retenue allume « R 16 »."
    },
    "merksatz": {
     "de": "Ein 4-Bit-Addierer rechnet bis 15 + 15 = 30. Passt das Ergebnis nicht in vier Bit, zeigt es der Übertrag an – Rechner nennen das Überlauf.",
-    "en": "A 4-bit adder calculates up to 15 + 15 = 30. If the result does not fit into four bits, the carry shows it – computers call this overflow."
+    "en": "A 4-bit adder calculates up to 15 + 15 = 30. If the result does not fit into four bits, the carry shows it – computers call this overflow.",
+    "fr": "Un additionneur 4 bits calcule jusqu’à 15 + 15 = 30. Si le résultat ne tient pas sur quatre bits, la retenue le signale – les ordinateurs appellent cela un dépassement."
    },
    "eingaenge": [
     {
      "name": "A3",
      "bezeichnung": {
       "de": "A 8",
-      "en": "A 8"
+      "en": "A 8",
+      "fr": "A 8"
      },
      "art": "kipp"
     },
@@ -1643,7 +1920,8 @@
      "name": "A2",
      "bezeichnung": {
       "de": "A 4",
-      "en": "A 4"
+      "en": "A 4",
+      "fr": "A 4"
      },
      "art": "kipp"
     },
@@ -1651,7 +1929,8 @@
      "name": "A1",
      "bezeichnung": {
       "de": "A 2",
-      "en": "A 2"
+      "en": "A 2",
+      "fr": "A 2"
      },
      "art": "kipp"
     },
@@ -1659,7 +1938,8 @@
      "name": "A0",
      "bezeichnung": {
       "de": "A 1",
-      "en": "A 1"
+      "en": "A 1",
+      "fr": "A 1"
      },
      "art": "kipp"
     },
@@ -1667,7 +1947,8 @@
      "name": "B3",
      "bezeichnung": {
       "de": "B 8",
-      "en": "B 8"
+      "en": "B 8",
+      "fr": "B 8"
      },
      "art": "kipp"
     },
@@ -1675,7 +1956,8 @@
      "name": "B2",
      "bezeichnung": {
       "de": "B 4",
-      "en": "B 4"
+      "en": "B 4",
+      "fr": "B 4"
      },
      "art": "kipp"
     },
@@ -1683,7 +1965,8 @@
      "name": "B1",
      "bezeichnung": {
       "de": "B 2",
-      "en": "B 2"
+      "en": "B 2",
+      "fr": "B 2"
      },
      "art": "kipp"
     },
@@ -1691,7 +1974,8 @@
      "name": "B0",
      "bezeichnung": {
       "de": "B 1",
-      "en": "B 1"
+      "en": "B 1",
+      "fr": "B 1"
      },
      "art": "kipp"
     }
@@ -1701,35 +1985,40 @@
      "name": "C",
      "bezeichnung": {
       "de": "Ü 16",
-      "en": "C 16"
+      "en": "C 16",
+      "fr": "R 16"
      }
     },
     {
      "name": "S3",
      "bezeichnung": {
       "de": "8",
-      "en": "8"
+      "en": "8",
+      "fr": "8"
      }
     },
     {
      "name": "S2",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      }
     },
     {
      "name": "S1",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      }
     },
     {
      "name": "S0",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      }
     }
    ],
@@ -2140,34 +2429,41 @@
    "symbol": "M",
    "name": {
     "de": "Merker",
-    "en": "Latch"
+    "en": "Latch",
+    "fr": "Bascule"
    },
    "titel": {
     "de": "Hat jemand geklingelt?",
-    "en": "Did someone ring?"
+    "en": "Did someone ring?",
+    "fr": "Quelqu’un a-t-il sonné ?"
    },
    "geschichte": {
     "de": "Du warst kurz im Garten. Hat in der Zeit jemand geklingelt? Eine normale Klingellampe leuchtet nur, solange jemand drückt. Deine Merklampe soll anbleiben, bis du auf »Löschen« drückst.",
-    "en": "You were out in the garden for a moment. Did anyone ring meanwhile? A normal bell lamp only glows while someone presses. Your memory lamp should stay on until you press »clear«."
+    "en": "You were out in the garden for a moment. Did anyone ring meanwhile? A normal bell lamp only glows while someone presses. Your memory lamp should stay on until you press »clear«.",
+    "fr": "Tu étais un moment au jardin. Quelqu’un a-t-il sonné entre-temps ? Une lampe de sonnette normale ne s’allume que tant que quelqu’un appuie. Ta lampe mémoire doit rester allumée jusqu’à ce que tu appuies sur « Effacer »."
    },
    "frage": {
     "de": "Wie kann sich eine Schaltung etwas merken?",
-    "en": "How can a circuit remember something?"
+    "en": "How can a circuit remember something?",
+    "fr": "Comment un circuit peut-il se souvenir de quelque chose ?"
    },
    "hilfe": {
     "de": "Die Lampe soll an bleiben, wenn sie schon an ist. Führe ihren Ausgang zurück: Lampe = (Klingel ODER Lampe) UND NICHT Löschen.",
-    "en": "The lamp should stay on once it is on. Feed its output back: lamp = (bell OR lamp) AND NOT clear."
+    "en": "The lamp should stay on once it is on. Feed its output back: lamp = (bell OR lamp) AND NOT clear.",
+    "fr": "La lampe doit rester allumée si elle l’est déjà. Ramène sa sortie en arrière : lampe = (sonnette OU lampe) ET NON effacer."
    },
    "merksatz": {
     "de": "Führt ein Ausgang zurück an den eigenen Eingang, kann sich die Schaltung etwas merken. Das ist ein Speicher für ein Bit.",
-    "en": "When an output leads back to its own input, the circuit can remember something. That is a memory for one bit."
+    "en": "When an output leads back to its own input, the circuit can remember something. That is a memory for one bit.",
+    "fr": "Quand une sortie revient sur sa propre entrée, le circuit peut se souvenir de quelque chose. C’est une mémoire pour un bit."
    },
    "eingaenge": [
     {
      "name": "S",
      "bezeichnung": {
       "de": "Klingelknopf",
-      "en": "Bell button"
+      "en": "Bell button",
+      "fr": "Bouton de sonnette"
      },
      "art": "taster"
     },
@@ -2175,7 +2471,8 @@
      "name": "R",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -2185,7 +2482,8 @@
      "name": "Q",
      "bezeichnung": {
       "de": "Merklampe",
-      "en": "Memory lamp"
+      "en": "Memory lamp",
+      "fr": "Lampe mémoire"
      }
     }
    ],
@@ -2200,7 +2498,8 @@
      "soll": "0",
      "text": {
       "de": "Einschalten: alles aus",
-      "en": "Switch on: all off"
+      "en": "Switch on: all off",
+      "fr": "Mise en marche : tout éteint"
      }
     },
     {
@@ -2208,7 +2507,8 @@
      "soll": "1",
      "text": {
       "de": "Jemand klingelt",
-      "en": "Someone rings"
+      "en": "Someone rings",
+      "fr": "Quelqu’un sonne"
      }
     },
     {
@@ -2216,7 +2516,8 @@
      "soll": "1",
      "text": {
       "de": "Klingelknopf loslassen",
-      "en": "Release the bell button"
+      "en": "Release the bell button",
+      "fr": "Relâcher le bouton de sonnette"
      }
     },
     {
@@ -2224,7 +2525,8 @@
      "soll": "0",
      "text": {
       "de": "Löschen drücken",
-      "en": "Press clear"
+      "en": "Press clear",
+      "fr": "Appuyer sur Effacer"
      }
     },
     {
@@ -2232,7 +2534,8 @@
      "soll": "0",
      "text": {
       "de": "Löschen loslassen",
-      "en": "Release clear"
+      "en": "Release clear",
+      "fr": "Relâcher Effacer"
      }
     },
     {
@@ -2240,7 +2543,8 @@
      "soll": "1",
      "text": {
       "de": "Noch einmal klingeln",
-      "en": "Ring again"
+      "en": "Ring again",
+      "fr": "Sonner encore une fois"
      }
     },
     {
@@ -2248,7 +2552,8 @@
      "soll": "1",
      "text": {
       "de": "Loslassen",
-      "en": "Release"
+      "en": "Release",
+      "fr": "Relâcher"
      }
     },
     {
@@ -2256,7 +2561,8 @@
      "soll": "0",
      "text": {
       "de": "Klingeln und Löschen zugleich",
-      "en": "Ring and clear together"
+      "en": "Ring and clear together",
+      "fr": "Sonner et effacer en même temps"
      }
     }
    ],
@@ -2315,34 +2621,41 @@
    "symbol": "D",
    "name": {
     "de": "Speicherbit",
-    "en": "Memory bit"
+    "en": "Memory bit",
+    "fr": "Bit mémoire"
    },
    "titel": {
     "de": "Der Schnappschuss",
-    "en": "The snapshot"
+    "en": "The snapshot",
+    "fr": "L’instantané"
    },
    "geschichte": {
     "de": "Ein Rechner muss sich Zahlen merken – aber nur dann, wenn er es soll. Wie bei einem Foto: Erst beim Drücken auf »Merken« wird festgehalten, wie der Schalter gerade steht. Danach darfst du ihn umlegen, die Lampe bleibt, wie sie war.",
-    "en": "A computer has to remember numbers – but only when it is told to. Like a photo: only when you press »store« is the switch position captured. Afterwards you may flip it, the lamp stays as it was."
+    "en": "A computer has to remember numbers – but only when it is told to. Like a photo: only when you press »store« is the switch position captured. Afterwards you may flip it, the lamp stays as it was.",
+    "fr": "Un ordinateur doit retenir des nombres – mais seulement quand on le lui demande. Comme pour une photo : c’est seulement en appuyant sur « Mémoriser » que la position de l’interrupteur est capturée. Ensuite, tu peux le basculer, la lampe reste comme elle était."
    },
    "frage": {
     "de": "Wie merkt sich ein Rechner ein Bit genau dann, wenn er soll?",
-    "en": "How does a computer store a bit exactly when it should?"
+    "en": "How does a computer store a bit exactly when it should?",
+    "fr": "Comment un ordinateur retient-il un bit exactement au bon moment ?"
    },
    "hilfe": {
     "de": "Nimm deinen Merker. Beim Merken mit Schalter an soll er gesetzt werden (Schalter UND Merken), beim Merken mit Schalter aus gelöscht (NICHT Schalter UND Merken).",
-    "en": "Use your latch. Storing with the switch on should set it (switch AND store), storing with the switch off should clear it (NOT switch AND store)."
+    "en": "Use your latch. Storing with the switch on should set it (switch AND store), storing with the switch off should clear it (NOT switch AND store).",
+    "fr": "Prends ta bascule. Mémoriser avec l’interrupteur allumé doit la mettre à 1 (interrupteur ET mémoriser), mémoriser avec l’interrupteur éteint doit l’effacer (NON interrupteur ET mémoriser)."
    },
    "merksatz": {
     "de": "Ein Speicherbit übernimmt den Wert nur beim Merken. Sonst behält es, was es hat.",
-    "en": "A memory bit only takes the value when storing. Otherwise it keeps what it has."
+    "en": "A memory bit only takes the value when storing. Otherwise it keeps what it has.",
+    "fr": "Un bit mémoire ne prend la valeur qu’au moment de mémoriser. Sinon, il garde ce qu’il a."
    },
    "eingaenge": [
     {
      "name": "D",
      "bezeichnung": {
       "de": "Schalter",
-      "en": "Switch"
+      "en": "Switch",
+      "fr": "Interrupteur"
      },
      "art": "kipp"
     },
@@ -2350,7 +2663,8 @@
      "name": "M",
      "bezeichnung": {
       "de": "Merken",
-      "en": "Store"
+      "en": "Store",
+      "fr": "Mémoriser"
      },
      "art": "taster"
     }
@@ -2360,7 +2674,8 @@
      "name": "Q",
      "bezeichnung": {
       "de": "Lampe",
-      "en": "Lamp"
+      "en": "Lamp",
+      "fr": "Lampe"
      }
     }
    ],
@@ -2375,7 +2690,8 @@
      "soll": "0",
      "text": {
       "de": "Schalter an – noch nicht gemerkt",
-      "en": "Switch on – not stored yet"
+      "en": "Switch on – not stored yet",
+      "fr": "Interrupteur allumé – pas encore mémorisé"
      }
     },
     {
@@ -2383,7 +2699,8 @@
      "soll": "1",
      "text": {
       "de": "Merken drücken",
-      "en": "Press store"
+      "en": "Press store",
+      "fr": "Appuyer sur Mémoriser"
      }
     },
     {
@@ -2391,7 +2708,8 @@
      "soll": "1",
      "text": {
       "de": "Merken loslassen",
-      "en": "Release store"
+      "en": "Release store",
+      "fr": "Relâcher Mémoriser"
      }
     },
     {
@@ -2399,7 +2717,8 @@
      "soll": "1",
      "text": {
       "de": "Schalter aus – die Lampe bleibt",
-      "en": "Switch off – the lamp stays"
+      "en": "Switch off – the lamp stays",
+      "fr": "Interrupteur éteint – la lampe reste"
      }
     },
     {
@@ -2407,7 +2726,8 @@
      "soll": "0",
      "text": {
       "de": "Merken drücken",
-      "en": "Press store"
+      "en": "Press store",
+      "fr": "Appuyer sur Mémoriser"
      }
     },
     {
@@ -2415,7 +2735,8 @@
      "soll": "0",
      "text": {
       "de": "Loslassen",
-      "en": "Release"
+      "en": "Release",
+      "fr": "Relâcher"
      }
     }
    ],
@@ -2488,34 +2809,41 @@
    "symbol": "DT",
    "name": {
     "de": "Taktbit",
-    "en": "Clock bit"
+    "en": "Clock bit",
+    "fr": "Bit d’horloge"
    },
    "titel": {
     "de": "Genau im Moment des Drückens",
-    "en": "Exactly at the moment of pressing"
+    "en": "Exactly at the moment of pressing",
+    "fr": "Exactement au moment d’appuyer"
    },
    "geschichte": {
     "de": "Dein Schnappschuss hat einen Haken: Solange »Merken« gedrückt ist, folgt die Lampe dem Schalter. Ein Rechner braucht Speicher, die nur im Moment des Drückens übernehmen – wie der Auslöser einer Kamera. Und einen Knopf zum Löschen.",
-    "en": "Your snapshot has a catch: as long as »store« is held, the lamp follows the switch. A computer needs memory that takes over only at the moment of pressing – like a camera shutter. And a clear button."
+    "en": "Your snapshot has a catch: as long as »store« is held, the lamp follows the switch. A computer needs memory that takes over only at the moment of pressing – like a camera shutter. And a clear button.",
+    "fr": "Ton instantané a un défaut : tant que « Mémoriser » est enfoncé, la lampe suit l’interrupteur. Un ordinateur a besoin de mémoires qui ne prennent la valeur qu’au moment où l’on appuie – comme le déclencheur d’un appareil photo. Et d’un bouton pour effacer."
    },
    "frage": {
     "de": "Wie übernimmt ein Speicher genau im Moment des Takts?",
-    "en": "How does a memory take over exactly at the moment of the clock?"
+    "en": "How does a memory take over exactly at the moment of the clock?",
+    "fr": "Comment une mémoire prend-elle la valeur exactement au moment de l’horloge ?"
    },
    "hilfe": {
     "de": "Zuerst ohne Löschen: zwei Speicherbits hintereinander. Das erste merkt, solange der Takt NICHT gedrückt ist, das zweite beim Drücken. Dann das Löschen: Es öffnet beide Speicherbits (ODER) und gibt beiden eine 0 (UND NICHT Löschen).",
-    "en": "First without clearing: two memory bits in a row. The first stores while the clock is NOT pressed, the second on pressing. Then clearing: it opens both memory bits (OR) and gives both a 0 (AND NOT clear)."
+    "en": "First without clearing: two memory bits in a row. The first stores while the clock is NOT pressed, the second on pressing. Then clearing: it opens both memory bits (OR) and gives both a 0 (AND NOT clear).",
+    "fr": "D’abord sans effacer : deux bits mémoire l’un après l’autre. Le premier mémorise tant que l’horloge n’est PAS enfoncée, le second au moment d’appuyer. Ensuite l’effacement : il ouvre les deux bits mémoire (OU) et leur donne un 0 (ET NON effacer)."
    },
    "merksatz": {
     "de": "Ein Taktbit übernimmt nur im Moment des Takts. Danach kann sich der Schalter ändern, die Lampe bleibt. Echte Speicher starten beim Einschalten zufällig – deshalb gibt es »Löschen«.",
-    "en": "A clock bit takes over only at the moment of the clock. Afterwards the switch may change, the lamp stays. Real memories start randomly when switched on – that is why there is »clear«."
+    "en": "A clock bit takes over only at the moment of the clock. Afterwards the switch may change, the lamp stays. Real memories start randomly when switched on – that is why there is »clear«.",
+    "fr": "Un bit d’horloge ne prend la valeur qu’au moment de l’horloge. Ensuite, l’interrupteur peut changer, la lampe reste. Les vraies mémoires démarrent au hasard à la mise en marche – c’est pourquoi il y a « Effacer »."
    },
    "eingaenge": [
     {
      "name": "D",
      "bezeichnung": {
       "de": "Schalter",
-      "en": "Switch"
+      "en": "Switch",
+      "fr": "Interrupteur"
      },
      "art": "kipp"
     },
@@ -2523,7 +2851,8 @@
      "name": "T",
      "bezeichnung": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      },
      "art": "taster"
     },
@@ -2531,7 +2860,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -2541,7 +2871,8 @@
      "name": "Q",
      "bezeichnung": {
       "de": "Lampe",
-      "en": "Lamp"
+      "en": "Lamp",
+      "fr": "Lampe"
      }
     }
    ],
@@ -2557,7 +2888,8 @@
      "soll": "0",
      "text": {
       "de": "Schalter an – noch kein Takt",
-      "en": "Switch on – no clock yet"
+      "en": "Switch on – no clock yet",
+      "fr": "Interrupteur allumé – pas encore d’horloge"
      }
     },
     {
@@ -2565,7 +2897,8 @@
      "soll": "1",
      "text": {
       "de": "Takt drücken: übernommen",
-      "en": "Press clock: taken over"
+      "en": "Press clock: taken over",
+      "fr": "Appuyer sur Horloge : valeur prise"
      }
     },
     {
@@ -2573,7 +2906,8 @@
      "soll": "1",
      "text": {
       "de": "Schalter aus, Takt noch gedrückt – die Lampe bleibt",
-      "en": "Switch off, clock still held – the lamp stays"
+      "en": "Switch off, clock still held – the lamp stays",
+      "fr": "Interrupteur éteint, horloge encore enfoncée – la lampe reste"
      }
     },
     {
@@ -2581,7 +2915,8 @@
      "soll": "1",
      "text": {
       "de": "Takt loslassen",
-      "en": "Release clock"
+      "en": "Release clock",
+      "fr": "Relâcher Horloge"
      }
     },
     {
@@ -2589,7 +2924,8 @@
      "soll": "0",
      "text": {
       "de": "Löschen drücken",
-      "en": "Press clear"
+      "en": "Press clear",
+      "fr": "Appuyer sur Effacer"
      }
     },
     {
@@ -2597,7 +2933,8 @@
      "soll": "0",
      "text": {
       "de": "Löschen loslassen",
-      "en": "Release clear"
+      "en": "Release clear",
+      "fr": "Relâcher Effacer"
      }
     },
     {
@@ -2609,7 +2946,8 @@
      "soll": "1",
      "text": {
       "de": "Schalter an, Takt",
-      "en": "Switch on, clock"
+      "en": "Switch on, clock",
+      "fr": "Interrupteur allumé, horloge"
      }
     },
     {
@@ -2621,7 +2959,8 @@
      "soll": "0",
      "text": {
       "de": "Löschen, obwohl der Schalter an ist",
-      "en": "Clear although the switch is on"
+      "en": "Clear although the switch is on",
+      "fr": "Effacer, alors que l’interrupteur est allumé"
      }
     }
    ],
@@ -2746,34 +3085,41 @@
    "symbol": "REG",
    "name": {
     "de": "Register",
-    "en": "Register"
+    "en": "Register",
+    "fr": "Registre"
    },
    "titel": {
     "de": "Vier Bits merken",
-    "en": "Storing four bits"
+    "en": "Storing four bits",
+    "fr": "Mémoriser quatre bits"
    },
    "geschichte": {
     "de": "Mit vier Taktbits nebeneinander merkt sich ein Rechner eine ganze Zahl von 0 bis 15. So etwas heißt Register. Alle vier hören auf denselben Takt und denselben Löschknopf.",
-    "en": "With four clock bits side by side, a computer stores a whole number from 0 to 15. This is called a register. All four listen to the same clock and the same clear button."
+    "en": "With four clock bits side by side, a computer stores a whole number from 0 to 15. This is called a register. All four listen to the same clock and the same clear button.",
+    "fr": "Avec quatre bits d’horloge côte à côte, un ordinateur retient un nombre entier de 0 à 15. Cela s’appelle un registre. Les quatre obéissent à la même horloge et au même bouton Effacer."
    },
    "frage": {
     "de": "Wie merkt sich ein Rechner eine ganze Zahl?",
-    "en": "How does a computer store a whole number?"
+    "en": "How does a computer store a whole number?",
+    "fr": "Comment un ordinateur retient-il un nombre entier ?"
    },
    "hilfe": {
     "de": "Jeder Schalter bekommt sein eigenes Taktbit. Takt und Löschen verbindest du mit allen vier.",
-    "en": "Every switch gets its own clock bit. Connect clock and clear to all four."
+    "en": "Every switch gets its own clock bit. Connect clock and clear to all four.",
+    "fr": "Chaque interrupteur reçoit son propre bit d’horloge. Relie Horloge et Effacer aux quatre."
    },
    "merksatz": {
     "de": "Ein Register besteht aus mehreren Taktbits, die gemeinsam übernehmen. Eins mit 4 Bit hält eine Zahl von 0 bis 15.",
-    "en": "A register consists of several clock bits that take over together. One with 4 bits holds a number from 0 to 15."
+    "en": "A register consists of several clock bits that take over together. One with 4 bits holds a number from 0 to 15.",
+    "fr": "Un registre est fait de plusieurs bits d’horloge qui prennent la valeur ensemble. Un registre de 4 bits garde un nombre de 0 à 15."
    },
    "eingaenge": [
     {
      "name": "D3",
      "bezeichnung": {
       "de": "8",
-      "en": "8"
+      "en": "8",
+      "fr": "8"
      },
      "art": "kipp"
     },
@@ -2781,7 +3127,8 @@
      "name": "D2",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      },
      "art": "kipp"
     },
@@ -2789,7 +3136,8 @@
      "name": "D1",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      },
      "art": "kipp"
     },
@@ -2797,7 +3145,8 @@
      "name": "D0",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      },
      "art": "kipp"
     },
@@ -2805,7 +3154,8 @@
      "name": "T",
      "bezeichnung": {
       "de": "Merken",
-      "en": "Store"
+      "en": "Store",
+      "fr": "Mémoriser"
      },
      "art": "taster"
     },
@@ -2813,7 +3163,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -2823,28 +3174,32 @@
      "name": "Q3",
      "bezeichnung": {
       "de": "8",
-      "en": "8"
+      "en": "8",
+      "fr": "8"
      }
     },
     {
      "name": "Q2",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      }
     },
     {
      "name": "Q1",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      }
     },
     {
      "name": "Q0",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      }
     }
    ],
@@ -2875,7 +3230,8 @@
      "soll": "0101",
      "text": {
       "de": "5 einstellen und merken",
-      "en": "Set 5 and store"
+      "en": "Set 5 and store",
+      "fr": "Régler 5 et mémoriser"
      }
     },
     {
@@ -2887,7 +3243,8 @@
      "soll": "0101",
      "text": {
       "de": "12 einstellen – es bleibt 5",
-      "en": "Set 12 – it stays 5"
+      "en": "Set 12 – it stays 5",
+      "fr": "Régler 12 – il reste 5"
      }
     },
     {
@@ -2895,7 +3252,8 @@
      "soll": "1100",
      "text": {
       "de": "Merken drücken",
-      "en": "Press store"
+      "en": "Press store",
+      "fr": "Appuyer sur Mémoriser"
      }
     },
     {
@@ -2903,7 +3261,8 @@
      "soll": "1100",
      "text": {
       "de": "Alle Schalter aus – es bleibt 12",
-      "en": "All switches off – it stays 12"
+      "en": "All switches off – it stays 12",
+      "fr": "Tous les interrupteurs éteints – il reste 12"
      }
     },
     {
@@ -2911,7 +3270,8 @@
      "soll": "0000",
      "text": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      }
     },
     {
@@ -2927,7 +3287,8 @@
      "soll": "1001",
      "text": {
       "de": "9 einstellen und merken",
-      "en": "Set 9 and store"
+      "en": "Set 9 and store",
+      "fr": "Régler 9 et mémoriser"
      }
     }
    ],
@@ -3032,34 +3393,41 @@
    "symbol": "SR",
    "name": {
     "de": "Schieberegister",
-    "en": "Shift register"
+    "en": "Shift register",
+    "fr": "Registre à décalage"
    },
    "titel": {
     "de": "Das Lauflicht",
-    "en": "The running light"
+    "en": "The running light",
+    "fr": "Le chenillard"
    },
    "geschichte": {
     "de": "Bei einem Lauflicht wandert ein Licht von Lampe zu Lampe. Dahinter steckt ein Register, in dem jedes Bit bei jedem Takt einen Platz weiterrückt – ein Schieberegister.",
-    "en": "In a running light, a light moves from lamp to lamp. Behind it is a register in which every bit moves one place on with every clock – a shift register."
+    "en": "In a running light, a light moves from lamp to lamp. Behind it is a register in which every bit moves one place on with every clock – a shift register.",
+    "fr": "Dans un chenillard, une lumière se déplace de lampe en lampe. Derrière, il y a un registre dans lequel chaque bit avance d’une place à chaque coup d’horloge – un registre à décalage."
    },
    "frage": {
     "de": "Wie wandert ein Bit von Lampe zu Lampe?",
-    "en": "How does a bit move from lamp to lamp?"
+    "en": "How does a bit move from lamp to lamp?",
+    "fr": "Comment un bit se déplace-t-il de lampe en lampe ?"
    },
    "hilfe": {
     "de": "Vier Taktbits in einer Reihe: Das erste bekommt den Eingang, jedes weitere den Ausgang seines Vordermanns. Takt und Löschen gehen an alle.",
-    "en": "Four clock bits in a row: the first gets the input, every other one the output of the one before. Clock and clear go to all of them."
+    "en": "Four clock bits in a row: the first gets the input, every other one the output of the one before. Clock and clear go to all of them.",
+    "fr": "Quatre bits d’horloge en rang : le premier reçoit l’entrée, chacun des suivants la sortie de celui qui le précède. Horloge et Effacer vont à tous."
    },
    "merksatz": {
     "de": "In einem Schieberegister rückt jedes Bit bei jedem Takt einen Platz weiter. Schiebt man eine Zahl um eine Stelle, wird sie doppelt oder halb so groß.",
-    "en": "In a shift register every bit moves one place on with each clock. Shifting a number by one place doubles or halves it."
+    "en": "In a shift register every bit moves one place on with each clock. Shifting a number by one place doubles or halves it.",
+    "fr": "Dans un registre à décalage, chaque bit avance d’une place à chaque coup d’horloge. Si on décale un nombre d’une position, il devient deux fois plus grand ou deux fois plus petit."
    },
    "eingaenge": [
     {
      "name": "E",
      "bezeichnung": {
       "de": "Eingang",
-      "en": "Input"
+      "en": "Input",
+      "fr": "Entrée"
      },
      "art": "kipp"
     },
@@ -3067,7 +3435,8 @@
      "name": "T",
      "bezeichnung": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      },
      "art": "taster"
     },
@@ -3075,7 +3444,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -3085,28 +3455,32 @@
      "name": "Y1",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      }
     },
     {
      "name": "Y2",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      }
     },
     {
      "name": "Y3",
      "bezeichnung": {
       "de": "3",
-      "en": "3"
+      "en": "3",
+      "fr": "3"
      }
     },
     {
      "name": "Y4",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      }
     }
    ],
@@ -3123,7 +3497,8 @@
      "soll": "1000",
      "text": {
       "de": "Eingang an, Takt: das erste Licht geht an",
-      "en": "Input on, clock: the first light goes on"
+      "en": "Input on, clock: the first light goes on",
+      "fr": "Entrée allumée, horloge : la première lumière s’allume"
      }
     },
     {
@@ -3139,7 +3514,8 @@
      "soll": "0100",
      "text": {
       "de": "Eingang aus, Takt: das Licht wandert",
-      "en": "Input off, clock: the light moves"
+      "en": "Input off, clock: the light moves",
+      "fr": "Entrée éteinte, horloge : la lumière avance"
      }
     },
     {
@@ -3151,7 +3527,8 @@
      "soll": "0010",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3163,7 +3540,8 @@
      "soll": "0001",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3175,7 +3553,8 @@
      "soll": "0000",
      "text": {
       "de": "Takt: es fällt hinten heraus",
-      "en": "Clock: it drops out at the end"
+      "en": "Clock: it drops out at the end",
+      "fr": "Horloge : elle sort au bout"
      }
     },
     {
@@ -3191,7 +3570,8 @@
      "soll": "1000",
      "text": {
       "de": "Eingang an, Takt",
-      "en": "Input on, clock"
+      "en": "Input on, clock",
+      "fr": "Entrée allumée, horloge"
      }
     },
     {
@@ -3203,7 +3583,8 @@
      "soll": "1100",
      "text": {
       "de": "Takt mit Eingang an",
-      "en": "Clock with input on"
+      "en": "Clock with input on",
+      "fr": "Horloge avec l’entrée allumée"
      }
     },
     {
@@ -3215,7 +3596,8 @@
      "soll": "0000",
      "text": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      }
     }
    ],
@@ -3320,34 +3702,41 @@
    "symbol": "T",
    "name": {
     "de": "Umschalter",
-    "en": "Toggle"
+    "en": "Toggle",
+    "fr": "Bascule T"
    },
    "titel": {
     "de": "Ein Knopf für An und Aus",
-    "en": "One button for on and off"
+    "en": "One button for on and off",
+    "fr": "Un bouton pour allumer et éteindre"
    },
    "geschichte": {
     "de": "Viele Geräte haben nur einen Knopf: Einmal drücken – an. Noch einmal drücken – aus. Dafür muss sich die Schaltung merken, wie sie gerade steht, und beim nächsten Takt das Gegenteil nehmen.",
-    "en": "Many devices have just one button: press once – on. Press again – off. For that the circuit has to remember its state and take the opposite on the next clock."
+    "en": "Many devices have just one button: press once – on. Press again – off. For that the circuit has to remember its state and take the opposite on the next clock.",
+    "fr": "Beaucoup d’appareils n’ont qu’un seul bouton : on appuie une fois – allumé. On appuie encore – éteint. Pour cela, le circuit doit retenir son état et prendre l’inverse au coup d’horloge suivant."
    },
    "frage": {
     "de": "Wie wechselt eine Lampe mit jedem Druck?",
-    "en": "How does a lamp change with every press?"
+    "en": "How does a lamp change with every press?",
+    "fr": "Comment une lampe change-t-elle à chaque pression ?"
    },
    "hilfe": {
     "de": "Ein Taktbit genügt: Gib ihm als Schalter das Gegenteil seiner eigenen Lampe (NICHT). Dann übernimmt es bei jedem Takt das Gegenteil.",
-    "en": "One clock bit is enough: give it the opposite of its own lamp as the switch (NOT). Then it takes the opposite on every clock."
+    "en": "One clock bit is enough: give it the opposite of its own lamp as the switch (NOT). Then it takes the opposite on every clock.",
+    "fr": "Un bit d’horloge suffit : donne-lui comme interrupteur l’inverse de sa propre lampe (NON). Il prend alors l’inverse à chaque coup d’horloge."
    },
    "merksatz": {
     "de": "Ein Taktbit, das bei jedem Takt sein eigenes Gegenteil übernimmt, ist ein Umschalter: Er wechselt bei jedem Druck genau einmal.",
-    "en": "A clock bit that takes its own opposite on every clock is a toggle: it changes exactly once per press."
+    "en": "A clock bit that takes its own opposite on every clock is a toggle: it changes exactly once per press.",
+    "fr": "Un bit d’horloge qui prend son propre inverse à chaque coup d’horloge est une bascule T : elle change exactement une fois à chaque pression."
    },
    "eingaenge": [
     {
      "name": "T",
      "bezeichnung": {
       "de": "Knopf",
-      "en": "Button"
+      "en": "Button",
+      "fr": "Bouton"
      },
      "art": "taster"
     },
@@ -3355,7 +3744,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Ganz aus",
-      "en": "All off"
+      "en": "All off",
+      "fr": "Tout éteint"
      },
      "art": "taster"
     }
@@ -3365,7 +3755,8 @@
      "name": "Q",
      "bezeichnung": {
       "de": "Lampe",
-      "en": "Lamp"
+      "en": "Lamp",
+      "fr": "Lampe"
      }
     }
    ],
@@ -3379,7 +3770,8 @@
      "soll": "0",
      "text": {
       "de": "Einschalten: Lampe aus",
-      "en": "Switch on: lamp off"
+      "en": "Switch on: lamp off",
+      "fr": "Mise en marche : lampe éteinte"
      }
     },
     {
@@ -3387,7 +3779,8 @@
      "soll": "1",
      "text": {
       "de": "Drücken – an",
-      "en": "Press – on"
+      "en": "Press – on",
+      "fr": "Appuyer – allumé"
      }
     },
     {
@@ -3395,7 +3788,8 @@
      "soll": "1",
      "text": {
       "de": "Loslassen – bleibt an",
-      "en": "Release – stays on"
+      "en": "Release – stays on",
+      "fr": "Relâcher – reste allumé"
      }
     },
     {
@@ -3403,7 +3797,8 @@
      "soll": "0",
      "text": {
       "de": "Drücken – aus",
-      "en": "Press – off"
+      "en": "Press – off",
+      "fr": "Appuyer – éteint"
      }
     },
     {
@@ -3411,7 +3806,8 @@
      "soll": "0",
      "text": {
       "de": "Loslassen – bleibt aus",
-      "en": "Release – stays off"
+      "en": "Release – stays off",
+      "fr": "Relâcher – reste éteint"
      }
     },
     {
@@ -3419,7 +3815,8 @@
      "soll": "1",
      "text": {
       "de": "Drücken – an",
-      "en": "Press – on"
+      "en": "Press – on",
+      "fr": "Appuyer – allumé"
      }
     },
     {
@@ -3431,7 +3828,8 @@
      "soll": "0",
      "text": {
       "de": "Ganz aus",
-      "en": "All off"
+      "en": "All off",
+      "fr": "Tout éteint"
      }
     }
    ],
@@ -3480,34 +3878,41 @@
    "symbol": "CTR",
    "name": {
     "de": "Zähler",
-    "en": "Counter"
+    "en": "Counter",
+    "fr": "Compteur"
    },
    "titel": {
     "de": "Der Zähler",
-    "en": "The counter"
+    "en": "The counter",
+    "fr": "Le compteur"
    },
    "geschichte": {
     "de": "Ein Rechner arbeitet im Takt: Bei jedem Takt geschieht ein Schritt. Damit er weiß, wo er gerade ist, zählt er die Takte mit. Hier bist du der Taktgeber – jeder Druck ist ein Takt.",
-    "en": "A computer works to a clock: on every tick, one step happens. To know where it is, it counts the ticks. Here you are the clock – every press is a tick."
+    "en": "A computer works to a clock: on every tick, one step happens. To know where it is, it counts the ticks. Here you are the clock – every press is a tick.",
+    "fr": "Un ordinateur travaille au rythme d’une horloge : à chaque coup, une étape se fait. Pour savoir où il en est, il compte les coups. Ici, c’est toi l’horloge – chaque pression est un coup d’horloge."
    },
    "frage": {
     "de": "Wie zählt ein Rechner mit jedem Takt weiter?",
-    "en": "How does a computer count on with every tick?"
+    "en": "How does a computer count on with every tick?",
+    "fr": "Comment un ordinateur compte-t-il à chaque coup d’horloge ?"
    },
    "hilfe": {
     "de": "Die Einerstelle wechselt bei jedem Takt. Die nächste Stelle wechselt immer dann, wenn die vorige von 1 auf 0 fällt – so wie beim Zählen die Zehner weiterspringen. Ein NICHT dazwischen macht aus dem Fallen ein Drücken. Löschen geht an alle.",
-    "en": "The ones place changes on every tick. The next place changes whenever the one before falls from 1 to 0 – just like the tens move on when you count. A NOT in between turns falling into pressing. Clear goes to all."
+    "en": "The ones place changes on every tick. The next place changes whenever the one before falls from 1 to 0 – just like the tens move on when you count. A NOT in between turns falling into pressing. Clear goes to all.",
+    "fr": "La position des unités change à chaque coup. La position suivante change chaque fois que la précédente passe de 1 à 0 – comme les dizaines qui avancent quand on compte. Un NON entre les deux transforme cette chute en pression. Effacer va à tous."
    },
    "merksatz": {
     "de": "Vier Umschalter hintereinander zählen von 0 bis 15. Nach 15 kommt wieder 0 – der Zähler läuft über.",
-    "en": "Four toggles in a row count from 0 to 15. After 15 comes 0 again – the counter overflows."
+    "en": "Four toggles in a row count from 0 to 15. After 15 comes 0 again – the counter overflows.",
+    "fr": "Quatre bascules T à la suite comptent de 0 à 15. Après 15 revient 0 – le compteur déborde."
    },
    "eingaenge": [
     {
      "name": "T",
      "bezeichnung": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      },
      "art": "taster"
     },
@@ -3515,7 +3920,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -3525,28 +3931,32 @@
      "name": "Q3",
      "bezeichnung": {
       "de": "8",
-      "en": "8"
+      "en": "8",
+      "fr": "8"
      }
     },
     {
      "name": "Q2",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      }
     },
     {
      "name": "Q1",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      }
     },
     {
      "name": "Q0",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      }
     }
    ],
@@ -3560,7 +3970,8 @@
      "soll": "0001",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3572,7 +3983,8 @@
      "soll": "0010",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3584,7 +3996,8 @@
      "soll": "0011",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3596,7 +4009,8 @@
      "soll": "0100",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3608,7 +4022,8 @@
      "soll": "0101",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3620,7 +4035,8 @@
      "soll": "0110",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3632,7 +4048,8 @@
      "soll": "0111",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3644,7 +4061,8 @@
      "soll": "1000",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3656,7 +4074,8 @@
      "soll": "1001",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3668,7 +4087,8 @@
      "soll": "1010",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3680,7 +4100,8 @@
      "soll": "1011",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3692,7 +4113,8 @@
      "soll": "1100",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3704,7 +4126,8 @@
      "soll": "1101",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3716,7 +4139,8 @@
      "soll": "1110",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3728,7 +4152,8 @@
      "soll": "1111",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3740,7 +4165,8 @@
      "soll": "0000",
      "text": {
       "de": "Takt – Überlauf",
-      "en": "Clock – overflow"
+      "en": "Clock – overflow",
+      "fr": "Horloge – dépassement"
      }
     },
     {
@@ -3752,7 +4178,8 @@
      "soll": "0001",
      "text": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
@@ -3764,7 +4191,8 @@
      "soll": "0000",
      "text": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      }
     },
     {
@@ -3776,7 +4204,8 @@
      "soll": "0001",
      "text": {
       "de": "Takt nach dem Löschen",
-      "en": "Clock after clearing"
+      "en": "Clock after clearing",
+      "fr": "Horloge après l’effacement"
      }
     }
    ],
@@ -3895,34 +4324,41 @@
    "symbol": "÷4",
    "name": {
     "de": "Teiler",
-    "en": "Divider"
+    "en": "Divider",
+    "fr": "Diviseur"
    },
    "titel": {
     "de": "Der Taktgeber",
-    "en": "The clock generator"
+    "en": "The clock generator",
+    "fr": "Le générateur d’horloge"
    },
    "geschichte": {
     "de": "Jetzt drückt niemand mehr: Links tickt ein Taktgeber von allein. Für eine Uhr ist er aber viel zu schnell. Bau einen Teiler: Die zweite Lampe soll halb so schnell blinken, die dritte noch einmal halb so schnell.",
-    "en": "Now nobody presses any more: on the left a clock generator ticks by itself. For a clock it is far too fast, though. Build a divider: the second lamp should blink half as fast, the third half as fast again."
+    "en": "Now nobody presses any more: on the left a clock generator ticks by itself. For a clock it is far too fast, though. Build a divider: the second lamp should blink half as fast, the third half as fast again.",
+    "fr": "Maintenant, plus personne n’appuie : à gauche, un générateur d’horloge bat tout seul. Mais il est bien trop rapide pour une montre. Construis un diviseur : la deuxième lampe doit clignoter deux fois moins vite, la troisième encore deux fois moins vite."
    },
    "frage": {
     "de": "Wie wird aus einem schnellen Takt ein langsamer?",
-    "en": "How does a fast clock become a slow one?"
+    "en": "How does a fast clock become a slow one?",
+    "fr": "Comment une horloge rapide devient-elle lente ?"
    },
    "hilfe": {
     "de": "Ein Umschalter am Taktgeber wechselt bei jedem Tick – er blinkt also halb so schnell. Ein zweiter Umschalter dahinter (mit NICHT wie beim Zähler) halbiert noch einmal.",
-    "en": "A toggle on the clock generator changes on every tick – so it blinks half as fast. A second toggle behind it (with NOT as in the counter) halves it again."
+    "en": "A toggle on the clock generator changes on every tick – so it blinks half as fast. A second toggle behind it (with NOT as in the counter) halves it again.",
+    "fr": "Une bascule T sur le générateur change à chaque tic – elle clignote donc deux fois moins vite. Une deuxième bascule derrière (avec un NON comme pour le compteur) divise encore par deux."
    },
    "merksatz": {
     "de": "Jeder Umschalter teilt den Takt durch 2. So entstehen aus einem schnellen Takt Sekunden, Minuten und Stunden.",
-    "en": "Every toggle divides the clock by 2. That is how seconds, minutes and hours come from a fast clock."
+    "en": "Every toggle divides the clock by 2. That is how seconds, minutes and hours come from a fast clock.",
+    "fr": "Chaque bascule T divise l’horloge par 2. C’est ainsi qu’une horloge rapide donne des secondes, des minutes et des heures."
    },
    "eingaenge": [
     {
      "name": "C",
      "bezeichnung": {
       "de": "Taktgeber",
-      "en": "Clock generator"
+      "en": "Clock generator",
+      "fr": "Générateur d’horloge"
      },
      "art": "takt"
     },
@@ -3930,7 +4366,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -3940,21 +4377,24 @@
      "name": "C1",
      "bezeichnung": {
       "de": "Takt",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Horloge"
      }
     },
     {
      "name": "C2",
      "bezeichnung": {
       "de": "halb",
-      "en": "half"
+      "en": "half",
+      "fr": "moitié"
      }
     },
     {
      "name": "C4",
      "bezeichnung": {
       "de": "Viertel",
-      "en": "quarter"
+      "en": "quarter",
+      "fr": "quart"
      }
     }
    ],
@@ -3968,7 +4408,8 @@
      "soll": "110",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -3980,7 +4421,8 @@
      "soll": "101",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -3992,7 +4434,8 @@
      "soll": "111",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -4004,7 +4447,8 @@
      "soll": "100",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -4016,7 +4460,8 @@
      "soll": "110",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -4028,7 +4473,8 @@
      "soll": "101",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -4040,7 +4486,8 @@
      "soll": "111",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -4052,7 +4499,8 @@
      "soll": "100",
      "text": {
       "de": "Tick",
-      "en": "Tick"
+      "en": "Tick",
+      "fr": "Tic"
      }
     },
     {
@@ -4064,7 +4512,8 @@
      "soll": "000",
      "text": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      }
     },
     {
@@ -4076,7 +4525,8 @@
      "soll": "110",
      "text": {
       "de": "Tick nach dem Löschen",
-      "en": "Tick after clearing"
+      "en": "Tick after clearing",
+      "fr": "Tic après l’effacement"
      }
     }
    ],
@@ -4143,34 +4593,41 @@
    "symbol": "=",
    "name": {
     "de": "Vergleicher",
-    "en": "Comparator"
+    "en": "Comparator",
+    "fr": "Comparateur"
    },
    "titel": {
     "de": "Das Zahlenschloss",
-    "en": "The combination lock"
+    "en": "The combination lock",
+    "fr": "Le cadenas à code"
    },
    "geschichte": {
     "de": "Ein Zahlenschloss geht nur auf, wenn die eingestellte Zahl genau die Geheimzahl ist. Oben stellst du die Zahl A ein, unten die Geheimzahl B. Die Lampe »offen« soll nur leuchten, wenn beide gleich sind.",
-    "en": "A combination lock only opens if the number set is exactly the secret number. At the top you set number A, below the secret number B. The lamp »open« should only glow when both are equal."
+    "en": "A combination lock only opens if the number set is exactly the secret number. At the top you set number A, below the secret number B. The lamp »open« should only glow when both are equal.",
+    "fr": "Un cadenas à code ne s’ouvre que si le nombre réglé est exactement le code secret. En haut, tu règles le nombre A, en bas le code secret B. La lampe « ouvert » ne doit s’allumer que si les deux sont égaux."
    },
    "frage": {
     "de": "Woran erkennt ein Rechner, dass zwei Zahlen gleich sind?",
-    "en": "How does a computer recognise that two numbers are equal?"
+    "en": "How does a computer recognise that two numbers are equal?",
+    "fr": "Comment un ordinateur reconnaît-il que deux nombres sont égaux ?"
    },
    "hilfe": {
     "de": "Vergleiche Stelle für Stelle: Deine Treppenlicht-Schaltung (XODER) meldet 1, wenn zwei Bits verschieden sind. Fasse die vier Meldungen mit ODER zusammen – und dreh das Ergebnis mit NICHT um.",
-    "en": "Compare place by place: your stairway circuit (XOR) reports 1 when two bits differ. Combine the four reports with OR – and turn the result round with NOT."
+    "en": "Compare place by place: your stairway circuit (XOR) reports 1 when two bits differ. Combine the four reports with OR – and turn the result round with NOT.",
+    "fr": "Compare position par position : ton va-et-vient (OU exclusif) signale 1 quand deux bits sont différents. Réunis les quatre signaux avec un OU – et inverse le résultat avec un NON."
    },
    "merksatz": {
     "de": "Zwei Zahlen sind gleich, wenn sich keine Stelle unterscheidet. XODER findet Unterschiede, NICHT-ODER meldet »keiner«.",
-    "en": "Two numbers are equal when no place differs. XOR finds differences, NOT-OR reports »none«."
+    "en": "Two numbers are equal when no place differs. XOR finds differences, NOT-OR reports »none«.",
+    "fr": "Deux nombres sont égaux quand aucune position ne diffère. OU exclusif trouve les différences, NON-OU signale « aucune »."
    },
    "eingaenge": [
     {
      "name": "A3",
      "bezeichnung": {
       "de": "A 8",
-      "en": "A 8"
+      "en": "A 8",
+      "fr": "A 8"
      },
      "art": "kipp"
     },
@@ -4178,7 +4635,8 @@
      "name": "A2",
      "bezeichnung": {
       "de": "A 4",
-      "en": "A 4"
+      "en": "A 4",
+      "fr": "A 4"
      },
      "art": "kipp"
     },
@@ -4186,7 +4644,8 @@
      "name": "A1",
      "bezeichnung": {
       "de": "A 2",
-      "en": "A 2"
+      "en": "A 2",
+      "fr": "A 2"
      },
      "art": "kipp"
     },
@@ -4194,7 +4653,8 @@
      "name": "A0",
      "bezeichnung": {
       "de": "A 1",
-      "en": "A 1"
+      "en": "A 1",
+      "fr": "A 1"
      },
      "art": "kipp"
     },
@@ -4202,7 +4662,8 @@
      "name": "B3",
      "bezeichnung": {
       "de": "B 8",
-      "en": "B 8"
+      "en": "B 8",
+      "fr": "B 8"
      },
      "art": "kipp"
     },
@@ -4210,7 +4671,8 @@
      "name": "B2",
      "bezeichnung": {
       "de": "B 4",
-      "en": "B 4"
+      "en": "B 4",
+      "fr": "B 4"
      },
      "art": "kipp"
     },
@@ -4218,7 +4680,8 @@
      "name": "B1",
      "bezeichnung": {
       "de": "B 2",
-      "en": "B 2"
+      "en": "B 2",
+      "fr": "B 2"
      },
      "art": "kipp"
     },
@@ -4226,7 +4689,8 @@
      "name": "B0",
      "bezeichnung": {
       "de": "B 1",
-      "en": "B 1"
+      "en": "B 1",
+      "fr": "B 1"
      },
      "art": "kipp"
     }
@@ -4236,7 +4700,8 @@
      "name": "G",
      "bezeichnung": {
       "de": "offen",
-      "en": "open"
+      "en": "open",
+      "fr": "ouvert"
      }
     }
    ],
@@ -4253,35 +4718,35 @@
    "proben": [
     [
      85,
-     "5 und 5"
+     "5 | 5"
     ],
     [
      84,
-     "5 und 4"
+     "5 | 4"
     ],
     [
      204,
-     "12 und 12"
+     "12 | 12"
     ],
     [
      150,
-     "9 und 6"
+     "9 | 6"
     ],
     [
      0,
-     "0 und 0"
+     "0 | 0"
     ],
     [
      254,
-     "15 und 14"
+     "15 | 14"
     ],
     [
      129,
-     "8 und 1"
+     "8 | 1"
     ],
     [
      51,
-     "3 und 3"
+     "3 | 3"
     ]
    ],
    "bausteine": [
@@ -4672,34 +5137,41 @@
    "symbol": "±",
    "name": {
     "de": "Rechenwerk",
-    "en": "Arithmetic unit"
+    "en": "Arithmetic unit",
+    "fr": "Unité de calcul"
    },
    "titel": {
     "de": "Plus und Minus",
-    "en": "Plus and minus"
+    "en": "Plus and minus",
+    "fr": "Plus et moins"
    },
    "geschichte": {
     "de": "Ein Rechner kann eigentlich nur addieren – und zieht trotzdem ab. Der Trick: Alle Bits von B umdrehen und noch 1 dazuzählen. Mit dem Schalter »Minus« soll dein Rechenwerk wahlweise A + B oder A − B rechnen.",
-    "en": "A computer can really only add – and still subtracts. The trick: flip all the bits of B and add 1. With the »minus« switch your arithmetic unit should compute either A + B or A − B."
+    "en": "A computer can really only add – and still subtracts. The trick: flip all the bits of B and add 1. With the »minus« switch your arithmetic unit should compute either A + B or A − B.",
+    "fr": "Un ordinateur ne sait en fait qu’additionner – et pourtant il soustrait. L’astuce : inverser tous les bits de B et ajouter encore 1. Avec l’interrupteur « Moins », ton unité de calcul doit calculer au choix A + B ou A − B."
    },
    "frage": {
     "de": "Wie zieht ein Rechner ab, wenn er nur addieren kann?",
-    "en": "How does a computer subtract if it can only add?"
+    "en": "How does a computer subtract if it can only add?",
+    "fr": "Comment un ordinateur soustrait-il s’il ne sait qu’additionner ?"
    },
    "hilfe": {
     "de": "Nimm vier Volladdierer wie beim Rechnen bis 15. Jedes Bit von B geht durch ein XODER mit »Minus« – das dreht es um, wenn Minus an ist. Und »Minus« ist zugleich der Übertrag in die Einerstelle: das »+ 1«.",
-    "en": "Use four full adders as for adding up to 15. Every bit of B goes through an XOR with »minus« – that flips it when minus is on. And »minus« is also the carry into the ones place: the »+ 1«."
+    "en": "Use four full adders as for adding up to 15. Every bit of B goes through an XOR with »minus« – that flips it when minus is on. And »minus« is also the carry into the ones place: the »+ 1«.",
+    "fr": "Prends quatre additionneurs complets comme pour calculer jusqu’à 15. Chaque bit de B passe dans un OU exclusif avec « Moins » – cela l’inverse quand Moins est allumé. Et « Moins » est en même temps la retenue dans la position des unités : le « + 1 »."
    },
    "merksatz": {
     "de": "A − B = A + (B umgedreht) + 1. Ist dabei Ü = 1, ging die Rechnung auf; ist Ü = 0, war B größer als A.",
-    "en": "A − B = A + (B flipped) + 1. If C = 1, the result is fine; if C = 0, B was larger than A."
+    "en": "A − B = A + (B flipped) + 1. If C = 1, the result is fine; if C = 0, B was larger than A.",
+    "fr": "A − B = A + (B inversé) + 1. Si R = 1, le calcul est juste ; si R = 0, B était plus grand que A."
    },
    "eingaenge": [
     {
      "name": "A3",
      "bezeichnung": {
       "de": "A 8",
-      "en": "A 8"
+      "en": "A 8",
+      "fr": "A 8"
      },
      "art": "kipp"
     },
@@ -4707,7 +5179,8 @@
      "name": "A2",
      "bezeichnung": {
       "de": "A 4",
-      "en": "A 4"
+      "en": "A 4",
+      "fr": "A 4"
      },
      "art": "kipp"
     },
@@ -4715,7 +5188,8 @@
      "name": "A1",
      "bezeichnung": {
       "de": "A 2",
-      "en": "A 2"
+      "en": "A 2",
+      "fr": "A 2"
      },
      "art": "kipp"
     },
@@ -4723,7 +5197,8 @@
      "name": "A0",
      "bezeichnung": {
       "de": "A 1",
-      "en": "A 1"
+      "en": "A 1",
+      "fr": "A 1"
      },
      "art": "kipp"
     },
@@ -4731,7 +5206,8 @@
      "name": "B3",
      "bezeichnung": {
       "de": "B 8",
-      "en": "B 8"
+      "en": "B 8",
+      "fr": "B 8"
      },
      "art": "kipp"
     },
@@ -4739,7 +5215,8 @@
      "name": "B2",
      "bezeichnung": {
       "de": "B 4",
-      "en": "B 4"
+      "en": "B 4",
+      "fr": "B 4"
      },
      "art": "kipp"
     },
@@ -4747,7 +5224,8 @@
      "name": "B1",
      "bezeichnung": {
       "de": "B 2",
-      "en": "B 2"
+      "en": "B 2",
+      "fr": "B 2"
      },
      "art": "kipp"
     },
@@ -4755,7 +5233,8 @@
      "name": "B0",
      "bezeichnung": {
       "de": "B 1",
-      "en": "B 1"
+      "en": "B 1",
+      "fr": "B 1"
      },
      "art": "kipp"
     },
@@ -4763,7 +5242,8 @@
      "name": "M",
      "bezeichnung": {
       "de": "Minus",
-      "en": "Minus"
+      "en": "Minus",
+      "fr": "Moins"
      },
      "art": "kipp"
     }
@@ -4773,35 +5253,40 @@
      "name": "C",
      "bezeichnung": {
       "de": "Ü",
-      "en": "C"
+      "en": "C",
+      "fr": "R"
      }
     },
     {
      "name": "S3",
      "bezeichnung": {
       "de": "8",
-      "en": "8"
+      "en": "8",
+      "fr": "8"
      }
     },
     {
      "name": "S2",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      }
     },
     {
      "name": "S1",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      }
     },
     {
      "name": "S0",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      }
     }
    ],
@@ -5533,30 +6018,36 @@
    "symbol": "",
    "titel": {
     "de": "Du bist das Steuerwerk",
-    "en": "You are the control unit"
+    "en": "You are the control unit",
+    "fr": "Tu es l’unité de commande"
    },
    "geschichte": {
     "de": "Hier ist eine fertige Rechenmaschine aus deinen Erfindungen: dein Rechenwerk und ein Register, der Akku, der sich das Ergebnis merkt. Was sie rechnen soll, sagst du ihr Schritt für Schritt: Zahl einstellen, Plus oder Minus wählen, »Rechnen« drücken. Du bist das Steuerwerk!",
-    "en": "Here is a finished calculating machine made of your inventions: your arithmetic unit and a register, the accumulator, which remembers the result. You tell it step by step what to compute: set a number, choose plus or minus, press »compute«. You are the control unit!"
+    "en": "Here is a finished calculating machine made of your inventions: your arithmetic unit and a register, the accumulator, which remembers the result. You tell it step by step what to compute: set a number, choose plus or minus, press »compute«. You are the control unit!",
+    "fr": "Voici une machine à calculer toute prête, faite de tes inventions : ton unité de calcul et un registre, l’accumulateur, qui retient le résultat. Tu lui dis étape par étape ce qu’elle doit calculer : régler un nombre, choisir plus ou moins, appuyer sur « Calculer ». C’est toi l’unité de commande !"
    },
    "frage": {
     "de": "Wer sagt der Rechenmaschine, was sie tun soll?",
-    "en": "Who tells the calculating machine what to do?"
+    "en": "Who tells the calculating machine what to do?",
+    "fr": "Qui dit à la machine à calculer ce qu’elle doit faire ?"
    },
    "hilfe": {
     "de": "Der Akku zeigt immer das Zwischenergebnis. Jeder Druck auf »Rechnen« rechnet Akku + Zahl (oder Akku − Zahl, wenn Minus an ist) und merkt sich das Ergebnis.",
-    "en": "The accumulator always shows the intermediate result. Every press on »compute« computes accumulator + number (or accumulator − number with minus on) and stores the result."
+    "en": "The accumulator always shows the intermediate result. Every press on »compute« computes accumulator + number (or accumulator − number with minus on) and stores the result.",
+    "fr": "L’accumulateur montre toujours le résultat intermédiaire. Chaque pression sur « Calculer » calcule accumulateur + nombre (ou accumulateur − nombre si Moins est allumé) et retient le résultat."
    },
    "merksatz": {
     "de": "Eine Rechenmaschine braucht jemanden, der ihr die Schritte nacheinander gibt – das Steuerwerk. Konrad Zuses große Idee: Die Schritte selbst in einem Speicher ablegen, dann rechnet die Maschine von allein. Das ist ein Programm.",
-    "en": "A calculating machine needs someone to give it the steps one after another – the control unit. Konrad Zuse's great idea: store the steps themselves in a memory, then the machine calculates by itself. That is a program."
+    "en": "A calculating machine needs someone to give it the steps one after another – the control unit. Konrad Zuse's great idea: store the steps themselves in a memory, then the machine calculates by itself. That is a program.",
+    "fr": "Une machine à calculer a besoin de quelqu’un qui lui donne les étapes l’une après l’autre – l’unité de commande. La grande idée de Konrad Zuse : ranger les étapes elles-mêmes dans une mémoire, et la machine calcule toute seule. C’est un programme."
    },
    "eingaenge": [
     {
      "name": "D3",
      "bezeichnung": {
       "de": "8",
-      "en": "8"
+      "en": "8",
+      "fr": "8"
      },
      "art": "kipp"
     },
@@ -5564,7 +6055,8 @@
      "name": "D2",
      "bezeichnung": {
       "de": "4",
-      "en": "4"
+      "en": "4",
+      "fr": "4"
      },
      "art": "kipp"
     },
@@ -5572,7 +6064,8 @@
      "name": "D1",
      "bezeichnung": {
       "de": "2",
-      "en": "2"
+      "en": "2",
+      "fr": "2"
      },
      "art": "kipp"
     },
@@ -5580,7 +6073,8 @@
      "name": "D0",
      "bezeichnung": {
       "de": "1",
-      "en": "1"
+      "en": "1",
+      "fr": "1"
      },
      "art": "kipp"
     },
@@ -5588,7 +6082,8 @@
      "name": "M",
      "bezeichnung": {
       "de": "Minus",
-      "en": "Minus"
+      "en": "Minus",
+      "fr": "Moins"
      },
      "art": "kipp"
     },
@@ -5596,7 +6091,8 @@
      "name": "T",
      "bezeichnung": {
       "de": "Rechnen",
-      "en": "Compute"
+      "en": "Compute",
+      "fr": "Calculer"
      },
      "art": "taster"
     },
@@ -5604,7 +6100,8 @@
      "name": "L",
      "bezeichnung": {
       "de": "Löschen",
-      "en": "Clear"
+      "en": "Clear",
+      "fr": "Effacer"
      },
      "art": "taster"
     }
@@ -5614,28 +6111,32 @@
      "name": "Q3",
      "bezeichnung": {
       "de": "Akku 8",
-      "en": "Acc 8"
+      "en": "Acc 8",
+      "fr": "Acc 8"
      }
     },
     {
      "name": "Q2",
      "bezeichnung": {
       "de": "Akku 4",
-      "en": "Acc 4"
+      "en": "Acc 4",
+      "fr": "Acc 4"
      }
     },
     {
      "name": "Q1",
      "bezeichnung": {
       "de": "Akku 2",
-      "en": "Acc 2"
+      "en": "Acc 2",
+      "fr": "Acc 2"
      }
     },
     {
      "name": "Q0",
      "bezeichnung": {
       "de": "Akku 1",
-      "en": "Acc 1"
+      "en": "Acc 1",
+      "fr": "Acc 1"
      }
     }
    ],
@@ -5666,24 +6167,29 @@
    "aufgabentexte": [
     {
      "de": "0 + 3: Lade 3 in den Akku",
-     "en": "0 + 3: load 3 into the accumulator"
+     "en": "0 + 3: load 3 into the accumulator",
+     "fr": "0 + 3 : charger 3 dans l’accumulateur"
     },
     {
      "de": "3 + 5",
-     "en": "3 + 5"
+     "en": "3 + 5",
+     "fr": "3 + 5"
     },
     {
      "de": "8 − 2",
-     "en": "8 − 2"
+     "en": "8 − 2",
+     "fr": "8 − 2"
     },
     {
      "de": "6 + 7",
-     "en": "6 + 7"
+     "en": "6 + 7",
+     "fr": "6 + 7"
     }
    ],
    "erfolg": {
     "de": "Geschafft: 3 + 5 − 2 + 7 = 13! Du hast die Maschine Schritt für Schritt gesteuert. Genau das macht in einem Rechner das Steuerwerk – von allein, nach einem Programm.",
-    "en": "Done: 3 + 5 − 2 + 7 = 13! You controlled the machine step by step. That is exactly what the control unit does in a computer – by itself, following a program."
+    "en": "Done: 3 + 5 − 2 + 7 = 13! You controlled the machine step by step. That is exactly what the control unit does in a computer – by itself, following a program.",
+    "fr": "Réussi : 3 + 5 − 2 + 7 = 13 ! Tu as commandé la machine étape par étape. C’est exactement ce que fait l’unité de commande dans un ordinateur – toute seule, en suivant un programme."
    },
    "ablauf": [
     {
@@ -5838,30 +6344,36 @@
    "symbol": "",
    "titel": {
     "de": "Freies Labor",
-    "en": "Free lab"
+    "en": "Free lab",
+    "fr": "Labo libre"
    },
    "frage": {
     "de": "Was baust du heute?",
-    "en": "What will you build today?"
+    "en": "What will you build today?",
+    "fr": "Que construis-tu aujourd’hui ?"
    },
    "geschichte": {
     "de": "Hier gibt es keine Aufgabe. Zieh deine Werkzeuge auf die Werkbank, verbinde sie mit den Schaltern und Lampen und probier aus, was passiert. Dein Aufbau bleibt gespeichert.",
-    "en": "There is no task here. Drag your tools onto the workbench, connect them to the switches and lamps and try out what happens. Your setup is saved."
+    "en": "There is no task here. Drag your tools onto the workbench, connect them to the switches and lamps and try out what happens. Your setup is saved.",
+    "fr": "Ici, il n’y a pas d’exercice. Fais glisser tes outils sur l’établi, relie-les aux interrupteurs et aux lampes et regarde ce qui se passe. Ton montage reste enregistré."
    },
    "hilfe": {
     "de": "Im Werkzeugfach liegen alle Werkzeuge, die du schon entdeckt oder erfunden hast. Je weiter du im Lernpfad kommst, desto mehr werden es.",
-    "en": "The tool tray holds every tool you have discovered or invented so far. The further you get on the learning path, the more there are."
+    "en": "The tool tray holds every tool you have discovered or invented so far. The further you get on the learning path, the more there are.",
+    "fr": "Le bac à outils contient tous les outils que tu as déjà découverts ou inventés. Plus tu avances dans le parcours, plus il y en a."
    },
    "merksatz": {
     "de": "",
-    "en": ""
+    "en": "",
+    "fr": ""
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      },
      "art": "kipp"
     },
@@ -5869,7 +6381,8 @@
      "name": "B",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      },
      "art": "kipp"
     },
@@ -5877,7 +6390,8 @@
      "name": "C",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      },
      "art": "kipp"
     },
@@ -5885,7 +6399,8 @@
      "name": "D",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      },
      "art": "kipp"
     },
@@ -5893,7 +6408,8 @@
      "name": "T",
      "bezeichnung": {
       "de": "Taster",
-      "en": "Button"
+      "en": "Button",
+      "fr": "Bouton-poussoir"
      },
      "art": "taster"
     },
@@ -5901,7 +6417,8 @@
      "name": "TG",
      "bezeichnung": {
       "de": "Taktgeber",
-      "en": "Clock"
+      "en": "Clock",
+      "fr": "Générateur d’horloge"
      },
      "art": "takt"
     }
@@ -5911,28 +6428,32 @@
      "name": "W",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      }
     },
     {
      "name": "X",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      }
     },
     {
      "name": "Y",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      }
     },
     {
      "name": "Z",
      "bezeichnung": {
       "de": "",
-      "en": ""
+      "en": "",
+      "fr": ""
      }
     }
    ],

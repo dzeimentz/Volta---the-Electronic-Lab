@@ -423,7 +423,7 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | N1 | Leistung | Zuse-4 flach mit 50 Hz Darstellungstakt, 60 fps auf dem Referenztablet | MUSS | offen |
 | N2 | Bedienung | Ziele ≥ 48 dp, Anschlüsse ≥ 56 dp; Finger, Stift, Maus; Pegel nie nur Farbe | MUSS | teilweise |
 | N3 | Datenschutz | offline, keine Datenerhebung (ADR-0006) | MUSS | umgesetzt |
-| N4 | Sprachen | DE, FR, EN, LU wie Volta | MUSS | DE/EN |
+| N4 | Sprachen | DE, FR, EN, LU wie Volta | MUSS | DE/EN/FR (alle 23 Experimente, Oberfläche, Erklär-Comics); LU später |
 | N5 | Größe | Installationsgröße < 80 MB | SOLL | erfüllt |
 | N6 | Formate | Hoch- und Querformat, Fenster ab 1280 × 720 | MUSS | Querformat |
 

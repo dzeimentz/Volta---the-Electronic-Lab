@@ -1626,7 +1626,7 @@
     <message>
         <location filename="../zuse/qml/TaskPanel.qml" line="178" />
         <source>Tippe eine Situation an – die Schalter stellen sich von selbst. »Prüfen« testet alle.</source>
-        <translation>Touche une situation – les interrupteurs se règlent tout seuls. »Vérifier« les teste toutes.</translation>
+        <translation>Touche une situation – les interrupteurs se règlent tout seuls. « Vérifier » les teste toutes.</translation>
     </message>
     <message>
         <location filename="../zuse/qml/TaskPanel.qml" line="206" />
@@ -1750,13 +1750,13 @@
     </message>
     <message>
         <location filename="../zuse/qml/ToolboxPanel.qml" line="207" />
-        <source>Offener Eingang »?«</source>
-        <translation>Entrée ouverte »?«</translation>
+        <source>Offener Eingang « ? »</source>
+        <translation>Entrée ouverte « ? »</translation>
     </message>
     <message>
         <location filename="../zuse/qml/ToolboxPanel.qml" line="208" />
-        <source>Hängt an einem Eingang keine Leitung, ist er weder 0 noch 1. Zuse 1 zeigt dann »?« – echte Bausteine verhalten sich an offenen Eingängen unberechenbar.</source>
-        <translation>Si aucun fil n’est relié à une entrée, elle n’est ni 0 ni 1. Zuse 1 affiche alors »?« – les vrais composants se comportent de façon imprévisible avec des entrées ouvertes.</translation>
+        <source>Hängt an einem Eingang keine Leitung, ist er weder 0 noch 1. Zuse 1 zeigt dann « ? » – echte Bausteine verhalten sich an offenen Eingängen unberechenbar.</source>
+        <translation>Si aucun fil n’est relié à une entrée, elle n’est ni 0 ni 1. Zuse 1 affiche alors « ? » – les vrais composants se comportent de façon imprévisible avec des entrées ouvertes.</translation>
     </message>
     <message>
         <location filename="../zuse/qml/ToolboxPanel.qml" line="210" />
@@ -1986,7 +1986,7 @@
     <message>
         <location filename="../zuse/qml/ToolboxPanel.qml" line="416" />
         <source>Keine Auffälligkeiten: Alle Eingänge haben eine Leitung, und jeder Ausgang führt irgendwohin. Ob die Schaltung das Richtige tut, zeigt »Prüfen«.</source>
-        <translation>Rien à signaler : chaque entrée a un fil et chaque sortie mène quelque part. Pour savoir si le circuit fait ce qu’il faut, utilise »Vérifier«.</translation>
+        <translation>Rien à signaler : chaque entrée a un fil et chaque sortie mène quelque part. Pour savoir si le circuit fait ce qu’il faut, utilise « Vérifier ».</translation>
     </message>
     <message>
         <location filename="../zuse/qml/ToolboxPanel.qml" line="453" />
@@ -2267,7 +2267,7 @@
     <message>
         <location filename="../zuse/src/workbench_controller.cpp" line="1266" />
         <source>Fast! Bei »%1« zeigt diese Kiste: »%2«. Richtig wäre: »%3«. Probier eine andere Kiste.</source>
-        <translation>Presque ! Avec »%1«, cette boîte donne : »%2«. Il faudrait : »%3«. Essaie une autre boîte.</translation>
+        <translation>Presque ! Avec « %1 », cette boîte donne : « %2 ». Il faudrait : « %3 ». Essaie une autre boîte.</translation>
     </message>
     <message>
         <location filename="../zuse/src/workbench_controller.cpp" line="1268" />
@@ -2287,8 +2287,8 @@
     </message>
     <message>
         <location filename="../zuse/src/schematic.cpp" line="315" />
-        <source>%1: Ein Eingang hat keine Leitung. Ein offener Eingang ist weder 0 noch 1 – die Lampe zeigt dann »?«.</source>
-        <translation>%1 : une entrée n’a pas de fil. Une entrée ouverte n’est ni 0 ni 1 – la lampe affiche alors »?«.</translation>
+        <source>%1: Ein Eingang hat keine Leitung. Ein offener Eingang ist weder 0 noch 1 – die Lampe zeigt dann « ? ».</source>
+        <translation>%1 : une entrée n’a pas de fil. Une entrée ouverte n’est ni 0 ni 1 – la lampe affiche alors « ? ».</translation>
     </message>
     <message>
         <location filename="../zuse/src/schematic.cpp" line="317" />

@@ -157,6 +157,23 @@ private slots:
         QVERIFY(w.boxes()[2].toMap()["revealed"].toBool());
     }
 
+    // Franzoesisch: Texte, Zustaende und Werkzeugnamen der Stufen in der eingestellten Sprache
+    void frenchContent() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "fr");
+        finishBit(w);
+        discover(w, 1);
+        discover(w, 2);
+        QCOMPARE(w.tools()[1].toMap()["name"].toString(), QStringLiteral("ET"));
+        QCOMPARE(w.tools()[0].toMap()["name"].toString(), QStringLiteral("NON"));
+        w.selectStage(2);
+        QCOMPARE(w.stageTitle(), QStringLiteral("Le coffre-fort"));
+        const QVariantMap row = w.checkRows()[3].toMap();
+        QCOMPARE(row["situation"].toList()[0].toMap()["text"].toString(), QStringLiteral("Clé 1 tournée"));
+        w.setLanguage("en");
+        QCOMPARE(w.tools()[1].toMap()["name"].toString(), QStringLiteral("AND"));
+    }
+
     // Entdecken mit Situationskarten: Alltagssprache statt 0 und 1, Vermutung direkt, Situation per Antippen
     void situationCards() {
         QTemporaryDir dir;
@@ -298,7 +315,7 @@ private slots:
         QCOMPARE(w.levelAt("S"), Level::Zero);
         QCOMPARE(w.levelAt("C"), Level::One);
         QVERIFY(w.lookInside("x1"));
-        QCOMPARE(w.path(), (QStringList{"HA", "XODER"}));
+        QCOMPARE(w.path(), (QStringList{"Halbaddierer", "Treppenlicht-Schaltung"})); // Namen statt Kuerzel
         QCOMPARE(w.parts().size(), 4);
         QVERIFY(w.addPart("AND", 100, 100).isEmpty()); // innen nur ansehen
         w.leaveTo(0);

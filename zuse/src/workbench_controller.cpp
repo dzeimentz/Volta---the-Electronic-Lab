@@ -885,11 +885,17 @@ void WorkbenchController::leaveTo(int depth) {
 }
 
 QStringList WorkbenchController::path() const {
-    QStringList labels{stageKuerzel()};
+    // Namen in der eingestellten Sprache (Vergleicher statt GLEICH), Bausteine ohne Namen mit ihrem Typ
+    auto nameOf = [this](const QString& kuerzel) {
+        for (const Stage& st : m_stages)
+            if (st.kuerzel == kuerzel && !st.name.isEmpty()) return st.name;
+        return kuerzel;
+    };
+    QStringList labels{nameOf(stageKuerzel())};
     const ChipDef* def = &m_def;
     for (const std::string& id : m_path) {
         const Part* p = def ? def->findPart(id) : nullptr;
-        labels << (p ? QString::fromStdString(p->type) : QString::fromStdString(id));
+        labels << (p ? nameOf(QString::fromStdString(p->type)) : QString::fromStdString(id));
         def = p ? m_library.find(p->type) : nullptr;
     }
     return labels;
@@ -1316,7 +1322,7 @@ void WorkbenchController::skipGuess() {
 QString WorkbenchController::toolName(const QString& type) const {
     if (primitiveFromName(type.toStdString())) {
         for (const Stage& s : m_stages)
-            if (s.tool == type && m_done.contains(s.kuerzel)) return s.kuerzel; // entdeckt: UND, ODER, NICHT
+            if (s.tool == type && m_done.contains(s.kuerzel)) return s.name.isEmpty() ? s.kuerzel : s.name; // UND, AND, ET
         return {};
     }
     return m_library.find(type.toStdString()) ? type : QString();
@@ -1330,7 +1336,7 @@ QVariantList WorkbenchController::tools() const {
         const bool invention = s.kind == "bauen" && s.makesChip && m_library.find(s.kuerzel.toStdString());
         if (!discovered && !invention) continue;
         list.append(QVariantMap{{"type", discovered ? s.tool : s.kuerzel},
-                                {"name", discovered ? s.kuerzel : (s.name.isEmpty() ? s.kuerzel : s.name)},
+                                {"name", s.name.isEmpty() ? s.kuerzel : s.name}, // Regeln heissen je Sprache (UND, AND, ET)
                                 {"merksatz", s.merksatz},
                                 {"symbol", s.symbol},
                                 {"inverted", s.inverted},

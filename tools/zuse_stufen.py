@@ -1,11 +1,28 @@
-"""Erzeugt zuse/content/stufen.json (Stufen von Zuse 1). Texte DE/EN; Wahrheitstabellen werden, wo moeglich,
+"""Erzeugt zuse/content/stufen.json (Stufen von Zuse 1). Texte DE/EN, Franzoesisch aus tools/zuse_stufen_fr.py
+(zum deutschen Text); Wahrheitstabellen werden, wo moeglich,
 aus Python-Funktionen berechnet. Aufruf: python tools/zuse_stufen.py"""
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from zuse_stufen_fr import FR  # noqa: E402
+
+fehlt_fr = []  # deutsche Texte ohne franzoesische Fassung
+
+
+def fr(de):
+    if de not in FR:
+        fehlt_fr.append(de)
+    t = FR.get(de, de)
+    # franzoesische Typografie: geschuetztes Leerzeichen vor ? ! : ; und innerhalb der Anfuehrungszeichen
+    for x in "?!:;":
+        t = t.replace(" " + x, " " + x)
+    return t.replace("« ", "« ").replace(" »", " »")
 
 
 def L(de, en):
-    return {"de": de, "en": en}
+    return {"de": de, "en": en, "fr": fr(de)}
 
 
 def inp(n, de, en, art="kipp", zustand=None):
@@ -24,7 +41,7 @@ def out(n, de, en, zustand=None):
 
 def Z(de0, de1, en0, en1):
     """Zustaende in Alltagssprache fuer 0 und 1 (Entdeckerstufen: Situationskarten statt Nullen und Einsen)"""
-    return {"de": [de0, de1], "en": [en0, en1]}
+    return {"de": [de0, de1], "en": [en0, en1], "fr": [fr(de0), fr(de1)]}
 
 
 def sol(parts, wires):
@@ -143,7 +160,7 @@ def plusminus(bits_):
 
 
 def probe_gleich(a, b):
-    return [a * 16 + b, f"{a} und {b}"]
+    return [a * 16 + b, f"{a} | {b}"]  # sprachneutral
 
 
 def probe_rw(a, b, minus):
@@ -174,7 +191,7 @@ stufen = [
                    out("Y", "Klingel", "Bell", Z("Klingel still", "Klingel läutet", "Bell silent", "Bell rings"))],
      "bausteine": [], "wahrheitstabelle": ["00", "01", "10", "11"],
      "loesung": sol([], [("A", "X"), ("B", "Y")])},
-    {"kuerzel": "NICHT", "art": "entdecken", "werkzeug": "NOT", "symbol": "1", "invertiert": True,
+    {"kuerzel": "NICHT", "art": "entdecken", "name": L("NICHT", "NOT"), "werkzeug": "NOT", "symbol": "1", "invertiert": True,
      "titel": L("Das Nachtlicht", "The night light"),
      "geschichte": L("Lenas Nachtlicht hat einen Lichtsensor. Es soll leuchten, wenn es im Zimmer dunkel ist – und "
                      "ausgehen, sobald es hell wird.",
@@ -190,7 +207,7 @@ stufen = [
      "ausgaenge": [out("Y", "Nachtlicht", "Night light", Z("Nachtlicht aus", "Nachtlicht leuchtet", "Night light off", "Night light glows"))],
      "kisten": [{"tabelle": ["0", "1"]}, {"tabelle": ["1", "0"]}, {"tabelle": ["1", "1"]}], "richtig": 1,
      "wahrheitstabelle": ["1", "0"]},
-    {"kuerzel": "UND", "art": "entdecken", "werkzeug": "AND", "symbol": "&",
+    {"kuerzel": "UND", "art": "entdecken", "name": L("UND", "AND"), "werkzeug": "AND", "symbol": "&",
      "titel": L("Der Tresor", "The safe"),
      "geschichte": L("Der Tresor der Bank hat zwei Schlösser. Er darf nur aufgehen, wenn beide Schlüssel gedreht "
                      "sind – sonst käme ein Dieb mit einem Schlüssel allein hinein.",
@@ -208,7 +225,7 @@ stufen = [
      "kisten": [{"tabelle": ["0", "1", "1", "1"]}, {"tabelle": ["0", "0", "1", "1"]},
                 {"tabelle": ["0", "0", "0", "1"]}], "richtig": 2,
      "wahrheitstabelle": ["0", "0", "0", "1"]},
-    {"kuerzel": "ODER", "art": "entdecken", "werkzeug": "OR", "symbol": "≥1",
+    {"kuerzel": "ODER", "art": "entdecken", "name": L("ODER", "OR"), "werkzeug": "OR", "symbol": "≥1",
      "titel": L("Die Klingel", "The doorbell"),
      "geschichte": L("Familie Berger hat zwei Türen, aber nur eine Klingel. Sie soll läuten, wenn vorne an der "
                      "Haustür oder hinten am Gartentor jemand drückt.",
@@ -228,7 +245,7 @@ stufen = [
      "kisten": [{"tabelle": ["0", "0", "0", "1"]}, {"tabelle": ["0", "1", "1", "1"]},
                 {"tabelle": ["0", "0", "1", "1"]}], "richtig": 1,
      "wahrheitstabelle": ["0", "1", "1", "1"]},
-    {"kuerzel": "NAND", "art": "entdecken", "werkzeug": "NAND", "symbol": "&", "invertiert": True,
+    {"kuerzel": "NAND", "art": "entdecken", "name": L("NAND", "NAND"), "werkzeug": "NAND", "symbol": "&", "invertiert": True,
      "titel": L("Die Fensterwarnung", "The window warning"),
      "geschichte": L("Im Klassenzimmer hat jedes der beiden Fenster einen Fühler. Im Winter soll keine Wärme "
                      "verloren gehen: Die Warnlampe leuchtet, solange noch ein Fenster offen ist. Erst wenn beide "
@@ -789,6 +806,11 @@ lernstufen = [
      "ausblick": L("Weiter in Zuse 2: Der Rechner bekommt einen Speicher für sein Programm und steuert sich selbst.",
                    "Continued in Zuse 2: the computer gets a memory for its program and controls itself.")},
 ]
+if fehlt_fr:
+    print("Ohne franzoesische Fassung:")
+    for t in dict.fromkeys(fehlt_fr):
+        print("  " + repr(t))
+    sys.exit(1)
 assert [k for l in lernstufen for k in l["experimente"]] == [st["kuerzel"] for st in stufen if not st.get("frei")]
 d = {"schema_version": 2,
      "hinweis": "Zuse 1 Prototyp: jede Stufe beginnt mit einer Geschichte; »entdecken« mit Raetselkisten, »bauen« auf "
