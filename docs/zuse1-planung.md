@@ -101,6 +101,61 @@ Ergaenzungen, die das Konzept noch nicht nennt (Vorschlag, Zuordnung zu den Stuf
 | Laufzeiten und Stoerimpulse | Die Einheitsverzoegerung der Logiksimulation erzeugt echte kurze Stoerimpulse; im Logikanalysator zeigen und erklaeren statt verstecken | 4–7 |
 | Konrad Zuse als Urheber des gespeicherten Rechenablaufs | Geschichtsfenster zu Z1 und Z3 in Stufe 4 (Speichern und Programmieren) | 10 |
 
+## Abgleich mit dem ELRAD-Lehrgang (Stand 25.10.2026: Lernstufen 0–4)
+Grundlage: Sonderheft »Digitaltechnik im Experiment« (elrad 1979, zehn Teile, H. Weidner; Ablage des Inhabers
+`J:\DC Learning EcoSystem\ELRAD - Digitaltechnik.pdf`, nicht im Repository). Uebernommen werden nur Prinzipien.
+
+### Gang des Lehrgangs
+| Teil | Inhalt |
+|---|---|
+| 1 | Binaere Groessen (Dinge mit und ohne »Gedaechtnis«: Lichtschalter gegen Klingelknopf), Wahrheitstabelle mit 2^n Zeilen, UND/ODER/NICHT an Alltagsentscheidungen, NAND als Inverter und UND aus NAND, XOR; erstes Flipflop (RS aus NAND) |
+| 2 | Schaltzeiten als Grund fuer den Takt: getaktetes RS-Flipflop, Taktgenerator, Dualsystem (Potenzen von 2, oktal, hexadezimal), JK-Flipflop |
+| 3 | Asynchroner 4-Bit-Zaehler mit Ruecksetztaste, BCD-Zaehler, Synchronzaehler, selbstanhaltende Zaehler, Schieberegister, Wahrheitstabelle Zeile fuer Zeile in Gatter umsetzen |
+| 4 | Boolesche Algebra, De Morgan, Vereinfachungsaufgaben; Technik (Transistor als Schalter, TTL, Schmitt-Trigger); Teiler bis Sekunden-, Minuten-, Stundentakt |
+| 5 | Netzteil (ausgeschlossen, Volta-Regel 6); Dezimal-Dual-Codierer, Dual-Dezimal-Decoder, Siebensegment-Decoder |
+| 6 | De-Morgan-Uebungen, D-Flipflop, umlaufendes Schieberegister, programmierbarer Zaehler, Vergleicher (Gleichheit mit XOR) |
+| 7 | 4-Bit-Vergleicher, groessere Zahl erkennen, Vorwahlzaehler, Rechts-Links-Schieberegister (mal 2, durch 2), Halb- und Volladdierer, BCD-Addition |
+| 8 | Serielles Addieren mit Schieberegister und Akkumulator, Paralleladdierer in zwei Schritten |
+| 9 | Rechenwerk mit ALU-Baustein: logische Funktionen, Steuerleitungen, Akkumulator; eine Aufgabe von Hand nach einem Ablaufschema durchrechnen (der Mensch ist das Steuerwerk) |
+| 10 | Der Rechenautomat: Konrad Zuse und der gespeicherte Ablauf, Speicher mit Adresse und Inhalt, Maschinencode mit etwa zehn Befehlen (schieben, +1, −1, negieren, laden, speichern, addieren, subtrahieren, UND, ODER), Programm »zwei Zahlen addieren«, Befehl holen und ausfuehren |
+
+### Gemeinsamkeiten
+- Gleicher Bogen: vom Schalter und Laempchen ueber Gatter, Addierer, Speicher und Zaehler bis zum kleinen Rechner mit
+  Programm im Speicher. Teil 10 entspricht fast genau den geplanten Experimenten 4.6/4.7 (Zuse-4).
+- Gleicher Einstieg: Der Lehrgang beginnt mit Lichtschalter (merkt sich etwas) und Klingelknopf (merkt sich nichts) –
+  genau Kippschalter und Taster aus Experiment 0.1.
+- Alltagsentscheidungen statt Formeln (Ampel, Hindernis, Stoppschild bzw. bei Zuse Tresor, Klingel, Alarmanlage).
+- Wahrheitstabelle selbst ausfuellen, bevor man misst (bei Zuse: Vermutung, dann Vergleich).
+- NAND als Baustein, aus dem sich alles bauen laesst (Zuse 2.3).
+
+### Unterschiede
+| Thema | ELRAD-Lehrgang | Zuse 1 (Stand jetzt) | Bewertung / Vorschlag |
+|---|---|---|---|
+| Zielgruppe und Weg | Jugendliche und Erwachsene; erst Erklaerung, dann Versuch nach Schaltplan | 10–14 Jahre; Frage – Vermutung – Ausprobieren – Benennen, Raetselkisten, eigene Erfindungen als Werkzeuge | Zuse-Weg beibehalten |
+| Reihenfolge | Flipflop schon in Teil 1, Takt und Zaehler (Teil 2–3) vor dem Rechnen (Teil 7) | Rechnen (Stufe 3) vor Speichern (Stufe 4) | beibehalten: Zahlen motivieren; das Dualsystem kommt bei Zuse ueber »Vier Lampen« statt ueber den Zaehler |
+| Speicherbaustein | RS aus zwei NAND (ueber Kreuz), danach fertige JK- und D-Flipflops als IC | Merker aus ODER/UND/NICHT mit Rueckfuehrung, Speicherbit, Umschalter – alles selbst gebaut | Zuse geht tiefer (eigener Umschalter); RS aus NAND als »Blick hinein« oder Weiterforschen anbieten |
+| Einschalten | Zustand nach dem Einschalten unvorhersehbar, daher Ruecksetztaste an jedem Zaehler | Speicher starten mit 0 (Vereinfachung) | **Luecke:** Register und Zaehler bekommen einen Eingang »Loeschen«; der Merksatz sagt, dass echte Speicher zufaellig starten |
+| Takt | Taktgenerator, Teiler bis zum Sekundentakt (Uhr) | Takt nur per Taster | **Luecke:** Taktgeber-Baustein (langsam blinkend) und Teiler durch 2 – ein »Sekundenblinker« ist kindgerecht |
+| Zaehlerarten | asynchron, synchron, BCD (Ruecksetzen bei 10), selbstanhaltend, Vorwahl | nur asynchroner 4-Bit-Zaehler | BCD und Vorwahl als Weiterforschen; fuer Zuse 1 genuegt der Binaerzaehler |
+| Schieberegister | ausfuehrlich: Lauflicht, mal 2/durch 2, serielles Addieren | fehlt | **Vorschlag:** ein Experiment »Lauflicht« (Register, dessen Bits weiterwandern) – anschaulich, und »schieben = mal 2« verbindet mit den Zahlen |
+| Vergleicher | Gleichheit (XOR), groesser/kleiner, 4 Bit | fehlt | **Vorschlag:** »Sind beide Zahlen gleich?« mit XODER und NICHT – baut auf 2.2 auf und wird spaeter fuer den Sprungbefehl gebraucht |
+| Codierer, Decoder, Siebensegment | eigener Teil (5) | Zahlenleiste zeigt binaer, dezimal, hex; kein Decoder | **Luecke vor 4.6:** Decoder »1 aus 4« ist Voraussetzung fuer Speicheradressen; Siebensegment eher Zuse 2 |
+| Boolesche Algebra | Gesetze, De Morgan, Aufgaben »auf n Verknuepfungen reduzieren« | nur NAND-Universalitaet | fuer 10–14 hoechstens spielerisch: Stern fuer die Loesung mit den wenigsten Bausteinen; Formeln in Zuse 2 |
+| Technik | Transistor als Schalter, TTL, Schmitt-Trigger, Netzteil | bewusst nicht (Nicht-Ziel); kein Netz | Bruecke ins Ecosystem: Transistor als Schalter steht in Volta 3 |
+| Laufzeiten | Schaltzeiten begruenden den Takt | Simulation hat echte Laufzeiten (Stoerimpulse), werden aber nicht gezeigt | mit dem Logikanalysator (F11) zeigen |
+| Rechenwerk | ALU mit Rechen- und Logikfunktionen, Subtraktion ueber Komplement | 4-Bit-Addierer mit Uebertrag | Der Arbeitsentwurf Zuse-4 (Konzept 5.6: LDA, ADD, SUB, STA, OUT, JMP, JZ, HLT) braucht SUB – also ein Experiment »Abziehen durch Addieren« (Komplement); sonst SUB streichen (offene Entscheidung, Konzept 15) |
+| Vom Rechenwerk zum Automaten | erst von Hand nach Ablaufschema bedienen (Mensch = Steuerwerk), dann automatisieren | geplant: 4.6 Speicher, 4.7 Zuse-4 | **Vorschlag:** Experiment »Du bist das Steuerwerk« vor 4.7 – das Kind gibt die Steuersignale selbst, dann uebernimmt der Rechner |
+| Geschichte | Konrad Zuse als Urheber des gespeicherten Ablaufs | Name der Reihe, aber noch kein Geschichtsfenster | Geschichtsfenster in Stufe 4 |
+| Darstellung | H/L-Pegel, Steckbrett, Kabelknaeuel | 0/1, Werkbank mit Raster, Erfindungen als Chips | Zuse-Weg beibehalten |
+
+### Folgerung fuer Stufe 4 (Vorschlag, noch nicht umgesetzt)
+1. Register und Zaehler mit »Loeschen« (ehrlich zum Einschalten).
+2. Neue Experimente in dieser Reihenfolge: Lauflicht (Schieberegister) nach dem Register; Taktgeber mit Teiler nach
+   dem Zaehler; Vergleicher (gleich) und Decoder 1 aus 4 als Vorbereitung auf den Speicher.
+3. »Du bist das Steuerwerk« vor »Laeuft er?«.
+4. Wird Stufe 4 damit zu gross (etwa zehn Experimente), sie teilen: Stufe 4 »Speichern und Zaehlen«, Stufe 5 »Der
+   Rechenautomat« – Entscheidung des Inhabers.
+
 ## Weitere Punkte zum Konzept
 - Das fruehere PDF v0.2 nannte ADR-0009 fuer die Inhalts-Einbettung; richtig ist ADR-0011 (in v0.3 behoben).
 - Konzept Abschnitt 9 bezieht sich auf den Cloud-Zweig `claude/mobile-android-ipad-0w8lbc` (Pull Request #1). Dieser
