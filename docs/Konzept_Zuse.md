@@ -254,6 +254,22 @@ Volta ist die gestalterische und interaktive Referenz; Zuse übernimmt Grundnavi
 
 Zetti wurde mit einem KI-Bildwerkzeug erzeugt und ist austauschbar (Rechteübersicht, Branding-Konzept für Partnerausgaben).
 
+### 6.3 Einheitliche Designsprache Zuse 1 bis 3: drei Schichten
+
+Entscheidung des Inhabers (25.10.2026): Alle Zuse-Bände verwenden dieselbe Bildschirmaufteilung wie Volta – Bibliothek links, Arbeitsfläche in der Mitte, Erklärungen und Aufgabe rechts. Die Arbeitsfläche selbst ist in drei Schichten gegliedert, die von links nach rechts dem Signalweg folgen:
+
+| Schicht | Gestaltung | Zuse 1 | Zuse 2 | Zuse 3 |
+|---|---|---|---|---|
+| Eingangsschicht (links) | Bedienfeld-Grau, Name »EINGÄNGE« | Kippschalter, Taster; ab vier Eingängen flache Form (56 dp) | Bedienfeld 8 Bit, Tastatur, Eingabe-Ports | Unterbrechungsquellen, Zeitgeber-Eingänge |
+| Logikschicht (Mitte) | Rasterplatine mit Stecklöchern (Raster 28 dp, jede vierte Reihe kräftiger), Name »LOGIK« | Gatter, Rätselkiste, eigene Erfindungen | Register, Busse, Speicher, Steuerwerk | Unterbrechungslogik, Zeitgeber, Pipeline |
+| Ausgangsschicht (rechts) | Bedienfeld-Grau, Name »AUSGÄNGE« | rote LEDs | LED-Zeilen, Siebensegment, Pixelmatrix | Ausgabe-Ports, Lautsprecher |
+
+- **Raster:** Bausteine rasten in der Logikschicht ein; ihre Anschlüsse liegen immer auf Rasterpunkten, ebenso die Lötpads der Schalter und LEDs. Leitungen verbinden so Punkte desselben Rasters, die Aufbauten wirken ordentlich und sind leicht nachzubauen.
+- **Anschlüsse aufgedruckt:** Erfindungen und größere Bausteine (Addierer, Register, Speicher) tragen ihre Anschlussnamen sichtbar – man verdrahtet ohne Datenblatt; einfache Gatter zeigen ihr Schaltzeichen. Vorbild im Prinzip sind Steckbaustein-Systeme mit aufgedruckten Anschlüssen auf Steckbrettern (Referenz: Experimentierkit Digitalelektronik von Make und ELV, 2026); übernommen wird nur das Prinzip.
+- **Gleiche Fläche für alle Stufen:** Rätselkisten-Stufen und Baustufen verwenden denselben Rahmen; die Rätselkiste steckt in der Logikschicht.
+- **Lesbar ohne Farbe:** Schichten tragen ihren Namen, Pegel stehen zusätzlich als 1/0 daneben.
+- **Umsetzung:** `zuse/qml/LayerFrame.qml` (gemeinsame Fläche), Raster und Schichtgrenzen im Modell (`WorkbenchController::kGrid`, `kLogicLeft`, `kLogicRight`).
+
 ## 7. Lernpfade
 
 ### 7.1 Zuse 1
@@ -470,3 +486,4 @@ Version 0.3 behält die tragfähige Technik von v0.2 – Logiksimulation, Prüfu
 - Ergänzungen und Fahrplan: `docs/zuse1-planung.md`; Rechte und Marken: `docs/partner/rechte-und-lizenzen.md`
 - Informatik-Monitor 2025/26 (Gesellschaft für Informatik), Lehrpläne der Länder
 - Prototyp: `logic/`, `zuse/`; Bildschirmfotos in `docs/zuse/`
+- Make/ELV: Experimentierkit Digitalelektronik mit PAD-Steckbausteinen (heise, 20.04.2026) – Prinzip der aufgedruckten Anschlüsse und des Rasters

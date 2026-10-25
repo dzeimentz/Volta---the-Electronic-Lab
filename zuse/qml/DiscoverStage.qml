@@ -3,10 +3,10 @@ import QtQuick.Shapes
 
 // Entdeckerstufe: Schalter links, Steckplatz mit der eingesetzten Raetselkiste in der Mitte, LED rechts; die Kisten
 // liegen in der Bibliothek links. Das Kind probiert aus und findet die Regel (NICHT, UND, ODER) selbst. Koordinaten
-// in dp eines Rahmens von 900 x 440, auf die verfuegbare Flaeche skaliert.
+// in dp eines Rahmens von 896 x 440 (Schichten wie die Werkbank, LayerFrame), auf die verfuegbare Flaeche skaliert.
 Item {
     id: root
-    readonly property real fw: 900
+    readonly property real fw: 896
     readonly property real fh: 440
     readonly property real s: Math.min(width / fw, height / fh)
 
@@ -16,7 +16,7 @@ Item {
     readonly property var current: workbench.boxIndex >= 0 ? boxList[workbench.boxIndex] : null
 
     // Steckplatz
-    readonly property real sx: 380
+    readonly property real sx: 368
     readonly property real sy: 100
     readonly property real sw: 160
     readonly property real sh: 200
@@ -34,21 +34,11 @@ Item {
         x: (root.width - width * root.s) / 2
         y: (root.height - height * root.s) / 2
 
-        Rectangle { // Platine
+        LayerFrame { // Eingangsschicht | Logikschicht mit Steckplatz | Ausgangsschicht
             anchors.fill: parent
-            radius: 18
-            color: ZTheme.board
-            border.width: 2
-            border.color: ZTheme.line
-            Canvas {
-                anchors.fill: parent
-                onPaint: {
-                    const ctx = getContext("2d")
-                    ctx.fillStyle = ZTheme.dot
-                    for (let x = 28; x < width; x += 28)
-                        for (let y = 28; y < height; y += 28) ctx.fillRect(x - 1, y - 1, 2, 2)
-                }
-            }
+            grid: 28
+            logicLeft: 168
+            logicRight: root.fw - 168
         }
 
         // Leitungen: Schalter -> Kiste -> LED (1 durchgezogen, 0 gestrichelt, ohne Kiste gepunktet)

@@ -9,6 +9,11 @@ QtObject {
     readonly property color surfaceHigh: "#E6EDF3"
     readonly property color board: "#FFFFFF"
     readonly property color dot: "#D5DEE8"
+    // drei Schichten der Arbeitsflaeche: Bedienfeld-Schichten links/rechts, Rasterplatine in der Mitte
+    readonly property color panelLayer: "#E3EAF1"
+    readonly property color layerEdge: "#C3CFDB"
+    readonly property color hole: "#D3DCE6"
+    readonly property color holeStrong: "#AFBECD"
     readonly property color pad: "#C9A45C"
     readonly property color padDark: "#8A6D35"
     readonly property color accent: "#06B6D4"     // Leitung mit 1, Hervorhebung

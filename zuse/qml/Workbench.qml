@@ -64,21 +64,12 @@ Item {
         x: (bench.width - width * bench.s) / 2
         y: (bench.height - height * bench.s) / 2
 
-        Rectangle { // Platine mit Punktraster
+        LayerFrame { // Eingangsschicht | Logikschicht mit Raster | Ausgangsschicht
             anchors.fill: parent
-            radius: 14
-            color: ZTheme.board
-            border.width: 2
-            border.color: workbench.inside ? ZTheme.pad : ZTheme.accentDim
-            Canvas {
-                anchors.fill: parent
-                onPaint: {
-                    const ctx = getContext("2d")
-                    ctx.fillStyle = ZTheme.dot
-                    for (let x = 28; x < width; x += 28)
-                        for (let y = 28; y < height; y += 28) ctx.fillRect(x - 1, y - 1, 2, 2)
-                }
-            }
+            grid: workbench.grid
+            logicLeft: workbench.logicLeft
+            logicRight: workbench.logicRight
+            borderColor: workbench.inside ? ZTheme.pad : ZTheme.accentDim
             TapHandler { onTapped: bench.clearSelection() }
         }
 
@@ -150,6 +141,7 @@ Item {
                     label: port.modelData.label || ""
                     kind: port.modelData.kind
                     level: port.modelData.level
+                    compact: !!port.modelData.compact
                     enabled: bench.editable
                 }
                 DragHandler {
@@ -243,14 +235,14 @@ Item {
     function dropPart(type, sceneX, sceneY) {
         const p = frame.mapFromItem(null, sceneX, sceneY)
         if (p.x < 0 || p.y < 0 || p.x > frame.width || p.y > frame.height) return false
-        const id = workbench.addPart(type, p.x - 60, p.y - 56)
+        const id = workbench.addPart(type, p.x - 56, p.y - 56)
         if (id !== "") { selectedWire = -1; selectedPart = id }
         return id !== ""
     }
     // Antippen im Fach: in eine freie Gegend der Werkbank
     function placePart(type) {
         const n = workbench.parts.length
-        const id = workbench.addPart(type, 260 + (n % 4) * 170, 80 + Math.floor(n / 4) * 150 + (n % 2) * 40)
+        const id = workbench.addPart(type, 224 + (n % 3) * 168, 84 + Math.floor(n / 3) * 168 + (n % 2) * 56)
         if (id !== "") { selectedWire = -1; selectedPart = id }
     }
 }

@@ -84,6 +84,9 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QStringList path READ path NOTIFY viewChanged)
     Q_PROPERTY(qreal frameWidth READ frameWidth CONSTANT)
     Q_PROPERTY(qreal frameHeight READ frameHeight CONSTANT)
+    Q_PROPERTY(qreal grid READ grid CONSTANT)
+    Q_PROPERTY(qreal logicLeft READ logicLeft CONSTANT)
+    Q_PROPERTY(qreal logicRight READ logicRight CONSTANT)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY historyChanged)
     Q_PROPERTY(QVariantList checkRows READ checkRows NOTIFY checkChanged)
@@ -98,12 +101,17 @@ public:
     WorkbenchController(const QString& stagesFile, const QString& dataDir, const QString& language,
                         QObject* parent = nullptr);
 
-    static constexpr qreal kFrameWidth = 900.0;
+    static constexpr qreal kFrameWidth = 896.0; // 32 Rasterschritte
     static constexpr qreal kFrameHeight = 600.0;
     static constexpr qreal kPinPitch = 56.0; // Anschluesse >= 56 dp
-    static constexpr qreal kPartWidth = 120.0;
-    static constexpr qreal kPortInset = 144.0;  // Schalter und LEDs sitzen im Rand des Rahmens
-    static constexpr qreal kPartMargin = 190.0; // Bausteine bleiben zwischen Schaltern und LEDs
+    // Drei Schichten (Designsprache der Zuse-Reihe): Eingangsschicht links, Logikschicht mit Steckraster in der
+    // Mitte, Ausgangsschicht rechts. Bausteine rasten im Raster ein, ihre Anschluesse liegen auf Rasterpunkten.
+    static constexpr qreal kGrid = 28.0;
+    static constexpr qreal kPartWidth = 112.0;   // 4 Rasterschritte
+    static constexpr qreal kPortInset = 140.0;   // Loetpads der Schalter und LEDs am Rand ihrer Schicht
+    static constexpr qreal kLogicLeft = 168.0;   // Grenze Eingangs-/Logikschicht
+    static constexpr qreal kLogicRight = kFrameWidth - kLogicLeft;
+    static constexpr size_t kCompactPorts = 4; // ab so vielen Schaltern bzw. LEDs je Seite die flache Form (56 dp)
 
     QVariantList stages() const;
     int stageIndex() const { return m_stage; }
@@ -140,6 +148,9 @@ public:
     QStringList path() const;
     qreal frameWidth() const { return kFrameWidth; }
     qreal frameHeight() const { return kFrameHeight; }
+    qreal grid() const { return kGrid; }
+    qreal logicLeft() const { return kLogicLeft; }
+    qreal logicRight() const { return kLogicRight; }
     bool canUndo() const { return m_undo.canUndo(); }
     bool canRedo() const { return m_undo.canRedo(); }
     QVariantList checkRows() const;
@@ -204,6 +215,8 @@ private:
     const volta::logic::Scope* shownScope() const;
     QString symbolOf(const QString& type, bool* inverted) const;
     void partSize(const std::string& type, qreal& w, qreal& h) const;
+    void snapPart(volta::logic::Part& part) const; // ins Raster der Logikschicht
+    static qreal portY(size_t index, size_t count);  // Hoehe eines Schalters bzw. einer LED
     bool pinPos(const volta::logic::ChipDef& def, const std::string& endpoint, qreal& x, qreal& y) const;
     QString levelString(const std::string& endpoint) const;
 

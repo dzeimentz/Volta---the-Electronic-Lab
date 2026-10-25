@@ -10,6 +10,7 @@
 #include <QVariantMap>
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 
 #include "chip_json.hpp"
 
@@ -270,8 +271,9 @@ QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
     qreal w = 0, h = 0;
     partSize(t, w, h);
     ChipDef after = m_def;
-    after.parts.push_back({id, t, std::clamp<qreal>(x, kPartMargin, kFrameWidth - kPartMargin - w),
-                           std::clamp<qreal>(y, 8.0, kFrameHeight - 8.0 - h)});
+    Part part{id, t, x, y};
+    snapPart(part);
+    after.parts.push_back(part);
     push(after, tr("Baustein setzen"));
     return QString::fromStdString(id);
 }
@@ -281,13 +283,12 @@ void WorkbenchController::movePart(const QString& id, qreal x, qreal y) {
     ChipDef after = m_def;
     for (Part& p : after.parts) {
         if (p.id != id.toStdString()) continue;
-        qreal w = 0, h = 0;
-        partSize(p.type, w, h);
-        x = std::clamp<qreal>(x, kPartMargin, kFrameWidth - kPartMargin - w);
-        y = std::clamp<qreal>(y, 8.0, kFrameHeight - 8.0 - h);
-        if (qFuzzyCompare(p.x, x) && qFuzzyCompare(p.y, y)) return;
-        p.x = x;
-        p.y = y;
+        Part moved = p;
+        moved.x = x;
+        moved.y = y;
+        snapPart(moved);
+        if (qFuzzyCompare(p.x, moved.x) && qFuzzyCompare(p.y, moved.y)) return;
+        p = moved;
         push(after, tr("Baustein verschieben"));
         return;
     }
@@ -345,6 +346,7 @@ void WorkbenchController::showSolution() {
     if (inside() || m_stages.empty()) return;
     ChipDef after = m_def;
     after.parts = m_stages[size_t(m_stage)].solution.parts;
+    for (Part& p : after.parts) snapPart(p);
     after.connections = m_stages[size_t(m_stage)].solution.connections;
     push(after, tr("Musterlösung"));
     setMessage(tr("So könnte es gehen. Prüfe die Lösung – und bau sie danach gern selbst nach."),
@@ -562,12 +564,31 @@ QString WorkbenchController::symbolOf(const QString& type, bool* inverted) const
     return type;
 }
 
+void WorkbenchController::snapPart(Part& part) const {
+    qreal w = 0, h = 0;
+    partSize(part.type, w, h);
+    // ganz in der Logikschicht, mit einem Rasterschritt Abstand zu den Loetpads der Schalter und LEDs
+    const qreal minX = std::ceil((kLogicLeft + kGrid) / kGrid) * kGrid;
+    const qreal maxX = std::floor((kLogicRight - kGrid - w) / kGrid) * kGrid;
+    const qreal minY = kGrid;
+    const qreal maxY = std::floor((kFrameHeight - kGrid - h) / kGrid) * kGrid;
+    part.x = std::clamp(std::round(part.x / kGrid) * kGrid, minX, maxX);
+    part.y = std::clamp(std::round(part.y / kGrid) * kGrid, minY, maxY);
+}
+
 void WorkbenchController::partSize(const std::string& type, qreal& w, qreal& h) const {
     std::vector<std::string> ins, outs;
     m_library.pinsOf(type, ins, outs);
     const size_t pins = std::max<size_t>({ins.size(), outs.size(), 2});
     w = kPartWidth;
     h = qreal(pins) * kPinPitch;
+}
+
+qreal WorkbenchController::portY(size_t index, size_t count) {
+    // gleichmaessig auf Rasterpunkten, mittig in der Hoehe; bei vielen Anschluessen 2 Rasterschritte Abstand
+    const qreal step = std::max(2.0 * kGrid, std::floor(kFrameHeight / qreal(count + 1) / kGrid) * kGrid);
+    const qreal first = std::round((kFrameHeight - step * qreal(count - 1)) / 2.0 / kGrid) * kGrid;
+    return first + step * qreal(index);
 }
 
 bool WorkbenchController::pinPos(const ChipDef& def, const std::string& endpoint, qreal& x, qreal& y) const {
@@ -577,13 +598,13 @@ bool WorkbenchController::pinPos(const ChipDef& def, const std::string& endpoint
         const auto inIt = std::find(ins.begin(), ins.end(), endpoint);
         if (inIt != ins.end()) {
             x = kPortInset;
-            y = kFrameHeight * qreal(inIt - ins.begin() + 1) / qreal(ins.size() + 1);
+            y = portY(size_t(inIt - ins.begin()), ins.size());
             return true;
         }
         const auto outIt = std::find(outs.begin(), outs.end(), endpoint);
         if (outIt == outs.end()) return false;
         x = kFrameWidth - kPortInset;
-        y = kFrameHeight * qreal(outIt - outs.begin() + 1) / qreal(outs.size() + 1);
+        y = portY(size_t(outIt - outs.begin()), outs.size());
         return true;
     }
     const Part* part = def.findPart(endpoint.substr(0, dot));
@@ -669,8 +690,10 @@ QVariantList WorkbenchController::ports() const {
             label = p.direction == Direction::In ? s.inputLabels.value(s.inputs.indexOf(n))
                                                  : s.outputLabels.value(s.outputs.indexOf(n));
         }
+        const size_t sameSide = p.direction == Direction::In ? def->inputNames().size() : def->outputNames().size();
         list.append(QVariantMap{{"name", QString::fromStdString(p.name)},
                                 {"label", label},
+                                {"compact", sameSide >= kCompactPorts}, // viele Anschluesse: flache Form
                                 {"input", p.direction == Direction::In},
                                 {"kind", kind},
                                 {"x", x},
