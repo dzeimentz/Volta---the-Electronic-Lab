@@ -98,6 +98,7 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QString stageName READ stageName NOTIFY stageChanged)
     Q_PROPERTY(bool stageDone READ stageDone NOTIFY stagesChanged)
     Q_PROPERTY(QVariantList tools READ tools NOTIFY stagesChanged)        // Werkzeugkiste
+    Q_PROPERTY(QStringList doneStages READ doneStages NOTIFY stagesChanged) // geschaffte Experimente (Lexikon)
     Q_PROPERTY(QVariantList panelInputs READ panelInputs NOTIFY viewChanged)   // Schalter mit Bedeutung und Pegel
     Q_PROPERTY(QVariantList panelOutputs READ panelOutputs NOTIFY viewChanged) // LEDs mit Bedeutung und Pegel
     Q_PROPERTY(QVariantList boxes READ boxes NOTIFY viewChanged)
@@ -117,6 +118,9 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList parts READ parts NOTIFY viewChanged)
     Q_PROPERTY(QVariantList ports READ ports NOTIFY viewChanged)
     Q_PROPERTY(QVariantList wires READ wires NOTIFY viewChanged)
+    Q_PROPERTY(QVariantMap schematic READ schematic NOTIFY viewChanged)        // Schaltplan zum Aufbau
+    Q_PROPERTY(QVariantList faultFindings READ faultFindings NOTIFY viewChanged) // Fehlersuche
+    Q_PROPERTY(QVariantList partsList READ partsList NOTIFY viewChanged)       // Teileliste
     Q_PROPERTY(bool inside READ inside NOTIFY viewChanged)
     Q_PROPERTY(QStringList path READ path NOTIFY viewChanged)
     // Feldgroesse wie bei Volta (+/-): 0 = kleinste (Vorgabe), 1 und 2 mehr Flaeche; die Ansicht skaliert auf die
@@ -179,6 +183,7 @@ public:
     QString stageName() const { return m_stages.empty() ? QString() : m_stages[size_t(m_stage)].name; }
     bool stageDone() const { return !m_stages.empty() && m_done.contains(m_stages[size_t(m_stage)].kuerzel); }
     QVariantList tools() const;
+    QStringList doneStages() const { return QStringList(m_done.begin(), m_done.end()); }
     QVariantList panelInputs() const;
     QVariantList panelOutputs() const;
     QVariantList boxes() const;
@@ -199,6 +204,9 @@ public:
     QVariantList parts() const;
     QVariantList ports() const;
     QVariantList wires() const;
+    QVariantMap schematic() const;      // in schematic.cpp
+    QVariantList faultFindings() const;
+    QVariantList partsList() const;
     bool inside() const { return !m_path.empty(); }
     QStringList path() const;
     static constexpr int kMaxBoardSize = 2;

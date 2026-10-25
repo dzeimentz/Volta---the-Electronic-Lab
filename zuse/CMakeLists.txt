@@ -6,6 +6,7 @@ qt_standard_project_setup(REQUIRES 6.8)
 add_library(zuse_model STATIC
     src/chip_json.cpp
     src/workbench_controller.cpp
+    src/schematic.cpp
     src/zuse_settings.cpp
 )
 target_include_directories(zuse_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -42,7 +43,8 @@ qt_add_qml_module(zuse_app
         qml/DemoPicker.qml
         qml/HeaderButton.qml
         qml/LayerFrame.qml
-        qml/ToolboxPopup.qml
+        qml/ToolboxPanel.qml
+        qml/SchematicView.qml
         qml/NumberStrip.qml
         qml/NumbersPopup.qml
         qml/PinPad.qml
@@ -68,6 +70,10 @@ qt_add_resources(zuse_app "zuse_icons" PREFIX "/zuse" BASE resources/icons FILES
 file(GLOB zuse_zetti RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" CONFIGURE_DEPENDS resources/zetti/*.png)
 qt_add_resources(zuse_app "zuse_zetti" PREFIX "/zuse" BASE resources FILES ${zuse_zetti})
 qt_add_resources(zuse_app "zuse_content" PREFIX "/zuse" BASE content FILES content/stufen.json)
+# Symbol der Werkzeugkiste (gemeinsam mit Volta)
+qt_add_resources(zuse_app "zuse_toolbox" PREFIX "/zuse/icons" BASE "${PROJECT_SOURCE_DIR}/app/resources/icons" FILES
+    "${PROJECT_SOURCE_DIR}/app/resources/icons/toolbox_light.svg"
+    "${PROJECT_SOURCE_DIR}/app/resources/icons/toolbox_dark.svg")
 # Flaggen der Sprachwahl (gemeinsam mit Volta)
 qt_add_resources(zuse_app "zuse_flags" PREFIX "/flags" BASE "${PROJECT_SOURCE_DIR}/app/resources/flags" FILES
     "${PROJECT_SOURCE_DIR}/app/resources/flags/de.svg" "${PROJECT_SOURCE_DIR}/app/resources/flags/fr.svg"

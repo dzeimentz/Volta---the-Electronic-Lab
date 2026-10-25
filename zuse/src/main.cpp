@@ -2,7 +2,7 @@
 // Offline, keine Datenerhebung: eigene Chips und Entwuerfe liegen nur in AppDataLocation.
 // Entwicklerhilfen: ZUSE_SCREENSHOT=<bild.png> (Bildschirmfoto statt Bedienung), ZUSE_SIZE=<b>x<h>,
 // ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|fr|en, ZUSE_FONT=0|1|2 (Schriftstufe), ZUSE_DEMO=<n> (n Stufen loesen und zur letzten gehen),
-// ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (Fenster oeffnen),
+// ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (Fenster oeffnen), ZUSE_DEMO_TAB=<n> (Reiter der Werkzeugkiste),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen),
 // ZUSE_PAGE=home|lab (Startseite bzw. Experiment; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
@@ -126,7 +126,12 @@ int main(int argc, char* argv[]) {
     }
     const QString popup = qEnvironmentVariable("ZUSE_DEMO_POPUP");
     if (window && !popup.isEmpty())
-        if (QObject* p = window->findChild<QObject*>(popup)) QMetaObject::invokeMethod(p, "open");
+        if (QObject* p = window->findChild<QObject*>(popup)) {
+            if (qEnvironmentVariableIsSet("ZUSE_DEMO_TAB"))
+                QMetaObject::invokeMethod(p, "showTab", Q_ARG(QVariant, qEnvironmentVariableIntValue("ZUSE_DEMO_TAB")));
+            else
+                QMetaObject::invokeMethod(p, "open");
+        }
     // ZUSE_DEMO_PRESS=x,y[,los]: Maus an Fensterposition druecken (und wieder loslassen) – prueft z. B. den Taster
     const QStringList press = qEnvironmentVariable("ZUSE_DEMO_PRESS").split(',');
     if (window && press.size() >= 2) {

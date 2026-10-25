@@ -548,17 +548,33 @@
         <translation>Afficher les nombres en binaire, décimal et hexadécimal</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="106" />
+        <location filename="../zuse/qml/Main.qml" line="108" />
+        <source>Schaltplan</source>
+        <translation>Schéma</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Main.qml" line="111" />
+        <source>Schaltplan ausblenden</source>
+        <translation>Masquer le schéma</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Main.qml" line="111" />
+        <source>Schaltplan zeigen</source>
+        <translation>Afficher le schéma</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Main.qml" line="118" />
+        <location filename="../zuse/qml/Main.qml" line="119" />
         <source>Werkzeugkiste</source>
         <translation>Boîte à outils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="172" />
+        <location filename="../zuse/qml/Main.qml" line="210" />
         <source>Zurück: auf den Pfad tippen</source>
         <translation>Retour : tape sur le chemin</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="173" />
+        <location filename="../zuse/qml/Main.qml" line="211" />
         <source>Doppelt tippen: in eine ★-Erfindung hineinschauen</source>
         <translation>Double-tape : regarder dans une invention ★</translation>
     </message>
@@ -851,6 +867,19 @@
     </message>
 </context>
 <context>
+    <name>SchematicView</name>
+    <message>
+        <location filename="../zuse/qml/SchematicView.qml" line="22" />
+        <source>Schaltplan</source>
+        <translation>Schéma</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/SchematicView.qml" line="30" />
+        <source>Noch nichts aufgebaut.</source>
+        <translation>Rien n’est encore monté.</translation>
+    </message>
+</context>
+<context>
     <name>StagePicker</name>
     <message>
         <location filename="../zuse/qml/StagePicker.qml" line="10" />
@@ -998,31 +1027,312 @@
     </message>
 </context>
 <context>
-    <name>ToolboxPopup</name>
+    <name>ToolboxPanel</name>
     <message>
-        <location filename="../zuse/qml/ToolboxPopup.qml" line="31" />
-        <source>Deine Werkzeugkiste</source>
-        <translation>Ta boîte à outils</translation>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="85" />
+        <source>Werkzeugkiste</source>
+        <translation>Boîte à outils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPopup.qml" line="35" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="94" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="95" />
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPopup.qml" line="41" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="106" />
+        <source>Werkzeuge</source>
+        <translation>Outils</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="107" />
+        <source>Lexikon</source>
+        <translation>Lexique</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="108" />
+        <source>Zahlen</source>
+        <translation>Nombres</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="109" />
+        <source>Fehlersuche</source>
+        <translation>Dépannage</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="110" />
+        <source>Teileliste</source>
+        <translation>Liste des pièces</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="123" />
         <source>Noch leer. Jede Regel, die du in einer Rätselkiste entdeckst, und jede Erfindung, die du einpackst, landet hier – und du kannst sie danach überall einbauen.</source>
-        <translation>Encore vide. Chaque règle que tu découvres dans une boîte à énigmes et chaque invention que tu ranges arrive ici – et tu peux ensuite l’utiliser partout.</translation>
+        <translation>Encore vide. Chaque règle que tu découvres dans une boîte mystère et chaque invention que tu emballes arrive ici – ensuite, tu peux l’utiliser partout.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPopup.qml" line="97" />
-        <source>Schaltzeichen:</source>
-        <translation>Symboles :</translation>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="158" />
+        <source>Schaltzeichen</source>
+        <translation>Symboles</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPopup.qml" line="114" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="174" />
         <source>DIN EN 60617 (Europa) oder IEEE Std 91 (USA)</source>
         <translation>DIN EN 60617 (Europe) ou IEEE Std 91 (États-Unis)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="181" />
+        <source>Hier sammeln sich die Begriffe, die du kennenlernst. Mit jedem geschafften Experiment kommen neue dazu.</source>
+        <translation>Ici se rassemblent les notions que tu découvres. Chaque expérience réussie en ajoute de nouvelles.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="186" />
+        <source>Bit</source>
+        <translation>Bit</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="187" />
+        <source>Die kleinste Information: 0 oder 1, aus oder an. Auf der Werkbank zeigt jede Leitung ihr Bit: Cyan und dick für 1, grau für 0.</source>
+        <translation>La plus petite information : 0 ou 1, éteint ou allumé. Sur l’établi, chaque fil montre son bit : cyan et épais pour 1, gris pour 0.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="189" />
+        <source>Offener Eingang »?«</source>
+        <translation>Entrée ouverte »?«</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="190" />
+        <source>Hängt an einem Eingang keine Leitung, ist er weder 0 noch 1. Zuse 1 zeigt dann »?« – echte Bausteine verhalten sich an offenen Eingängen unberechenbar.</source>
+        <translation>Si aucun fil n’est relié à une entrée, elle n’est ni 0 ni 1. Zuse 1 affiche alors »?« – les vrais composants se comportent de façon imprévisible avec des entrées ouvertes.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="192" />
+        <source>NICHT</source>
+        <translation>NON</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="193" />
+        <source>Dreht ein Bit um. Beispiel: Das Licht im Kühlschrank ist an, wenn die Tür NICHT zu ist.</source>
+        <translation>Inverse un bit. Exemple : la lumière du réfrigérateur est allumée quand la porte n’est PAS fermée.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="195" />
+        <source>UND</source>
+        <translation>ET</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="196" />
+        <source>Nur 1, wenn alle Eingänge 1 sind. Beispiel: Die Maschine läuft nur, wenn beide Hände auf den Tasten liegen.</source>
+        <translation>1 seulement si toutes les entrées sont à 1. Exemple : la machine ne tourne que si les deux mains sont sur les boutons.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="198" />
+        <source>ODER</source>
+        <translation>OU</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="199" />
+        <source>1, sobald mindestens ein Eingang 1 ist. Beispiel: Die Klingel läutet an der Haustür oder an der Gartentür.</source>
+        <translation>1 dès qu’au moins une entrée est à 1. Exemple : la sonnette retentit à la porte d’entrée ou au portail du jardin.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="201" />
+        <source>NAND</source>
+        <translation>NON-ET</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="203" />
+        <source>NICHT-UND: nur 0, wenn alle Eingänge 1 sind. Aus NAND allein lässt sich jede andere Schaltung bauen.</source>
+        <translation>NON-ET : 0 seulement si toutes les entrées sont à 1. Avec des NON-ET seuls, on peut construire n’importe quel autre circuit.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="205" />
+        <source>XODER</source>
+        <translation>OU exclusif</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="207" />
+        <source>Entweder-oder: 1, wenn die Eingänge verschieden sind. Beispiel: Ein Licht mit zwei Schaltern im Treppenhaus.</source>
+        <translation>Soit l’un, soit l’autre : 1 si les entrées sont différentes. Exemple : une lumière d’escalier avec deux interrupteurs.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="209" />
+        <source>Binärzahl</source>
+        <translation>Nombre binaire</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="210" />
+        <source>Jedes Bit hat einen Wert: 1, 2, 4, 8 … – von rechts nach links verdoppelt. 1011 heißt 8 + 2 + 1 = 11.</source>
+        <translation>Chaque bit a une valeur : 1, 2, 4, 8 … – elle double de droite à gauche. 1011 signifie 8 + 2 + 1 = 11.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="212" />
+        <source>Hexadezimal</source>
+        <translation>Hexadécimal</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="213" />
+        <source>Vier Bits zusammen ergeben eine Ziffer von 0 bis F (15). So schreibt man lange Bitketten kurz: 1111 1010 = FA.</source>
+        <translation>Quatre bits ensemble forment un chiffre de 0 à F (15). On écrit ainsi de longues suites de bits en bref : 1111 1010 = FA.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="215" />
+        <source>Übertrag</source>
+        <translation>Retenue</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="216" />
+        <source>1 + 1 ergibt binär 10: Die Stelle zeigt 0, die 1 wandert als Übertrag in die nächste Stelle – wie beim schriftlichen Rechnen.</source>
+        <translation>En binaire, 1 + 1 donne 10 : le chiffre affiche 0 et le 1 passe au rang suivant comme retenue – comme dans le calcul posé.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="218" />
+        <source>Halbaddierer</source>
+        <translation>Demi-additionneur</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="219" />
+        <source>Addiert zwei Bits: XODER liefert die Summe, UND den Übertrag.</source>
+        <translation>Additionne deux bits : le OU exclusif donne la somme, le ET la retenue.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="220" />
+        <source>Volladdierer</source>
+        <translation>Additionneur complet</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="221" />
+        <source>Addiert zwei Bits und den Übertrag von der Stelle davor. Mehrere hintereinander addieren ganze Zahlen.</source>
+        <translation>Additionne deux bits et la retenue du rang précédent. Plusieurs à la suite additionnent des nombres entiers.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="223" />
+        <source>Rückkopplung und Speicher</source>
+        <translation>Rétroaction et mémoire</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="224" />
+        <source>Führt ein Ausgang auf den eigenen Eingang zurück, kann sich die Schaltung etwas merken. So entsteht ein Speicher für ein Bit.</source>
+        <translation>Si une sortie revient sur sa propre entrée, le circuit peut retenir quelque chose. C’est ainsi qu’on obtient une mémoire d’un bit.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="226" />
+        <source>Takt</source>
+        <translation>Horloge</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="227" />
+        <source>Ein gleichmäßiges An und Aus, das alle Speicher gemeinsam weiterschaltet. So passiert alles Schritt für Schritt in der richtigen Reihenfolge.</source>
+        <translation>Un allumé-éteint régulier qui fait avancer toutes les mémoires ensemble. Ainsi, tout se passe pas à pas dans le bon ordre.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="229" />
+        <source>Register</source>
+        <translation>Registre</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="230" />
+        <source>Mehrere Speicherbits nebeneinander, die eine ganze Zahl auf einmal merken.</source>
+        <translation>Plusieurs bits de mémoire côte à côte qui retiennent un nombre entier d’un coup.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="231" />
+        <source>Zähler</source>
+        <translation>Compteur</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="232" />
+        <source>Speicherbits, die bei jedem Takt um eins weiterzählen – binär: 0000, 0001, 0010 …</source>
+        <translation>Des bits de mémoire qui avancent d’un à chaque coup d’horloge – en binaire : 0000, 0001, 0010 …</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="233" />
+        <source>Rechenwerk</source>
+        <translation>Unité de calcul</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="234" />
+        <source>Der Teil eines Computers, der rechnet: Addierer und Register zusammen.</source>
+        <translation>La partie d’un ordinateur qui calcule : additionneurs et registres ensemble.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="235" />
+        <source>Steuerung</source>
+        <translation>Commande</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="236" />
+        <source>Sagt dem Rechenwerk, wann es rechnen und wann es sich das Ergebnis merken soll. Bei dir sind das noch deine Hände – später übernimmt das ein Programm.</source>
+        <translation>Indique à l’unité de calcul quand calculer et quand retenir le résultat. Pour l’instant, ce sont tes mains – plus tard, un programme s’en chargera.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="238" />
+        <source>Konrad Zuse</source>
+        <translation>Konrad Zuse</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="239" />
+        <source>Baute ab 1936 in Berlin Rechenmaschinen, die mit Bits rechneten. Seine Z3 (1941) gilt als erster funktionsfähiger frei programmierbarer Computer.</source>
+        <translation>À partir de 1936, il construisit à Berlin des machines à calculer qui comptaient avec des bits. Sa Z3 (1941) est considérée comme le premier ordinateur programmable en état de marche.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="269" />
+        <source>Noch nicht entdeckt</source>
+        <translation>Pas encore découvert</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="291" />
+        <source>Tippe die Bits an. Jedes Bit hat seinen Wert – zusammen ergeben sie die Zahl.</source>
+        <translation>Touche les bits. Chaque bit a sa valeur – ensemble, ils forment le nombre.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="318" />
+        <source>Bit mit Wert %1: %2</source>
+        <translation>Bit de valeur %1 : %2</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="340" />
+        <source>binär</source>
+        <translation>binaire</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="346" />
+        <source>dezimal</source>
+        <translation>décimal</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="352" />
+        <source>hexadezimal</source>
+        <translation>hexadécimal</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="364" />
+        <source>Null</source>
+        <translation>Zéro</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="368" />
+        <source>Mit 8 Bits (einem Byte) kommst du von 0 bis 255. Nach 255 fängt der Zähler wieder bei 0 an – das Bit für 256 fehlt.</source>
+        <translation>Avec 8 bits (un octet), tu vas de 0 à 255. Après 255, le compteur repart de 0 – il manque le bit pour 256.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="376" />
+        <source>Hier steht, was an deinem Aufbau auffällt. Tippe einen Hinweis an, dann leuchtet der Baustein auf der Werkbank auf.</source>
+        <translation>Ici s’affiche ce qui attire l’attention dans ton montage. Touche une remarque et le composant s’illumine sur l’établi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="389" />
+        <source>Keine Auffälligkeiten: Alle Eingänge haben eine Leitung, und jeder Ausgang führt irgendwohin. Ob die Schaltung das Richtige tut, zeigt »Prüfen«.</source>
+        <translation>Rien à signaler : chaque entrée a un fil et chaque sortie mène quelque part. Pour savoir si le circuit fait ce qu’il faut, utilise »Vérifier«.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="426" />
+        <source>Auf der Werkbank liegt noch kein Baustein.</source>
+        <translation>Il n’y a encore aucun composant sur l’établi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="464" />
+        <source>Bausteine zusammen: %1</source>
+        <translation>Composants au total : %1</translation>
     </message>
 </context>
 <context>
@@ -1306,6 +1616,26 @@
         <location filename="../zuse/src/workbench_controller.cpp" line="1237" />
         <source>Gut, dann probier einfach aus! Setz eine Kiste ein.</source>
         <translation>D’accord, alors essaie simplement ! Insère une boîte.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/schematic.cpp" line="315" />
+        <source>%1: Ein Eingang hat keine Leitung. Ein offener Eingang ist weder 0 noch 1 – die Lampe zeigt dann »?«.</source>
+        <translation>%1 : une entrée n’a pas de fil. Une entrée ouverte n’est ni 0 ni 1 – la lampe affiche alors »?«.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/schematic.cpp" line="317" />
+        <source>%1: Die Eingänge %2 haben keine Leitung. Offene Eingänge sind weder 0 noch 1.</source>
+        <translation>%1 : les entrées %2 n’ont pas de fil. Des entrées ouvertes ne sont ni 0 ni 1.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/schematic.cpp" line="323" />
+        <source>%1: Der Ausgang führt nirgendwohin. Wolltest du ihn mit einer Lampe oder einem anderen Baustein verbinden?</source>
+        <translation>%1 : la sortie ne mène nulle part. Voulais-tu la relier à une lampe ou à un autre composant ?</translation>
+    </message>
+    <message>
+        <location filename="../zuse/src/schematic.cpp" line="335" />
+        <source>Die Lampe »%1« hat keine Leitung.</source>
+        <translation>La lampe »%1« n’a pas de fil.</translation>
     </message>
 </context>
 </TS>

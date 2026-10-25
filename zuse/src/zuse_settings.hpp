@@ -15,6 +15,7 @@ class ZuseSettings : public QObject {
     Q_PROPERTY(QVariantList languages READ languages CONSTANT)
     Q_PROPERTY(int fontLevel READ fontLevel WRITE setFontLevel NOTIFY fontLevelChanged)
     Q_PROPERTY(qreal fontScale READ fontScale NOTIFY fontLevelChanged)
+    Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY schematicVisibleChanged)
 
 public:
     // dataDir leer: nichts laden und speichern (Tests); language: Vorgabe, falls noch nichts gewaehlt wurde
@@ -29,10 +30,13 @@ public:
     int fontLevel() const { return m_fontLevel; }
     void setFontLevel(int level);
     qreal fontScale() const { return 0.8 + 0.1 * m_fontLevel; } // 0,8 / 0,9 / 1,0
+    bool schematicVisible() const { return m_schematicVisible; } // Schaltplan neben der Werkbank
+    void setSchematicVisible(bool on);
 
 signals:
     void languageChanged(const QString& code);
     void fontLevelChanged();
+    void schematicVisibleChanged();
 
 private:
     void save() const;
@@ -41,6 +45,7 @@ private:
     QString m_file;
     QString m_language = QStringLiteral("de");
     int m_fontLevel = 2;
+    bool m_schematicVisible = false;
     QTranslator m_translator;
     bool m_installed = false;
 };

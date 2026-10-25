@@ -102,9 +102,47 @@ ApplicationWindow {
                 Accessible.name: qsTr("Zahlensysteme anzeigen")
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Zahlen binär, dezimal und hexadezimal anzeigen")
             }
-            HeaderButton {
-                text: qsTr("Werkzeugkiste") + " (" + workbench.tools.length + ")"
-                onClicked: toolbox.open()
+            HeaderButton { // Schaltplan neben der Werkbank ein/aus (wie Volta)
+                objectName: "schematicToggle"
+                visible: win.inLab && win.building
+                text: qsTr("Schaltplan")
+                on: settings.schematicVisible
+                onClicked: settings.schematicVisible = !settings.schematicVisible
+                Accessible.name: settings.schematicVisible ? qsTr("Schaltplan ausblenden") : qsTr("Schaltplan zeigen")
+                ToolTip.visible: hovered; ToolTip.text: Accessible.name
+            }
+            ToolButton { // Werkzeugkiste wie Volta: Symbol mit Zahl der Werkzeuge
+                objectName: "toolboxButton"
+                implicitWidth: ZTheme.control; implicitHeight: ZTheme.control
+                onClicked: toolbox.opened ? toolbox.close() : toolbox.open()
+                Accessible.name: qsTr("Werkzeugkiste")
+                ToolTip.visible: hovered; ToolTip.text: qsTr("Werkzeugkiste")
+                contentItem: Item {
+                    Image {
+                        anchors.centerIn: parent
+                        width: 26; height: 26
+                        sourceSize: Qt.size(64, 64)
+                        source: "qrc:/zuse/icons/toolbox_light.svg"
+                    }
+                    Rectangle { // Zahl der Werkzeuge
+                        visible: workbench.tools.length > 0
+                        anchors { right: parent.right; top: parent.top; margins: 2 }
+                        width: Math.max(18, badge.implicitWidth + 8); height: 18; radius: 9
+                        color: ZTheme.pad
+                        Text {
+                            id: badge
+                            anchors.centerIn: parent
+                            text: workbench.tools.length
+                            color: ZTheme.shell
+                            font.pixelSize: 11; font.bold: true
+                        }
+                    }
+                }
+                background: Rectangle {
+                    radius: 8
+                    color: toolbox.opened ? ZTheme.accent : (parent.hovered ? "#16385C" : "transparent")
+                    border.color: Qt.rgba(1, 1, 1, 0.45)
+                }
             }
             TopBar { // wie Volta: Schrift, Sprache, Hilfe, Kurzanleitung, Info, Menue
                 Layout.alignment: Qt.AlignVCenter
@@ -188,6 +226,14 @@ ApplicationWindow {
             }
         }
 
+        SchematicView { // Schaltplan parallel zum Aufbau
+            objectName: "schematic"
+            visible: settings.schematicVisible && win.building
+            Layout.preferredWidth: Math.max(280, (win.width - 190 - 360) * 0.45)
+            Layout.fillHeight: true
+            Layout.topMargin: 12; Layout.bottomMargin: 12
+        }
+
         TaskPanel {
             Layout.preferredWidth: 360
             Layout.fillHeight: true
@@ -196,7 +242,13 @@ ApplicationWindow {
         }
     }
 
-    ToolboxPopup { id: toolbox; objectName: "toolbox" }
+    ToolboxPanel {
+        id: toolbox
+        objectName: "toolbox"
+        y: win.header.height // unter der Kopfzeile, der Knopf bleibt erreichbar
+        height: win.height - win.header.height
+        onPartSelected: id => bench.selectedPart = id
+    }
     DemoPicker {
         id: demoPicker
         objectName: "demoPicker"

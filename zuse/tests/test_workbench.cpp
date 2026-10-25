@@ -467,6 +467,62 @@ private slots:
     }
 
     // wie Volta: Freies Labor (alle eigenen Werkzeuge, nicht im Lernpfad) und Vorfuehrung (nichts wird gespeichert)
+    // Schaltplan aller Musterloesungen: nur rechte Winkel, alles im Plan, keine Leitung quer durch einen Baustein
+    void schematicOfAllSolutions() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        for (const QVariant& d : w.demos()) {
+            QVERIFY(w.startDemo(d.toMap()["index"].toInt()));
+            const QVariantMap plan = w.schematic();
+            const qreal width = plan["width"].toReal(), height = plan["height"].toReal();
+            QList<QRectF> boxes;
+            int parts = 0;
+            for (const QVariant& e : plan["elements"].toList()) {
+                const QVariantMap m = e.toMap();
+                if (m["kind"] != "part") continue;
+                ++parts;
+                boxes << QRectF(m["x"].toReal(), m["y"].toReal(), m["w"].toReal(), m["h"].toReal());
+            }
+            QCOMPARE(parts, int(w.def().parts.size()));
+            for (const QVariant& l : plan["lines"].toList()) {
+                const QVariantList pts = l.toMap()["points"].toList();
+                for (int i = 0; i + 3 < pts.size(); i += 2) {
+                    const QPointF a(pts[i].toReal(), pts[i + 1].toReal()), b(pts[i + 2].toReal(), pts[i + 3].toReal());
+                    QVERIFY2(qFuzzyCompare(a.x() + 1, b.x() + 1) || qFuzzyCompare(a.y() + 1, b.y() + 1),
+                             qPrintable(d.toMap()["label"].toString()));
+                    for (const QPointF& p : {a, b})
+                        QVERIFY(p.x() >= 0 && p.x() <= width && p.y() >= 0 && p.y() <= height);
+                    const QRectF seg = QRectF(a, b).normalized().adjusted(-0.1, -0.1, 0.1, 0.1);
+                    for (const QRectF& box : boxes)
+                        QVERIFY2(!seg.intersects(box.adjusted(2, 2, -2, -2)),
+                                 qPrintable(d.toMap()["label"].toString() + ": Leitung durch einen Baustein"));
+                }
+            }
+            QVERIFY(w.faultFindings().isEmpty()); // Musterloesungen sind vollstaendig verdrahtet
+            int count = 0;
+            for (const QVariant& p : w.partsList()) count += p.toMap()["count"].toInt();
+            QCOMPARE(count, int(w.def().parts.size()));
+            w.leaveSpecial();
+        }
+    }
+
+    // Fehlersuche: offener Eingang, Ausgang ohne Ziel, Lampe ohne Leitung
+    void faultFinder() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        finishBit(w);
+        discover(w, 1);
+        w.startFreeLab();
+        const QString id = w.addPart("NOT", 300, 300);
+        QVERIFY(!id.isEmpty());
+        QStringList kinds;
+        for (const QVariant& f : w.faultFindings()) kinds << f.toMap()["kind"].toString();
+        QVERIFY(kinds.contains("offen"));
+        QVERIFY(kinds.contains("unbenutzt"));
+        QCOMPARE(w.partsList().size(), 1);
+        QCOMPARE(w.partsList()[0].toMap()["count"].toInt(), 1);
+    }
+
     void freeLabAndDemo() {
         QTemporaryDir dir;
         {
