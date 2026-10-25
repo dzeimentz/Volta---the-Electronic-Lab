@@ -15,9 +15,15 @@ Rectangle {
     readonly property bool demo: workbench.mode === "vorfuehrung"
     readonly property bool discover: workbench.stageKind === "entdecken"
     property bool unread: false // neue Nachricht von Zetti, waehrend er ausgeblendet ist
+    // Erklaer-Comic zur Grundfunktion der Stufe; beim Entdecken erst nach dem Loesen (verraet sonst die Kiste)
+    readonly property string comicKey: ({ "NICHT": "nicht", "UND": "und", "ODER": "oder", "NAND": "nand",
+                                          "XODER": "xoder" })[workbench.stageKuerzel] || ""
+    readonly property bool comicOffered: comicKey !== "" && !free
+                                         && (!discover || workbench.stageDone || demo)
 
     signal demoPickerRequested()
     signal homeRequested()
+    signal comicRequested(string key)
     color: ZTheme.surface
     Rectangle { anchors { left: parent.left; top: parent.top; bottom: parent.bottom } width: 1; color: ZTheme.line }
 
@@ -95,7 +101,8 @@ Rectangle {
                 }
             }
         }
-        RowLayout {
+        Flow {
+            Layout.fillWidth: true
             spacing: 8
             ZButton {
                 text: root.hintVisible ? qsTr("Tipp aus") : qsTr("Tipp")
@@ -113,6 +120,14 @@ Rectangle {
                 }
                 Accessible.name: settings.zettiVisible ? qsTr("Zetti und seine Tipps ausblenden")
                                                        : qsTr("Zetti und seine Tipps zeigen")
+                ToolTip.visible: hovered; ToolTip.text: Accessible.name
+            }
+            ZButton { // Erklaer-Comic mit Zetti
+                objectName: "comicButton"
+                visible: root.comicOffered
+                text: qsTr("Erklärung")
+                onClicked: root.comicRequested(root.comicKey)
+                Accessible.name: qsTr("Zetti erklärt die Regel mit einem Comic")
                 ToolTip.visible: hovered; ToolTip.text: Accessible.name
             }
             ZButton {

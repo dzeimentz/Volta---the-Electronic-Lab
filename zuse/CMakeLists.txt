@@ -58,6 +58,7 @@ qt_add_qml_module(zuse_app
         qml/HelpDialog.qml
         qml/QuickGuide.qml
         qml/InfoDialog.qml
+        qml/ComicDialog.qml
 )
 # Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)

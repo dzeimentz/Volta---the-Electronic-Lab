@@ -2,6 +2,540 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>ComicDialog</name>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="35" />
+        <source>UND – Die Türsteher-Regel</source>
+        <translation>ET – La règle du portier</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="36" />
+        <source>»Du darfst ins Kino, wenn du deine Hausaufgaben gemacht hast und dein Zimmer aufgeräumt ist.«</source>
+        <translation>« Tu peux aller au cinéma si tu as fait tes devoirs et rangé ta chambre. »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="38" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="40" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="42" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="44" />
+        <source>Hausaufgaben gemacht</source>
+        <translation>Devoirs faits</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="38" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="40" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="42" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="44" />
+        <source>Hausaufgaben nicht gemacht</source>
+        <translation>Devoirs pas faits</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="38" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="40" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="42" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="44" />
+        <source>Zimmer aufgeräumt</source>
+        <translation>Chambre rangée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="38" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="40" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="42" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="44" />
+        <source>Zimmer nicht aufgeräumt</source>
+        <translation>Chambre pas rangée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="38" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="40" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="42" />
+        <source>Kein Kino</source>
+        <translation>Pas de cinéma</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="39" />
+        <source>Nichts erledigt? Der Türsteher lässt dich nicht rein.</source>
+        <translation>Rien de fait ? Le portier ne te laisse pas entrer.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="41" />
+        <source>Hausaufgaben fertig, aber das Zimmer ist ein Chaos – die Tür bleibt zu.</source>
+        <translation>Devoirs faits, mais la chambre est en désordre – la porte reste fermée.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="43" />
+        <source>Zimmer ordentlich, aber die Hausaufgaben fehlen – immer noch zu!</source>
+        <translation>Chambre rangée, mais pas de devoirs – toujours fermé !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="44" />
+        <source>Ab ins Kino!</source>
+        <translation>En route pour le cinéma !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="45" />
+        <source>&lt;b&gt;WENN&lt;/b&gt; die Hausaufgaben gemacht sind &lt;b&gt;UND&lt;/b&gt; das Zimmer aufgeräumt ist, &lt;b&gt;DANN&lt;/b&gt; geht es ins Kino!</source>
+        <translation>&lt;b&gt;SI&lt;/b&gt; les devoirs sont faits &lt;b&gt;ET&lt;/b&gt; la chambre est rangée, &lt;b&gt;ALORS&lt;/b&gt; on va au cinéma !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="47" />
+        <source>Zum Anfassen: Zwei Schalter hintereinander (in Reihe). Der Strom muss durch beide – die Lampe leuchtet nur, wenn A &lt;b&gt;UND&lt;/b&gt; B an sind.</source>
+        <translation>À toi : deux interrupteurs l’un après l’autre (en série). Le courant doit traverser les deux – la lampe ne s’allume que si A &lt;b&gt;ET&lt;/b&gt; B sont fermés.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="49" />
+        <source>UND: Beide Bedingungen müssen erfüllt sein. Fehlt auch nur eine, bleibt die Tür zu.</source>
+        <translation>ET : les deux conditions doivent être remplies. S’il en manque une seule, la porte reste fermée.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="52" />
+        <source>ODER – Die Eisdielen-Regel</source>
+        <translation>OU – La règle du glacier</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="53" />
+        <source>»Du bekommst zum Nachtisch ein Eis oder einen Apfel.«</source>
+        <translation>« Comme dessert, tu as une glace ou une pomme. »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="55" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="57" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="59" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="61" />
+        <source>Eis da</source>
+        <translation>Glace</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="55" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="57" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="59" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="61" />
+        <source>kein Eis</source>
+        <translation>pas de glace</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="55" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="57" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="59" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="61" />
+        <source>Apfel da</source>
+        <translation>Pomme</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="55" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="57" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="59" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="61" />
+        <source>kein Apfel</source>
+        <translation>pas de pomme</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="55" />
+        <source>Kein Nachtisch</source>
+        <translation>Pas de dessert</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="56" />
+        <source>Weder Eis noch Apfel? Dann gibt es keinen Nachtisch – schade!</source>
+        <translation>Ni glace ni pomme ? Alors pas de dessert – dommage !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="57" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="59" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="61" />
+        <source>Nachtisch!</source>
+        <translation>Dessert !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="58" />
+        <source>Ein Eis – der Nachtisch ist gerettet!</source>
+        <translation>Une glace – le dessert est sauvé !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="60" />
+        <source>Ein Apfel – auch prima!</source>
+        <translation>Une pomme – super aussi !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="62" />
+        <source>Beides? Umso besser! &lt;b&gt;WENN&lt;/b&gt; es Eis &lt;b&gt;ODER&lt;/b&gt; einen Apfel gibt, &lt;b&gt;DANN&lt;/b&gt; gibt es Nachtisch – beides ist auch erlaubt.</source>
+        <translation>Les deux ? Encore mieux ! &lt;b&gt;SI&lt;/b&gt; il y a une glace &lt;b&gt;OU&lt;/b&gt; une pomme, &lt;b&gt;ALORS&lt;/b&gt; il y a un dessert – les deux, c’est permis aussi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="64" />
+        <source>Zum Anfassen: Zwei Schalter nebeneinander (parallel). Der Strom hat zwei Wege – die Lampe leuchtet, wenn A &lt;b&gt;ODER&lt;/b&gt; B an ist, oder beide.</source>
+        <translation>À toi : deux interrupteurs côte à côte (en parallèle). Le courant a deux chemins – la lampe s’allume si A &lt;b&gt;OU&lt;/b&gt; B est fermé, ou les deux.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="66" />
+        <source>ODER: Es reicht, wenn mindestens eine Bedingung stimmt – beide dürfen es auch.</source>
+        <translation>OU : il suffit qu’au moins une condition soit vraie – les deux peuvent l’être aussi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="69" />
+        <source>NICHT – Der Gegenteil-Tag</source>
+        <translation>NON – Le jour du contraire</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="70" />
+        <source>Heute ist Gegenteil-Tag! Zettis Zauberschild sagt immer das Gegenteil.</source>
+        <translation>Aujourd’hui, c’est le jour du contraire ! Le panneau magique de Zetti dit toujours le contraire.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="72" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="74" />
+        <source>Sonne scheint</source>
+        <translation>Le soleil brille</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="72" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="74" />
+        <source>Sonne scheint nicht</source>
+        <translation>Le soleil ne brille pas</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="72" />
+        <source>Schild: »Regen!«</source>
+        <translation>Panneau : « Pluie ! »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="73" />
+        <source>&lt;b&gt;WENN&lt;/b&gt; die Sonne scheint, &lt;b&gt;DANN&lt;/b&gt; sagt das Schild: &lt;b&gt;NICHT&lt;/b&gt;-Sonne – also Regen!</source>
+        <translation>&lt;b&gt;SI&lt;/b&gt; le soleil brille, &lt;b&gt;ALORS&lt;/b&gt; le panneau dit : &lt;b&gt;NON&lt;/b&gt;-soleil – donc pluie !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="74" />
+        <source>Schild: »Sonne!«</source>
+        <translation>Panneau : « Soleil ! »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="75" />
+        <source>Es regnet? Dann behauptet das Schild: Sonne!</source>
+        <translation>Il pleut ? Alors le panneau affirme : soleil !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="77" />
+        <source>&lt;b&gt;NICHT&lt;/b&gt; kehrt den Zustand einfach um: Aus Ja wird Nein, aus An wird Aus – und umgekehrt.</source>
+        <translation>&lt;b&gt;NON&lt;/b&gt; inverse simplement l’état : oui devient non, allumé devient éteint – et inversement.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="79" />
+        <source>Zum Anfassen: Ein Taster als Öffner. Die Lampe ist an – drückst du, geht sie aus. Drücken heißt hier: &lt;b&gt;NICHT&lt;/b&gt; leuchten.</source>
+        <translation>À toi : un bouton qui coupe quand on appuie. La lampe est allumée – appuie, elle s’éteint. Appuyer veut dire ici : &lt;b&gt;NE PAS&lt;/b&gt; éclairer.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="81" />
+        <source>NICHT dreht um: Aus An wird Aus, aus Aus wird An.</source>
+        <translation>NON inverse : allumé devient éteint, éteint devient allumé.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="84" />
+        <source>NAND – Die verbotene Kombination</source>
+        <translation>NON-ET – La combinaison interdite</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="85" />
+        <source>»Du darfst alles machen, außer gleichzeitig rennen und die volle Suppenschüssel tragen.«</source>
+        <translation>« Tu peux tout faire, sauf courir en portant la soupière pleine. »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="87" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="89" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="91" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="93" />
+        <source>Rennen</source>
+        <translation>Courir</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="87" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="89" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="91" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="93" />
+        <source>nicht rennen</source>
+        <translation>ne pas courir</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="87" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="89" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="91" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="93" />
+        <source>Suppe tragen</source>
+        <translation>Porter la soupe</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="87" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="89" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="91" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="93" />
+        <source>keine Suppe tragen</source>
+        <translation>pas de soupe</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="87" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="89" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="91" />
+        <source>Erlaubt</source>
+        <translation>Permis</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="88" />
+        <source>Ruhig stehen, keine Schüssel – erlaubt.</source>
+        <translation>Rester calme, sans soupière – permis.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="90" />
+        <source>Rennen ohne Schüssel – erlaubt!</source>
+        <translation>Courir sans soupière – permis !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="92" />
+        <source>Die Schüssel langsam tragen – auch erlaubt.</source>
+        <translation>Porter la soupière lentement – permis aussi.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="93" />
+        <source>Verboten!</source>
+        <translation>Interdit !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="94" />
+        <source>Rennen &lt;b&gt;UND&lt;/b&gt; Suppe tragen – das ist die verbotene Kombination! Nur hier heißt es Nein.</source>
+        <translation>Courir &lt;b&gt;ET&lt;/b&gt; porter la soupe – c’est la combinaison interdite ! C’est le seul cas où c’est non.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="96" />
+        <source>Das ist ein &lt;b&gt;UND&lt;/b&gt; mit einem &lt;b&gt;NICHT&lt;/b&gt; dahinter: &lt;b&gt;NICHT-UND&lt;/b&gt;, kurz NAND. Solange &lt;b&gt;NICHT&lt;/b&gt; beides zugleich passiert, heißt es Ja. So arbeitet auch die Fensterwarnung.</source>
+        <translation>C’est un &lt;b&gt;ET&lt;/b&gt; suivi d’un &lt;b&gt;NON&lt;/b&gt; : &lt;b&gt;NON-ET&lt;/b&gt;. Tant que les deux n’arrivent &lt;b&gt;PAS&lt;/b&gt; en même temps, c’est oui. L’alerte fenêtre fonctionne de la même façon.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="98" />
+        <source>NAND: Fast alles ist erlaubt – nur beides gleichzeitig nicht.</source>
+        <translation>NON-ET : presque tout est permis – sauf les deux à la fois.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="101" />
+        <source>NOR – Die strenge Ruhe-Regel</source>
+        <translation>NON-OU – La règle du calme</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="102" />
+        <source>»Es gibt heute weder Fernseher noch Tablet.«</source>
+        <translation>« Aujourd’hui, ni télé ni tablette. »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="104" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="106" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="108" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="110" />
+        <source>Fernseher an</source>
+        <translation>Télé allumée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="104" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="106" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="108" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="110" />
+        <source>Fernseher aus</source>
+        <translation>Télé éteinte</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="104" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="106" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="108" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="110" />
+        <source>Tablet an</source>
+        <translation>Tablette allumée</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="104" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="106" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="108" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="110" />
+        <source>Tablet aus</source>
+        <translation>Tablette éteinte</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="104" />
+        <source>Ruhe</source>
+        <translation>Calme</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="105" />
+        <source>Weder Fernseher noch Tablet – herrliche Ruhe!</source>
+        <translation>Ni télé ni tablette – quel calme !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="106" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="108" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="110" />
+        <source>Keine Ruhe</source>
+        <translation>Pas de calme</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="107" />
+        <source>Der Fernseher läuft – vorbei mit der Ruhe.</source>
+        <translation>La télé est allumée – fini le calme.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="109" />
+        <source>Das Tablet ist an – auch keine Ruhe.</source>
+        <translation>La tablette est allumée – pas de calme non plus.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="111" />
+        <source>Beides an? Erst recht nicht!</source>
+        <translation>Les deux allumées ? Encore moins !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="113" />
+        <source>&lt;b&gt;WENN&lt;/b&gt; der Fernseher &lt;b&gt;ODER&lt;/b&gt; das Tablet an ist, &lt;b&gt;DANN&lt;/b&gt; ist &lt;b&gt;NICHT&lt;/b&gt; Ruhe. Das ist &lt;b&gt;NICHT-ODER&lt;/b&gt;, kurz NOR.</source>
+        <translation>&lt;b&gt;SI&lt;/b&gt; la télé &lt;b&gt;OU&lt;/b&gt; la tablette est allumée, &lt;b&gt;ALORS&lt;/b&gt; ce n’est &lt;b&gt;PAS&lt;/b&gt; calme. C’est &lt;b&gt;NON-OU&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="115" />
+        <source>NOR: Nur wenn weder das eine noch das andere passiert, herrscht Ruhe.</source>
+        <translation>NON-OU : c’est calme seulement si ni l’un ni l’autre n’arrive.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="118" />
+        <source>XODER – Das Entscheidungsspiel</source>
+        <translation>OU exclusif – Le jeu du choix</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="119" />
+        <source>»Du kannst jetzt entweder draußen Fahrrad fahren oder drinnen Lego bauen – aber nicht beides gleichzeitig.«</source>
+        <translation>« Tu peux soit faire du vélo dehors, soit construire des Lego dedans – mais pas les deux à la fois. »</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="121" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="123" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="125" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="127" />
+        <source>Fahrrad fahren</source>
+        <translation>Faire du vélo</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="121" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="123" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="125" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="127" />
+        <source>nicht Fahrrad fahren</source>
+        <translation>pas de vélo</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="121" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="123" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="125" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="127" />
+        <source>Lego bauen</source>
+        <translation>Construire des Lego</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="121" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="123" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="125" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="127" />
+        <source>nicht Lego bauen</source>
+        <translation>pas de Lego</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="121" />
+        <source>Nichts passiert</source>
+        <translation>Rien ne se passe</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="122" />
+        <source>Keins von beiden? Dann passiert gar nichts.</source>
+        <translation>Ni l’un ni l’autre ? Alors il ne se passe rien.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="123" />
+        <location filename="../zuse/qml/ComicDialog.qml" line="125" />
+        <source>Das geht!</source>
+        <translation>Ça marche !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="124" />
+        <source>Fahrrad fahren – super!</source>
+        <translation>Faire du vélo – super !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="126" />
+        <source>Lego bauen – auch super!</source>
+        <translation>Construire des Lego – super aussi !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="127" />
+        <source>Geht nicht!</source>
+        <translation>Impossible !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="128" />
+        <source>Draußen radeln und drinnen bauen zugleich? Das geht nicht!</source>
+        <translation>Faire du vélo dehors et construire dedans en même temps ? Impossible !</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="130" />
+        <source>Genau eines muss stimmen: das eine &lt;b&gt;ODER&lt;/b&gt; das andere – aber &lt;b&gt;NICHT&lt;/b&gt; beide. Entweder-oder: XODER. Das Treppenlicht funktioniert genauso.</source>
+        <translation>Une seule chose doit être vraie : l’une &lt;b&gt;OU&lt;/b&gt; l’autre – mais &lt;b&gt;PAS&lt;/b&gt; les deux. Soit l’un, soit l’autre : OU exclusif. La lumière de l’escalier fonctionne pareil.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="132" />
+        <source>XODER: Genau eines von beiden – nicht keins und nicht beides.</source>
+        <translation>OU exclusif : exactement l’un des deux – ni aucun, ni les deux.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="256" />
+        <source>A loslassen</source>
+        <translation>Relâcher A</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="256" />
+        <source>A drücken</source>
+        <translation>Appuyer sur A</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="257" />
+        <source>A ausschalten</source>
+        <translation>Ouvrir A</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="257" />
+        <source>A einschalten</source>
+        <translation>Fermer A</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="262" />
+        <source>B ausschalten</source>
+        <translation>Ouvrir B</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="262" />
+        <source>B einschalten</source>
+        <translation>Fermer B</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="267" />
+        <source>Lampe leuchtet</source>
+        <translation>La lampe brille</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="267" />
+        <source>Lampe aus</source>
+        <translation>Lampe éteinte</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="307" />
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ComicDialog.qml" line="440" />
+        <source>Merke: </source>
+        <translation>À retenir : </translation>
+    </message>
+</context>
+<context>
     <name>DemoPicker</name>
     <message>
         <location filename="../zuse/qml/DemoPicker.qml" line="27" />
@@ -579,17 +1113,17 @@
         <translation>Double-tape : regarder dans une invention ★</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="290" />
+        <location filename="../zuse/qml/Main.qml" line="291" />
         <source>Vorführung</source>
         <translation>Démonstration</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="297" />
+        <location filename="../zuse/qml/Main.qml" line="298" />
         <source>Andere Vorführung</source>
         <translation>Autre démonstration</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/Main.qml" line="302" />
+        <location filename="../zuse/qml/Main.qml" line="303" />
         <source>Beenden</source>
         <translation>Terminer</translation>
     </message>
@@ -1000,132 +1534,142 @@
 <context>
     <name>TaskPanel</name>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="101" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="108" />
         <source>Tipp aus</source>
         <translation>Masquer l’astuce</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="101" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="108" />
         <source>Tipp</source>
         <translation>Astuce</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="109" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="116" />
         <source>Zetti aus</source>
         <translation>Masquer Zetti</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="109" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="116" />
         <source>Zetti an</source>
         <translation>Afficher Zetti</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="114" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="121" />
         <source>Zetti und seine Tipps ausblenden</source>
         <translation>Masquer Zetti et ses conseils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="115" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="122" />
         <source>Zetti und seine Tipps zeigen</source>
         <translation>Afficher Zetti et ses conseils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="120" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="128" />
+        <source>Erklärung</source>
+        <translation>Explication</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/TaskPanel.qml" line="130" />
+        <source>Zetti erklärt die Regel mit einem Comic</source>
+        <translation>Zetti explique la règle avec une BD</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/TaskPanel.qml" line="135" />
         <source>Lösung zeigen</source>
         <translation>Montrer la solution</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="142" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="157" />
         <source>Aufgaben</source>
         <translation>Tâches</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="143" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="158" />
         <source>Ablauf</source>
         <translation>Déroulement</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="144" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="159" />
         <source>Wahrheitstabelle</source>
         <translation>Table de vérité</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="144" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="159" />
         <source>Was soll passieren?</source>
         <translation>Que doit-il se passer ?</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="145" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="160" />
         <source>Was glaubst du?</source>
         <translation>Qu’en penses-tu ?</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="146" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="161" />
         <source>Probier es aus!</source>
         <translation>Essaie !</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="154" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="169" />
         <source>Lies jede Situation. Was macht die Lampe da? Tippe an, was du glaubst.</source>
         <translation>Lis chaque situation. Que fait la lampe ? Touche ce que tu penses.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="155" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="170" />
         <source>Setz links eine Kiste ein. Dann tippe eine Situation an – die Schalter stellen sich von selbst.</source>
         <translation>Place une boîte à gauche. Puis touche une situation – les interrupteurs se règlent tout seuls.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="146" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="161" />
         <source>Was passiert?</source>
         <translation>Que se passe-t-il ?</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="163" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="178" />
         <source>Tippe eine Situation an – die Schalter stellen sich von selbst. »Prüfen« testet alle.</source>
         <translation>Touche une situation – les interrupteurs se règlent tout seuls. »Vérifier« les teste toutes.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="191" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="206" />
         <source>Zeige die %1</source>
         <translation>Affiche %1</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="218" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="233" />
         <source>Merke: </source>
         <translation>Retiens : </translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="230" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="245" />
         <source>Weiß ich nicht – ausprobieren</source>
         <translation>Je ne sais pas – j’essaie</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="236" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="251" />
         <source>Diese Kiste passt!</source>
         <translation>Cette boîte convient !</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="243" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="258" />
         <source>Prüfen</source>
         <translation>Vérifier</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="251" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="266" />
         <source>Erfindung einpacken</source>
         <translation>Ranger l’invention</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="251" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="266" />
         <source>Geschafft!</source>
         <translation>Réussi !</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="259" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="274" />
         <source>Zur Startseite</source>
         <translation>Vers l’accueil</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/TaskPanel.qml" line="265" />
+        <location filename="../zuse/qml/TaskPanel.qml" line="280" />
         <source>Weiter</source>
         <translation>Suivant</translation>
     </message>
@@ -1133,308 +1677,324 @@
 <context>
     <name>ToolboxPanel</name>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="85" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="96" />
         <source>Werkzeugkiste</source>
         <translation>Boîte à outils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="94" />
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="95" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="105" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="106" />
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="106" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="117" />
         <source>Werkzeuge</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="107" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="118" />
         <source>Lexikon</source>
         <translation>Lexique</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="108" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="119" />
         <source>Zahlen</source>
         <translation>Nombres</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="109" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="120" />
         <source>Fehlersuche</source>
         <translation>Dépannage</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="110" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="121" />
         <source>Teileliste</source>
         <translation>Liste des pièces</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="123" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="134" />
         <source>Noch leer. Jede Regel, die du in einer Rätselkiste entdeckst, und jede Erfindung, die du einpackst, landet hier – und du kannst sie danach überall einbauen.</source>
         <translation>Encore vide. Chaque règle que tu découvres dans une boîte mystère et chaque invention que tu emballes arrive ici – ensuite, tu peux l’utiliser partout.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="158" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="169" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="305" />
+        <source>Erklärung</source>
+        <translation>Explication</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="176" />
         <source>Schaltzeichen</source>
         <translation>Symboles</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="174" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="192" />
         <source>DIN EN 60617 (Europa) oder IEEE Std 91 (USA)</source>
         <translation>DIN EN 60617 (Europe) ou IEEE Std 91 (États-Unis)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="181" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="199" />
         <source>Hier sammeln sich die Begriffe, die du kennenlernst. Mit jedem geschafften Experiment kommen neue dazu.</source>
         <translation>Ici se rassemblent les notions que tu découvres. Chaque expérience réussie en ajoute de nouvelles.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="186" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="204" />
         <source>Bit</source>
         <translation>Bit</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="187" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="205" />
         <source>Die kleinste Information: 0 oder 1, aus oder an. Auf der Werkbank zeigt jede Leitung ihr Bit: Cyan und dick für 1, grau für 0.</source>
         <translation>La plus petite information : 0 ou 1, éteint ou allumé. Sur l’établi, chaque fil montre son bit : cyan et épais pour 1, gris pour 0.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="189" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="207" />
         <source>Offener Eingang »?«</source>
         <translation>Entrée ouverte »?«</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="190" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="208" />
         <source>Hängt an einem Eingang keine Leitung, ist er weder 0 noch 1. Zuse 1 zeigt dann »?« – echte Bausteine verhalten sich an offenen Eingängen unberechenbar.</source>
         <translation>Si aucun fil n’est relié à une entrée, elle n’est ni 0 ni 1. Zuse 1 affiche alors »?« – les vrais composants se comportent de façon imprévisible avec des entrées ouvertes.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="192" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="210" />
         <source>NICHT</source>
         <translation>NON</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="193" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="211" />
         <source>Dreht ein Bit um. Beispiel: Das Licht im Kühlschrank ist an, wenn die Tür NICHT zu ist.</source>
         <translation>Inverse un bit. Exemple : la lumière du réfrigérateur est allumée quand la porte n’est PAS fermée.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="195" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="213" />
         <source>UND</source>
         <translation>ET</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="196" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="214" />
         <source>Nur 1, wenn alle Eingänge 1 sind. Beispiel: Die Maschine läuft nur, wenn beide Hände auf den Tasten liegen.</source>
         <translation>1 seulement si toutes les entrées sont à 1. Exemple : la machine ne tourne que si les deux mains sont sur les boutons.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="198" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="216" />
         <source>ODER</source>
         <translation>OU</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="199" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="217" />
         <source>1, sobald mindestens ein Eingang 1 ist. Beispiel: Die Klingel läutet an der Haustür oder an der Gartentür.</source>
         <translation>1 dès qu’au moins une entrée est à 1. Exemple : la sonnette retentit à la porte d’entrée ou au portail du jardin.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="201" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="219" />
+        <source>NOR</source>
+        <translation>NON-OU</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="221" />
+        <source>NICHT-ODER: nur 1, wenn kein Eingang 1 ist. Beispiel: Ruhe herrscht, wenn weder der Fernseher noch das Tablet läuft.</source>
+        <translation>NON-OU : 1 seulement si aucune entrée n’est à 1. Exemple : c’est calme quand ni la télé ni la tablette ne sont allumées.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="223" />
         <source>NAND</source>
         <translation>NON-ET</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="203" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="225" />
         <source>NICHT-UND: nur 0, wenn alle Eingänge 1 sind. Aus NAND allein lässt sich jede andere Schaltung bauen.</source>
         <translation>NON-ET : 0 seulement si toutes les entrées sont à 1. Avec des NON-ET seuls, on peut construire n’importe quel autre circuit.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="205" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="227" />
         <source>XODER</source>
         <translation>OU exclusif</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="207" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="229" />
         <source>Entweder-oder: 1, wenn die Eingänge verschieden sind. Beispiel: Ein Licht mit zwei Schaltern im Treppenhaus.</source>
         <translation>Soit l’un, soit l’autre : 1 si les entrées sont différentes. Exemple : une lumière d’escalier avec deux interrupteurs.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="209" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="231" />
         <source>Binärzahl</source>
         <translation>Nombre binaire</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="210" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="232" />
         <source>Jedes Bit hat einen Wert: 1, 2, 4, 8 … – von rechts nach links verdoppelt. 1011 heißt 8 + 2 + 1 = 11.</source>
         <translation>Chaque bit a une valeur : 1, 2, 4, 8 … – elle double de droite à gauche. 1011 signifie 8 + 2 + 1 = 11.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="212" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="234" />
         <source>Hexadezimal</source>
         <translation>Hexadécimal</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="213" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="235" />
         <source>Vier Bits zusammen ergeben eine Ziffer von 0 bis F (15). So schreibt man lange Bitketten kurz: 1111 1010 = FA.</source>
         <translation>Quatre bits ensemble forment un chiffre de 0 à F (15). On écrit ainsi de longues suites de bits en bref : 1111 1010 = FA.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="215" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="237" />
         <source>Übertrag</source>
         <translation>Retenue</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="216" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="238" />
         <source>1 + 1 ergibt binär 10: Die Stelle zeigt 0, die 1 wandert als Übertrag in die nächste Stelle – wie beim schriftlichen Rechnen.</source>
         <translation>En binaire, 1 + 1 donne 10 : le chiffre affiche 0 et le 1 passe au rang suivant comme retenue – comme dans le calcul posé.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="218" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="240" />
         <source>Halbaddierer</source>
         <translation>Demi-additionneur</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="219" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="241" />
         <source>Addiert zwei Bits: XODER liefert die Summe, UND den Übertrag.</source>
         <translation>Additionne deux bits : le OU exclusif donne la somme, le ET la retenue.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="220" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="242" />
         <source>Volladdierer</source>
         <translation>Additionneur complet</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="221" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="243" />
         <source>Addiert zwei Bits und den Übertrag von der Stelle davor. Mehrere hintereinander addieren ganze Zahlen.</source>
         <translation>Additionne deux bits et la retenue du rang précédent. Plusieurs à la suite additionnent des nombres entiers.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="223" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="245" />
         <source>Rückkopplung und Speicher</source>
         <translation>Rétroaction et mémoire</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="224" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="246" />
         <source>Führt ein Ausgang auf den eigenen Eingang zurück, kann sich die Schaltung etwas merken. So entsteht ein Speicher für ein Bit.</source>
         <translation>Si une sortie revient sur sa propre entrée, le circuit peut retenir quelque chose. C’est ainsi qu’on obtient une mémoire d’un bit.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="226" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="248" />
         <source>Takt</source>
         <translation>Horloge</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="227" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="249" />
         <source>Ein gleichmäßiges An und Aus, das alle Speicher gemeinsam weiterschaltet. So passiert alles Schritt für Schritt in der richtigen Reihenfolge.</source>
         <translation>Un allumé-éteint régulier qui fait avancer toutes les mémoires ensemble. Ainsi, tout se passe pas à pas dans le bon ordre.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="229" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="251" />
         <source>Register</source>
         <translation>Registre</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="230" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="252" />
         <source>Mehrere Speicherbits nebeneinander, die eine ganze Zahl auf einmal merken.</source>
         <translation>Plusieurs bits de mémoire côte à côte qui retiennent un nombre entier d’un coup.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="231" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="253" />
         <source>Zähler</source>
         <translation>Compteur</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="232" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="254" />
         <source>Speicherbits, die bei jedem Takt um eins weiterzählen – binär: 0000, 0001, 0010 …</source>
         <translation>Des bits de mémoire qui avancent d’un à chaque coup d’horloge – en binaire : 0000, 0001, 0010 …</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="233" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="255" />
         <source>Rechenwerk</source>
         <translation>Unité de calcul</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="234" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="256" />
         <source>Der Teil eines Computers, der rechnet: Addierer und Register zusammen.</source>
         <translation>La partie d’un ordinateur qui calcule : additionneurs et registres ensemble.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="235" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="257" />
         <source>Steuerung</source>
         <translation>Commande</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="236" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="258" />
         <source>Sagt dem Rechenwerk, wann es rechnen und wann es sich das Ergebnis merken soll. Bei dir sind das noch deine Hände – später übernimmt das ein Programm.</source>
         <translation>Indique à l’unité de calcul quand calculer et quand retenir le résultat. Pour l’instant, ce sont tes mains – plus tard, un programme s’en chargera.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="238" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="260" />
         <source>Konrad Zuse</source>
         <translation>Konrad Zuse</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="239" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="261" />
         <source>Baute ab 1936 in Berlin Rechenmaschinen, die mit Bits rechneten. Seine Z3 (1941) gilt als erster funktionsfähiger frei programmierbarer Computer.</source>
         <translation>À partir de 1936, il construisit à Berlin des machines à calculer qui comptaient avec des bits. Sa Z3 (1941) est considérée comme le premier ordinateur programmable en état de marche.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="269" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="291" />
         <source>Noch nicht entdeckt</source>
         <translation>Pas encore découvert</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="291" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="318" />
         <source>Tippe die Bits an. Jedes Bit hat seinen Wert – zusammen ergeben sie die Zahl.</source>
         <translation>Touche les bits. Chaque bit a sa valeur – ensemble, ils forment le nombre.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="318" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="345" />
         <source>Bit mit Wert %1: %2</source>
         <translation>Bit de valeur %1 : %2</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="340" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="367" />
         <source>binär</source>
         <translation>binaire</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="346" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="373" />
         <source>dezimal</source>
         <translation>décimal</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="352" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="379" />
         <source>hexadezimal</source>
         <translation>hexadécimal</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="364" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="391" />
         <source>Null</source>
         <translation>Zéro</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="368" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="395" />
         <source>Mit 8 Bits (einem Byte) kommst du von 0 bis 255. Nach 255 fängt der Zähler wieder bei 0 an – das Bit für 256 fehlt.</source>
         <translation>Avec 8 bits (un octet), tu vas de 0 à 255. Après 255, le compteur repart de 0 – il manque le bit pour 256.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="376" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="403" />
         <source>Hier steht, was an deinem Aufbau auffällt. Tippe einen Hinweis an, dann leuchtet der Baustein auf der Werkbank auf.</source>
         <translation>Ici s’affiche ce qui attire l’attention dans ton montage. Touche une remarque et le composant s’illumine sur l’établi.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="389" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="416" />
         <source>Keine Auffälligkeiten: Alle Eingänge haben eine Leitung, und jeder Ausgang führt irgendwohin. Ob die Schaltung das Richtige tut, zeigt »Prüfen«.</source>
         <translation>Rien à signaler : chaque entrée a un fil et chaque sortie mène quelque part. Pour savoir si le circuit fait ce qu’il faut, utilise »Vérifier«.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="426" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="453" />
         <source>Auf der Werkbank liegt noch kein Baustein.</source>
         <translation>Il n’y a encore aucun composant sur l’établi.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/ToolboxPanel.qml" line="464" />
+        <location filename="../zuse/qml/ToolboxPanel.qml" line="491" />
         <source>Bausteine zusammen: %1</source>
         <translation>Composants au total : %1</translation>
     </message>

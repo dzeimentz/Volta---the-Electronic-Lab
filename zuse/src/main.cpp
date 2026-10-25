@@ -132,6 +132,9 @@ int main(int argc, char* argv[]) {
             else
                 QMetaObject::invokeMethod(p, "open");
         }
+    // ZUSE_DEMO_COMIC=und|oder|nicht|nand|nor|xoder: Erklaer-Comic oeffnen
+    if (const QString comic = qEnvironmentVariable("ZUSE_DEMO_COMIC"); window && !comic.isEmpty())
+        if (QObject* c = window->findChild<QObject*>("comic")) QMetaObject::invokeMethod(c, "show", Q_ARG(QVariant, comic));
     // ZUSE_DEMO_PRESS=x,y[,los]: Maus an Fensterposition druecken (und wieder loslassen) – prueft z. B. den Taster
     const QStringList press = qEnvironmentVariable("ZUSE_DEMO_PRESS").split(',');
     if (window && press.size() >= 2) {

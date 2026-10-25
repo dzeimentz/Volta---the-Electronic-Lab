@@ -8,6 +8,7 @@ import QtQuick.Layouts
 Drawer {
     id: box
     signal partSelected(string partId) // Fehlersuche: Baustein auf der Werkbank hervorheben
+    signal comicRequested(string key)  // Erklaer-Comic zu einer Grundfunktion
 
     edge: Qt.RightEdge
     width: Math.min(460, parent ? parent.width : 460)
@@ -18,6 +19,16 @@ Drawer {
     background: Rectangle { color: "#FFFDF7"; border.color: ZTheme.layerEdge }
 
     function showTab(index) { tabs.currentIndex = index; open() }
+    QtObject { // Zuordnung Schaltzeichen -> Comic (Werkzeugkarten; Erfindungen ohne Comic)
+        id: comicKeys
+        function keyFor(symbol, inverted) {
+            if (symbol === "1") return inverted ? "nicht" : ""
+            if (symbol === "&") return inverted ? "nand" : "und"
+            if (symbol === "≥1") return inverted ? "nor" : "oder"
+            if (symbol === "=1") return inverted ? "" : "xoder"
+            return ""
+        }
+    }
     function has(kuerzel) { return kuerzel === "" || workbench.doneStages.indexOf(kuerzel) >= 0 }
 
     component Heading: Text {
@@ -151,6 +162,13 @@ Drawer {
                                 spacing: 2
                                 Heading { text: (card.modelData.invention ? "★ " : "") + card.modelData.name }
                                 Body { text: card.modelData.merksatz }
+                                ZButton {
+                                    readonly property string key: card.modelData.invention ? ""
+                                        : comicKeys.keyFor(card.modelData.symbol, card.modelData.inverted)
+                                    visible: key !== ""
+                                    text: qsTr("Erklärung")
+                                    onClicked: box.comicRequested(key)
+                                }
                             }
                         }
                     }
@@ -189,20 +207,24 @@ Drawer {
                         { need: "", title: qsTr("Offener Eingang »?«"), symbol: "",
                           text: qsTr("Hängt an einem Eingang keine Leitung, ist er weder 0 noch 1. Zuse 1 zeigt dann "
                                      + "»?« – echte Bausteine verhalten sich an offenen Eingängen unberechenbar.") },
-                        { need: "NICHT", title: qsTr("NICHT"), symbol: "1", inv: true, table: ["0 → 1", "1 → 0"],
+                        { need: "NICHT", title: qsTr("NICHT"), symbol: "1", inv: true, comic: "nicht", table: ["0 → 1", "1 → 0"],
                           text: qsTr("Dreht ein Bit um. Beispiel: Das Licht im Kühlschrank ist an, wenn die Tür NICHT "
                                      + "zu ist.") },
-                        { need: "UND", title: qsTr("UND"), symbol: "&", table: ["0 0 → 0", "0 1 → 0", "1 0 → 0", "1 1 → 1"],
+                        { need: "UND", title: qsTr("UND"), symbol: "&", comic: "und", table: ["0 0 → 0", "0 1 → 0", "1 0 → 0", "1 1 → 1"],
                           text: qsTr("Nur 1, wenn alle Eingänge 1 sind. Beispiel: Die Maschine läuft nur, wenn beide "
                                      + "Hände auf den Tasten liegen.") },
-                        { need: "ODER", title: qsTr("ODER"), symbol: "≥1", table: ["0 0 → 0", "0 1 → 1", "1 0 → 1", "1 1 → 1"],
+                        { need: "ODER", title: qsTr("ODER"), symbol: "≥1", comic: "oder", table: ["0 0 → 0", "0 1 → 1", "1 0 → 1", "1 1 → 1"],
                           text: qsTr("1, sobald mindestens ein Eingang 1 ist. Beispiel: Die Klingel läutet an der "
                                      + "Haustür oder an der Gartentür.") },
-                        { need: "NAND", title: qsTr("NAND"), symbol: "&", inv: true,
+                        { need: "NAND", title: qsTr("NOR"), symbol: "≥1", inv: true, comic: "nor",
+                          table: ["0 0 → 1", "0 1 → 0", "1 0 → 0", "1 1 → 0"],
+                          text: qsTr("NICHT-ODER: nur 1, wenn kein Eingang 1 ist. Beispiel: Ruhe herrscht, wenn "
+                                     + "weder der Fernseher noch das Tablet läuft.") },
+                        { need: "NAND", title: qsTr("NAND"), symbol: "&", inv: true, comic: "nand",
                           table: ["0 0 → 1", "0 1 → 1", "1 0 → 1", "1 1 → 0"],
                           text: qsTr("NICHT-UND: nur 0, wenn alle Eingänge 1 sind. Aus NAND allein lässt sich jede "
                                      + "andere Schaltung bauen.") },
-                        { need: "XODER", title: qsTr("XODER"), symbol: "=1",
+                        { need: "XODER", title: qsTr("XODER"), symbol: "=1", comic: "xoder",
                           table: ["0 0 → 0", "0 1 → 1", "1 0 → 1", "1 1 → 0"],
                           text: qsTr("Entweder-oder: 1, wenn die Eingänge verschieden sind. Beispiel: Ein Licht mit "
                                      + "zwei Schaltern im Treppenhaus.") },
@@ -277,6 +299,11 @@ Drawer {
                                     font.family: ZTheme.mono
                                     font.pixelSize: Math.round(14 * ZTheme.fontScale)
                                     color: ZTheme.accentText
+                                }
+                                ZButton {
+                                    visible: entry.open && !!entry.modelData.comic
+                                    text: qsTr("Erklärung")
+                                    onClicked: box.comicRequested(entry.modelData.comic)
                                 }
                             }
                         }

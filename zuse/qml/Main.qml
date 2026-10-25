@@ -244,6 +244,7 @@ ApplicationWindow {
             Layout.fillHeight: true
             onDemoPickerRequested: demoPicker.open()
             onHomeRequested: win.goHome()
+            onComicRequested: key => comic.show(key)
         }
     }
 
@@ -311,6 +312,7 @@ ApplicationWindow {
         y: win.header.height // unter der Kopfzeile, der Knopf bleibt erreichbar
         height: win.height - win.header.height
         onPartSelected: id => bench.selectedPart = id
+        onComicRequested: key => comic.show(key)
     }
     DemoPicker {
         id: demoPicker
@@ -321,6 +323,7 @@ ApplicationWindow {
     HelpDialog { id: help }
     QuickGuide { id: quickGuide; onHelpRequested: help.show("") }
     InfoDialog { id: info }
+    ComicDialog { id: comic; objectName: "comic" }
 
     Rectangle { // Werkzeug, das gerade auf die Werkbank gezogen wird
         id: ghost
