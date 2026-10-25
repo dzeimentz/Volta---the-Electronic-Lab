@@ -170,6 +170,7 @@ void WorkbenchController::load() {
     for (const QJsonValue& v : root.value("geschafft").toArray()) m_done.insert(v.toString());
     if (root.value("schaltzeichen").toString() == "us") m_symbolStyle = QStringLiteral("us");
     m_numbersVisible = root.value("zahlen").toBool(true);
+    m_boardSize = std::clamp(root.value("feld").toInt(0), 0, kMaxBoardSize);
     const QJsonObject drafts = root.value("entwuerfe").toObject();
     for (auto it = drafts.begin(); it != drafts.end(); ++it) {
         ChipDef d;
@@ -220,7 +221,8 @@ void WorkbenchController::save() const {
     QSaveFile f(QDir(m_dataDir).filePath("werkbank.json"));
     if (!f.open(QIODevice::WriteOnly)) return;
     f.write(QJsonDocument(QJsonObject{{"schema_version", 1}, {"chips", chips}, {"geschafft", done}, {"entwuerfe", drafts},
-                                         {"schaltzeichen", m_symbolStyle}, {"zahlen", m_numbersVisible}})
+                                         {"schaltzeichen", m_symbolStyle}, {"zahlen", m_numbersVisible},
+                                         {"feld", m_boardSize}})
                 .toJson());
     f.commit();
 }
@@ -878,9 +880,9 @@ void WorkbenchController::snapPart(Part& part) const {
     partSize(part.type, w, h);
     // ganz in der Logikschicht, mit einem Rasterschritt Abstand zu den Loetpads der Schalter und LEDs
     const qreal minX = std::ceil((kLogicLeft + kGrid) / kGrid) * kGrid;
-    const qreal maxX = std::floor((kLogicRight - kGrid - w) / kGrid) * kGrid;
+    const qreal maxX = std::floor((logicRight() - kGrid - w) / kGrid) * kGrid;
     const qreal minY = kGrid;
-    const qreal maxY = std::floor((kFrameHeight - kGrid - h) / kGrid) * kGrid;
+    const qreal maxY = std::floor((frameHeight() - kGrid - h) / kGrid) * kGrid;
     part.x = std::clamp(std::round(part.x / kGrid) * kGrid, minX, maxX);
     part.y = std::clamp(std::round(part.y / kGrid) * kGrid, minY, maxY);
 }
@@ -893,10 +895,34 @@ void WorkbenchController::partSize(const std::string& type, qreal& w, qreal& h) 
     h = qreal(pins) * kPinPitch;
 }
 
-qreal WorkbenchController::portY(size_t index, size_t count) {
+int WorkbenchController::requiredBoardSize() const {
+    const ChipDef* def = shownDef();
+    if (!def) return 0;
+    for (int size = 0; size < kMaxBoardSize; ++size) {
+        bool fits = true;
+        for (const Part& p : def->parts) {
+            qreal w = 0, h = 0;
+            partSize(p.type, w, h);
+            fits = fits && p.x + w <= frameWidthAt(size) - kLogicLeft - kGrid && p.y + h <= frameHeightAt(size) - kGrid;
+        }
+        if (fits) return size;
+    }
+    return kMaxBoardSize;
+}
+
+void WorkbenchController::setBoardSize(int size) {
+    size = std::clamp(size, 0, kMaxBoardSize);
+    if (size == m_boardSize) return;
+    m_boardSize = size;
+    save();
+    emit viewChanged();
+}
+
+qreal WorkbenchController::portY(size_t index, size_t count) const {
     // gleichmaessig auf Rasterpunkten, mittig in der Hoehe; bei vielen Anschluessen 2 Rasterschritte Abstand
-    const qreal step = std::max(2.0 * kGrid, std::floor(kFrameHeight / qreal(count + 1) / kGrid) * kGrid);
-    const qreal first = std::round((kFrameHeight - step * qreal(count - 1)) / 2.0 / kGrid) * kGrid;
+    const qreal height = frameHeight();
+    const qreal step = std::max(2.0 * kGrid, std::floor(height / qreal(count + 1) / kGrid) * kGrid);
+    const qreal first = std::round((height - step * qreal(count - 1)) / 2.0 / kGrid) * kGrid;
     return first + step * qreal(index);
 }
 
@@ -912,7 +938,7 @@ bool WorkbenchController::pinPos(const ChipDef& def, const std::string& endpoint
         }
         const auto outIt = std::find(outs.begin(), outs.end(), endpoint);
         if (outIt == outs.end()) return false;
-        x = kFrameWidth - kPortInset;
+        x = frameWidth() - kPortInset;
         y = portY(size_t(outIt - outs.begin()), outs.size());
         return true;
     }

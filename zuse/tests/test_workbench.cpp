@@ -432,6 +432,24 @@ private slots:
         QVERIFY(w.levels()[5].toMap()["done"].toBool());
     }
 
+    // Feldgroesse wie Volta: groesseres Feld = mehr Raster; kleiner geht nur, wenn der Aufbau hineinpasst
+    void boardSize() {
+        QTemporaryDir dir;
+        {
+            WorkbenchController w(kStages, dir.path(), "de");
+            QCOMPARE(w.boardSize(), 0);
+            QVERIFY(!w.canShrinkBoard());
+            w.setBoardSize(2);
+            QCOMPARE(w.frameWidth(), 896.0 + 16 * 28);
+            QCOMPARE(w.logicRight(), w.frameWidth() - w.logicLeft());
+            QVERIFY(!w.canGrowBoard());
+            QVERIFY(w.connectPins("A", "X")); // Schalter A am rechten Rand des groesseren Felds
+            w.setBoardSize(1);
+        }
+        WorkbenchController again(kStages, dir.path(), "de");
+        QCOMPARE(again.boardSize(), 1); // gespeichert
+    }
+
     // aeltere Ablage: Erfindung mit anderen Anschluessen (z. B. Register ohne Loeschen) wird verworfen
     void staleChipsAreDropped() {
         QTemporaryDir dir;

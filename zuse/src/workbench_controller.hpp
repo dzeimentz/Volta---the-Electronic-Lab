@@ -119,11 +119,17 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList wires READ wires NOTIFY viewChanged)
     Q_PROPERTY(bool inside READ inside NOTIFY viewChanged)
     Q_PROPERTY(QStringList path READ path NOTIFY viewChanged)
-    Q_PROPERTY(qreal frameWidth READ frameWidth CONSTANT)
-    Q_PROPERTY(qreal frameHeight READ frameHeight CONSTANT)
+    // Feldgroesse wie bei Volta (+/-): 0 = kleinste (Vorgabe), 1 und 2 mehr Flaeche; die Ansicht skaliert auf die
+    // verfuegbare Flaeche, also wirken Raster, Bausteine und Bedienfeld kleiner. Reicht ein Aufbau weiter, als die
+    // gewaehlte Groesse zulaesst, bleibt das Feld so gross wie noetig.
+    Q_PROPERTY(int boardSize READ boardSize NOTIFY viewChanged)
+    Q_PROPERTY(bool canGrowBoard READ canGrowBoard NOTIFY viewChanged)
+    Q_PROPERTY(bool canShrinkBoard READ canShrinkBoard NOTIFY viewChanged)
+    Q_PROPERTY(qreal frameWidth READ frameWidth NOTIFY viewChanged)
+    Q_PROPERTY(qreal frameHeight READ frameHeight NOTIFY viewChanged)
     Q_PROPERTY(qreal grid READ grid CONSTANT)
     Q_PROPERTY(qreal logicLeft READ logicLeft CONSTANT)
-    Q_PROPERTY(qreal logicRight READ logicRight CONSTANT)
+    Q_PROPERTY(qreal logicRight READ logicRight NOTIFY viewChanged)
     Q_PROPERTY(bool canUndo READ canUndo NOTIFY historyChanged)
     Q_PROPERTY(bool canRedo READ canRedo NOTIFY historyChanged)
     Q_PROPERTY(QVariantList checkRows READ checkRows NOTIFY checkChanged)
@@ -147,7 +153,6 @@ public:
     static constexpr qreal kPartWidth = 112.0;   // 4 Rasterschritte
     static constexpr qreal kPortInset = 140.0;   // Loetpads der Schalter und LEDs am Rand ihrer Schicht
     static constexpr qreal kLogicLeft = 168.0;   // Grenze Eingangs-/Logikschicht
-    static constexpr qreal kLogicRight = kFrameWidth - kLogicLeft;
     static constexpr size_t kCompactPorts = 4; // ab so vielen Schaltern bzw. LEDs je Seite die flache Form (56 dp)
 
     QVariantList stages() const;
@@ -196,11 +201,18 @@ public:
     QVariantList wires() const;
     bool inside() const { return !m_path.empty(); }
     QStringList path() const;
-    qreal frameWidth() const { return kFrameWidth; }
-    qreal frameHeight() const { return kFrameHeight; }
+    static constexpr int kMaxBoardSize = 2;
+    static qreal frameWidthAt(int size) { return kFrameWidth + 8 * kGrid * size; }   // je Stufe 8 Rasterspalten mehr
+    static qreal frameHeightAt(int size) { return kFrameHeight + 6 * kGrid * size; } // und 6 Rasterzeilen
+    int boardSize() const { return std::max(m_boardSize, requiredBoardSize()); }
+    bool canGrowBoard() const { return boardSize() < kMaxBoardSize; }
+    bool canShrinkBoard() const { return boardSize() > requiredBoardSize(); }
+    Q_INVOKABLE void setBoardSize(int size);
+    qreal frameWidth() const { return frameWidthAt(boardSize()); }
+    qreal frameHeight() const { return frameHeightAt(boardSize()); }
     qreal grid() const { return kGrid; }
     qreal logicLeft() const { return kLogicLeft; }
-    qreal logicRight() const { return kLogicRight; }
+    qreal logicRight() const { return frameWidth() - kLogicLeft; }
     bool canUndo() const { return m_undo.canUndo(); }
     bool canRedo() const { return m_undo.canRedo(); }
     QVariantList checkRows() const;
@@ -282,7 +294,8 @@ private:
     QString symbolOf(const QString& type, bool* inverted) const;
     void partSize(const std::string& type, qreal& w, qreal& h) const;
     void snapPart(volta::logic::Part& part) const; // ins Raster der Logikschicht
-    static qreal portY(size_t index, size_t count);  // Hoehe eines Schalters bzw. einer LED
+    qreal portY(size_t index, size_t count) const;  // Hoehe eines Schalters bzw. einer LED
+    int requiredBoardSize() const; // kleinste Feldgroesse, in die der gezeigte Aufbau passt
     bool pinPos(const volta::logic::ChipDef& def, const std::string& endpoint, qreal& x, qreal& y) const;
     QString levelString(const std::string& endpoint) const;
     int levelOf(const QString& kuerzel) const; // Lernstufe eines Experiments, -1 = keine
@@ -319,6 +332,7 @@ private:
     QTimer m_clock;    // Taktgeber
     QString m_symbolStyle = QStringLiteral("din");
     bool m_numbersVisible = true;
+    int m_boardSize = 0; // gewaehlte Feldgroesse (Einstellung, kein Befehl)
 };
 
 } // namespace zuse

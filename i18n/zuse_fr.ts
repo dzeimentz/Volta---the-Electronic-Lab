@@ -1111,179 +1111,199 @@
 <context>
     <name>Workbench</name>
     <message>
-        <location filename="../zuse/qml/Workbench.qml" line="229" />
+        <location filename="../zuse/qml/Workbench.qml" line="231" />
         <source>Blick hinein – nur ansehen. Die Werte kommen von außen.</source>
         <translation>Regard à l’intérieur – seulement pour voir. Les valeurs viennent de l’extérieur.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Workbench.qml" line="279" />
+        <source>Größeres Feld: mehr Platz, kleinere Bausteine</source>
+        <translation>Plan plus grand : plus de place, composants plus petits</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Workbench.qml" line="287" />
+        <source>Feldgröße %1 von 3</source>
+        <translation>Taille du plan %1 sur 3</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Workbench.qml" line="295" />
+        <source>Kleineres Feld: größere Bausteine</source>
+        <translation>Plan plus petit : composants plus grands</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/Workbench.qml" line="296" />
+        <source>Kleiner geht nicht: Bausteine liegen weiter außen. Schieb sie zuerst zusammen.</source>
+        <translation>Impossible de réduire : des composants sont trop loin. Rapproche-les d’abord.</translation>
     </message>
 </context>
 <context>
     <name>zuse::WorkbenchController</name>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="334" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="336" />
         <source>Vorführung: So sieht eine fertige Lösung aus. Probier die Schalter aus – hier wird nichts gespeichert.</source>
         <translation>Démonstration : voici à quoi ressemble une solution terminée. Essaie les interrupteurs – rien n’est enregistré ici.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="469" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="471" />
         <source>Baustein setzen</source>
         <translation>Poser un composant</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="485" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="487" />
         <source>Baustein verschieben</source>
         <translation>Déplacer un composant</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="503" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="505" />
         <source>Baustein entfernen</source>
         <translation>Retirer un composant</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="516" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="518" />
         <source>Zwei Ausgänge an einer Leitung würden gegeneinander arbeiten. Verbinde einen Ausgang mit Eingängen.</source>
         <translation>Deux sorties sur un même fil travailleraient l’une contre l’autre. Relie une sortie à des entrées.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="520" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="522" />
         <source>Leitung ziehen</source>
         <translation>Tirer un fil</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="530" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="532" />
         <source>Leitung entfernen</source>
         <translation>Retirer un fil</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="539" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="541" />
         <source>Werkbank leeren</source>
         <translation>Vider l’établi</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="549" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="551" />
         <source>Musterlösung</source>
         <translation>Solution modèle</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="550" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="552" />
         <source>So könnte es gehen. Prüfe die Lösung – und bau sie danach gern selbst nach.</source>
         <translation>Voici comment cela pourrait marcher. Vérifie la solution – et reconstruis-la ensuite toi-même.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="639" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="641" />
         <source>Richtig: Im Akku steht jetzt %1. Nächster Schritt: %2</source>
         <translation>Juste : l’accumulateur contient maintenant %1. Étape suivante : %2</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="642" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="644" />
         <source>Richtig: %1 ist binär %2. Jetzt zeig die %3!</source>
         <translation>Juste : %1 s’écrit %2 en binaire. Maintenant, affiche %3 !</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="651" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="653" />
         <source>Super! %1 ist binär %2. Du kannst jetzt mit vier Lampen bis 15 zählen.</source>
         <translation>Super ! %1 s’écrit %2 en binaire. Tu sais maintenant compter jusqu’à 15 avec quatre lampes.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="693" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="695" />
         <source>Der Aufbau lässt sich nicht simulieren.</source>
         <translation>Ce montage ne peut pas être simulé.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="700" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="702" />
         <source>Alles richtig! Schalter und LEDs machen, was sie sollen.</source>
         <translation>Tout est juste ! Les interrupteurs et les LED font ce qu’il faut.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="702" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="704" />
         <source>Alles richtig! Pack deine Erfindung ein, dann kannst du sie immer wieder benutzen.</source>
         <translation>Tout est juste ! Range ton invention, tu pourras la réutiliser encore et encore.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="705" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="707" />
         <source>Die Schaltung kommt nicht zur Ruhe – sie schwingt.</source>
         <translation>Le circuit ne se stabilise pas – il oscille.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="707" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="709" />
         <source>Noch nicht ganz: Bei den markierten Schritten stimmt die Lampe nicht. Spiel den Ablauf an den Schaltern und Tastern nach.</source>
         <translation>Pas encore tout à fait : aux étapes marquées, la lampe n’est pas juste. Refais le déroulement avec les interrupteurs et les boutons.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="711" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="713" />
         <source>Noch nicht ganz: Die markierten Zeilen stimmen nicht. Stell die Schalter so ein und schau, was passiert.</source>
         <translation>Pas encore tout à fait : les lignes marquées sont fausses. Mets les interrupteurs ainsi et regarde ce qui se passe.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="789" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="791" />
         <source>Geschafft! Weiter geht es mit der nächsten Stufe.</source>
         <translation>Réussi ! On continue avec le niveau suivant.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="801" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="803" />
         <source>Eingepackt! »%1« liegt jetzt in deiner Werkzeugkiste.</source>
         <translation>Rangé ! « %1 » est maintenant dans ta boîte à outils.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1133" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1159" />
         <source>Erst vermuten: Tippe in der Tabelle für jede Schalterstellung 1 (an) oder 0 (aus).</source>
         <translation>Devine d’abord : dans le tableau, tape 1 (allumé) ou 0 (éteint) pour chaque position.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1140" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1166" />
         <source>Kiste %1 ist eingesetzt. Probier die Schalter aus!</source>
         <translation>La boîte %1 est insérée. Essaie les interrupteurs !</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1149" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1175" />
         <source>Setz zuerst eine Kiste ein.</source>
         <translation>Insère d’abord une boîte.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1161" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1187" />
         <source>Deine Vermutung hat gestimmt!</source>
         <translation>Ta supposition était juste !</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1162" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1188" />
         <source>Überraschung: In einer Zeile kam es anders, als du vermutet hast.</source>
         <translation>Surprise : dans une ligne, ça s’est passé autrement que tu ne le pensais.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1163" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1189" />
         <source>Überraschung: In %1 Zeilen kam es anders, als du vermutet hast.</source>
         <translation>Surprise : dans %1 lignes, ça s’est passé autrement que tu ne le pensais.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1166" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1192" />
         <source>Richtig! Diese Kiste heißt %1. %2 Sie liegt jetzt in deiner Werkzeugkiste.</source>
         <translation>Juste ! Cette boîte s’appelle %1. %2 Elle est maintenant dans ta boîte à outils.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1180" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1183" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1184" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1206" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1209" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1210" />
         <source>an</source>
         <translation>allumé</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1180" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1183" />
-        <location filename="../zuse/src/workbench_controller.cpp" line="1184" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1206" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1209" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1210" />
         <source>aus</source>
         <translation>éteint</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1185" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1211" />
         <source>Fast! Bei »%1« ist %2 mit dieser Kiste %3 – es soll aber %4 sein. Probier eine andere Kiste.</source>
         <translation>Presque ! Pour « %1 », %2 est %3 avec cette boîte – mais il devrait être %4. Essaie une autre boîte.</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1203" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1229" />
         <source>Das ist deine Vermutung. Jetzt setz eine Kiste ein und probier aus, welche dazu passt!</source>
         <translation>Voilà ta supposition. Maintenant, insère une boîte et essaie laquelle convient !</translation>
     </message>
     <message>
-        <location filename="../zuse/src/workbench_controller.cpp" line="1211" />
+        <location filename="../zuse/src/workbench_controller.cpp" line="1237" />
         <source>Gut, dann probier einfach aus! Setz eine Kiste ein.</source>
         <translation>D’accord, alors essaie simplement ! Insère une boîte.</translation>
     </message>

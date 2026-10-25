@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Shapes
 
 // Arbeitsflaeche der Werkbank. Koordinaten in dp des Rahmens (workbench.frameWidth x frameHeight), auf die
@@ -9,7 +10,8 @@ Item {
     property string selectedPart: ""
     property int selectedWire: -1
     readonly property bool editable: !workbench.inside && !workbench.benchLocked
-    readonly property real s: Math.min(width / workbench.frameWidth, height / workbench.frameHeight)
+    readonly property real sizerWidth: ZTheme.control + 8 // Feldgroesse +/- rechts neben dem Rahmen (wie Volta)
+    readonly property real s: Math.min((width - sizerWidth) / workbench.frameWidth, height / workbench.frameHeight)
 
     // Leitung im Entstehen
     property string dragFrom: ""
@@ -61,7 +63,7 @@ Item {
         height: workbench.frameHeight
         scale: bench.s
         transformOrigin: Item.TopLeft
-        x: (bench.width - width * bench.s) / 2
+        x: (bench.width - bench.sizerWidth - width * bench.s) / 2
         y: (bench.height - height * bench.s) / 2
 
         LayerFrame { // Eingangsschicht | Logikschicht mit Raster | Ausgangsschicht
@@ -242,6 +244,59 @@ Item {
         return id !== ""
     }
     // Antippen im Fach: in eine freie Gegend der Werkbank
+    // Feldgroesse wie bei Volta: gelbe runde Knoepfe, dazwischen die Stufe; die kleinste ist die Vorgabe
+    component SizeButton: AbstractButton {
+        id: sizeButton
+        property bool plus: true
+        width: ZTheme.control; height: ZTheme.control
+        ToolTip.visible: hovered
+        Accessible.name: ToolTip.text
+        contentItem: Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: 34; height: 34; radius: 17
+                color: !sizeButton.enabled ? "#C9CED4" : (sizeButton.down ? "#F2B705" : "#FFD23F")
+                border.color: sizeButton.enabled ? "#111111" : "#9AA3AD"
+                border.width: 2.5
+                Rectangle { anchors.centerIn: parent; width: 16; height: 3; color: sizeButton.enabled ? "#111111" : "#9AA3AD" }
+                Rectangle {
+                    visible: sizeButton.plus
+                    anchors.centerIn: parent; width: 3; height: 16
+                    color: sizeButton.enabled ? "#111111" : "#9AA3AD"
+                }
+            }
+        }
+    }
+    Column {
+        objectName: "boardSizer"
+        x: frame.x + frame.width * bench.s + 8
+        y: frame.y
+        visible: !workbench.inside
+        SizeButton {
+            objectName: "boardBigger"
+            enabled: workbench.canGrowBoard
+            onClicked: workbench.setBoardSize(workbench.boardSize + 1)
+            ToolTip.text: qsTr("Größeres Feld: mehr Platz, kleinere Bausteine")
+        }
+        Text {
+            width: ZTheme.control
+            horizontalAlignment: Text.AlignHCenter
+            text: (workbench.boardSize + 1) + "/3"
+            color: ZTheme.navy
+            font.pixelSize: 12; font.bold: true
+            Accessible.name: qsTr("Feldgröße %1 von 3").arg(workbench.boardSize + 1)
+        }
+        SizeButton {
+            objectName: "boardSmaller"
+            plus: false
+            enabled: workbench.canShrinkBoard
+            onClicked: workbench.setBoardSize(workbench.boardSize - 1)
+            ToolTip.text: workbench.canShrinkBoard || workbench.boardSize === 0
+                          ? qsTr("Kleineres Feld: größere Bausteine")
+                          : qsTr("Kleiner geht nicht: Bausteine liegen weiter außen. Schieb sie zuerst zusammen.")
+        }
+    }
+
     function placePart(type) {
         const n = workbench.parts.length
         const id = workbench.addPart(type, 224 + (n % 3) * 168, 84 + Math.floor(n / 3) * 168 + (n % 2) * 56)
