@@ -2485,26 +2485,26 @@
      {
       "id": "n2",
       "typ": "NOT",
-      "x": 252,
-      "y": 336
+      "x": 224,
+      "y": 112
      },
      {
       "id": "s1",
       "typ": "SBIT",
-      "x": 420,
-      "y": 140
+      "x": 392,
+      "y": 112
      },
      {
       "id": "s2",
       "typ": "SBIT",
       "x": 588,
-      "y": 280
+      "y": 252
      },
      {
       "id": "n1",
       "typ": "NOT",
-      "x": 420,
-      "y": 448
+      "x": 392,
+      "y": 392
      }
     ],
     "verbindungen": [
@@ -2908,6 +2908,135 @@
       "Q3"
      ]
     ]
+   }
+  },
+  {
+   "kuerzel": "FREI",
+   "art": "bauen",
+   "frei": true,
+   "chip": false,
+   "symbol": "",
+   "titel": {
+    "de": "Freies Labor",
+    "en": "Free lab"
+   },
+   "frage": {
+    "de": "Was baust du heute?",
+    "en": "What will you build today?"
+   },
+   "geschichte": {
+    "de": "Hier gibt es keine Aufgabe. Zieh deine Werkzeuge auf die Werkbank, verbinde sie mit den Schaltern und Lampen und probier aus, was passiert. Dein Aufbau bleibt gespeichert.",
+    "en": "There is no task here. Drag your tools onto the workbench, connect them to the switches and lamps and try out what happens. Your setup is saved."
+   },
+   "hilfe": {
+    "de": "Im Werkzeugfach liegen alle Werkzeuge, die du schon entdeckt oder erfunden hast. Je weiter du im Lernpfad kommst, desto mehr werden es.",
+    "en": "The tool tray holds every tool you have discovered or invented so far. The further you get on the learning path, the more there are."
+   },
+   "merksatz": {
+    "de": "",
+    "en": ""
+   },
+   "eingaenge": [
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "D",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "T",
+     "bezeichnung": {
+      "de": "Taster",
+      "en": "Button"
+     },
+     "art": "taster"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "W",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     }
+    },
+    {
+     "name": "X",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     }
+    },
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     }
+    },
+    {
+     "name": "Z",
+     "bezeichnung": {
+      "de": "",
+      "en": ""
+     }
+    }
+   ],
+   "eingabegruppen": [
+    {
+     "name": "",
+     "bits": 4
+    },
+    {
+     "name": "T",
+     "bits": 1
+    }
+   ],
+   "bausteine": [
+    "NOT",
+    "AND",
+    "OR",
+    "NAND",
+    "XODER",
+    "HA",
+    "VA",
+    "ADD4",
+    "ALARM",
+    "MERKER",
+    "SBIT",
+    "REG4",
+    "TFF",
+    "ZAEHLER"
+   ],
+   "loesung": {
+    "bausteine": [],
+    "verbindungen": []
    }
   }
  ]

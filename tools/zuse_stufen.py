@@ -391,8 +391,8 @@ stufen = [
                 schritt("1", "0", "Drücken – aus", "Press – off"),
                 schritt("0", "0", "Loslassen – bleibt aus", "Release – stays off"),
                 schritt("1", "1", "Drücken – an", "Press – on")],
-     "loesung": sol([("n2", "NOT", 252, 336), ("s1", "SBIT", 420, 140), ("s2", "SBIT", 588, 280),
-                     ("n1", "NOT", 420, 448)],
+     "loesung": sol([("n2", "NOT", 224, 112), ("s1", "SBIT", 392, 112), ("s2", "SBIT", 588, 252),
+                     ("n1", "NOT", 392, 392)],
                     [("s2.Q", "n1.a"), ("n1.y", "s1.D"), ("T", "n2.a"), ("n2.y", "s1.M"), ("s1.Q", "s2.D"),
                      ("T", "s2.M"), ("s2.Q", "Q")])},
     {"kuerzel": "ZAEHLER", "art": "bauen", "symbol": "CTR", "name": L("Zähler", "Counter"),
@@ -419,6 +419,27 @@ stufen = [
                     [("T", "t0.T"), ("t0.Q", "n0.a"), ("n0.y", "t1.T"), ("t1.Q", "n1.a"), ("n1.y", "t2.T"),
                      ("t2.Q", "n2.a"), ("n2.y", "t3.T"), ("t0.Q", "Q0"), ("t1.Q", "Q1"), ("t2.Q", "Q2"),
                      ("t3.Q", "Q3")])},
+    # Freies Labor wie bei Volta: keine Aufgabe, alle bisher entdeckten und erfundenen Werkzeuge; gehoert nicht zum
+    # Lernpfad und bleibt immer offen
+    {"kuerzel": "FREI", "art": "bauen", "frei": True, "chip": False, "symbol": "",
+     "titel": L("Freies Labor", "Free lab"),
+     "frage": L("Was baust du heute?", "What will you build today?"),
+     "geschichte": L("Hier gibt es keine Aufgabe. Zieh deine Werkzeuge auf die Werkbank, verbinde sie mit den "
+                     "Schaltern und Lampen und probier aus, was passiert. Dein Aufbau bleibt gespeichert.",
+                     "There is no task here. Drag your tools onto the workbench, connect them to the switches and "
+                     "lamps and try out what happens. Your setup is saved."),
+     "hilfe": L("Im Werkzeugfach liegen alle Werkzeuge, die du schon entdeckt oder erfunden hast. Je weiter du im "
+                "Lernpfad kommst, desto mehr werden es.",
+                "The tool tray holds every tool you have discovered or invented so far. The further you get on the "
+                "learning path, the more there are."),
+     "merksatz": L("", ""),
+     "eingaenge": [inp("A", "", ""), inp("B", "", ""), inp("C", "", ""), inp("D", "", ""),
+                   inp("T", "Taster", "Button", "taster")],
+     "ausgaenge": [out("W", "", ""), out("X", "", ""), out("Y", "", ""), out("Z", "", "")],
+     "eingabegruppen": [{"name": "", "bits": 4}, {"name": "T", "bits": 1}],
+     "bausteine": ["NOT", "AND", "OR", "NAND", "XODER", "HA", "VA", "ADD4", "ALARM", "MERKER", "SBIT", "REG4",
+                   "TFF", "ZAEHLER"],
+     "loesung": sol([], [])},
 ]
 
 # Lernstufen wie bei Volta: einfach beginnen, pro Stufe anspruchsvoller. Ausgangspunkt ist ein Kind, das noch nie etwas
@@ -443,7 +464,7 @@ lernstufen = [
      # folgen: Speicher mit Adressen am Bedienfeld, Zuse-4 mit Programm
      "geplant": [L("Wo wohnt ein Programm?", "Where does a program live?"), L("Läuft er?", "Does it run?")]},
 ]
-assert [k for l in lernstufen for k in l["experimente"]] == [st["kuerzel"] for st in stufen]
+assert [k for l in lernstufen for k in l["experimente"]] == [st["kuerzel"] for st in stufen if not st.get("frei")]
 d = {"schema_version": 2,
      "hinweis": "Zuse 1 Prototyp: jede Stufe beginnt mit einer Geschichte; »entdecken« mit Raetselkisten, »bauen« auf "
                 "der Werkbank. Wahrheitstabelle: Ausgaenge je Zeile, Eingaenge binaer aufsteigend (erster Eingang "

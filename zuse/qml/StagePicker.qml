@@ -7,7 +7,9 @@ import QtQuick.Layouts
 HeaderButton {
     id: root
     readonly property var current: workbench.stages[workbench.stageIndex]
-    text: current ? qsTr("Stufe %1: %2").arg(current.level >= 0 ? current.level : current.index).arg(current.title)
+    text: workbench.mode === "frei" ? qsTr("Freies Labor") + "  ▾"
+        : workbench.mode === "vorfuehrung" ? qsTr("Vorführung: %1").arg(workbench.stageTitle) + "  ▾"
+        : current ? qsTr("Stufe %1: %2").arg(current.level >= 0 ? current.level : current.index).arg(current.title)
                     + "  ▾" : ""
     implicitWidth: Math.min(360, contentItem.implicitWidth + 28)
     onClicked: list.open()

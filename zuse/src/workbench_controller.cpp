@@ -68,9 +68,13 @@ WorkbenchController::WorkbenchController(const QString& stagesFile, const QStrin
     load();
     connect(&m_undo, &QUndoStack::canUndoChanged, this, &WorkbenchController::historyChanged);
     connect(&m_undo, &QUndoStack::canRedoChanged, this, &WorkbenchController::historyChanged);
-    int first = 0; // erste noch offene Stufe
-    while (first + 1 < static_cast<int>(m_stages.size()) && m_done.contains(m_stages[size_t(first)].kuerzel)) ++first;
-    startStage(first);
+    int first = -1; // erste noch offene Stufe (sonst die letzte des Lernpfads)
+    for (size_t i = 0; i < m_stages.size() && first < 0; ++i)
+        if (!m_stages[i].free && !m_done.contains(m_stages[i].kuerzel)) first = int(i);
+    if (first < 0)
+        for (size_t i = 0; i < m_stages.size(); ++i)
+            if (!m_stages[i].free) first = int(i);
+    startStage(std::max(first, 0));
 }
 
 bool WorkbenchController::loadStages(const QString& file, const QString& language) {
@@ -110,6 +114,7 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         }
         s.rightBox = o.value("richtig").toInt(-1);
         s.makesChip = s.kind == "bauen" && o.value("chip").toBool(true);
+        s.free = o.value("frei").toBool();
         for (const QJsonValue& x : o.value("bausteine").toArray()) s.palette << x.toString();
         for (const QJsonValue& x : o.value("wahrheitstabelle").toArray()) s.table.push_back(parseLevels(x.toString()));
         for (const QJsonValue& x : o.value("aufgaben").toArray()) s.targets.push_back(x.toInt());
@@ -125,6 +130,13 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         QJsonObject sol = o.value("loesung").toObject();
         sol.insert("kuerzel", s.kuerzel);
         chipFromJson(sol, s.solution);
+        if (s.makesChip) { // Musterloesung als fertiger Chip fuer die Vorfuehrung
+            ChipDef chip = s.solution;
+            chip.ports.clear();
+            for (const QString& n : s.inputs) chip.ports.push_back({n.toStdString(), Direction::In});
+            for (const QString& n : s.outputs) chip.ports.push_back({n.toStdString(), Direction::Out});
+            m_demoLibrary.add(chip);
+        }
         m_stages.push_back(s);
     }
     for (const QJsonValue& v : root.value("lernstufen").toArray()) {
@@ -159,7 +171,7 @@ void WorkbenchController::load() {
 }
 
 void WorkbenchController::save() const {
-    if (m_dataDir.isEmpty()) return;
+    if (m_dataDir.isEmpty() || m_demo) return; // Vorfuehrung: nichts wird gespeichert
     QDir().mkpath(m_dataDir);
     QJsonArray chips;
     for (const std::string& k : m_library.kuerzel()) chips.append(chipToJson(*m_library.find(k)));
@@ -179,6 +191,7 @@ void WorkbenchController::save() const {
 
 bool WorkbenchController::unlocked(int index) const {
     if (index <= 0) return index == 0;
+    if (m_stages[size_t(index)].free) return true;
     return m_done.contains(m_stages[size_t(index - 1)].kuerzel);
 }
 
@@ -186,7 +199,9 @@ QVariantList WorkbenchController::stages() const {
     QVariantList list;
     for (size_t i = 0; i < m_stages.size(); ++i) {
         const Stage& s = m_stages[i];
+        if (s.free) continue; // Freies Labor gehoert nicht zum Lernpfad
         list.append(QVariantMap{{"index", int(i)},
+                                {"label", stageLabel(int(i))},
                                 {"kuerzel", s.kuerzel},
                                 {"symbol", s.symbol},
                                 {"title", s.title},
@@ -219,6 +234,82 @@ QVariantList WorkbenchController::levels() const {
                                 {"done", done}});
     }
     return list;
+}
+
+QString WorkbenchController::stageLabel(int index) const {
+    const QString& k = m_stages[size_t(index)].kuerzel;
+    for (const LearningLevel& l : m_levels)
+        if (l.kuerzel.contains(k)) return QStringLiteral("%1.%2").arg(l.number).arg(l.kuerzel.indexOf(k) + 1);
+    return QString::number(index);
+}
+
+QString WorkbenchController::mode() const {
+    if (m_demo) return QStringLiteral("vorfuehrung");
+    return isFree() ? QStringLiteral("frei") : QStringLiteral("lernpfad");
+}
+
+QVariantList WorkbenchController::demos() const {
+    QVariantList list;
+    for (size_t i = 0; i < m_stages.size(); ++i) {
+        const Stage& s = m_stages[i];
+        if (s.free || s.kind != "bauen" || s.solution.parts.empty()) continue; // nur Aufbauten mit Bausteinen
+        list.append(QVariantMap{{"index", int(i)},
+                                {"label", stageLabel(int(i))},
+                                {"title", s.title},
+                                {"name", s.name},
+                                {"question", s.question}});
+    }
+    return list;
+}
+
+QVariantMap WorkbenchController::resume() const {
+    if (m_stages.empty()) return {};
+    const Stage& s = m_stages[size_t(m_lastStage)];
+    return QVariantMap{{"index", m_lastStage},
+                       {"label", stageLabel(m_lastStage)},
+                       {"level", levelOf(s.kuerzel)},
+                       {"title", s.title},
+                       {"done", m_done.contains(s.kuerzel)}};
+}
+
+void WorkbenchController::startFreeLab() {
+    for (size_t i = 0; i < m_stages.size(); ++i)
+        if (m_stages[i].free) {
+            endDemo();
+            startStage(int(i));
+            return;
+        }
+}
+
+bool WorkbenchController::startDemo(int index) {
+    if (index < 0 || index >= int(m_stages.size())) return false;
+    const Stage& s = m_stages[size_t(index)];
+    if (s.free || s.kind != "bauen" || s.solution.parts.empty()) return false;
+    if (!m_demo) {
+        m_ownLibrary = m_library;
+        m_library = m_demoLibrary;
+        m_demo = true;
+    }
+    startStage(index); // laedt in der Vorfuehrung die Musterloesung
+    check(); // Tabelle mit Haken: so soll es sein
+    setMessage(tr("Vorführung: So sieht eine fertige Lösung aus. Probier die Schalter aus – hier wird nichts "
+                  "gespeichert."),
+               QStringLiteral("zeigend"));
+    emit checkChanged();
+    return true;
+}
+
+void WorkbenchController::endDemo() {
+    if (!m_demo) return;
+    m_library = m_ownLibrary;
+    m_ownLibrary = Library{};
+    m_demo = false;
+}
+
+void WorkbenchController::leaveSpecial() {
+    if (!m_demo && !isFree()) return;
+    endDemo();
+    startStage(m_lastStage);
 }
 
 int WorkbenchController::levelOf(const QString& kuerzel) const {
@@ -257,6 +348,7 @@ QVariantList WorkbenchController::palette() const {
 
 bool WorkbenchController::selectStage(int index) {
     if (index < 0 || index >= int(m_stages.size()) || !unlocked(index)) return false;
+    endDemo();
     startStage(index);
     return true;
 }
@@ -265,8 +357,9 @@ void WorkbenchController::startStage(int index) {
     if (m_stages.empty()) return;
     m_stage = index;
     const Stage& s = m_stages[size_t(index)];
+    if (!s.free && !m_demo) m_lastStage = index;
     const auto draft = m_drafts.find(s.kuerzel);
-    if (s.kind == "zahlen") { // fest verdrahtet: Schalter direkt an den LEDs
+    if (s.kind == "zahlen" || m_demo) { // fest verdrahtet bzw. Vorfuehrung: Musterloesung
         m_def = s.solution;
         m_def.kuerzel = s.kuerzel.toStdString();
     } else if (draft != m_drafts.end()) {
@@ -314,7 +407,7 @@ void WorkbenchController::push(const ChipDef& after, const QString& text) {
 }
 
 QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
-    if (isCounting()) return {}; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return {}; // fest verdrahtet bzw. Vorfuehrung
     if (inside() || m_stages.empty() || !m_stages[size_t(m_stage)].palette.contains(type)) return {};
     const std::string t = type.toStdString();
     if (toolName(type).isEmpty()) return {}; // Werkzeug noch nicht in der Kiste
@@ -336,7 +429,7 @@ QString WorkbenchController::addPart(const QString& type, qreal x, qreal y) {
 }
 
 void WorkbenchController::movePart(const QString& id, qreal x, qreal y) {
-    if (isCounting()) return; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return; // fest verdrahtet bzw. Vorfuehrung
     if (inside()) return;
     ChipDef after = m_def;
     for (Part& p : after.parts) {
@@ -353,7 +446,7 @@ void WorkbenchController::movePart(const QString& id, qreal x, qreal y) {
 }
 
 void WorkbenchController::removePart(const QString& id) {
-    if (isCounting()) return; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return; // fest verdrahtet bzw. Vorfuehrung
     if (inside()) return;
     const std::string pid = id.toStdString();
     ChipDef after = m_def;
@@ -369,7 +462,7 @@ void WorkbenchController::removePart(const QString& id) {
 }
 
 bool WorkbenchController::connectPins(const QString& a, const QString& b) {
-    if (isCounting()) return false; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return false; // fest verdrahtet bzw. Vorfuehrung
     if (inside() || a == b) return false;
     const std::string from = a.toStdString(), to = b.toStdString();
     for (const Connection& c : m_def.connections)
@@ -388,7 +481,7 @@ bool WorkbenchController::connectPins(const QString& a, const QString& b) {
 }
 
 void WorkbenchController::removeWire(int index) {
-    if (isCounting()) return; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return; // fest verdrahtet bzw. Vorfuehrung
     if (inside() || index < 0 || index >= int(m_def.connections.size())) return;
     ChipDef after = m_def;
     after.connections.erase(after.connections.begin() + index);
@@ -396,7 +489,7 @@ void WorkbenchController::removeWire(int index) {
 }
 
 void WorkbenchController::clearBench() {
-    if (isCounting()) return; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return; // fest verdrahtet bzw. Vorfuehrung
     if (inside() || (m_def.parts.empty() && m_def.connections.empty())) return;
     ChipDef after = m_def;
     after.parts.clear();
@@ -405,7 +498,7 @@ void WorkbenchController::clearBench() {
 }
 
 void WorkbenchController::showSolution() {
-    if (isCounting()) return; // fest verdrahtetes Bedienfeld
+    if (editLocked()) return; // fest verdrahtet bzw. Vorfuehrung
     if (inside() || m_stages.empty()) return;
     ChipDef after = m_def;
     after.parts = m_stages[size_t(m_stage)].solution.parts;
@@ -464,6 +557,7 @@ void WorkbenchController::setInput(const QString& name, bool on) {
 }
 
 void WorkbenchController::checkTarget() {
+    if (m_demo) return;
     const Stage& s = m_stages[size_t(m_stage)];
     if (stageDone() || m_task >= s.targets.size()) return;
     const QVariantMap shown = outputNumber();

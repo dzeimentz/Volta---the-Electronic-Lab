@@ -363,6 +363,44 @@ private slots:
         QVERIFY(w.library().find("ZAEHLER"));
         QVERIFY(w.levels()[4].toMap()["done"].toBool());
     }
+
+    // wie Volta: Freies Labor (alle eigenen Werkzeuge, nicht im Lernpfad) und Vorfuehrung (nichts wird gespeichert)
+    void freeLabAndDemo() {
+        QTemporaryDir dir;
+        {
+            WorkbenchController w(kStages, dir.path(), "de");
+            QCOMPARE(w.mode(), QStringLiteral("lernpfad"));
+            for (const QVariant& s : w.stages()) QVERIFY(s.toMap()["kuerzel"].toString() != "FREI");
+            w.startFreeLab();
+            QCOMPARE(w.mode(), QStringLiteral("frei"));
+            QCOMPARE(w.palette().size(), 0); // noch nichts entdeckt
+            QVERIFY(w.addPart("AND", 300, 300).isEmpty()); // UND ist noch nicht entdeckt
+            w.leaveSpecial();
+            QCOMPARE(w.mode(), QStringLiteral("lernpfad"));
+            QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
+
+            // Vorfuehrung: Zaehler laeuft mit allen Musterloesungen, obwohl noch nichts gebaut ist
+            const QVariantList demos = w.demos();
+            QVERIFY(demos.size() >= 10);
+            int counter = -1;
+            for (const QVariant& d : demos)
+                if (d.toMap()["label"].toString() == "4.5") counter = d.toMap()["index"].toInt();
+            QVERIFY(w.startDemo(counter));
+            QCOMPARE(w.mode(), QStringLiteral("vorfuehrung"));
+            QVERIFY(w.benchLocked());
+            QCOMPARE(w.checkState(), QStringLiteral("passed"));
+            QVERIFY(!w.chipReady()); // nichts einpacken
+            w.setInput("T", true);
+            QCOMPARE(w.levelAt("Q0"), Level::One);
+            QVERIFY(w.addPart("NOT", 300, 300).isEmpty()); // Aufbau gesperrt
+            w.leaveSpecial();
+            QVERIFY(!w.library().find("ZAEHLER")); // eigene Werkzeugkiste wieder da
+            QCOMPARE(w.resume()["label"].toString(), QStringLiteral("0.1"));
+        }
+        WorkbenchController again(kStages, dir.path(), "de");
+        QVERIFY(!again.isDone("ZAEHLER"));
+        QVERIFY(!again.library().find("ZAEHLER"));
+    }
 };
 
 QTEST_GUILESS_MAIN(WorkbenchTest)

@@ -292,6 +292,8 @@ Gegenüber der ersten Fassung (Stufen 0–15 ohne Gruppierung) rückt die NAND-E
 
 Experimentarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle), **zahlen** (fest verdrahtetes Bedienfeld, Zahlen einstellen).
 
+Aufbau der App wie Volta 1: Die **Startseite** begrüßt mit Zetti und bietet die Karten **Weitermachen** (zuletzt bearbeitetes Experiment), **Freies Labor** (Werkbank mit vier Kippschaltern, einem Taster und vier LEDs, alle bisher entdeckten und erfundenen Werkzeuge, keine Aufgabe, Aufbau wird gespeichert) und **Vorführung** (alle Musterlösungen mit Bausteinen als fertige Aufbauten zum Zeigen, auch noch nicht geschaffte; bedienbar, aber nicht veränderbar, es wird nichts gespeichert). Darunter folgt der **Lernpfad** mit den Lernstufen (Leitfrage, »n von m geschafft«) und ihren Experimenten. Im Experiment führt der Knopf ⌂ in der Kopfzeile zurück zur Startseite. Offen gegenüber Volta: Aufgabe der Lehrkraft (Code), Forscherheft, Hilfe und Kurzanleitung, Info, Schriftgröße und Sprache in der Kopfzeile, Profile und Elternbereich.
+
 ### 7.2 Zuse 2 (Skizze)
 
 | Stufe | Thema | Ergebnis |

@@ -1,0 +1,300 @@
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+// Startseite wie Volta 1: Zetti begruesst, darunter die Karten Weitermachen, Freies Labor und Vorfuehrung, dann der
+// Lernpfad mit den Lernstufen (Leitfrage, Fortschritt) und ihren Experimenten. Gesperrtes traegt ein Schloss, Geschafftes
+// einen Haken (nie nur ueber die Farbe).
+Rectangle {
+    id: home
+    color: ZTheme.graphite
+
+    signal experimentRequested(int index)
+    signal freeLabRequested()
+    signal demoRequested()
+
+    // Karte oben (Weitermachen, Freies Labor, Vorfuehrung)
+    component Tile: Rectangle {
+        id: tile
+        property string icon
+        property string title
+        property string subtitle
+        signal activated()
+        width: 300
+        height: 104
+        radius: 14
+        color: tap.pressed ? "#D9F3F8" : ZTheme.surface
+        border.width: 2
+        border.color: ZTheme.navy
+        RowLayout {
+            anchors.fill: parent
+            anchors.margins: 16
+            spacing: 14
+            Text { text: tile.icon; font.pixelSize: 32; font.family: "Segoe UI Emoji" }
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 2
+                Text {
+                    Layout.fillWidth: true
+                    text: tile.title
+                    color: ZTheme.navy
+                    font.pixelSize: 20; font.bold: true
+                    elide: Text.ElideRight
+                }
+                Text {
+                    Layout.fillWidth: true
+                    text: tile.subtitle
+                    color: ZTheme.muted
+                    font.pixelSize: 13
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 2
+                    elide: Text.ElideRight
+                }
+            }
+        }
+        TapHandler { id: tap; onTapped: tile.activated() }
+        Accessible.role: Accessible.Button
+        Accessible.name: title
+    }
+
+    Flickable {
+        anchors.fill: parent
+        contentHeight: page.implicitHeight + 48
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+
+        ColumnLayout {
+            id: page
+            x: 24
+            y: 24
+            width: parent.width - 48
+            spacing: 18
+
+            // ---- Zetti begruesst
+            RowLayout {
+                spacing: 14
+                Image {
+                    Layout.preferredWidth: 96
+                    Layout.preferredHeight: 120
+                    source: "qrc:/zuse/zetti/zetti_freundlich.png"
+                    fillMode: Image.PreserveAspectFit
+                    mipmap: true
+                }
+                Rectangle {
+                    Layout.preferredWidth: Math.min(620, page.width - 130)
+                    Layout.preferredHeight: greeting.implicitHeight + 24
+                    radius: 14
+                    color: ZTheme.bubble
+                    border.width: 2
+                    border.color: ZTheme.accentDim
+                    Text {
+                        id: greeting
+                        anchors { left: parent.left; right: parent.right; top: parent.top; margins: 12 }
+                        wrapMode: Text.WordWrap
+                        color: ZTheme.text
+                        font.pixelSize: 15
+                        text: qsTr("Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis "
+                                   + "zum Zähler. Fang beim Lernpfad an oder probiere im freien Labor eigene Ideen aus.")
+                    }
+                }
+            }
+
+            // ---- Karten
+            Flow {
+                Layout.fillWidth: true
+                spacing: 18
+                Tile {
+                    objectName: "tileContinue"
+                    icon: "▶️"
+                    title: qsTr("Weitermachen")
+                    subtitle: workbench.resume.label !== undefined
+                              ? workbench.resume.label + " " + workbench.resume.title : ""
+                    onActivated: home.experimentRequested(workbench.resume.index)
+                }
+                Tile {
+                    objectName: "tileFreeLab"
+                    icon: "🔧"
+                    title: qsTr("Freies Labor")
+                    subtitle: qsTr("Eigene Ideen ausprobieren – mit allen deinen Werkzeugen")
+                    onActivated: home.freeLabRequested()
+                }
+                Tile {
+                    objectName: "tileDemo"
+                    icon: "🎬"
+                    title: qsTr("Vorführung")
+                    subtitle: qsTr("%1 fertige Aufbauten zum Zeigen – es wird nichts gespeichert").arg(workbench.demos.length)
+                    onActivated: home.demoRequested()
+                }
+            }
+
+            Text {
+                Layout.topMargin: 6
+                text: qsTr("Lernpfad")
+                color: ZTheme.navy
+                font.pixelSize: 24; font.bold: true
+            }
+
+            // ---- Lernstufen
+            Repeater {
+                model: workbench.levels
+                delegate: Rectangle {
+                    id: level
+                    required property var modelData
+                    readonly property int doneCount: modelData.experiments.filter(e => e.done).length
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: levelCol.implicitHeight + 28
+                    radius: 14
+                    color: modelData.unlocked ? ZTheme.surface : ZTheme.surfaceHigh
+                    border.color: ZTheme.line
+                    ColumnLayout {
+                        id: levelCol
+                        x: 16
+                        y: 14
+                        width: parent.width - 32
+                        spacing: 10
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+                            Rectangle {
+                                Layout.preferredWidth: 44; Layout.preferredHeight: 44
+                                radius: 22
+                                color: level.modelData.done ? ZTheme.ok
+                                     : level.modelData.unlocked ? ZTheme.navy : ZTheme.zero
+                                Text {
+                                    anchors.centerIn: parent
+                                    text: level.modelData.done ? "✓"
+                                        : level.modelData.unlocked || level.modelData.planned ? level.modelData.number : "🔒"
+                                    color: "white"
+                                    font.pixelSize: 20; font.bold: true
+                                    font.family: text === "🔒" ? "Segoe UI Emoji" : ""
+                                }
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 0
+                                Text {
+                                    Layout.fillWidth: true
+                                    text: qsTr("Stufe %1: %2").arg(level.modelData.number).arg(level.modelData.title)
+                                    color: ZTheme.text
+                                    font.pixelSize: 19; font.bold: true
+                                    wrapMode: Text.WordWrap
+                                }
+                                Text {
+                                    Layout.fillWidth: true
+                                    text: level.modelData.question
+                                    color: ZTheme.muted
+                                    font.pixelSize: 14; font.italic: true
+                                    wrapMode: Text.WordWrap
+                                }
+                            }
+                            ColumnLayout { // Fortschritt als Zahl und Balken
+                                visible: level.modelData.experiments.length > 0
+                                spacing: 4
+                                Text {
+                                    Layout.alignment: Qt.AlignRight
+                                    text: qsTr("%1 von %2 geschafft").arg(level.doneCount)
+                                                                     .arg(level.modelData.experiments.length)
+                                    color: ZTheme.muted
+                                    font.pixelSize: 13
+                                }
+                                Rectangle {
+                                    Layout.preferredWidth: 190; Layout.preferredHeight: 8
+                                    radius: 4
+                                    color: ZTheme.surfaceHigh
+                                    Rectangle {
+                                        width: parent.width * level.doneCount / Math.max(1, level.modelData.experiments.length)
+                                        height: parent.height
+                                        radius: 4
+                                        color: ZTheme.ok
+                                    }
+                                }
+                            }
+                        }
+                        Text {
+                            visible: !level.modelData.unlocked && !level.modelData.planned
+                            text: qsTr("Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.")
+                                  .arg(level.modelData.number - 1)
+                            color: ZTheme.muted
+                            font.pixelSize: 14
+                        }
+                        Flow { // Experimente der Stufe, danach geplante mit »folgt«
+                            Layout.fillWidth: true
+                            spacing: 12
+                            Repeater {
+                                model: level.modelData.experiments
+                                delegate: Rectangle {
+                                    id: card
+                                    required property var modelData
+                                    width: 280
+                                    height: 72
+                                    radius: 10
+                                    color: !modelData.unlocked ? ZTheme.surfaceHigh
+                                         : modelData.done ? ZTheme.okBg : cardTap.pressed ? "#D9F3F8" : "#F3FAFC"
+                                    border.width: 2
+                                    border.color: modelData.done ? ZTheme.ok : modelData.unlocked ? ZTheme.accent : ZTheme.line
+                                    opacity: modelData.unlocked ? 1 : 0.6
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 12
+                                        anchors.rightMargin: 12
+                                        spacing: 10
+                                        Text {
+                                            text: card.modelData.label
+                                            color: ZTheme.muted
+                                            font.pixelSize: 13; font.bold: true
+                                        }
+                                        Text {
+                                            Layout.fillWidth: true
+                                            text: card.modelData.title
+                                            color: ZTheme.text
+                                            font.pixelSize: 15; font.bold: true
+                                            wrapMode: Text.WordWrap
+                                            maximumLineCount: 2
+                                            elide: Text.ElideRight
+                                        }
+                                        Text {
+                                            text: card.modelData.done ? "✓" : card.modelData.unlocked ? "›" : "🔒"
+                                            color: card.modelData.done ? ZTheme.ok : ZTheme.navy
+                                            font.pixelSize: 20; font.bold: true
+                                            font.family: text === "🔒" ? "Segoe UI Emoji" : ""
+                                        }
+                                    }
+                                    TapHandler {
+                                        id: cardTap
+                                        enabled: card.modelData.unlocked
+                                        onTapped: home.experimentRequested(card.modelData.index)
+                                    }
+                                    Accessible.role: Accessible.Button
+                                    Accessible.name: card.modelData.label + " " + card.modelData.title
+                                                     + (card.modelData.done ? ", " + qsTr("geschafft") : "")
+                                }
+                            }
+                            Repeater {
+                                model: level.modelData.upcoming
+                                delegate: Rectangle {
+                                    required property var modelData
+                                    width: 280
+                                    height: 72
+                                    radius: 10
+                                    color: ZTheme.surfaceHigh
+                                    border.color: ZTheme.line
+                                    opacity: 0.6
+                                    Text {
+                                        anchors.fill: parent
+                                        anchors.margins: 12
+                                        verticalAlignment: Text.AlignVCenter
+                                        text: parent.modelData + " – " + qsTr("folgt")
+                                        color: ZTheme.text
+                                        font.pixelSize: 15
+                                        wrapMode: Text.WordWrap
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -43,6 +43,7 @@ struct Stage {
     QStringList inputKinds; // je Eingang "kipp" (Kippschalter, rastet) oder "taster" (nur solange gedrueckt)
     QStringList outputs;    // Ausgaenge sind LEDs
     bool makesChip = true;  // Stufe 0 (Schalter direkt an LEDs) ergibt keinen Chip
+    bool free = false;      // Freies Labor: keine Aufgabe, alle eigenen Werkzeuge, nicht im Lernpfad
     QStringList palette;
     std::vector<std::vector<volta::logic::Level>> table;
     volta::logic::ChipDef solution; // Musterloesung (Teile und Verbindungen)
@@ -72,6 +73,10 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QVariantList stages READ stages NOTIFY stagesChanged)
     Q_PROPERTY(QVariantList levels READ levels NOTIFY stagesChanged) // Lernstufen mit ihren Experimenten
     Q_PROPERTY(bool stageSequence READ stageSequence NOTIFY stageChanged) // Pruefung als Ablauf (Speicher)
+    // wie Volta: »lernpfad« (Experiment), »frei« (Freies Labor) oder »vorfuehrung« (fertiger Aufbau, nichts gespeichert)
+    Q_PROPERTY(QString mode READ mode NOTIFY stageChanged)
+    Q_PROPERTY(QVariantList demos READ demos NOTIFY stagesChanged)   // Aufbauten fuer die Vorfuehrung
+    Q_PROPERTY(QVariantMap resume READ resume NOTIFY stageChanged)   // »Weitermachen«: zuletzt bearbeitetes Experiment
     Q_PROPERTY(int stageIndex READ stageIndex NOTIFY stageChanged)
     Q_PROPERTY(QString stageTitle READ stageTitle NOTIFY stageChanged)
     Q_PROPERTY(QString stageQuestion READ stageQuestion NOTIFY stageChanged)
@@ -140,6 +145,12 @@ public:
     QVariantList stages() const;
     QVariantList levels() const;
     bool stageSequence() const { return !m_stages.empty() && !m_stages[size_t(m_stage)].steps.empty(); }
+    QString mode() const;
+    QVariantList demos() const;
+    QVariantMap resume() const;
+    Q_INVOKABLE void startFreeLab();
+    Q_INVOKABLE bool startDemo(int index); // Experiment index mit Musterloesung zeigen, ohne zu speichern
+    Q_INVOKABLE void leaveSpecial();       // Freies Labor bzw. Vorfuehrung beenden, zurueck zum Lernpfad
     int stageIndex() const { return m_stage; }
     QString stageTitle() const;
     QString stageQuestion() const;
@@ -165,7 +176,7 @@ public:
     QVariantMap outputNumber() const;
     QVariantList inputNumbers() const;
     QVariantList tasks() const;
-    bool benchLocked() const { return isCounting(); }
+    bool benchLocked() const { return editLocked(); }
     bool numbersVisible() const { return m_numbersVisible; }
     void setNumbersVisible(bool on);
     // Bits (hoechstes zuerst) als Zahl: {"bin", "dec", "hex", "value", "bits"}; mit unbestimmtem Bit "?"
@@ -184,7 +195,7 @@ public:
     bool canRedo() const { return m_undo.canRedo(); }
     QVariantList checkRows() const;
     QString checkState() const;
-    bool chipReady() const { return m_checkDone && m_check.passed; }
+    bool chipReady() const { return m_checkDone && m_check.passed && !m_demo && !isFree(); }
     QString message() const { return m_message; }
     QString symbolStyle() const { return m_symbolStyle; }
     void setSymbolStyle(const QString& style);
@@ -237,6 +248,10 @@ private:
     void setMessage(const QString& text, const QString& pose = QString());
     bool isDiscover() const { return !m_stages.empty() && m_stages[size_t(m_stage)].kind == "entdecken"; }
     bool isCounting() const { return !m_stages.empty() && m_stages[size_t(m_stage)].kind == "zahlen"; }
+    bool isFree() const { return !m_stages.empty() && m_stages[size_t(m_stage)].free; }
+    bool editLocked() const { return isCounting() || m_demo; } // fest verdrahtet oder Vorfuehrung
+    QString stageLabel(int index) const; // »4.5«: Lernstufe und Platz darin
+    void endDemo();                      // eigene Werkzeugkiste zurueck
     void checkTarget(); // Art »zahlen«: aktuelle Aufgabe erfuellt?
     size_t currentRow() const; // Zeile der Wahrheitstabelle zur aktuellen Schalterstellung
     volta::logic::Level boxOutput(size_t output) const;
@@ -257,6 +272,10 @@ private:
     int m_stage = 0;
     QString m_dataDir;
     volta::logic::Library m_library; // erstellte Chips
+    volta::logic::Library m_demoLibrary;  // alle Musterloesungen (Vorfuehrung)
+    volta::logic::Library m_ownLibrary;   // eigene Chips, solange die Vorfuehrung laeuft
+    bool m_demo = false;
+    int m_lastStage = 0;                  // zuletzt bearbeitetes Experiment im Lernpfad
     QSet<QString> m_done;
     std::map<QString, volta::logic::ChipDef> m_drafts;
     volta::logic::ChipDef m_def;

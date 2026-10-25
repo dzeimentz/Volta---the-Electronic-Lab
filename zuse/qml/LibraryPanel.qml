@@ -28,14 +28,30 @@ Rectangle {
         }
         Rectangle { Layout.fillWidth: true; height: 3; radius: 1.5; color: ZTheme.accent }
 
-        // ---- Bauen: Werkzeuge der Stufe
+        // ---- Bauen: Werkzeuge der Stufe; viele Werkzeuge (Freies Labor) zweispaltig und rollbar
+        Flickable {
+            id: tray
+            readonly property bool twoColumns: workbench.palette.length > 5
+            visible: root.building && !workbench.benchLocked
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            contentHeight: grid.implicitHeight
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            interactive: contentHeight > height
+            GridLayout {
+            id: grid
+            width: tray.width
+            columns: tray.twoColumns ? 2 : 1
+            columnSpacing: 8
+            rowSpacing: 10
         Repeater {
             model: root.building ? workbench.palette : []
             delegate: Rectangle {
                 id: tile
                 required property var modelData
                 Layout.fillWidth: true
-                Layout.preferredHeight: 92
+                Layout.preferredHeight: tray.twoColumns ? 80 : 92
                 radius: 12
                 color: modelData.own ? "#FFF7E6" : "#ECFAFD"
                 border.color: modelData.own ? ZTheme.pad : ZTheme.accentDim
@@ -43,7 +59,7 @@ Rectangle {
                 opacity: workbench.inside ? 0.5 : 1
                 GateShape {
                     anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; topMargin: 6 }
-                    width: 70; height: 54
+                    width: tray.twoColumns ? 54 : 70; height: tray.twoColumns ? 42 : 54
                     symbol: tile.modelData.symbol
                     inverted: tile.modelData.inverted
                     us: workbench.symbolStyle === "us"
@@ -52,9 +68,12 @@ Rectangle {
                 }
                 Text {
                     anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 6 }
+                    width: parent.width - 8
+                    horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
                     text: (tile.modelData.own ? "★ " : "") + tile.modelData.name
                     color: ZTheme.navy
-                    font.pixelSize: 14; font.bold: true
+                    font.pixelSize: tray.twoColumns ? 12 : 14; font.bold: true
                 }
                 TapHandler { enabled: !workbench.inside; onTapped: root.bench.placePart(tile.modelData.type) }
                 DragHandler {
@@ -76,11 +95,14 @@ Rectangle {
                 }
             }
         }
+            }
+        }
 
         Text { // Bedienfeld fest verdrahtet: keine Werkzeuge noetig
             visible: workbench.benchLocked
             Layout.fillWidth: true
-            text: qsTr("Hier brauchst du keine Werkzeuge – nur die Schalter am Bedienfeld.")
+            text: workbench.mode === "vorfuehrung" ? qsTr("Vorführung: Hier ist schon alles aufgebaut.")
+                                                   : qsTr("Hier brauchst du keine Werkzeuge – nur die Schalter am Bedienfeld.")
             color: ZTheme.textOnShellMuted
             font.pixelSize: 14
             wrapMode: Text.WordWrap
@@ -134,17 +156,17 @@ Rectangle {
             }
         }
 
-        Item { Layout.fillHeight: true }
+        Item { visible: !tray.visible; Layout.fillHeight: true }
 
         HeaderButton {
-            visible: root.building
+            visible: root.building && !workbench.benchLocked
             Layout.fillWidth: true
             text: qsTr("Entfernen")
             enabled: !workbench.inside && (root.bench.selectedPart !== "" || root.bench.selectedWire >= 0)
             onClicked: root.removeSelection()
         }
         HeaderButton {
-            visible: root.building
+            visible: root.building && !workbench.benchLocked
             Layout.fillWidth: true
             text: qsTr("Leeren")
             enabled: !workbench.inside && workbench.parts.length > 0

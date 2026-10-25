@@ -37,6 +37,8 @@ qt_add_qml_module(zuse_app
         qml/TaskPanel.qml
         qml/LibraryPanel.qml
         qml/StagePicker.qml
+        qml/Home.qml
+        qml/DemoPicker.qml
         qml/HeaderButton.qml
         qml/LayerFrame.qml
         qml/ToolboxPopup.qml

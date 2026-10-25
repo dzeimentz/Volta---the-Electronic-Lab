@@ -11,6 +11,11 @@ Rectangle {
     readonly property bool building: workbench.stageKind === "bauen"
     readonly property bool counting: workbench.stageKind === "zahlen"
     readonly property bool hasNext: workbench.stageIndex + 1 < workbench.stages.length
+    readonly property bool free: workbench.mode === "frei"
+    readonly property bool demo: workbench.mode === "vorfuehrung"
+
+    signal demoPickerRequested()
+    signal homeRequested()
     color: ZTheme.surface
     Rectangle { anchors { left: parent.left; top: parent.top; bottom: parent.bottom } width: 1; color: ZTheme.line }
 
@@ -91,7 +96,7 @@ Rectangle {
                 onClicked: root.hintVisible = !root.hintVisible
             }
             ZButton {
-                visible: root.building
+                visible: root.building && !root.free && !root.demo
                 text: qsTr("Lösung zeigen")
                 enabled: !workbench.inside
                 onClicked: workbench.showSolution()
@@ -112,6 +117,7 @@ Rectangle {
                 width: parent.width
                 spacing: 8
                 Text {
+                    visible: !root.free
                     Layout.fillWidth: true
                     text: root.counting ? qsTr("Aufgaben")
                         : root.building ? (workbench.stageSequence ? qsTr("Ablauf") : qsTr("Wahrheitstabelle"))
@@ -127,7 +133,7 @@ Rectangle {
                     font.pixelSize: 14
                     wrapMode: Text.WordWrap
                 }
-                TruthPanel { visible: !root.counting; Layout.fillWidth: true }
+                TruthPanel { visible: !root.counting && !root.free; Layout.fillWidth: true }
                 Repeater { // Art »zahlen«: Zahlen, die an den Lampen erscheinen sollen
                     model: workbench.tasks
                     delegate: Rectangle {
@@ -158,7 +164,7 @@ Rectangle {
                     }
                 }
                 Rectangle { // Merksatz nach dem Schaffen der Stufe
-                    visible: workbench.stageDone && workbench.stageMerksatz !== ""
+                    visible: (workbench.stageDone || root.demo) && workbench.stageMerksatz !== ""
                     Layout.fillWidth: true
                     Layout.topMargin: 4
                     Layout.preferredHeight: merk.implicitHeight + 20
@@ -192,7 +198,7 @@ Rectangle {
             onClicked: workbench.confirmBox()
         }
         ZButton { // bauen
-            visible: root.building && !workbench.stageDone
+            visible: root.building && !workbench.stageDone && !root.free && !root.demo
             Layout.fillWidth: true
             text: qsTr("Prüfen")
             primary: !workbench.chipReady
@@ -200,15 +206,28 @@ Rectangle {
             onClicked: workbench.check()
         }
         ZButton {
-            visible: root.building && !workbench.stageDone
+            visible: root.building && !workbench.stageDone && !root.free && !root.demo
             Layout.fillWidth: true
             text: workbench.stageMakesChip ? qsTr("Erfindung einpacken") : qsTr("Geschafft!")
             primary: workbench.chipReady
             enabled: workbench.chipReady
             onClicked: workbench.createChip()
         }
+        ZButton { // Vorfuehrung wie Volta: andere zeigen oder beenden (zurueck zur Startseite)
+            visible: root.demo
+            Layout.fillWidth: true
+            text: qsTr("Andere Vorführung")
+            onClicked: root.demoPickerRequested()
+        }
         ZButton {
-            visible: workbench.stageDone && root.hasNext
+            visible: root.demo || root.free
+            Layout.fillWidth: true
+            text: root.demo ? qsTr("Vorführung beenden") : qsTr("Zur Startseite")
+            primary: root.demo
+            onClicked: root.homeRequested()
+        }
+        ZButton {
+            visible: workbench.stageDone && root.hasNext && !root.demo
             Layout.fillWidth: true
             text: qsTr("Weiter") + " →"
             primary: true

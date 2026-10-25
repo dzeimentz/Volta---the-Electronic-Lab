@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-// Zuse 1 (Prototyp Z0) in der Grundschale des DC Learning Design Standards (wie Volta): dunkelblaue Kopfzeile mit
-// Stufenauswahl, links die Bibliothek (Werkzeuge bzw. Raetselkisten), in der Mitte Steckplatz oder Werkbank, rechts
+// Zuse 1 (Prototyp Z0) in der Grundschale des DC Learning Design Standards (wie Volta): Startseite mit Lernpfad,
+// Freiem Labor und Vorfuehrung; im Experiment dunkelblaue Kopfzeile mit Startseite und Stufenauswahl, links die Bibliothek (Werkzeuge bzw. Raetselkisten), in der Mitte Steckplatz oder Werkbank, rechts
 // die Aufgabe mit Zetti, Vermutung/Tabelle und Aktion. Unter der Mitte (zuschaltbar): Schalter und LEDs als Zahl.
 ApplicationWindow {
     id: win
@@ -15,7 +15,14 @@ ApplicationWindow {
     color: ZTheme.graphite
     title: qsTr("Zuse 1 – Computertechnik für Einsteiger (Prototyp)")
 
+    property string page: startPage // "home" (Startseite) oder "lab" (Experiment, Freies Labor, Vorfuehrung)
     readonly property bool building: workbench.stageKind === "bauen"
+    readonly property bool inLab: page === "lab"
+
+    function goHome() {
+        workbench.leaveSpecial()
+        page = "home"
+    }
     readonly property bool discovering: workbench.stageKind === "entdecken"
 
     Connections {
@@ -49,14 +56,23 @@ ApplicationWindow {
                 Layout.preferredWidth: 44; Layout.preferredHeight: 44
             }
             Text {
-                text: "Zuse 1"
+                text: win.inLab ? "Zuse 1" : qsTr("Zuse 1 – Computertechnik für Einsteiger")
                 color: ZTheme.textOnShell
                 font.pixelSize: 22; font.bold: true
             }
             Item { Layout.preferredWidth: 6 }
-            StagePicker { Layout.maximumWidth: 360 }
+            HeaderButton { // zurueck zur Startseite wie Volta
+                visible: win.inLab
+                text: "⌂"
+                font.family: "Segoe UI Symbol"
+                font.pixelSize: 24
+                onClicked: win.goHome()
+                Accessible.name: qsTr("Startseite")
+                ToolTip.visible: hovered; ToolTip.text: qsTr("Startseite")
+            }
+            StagePicker { visible: win.inLab; Layout.maximumWidth: 360 }
             HeaderButton {
-                visible: win.building
+                visible: win.inLab && win.building && !workbench.benchLocked
                 text: "↶"
                 font.family: "Segoe UI Symbol"
                 font.pixelSize: 22
@@ -66,7 +82,7 @@ ApplicationWindow {
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Rückgängig")
             }
             HeaderButton {
-                visible: win.building
+                visible: win.inLab && win.building && !workbench.benchLocked
                 text: "↷"
                 font.family: "Segoe UI Symbol"
                 font.pixelSize: 22
@@ -77,6 +93,7 @@ ApplicationWindow {
             }
             Item { Layout.fillWidth: true }
             HeaderButton { // Zahlenleiste ein/aus
+                visible: win.inLab
                 text: "0b 0x"
                 on: workbench.numbersVisible
                 onClicked: workbench.numbersVisible = !workbench.numbersVisible
@@ -90,8 +107,17 @@ ApplicationWindow {
         }
     }
 
+    Home {
+        anchors.fill: parent
+        visible: !win.inLab
+        onExperimentRequested: index => { workbench.selectStage(index); win.page = "lab" }
+        onFreeLabRequested: { workbench.startFreeLab(); win.page = "lab" }
+        onDemoRequested: demoPicker.open()
+    }
+
     RowLayout {
         anchors.fill: parent
+        visible: win.inLab
         spacing: 0
 
         LibraryPanel {
@@ -156,10 +182,17 @@ ApplicationWindow {
         TaskPanel {
             Layout.preferredWidth: 360
             Layout.fillHeight: true
+            onDemoPickerRequested: demoPicker.open()
+            onHomeRequested: win.goHome()
         }
     }
 
     ToolboxPopup { id: toolbox; objectName: "toolbox" }
+    DemoPicker {
+        id: demoPicker
+        objectName: "demoPicker"
+        onChosen: index => { workbench.startDemo(index); win.page = "lab" }
+    }
     NumbersPopup { id: numbers; objectName: "numbers" }
 
     Rectangle { // Werkzeug, das gerade auf die Werkbank gezogen wird
