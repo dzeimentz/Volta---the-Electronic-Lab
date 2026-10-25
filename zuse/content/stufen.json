@@ -1,6 +1,84 @@
 {
  "schema_version": 2,
  "hinweis": "Zuse 1 Prototyp: jede Stufe beginnt mit einer Geschichte; »entdecken« mit Raetselkisten, »bauen« auf der Werkbank. Wahrheitstabelle: Ausgaenge je Zeile, Eingaenge binaer aufsteigend (erster Eingang hoechstes Bit).",
+ "lernstufen": [
+  {
+   "nr": 0,
+   "titel": {
+    "de": "Auftakt",
+    "en": "Warm-up"
+   },
+   "frage": {
+    "de": "Was versteht ein Rechner überhaupt?",
+    "en": "What does a computer understand at all?"
+   },
+   "experimente": [
+    "BIT"
+   ]
+  },
+  {
+   "nr": 1,
+   "titel": {
+    "de": "Logik entdecken",
+    "en": "Discovering logic"
+   },
+   "frage": {
+    "de": "Wie entscheidet ein Rechner?",
+    "en": "How does a computer decide?"
+   },
+   "experimente": [
+    "NICHT",
+    "UND",
+    "ODER",
+    "NAND"
+   ]
+  },
+  {
+   "nr": 2,
+   "titel": {
+    "de": "Erfinden mit Bausteinen",
+    "en": "Inventing with parts"
+   },
+   "frage": {
+    "de": "Was kann ich aus meinen Bausteinen bauen?",
+    "en": "What can I build from my parts?"
+   },
+   "experimente": [
+    "ALARM",
+    "XODER",
+    "NANDUND"
+   ]
+  },
+  {
+   "nr": 3,
+   "titel": {
+    "de": "Zahlen und Rechnen",
+    "en": "Numbers and adding"
+   },
+   "frage": {
+    "de": "Wie rechnet ein Rechner mit 0 und 1?",
+    "en": "How does a computer calculate with 0 and 1?"
+   },
+   "experimente": [
+    "ZAEHLEN",
+    "HA",
+    "VA",
+    "ADD4"
+   ]
+  },
+  {
+   "nr": 4,
+   "titel": {
+    "de": "Speichern und Programmieren",
+    "en": "Memory and programs"
+   },
+   "frage": {
+    "de": "Wie merkt sich ein Rechner etwas – und wie läuft ein Programm?",
+    "en": "How does a computer remember – and how does a program run?"
+   },
+   "experimente": []
+  }
+ ],
  "stufen": [
   {
    "kuerzel": "BIT",
@@ -326,6 +404,93 @@
    ]
   },
   {
+   "kuerzel": "NAND",
+   "art": "entdecken",
+   "werkzeug": "NAND",
+   "symbol": "&",
+   "invertiert": true,
+   "titel": {
+    "de": "Die Fensterwarnung",
+    "en": "The window warning"
+   },
+   "geschichte": {
+    "de": "Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
+    "en": "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a warning lamp should glow as long as not both windows are closed."
+   },
+   "frage": {
+    "de": "Welche Kiste warnt richtig?",
+    "en": "Which box warns correctly?"
+   },
+   "hilfe": {
+    "de": "Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
+    "en": "Try all four settings. When may the warning lamp be off?"
+   },
+   "merksatz": {
+    "de": "NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
+    "en": "NAND means NOT-AND: only when all inputs are 1 is the output 0."
+   },
+   "eingaenge": [
+    {
+     "name": "A",
+     "bezeichnung": {
+      "de": "Fenster 1 zu",
+      "en": "Window 1 closed"
+     },
+     "art": "kipp"
+    },
+    {
+     "name": "B",
+     "bezeichnung": {
+      "de": "Fenster 2 zu",
+      "en": "Window 2 closed"
+     },
+     "art": "kipp"
+    }
+   ],
+   "ausgaenge": [
+    {
+     "name": "Y",
+     "bezeichnung": {
+      "de": "Warnlampe",
+      "en": "Warning lamp"
+     }
+    }
+   ],
+   "kisten": [
+    {
+     "tabelle": [
+      "0",
+      "0",
+      "0",
+      "1"
+     ]
+    },
+    {
+     "tabelle": [
+      "1",
+      "1",
+      "1",
+      "0"
+     ]
+    },
+    {
+     "tabelle": [
+      "1",
+      "0",
+      "0",
+      "0"
+     ]
+    }
+   ],
+   "richtig": 1,
+   "wahrheitstabelle": [
+    "1",
+    "1",
+    "1",
+    "0"
+   ]
+  },
+  {
    "kuerzel": "ALARM",
    "art": "bauen",
    "symbol": "ALARM",
@@ -572,118 +737,101 @@
    }
   },
   {
-   "kuerzel": "HA",
+   "kuerzel": "NANDUND",
    "art": "bauen",
-   "symbol": "HA",
-   "name": {
-    "de": "Halbaddierer",
-    "en": "Half adder"
-   },
+   "chip": false,
+   "symbol": "",
    "titel": {
-    "de": "1 + 1 = 10",
-    "en": "1 + 1 = 10"
+    "de": "Alles aus einem Baustein",
+    "en": "Everything from one part"
    },
    "geschichte": {
-    "de": "Rechner zählen nur mit 0 und 1. Kommen zwei Einsen zusammen, wird es eng: 1 + 1 ergibt »10« – eine 0 und ein Übertrag in die nächste Stelle, wie beim Zehnerübergang.",
-    "en": "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 and a carry to the next place, just like carrying a ten."
+    "de": "Chipfabriken mögen den NAND-Baustein besonders: Aus ihm allein lässt sich jede andere Schaltung bauen. Probier es aus – baue ein UND nur aus NAND-Bausteinen.",
+    "en": "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – build an AND from NAND parts only."
    },
    "frage": {
-    "de": "Baue eine Schaltung, die zwei Bits addiert.",
-    "en": "Build a circuit that adds two bits."
+    "de": "Geht alles mit einem einzigen Baustein?",
+    "en": "Can everything be done with a single part?"
    },
    "hilfe": {
-    "de": "Die Summe ist 1, wenn die Bits verschieden sind. Der Übertrag ist 1, wenn beide 1 sind.",
-    "en": "The sum is 1 when the bits differ. The carry is 1 when both are 1."
+    "de": "Verbindest du beide Eingänge eines NAND, dreht er um wie NICHT. Und NICHT hinter NICHT-UND ergibt …?",
+    "en": "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?"
    },
    "merksatz": {
-    "de": "Summe und Übertrag – so rechnet ein Computer.",
-    "en": "Sum and carry – that's how a computer adds."
+    "de": "Ein NAND mit verbundenen Eingängen ist ein NICHT. Zwei NAND ergeben ein UND – aus NAND lässt sich alles bauen.",
+    "en": "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
-      "de": "Bit A",
-      "en": "Bit A"
+      "de": "Schalter A",
+      "en": "Switch A"
      },
      "art": "kipp"
     },
     {
      "name": "B",
      "bezeichnung": {
-      "de": "Bit B",
-      "en": "Bit B"
+      "de": "Schalter B",
+      "en": "Switch B"
      },
      "art": "kipp"
     }
    ],
    "ausgaenge": [
     {
-     "name": "S",
+     "name": "Y",
      "bezeichnung": {
-      "de": "Summe",
-      "en": "Sum"
-     }
-    },
-    {
-     "name": "C",
-     "bezeichnung": {
-      "de": "Übertrag",
-      "en": "Carry"
+      "de": "Lampe",
+      "en": "Lamp"
      }
     }
    ],
    "bausteine": [
-    "AND",
-    "OR",
-    "NOT",
-    "XODER"
+    "NAND"
    ],
    "wahrheitstabelle": [
-    "00",
-    "10",
-    "10",
-    "01"
+    "0",
+    "0",
+    "0",
+    "1"
    ],
    "loesung": {
     "bausteine": [
      {
-      "id": "x1",
-      "typ": "XODER",
-      "x": 400,
-      "y": 100
+      "id": "n1",
+      "typ": "NAND",
+      "x": 280,
+      "y": 196
      },
      {
-      "id": "u1",
-      "typ": "AND",
-      "x": 400,
-      "y": 380
+      "id": "n2",
+      "typ": "NAND",
+      "x": 476,
+      "y": 196
      }
     ],
     "verbindungen": [
      [
       "A",
-      "x1.A"
+      "n1.a"
      ],
      [
       "B",
-      "x1.B"
+      "n1.b"
      ],
      [
-      "A",
-      "u1.a"
+      "n1.y",
+      "n2.a"
      ],
      [
-      "B",
-      "u1.b"
+      "n1.y",
+      "n2.b"
      ],
      [
-      "x1.Y",
-      "S"
-     ],
-     [
-      "u1.y",
-      "C"
+      "n2.y",
+      "Y"
      ]
     ]
    }
@@ -826,188 +974,118 @@
    }
   },
   {
-   "kuerzel": "NAND",
-   "art": "entdecken",
-   "werkzeug": "NAND",
-   "symbol": "&",
-   "invertiert": true,
-   "titel": {
-    "de": "Die Fensterwarnung",
-    "en": "The window warning"
-   },
-   "geschichte": {
-    "de": "Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
-    "en": "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a warning lamp should glow as long as not both windows are closed."
-   },
-   "frage": {
-    "de": "Welche Kiste warnt richtig?",
-    "en": "Which box warns correctly?"
-   },
-   "hilfe": {
-    "de": "Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
-    "en": "Try all four settings. When may the warning lamp be off?"
-   },
-   "merksatz": {
-    "de": "NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
-    "en": "NAND means NOT-AND: only when all inputs are 1 is the output 0."
-   },
-   "eingaenge": [
-    {
-     "name": "A",
-     "bezeichnung": {
-      "de": "Fenster 1 zu",
-      "en": "Window 1 closed"
-     },
-     "art": "kipp"
-    },
-    {
-     "name": "B",
-     "bezeichnung": {
-      "de": "Fenster 2 zu",
-      "en": "Window 2 closed"
-     },
-     "art": "kipp"
-    }
-   ],
-   "ausgaenge": [
-    {
-     "name": "Y",
-     "bezeichnung": {
-      "de": "Warnlampe",
-      "en": "Warning lamp"
-     }
-    }
-   ],
-   "kisten": [
-    {
-     "tabelle": [
-      "0",
-      "0",
-      "0",
-      "1"
-     ]
-    },
-    {
-     "tabelle": [
-      "1",
-      "1",
-      "1",
-      "0"
-     ]
-    },
-    {
-     "tabelle": [
-      "1",
-      "0",
-      "0",
-      "0"
-     ]
-    }
-   ],
-   "richtig": 1,
-   "wahrheitstabelle": [
-    "1",
-    "1",
-    "1",
-    "0"
-   ]
-  },
-  {
-   "kuerzel": "NANDUND",
+   "kuerzel": "HA",
    "art": "bauen",
-   "chip": false,
-   "symbol": "",
+   "symbol": "HA",
+   "name": {
+    "de": "Halbaddierer",
+    "en": "Half adder"
+   },
    "titel": {
-    "de": "Alles aus einem Baustein",
-    "en": "Everything from one part"
+    "de": "1 + 1 = 10",
+    "en": "1 + 1 = 10"
    },
    "geschichte": {
-    "de": "Chipfabriken mögen den NAND-Baustein besonders: Aus ihm allein lässt sich jede andere Schaltung bauen. Probier es aus – baue ein UND nur aus NAND-Bausteinen.",
-    "en": "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – build an AND from NAND parts only."
+    "de": "Rechner zählen nur mit 0 und 1. Kommen zwei Einsen zusammen, wird es eng: 1 + 1 ergibt »10« – eine 0 und ein Übertrag in die nächste Stelle, wie beim Zehnerübergang.",
+    "en": "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 and a carry to the next place, just like carrying a ten."
    },
    "frage": {
-    "de": "Geht alles mit einem einzigen Baustein?",
-    "en": "Can everything be done with a single part?"
+    "de": "Baue eine Schaltung, die zwei Bits addiert.",
+    "en": "Build a circuit that adds two bits."
    },
    "hilfe": {
-    "de": "Verbindest du beide Eingänge eines NAND, dreht er um wie NICHT. Und NICHT hinter NICHT-UND ergibt …?",
-    "en": "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?"
+    "de": "Die Summe ist 1, wenn die Bits verschieden sind. Der Übertrag ist 1, wenn beide 1 sind.",
+    "en": "The sum is 1 when the bits differ. The carry is 1 when both are 1."
    },
    "merksatz": {
-    "de": "Ein NAND mit verbundenen Eingängen ist ein NICHT. Zwei NAND ergeben ein UND – aus NAND lässt sich alles bauen.",
-    "en": "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND."
+    "de": "Summe und Übertrag – so rechnet ein Computer.",
+    "en": "Sum and carry – that's how a computer adds."
    },
    "eingaenge": [
     {
      "name": "A",
      "bezeichnung": {
-      "de": "Schalter A",
-      "en": "Switch A"
+      "de": "Bit A",
+      "en": "Bit A"
      },
      "art": "kipp"
     },
     {
      "name": "B",
      "bezeichnung": {
-      "de": "Schalter B",
-      "en": "Switch B"
+      "de": "Bit B",
+      "en": "Bit B"
      },
      "art": "kipp"
     }
    ],
    "ausgaenge": [
     {
-     "name": "Y",
+     "name": "S",
      "bezeichnung": {
-      "de": "Lampe",
-      "en": "Lamp"
+      "de": "Summe",
+      "en": "Sum"
+     }
+    },
+    {
+     "name": "C",
+     "bezeichnung": {
+      "de": "Übertrag",
+      "en": "Carry"
      }
     }
    ],
    "bausteine": [
-    "NAND"
+    "AND",
+    "OR",
+    "NOT",
+    "XODER"
    ],
    "wahrheitstabelle": [
-    "0",
-    "0",
-    "0",
-    "1"
+    "00",
+    "10",
+    "10",
+    "01"
    ],
    "loesung": {
     "bausteine": [
      {
-      "id": "n1",
-      "typ": "NAND",
-      "x": 280,
-      "y": 196
+      "id": "x1",
+      "typ": "XODER",
+      "x": 400,
+      "y": 100
      },
      {
-      "id": "n2",
-      "typ": "NAND",
-      "x": 476,
-      "y": 196
+      "id": "u1",
+      "typ": "AND",
+      "x": 400,
+      "y": 380
      }
     ],
     "verbindungen": [
      [
       "A",
-      "n1.a"
+      "x1.A"
      ],
      [
       "B",
-      "n1.b"
+      "x1.B"
      ],
      [
-      "n1.y",
-      "n2.a"
+      "A",
+      "u1.a"
      ],
      [
-      "n1.y",
-      "n2.b"
+      "B",
+      "u1.b"
      ],
      [
-      "n2.y",
-      "Y"
+      "x1.Y",
+      "S"
+     ],
+     [
+      "u1.y",
+      "C"
      ]
     ]
    }

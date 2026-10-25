@@ -99,7 +99,7 @@ Ergaenzungen, die das Konzept noch nicht nennt (Vorschlag, Zuordnung zu den Stuf
 | Codierer, Decoder, Siebensegmentanzeige | Decoder als eigener Chip (Stufe 8) und optional Siebensegment-Decoder fuer die Ausgabe der Systemplatine | 8 / frei |
 | Serielles Addieren mit Schieberegister und Akkumulator | Vergleich »parallel gegen seriell« als Weiterforschen; Schieberegister eher Zuse 2 | Weiterforschen |
 | Laufzeiten und Stoerimpulse | Die Einheitsverzoegerung der Logiksimulation erzeugt echte kurze Stoerimpulse; im Logikanalysator zeigen und erklaeren statt verstecken | 4–7 |
-| Konrad Zuse als Urheber des gespeicherten Rechenablaufs | Geschichtsfenster zu Z1 und Z3 in Stufe 10 | 10 |
+| Konrad Zuse als Urheber des gespeicherten Rechenablaufs | Geschichtsfenster zu Z1 und Z3 in Stufe 4 (Speichern und Programmieren) | 10 |
 
 ## Weitere Punkte zum Konzept
 - Das fruehere PDF v0.2 nannte ADR-0009 fuer die Inhalts-Einbettung; richtig ist ADR-0011 (in v0.3 behoben).

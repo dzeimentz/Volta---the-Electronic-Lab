@@ -42,6 +42,16 @@ void solveAndPack(WorkbenchController& w, int stage) {
     QVERIFY2(w.checkState() == "passed", qPrintable(w.stageKuerzel()));
     QVERIFY(w.createChip());
 }
+// Zahlenstufe: jede Zielzahl an den Schaltern einstellen
+void countThrough(WorkbenchController& w, int stage) {
+    QVERIFY(w.selectStage(stage));
+    QCOMPARE(w.stageKind(), QStringLiteral("zahlen"));
+    const QStringList in = w.stageInputs();
+    for (const QVariant& t : w.tasks())
+        for (qsizetype i = 0; i < in.size(); ++i)
+            w.setInput(in[i], (t.toMap().value("value").toInt() >> (in.size() - 1 - i)) & 1);
+    QVERIFY(w.stageDone());
+}
 } // namespace
 
 class WorkbenchTest : public QObject {
@@ -55,6 +65,16 @@ private slots:
         QVERIFY(!w.stageStory().isEmpty());
         QVERIFY(!w.stageMakesChip());
         QVERIFY(!w.selectStage(1)); // Nachtlicht erst nach Stufe 0
+        // Lernstufen wie bei Volta: Auftakt, Logik entdecken, Erfinden, Zahlen und Rechnen, (Speichern geplant)
+        const QVariantList levels = w.levels();
+        QCOMPARE(levels.size(), 5);
+        QCOMPARE(levels[0].toMap()["experiments"].toList().size(), 1);
+        QCOMPARE(levels[1].toMap()["experiments"].toList().size(), 4);
+        QVERIFY(levels[1].toMap()["unlocked"].toBool() == false);
+        QVERIFY(levels[4].toMap()["planned"].toBool());
+        QCOMPARE(w.stages()[4].toMap()["kuerzel"].toString(), QStringLiteral("NAND"));
+        QCOMPARE(w.stages()[4].toMap()["level"].toInt(), 1);
+        QCOMPARE(w.stages()[11].toMap()["level"].toInt(), 3);
         const QVariantList in = w.panelInputs();
         QCOMPARE(in.size(), 2);
         QCOMPARE(in[0].toMap()["label"].toString(), QStringLiteral("Lichtschalter"));
@@ -134,7 +154,8 @@ private slots:
         discover(w, 1);
         discover(w, 2);
         discover(w, 3);
-        QVERIFY(w.selectStage(4));
+        discover(w, 4); // NAND gehoert zur Stufe »Logik entdecken«
+        QVERIFY(w.selectStage(5));
         QCOMPARE(w.stageKuerzel(), QStringLiteral("ALARM"));
         QCOMPARE(w.palette().size(), 3); // UND, ODER, NICHT aus der Werkzeugkiste
         const QString o = w.addPart("OR", 330, 330);
@@ -157,8 +178,8 @@ private slots:
         QVERIFY(w.chipReady());
         QVERIFY(w.createChip());
         QVERIFY(w.message().contains("Alarmanlage"));
-        QCOMPARE(w.tools().size(), 4);
-        QVERIFY(w.tools()[3].toMap()["invention"].toBool());
+        QCOMPARE(w.tools().size(), 5); // NICHT, UND, ODER, NAND und die Erfindung
+        QVERIFY(w.tools()[4].toMap()["invention"].toBool());
         // Sirene nur, wenn die Anlage an ist und ein Fenster offen
         w.toggleInput("F");
         QCOMPARE(w.levelAt("S"), Level::Zero);
@@ -176,9 +197,13 @@ private slots:
         discover(w, 1);
         discover(w, 2);
         discover(w, 3);
-        solveAndPack(w, 4);
+        discover(w, 4);
         solveAndPack(w, 5);
         solveAndPack(w, 6);
+        solveAndPack(w, 7);
+        countThrough(w, 8);
+        solveAndPack(w, 9);
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("HA"));
         // Halbaddierer mit der selbst gebauten Treppenlicht-Schaltung: 1 + 1 = 10
         w.toggleInput("A");
         w.toggleInput("B");
@@ -192,16 +217,27 @@ private slots:
         QVERIFY(!w.inside());
     }
 
-    // Stufen 7 bis 11: Zahlen am Bedienfeld, NAND, alles aus NAND, Volladdierer, 4-Bit-Addierer mit Ueberlauf
+    // NAND, alles aus NAND, Zahlen am Bedienfeld, Volladdierer, 4-Bit-Addierer mit Ueberlauf
     void countingNandAndAdders() {
         QTemporaryDir dir;
         WorkbenchController w(kStages, dir.path(), "de");
         finishBit(w);
         for (int s : {1, 2, 3}) discover(w, s);
-        for (int s : {4, 5, 6}) solveAndPack(w, s);
-
-        // 7: fest verdrahtetes Bedienfeld, Zahlen nacheinander einstellen
+        // 4: NAND entdecken
+        discover(w, 4);
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("NAND"));
+        for (int s : {5, 6}) solveAndPack(w, s);
+        // 7: UND nur aus NAND (keine Erfindung)
         QVERIFY(w.selectStage(7));
+        QCOMPARE(w.palette().size(), 1);
+        QVERIFY(!w.addPart("NAND", 300, 200).isEmpty());
+        QVERIFY(w.addPart("AND", 300, 400).isEmpty()); // nur NAND erlaubt
+        w.clearBench();
+        solveAndPack(w, 7);
+        QVERIFY(!w.library().find("NANDUND"));
+
+        // 8: fest verdrahtetes Bedienfeld, Zahlen nacheinander einstellen
+        QVERIFY(w.selectStage(8));
         QCOMPARE(w.stageKind(), QStringLiteral("zahlen"));
         QVERIFY(w.benchLocked());
         QVERIFY(!w.connectPins("D0", "L1")); // Verdrahtung gesperrt
@@ -225,17 +261,8 @@ private slots:
         show(15);
         QVERIFY(w.stageDone());
 
-        // 8: NAND entdecken
-        discover(w, 8);
-        QCOMPARE(w.stageKuerzel(), QStringLiteral("NAND"));
-        // 9: UND nur aus NAND (keine Erfindung)
-        QVERIFY(w.selectStage(9));
-        QCOMPARE(w.palette().size(), 1);
-        QVERIFY(!w.addPart("NAND", 300, 200).isEmpty());
-        QVERIFY(w.addPart("AND", 300, 400).isEmpty()); // nur NAND erlaubt
-        w.clearBench();
+        // 9: Halbaddierer
         solveAndPack(w, 9);
-        QVERIFY(!w.library().find("NANDUND"));
         // 10: Volladdierer aus zwei Halbaddierern
         solveAndPack(w, 10);
         QVERIFY(w.library().find("VA"));

@@ -29,7 +29,7 @@ Im **DC Learning Ecosystem** ist Zuse das Mittelstück der Kernlinie **Volta →
 
 Die Gestaltung ist hell und freundlich wie Volta 1 und folgt dem DC Learning Design Standard. Gemeinsam mit Volta bleiben Qt-Stapel, Plattformen, Lernpfad, Inhaltspakete, Mehrsprachigkeit, Befehlsmuster und alle Regeln zu Datenschutz, Kindersicherheit und Barrierefreiheit.
 
-**Empfehlung:** Die Richtung von v0.3 als Grundlage festschreiben, den Prototyp (inzwischen Stufen 0–11 bis zum 4-Bit-Addierer) mit drei bis fünf Kindern der Zielgruppe erproben. Weitere Phasen erst nach der Rückmeldung der angefragten Verlage.
+**Empfehlung:** Die Richtung von v0.3 als Grundlage festschreiben, den Prototyp (inzwischen Lernstufen 0–3 mit zwölf Experimenten bis zum 4-Bit-Addierer) mit drei bis fünf Kindern der Zielgruppe erproben. Weitere Phasen erst nach der Rückmeldung der angefragten Verlage.
 
 ## 2. Ausgangslage und Entstehung
 
@@ -186,7 +186,7 @@ Vorbild ist das Bedienfeld der ersten Bausatz-Rechner (Altair 8800, 1975): Progr
 
 Zuse 1 hat **keinen eigenen Adressbus**: Die Adressschalter laden das Adressregister über den gemeinsamen 4-Bit-Bus (Busbreite 4 Bit durchgehend, Adressen 0–15), wie bei didaktischen Lehrrechnern. Ein separater Adressbus kommt erst mit Zuse 2.
 
-Das Bedienfeld entsteht schrittweise: Stufe 0 (ein Schalter, eine LED), Stufe 7 (vier Schalter, vier LEDs), Stufe 11 (zwei Zahlen mit je vier Schaltern, fünf LEDs mit Übertrag), Stufe 14 (Adressschalter und Speicher), Stufe 15 (der vollständige Rechner).
+Das Bedienfeld entsteht schrittweise: Experiment 0.1 (ein Schalter, eine LED), 3.1 (vier Schalter, vier LEDs), 3.4 (zwei Zahlen mit je vier Schaltern, fünf LEDs mit Übertrag), 4.3 (Adressschalter und Speicher), 4.4 (der vollständige Rechner).
 
 ### 5.6 Programmierebene
 
@@ -274,28 +274,21 @@ Entscheidung des Inhabers (25.10.2026): Alle Zuse-Bände verwenden dieselbe Bild
 
 ### 7.1 Zuse 1
 
-| Stufe | Frage | Art | Ergebnis | Stand |
-|---|---|---|---|---|
-| 0 | Licht an! Wie sagt man einem Rechner Ja oder Nein? | bauen | Bit; Kippschalter und Taster | Prototyp |
-| 1 | Das Nachtlicht soll angehen, wenn es nicht hell ist | entdecken | NICHT | Prototyp |
-| 2 | Der Tresor darf nur mit beiden Schlüsseln aufgehen | entdecken | UND | Prototyp |
-| 3 | Die Klingel soll an beiden Türen läuten | entdecken | ODER | Prototyp |
-| 4 | Die Alarmanlage | bauen | erste Erfindung | Prototyp |
-| 5 | Das Treppenhauslicht mit zwei Schaltern | bauen | XODER | Prototyp |
-| 6 | 1 + 1 = 10 | bauen | Halbaddierer | Prototyp |
-| 7 | Wie zählt ein Rechner mit vier Lampen? | zahlen | Binärzahlen am 4-Bit-Bedienfeld: fünf Zahlen einstellen (Stellenwerte 8, 4, 2, 1) | Prototyp |
-| 8 | Die Fensterwarnung | entdecken | NAND | Prototyp |
-| 9 | Geht alles mit einem einzigen Baustein? | bauen | UND nur aus NAND (keine Erfindung) | Prototyp |
-| 10 | Drei Bits auf einmal | bauen | Volladdierer aus zwei Halbaddierern und ODER | Prototyp |
-| 11 | Rechnen bis 15 – und was, wenn es nicht mehr passt? | bauen | 4-Bit-Addierer, Übertrags-LED »Ü 16«; Tabelle zeigt Rechnungen als Proben, geprüft werden alle 256 Zeilen | Prototyp |
-| 12 | Hat jemand geklingelt, während ich weg war? | bauen | Speicher: Flipflop, Register | geplant |
-| 13 | Wie zählt ein Rechner von allein? | bauen | Takt (prellender Taster), Zähler, Befehlszähler | geplant |
-| 14 | Wo wohnt ein Programm? | bauen | Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld | geplant |
-| 15 | Läuft er? | bauen | Zuse-4: Programm eintippen, Einzelschritt, Start | geplant |
+Wie bei Volta ist Zuse 1 in Lernstufen gegliedert; jede Stufe hat eine Leitfrage und mehrere Experimente. Ausgangspunkt ist ein Kind, das noch nie etwas von Digitaltechnik gehört hat: Es beginnt mit Schalter und Lampe, entdeckt dann die Grundbausteine, kombiniert sie zu eigenen Erfindungen und rechnet zuletzt mit Zahlen. Jede Stufe ist anspruchsvoller als die vorige, jedes Experiment bringt nur einen neuen Gedanken.
 
-Freischaltung wie Volta: Eine Stufe öffnet sich, wenn die vorige geschafft ist. In Stufe 15 ist das Steuerwerk teilweise vorgegeben (R2). Die früheren Stufen 8 (NAND) und 9 (Addierer) wurden bei der Umsetzung geteilt, damit jede Stufe nur einen neuen Gedanken bringt; die Stufen ab dem Speicher rücken dadurch um zwei auf.
+| Stufe | Leitfrage | Experimente (Art, Ergebnis) | Stand |
+|---|---|---|---|
+| 0 Auftakt | Was versteht ein Rechner überhaupt? | 0.1 Licht an! (bauen: Bit, Kippschalter und Taster) | Prototyp |
+| 1 Logik entdecken | Wie entscheidet ein Rechner? | 1.1 Das Nachtlicht (entdecken: NICHT) · 1.2 Der Tresor (UND) · 1.3 Die Klingel (ODER) · 1.4 Die Fensterwarnung (NAND) | Prototyp |
+| 2 Erfinden mit Bausteinen | Was kann ich aus meinen Bausteinen bauen? | 2.1 Die Alarmanlage (bauen: erste Erfindung) · 2.2 Das Treppenhauslicht (XODER) · 2.3 Alles aus einem Baustein (UND nur aus NAND, keine Erfindung) | Prototyp |
+| 3 Zahlen und Rechnen | Wie rechnet ein Rechner mit 0 und 1? | 3.1 Vier Lampen (zahlen: Binärzahlen am 4-Bit-Bedienfeld, Stellenwerte 8, 4, 2, 1) · 3.2 1 + 1 = 10 (Halbaddierer) · 3.3 Drei Bits auf einmal (Volladdierer) · 3.4 Rechnen bis 15 (4-Bit-Addierer, Übertrags-LED »Ü 16«; Tabelle zeigt Rechnungen als Proben, geprüft werden alle 256 Zeilen) | Prototyp |
+| 4 Speichern und Programmieren | Wie merkt sich ein Rechner etwas – und wie läuft ein Programm? | 4.1 Hat jemand geklingelt, während ich weg war? (Flipflop, Register) · 4.2 Wie zählt ein Rechner von allein? (Takt mit prellendem Taster, Zähler, Befehlszähler) · 4.3 Wo wohnt ein Programm? (Speicher 16 × 4, Untersuchen und Ablegen am Bedienfeld) · 4.4 Läuft er? (Zuse-4: Programm eintippen, Einzelschritt, Start) | geplant |
 
-Stufenarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle), **zahlen** (fest verdrahtetes Bedienfeld, Zahlen einstellen).
+Freischaltung wie Volta: Ein Experiment öffnet sich, wenn das vorige geschafft ist, denn die Werkzeuge bauen aufeinander auf (die Alarmanlage braucht UND, ODER und NICHT, der Halbaddierer das Treppenhauslicht). In der Stufenauswahl erscheinen die Lernstufen mit Leitfrage, darunter ihre Experimente (0.1, 1.1 …); die Kopfzeile zeigt »Stufe n: Experiment«. In Experiment 4.4 ist das Steuerwerk teilweise vorgegeben (R2).
+
+Gegenüber der ersten Fassung (Stufen 0–15 ohne Gruppierung) rückt die NAND-Entdeckung zu den anderen Grundbausteinen in Stufe 1 und das Zählen mit vier Lampen vor den Halbaddierer, damit »1 + 1 = 10« auf dem Zählen aufbaut.
+
+Experimentarten: **entdecken** (Rätselkisten, mit Vermutung), **bauen** (Werkbank, Prüfen mit Wahrheitstabelle), **zahlen** (fest verdrahtetes Bedienfeld, Zahlen einstellen).
 
 ### 7.2 Zuse 2 (Skizze)
 
@@ -423,7 +416,7 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 | Nr. | Risiko | Eintritt | Auswirkung | Maßnahme |
 |---|---|---|---|---|
 | R1 | Name »Zuse« markenrechtlich nicht verfügbar | MITTEL | HOCH | Recherche DPMA/EUIPO; Ersatzname vorhalten |
-| R2 | Stufen 12–15 (Speicher, Steuerwerk) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Steuerwerk teilweise vorgegeben; Rätselkisten auch für Speicher |
+| R2 | Stufe 4 (Speicher, Steuerwerk) für die Zielgruppe zu schwer | MITTEL | HOCH | Erprobung; Steuerwerk teilweise vorgegeben; Rätselkisten auch für Speicher |
 | R3 | Rätselkisten werden durch Raten gelöst statt durch Ausprobieren | MITTEL | MITTEL | Rückmeldung mit konkreter Schalterstellung; später: alle Zeilen ausprobieren, bevor geprüft wird |
 | R4 | Arbeitsfläche auf dem Tablet zu klein (Seitenleisten, Zahlenleiste) | MITTEL | MITTEL | einklappbare Seitenleisten, Zoom; Erprobung auf 10" |
 | R5 | Bedarf der Verlage weicht ab (z. B. nur Mikrocontroller) | MITTEL | HOCH | Rückmeldung der angefragten Verlage abwarten; MCU Explorer im Ecosystem vorziehen möglich |
@@ -437,10 +430,10 @@ Größenziel < 80 MB je Plattform (Prototyp: 46 MB APK); 60 fps auf dem Referenz
 
 | Phase | Inhalt | Grobschätzung | Stand |
 |---|---|---|---|
-| Z0 | Prototyp: Logikbibliothek, Werkbank, Rätselkisten, Werkzeugkiste, Zetti, Zahlensysteme, Stufen 0–6, Android-Testversion | 20–25 PT | weitgehend umgesetzt (Okt. 2026) |
-| Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung, drei Schichten); Stufen 7–11 (Bedienfeld 4 Bit, NAND, Addierer); Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | Angleichung und Stufen 7–11 umgesetzt (Okt. 2026); offen: Erprobung, Markenrecherche |
-| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Stufen 12–13 | 30–40 PT | nach Verlagsrückmeldung |
-| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Stufen 14–15 | 35–45 PT | |
+| Z0 | Prototyp: Logikbibliothek, Werkbank, Rätselkisten, Werkzeugkiste, Zetti, Zahlensysteme, erste sieben Experimente, Android-Testversion | 20–25 PT | weitgehend umgesetzt (Okt. 2026) |
+| Z0+ | Angleichung an den Design Standard (Kopfzeile, Layout, Vermutung, drei Schichten, Lernstufen 0–3); Bedienfeld 4 Bit, NAND, Addierer; Erprobung mit 3–5 Kindern; Markenrecherche | 12–18 PT | Angleichung und Stufen 7–11 umgesetzt (Okt. 2026); offen: Erprobung, Markenrecherche |
+| Z1 | Speicher, Takt, Zähler, Bus mit Z, Logikanalysator; Experimente 4.1–4.2 | 30–40 PT | nach Verlagsrückmeldung |
+| Z2 | Speicher am Bedienfeld, Steuerwerk, Zuse-4, Programmtabelle; Experimente 4.3–4.4 | 35–45 PT | |
 | Z3 | Übersetzungen (FR, LU), Lehrerhandreichung, Hochformat, Erprobung, Paketierung | 20–25 PT | Zuse 1 Version 1.0 |
 
 Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
@@ -461,7 +454,7 @@ Summe Zuse 1: ca. 115–150 PT. Zuse 2 und 3 werden nach Zuse 1 geschätzt.
 
 Version 0.3 behält die tragfähige Technik von v0.2 – Logiksimulation, Prüfung, Blick hinein, Abstraktionsleiter – und gibt ihr einen Einstieg, den Kinder nachvollziehen können: erst eine Frage aus dem Alltag, dann Ausprobieren, dann der Name, dann das Werkzeug. Das Bedienfeld der ersten Bausatz-Rechner verbindet die drei Bände zu einer Geschichte, die mit einem Schalter und einer LED beginnt und mit einem selbst gebauten, über Schalter programmierten Rechner endet. Die Zahlensysteme sind von Anfang an sichtbar, die Gestaltung ist auf einer Linie mit Volta 1.
 
-**Nächste Schritte:** (1) Richtung v0.3 bestätigen und ADR-0010 ergänzen. (2) und (3): Angleichung an den Design Standard und Stufen 7–11 mit dem 4-Bit-Bedienfeld sind umgesetzt (Oktober 2026). (4) Erprobung mit drei bis fünf Kindern auf dem Tablet. (5) Rückmeldung der Verlage einarbeiten (Altersstufe, Schulbuchbezug, Reihenfolge der Bände).
+**Nächste Schritte:** (1) Richtung v0.3 bestätigen und ADR-0010 ergänzen. (2) und (3): Angleichung an den Design Standard, Gliederung in Lernstufen 0–3 und das 4-Bit-Bedienfeld sind umgesetzt (Oktober 2026). (4) Erprobung mit drei bis fünf Kindern auf dem Tablet. (5) Rückmeldung der Verlage einarbeiten (Altersstufe, Schulbuchbezug, Reihenfolge der Bände).
 
 ## Anhang A: Begriffe
 

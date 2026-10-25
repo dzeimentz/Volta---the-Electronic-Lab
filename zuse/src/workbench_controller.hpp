@@ -54,9 +54,18 @@ struct Stage {
     std::vector<std::pair<size_t, QString>> samples;
 };
 
+// Lernstufe wie bei Volta: fasst Experimente zusammen (einfach beginnen, pro Stufe anspruchsvoller)
+struct LearningLevel {
+    int number = 0;
+    QString title;
+    QString question;     // Leitfrage der Stufe
+    QStringList kuerzel;  // Experimente der Stufe in Reihenfolge; leer = geplant
+};
+
 class WorkbenchController : public QObject {
     Q_OBJECT
     Q_PROPERTY(QVariantList stages READ stages NOTIFY stagesChanged)
+    Q_PROPERTY(QVariantList levels READ levels NOTIFY stagesChanged) // Lernstufen mit ihren Experimenten
     Q_PROPERTY(int stageIndex READ stageIndex NOTIFY stageChanged)
     Q_PROPERTY(QString stageTitle READ stageTitle NOTIFY stageChanged)
     Q_PROPERTY(QString stageQuestion READ stageQuestion NOTIFY stageChanged)
@@ -123,6 +132,7 @@ public:
     static constexpr size_t kCompactPorts = 4; // ab so vielen Schaltern bzw. LEDs je Seite die flache Form (56 dp)
 
     QVariantList stages() const;
+    QVariantList levels() const;
     int stageIndex() const { return m_stage; }
     QString stageTitle() const;
     QString stageQuestion() const;
@@ -233,8 +243,10 @@ private:
     static qreal portY(size_t index, size_t count);  // Hoehe eines Schalters bzw. einer LED
     bool pinPos(const volta::logic::ChipDef& def, const std::string& endpoint, qreal& x, qreal& y) const;
     QString levelString(const std::string& endpoint) const;
+    int levelOf(const QString& kuerzel) const; // Lernstufe eines Experiments, -1 = keine
 
     std::vector<Stage> m_stages;
+    std::vector<LearningLevel> m_levels;
     int m_stage = 0;
     QString m_dataDir;
     volta::logic::Library m_library; // erstellte Chips

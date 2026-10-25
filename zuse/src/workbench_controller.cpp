@@ -122,6 +122,15 @@ bool WorkbenchController::loadStages(const QString& file, const QString& languag
         chipFromJson(sol, s.solution);
         m_stages.push_back(s);
     }
+    for (const QJsonValue& v : root.value("lernstufen").toArray()) {
+        const QJsonObject o = v.toObject();
+        LearningLevel l;
+        l.number = o.value("nr").toInt();
+        l.title = localized(o.value("titel"), language);
+        l.question = localized(o.value("frage"), language);
+        for (const QJsonValue& k : o.value("experimente").toArray()) l.kuerzel.append(k.toString());
+        m_levels.push_back(l);
+    }
     return !m_stages.empty();
 }
 
@@ -176,10 +185,39 @@ QVariantList WorkbenchController::stages() const {
                                 {"symbol", s.symbol},
                                 {"title", s.title},
                                 {"question", s.question},
+                                {"level", levelOf(s.kuerzel)},
                                 {"unlocked", unlocked(int(i))},
                                 {"done", m_done.contains(s.kuerzel)}});
     }
     return list;
+}
+
+// Lernstufen mit ihren Experimenten (Eintraege wie in stages()); eine Stufe ist geschafft, wenn alle Experimente
+// geschafft sind, und offen, sobald ihr erstes Experiment offen ist
+QVariantList WorkbenchController::levels() const {
+    const QVariantList all = stages();
+    QVariantList list;
+    for (const LearningLevel& l : m_levels) {
+        QVariantList experiments;
+        for (const QVariant& s : all)
+            if (l.kuerzel.contains(s.toMap().value("kuerzel").toString())) experiments.append(s);
+        bool done = !experiments.isEmpty();
+        for (const QVariant& e : experiments) done = done && e.toMap().value("done").toBool();
+        list.append(QVariantMap{{"number", l.number},
+                                {"title", l.title},
+                                {"question", l.question},
+                                {"experiments", experiments},
+                                {"planned", experiments.isEmpty()},
+                                {"unlocked", !experiments.isEmpty() && experiments.first().toMap().value("unlocked").toBool()},
+                                {"done", done}});
+    }
+    return list;
+}
+
+int WorkbenchController::levelOf(const QString& kuerzel) const {
+    for (const LearningLevel& l : m_levels)
+        if (l.kuerzel.contains(kuerzel)) return l.number;
+    return -1;
 }
 
 QString WorkbenchController::stageTitle() const { return m_stages.empty() ? QString() : m_stages[size_t(m_stage)].title; }

@@ -103,6 +103,22 @@ stufen = [
      "kisten": [{"tabelle": ["0", "0", "0", "1"]}, {"tabelle": ["0", "1", "1", "1"]},
                 {"tabelle": ["0", "0", "1", "1"]}], "richtig": 1,
      "wahrheitstabelle": ["0", "1", "1", "1"]},
+    {"kuerzel": "NAND", "art": "entdecken", "werkzeug": "NAND", "symbol": "&", "invertiert": True,
+     "titel": L("Die Fensterwarnung", "The window warning"),
+     "geschichte": L("Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme "
+                     "verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
+                     "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a "
+                     "warning lamp should glow as long as not both windows are closed."),
+     "frage": L("Welche Kiste warnt richtig?", "Which box warns correctly?"),
+     "hilfe": L("Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
+                "Try all four settings. When may the warning lamp be off?"),
+     "merksatz": L("NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
+                   "NAND means NOT-AND: only when all inputs are 1 is the output 0."),
+     "eingaenge": [inp("A", "Fenster 1 zu", "Window 1 closed"), inp("B", "Fenster 2 zu", "Window 2 closed")],
+     "ausgaenge": [out("Y", "Warnlampe", "Warning lamp")],
+     "kisten": [{"tabelle": ["0", "0", "0", "1"]}, {"tabelle": ["1", "1", "1", "0"]},
+                {"tabelle": ["1", "0", "0", "0"]}], "richtig": 1,
+     "wahrheitstabelle": ["1", "1", "1", "0"]},
     {"kuerzel": "ALARM", "art": "bauen", "symbol": "ALARM", "name": L("Alarmanlage", "Alarm system"),
      "titel": L("Die Alarmanlage", "The alarm system"),
      "geschichte": L("Jetzt bist du der Erfinder! Die Sirene soll heulen, wenn die Alarmanlage eingeschaltet ist und "
@@ -137,21 +153,23 @@ stufen = [
      "loesung": sol([("o1", "OR", 230, 90), ("u1", "AND", 230, 370), ("n1", "NOT", 390, 370), ("u2", "AND", 560, 230)],
                     [("A", "o1.a"), ("B", "o1.b"), ("A", "u1.a"), ("B", "u1.b"), ("u1.y", "n1.a"), ("o1.y", "u2.a"),
                      ("n1.y", "u2.b"), ("u2.y", "Y")])},
-    {"kuerzel": "HA", "art": "bauen", "symbol": "HA", "name": L("Halbaddierer", "Half adder"),
-     "titel": L("1 + 1 = 10", "1 + 1 = 10"),
-     "geschichte": L("Rechner zählen nur mit 0 und 1. Kommen zwei Einsen zusammen, wird es eng: 1 + 1 ergibt »10« – "
-                     "eine 0 und ein Übertrag in die nächste Stelle, wie beim Zehnerübergang.",
-                     "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 "
-                     "and a carry to the next place, just like carrying a ten."),
-     "frage": L("Baue eine Schaltung, die zwei Bits addiert.", "Build a circuit that adds two bits."),
-     "hilfe": L("Die Summe ist 1, wenn die Bits verschieden sind. Der Übertrag ist 1, wenn beide 1 sind.",
-                "The sum is 1 when the bits differ. The carry is 1 when both are 1."),
-     "merksatz": L("Summe und Übertrag – so rechnet ein Computer.", "Sum and carry – that's how a computer adds."),
-     "eingaenge": [inp("A", "Bit A", "Bit A"), inp("B", "Bit B", "Bit B")],
-     "ausgaenge": [out("S", "Summe", "Sum"), out("C", "Übertrag", "Carry")],
-     "bausteine": ["AND", "OR", "NOT", "XODER"], "wahrheitstabelle": ["00", "10", "10", "01"],
-     "loesung": sol([("x1", "XODER", 400, 100), ("u1", "AND", 400, 380)],
-                    [("A", "x1.A"), ("B", "x1.B"), ("A", "u1.a"), ("B", "u1.b"), ("x1.Y", "S"), ("u1.y", "C")])},
+    {"kuerzel": "NANDUND", "art": "bauen", "chip": False, "symbol": "",
+     "titel": L("Alles aus einem Baustein", "Everything from one part"),
+     "geschichte": L("Chipfabriken mögen den NAND-Baustein besonders: Aus ihm allein lässt sich jede andere Schaltung "
+                     "bauen. Probier es aus – baue ein UND nur aus NAND-Bausteinen.",
+                     "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – "
+                     "build an AND from NAND parts only."),
+     "frage": L("Geht alles mit einem einzigen Baustein?", "Can everything be done with a single part?"),
+     "hilfe": L("Verbindest du beide Eingänge eines NAND, dreht er um wie NICHT. Und NICHT hinter NICHT-UND ergibt …?",
+                "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?"),
+     "merksatz": L("Ein NAND mit verbundenen Eingängen ist ein NICHT. Zwei NAND ergeben ein UND – aus NAND lässt sich "
+                   "alles bauen.",
+                   "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND."),
+     "eingaenge": [inp("A", "Schalter A", "Switch A"), inp("B", "Schalter B", "Switch B")],
+     "ausgaenge": [out("Y", "Lampe", "Lamp")],
+     "bausteine": ["NAND"], "wahrheitstabelle": ["0", "0", "0", "1"],
+     "loesung": sol([("n1", "NAND", 280, 196), ("n2", "NAND", 476, 196)],
+                    [("A", "n1.a"), ("B", "n1.b"), ("n1.y", "n2.a"), ("n1.y", "n2.b"), ("n2.y", "Y")])},
     {"kuerzel": "ZAEHLEN", "art": "zahlen", "chip": False, "symbol": "",
      "titel": L("Vier Lampen", "Four lamps"),
      "geschichte": L("Mit einer Lampe kann man nur 0 und 1 zeigen. Mit vier Lampen nebeneinander geht viel mehr: Jede "
@@ -175,39 +193,21 @@ stufen = [
      "aufgaben": [2, 5, 8, 11, 15],
      "bausteine": [], "wahrheitstabelle": table(4, lambda b: "".join(map(str, b))),
      "loesung": sol([], [("D3", "L3"), ("D2", "L2"), ("D1", "L1"), ("D0", "L0")])},
-    {"kuerzel": "NAND", "art": "entdecken", "werkzeug": "NAND", "symbol": "&", "invertiert": True,
-     "titel": L("Die Fensterwarnung", "The window warning"),
-     "geschichte": L("Im Klassenraum haben die beiden Fenster Sensoren: 1 heißt »Fenster ist zu«. Damit keine Wärme "
-                     "verloren geht, soll eine Warnlampe leuchten, solange nicht beide Fenster geschlossen sind.",
-                     "The two classroom windows have sensors: 1 means »window is closed«. So that no heat is lost, a "
-                     "warning lamp should glow as long as not both windows are closed."),
-     "frage": L("Welche Kiste warnt richtig?", "Which box warns correctly?"),
-     "hilfe": L("Probier alle vier Stellungen. Wann darf die Warnlampe aus sein?",
-                "Try all four settings. When may the warning lamp be off?"),
-     "merksatz": L("NAND heißt NICHT-UND: Nur wenn alle Eingänge 1 sind, ist der Ausgang 0.",
-                   "NAND means NOT-AND: only when all inputs are 1 is the output 0."),
-     "eingaenge": [inp("A", "Fenster 1 zu", "Window 1 closed"), inp("B", "Fenster 2 zu", "Window 2 closed")],
-     "ausgaenge": [out("Y", "Warnlampe", "Warning lamp")],
-     "kisten": [{"tabelle": ["0", "0", "0", "1"]}, {"tabelle": ["1", "1", "1", "0"]},
-                {"tabelle": ["1", "0", "0", "0"]}], "richtig": 1,
-     "wahrheitstabelle": ["1", "1", "1", "0"]},
-    {"kuerzel": "NANDUND", "art": "bauen", "chip": False, "symbol": "",
-     "titel": L("Alles aus einem Baustein", "Everything from one part"),
-     "geschichte": L("Chipfabriken mögen den NAND-Baustein besonders: Aus ihm allein lässt sich jede andere Schaltung "
-                     "bauen. Probier es aus – baue ein UND nur aus NAND-Bausteinen.",
-                     "Chip factories love the NAND part: every other circuit can be built from it alone. Try it – "
-                     "build an AND from NAND parts only."),
-     "frage": L("Geht alles mit einem einzigen Baustein?", "Can everything be done with a single part?"),
-     "hilfe": L("Verbindest du beide Eingänge eines NAND, dreht er um wie NICHT. Und NICHT hinter NICHT-UND ergibt …?",
-                "If you connect both inputs of a NAND, it flips like NOT. And NOT after NOT-AND gives …?"),
-     "merksatz": L("Ein NAND mit verbundenen Eingängen ist ein NICHT. Zwei NAND ergeben ein UND – aus NAND lässt sich "
-                   "alles bauen.",
-                   "A NAND with joined inputs is a NOT. Two NANDs make an AND – everything can be built from NAND."),
-     "eingaenge": [inp("A", "Schalter A", "Switch A"), inp("B", "Schalter B", "Switch B")],
-     "ausgaenge": [out("Y", "Lampe", "Lamp")],
-     "bausteine": ["NAND"], "wahrheitstabelle": ["0", "0", "0", "1"],
-     "loesung": sol([("n1", "NAND", 280, 196), ("n2", "NAND", 476, 196)],
-                    [("A", "n1.a"), ("B", "n1.b"), ("n1.y", "n2.a"), ("n1.y", "n2.b"), ("n2.y", "Y")])},
+    {"kuerzel": "HA", "art": "bauen", "symbol": "HA", "name": L("Halbaddierer", "Half adder"),
+     "titel": L("1 + 1 = 10", "1 + 1 = 10"),
+     "geschichte": L("Rechner zählen nur mit 0 und 1. Kommen zwei Einsen zusammen, wird es eng: 1 + 1 ergibt »10« – "
+                     "eine 0 und ein Übertrag in die nächste Stelle, wie beim Zehnerübergang.",
+                     "Computers count with just 0 and 1. When two ones meet, there's no room: 1 + 1 gives »10« – a 0 "
+                     "and a carry to the next place, just like carrying a ten."),
+     "frage": L("Baue eine Schaltung, die zwei Bits addiert.", "Build a circuit that adds two bits."),
+     "hilfe": L("Die Summe ist 1, wenn die Bits verschieden sind. Der Übertrag ist 1, wenn beide 1 sind.",
+                "The sum is 1 when the bits differ. The carry is 1 when both are 1."),
+     "merksatz": L("Summe und Übertrag – so rechnet ein Computer.", "Sum and carry – that's how a computer adds."),
+     "eingaenge": [inp("A", "Bit A", "Bit A"), inp("B", "Bit B", "Bit B")],
+     "ausgaenge": [out("S", "Summe", "Sum"), out("C", "Übertrag", "Carry")],
+     "bausteine": ["AND", "OR", "NOT", "XODER"], "wahrheitstabelle": ["00", "10", "10", "01"],
+     "loesung": sol([("x1", "XODER", 400, 100), ("u1", "AND", 400, 380)],
+                    [("A", "x1.A"), ("B", "x1.B"), ("A", "u1.a"), ("B", "u1.b"), ("x1.Y", "S"), ("u1.y", "C")])},
     {"kuerzel": "VA", "art": "bauen", "symbol": "VA", "name": L("Volladdierer", "Full adder"),
      "titel": L("Drei Bits auf einmal", "Three bits at once"),
      "geschichte": L("Beim schriftlichen Addieren kommt von rechts manchmal ein Übertrag dazu. Dann müssen drei Bits "
@@ -260,11 +260,33 @@ stufen = [
                      ("A2", "v2.A"), ("B2", "v2.B"), ("v1.C", "v2.Ci"), ("v2.S", "S2"),
                      ("A3", "v3.A"), ("B3", "v3.B"), ("v2.C", "v3.Ci"), ("v3.S", "S3"), ("v3.C", "C")])},
 ]
+
+# Lernstufen wie bei Volta: einfach beginnen, pro Stufe anspruchsvoller. Ausgangspunkt ist ein Kind, das noch nie etwas
+# von Digitaltechnik gehoert hat. Die Experimente bleiben der Reihe nach freigeschaltet (Werkzeuge bauen aufeinander auf).
+lernstufen = [
+    {"nr": 0, "titel": L("Auftakt", "Warm-up"),
+     "frage": L("Was versteht ein Rechner überhaupt?", "What does a computer understand at all?"),
+     "experimente": ["BIT"]},
+    {"nr": 1, "titel": L("Logik entdecken", "Discovering logic"),
+     "frage": L("Wie entscheidet ein Rechner?", "How does a computer decide?"),
+     "experimente": ["NICHT", "UND", "ODER", "NAND"]},
+    {"nr": 2, "titel": L("Erfinden mit Bausteinen", "Inventing with parts"),
+     "frage": L("Was kann ich aus meinen Bausteinen bauen?", "What can I build from my parts?"),
+     "experimente": ["ALARM", "XODER", "NANDUND"]},
+    {"nr": 3, "titel": L("Zahlen und Rechnen", "Numbers and adding"),
+     "frage": L("Wie rechnet ein Rechner mit 0 und 1?", "How does a computer calculate with 0 and 1?"),
+     "experimente": ["ZAEHLEN", "HA", "VA", "ADD4"]},
+    {"nr": 4, "titel": L("Speichern und Programmieren", "Memory and programs"),
+     "frage": L("Wie merkt sich ein Rechner etwas – und wie läuft ein Programm?",
+                "How does a computer remember – and how does a program run?"),
+     "experimente": []},  # geplant (Speicher, Takt, Programm)
+]
+assert [k for l in lernstufen for k in l["experimente"]] == [st["kuerzel"] for st in stufen]
 d = {"schema_version": 2,
      "hinweis": "Zuse 1 Prototyp: jede Stufe beginnt mit einer Geschichte; »entdecken« mit Raetselkisten, »bauen« auf "
                 "der Werkbank. Wahrheitstabelle: Ausgaenge je Zeile, Eingaenge binaer aufsteigend (erster Eingang "
                 "hoechstes Bit).",
-     "stufen": stufen}
+     "lernstufen": lernstufen, "stufen": stufen}
 with open(Path(__file__).resolve().parent.parent / "zuse" / "content" / "stufen.json", "w", encoding="utf-8",
           newline="\n") as f:
     json.dump(d, f, ensure_ascii=False, indent=1)
