@@ -96,6 +96,14 @@ Popup {
             Line { text: qsTr("Web: %1").arg("www.dc-software-engineering.com") }
             Heading { text: qsTr("Zetti") }
             Line { text: qsTr("Zetti, der kleine Roboter, begleitet dich durch Zuse 1. Der Name erinnert an Konrad Zuse, der 1941 den ersten frei programmierbaren Rechner der Welt baute.") }
+            Heading { text: qsTr("Fotos (Historische Entwicklung)") }
+            Line { text: qsTr("Alle Fotos von Wikimedia Commons, verkleinert:") }
+            Line { text: qsTr("Konrad Zuse, 1992: Wolfgang Hunscher, Dortmund (CC BY-SA 3.0)") }
+            Line { text: qsTr("Nachbau der Z3: Venusianer, Wikipedia (CC BY-SA 3.0)") }
+            Line { text: qsTr("Relais: Sir Boris (CC BY-SA 3.0)") }
+            Line { text: qsTr("Elektronenröhre: Alex P. Kok (CC BY-SA 4.0)") }
+            Line { text: qsTr("Nachbau des ersten Transistors: gemeinfrei") }
+            Line { text: qsTr("Chip 7400 unter dem Mikroskop: Robert Baruch (CC BY-SA 4.0)") }
             Heading { text: qsTr("Datenschutz") }
             Line { text: qsTr("Zuse 1 erhebt keine Daten, zeigt keine Werbung und braucht kein Internet. Deine Erfindungen bleiben auf diesem Gerät.") }
             Line { text: "© 2026 DC Software Engineering"; color: ZTheme.muted; topPadding: 8 }

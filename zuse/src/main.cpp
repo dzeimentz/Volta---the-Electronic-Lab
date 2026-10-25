@@ -167,10 +167,14 @@ int main(int argc, char* argv[]) {
             QMetaObject::invokeMethod(d, "showTask", Q_ARG(QVariant, workbench.makeTaskLink(labels, {}, false, {})),
                                       Q_ARG(QVariant, workbench.makeTaskCode(labels)));
     }
-    // ZUSE_DEMO_HISTORY=<n>: Station n der historischen Entwicklung (mit ZUSE_PAGE=history)
+    // ZUSE_DEMO_HISTORY=<n>: Station n der historischen Entwicklung (mit ZUSE_PAGE=history); ZUSE_DEMO_PHOTO=<i>
+    // vergroessert dort Foto i
     if (window && qEnvironmentVariableIsSet("ZUSE_DEMO_HISTORY"))
-        if (QObject* h = window->findChild<QObject*>("historyPage"))
+        if (QObject* h = window->findChild<QObject*>("historyPage")) {
             h->setProperty("current", qEnvironmentVariableIntValue("ZUSE_DEMO_HISTORY"));
+            if (qEnvironmentVariableIsSet("ZUSE_DEMO_PHOTO"))
+                QMetaObject::invokeMethod(h, "showPhoto", Q_ARG(QVariant, qEnvironmentVariableIntValue("ZUSE_DEMO_PHOTO")));
+        }
     // ZUSE_DEMO_PARENT=gate|area: Elternschranke bzw. Elternbereich oeffnen
     if (const QString parent = qEnvironmentVariable("ZUSE_DEMO_PARENT"); window && !parent.isEmpty()) {
         if (parent == QStringLiteral("gate")) {

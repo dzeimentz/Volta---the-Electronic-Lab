@@ -44,6 +44,20 @@ Berechtigung `INTERNET`, kein Netzwerkcode).
 **Nicht ausgeliefert** (nur Entwicklung): Catch2 (BSL-1.0, Tests), Python-Werkzeuge (reportlab, Pillow, PyMuPDF
 nur für Vorschauen), Android-SDK/NDK, Compiler.
 
+**Fotos in Zuse 1 (»Historische Entwicklung«, `zuse/resources/history/`):** sechs Fotos von Wikimedia Commons,
+verkleinert (ohne Metadaten), sonst unverändert. Urheber und Lizenz stehen unter jedem Foto, in der Großansicht und
+im Info-Fenster. CC BY-SA verlangt Namensnennung und Lizenzangabe; die Weitergabe-Pflicht gilt nur für das Bild
+selbst, nicht für die App.
+
+| Datei | Original auf Commons | Urheber | Lizenz |
+|---|---|---|---|
+| zuse.jpg | File:Konrad Zuse (1992).jpg | Wolfgang Hunscher, Dortmund | CC BY-SA 3.0 |
+| z3.jpg | File:Z3 Deutsches Museum.JPG | Venusianer (deutschsprachige Wikipedia) | CC BY-SA 3.0 |
+| relais.jpg | File:Flachrelais.JPG | Sir Boris | CC BY-SA 3.0 |
+| roehre.jpg | File:Vacuum tube Teonex EC81 triode IMG 7756.jpg | Alex P. Kok | CC BY-SA 4.0 |
+| transistor.jpg | File:Replica-of-first-transistor.jpg | (Nachbau von Lucent Technologies) | gemeinfrei |
+| die7400.jpg | File:7400 NS 443 die 120nmpp.jpg | Robert Baruch | CC BY-SA 4.0 |
+
 **Schriften:** Die App nutzt die Schriften des Systems. Die PDF-Unterlagen (Anleitung, Flyer, Aufbaukarte)
 betten Teilmengen von Segoe UI ein; für eine Auslieferung durch einen Partner wird das gegen dessen Hausschrift
 oder eine freie Schrift (z. B. Noto Sans) getauscht.

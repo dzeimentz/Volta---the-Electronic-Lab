@@ -13,6 +13,12 @@ Rectangle {
 
     property int current: 0
     function go(i) { current = Math.max(0, Math.min(stations.length - 1, i)) }
+    function showPhoto(i) { // Foto i der aktuellen Station vergroessert zeigen
+        const list = station.photos || []
+        if (i < 0 || i >= list.length) return
+        photoView.photo = list[i]
+        photoView.open()
+    }
 
     readonly property var stations: [
         { key: "aristoteles", year: qsTr("um 350 v. Chr."), title: qsTr("Wahr oder falsch"), pose: "erklaerend",
@@ -32,19 +38,33 @@ Rectangle {
           where: qsTr("In Zuse 1: Stufe 0 und Stufe 1.") },
         { key: "zuse", year: "1938 / 1941", title: qsTr("Konrad Zuse baut Rechner"), pose: "froehlich",
           text: qsTr("In Berlin baute Konrad Zuse im Wohnzimmer seiner Eltern die Z1. Sie rechnete schon mit 0 und 1, aber mechanisch: mit Tausenden dünner Blechteile, die sich verschoben. 1941 lief seine Z3 mit rund 2000 Relais – der erste funktionierende frei programmierbare Rechner der Welt. Ein Relais ist ein Schalter, den ein Elektromagnet umlegt."),
+          photos: [
+              { src: "zuse.jpg", caption: qsTr("Konrad Zuse, 1992"), credit: qsTr("Foto: Wolfgang Hunscher, Dortmund · CC BY-SA 3.0") },
+              { src: "z3.jpg", caption: qsTr("Nachbau der Z3 im Deutschen Museum in München"), credit: qsTr("Foto: Venusianer (Wikipedia) · CC BY-SA 3.0") },
+              { src: "relais.jpg", caption: qsTr("Ein Relais aus der Telefontechnik – solche Relais steckten auch in Zuses Rechnern"), credit: qsTr("Foto: Sir Boris · CC BY-SA 3.0") }
+          ],
           where: qsTr("Nach Konrad Zuse heißt diese App – und ich, Zetti, auch ein bisschen.") },
         { key: "eniac", year: "1946", title: qsTr("Röhren statt Relais"), pose: "ueberrascht",
           text: qsTr("In den USA startete der ENIAC mit fast 18 000 Elektronenröhren. Röhren schalten ohne bewegliche Teile und sind dadurch etwa tausendmal schneller als Relais. Aber sie werden heiß, brauchen viel Strom und brennen immer wieder durch."),
+          photos: [
+              { src: "roehre.jpg", caption: qsTr("Eine Elektronenröhre (Triode). Der ENIAC hatte fast 18 000 davon."), credit: qsTr("Foto: Alex P. Kok · CC BY-SA 4.0") }
+          ],
           where: "" },
         { key: "transistor", year: "1947", title: qsTr("Der Transistor"), pose: "begeistert",
           text: qsTr("John Bardeen, Walter Brattain und William Shockley erfanden in den Bell Labs den Transistor: einen Schalter ohne Mechanik und ohne Glühen – klein, kühl und langlebig. Seitdem werden Schalter immer kleiner und schneller. Schau, wie schnell sie umschalten können!"),
+          photos: [
+              { src: "transistor.jpg", caption: qsTr("Nachbau des ersten Transistors von 1947"), credit: qsTr("Foto: gemeinfrei (Wikimedia Commons)") }
+          ],
           where: "" },
-        { key: "chip", year: qsTr("ab 1958"), title: qsTr("Vier NAND in einem Chip"), pose: "zeigend",
-          text: qsTr("1958 brachte Jack Kilby mehrere Bauteile auf ein einziges Stück Halbleiter: den ersten Chip. Ab Mitte der 1960er Jahre wurde die 74er-Reihe von Texas Instruments zum Standard. Der berühmte 7400 enthält vier NAND-Gatter. Weil man aus NAND alles bauen kann, steckte er fast überall drin."),
-          where: qsTr("In Zuse 1: Die Werkzeugkiste ist wie eine Kiste voller Chips.") },
         { key: "xoder", year: qsTr("1950er"), title: qsTr("Rechnen mit XODER"), pose: "bauen",
           text: qsTr("Rechenwerke brauchen ein besonderes Gatter: XODER, »entweder – oder«. Rechnet man 1 + 1 im Zweiersystem, kommt 10 heraus. XODER liefert die Stelle, UND den Übertrag. Das ist der Halbaddierer. XODER hilft auch, Fehler in Daten zu erkennen."),
           where: qsTr("In Zuse 1: Treppenlicht in Stufe 2, Halbaddierer in Stufe 3.") },
+        { key: "chip", year: qsTr("ab 1958"), title: qsTr("Vier NAND in einem Chip"), pose: "zeigend",
+          text: qsTr("1958 brachte Jack Kilby mehrere Bauteile auf ein einziges Stück Halbleiter: den ersten Chip. Ab Mitte der 1960er Jahre wurde die 74er-Reihe von Texas Instruments zum Standard. Der berühmte 7400 enthält vier NAND-Gatter. Weil man aus NAND alles bauen kann, steckte er fast überall drin."),
+          photos: [
+              { src: "die7400.jpg", caption: qsTr("Blick in einen echten 7400: der Siliziumchip unter dem Mikroskop. Am Rand sitzen die Anschlussflächen für die Beinchen."), credit: qsTr("Foto: Robert Baruch · CC BY-SA 4.0") }
+          ],
+          where: qsTr("In Zuse 1: Die Werkzeugkiste ist wie eine Kiste voller Chips.") },
         { key: "cmos", year: "1968", title: qsTr("Strom sparen mit CMOS"), pose: "freundlich",
           text: qsTr("Mit den CMOS-Chips der 4000er-Reihe brauchen Gatter fast nur beim Umschalten Strom, im Ruhezustand beinahe keinen. Erst dadurch wurden Taschenrechner, Digitaluhren und später Handys möglich, die lange mit einer Batterie auskommen."),
           where: "" },
@@ -59,6 +79,21 @@ Rectangle {
           where: "" }
     ]
     readonly property var station: stations[current]
+
+    // Epochen des Zeitstrahls: Farbe und Name (nie nur Farbe); from = erste Station der Epoche
+    readonly property var eras: [
+        { from: 0, name: qsTr("Antike"), color: "#9A6B2F" },
+        { from: 1, name: qsTr("Mathematik"), color: "#6B4FA8" },
+        { from: 4, name: qsTr("Schalter und Relais"), color: "#B4521E" },
+        { from: 6, name: qsTr("Elektronenröhren"), color: "#B0303A" },
+        { from: 7, name: qsTr("Transistoren"), color: "#2A7D4F" },
+        { from: 9, name: qsTr("Chips"), color: "#1D63A8" }
+    ]
+    function eraOf(i) {
+        let e = eras[0]
+        for (const x of eras) if (i >= x.from) e = x
+        return e
+    }
 
     Keys.onLeftPressed: go(current - 1)
     Keys.onRightPressed: go(current + 1)
@@ -787,53 +822,120 @@ Rectangle {
                 }
             }
 
-            // Zeitleiste: Jahr und Titel, die aktuelle Station mit dickem Rahmen (nicht nur Farbe)
+            // Zeitleiste: Karten mit Jahr und Titel, darunter der Zeitstrahl. Jede Karte ist mit ihrem Punkt auf dem Strahl
+            // verbunden; die Abschnitte tragen Farbe und Namen der Epoche. Die aktuelle Station hat einen dicken Rahmen und
+            // einen grossen Punkt (nicht nur Farbe). Zwischen Antike und Leibniz ist der Strahl unterbrochen (2000 Jahre).
             ListView {
                 id: timeline
                 objectName: "historyTimeline"
                 Layout.fillWidth: true
-                Layout.preferredHeight: 74
+                Layout.preferredHeight: 128
                 orientation: ListView.Horizontal
-                spacing: 6
+                spacing: 0
                 clip: true
                 model: root.stations
                 currentIndex: root.current
                 boundsBehavior: Flickable.StopAtBounds
                 onCurrentIndexChanged: positionViewAtIndex(currentIndex, ListView.Contain)
                 Component.onCompleted: positionViewAtIndex(currentIndex, ListView.Contain)
-                delegate: Rectangle {
+                delegate: Item {
+                    id: stop
                     required property var modelData
                     required property int index
                     readonly property bool isCurrent: index === root.current
-                    width: 140; height: 70
-                    radius: 10
-                    color: isCurrent ? ZTheme.navy : stopTap.pressed ? "#D9F3F8" : ZTheme.surface
-                    border.width: isCurrent ? 3 : 1
-                    border.color: isCurrent ? ZTheme.pad : ZTheme.line
-                    Column {
-                        anchors.centerIn: parent
-                        width: parent.width - 12
-                        spacing: 2
-                        Text {
-                            width: parent.width
-                            horizontalAlignment: Text.AlignHCenter
-                            text: parent.parent.modelData.year !== "" ? parent.parent.modelData.year : "★"
-                            color: parent.parent.isCurrent ? "white" : ZTheme.navy
-                            font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
-                            elide: Text.ElideRight
-                        }
-                        Text {
-                            width: parent.width
-                            horizontalAlignment: Text.AlignHCenter
-                            text: parent.parent.modelData.title
-                            color: parent.parent.isCurrent ? "#E8C27A" : ZTheme.muted
-                            font.pixelSize: Math.round(12 * ZTheme.fontScale)
-                            elide: Text.ElideRight
+                    readonly property bool onAxis: modelData.year !== ""
+                    readonly property var era: root.eraOf(index)
+                    readonly property bool lastOnAxis: onAxis && (index + 1 >= root.stations.length
+                                                                  || root.stations[index + 1].year === "")
+                    readonly property real axisY: 96
+                    width: 146; height: 128
+
+                    Rectangle { // Karte
+                        id: card
+                        x: 3
+                        width: 140; height: 70
+                        radius: 10
+                        color: stop.isCurrent ? ZTheme.navy : stopTap.pressed ? "#D9F3F8" : ZTheme.surface
+                        border.width: stop.isCurrent ? 3 : 1
+                        border.color: stop.isCurrent ? ZTheme.pad : ZTheme.line
+                        Column {
+                            anchors.centerIn: parent
+                            width: parent.width - 12
+                            spacing: 2
+                            Text {
+                                width: parent.width
+                                horizontalAlignment: Text.AlignHCenter
+                                text: stop.onAxis ? stop.modelData.year : "★"
+                                color: stop.isCurrent ? "white" : ZTheme.navy
+                                font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
+                                elide: Text.ElideRight
+                            }
+                            Text {
+                                width: parent.width
+                                horizontalAlignment: Text.AlignHCenter
+                                text: stop.modelData.title
+                                color: stop.isCurrent ? "#E8C27A" : ZTheme.muted
+                                font.pixelSize: Math.round(12 * ZTheme.fontScale)
+                                elide: Text.ElideRight
+                            }
                         }
                     }
-                    TapHandler { id: stopTap; onTapped: root.go(parent.index) }
+                    Rectangle { // Verbindung Karte -> Punkt
+                        visible: stop.onAxis
+                        x: stop.width / 2 - width / 2
+                        y: card.height
+                        width: stop.isCurrent ? 4 : 2
+                        height: stop.axisY - card.height
+                        color: stop.isCurrent ? ZTheme.navy : "#B9AE96"
+                    }
+                    Rectangle { // Abschnitt des Zeitstrahls in der Farbe der Epoche
+                        visible: stop.onAxis
+                        x: stop.index === 0 ? stop.width / 2 : 0
+                        y: stop.axisY - height / 2
+                        width: (stop.lastOnAxis ? stop.width - 14 : stop.width) - x
+                        height: 6
+                        color: stop.era.color
+                    }
+                    Canvas { // Pfeilspitze am Ende (heute)
+                        visible: stop.lastOnAxis
+                        x: stop.width - 16; y: stop.axisY - 9
+                        width: 16; height: 18
+                        onPaint: {
+                            const g = getContext("2d")
+                            g.reset()
+                            g.fillStyle = stop.era.color
+                            g.beginPath(); g.moveTo(0, 0); g.lineTo(16, 9); g.lineTo(0, 18); g.closePath(); g.fill()
+                        }
+                    }
+                    Item { // Unterbrechung nach der Antike: zwei schraege Striche
+                        visible: stop.index === 0
+                        x: stop.width - 18; y: stop.axisY - 12
+                        width: 16; height: 24
+                        Rectangle { x: 3; y: 6; width: 10; height: 12; color: root.color }
+                        Rectangle { x: 3; y: 2; width: 2; height: 20; rotation: 20; color: "#6B6252" }
+                        Rectangle { x: 11; y: 2; width: 2; height: 20; rotation: 20; color: "#6B6252" }
+                    }
+                    Rectangle { // Punkt der Station
+                        visible: stop.onAxis
+                        width: stop.isCurrent ? 22 : 14; height: width; radius: width / 2
+                        x: stop.width / 2 - width / 2
+                        y: stop.axisY - height / 2
+                        color: stop.isCurrent ? ZTheme.navy : "white"
+                        border.width: 3
+                        border.color: stop.isCurrent ? ZTheme.pad : stop.era.color
+                    }
+                    Text { // Name der Epoche am Anfang ihres Abschnitts
+                        visible: stop.onAxis && (stop.index === 0 || root.eraOf(stop.index - 1) !== stop.era)
+                        x: stop.index === 0 ? 8 : 6
+                        y: stop.axisY + 12
+                        text: stop.era.name
+                        color: stop.era.color
+                        font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: true
+                    }
+                    TapHandler { id: stopTap; onTapped: root.go(stop.index) }
                     Accessible.role: Accessible.Button
-                    Accessible.name: modelData.year + " " + modelData.title + (isCurrent ? ", " + qsTr("ausgewählt") : "")
+                    Accessible.name: modelData.year + " " + modelData.title + (onAxis ? ", " + era.name : "")
+                                     + (isCurrent ? ", " + qsTr("ausgewählt") : "")
                 }
             }
 
@@ -900,6 +1002,59 @@ Rectangle {
                             color: ZTheme.accentText
                             font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
                         }
+                        Flow { // echte Fotos zur Station; Antippen vergroessert
+                            objectName: "historyPhotos"
+                            visible: (root.station.photos || []).length > 0
+                            Layout.fillWidth: true
+                            Layout.topMargin: 4
+                            spacing: 12
+                            Repeater {
+                                model: root.station.photos || []
+                                delegate: Grid { // ein Foto: Text daneben, mehrere: Text darunter
+                                    id: photo
+                                    required property var modelData
+                                    readonly property bool single: (root.station.photos || []).length === 1
+                                    columns: single ? 2 : 1
+                                    spacing: single ? 12 : 4
+                                    Image {
+                                        id: thumb
+                                        height: (root.station.photos || []).length > 2 ? 120 : 170
+                                        width: sourceSize.height > 0 ? sourceSize.width * height / sourceSize.height : height
+                                        source: "qrc:/zuse/history/" + photo.modelData.src
+                                        fillMode: Image.PreserveAspectFit
+                                        mipmap: true
+                                        Rectangle { anchors.fill: parent; color: "transparent"; border.color: "#D8CDB4"; radius: 2 }
+                                        Text { // Lupe: antippen vergroessert
+                                            anchors { right: parent.right; bottom: parent.bottom; margins: 4 }
+                                            text: "🔍"
+                                            font.pixelSize: 16
+                                            Accessible.ignored: true
+                                        }
+                                        TapHandler { onTapped: { photoView.photo = photo.modelData; photoView.open() } }
+                                        Accessible.role: Accessible.Button
+                                        Accessible.name: photo.modelData.caption
+                                    }
+                                    Column {
+                                        width: photo.single ? 200 : Math.max(thumb.width, 110)
+                                        spacing: 4
+                                        Text {
+                                            width: parent.width
+                                            text: photo.modelData.caption
+                                            wrapMode: Text.WordWrap
+                                            color: ZTheme.text
+                                            font.pixelSize: Math.round((photo.single ? 14 : 12) * ZTheme.fontScale)
+                                        }
+                                        Text {
+                                            width: parent.width
+                                            text: photo.modelData.credit
+                                            wrapMode: Text.WordWrap
+                                            color: ZTheme.muted
+                                            font.pixelSize: Math.round(10 * ZTheme.fontScale)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     Loader {
                         id: visual
@@ -935,6 +1090,50 @@ Rectangle {
                     text: qsTr("Zum Lernpfad")
                     onClicked: root.backRequested()
                 }
+            }
+        }
+    }
+
+    Popup {
+        id: photoView
+        property var photo: ({})
+        objectName: "historyPhotoView"
+        anchors.centerIn: Overlay.overlay
+        width: Math.min(root.width - 48, Math.max(440, big.Layout.preferredWidth + 40))
+        modal: true
+        padding: 20
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        background: Rectangle { radius: 16; color: "#FFFDF7"; border.color: ZTheme.navy; border.width: 2 }
+        contentItem: ColumnLayout {
+            spacing: 10
+            Image {
+                id: big
+                Layout.alignment: Qt.AlignHCenter
+                readonly property real maxH: Math.max(200, root.height - 260)
+                Layout.preferredHeight: Math.min(sourceSize.height, maxH)
+                Layout.preferredWidth: sourceSize.height > 0 ? sourceSize.width * Layout.preferredHeight / sourceSize.height : 0
+                Layout.maximumWidth: root.width - 88
+                source: photoView.photo.src ? "qrc:/zuse/history/" + photoView.photo.src : ""
+                fillMode: Image.PreserveAspectFit
+                mipmap: true
+            }
+            Text {
+                Layout.fillWidth: true
+                text: photoView.photo.caption || ""
+                wrapMode: Text.WordWrap
+                color: ZTheme.text
+                font.pixelSize: Math.round(16 * ZTheme.fontScale)
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                Text {
+                    Layout.fillWidth: true
+                    text: (photoView.photo.credit || "") + " · Wikimedia Commons"
+                    wrapMode: Text.WordWrap
+                    color: ZTheme.muted
+                    font.pixelSize: Math.round(12 * ZTheme.fontScale)
+                }
+                ZButton { text: qsTr("Schließen"); onClicked: photoView.close() }
             }
         }
     }

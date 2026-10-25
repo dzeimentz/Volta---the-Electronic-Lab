@@ -862,655 +862,750 @@
 <context>
     <name>HistoryPage</name>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="18" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="24" />
         <source>um 350 v. Chr.</source>
         <translation>around 350 BC</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="18" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="24" />
         <source>Wahr oder falsch</source>
         <translation>True or false</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="19" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="25" />
         <source>Schon vor über 2000 Jahren fragte sich der griechische Denker Aristoteles: Nach welchen Regeln denken wir richtig? Er stellte fest: Eine Aussage ist entweder wahr oder falsch – etwas Drittes gibt es nicht. Genau so arbeiten Rechner bis heute.</source>
         <translation>More than 2000 years ago, the Greek thinker Aristotle asked: by which rules do we think correctly? He found that a statement is either true or false – there is no third option. Computers still work exactly like that today.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="20" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="26" />
         <source>In Zuse 1: Eine Lampe ist an oder aus – wie wahr und falsch.</source>
         <translation>In Zuse 1: a lamp is on or off – like true and false.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="21" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="27" />
         <source>Rechnen mit 0 und 1</source>
         <translation>Counting with 0 and 1</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="22" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="28" />
         <source>Gottfried Wilhelm Leibniz zeigte, dass man alle Zahlen nur mit den Ziffern 0 und 1 schreiben kann: das Zweiersystem. Damals ahnte niemand, dass Rechner einmal genau so zählen würden. Zähl selbst mit drei Lampen!</source>
         <translation>Gottfried Wilhelm Leibniz showed that every number can be written with just the digits 0 and 1: the binary system. Nobody guessed back then that computers would one day count exactly like that. Count for yourself with three lamps!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="23" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="29" />
         <source>In Zuse 1: Stufe 3 »Zahlen und Rechnen«.</source>
         <translation>In Zuse 1: level 3 “Numbers and arithmetic”.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="24" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="30" />
         <source>Logik wird Mathematik</source>
         <translation>Logic becomes mathematics</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="25" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="31" />
         <source>George Boole schrieb »wahr« als 1 und »falsch« als 0 und rechnete damit wie mit Zahlen. Aus »Es regnet UND ich habe einen Schirm« wurde eine Rechnung. Das war reine Mathematik – mit Strom hatte es noch nichts zu tun.</source>
         <translation>George Boole wrote “true” as 1 and “false” as 0 and calculated with them like numbers. “It is raining AND I have an umbrella” became a calculation. That was pure mathematics – it had nothing to do with electricity yet.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="26" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="32" />
         <source>In Zuse 1: Die Tabellen in Stufe 1 sind Boolesche Rechnungen.</source>
         <translation>In Zuse 1: the tables in level 1 are Boolean calculations.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="27" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="33" />
         <source>Ein Baustein für alles</source>
         <translation>One building block for everything</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="28" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="34" />
         <source>Charles Sanders Peirce entdeckte um 1880: Mit einer einzigen Verknüpfung lassen sich alle anderen bauen. Er veröffentlichte es kaum. 1913 zeigte Henry Sheffer dasselbe für die Verknüpfung, die wir heute NAND nennen.</source>
         <translation>Around 1880, Charles Sanders Peirce discovered that a single operation can be used to build all the others. He hardly published it. In 1913 Henry Sheffer showed the same for the operation we call NAND today.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="29" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="35" />
         <source>In Zuse 1: Experiment 2.3 »Alles aus einem Baustein«.</source>
         <translation>In Zuse 1: experiment 2.3 “Everything from one block”.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="30" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="36" />
         <source>Schalter können denken</source>
         <translation>Switches can think</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="31" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="37" />
         <source>Der Student Claude Shannon entdeckte: Boolesche Logik passt genau auf Schalter! Zwei Schalter hintereinander – die Lampe leuchtet nur, wenn A UND B geschlossen sind. Nebeneinander reicht A ODER B. Ein Öffner dreht um: NICHT. Ähnliches fanden zur selben Zeit Forscher in Japan und der Sowjetunion. Probier es aus!</source>
         <translation>The student Claude Shannon discovered that Boolean logic fits switches exactly! Two switches one after the other – the lamp only lights up when A AND B are closed. Side by side, A OR B is enough. A break contact turns it around: NOT. Researchers in Japan and the Soviet Union found something similar at the same time. Try it out!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="32" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="38" />
         <source>In Zuse 1: Stufe 0 und Stufe 1.</source>
         <translation>In Zuse 1: levels 0 and 1.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="33" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="39" />
         <source>Konrad Zuse baut Rechner</source>
         <translation>Konrad Zuse builds computers</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="34" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="40" />
         <source>In Berlin baute Konrad Zuse im Wohnzimmer seiner Eltern die Z1. Sie rechnete schon mit 0 und 1, aber mechanisch: mit Tausenden dünner Blechteile, die sich verschoben. 1941 lief seine Z3 mit rund 2000 Relais – der erste funktionierende frei programmierbare Rechner der Welt. Ein Relais ist ein Schalter, den ein Elektromagnet umlegt.</source>
         <translation>In Berlin, Konrad Zuse built the Z1 in his parents’ living room. It already calculated with 0 and 1, but mechanically: with thousands of thin metal plates that slid back and forth. In 1941 his Z3 ran with about 2000 relays – the world’s first working freely programmable computer. A relay is a switch that is flipped by an electromagnet.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="35" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="46" />
         <source>Nach Konrad Zuse heißt diese App – und ich, Zetti, auch ein bisschen.</source>
         <translation>This app is named after Konrad Zuse – and so am I, Zetti, a little bit.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="36" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="47" />
         <source>Röhren statt Relais</source>
         <translation>Tubes instead of relays</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="37" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="48" />
         <source>In den USA startete der ENIAC mit fast 18 000 Elektronenröhren. Röhren schalten ohne bewegliche Teile und sind dadurch etwa tausendmal schneller als Relais. Aber sie werden heiß, brauchen viel Strom und brennen immer wieder durch.</source>
         <translation>In the USA, ENIAC started up with almost 18,000 vacuum tubes. Tubes switch without moving parts and are therefore about a thousand times faster than relays. But they get hot, use a lot of electricity and keep burning out.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="39" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="53" />
         <source>Der Transistor</source>
         <translation>The transistor</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="40" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="54" />
         <source>John Bardeen, Walter Brattain und William Shockley erfanden in den Bell Labs den Transistor: einen Schalter ohne Mechanik und ohne Glühen – klein, kühl und langlebig. Seitdem werden Schalter immer kleiner und schneller. Schau, wie schnell sie umschalten können!</source>
         <translation>At Bell Labs, John Bardeen, Walter Brattain and William Shockley invented the transistor: a switch without mechanics and without glowing – small, cool and long-lasting. Since then, switches have kept getting smaller and faster. See how fast they can switch!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="42" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="62" />
         <source>ab 1958</source>
         <translation>from 1958</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="42" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="62" />
         <source>Vier NAND in einem Chip</source>
         <translation>Four NANDs in one chip</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="43" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="63" />
         <source>1958 brachte Jack Kilby mehrere Bauteile auf ein einziges Stück Halbleiter: den ersten Chip. Ab Mitte der 1960er Jahre wurde die 74er-Reihe von Texas Instruments zum Standard. Der berühmte 7400 enthält vier NAND-Gatter. Weil man aus NAND alles bauen kann, steckte er fast überall drin.</source>
         <translation>In 1958 Jack Kilby put several components on a single piece of semiconductor: the first chip. From the mid-1960s, the 74 series from Texas Instruments became the standard. The famous 7400 contains four NAND gates. Because you can build anything from NAND, it was found almost everywhere.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="44" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="67" />
         <source>In Zuse 1: Die Werkzeugkiste ist wie eine Kiste voller Chips.</source>
         <translation>In Zuse 1: the toolbox is like a box full of chips.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="45" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="59" />
         <source>1950er</source>
         <translation>1950s</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="45" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="59" />
         <source>Rechnen mit XODER</source>
         <translation>Calculating with XOR</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="46" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="60" />
         <source>Rechenwerke brauchen ein besonderes Gatter: XODER, »entweder – oder«. Rechnet man 1 + 1 im Zweiersystem, kommt 10 heraus. XODER liefert die Stelle, UND den Übertrag. Das ist der Halbaddierer. XODER hilft auch, Fehler in Daten zu erkennen.</source>
         <translation>Arithmetic units need a special gate: XOR, “either – or”. If you add 1 + 1 in binary, you get 10. XOR gives the digit, AND gives the carry. That is the half adder. XOR also helps to detect errors in data.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="47" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="61" />
         <source>In Zuse 1: Treppenlicht in Stufe 2, Halbaddierer in Stufe 3.</source>
         <translation>In Zuse 1: stairway light in level 2, half adder in level 3.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="48" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="68" />
         <source>Strom sparen mit CMOS</source>
         <translation>Saving power with CMOS</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="49" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="69" />
         <source>Mit den CMOS-Chips der 4000er-Reihe brauchen Gatter fast nur beim Umschalten Strom, im Ruhezustand beinahe keinen. Erst dadurch wurden Taschenrechner, Digitaluhren und später Handys möglich, die lange mit einer Batterie auskommen.</source>
         <translation>With the CMOS chips of the 4000 series, gates use power almost only when they switch, and hardly any at rest. Only this made calculators, digital watches and later mobile phones possible that run for a long time on one battery.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="51" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="71" />
         <source>Gatter zum Umprogrammieren</source>
         <translation>Gates you can reprogram</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="52" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="72" />
         <source>Bei programmierbaren Chips legt man selbst fest, welche Gatter wie verbunden sind – mit einem Programm statt mit dem Lötkolben. 1985 kam der erste FPGA auf den Markt. Tippe auf die Zellen und mach daraus andere Gatter!</source>
         <translation>With programmable chips you decide yourself which gates are connected and how – with a program instead of a soldering iron. The first FPGA came on the market in 1985. Tap the cells and turn them into other gates!</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="53" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="73" />
         <source>In Zuse 1: Auf der Werkbank verbindest du Gatter selbst – fast wie in einem FPGA.</source>
         <translation>In Zuse 1: on the workbench you connect gates yourself – almost like in an FPGA.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="54" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="74" />
         <source>heute</source>
         <translation>today</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="54" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="74" />
         <source>Milliarden Gatter</source>
         <translation>Billions of gates</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="55" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="75" />
         <source>Der Chip in einem Handy hat viele Milliarden Transistoren. Sie sind nur wenige Nanometer groß: Mehr als tausend passen nebeneinander in die Breite eines Haares. Und doch macht jedes Gatter darin genau das, was du in Zuse 1 entdeckst: UND, ODER, NICHT.</source>
         <translation>The chip in a mobile phone has many billions of transistors. They are only a few nanometres in size: more than a thousand fit side by side across the width of a hair. And yet every gate in it does exactly what you discover in Zuse 1: AND, OR, NOT.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="56" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="76" />
         <source>In Zuse 1: Fang beim Lernpfad an – genau wie die Geschichte.</source>
         <translation>In Zuse 1: start with the learning path – just like history.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="57" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="77" />
         <source>Überblick</source>
         <translation>Overview</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="58" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="78" />
         <source>Hier siehst du noch einmal alle Gatter: woher die Idee kommt, womit man sie zuerst gebaut hat und wofür man sie braucht.</source>
         <translation>Here you can see all the gates once more: where the idea comes from, what they were first built with and what they are used for.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="155" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="190" />
         <source>hintereinander = UND</source>
         <translation>in series = AND</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="156" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="191" />
         <source>nebeneinander = ODER</source>
         <translation>side by side = OR</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="156" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="191" />
         <source>Öffner = NICHT</source>
         <translation>break contact = NOT</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="215" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="250" />
         <source>Schalter A</source>
         <translation>Switch A</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="215" />
-        <location filename="../zuse/qml/HistoryPage.qml" line="223" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="250" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="258" />
         <source>gedrückt</source>
         <translation>pressed</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="223" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="258" />
         <source>Schalter B</source>
         <translation>Switch B</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="226" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="261" />
         <source>leuchtet</source>
         <translation>lights up</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="226" />
-        <location filename="../zuse/qml/HistoryPage.qml" line="244" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="261" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="279" />
         <source>aus</source>
         <translation>off</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="240" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="275" />
         <source>»Die Lampe leuchtet.«</source>
         <translation>“The lamp is on.”</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="244" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="279" />
         <source>an</source>
         <translation>on</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="256" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="291" />
         <source>wahr</source>
         <translation>true</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="256" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="291" />
         <source>falsch</source>
         <translation>false</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="264" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="299" />
         <source>Lampe umschalten</source>
         <translation>Switch the lamp</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="283" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="318" />
         <source>%1er</source>
         <translation>%1s</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="293" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="328" />
         <source>Jede Lampe ist doppelt so viel wert wie die rechts daneben.</source>
         <translation>Each lamp is worth twice as much as the one to its right.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="298" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="333" />
         <source>Auf 0</source>
         <translation>Back to 0</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="311" />
-        <location filename="../zuse/qml/HistoryPage.qml" line="355" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="346" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="390" />
         <source>UND</source>
         <translation>AND</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="312" />
-        <location filename="../zuse/qml/HistoryPage.qml" line="356" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="347" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="391" />
         <source>ODER</source>
         <translation>OR</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="313" />
-        <location filename="../zuse/qml/HistoryPage.qml" line="354" />
-        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="348" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="389" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="760" />
         <source>NICHT</source>
         <translation>NOT</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="346" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="381" />
         <source>1 bedeutet wahr, 0 bedeutet falsch. Zum Beispiel UND: Nur 1 und 1 ergibt 1.</source>
         <translation>1 means true, 0 means false. For example AND: only 1 and 1 gives 1.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="354" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="389" />
         <source>1 NAND, beide Eingänge verbunden</source>
         <translation>1 NAND, both inputs connected</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="355" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="390" />
         <source>NAND, danach ein NAND als NICHT</source>
         <translation>NAND, then a NAND as NOT</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="356" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="391" />
         <source>beide Eingänge umdrehen, dann NAND</source>
         <translation>invert both inputs, then NAND</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="357" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="392" />
         <source>Mit genug NAND-Gattern lässt sich jede Schaltung bauen – sogar ein ganzer Rechner.</source>
         <translation>With enough NAND gates you can build any circuit – even a whole computer.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="372" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="407" />
         <source>▼ = Taster gedrückt (1), ▲ = losgelassen (0). Der Öffner unterbricht den Strom, wenn man ihn drückt.</source>
         <translation>▼ = button pressed (1), ▲ = released (0). The break contact interrupts the current when you press it.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="399" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="434" />
         <source>Spule</source>
         <translation>Coil</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="406" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="441" />
         <source>Anker</source>
         <translation>Armature</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="412" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="447" />
         <source>Kontakt</source>
         <translation>Contact</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="430" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="465" />
         <source>Strom in der Spule: an</source>
         <translation>Current in the coil: on</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="430" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="465" />
         <source>Strom in der Spule: aus</source>
         <translation>Current in the coil: off</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="433" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="468" />
         <source>Fließt Strom durch die Spule, wird sie zum Magneten und zieht den Anker an. Der Anker schließt den Kontakt – die Lampe leuchtet. Das dauert ein paar Tausendstel Sekunden.</source>
         <translation>When current flows through the coil, it becomes a magnet and pulls the armature. The armature closes the contact – the lamp lights up. This takes a few thousandths of a second.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
         <source>17 468</source>
         <translation>17,468</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
         <source>Röhren</source>
         <translation>tubes</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="42" />
+        <source>Konrad Zuse, 1992</source>
+        <translation>Konrad Zuse, 1992</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="42" />
+        <source>Foto: Wolfgang Hunscher, Dortmund · CC BY-SA 3.0</source>
+        <translation>Photo: Wolfgang Hunscher, Dortmund · CC BY-SA 3.0</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="43" />
+        <source>Nachbau der Z3 im Deutschen Museum in München</source>
+        <translation>Replica of the Z3 in the Deutsches Museum in Munich</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="43" />
+        <source>Foto: Venusianer (Wikipedia) · CC BY-SA 3.0</source>
+        <translation>Photo: Venusianer (Wikipedia) · CC BY-SA 3.0</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="44" />
+        <source>Ein Relais aus der Telefontechnik – solche Relais steckten auch in Zuses Rechnern</source>
+        <translation>A relay from telephone engineering – relays like this were also inside Zuse’s computers</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="44" />
+        <source>Foto: Sir Boris · CC BY-SA 3.0</source>
+        <translation>Photo: Sir Boris · CC BY-SA 3.0</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="50" />
+        <source>Eine Elektronenröhre (Triode). Der ENIAC hatte fast 18 000 davon.</source>
+        <translation>A vacuum tube (triode). ENIAC had almost 18,000 of them.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="50" />
+        <source>Foto: Alex P. Kok · CC BY-SA 4.0</source>
+        <translation>Photo: Alex P. Kok · CC BY-SA 4.0</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="56" />
+        <source>Nachbau des ersten Transistors von 1947</source>
+        <translation>Replica of the first transistor from 1947</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="56" />
+        <source>Foto: gemeinfrei (Wikimedia Commons)</source>
+        <translation>Photo: public domain (Wikimedia Commons)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="65" />
+        <source>Blick in einen echten 7400: der Siliziumchip unter dem Mikroskop. Am Rand sitzen die Anschlussflächen für die Beinchen.</source>
+        <translation>A look inside a real 7400: the silicon chip under the microscope. The pads for the pins sit around the edge.</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="65" />
+        <source>Foto: Robert Baruch · CC BY-SA 4.0</source>
+        <translation>Photo: Robert Baruch · CC BY-SA 4.0</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="85" />
+        <source>Antike</source>
+        <translation>Antiquity</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="86" />
+        <source>Mathematik</source>
+        <translation>Mathematics</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="87" />
+        <source>Schalter und Relais</source>
+        <translation>Switches and relays</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="88" />
+        <source>Elektronenröhren</source>
+        <translation>Vacuum tubes</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="89" />
+        <source>Transistoren</source>
+        <translation>Transistors</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="90" />
+        <source>Chips</source>
+        <translation>Chips</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
         <source>27 Tonnen</source>
         <translation>27 tonnes</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="462" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
         <source>schwer, so viel wie vier bis fünf Elefanten</source>
         <translation>in weight, as much as four to five elephants</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="463" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="498" />
         <source>150 Kilowatt</source>
         <translation>150 kilowatts</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="463" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="498" />
         <source>Strom, so viel wie viele Herdplatten zugleich</source>
         <translation>of power, as much as lots of cooker hotplates at once</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="491" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="526" />
         <source>So oft können sie in einer Sekunde umschalten (ungefähr):</source>
         <translation>How often they can switch in one second (roughly):</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="531" />
         <source>Relais</source>
         <translation>Relay</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="531" />
         <source>100-mal</source>
         <translation>100 times</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="531" />
         <source>Röhre</source>
         <translation>Tube</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="496" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="531" />
         <source>1 Million Mal</source>
         <translation>1 million times</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="532" />
         <source>Transistor im Chip heute</source>
         <translation>Transistor in a chip today</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="497" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="532" />
         <source>100 Milliarden Mal</source>
         <translation>100 billion times</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="522" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="557" />
         <source>Jedes Kästchen bedeutet: zehnmal so oft.</source>
         <translation>Each box means: ten times as often.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="577" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="612" />
         <source>Der 7400 von oben: 14 Beinchen, darin vier NAND-Gatter. Beinchen 14 bekommt +5 Volt, Beinchen 7 ist Masse (GND).</source>
         <translation>The 7400 seen from above: 14 pins with four NAND gates inside. Pin 14 gets +5 volts, pin 7 is ground (GND).</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="602" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="637" />
         <source>Stelle</source>
         <translation>Digit</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="606" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="641" />
         <source>Übertrag</source>
         <translation>Carry</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="612" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="647" />
         <source>dezimal %1</source>
         <translation>decimal %1</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="627" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="662" />
         <source>Taschenrechner</source>
         <translation>Calculator</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="627" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="662" />
         <source>Digitaluhr</source>
         <translation>Digital watch</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="627" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="662" />
         <source>Handy</source>
         <translation>Mobile phone</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="641" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="676" />
         <source>Ein CMOS-Gatter ist wie eine Tür mit zwei Flügeln: Immer ist genau einer zu. Deshalb fließt im Ruhezustand fast kein Strom.</source>
         <translation>A CMOS gate is like a door with two leaves: exactly one of them is always closed. That is why almost no current flows at rest.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="677" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="712" />
         <source>Logikzelle %1 umprogrammieren</source>
         <translation>Reprogram logic cell %1</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="681" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="716" />
         <source>Ein echter FPGA hat Tausende bis Millionen solcher Zellen.</source>
         <translation>A real FPGA has thousands to millions of such cells.</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="690" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
         <source>viele Milliarden</source>
         <translation>many billions</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="690" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
         <source>Transistoren auf einem Handy-Chip</source>
         <translation>of transistors on a phone chip</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="691" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
         <source>wenige Nanometer</source>
         <translation>a few nanometres</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="691" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
         <source>klein sind ihre feinsten Teile – ein Nanometer ist ein Millionstel Millimeter</source>
         <translation>is the size of their finest parts – a nanometre is a millionth of a millimetre</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="692" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
         <source>Milliarden Mal</source>
         <translation>billions of times</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="692" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
         <source>pro Sekunde kann ein Gatter umschalten</source>
         <translation>per second a gate can switch</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="759" />
         <source>Gatter</source>
         <translation>Gate</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="759" />
         <source>Idee aus der Mathematik</source>
         <translation>Idea from mathematics</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="759" />
         <source>Zuerst gebaut mit</source>
         <translation>First built with</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="724" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="759" />
         <source>Wofür?</source>
         <translation>What for?</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="760" />
         <source>Verneinung (Aristoteles, Boole)</source>
         <translation>negation (Aristotle, Boole)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="760" />
         <source>Relais-Öffner, Röhre</source>
         <translation>relay break contact, tube</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="725" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="760" />
         <source>ein Signal umdrehen</source>
         <translation>invert a signal</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="761" />
         <source>UND, ODER</source>
         <translation>AND, OR</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="761" />
         <source>Boolesche Algebra (1854)</source>
         <translation>Boolean algebra (1854)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="761" />
         <source>Schaltern, Relais, Dioden</source>
         <translation>switches, relays, diodes</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="726" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="761" />
         <source>Bedingungen prüfen, Maschinen steuern</source>
         <translation>check conditions, control machines</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="762" />
         <source>NAND, NOR</source>
         <translation>NAND, NOR</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="762" />
         <source>Sheffer-Strich (1913), Peirce-Pfeil (um 1880)</source>
         <translation>Sheffer stroke (1913), Peirce arrow (around 1880)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="762" />
         <source>Transistoren, Chips wie dem 7400</source>
         <translation>transistors, chips like the 7400</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="727" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="762" />
         <source>alles aus einem einzigen Baustein bauen</source>
         <translation>build everything from a single building block</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="763" />
         <source>XODER</source>
         <translation>XOR</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="763" />
         <source>Rechnen mit Rest 2</source>
         <translation>arithmetic with remainder 2 (modulo 2)</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="763" />
         <source>mehreren Gattern zusammen</source>
         <translation>several gates together</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="728" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="763" />
         <source>addieren, Fehler erkennen, verschlüsseln</source>
         <translation>add, detect errors, encrypt</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="776" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="811" />
         <source>Zurück</source>
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="779" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="814" />
         <source>Historische Entwicklung</source>
         <translation>Historical development</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="784" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="819" />
         <source>Station %1 von %2</source>
         <translation>Stop %1 of %2</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="836" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="938" />
         <source>ausgewählt</source>
         <translation>selected</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="921" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="1076" />
         <source>Vorherige Station</source>
         <translation>Previous stop</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="929" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="1084" />
         <source>Nächste Station</source>
         <translation>Next stop</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/HistoryPage.qml" line="935" />
+        <location filename="../zuse/qml/HistoryPage.qml" line="1090" />
         <source>Zum Lernpfad</source>
         <translation>To the learning path</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/HistoryPage.qml" line="1136" />
+        <source>Schließen</source>
+        <translation>Close</translation>
     </message>
 </context>
 <context>
@@ -1726,11 +1821,51 @@
     </message>
     <message>
         <location filename="../zuse/qml/InfoDialog.qml" line="99" />
+        <source>Fotos (Historische Entwicklung)</source>
+        <translation>Photos (Historical development)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="100" />
+        <source>Alle Fotos von Wikimedia Commons, verkleinert:</source>
+        <translation>All photos from Wikimedia Commons, scaled down:</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="101" />
+        <source>Konrad Zuse, 1992: Wolfgang Hunscher, Dortmund (CC BY-SA 3.0)</source>
+        <translation>Konrad Zuse, 1992: Wolfgang Hunscher, Dortmund (CC BY-SA 3.0)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="102" />
+        <source>Nachbau der Z3: Venusianer, Wikipedia (CC BY-SA 3.0)</source>
+        <translation>Replica of the Z3: Venusianer, Wikipedia (CC BY-SA 3.0)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="103" />
+        <source>Relais: Sir Boris (CC BY-SA 3.0)</source>
+        <translation>Relay: Sir Boris (CC BY-SA 3.0)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="104" />
+        <source>Elektronenröhre: Alex P. Kok (CC BY-SA 4.0)</source>
+        <translation>Vacuum tube: Alex P. Kok (CC BY-SA 4.0)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="105" />
+        <source>Nachbau des ersten Transistors: gemeinfrei</source>
+        <translation>Replica of the first transistor: public domain</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="106" />
+        <source>Chip 7400 unter dem Mikroskop: Robert Baruch (CC BY-SA 4.0)</source>
+        <translation>7400 chip under the microscope: Robert Baruch (CC BY-SA 4.0)</translation>
+    </message>
+    <message>
+        <location filename="../zuse/qml/InfoDialog.qml" line="107" />
         <source>Datenschutz</source>
         <translation>Privacy</translation>
     </message>
     <message>
-        <location filename="../zuse/qml/InfoDialog.qml" line="100" />
+        <location filename="../zuse/qml/InfoDialog.qml" line="108" />
         <source>Zuse 1 erhebt keine Daten, zeigt keine Werbung und braucht kein Internet. Deine Erfindungen bleiben auf diesem Gerät.</source>
         <translation>Zuse 1 collects no data, shows no ads and needs no internet. Your inventions stay on this device.</translation>
     </message>

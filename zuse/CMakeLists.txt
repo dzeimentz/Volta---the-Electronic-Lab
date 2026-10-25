@@ -86,6 +86,9 @@ qt_add_resources(zuse_app "zuse_icons" PREFIX "/zuse" BASE resources/icons FILES
 # Maskottchen Zetti (tools/make_zetti.py)
 file(GLOB zuse_zetti RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" CONFIGURE_DEPENDS resources/zetti/*.png)
 qt_add_resources(zuse_app "zuse_zetti" PREFIX "/zuse" BASE resources FILES ${zuse_zetti})
+# Fotos der historischen Entwicklung (Wikimedia Commons, Urheber und Lizenz in InfoDialog und docs/partner)
+file(GLOB zuse_history RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" CONFIGURE_DEPENDS resources/history/*.jpg)
+qt_add_resources(zuse_app "zuse_history" PREFIX "/zuse" BASE resources FILES ${zuse_history})
 qt_add_resources(zuse_app "zuse_content" PREFIX "/zuse" BASE content FILES content/stufen.json)
 # Symbol der Werkzeugkiste (gemeinsam mit Volta)
 qt_add_resources(zuse_app "zuse_toolbox" PREFIX "/zuse/icons" BASE "${PROJECT_SOURCE_DIR}/app/resources/icons" FILES
