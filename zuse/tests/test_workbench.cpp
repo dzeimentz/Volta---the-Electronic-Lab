@@ -4,6 +4,7 @@
 #include <QtTest>
 
 #include "workbench_controller.hpp"
+#include "zuse_settings.hpp"
 
 using namespace zuse;
 using volta::logic::Level;
@@ -694,6 +695,105 @@ private slots:
         WorkbenchController again(kStages, dir.path(), "de");
         QVERIFY(!again.isDone("ZAEHLER"));
         QVERIFY(!again.library().find("ZAEHLER"));
+    }
+    // Elternbereich: Forscherprofile halten Fortschritt, Erfindungen und Forscherheft getrennt
+    void profilesKeepDataApart() {
+        QTemporaryDir dir;
+        WorkbenchController w(kStages, dir.path(), "de");
+        w.setProfilesEnabled(true);
+        QVERIFY(w.currentProfile().isEmpty());
+        const QString fox = w.addProfile(QStringLiteral("🦊"), QStringLiteral("Funkenfuchs"));
+        const QString owl = w.addProfile(QStringLiteral("🦉"), QStringLiteral("Bitbert"));
+        QVERIFY(!fox.isEmpty() && !owl.isEmpty());
+        QCOMPARE(w.profiles().size(), 2);
+
+        QVERIFY(w.selectProfile(fox));
+        QCOMPARE(w.currentProfile()["name"].toString(), QStringLiteral("Funkenfuchs"));
+        finishBit(w);
+        discover(w, 1);
+        QVERIFY(w.addJournalNote(QStringLiteral("NICHT"), QStringLiteral("dreht um")));
+        QVERIFY(w.isDone("BIT"));
+
+        QVERIFY(w.selectProfile(owl)); // neues Kind: alles leer
+        QVERIFY(!w.isDone("BIT"));
+        QVERIFY(w.journal().isEmpty());
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
+
+        QVERIFY(w.selectProfile(fox)); // wieder da
+        QVERIFY(w.isDone("BIT") && w.isDone("NICHT"));
+        QCOMPARE(w.journal().size(), 2); // Heftseiten zu BIT und NICHT
+        QCOMPARE(w.stageKuerzel(), QStringLiteral("UND")); // erste offene Stufe
+
+        w.leaveProfile();
+        QVERIFY(w.currentProfile().isEmpty());
+        QVERIFY(w.removeProfile(fox));
+        QCOMPARE(w.profiles().size(), 1);
+        QVERIFY(!w.selectProfile(fox));
+        w.setProfilesEnabled(false); // ohne Profile: Daten direkt im Datenordner
+        QVERIFY(!w.isDone("BIT"));
+        QVERIFY(!w.selectProfile(owl));
+    }
+
+    // Freigabe: alles offen, fehlende Erfindungen werden aus den Musterloesungen geliehen und nie gespeichert
+    void unlockAllLendsChips() {
+        QTemporaryDir dir;
+        {
+            WorkbenchController w(kStages, dir.path(), "de");
+            const QVariantList before = w.stages();
+            QVERIFY(!before.last().toMap()["unlocked"].toBool());
+            w.setUnlockAll(true);
+            for (const QVariant& s : w.stages()) QVERIFY(s.toMap()["unlocked"].toBool());
+            QVERIFY(w.library().find("XODER")); // geliehen
+            QVERIFY(w.selectStage(before.last().toMap()["index"].toInt()));
+            QVERIFY(w.selectStage(0));
+            finishBit(w); // speichert
+            QVERIFY(w.selectStage(5));
+            w.showSolution();
+            w.check();
+            QVERIFY(w.createChip()); // eigene Erfindung ersetzt die geliehene
+            w.setUnlockAll(false);
+            QVERIFY(w.library().find("ALARM"));
+            QVERIFY(!w.library().find("XODER")); // Leihgabe zurueck
+        }
+        WorkbenchController again(kStages, dir.path(), "de");
+        QVERIFY(again.library().find("ALARM"));
+        QVERIFY(!again.library().find("XODER"));
+        QVERIFY(!again.stages().last().toMap()["unlocked"].toBool());
+    }
+
+    void resetProgress() {
+        QTemporaryDir dir;
+        {
+            WorkbenchController w(kStages, dir.path(), "de");
+            finishBit(w);
+            discover(w, 1);
+            w.resetProgress();
+            QVERIFY(!w.isDone("BIT") && !w.isDone("NICHT"));
+            QCOMPARE(w.stageKuerzel(), QStringLiteral("BIT"));
+        }
+        WorkbenchController again(kStages, dir.path(), "de");
+        QVERIFY(!again.isDone("BIT"));
+    }
+
+    // PIN fuer Erwachsene: Start-PIN 1234, eigene PIN 4-8 Ziffern, nach fuenf Fehlversuchen gesperrt
+    void parentPin() {
+        QTemporaryDir dir;
+        {
+            ZuseSettings s(dir.path(), "de");
+            QVERIFY(s.parentPinIsDefault());
+            QVERIFY(s.checkParentPin("1234"));
+            QVERIFY(!s.setParentPin("12"));
+            QVERIFY(!s.setParentPin("12a4"));
+            QVERIFY(s.setParentPin("4711"));
+            QVERIFY(!s.parentPinIsDefault());
+            QVERIFY(!s.checkParentPin("1234"));
+            QVERIFY(s.checkParentPin("4711"));
+        }
+        ZuseSettings s(dir.path(), "de"); // bleibt gespeichert
+        QVERIFY(s.checkParentPin("4711"));
+        for (int i = 0; i < 5; ++i) QVERIFY(!s.checkParentPin("0000"));
+        QVERIFY(s.parentPinLockSeconds() > 0);
+        QVERIFY(!s.checkParentPin("4711")); // gesperrt
     }
 };
 

@@ -21,6 +21,7 @@ ApplicationWindow {
     property string journalReturn: "home" // von hier aus wurde das Forscherheft geoeffnet
     readonly property bool building: workbench.stageKind === "bauen"
     readonly property bool inLab: page === "lab"
+    readonly property bool choosingProfile: workbench.profilesEnabled && workbench.currentProfile.id === undefined
 
     function openJournal() {
         if (page !== "journal") journalReturn = page
@@ -128,6 +129,7 @@ ApplicationWindow {
             }
             ToolButton { // Werkzeugkiste wie Volta: Symbol mit Zahl der Werkzeuge
                 objectName: "toolboxButton"
+                visible: !win.choosingProfile
                 implicitWidth: ZTheme.control; implicitHeight: ZTheme.control
                 onClicked: toolbox.opened ? toolbox.close() : toolbox.open()
                 Accessible.name: qsTr("Werkzeugkiste")
@@ -166,6 +168,7 @@ ApplicationWindow {
                 onQuickGuideRequested: quickGuide.open()
                 onInfoRequested: info.open()
                 onJournalRequested: win.openJournal()
+                onParentAreaRequested: parentGate.ask(() => parentArea.open())
             }
         }
     }
@@ -348,6 +351,17 @@ ApplicationWindow {
     QuickGuide { id: quickGuide; onHelpRequested: help.show("") }
     InfoDialog { id: info }
     ComicDialog { id: comic; objectName: "comic" }
+    ParentGate { id: parentGate }
+    ParentArea { id: parentArea }
+
+    // Forscherprofile: ohne gewaehltes Profil fragt Zuse zuerst »Wer forscht heute?«
+    ProfileChooser {
+        anchors.fill: parent
+        z: 800
+        visible: win.choosingProfile
+        onVisibleChanged: if (visible) { creating = false; win.page = "home" }
+        onChosen: id => { workbench.selectProfile(id); win.page = "home" }
+    }
 
     Rectangle { // Werkzeug, das gerade auf die Werkbank gezogen wird
         id: ghost

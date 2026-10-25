@@ -11,6 +11,7 @@ Row {
     signal quickGuideRequested()
     signal infoRequested()
     signal journalRequested()
+    signal parentAreaRequested()
     spacing: 4
 
     component BarButton: ToolButton {
@@ -159,8 +160,16 @@ Row {
                 onTriggered: bar.quickGuideRequested()
             }
             MenuItem {
+                objectName: "menuProfile"
+                visible: workbench.currentProfile.id !== undefined
+                height: visible ? ZTheme.control : 0
+                text: workbench.currentProfile.id !== undefined
+                      ? workbench.currentProfile.symbol + "  " + qsTr("Profil wechseln") : ""
+                onTriggered: workbench.leaveProfile()
+            }
+            MenuItem {
                 objectName: "menuJournal"
-                visible: workbench.mode !== "vorfuehrung"
+                visible: workbench.mode !== "vorfuehrung" && !(workbench.profilesEnabled && workbench.currentProfile.id === undefined)
                 height: visible ? ZTheme.control : 0
                 text: "📓  " + qsTr("Forscherheft")
                 font.bold: true
@@ -179,6 +188,12 @@ Row {
                 checked: workbench.symbolStyle === "us"
                 text: qsTr("Schaltzeichen nach US-Norm (IEEE)")
                 onTriggered: workbench.symbolStyle = workbench.symbolStyle === "us" ? "din" : "us"
+            }
+            MenuItem {
+                objectName: "menuParentArea"
+                height: ZTheme.control
+                text: "🔒  " + qsTr("Elternbereich")
+                onTriggered: bar.parentAreaRequested()
             }
         }
     }

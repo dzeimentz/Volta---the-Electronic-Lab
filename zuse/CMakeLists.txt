@@ -9,6 +9,8 @@ add_library(zuse_model STATIC
     src/schematic.cpp
     src/zuse_settings.cpp
     src/workbench_journal.cpp
+    src/workbench_profiles.cpp
+    ${PROJECT_SOURCE_DIR}/app/src/services/profile_store.cpp
     ${PROJECT_SOURCE_DIR}/app/src/services/journal_store.cpp # Forscherheft wie Volta (gemeinsamer Speicher)
 )
 target_include_directories(zuse_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/app/src)
@@ -62,6 +64,9 @@ qt_add_qml_module(zuse_app
         qml/InfoDialog.qml
         qml/ComicDialog.qml
         qml/JournalPage.qml
+        qml/ParentGate.qml
+        qml/ParentArea.qml
+        qml/ProfileChooser.qml
 )
 # Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)

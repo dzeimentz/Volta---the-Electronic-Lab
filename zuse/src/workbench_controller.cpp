@@ -78,7 +78,7 @@ bool isEndpointOfPart(const std::string& endpoint, const std::string& partId) {
 WorkbenchController::WorkbenchController(const QString& stagesFile, const QString& dataDir, const QString& language,
                                          QObject* parent)
     : QObject(parent), m_stagesFile(stagesFile), m_language(language), m_dataDir(dataDir),
-      m_journal(journalFile(dataDir)) {
+      m_journal(journalFile(dataDir)), m_dataRoot(dataDir), m_profiles(dataDir) {
     loadStages(stagesFile, language);
     load();
     dropStaleChips();
@@ -86,13 +86,7 @@ WorkbenchController::WorkbenchController(const QString& stagesFile, const QStrin
     connect(&m_clock, &QTimer::timeout, this, &WorkbenchController::tickClock);
     connect(&m_undo, &QUndoStack::canUndoChanged, this, &WorkbenchController::historyChanged);
     connect(&m_undo, &QUndoStack::canRedoChanged, this, &WorkbenchController::historyChanged);
-    int first = -1; // erste noch offene Stufe (sonst die letzte des Lernpfads)
-    for (size_t i = 0; i < m_stages.size() && first < 0; ++i)
-        if (!m_stages[i].free && !m_done.contains(m_stages[i].kuerzel)) first = int(i);
-    if (first < 0)
-        for (size_t i = 0; i < m_stages.size(); ++i)
-            if (!m_stages[i].free) first = int(i);
-    startStage(std::max(first, 0));
+    startFirstOpen();
 }
 
 bool WorkbenchController::loadStages(const QString& file, const QString& language) {
@@ -230,7 +224,9 @@ void WorkbenchController::save() const {
     if (m_dataDir.isEmpty() || m_demo) return; // Vorfuehrung: nichts wird gespeichert
     QDir().mkpath(m_dataDir);
     QJsonArray chips;
-    for (const std::string& k : m_library.kuerzel()) chips.append(chipToJson(*m_library.find(k)));
+    const Library& own = m_library;
+    for (const std::string& k : own.kuerzel())
+        if (!m_lent.contains(QString::fromStdString(k))) chips.append(chipToJson(*own.find(k))); // nur eigene
     QJsonArray done;
     for (const QString& k : m_done) done.append(k);
     QJsonObject drafts;
@@ -248,7 +244,7 @@ void WorkbenchController::save() const {
 
 bool WorkbenchController::unlocked(int index) const {
     if (index <= 0) return index == 0;
-    if (m_stages[size_t(index)].free) return true;
+    if (m_stages[size_t(index)].free || m_unlockAll) return true; // Freigabe im Elternbereich
     return m_done.contains(m_stages[size_t(index - 1)].kuerzel);
 }
 
@@ -845,6 +841,7 @@ bool WorkbenchController::createChip() {
     const ChipDef* old = m_library.find(chip.kuerzel);
     chip.version = old ? old->version + 1 : 1;
     m_library.add(chip);
+    m_lent.remove(s.kuerzel); // eigene Erfindung ersetzt die geliehene
     m_done.insert(s.kuerzel);
     save();
     journalResult();
@@ -1332,7 +1329,8 @@ void WorkbenchController::skipGuess() {
 QString WorkbenchController::toolName(const QString& type) const {
     if (primitiveFromName(type.toStdString())) {
         for (const Stage& s : m_stages)
-            if (s.tool == type && m_done.contains(s.kuerzel)) return s.name.isEmpty() ? s.kuerzel : s.name; // UND, AND, ET
+            if (s.tool == type && (m_done.contains(s.kuerzel) || m_unlockAll)) // UND, AND, ET; Freigabe: alle
+                return s.name.isEmpty() ? s.kuerzel : s.name;
         return {};
     }
     return m_library.find(type.toStdString()) ? type : QString();

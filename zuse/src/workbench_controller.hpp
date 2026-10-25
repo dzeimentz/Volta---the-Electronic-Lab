@@ -23,6 +23,7 @@
 #include "volta/logic/logic_sim.hpp"
 #include "volta/logic/netlist.hpp"
 #include "services/journal_store.hpp"
+#include "services/profile_store.hpp"
 
 namespace zuse {
 
@@ -148,6 +149,11 @@ class WorkbenchController : public QObject {
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     // Schaltzeichen: "din" (DIN EN 60617-12, Vorgabe) oder "us" (IEEE Std 91); Einstellung, kein Befehl
     Q_PROPERTY(QVariantList journal READ journal NOTIFY journalChanged) // Forscherheft, neueste Eintraege zuerst
+    // Elternbereich: Forscherprofile [{id, symbol, name}] und das gewaehlte; alle Experimente freigeben
+    Q_PROPERTY(bool profilesEnabled READ profilesEnabled WRITE setProfilesEnabled NOTIFY profilesChanged)
+    Q_PROPERTY(QVariantList profiles READ profiles NOTIFY profilesChanged)
+    Q_PROPERTY(QVariantMap currentProfile READ currentProfile NOTIFY profilesChanged)
+    Q_PROPERTY(bool unlockAll READ unlockAll WRITE setUnlockAll NOTIFY stagesChanged)
     Q_PROPERTY(QString symbolStyle READ symbolStyle WRITE setSymbolStyle NOTIFY symbolStyleChanged)
 
 public:
@@ -272,6 +278,21 @@ public:
     Q_INVOKABLE void resetJournal();
     static QString journalFile(const QString& dataDir);
 
+    // Forscherprofile (wie Volta): ohne Profile liegen die Daten direkt im Datenordner, sonst je Profil darunter
+    void useDataRoot(const QString& dir);
+    bool profilesEnabled() const { return m_profilesEnabled; }
+    void setProfilesEnabled(bool on);
+    QVariantList profiles() const;
+    QVariantMap currentProfile() const;
+    Q_INVOKABLE QString addProfile(const QString& symbol, const QString& name);
+    Q_INVOKABLE bool selectProfile(const QString& id);
+    Q_INVOKABLE void leaveProfile();
+    Q_INVOKABLE bool removeProfile(const QString& id); // samt Daten (Elternbereich)
+    Q_INVOKABLE void removeAllProfiles();
+    bool unlockAll() const { return m_unlockAll; }
+    void setUnlockAll(bool on);
+    Q_INVOKABLE void resetProgress(); // Lernpfad, Erfindungen und Aufbauten zuruecksetzen (Elternbereich)
+
     // fuer Befehle und Tests
     const volta::logic::ChipDef& def() const { return m_def; }
     const volta::logic::Library& library() const { return m_library; }
@@ -293,6 +314,7 @@ signals:
     void numbersVisibleChanged();
     void clockChanged();
     void journalChanged();
+    void profilesChanged();
 
 private:
     bool loadStages(const QString& file, const QString& language);
@@ -329,6 +351,9 @@ private:
     QString situationLine(const Stage& s, size_t row, const std::vector<volta::logic::Level>& outs) const;
     void journalGuess();  // Vermutung ins Forscherheft
     void journalResult(); // Ergebnis der Stufe ins Forscherheft
+    void useDataDir(const QString& dir); // Daten eines Profils (bzw. ohne Profil) laden
+    void startFirstOpen();               // erste offene Stufe des Lernpfads
+    void lendChips(); // Freigabe: fehlende Erfindungen als Musterloesung leihen (bzw. zurueckgeben)
 
     std::vector<Stage> m_stages;
     std::vector<LearningLevel> m_levels;
@@ -360,6 +385,12 @@ private:
     bool m_guessSkipped = false;
     bool m_solutionShown = false; // Musterloesung in dieser Stufe angeschaut (Forscherheft)
     volta::services::JournalStore m_journal;
+    QString m_dataRoot;                     // Datenordner ohne Profil
+    volta::services::ProfileStore m_profiles;
+    bool m_profilesEnabled = false;
+    QString m_currentProfile;
+    bool m_unlockAll = false;
+    QSet<QString> m_lent; // geliehene Erfindungen (Freigabe), werden nicht gespeichert
     size_t m_task = 0; // Art »zahlen«: aktuelle Aufgabe
     QTimer m_clock;    // Taktgeber
     QString m_symbolStyle = QStringLiteral("din");

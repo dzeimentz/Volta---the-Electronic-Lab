@@ -74,6 +74,7 @@ Rectangle {
 
             // ---- Zetti begruesst
             RowLayout {
+                Layout.fillWidth: true
                 spacing: 14
                 Image {
                     Layout.preferredWidth: 96
@@ -95,10 +96,47 @@ Rectangle {
                         wrapMode: Text.WordWrap
                         color: ZTheme.text
                         font.pixelSize: Math.round(15 * ZTheme.fontScale)
-                        text: qsTr("Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis "
-                                   + "zur Rechenmaschine. Fang beim Lernpfad an oder probiere im freien Labor eigene "
-                                   + "Ideen aus.")
+                        text: workbench.currentProfile.id !== undefined
+                              ? qsTr("Hallo %1! Schön, dass du wieder forschst. Mach im Lernpfad weiter oder probiere "
+                                     + "im freien Labor eigene Ideen aus.").arg(workbench.currentProfile.name)
+                              : qsTr("Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis "
+                                     + "zur Rechenmaschine. Fang beim Lernpfad an oder probiere im freien Labor eigene "
+                                     + "Ideen aus.")
                     }
+                }
+                Item { Layout.fillWidth: true }
+                Rectangle { // Forscherprofil: Symbol und Spitzname, Antippen wechselt das Profil
+                    objectName: "profileChip"
+                    visible: workbench.currentProfile.id !== undefined
+                    Layout.alignment: Qt.AlignTop
+                    Layout.preferredWidth: chipRow.implicitWidth + 28
+                    Layout.preferredHeight: ZTheme.control + 8
+                    radius: height / 2
+                    color: chipTap.pressed ? "#D9F3F8" : ZTheme.surface
+                    border.width: 2
+                    border.color: ZTheme.navy
+                    RowLayout {
+                        id: chipRow
+                        anchors.centerIn: parent
+                        spacing: 8
+                        Text { text: workbench.currentProfile.symbol ?? ""; font.pixelSize: 26; font.family: "Segoe UI Emoji" }
+                        ColumnLayout {
+                            spacing: 0
+                            Text {
+                                text: workbench.currentProfile.name ?? ""
+                                color: ZTheme.navy
+                                font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: true
+                            }
+                            Text {
+                                text: qsTr("Profil wechseln")
+                                color: ZTheme.muted
+                                font.pixelSize: Math.round(12 * ZTheme.fontScale)
+                            }
+                        }
+                    }
+                    TapHandler { id: chipTap; onTapped: workbench.leaveProfile() }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: qsTr("Profil wechseln")
                 }
             }
 
@@ -131,6 +169,7 @@ Rectangle {
                 }
                 Tile {
                     objectName: "tileDemo"
+                    visible: settings.demoVisible
                     icon: "🎬"
                     title: qsTr("Vorführung")
                     subtitle: qsTr("%1 fertige Aufbauten zum Zeigen – es wird nichts gespeichert").arg(workbench.demos.length)

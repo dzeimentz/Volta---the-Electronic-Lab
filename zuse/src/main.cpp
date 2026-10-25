@@ -6,7 +6,8 @@
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen),
 // ZUSE_PAGE=home|lab|journal (Startseite bzw. Experiment; mit ZUSE_DEMO sonst lab), ZUSE_DEMO_FREE=1 (Freies Labor),
-// ZUSE_DEMO_SHOW=<n> (Vorfuehrung des Experiments n).
+// ZUSE_DEMO_SHOW=<n> (Vorfuehrung des Experiments n), ZUSE_DEMO_PROFILES=1|gewaehlt (Forscherprofile mit Beispielen),
+// ZUSE_DEMO_PARENT=gate|area (Elternschranke bzw. Elternbereich).
 #include <QDir>
 #include <QGuiApplication>
 #include <QIcon>
@@ -46,6 +47,24 @@ int main(int argc, char* argv[]) {
     const QString language = settings.language();
 
     zuse::WorkbenchController workbench(QStringLiteral(":/zuse/stufen.json"), dataDir, language);
+    // Elternbereich: Freigabe und Forscherprofile gelten fuer das ganze Geraet (Einstellungen)
+    workbench.setUnlockAll(settings.unlockAll());
+    workbench.setProfilesEnabled(settings.profilesEnabled());
+    QObject::connect(&settings, &zuse::ZuseSettings::parentChanged, &workbench, [&] {
+        workbench.setUnlockAll(settings.unlockAll());
+        workbench.setProfilesEnabled(settings.profilesEnabled());
+    });
+    // ZUSE_DEMO_PROFILES=1: Forscherprofile mit drei Beispielprofilen (Profilauswahl), =gewaehlt: das erste gewaehlt
+    if (qEnvironmentVariableIsSet("ZUSE_DEMO_PROFILES")) {
+        settings.setProfilesEnabled(true);
+        if (workbench.profiles().isEmpty()) {
+            workbench.addProfile(QStringLiteral("🦊"), QStringLiteral("Funkenfuchs"));
+            workbench.addProfile(QStringLiteral("🦉"), QStringLiteral("Bitbert"));
+            workbench.addProfile(QStringLiteral("🚀"), QStringLiteral("Rakete"));
+        }
+        if (qEnvironmentVariable("ZUSE_DEMO_PROFILES") == QStringLiteral("gewaehlt"))
+            workbench.selectProfile(workbench.profiles().first().toMap().value("id").toString());
+    }
     // Vorfuehrung: die ersten n Stufen mit der Musterloesung durchspielen
     const int demo = qEnvironmentVariableIntValue("ZUSE_DEMO");
     for (int s = 0; s < demo && s < workbench.stages().size(); ++s) {
@@ -135,6 +154,15 @@ int main(int argc, char* argv[]) {
     // ZUSE_DEMO_COMIC=und|oder|nicht|nand|nor|xoder: Erklaer-Comic oeffnen
     if (const QString comic = qEnvironmentVariable("ZUSE_DEMO_COMIC"); window && !comic.isEmpty())
         if (QObject* c = window->findChild<QObject*>("comic")) QMetaObject::invokeMethod(c, "show", Q_ARG(QVariant, comic));
+    // ZUSE_DEMO_PARENT=gate|area: Elternschranke bzw. Elternbereich oeffnen
+    if (const QString parent = qEnvironmentVariable("ZUSE_DEMO_PARENT"); window && !parent.isEmpty()) {
+        if (parent == QStringLiteral("gate")) {
+            if (QObject* g = window->findChild<QObject*>("parentGate"))
+                QMetaObject::invokeMethod(g, "ask", Q_ARG(QVariant, QVariant()));
+        } else if (QObject* a = window->findChild<QObject*>("parentArea")) {
+            QMetaObject::invokeMethod(a, "open");
+        }
+    }
     // ZUSE_DEMO_PRESS=x,y[,los]: Maus an Fensterposition druecken (und wieder loslassen) – prueft z. B. den Taster
     const QStringList press = qEnvironmentVariable("ZUSE_DEMO_PRESS").split(',');
     if (window && press.size() >= 2) {

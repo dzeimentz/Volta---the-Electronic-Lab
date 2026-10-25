@@ -72,6 +72,7 @@ Popup {
           points: [qsTr("Der Lernpfad führt in sechs Stufen von Schalter und Lampe über Logik, Binärzahlen und Addierer bis zu Speicher, Zähler und einer von Hand gesteuerten Rechenmaschine."),
                    qsTr("Das Programm im Speicher – Konrad Zuses große Idee – ist Thema von Zuse 2."),
                    qsTr("Alles, was die Lampen zeigen, berechnet eine echte Logiksimulation. Vereinfachung: Speicher starten beim Einschalten mit 0; echte Bausteine starten zufällig, deshalb gibt es »Löschen«."),
+                   qsTr("Im Elternbereich (Menü mit den drei Strichen, 🔒, Start-PIN 1234) geben Sie alle Experimente frei, richten Forscherprofile für Geschwister oder die Klasse ein und setzen Fortschritt oder Forscherheft zurück."),
                    qsTr("Zuse 1 erhebt keine Daten und braucht kein Internet. Fortschritt und Erfindungen bleiben auf dem Gerät.")] }
     ]
 

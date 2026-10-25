@@ -1,6 +1,10 @@
 #include "zuse_settings.hpp"
 
 #include <QCoreApplication>
+#include <QCryptographicHash>
+#include <QDateTime>
+#include <QRandomGenerator>
+#include <QRegularExpression>
 #include <QDir>
 #include <QFileInfo>
 #include <QLocale>
@@ -28,6 +32,13 @@ ZuseSettings::ZuseSettings(const QString& dataDir, const QString& language, QObj
         m_fontLevel = qBound(0, s.value(QStringLiteral("anzeige/schrift"), 2).toInt(), 2);
         m_schematicVisible = s.value(QStringLiteral("anzeige/schaltplan"), false).toBool();
         m_zettiVisible = s.value(QStringLiteral("anzeige/zetti"), true).toBool();
+        m_unlockAll = s.value(QStringLiteral("eltern/alles_frei"), false).toBool();
+        m_profilesEnabled = s.value(QStringLiteral("profile/aktiv"), false).toBool();
+        m_demoVisible = s.value(QStringLiteral("eltern/vorfuehrung"), true).toBool();
+        m_pinHash = s.value(QStringLiteral("eltern/pin_pruefwert")).toString();
+        m_pinSalt = s.value(QStringLiteral("eltern/pin_salz")).toString();
+        m_pinFailures = s.value(QStringLiteral("eltern/fehlversuche"), 0).toInt();
+        m_pinLockedUntil = s.value(QStringLiteral("eltern/gesperrt_bis"), 0).toLongLong();
     }
     m_language = isAvailable(code) ? code : QStringLiteral("de");
     installTranslator();
@@ -95,6 +106,72 @@ void ZuseSettings::setZettiVisible(bool on) {
     emit zettiVisibleChanged();
 }
 
+void ZuseSettings::setUnlockAll(bool on) {
+    if (on == m_unlockAll) return;
+    m_unlockAll = on;
+    save();
+    emit parentChanged();
+}
+
+void ZuseSettings::setProfilesEnabled(bool on) {
+    if (on == m_profilesEnabled) return;
+    m_profilesEnabled = on;
+    save();
+    emit parentChanged();
+}
+
+void ZuseSettings::setDemoVisible(bool on) {
+    if (on == m_demoVisible) return;
+    m_demoVisible = on;
+    save();
+    emit parentChanged();
+}
+
+QString ZuseSettings::hashPin(const QString& salt, const QString& pin) {
+    return QString::fromLatin1(
+        QCryptographicHash::hash((salt + QLatin1Char(':') + pin).toUtf8(), QCryptographicHash::Sha256).toHex());
+}
+
+void ZuseSettings::savePinState() const {
+    if (m_file.isEmpty()) return;
+    QSettings s(m_file, QSettings::IniFormat);
+    s.setValue(QStringLiteral("eltern/pin_pruefwert"), m_pinHash);
+    s.setValue(QStringLiteral("eltern/pin_salz"), m_pinSalt);
+    s.setValue(QStringLiteral("eltern/fehlversuche"), m_pinFailures);
+    s.setValue(QStringLiteral("eltern/gesperrt_bis"), m_pinLockedUntil);
+}
+
+int ZuseSettings::parentPinLockSeconds() const {
+    const qint64 rest = m_pinLockedUntil - QDateTime::currentMSecsSinceEpoch();
+    return rest > 0 ? static_cast<int>((rest + 999) / 1000) : 0;
+}
+
+bool ZuseSettings::checkParentPin(const QString& pin) {
+    if (parentPinLockSeconds() > 0) return false;
+    const bool ok = m_pinHash.isEmpty() ? pin == QLatin1String(kDefaultPin) : hashPin(m_pinSalt, pin) == m_pinHash;
+    if (ok) {
+        m_pinFailures = 0;
+    } else if (++m_pinFailures >= 5) {
+        m_pinFailures = 0;
+        m_pinLockedUntil = QDateTime::currentMSecsSinceEpoch() + 30000;
+    }
+    savePinState();
+    return ok;
+}
+
+bool ZuseSettings::setParentPin(const QString& pin) {
+    static const QRegularExpression digits(QStringLiteral("^[0-9]{4,8}$"));
+    if (!digits.match(pin).hasMatch()) return false;
+    QByteArray salt(16, Qt::Uninitialized);
+    QRandomGenerator::system()->fillRange(reinterpret_cast<quint32*>(salt.data()), salt.size() / 4);
+    m_pinSalt = QString::fromLatin1(salt.toHex());
+    m_pinHash = hashPin(m_pinSalt, pin);
+    m_pinFailures = 0;
+    savePinState();
+    emit parentChanged();
+    return true;
+}
+
 void ZuseSettings::save() const {
     if (m_file.isEmpty()) return;
     QDir().mkpath(QFileInfo(m_file).absolutePath());
@@ -103,6 +180,9 @@ void ZuseSettings::save() const {
     s.setValue(QStringLiteral("anzeige/schrift"), m_fontLevel);
     s.setValue(QStringLiteral("anzeige/schaltplan"), m_schematicVisible);
     s.setValue(QStringLiteral("anzeige/zetti"), m_zettiVisible);
+    s.setValue(QStringLiteral("eltern/alles_frei"), m_unlockAll);
+    s.setValue(QStringLiteral("profile/aktiv"), m_profilesEnabled);
+    s.setValue(QStringLiteral("eltern/vorfuehrung"), m_demoVisible);
 }
 
 } // namespace zuse
