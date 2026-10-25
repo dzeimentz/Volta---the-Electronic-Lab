@@ -33,15 +33,15 @@ Popup {
             anchors { left: parent.left; right: parent.right; top: parent.top; margins: 12 }
             spacing: 4
             RowLayout {
-                Text { text: card.title; color: ZTheme.navy; font.pixelSize: 19; font.bold: true }
-                Text { text: card.base; color: ZTheme.muted; font.pixelSize: 14 }
+                Text { text: card.title; color: ZTheme.navy; font.pixelSize: Math.round(19 * ZTheme.fontScale); font.bold: true }
+                Text { text: card.base; color: ZTheme.muted; font.pixelSize: Math.round(14 * ZTheme.fontScale) }
             }
             Text {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
                 text: card.body
                 color: ZTheme.text
-                font.pixelSize: 15
+                font.pixelSize: Math.round(15 * ZTheme.fontScale)
                 lineHeight: 1.1
             }
         }
@@ -67,7 +67,7 @@ Popup {
                     wrapMode: Text.WordWrap
                     text: qsTr("Drei Arten, dieselbe Zahl zu schreiben")
                     color: ZTheme.navy
-                    font.pixelSize: 24; font.bold: true
+                    font.pixelSize: Math.round(24 * ZTheme.fontScale); font.bold: true
                 }
             }
             Explain {
@@ -114,9 +114,9 @@ Popup {
             spacing: 2
             RowLayout {
                 Layout.fillWidth: true
-                Text { Layout.preferredWidth: 70; text: qsTr("dezimal"); color: ZTheme.muted; font.pixelSize: 13; font.bold: true }
-                Text { Layout.preferredWidth: 110; text: qsTr("binär"); color: ZTheme.muted; font.pixelSize: 13; font.bold: true }
-                Text { Layout.fillWidth: true; text: qsTr("hex"); color: ZTheme.muted; font.pixelSize: 13; font.bold: true }
+                Text { Layout.preferredWidth: 70; text: qsTr("dezimal"); color: ZTheme.muted; font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: true }
+                Text { Layout.preferredWidth: 110; text: qsTr("binär"); color: ZTheme.muted; font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: true }
+                Text { Layout.fillWidth: true; text: qsTr("hex"); color: ZTheme.muted; font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: true }
             }
             Repeater {
                 model: 16
@@ -135,19 +135,19 @@ Popup {
                             Layout.preferredWidth: 60
                             text: String(row.index)
                             color: row.now ? ZTheme.textOnAccent : ZTheme.text
-                            font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
+                            font.family: ZTheme.mono; font.pixelSize: Math.round(17 * ZTheme.fontScale); font.bold: true
                         }
                         Text {
                             Layout.preferredWidth: 110
                             text: ("000" + row.index.toString(2)).slice(-4)
                             color: row.now ? ZTheme.textOnAccent : ZTheme.text
-                            font.family: ZTheme.mono; font.pixelSize: 17
+                            font.family: ZTheme.mono; font.pixelSize: Math.round(17 * ZTheme.fontScale)
                         }
                         Text {
                             Layout.fillWidth: true
                             text: row.index.toString(16).toUpperCase()
                             color: row.now ? ZTheme.textOnAccent : ZTheme.text
-                            font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
+                            font.family: ZTheme.mono; font.pixelSize: Math.round(17 * ZTheme.fontScale); font.bold: true
                         }
                     }
                 }

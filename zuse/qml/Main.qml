@@ -15,6 +15,8 @@ ApplicationWindow {
     color: ZTheme.graphite
     title: qsTr("Zuse 1 – Computertechnik für Einsteiger (Prototyp)")
 
+    Binding { target: ZTheme; property: "fontScale"; value: settings.fontScale }
+
     property string page: startPage // "home" (Startseite) oder "lab" (Experiment, Freies Labor, Vorfuehrung)
     readonly property bool building: workbench.stageKind === "bauen"
     readonly property bool inLab: page === "lab"
@@ -58,24 +60,24 @@ ApplicationWindow {
             Text {
                 text: win.inLab ? "Zuse 1" : qsTr("Zuse 1 – Computertechnik für Einsteiger")
                 color: ZTheme.textOnShell
-                font.pixelSize: 22; font.bold: true
+                font.pixelSize: Math.round(22 * ZTheme.fontScale); font.bold: true
             }
             Item { Layout.preferredWidth: 6 }
             HeaderButton { // zurueck zur Startseite wie Volta
                 visible: win.inLab
                 text: "⌂"
                 font.family: "Segoe UI Symbol"
-                font.pixelSize: 24
+                font.pixelSize: Math.round(24 * ZTheme.fontScale)
                 onClicked: win.goHome()
                 Accessible.name: qsTr("Startseite")
                 ToolTip.visible: hovered; ToolTip.text: qsTr("Startseite")
             }
-            StagePicker { visible: win.inLab; Layout.maximumWidth: 360 }
+            StagePicker { visible: win.inLab; Layout.fillWidth: true; Layout.minimumWidth: 160; Layout.maximumWidth: 360 }
             HeaderButton {
                 visible: win.inLab && win.building && !workbench.benchLocked
                 text: "↶"
                 font.family: "Segoe UI Symbol"
-                font.pixelSize: 22
+                font.pixelSize: Math.round(22 * ZTheme.fontScale)
                 enabled: workbench.canUndo && !workbench.inside
                 onClicked: workbench.undo()
                 Accessible.name: qsTr("Rückgängig")
@@ -85,7 +87,7 @@ ApplicationWindow {
                 visible: win.inLab && win.building && !workbench.benchLocked
                 text: "↷"
                 font.family: "Segoe UI Symbol"
-                font.pixelSize: 22
+                font.pixelSize: Math.round(22 * ZTheme.fontScale)
                 enabled: workbench.canRedo && !workbench.inside
                 onClicked: workbench.redo()
                 Accessible.name: qsTr("Wiederholen")
@@ -103,6 +105,13 @@ ApplicationWindow {
             HeaderButton {
                 text: qsTr("Werkzeugkiste") + " (" + workbench.tools.length + ")"
                 onClicked: toolbox.open()
+            }
+            TopBar { // wie Volta: Schrift, Sprache, Hilfe, Kurzanleitung, Info, Menue
+                Layout.alignment: Qt.AlignVCenter
+                helpInMenu: win.inLab
+                onHelpRequested: help.show("")
+                onQuickGuideRequested: quickGuide.open()
+                onInfoRequested: info.open()
             }
         }
     }
@@ -150,7 +159,7 @@ ApplicationWindow {
                         required property string modelData
                         required property int index
                         spacing: 6
-                        Text { visible: index > 0; text: "›"; color: ZTheme.muted; font.pixelSize: 22 }
+                        Text { visible: index > 0; text: "›"; color: ZTheme.muted; font.pixelSize: Math.round(22 * ZTheme.fontScale) }
                         ZButton {
                             text: modelData
                             primary: index === workbench.path.length - 1
@@ -162,7 +171,7 @@ ApplicationWindow {
                     Layout.leftMargin: 8
                     text: workbench.inside ? qsTr("Zurück: auf den Pfad tippen")
                                            : qsTr("Doppelt tippen: in eine ★-Erfindung hineinschauen")
-                    color: ZTheme.muted; font.pixelSize: 14
+                    color: ZTheme.muted; font.pixelSize: Math.round(14 * ZTheme.fontScale)
                 }
             }
             Workbench {
@@ -194,6 +203,9 @@ ApplicationWindow {
         onChosen: index => { workbench.startDemo(index); win.page = "lab" }
     }
     NumbersPopup { id: numbers; objectName: "numbers" }
+    HelpDialog { id: help }
+    QuickGuide { id: quickGuide; onHelpRequested: help.show("") }
+    InfoDialog { id: info }
 
     Rectangle { // Werkzeug, das gerade auf die Werkbank gezogen wird
         id: ghost
@@ -208,7 +220,7 @@ ApplicationWindow {
         Text {
             anchors.centerIn: parent
             text: ghost.symbol; color: ZTheme.text
-            font.family: ZTheme.mono; font.pixelSize: 30; font.bold: true
+            font.family: ZTheme.mono; font.pixelSize: Math.round(30 * ZTheme.fontScale); font.bold: true
         }
     }
 }

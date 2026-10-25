@@ -26,13 +26,13 @@ Popup {
             Text {
                 text: qsTr("Vorführung")
                 color: ZTheme.navy
-                font.pixelSize: 22; font.bold: true
+                font.pixelSize: Math.round(22 * ZTheme.fontScale); font.bold: true
             }
             Text {
                 Layout.fillWidth: true
                 text: qsTr("Fertige Aufbauten zum Zeigen. Schalter und Taster lassen sich bedienen, gespeichert wird nichts.")
                 color: ZTheme.muted
-                font.pixelSize: 14
+                font.pixelSize: Math.round(14 * ZTheme.fontScale)
                 wrapMode: Text.WordWrap
             }
             Repeater {
@@ -54,7 +54,7 @@ Popup {
                             Layout.preferredWidth: 34
                             text: item.modelData.label
                             color: ZTheme.muted
-                            font.pixelSize: 14; font.bold: true
+                            font.pixelSize: Math.round(14 * ZTheme.fontScale); font.bold: true
                         }
                         ColumnLayout {
                             id: col
@@ -65,18 +65,18 @@ Popup {
                                 text: item.modelData.name !== "" ? item.modelData.name + " – " + item.modelData.title
                                                                   : item.modelData.title
                                 color: ZTheme.text
-                                font.pixelSize: 16; font.bold: true
+                                font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: true
                                 elide: Text.ElideRight
                             }
                             Text {
                                 Layout.fillWidth: true
                                 text: item.modelData.question
                                 color: ZTheme.muted
-                                font.pixelSize: 13
+                                font.pixelSize: Math.round(13 * ZTheme.fontScale)
                                 elide: Text.ElideRight
                             }
                         }
-                        Text { text: "▶"; color: ZTheme.navy; font.pixelSize: 18 }
+                        Text { text: "▶"; color: ZTheme.navy; font.pixelSize: Math.round(18 * ZTheme.fontScale) }
                     }
                     TapHandler {
                         id: tap

@@ -30,7 +30,7 @@ Popup {
                 Layout.fillWidth: true
                 text: qsTr("Deine Werkzeugkiste")
                 color: ZTheme.navy
-                font.pixelSize: 26; font.bold: true
+                font.pixelSize: Math.round(26 * ZTheme.fontScale); font.bold: true
             }
             ZButton { text: qsTr("Schließen"); onClicked: root.close() }
         }
@@ -41,7 +41,7 @@ Popup {
             text: qsTr("Noch leer. Jede Regel, die du in einer Rätselkiste entdeckst, und jede Erfindung, die du "
                        + "einpackst, landet hier – und du kannst sie danach überall einbauen.")
             color: ZTheme.muted
-            font.pixelSize: 16
+            font.pixelSize: Math.round(16 * ZTheme.fontScale)
         }
         GridLayout {
             Layout.fillWidth: true
@@ -76,14 +76,14 @@ Popup {
                             Text {
                                 text: (card.modelData.invention ? "★ " : "") + card.modelData.name
                                 color: ZTheme.navy
-                                font.pixelSize: 20; font.bold: true
+                                font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                             }
                             Text {
                                 Layout.fillWidth: true
                                 wrapMode: Text.WordWrap
                                 text: card.modelData.merksatz
                                 color: ZTheme.text
-                                font.pixelSize: 15
+                                font.pixelSize: Math.round(15 * ZTheme.fontScale)
                             }
                         }
                     }
@@ -96,7 +96,7 @@ Popup {
             Text {
                 text: qsTr("Schaltzeichen:")
                 color: ZTheme.muted
-                font.pixelSize: 15
+                font.pixelSize: Math.round(15 * ZTheme.fontScale)
             }
             ZButton {
                 text: "DIN"
@@ -113,7 +113,7 @@ Popup {
                 wrapMode: Text.WordWrap
                 text: qsTr("DIN EN 60617 (Europa) oder IEEE Std 91 (USA)")
                 color: ZTheme.muted
-                font.pixelSize: 13
+                font.pixelSize: Math.round(13 * ZTheme.fontScale)
             }
         }
     }

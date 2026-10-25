@@ -63,7 +63,7 @@ bool isEndpointOfPart(const std::string& endpoint, const std::string& partId) {
 
 WorkbenchController::WorkbenchController(const QString& stagesFile, const QString& dataDir, const QString& language,
                                          QObject* parent)
-    : QObject(parent), m_dataDir(dataDir) {
+    : QObject(parent), m_stagesFile(stagesFile), m_language(language), m_dataDir(dataDir) {
     loadStages(stagesFile, language);
     load();
     dropStaleChips();
@@ -175,6 +175,21 @@ void WorkbenchController::load() {
         ChipDef d;
         if (chipFromJson(it.value().toObject(), d)) m_drafts[it.key()] = d;
     }
+}
+
+void WorkbenchController::setLanguage(const QString& language) {
+    if (language == m_language || m_stages.empty()) return;
+    m_language = language;
+    m_stages.clear();
+    m_levels.clear();
+    m_demoLibrary = Library{};
+    loadStages(m_stagesFile, language); // gleiche Datei: Reihenfolge und Daten bleiben, nur die Texte wechseln
+    if (m_demo) m_library = m_demoLibrary;
+    setMessage(QString());
+    emit stagesChanged();
+    emit stageChanged();
+    emit viewChanged();
+    emit checkChanged();
 }
 
 void WorkbenchController::dropStaleChips() {

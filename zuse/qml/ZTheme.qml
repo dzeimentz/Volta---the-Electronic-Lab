@@ -40,6 +40,7 @@ QtObject {
     readonly property int control: 48   // Bedienelemente >= 48 dp
     readonly property int pin: 56       // Anschluesse >= 56 dp
     readonly property int radius: 12
+    property real fontScale: 1.0 // Schriftgroesse (Einstellung A−/A+): 0,8 / 0,9 / 1,0; Main.qml bindet sie
 
     function levelColor(level) { return level === "1" ? accent : zero }
 }

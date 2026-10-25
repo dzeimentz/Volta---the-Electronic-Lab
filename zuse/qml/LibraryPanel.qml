@@ -23,7 +23,7 @@ Rectangle {
             Layout.fillWidth: true
             text: root.discovering ? qsTr("Rätselkisten") : qsTr("Werkzeuge")
             color: ZTheme.textOnShell
-            font.pixelSize: 18; font.bold: true
+            font.pixelSize: Math.round(18 * ZTheme.fontScale); font.bold: true
             horizontalAlignment: Text.AlignHCenter
         }
         Rectangle { Layout.fillWidth: true; height: 3; radius: 1.5; color: ZTheme.accent }
@@ -104,7 +104,7 @@ Rectangle {
             text: workbench.mode === "vorfuehrung" ? qsTr("Vorführung: Hier ist schon alles aufgebaut.")
                                                    : qsTr("Hier brauchst du keine Werkzeuge – nur die Schalter am Bedienfeld.")
             color: ZTheme.textOnShellMuted
-            font.pixelSize: 14
+            font.pixelSize: Math.round(14 * ZTheme.fontScale)
             wrapMode: Text.WordWrap
         }
 
@@ -114,7 +114,7 @@ Rectangle {
             Layout.fillWidth: true
             text: "🔒 " + qsTr("Erst vermuten – dann gehen die Kisten auf.")
             color: ZTheme.textOnShellMuted
-            font.pixelSize: 14
+            font.pixelSize: Math.round(14 * ZTheme.fontScale)
             wrapMode: Text.WordWrap
         }
         Repeater {
@@ -142,7 +142,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: qsTr("Kiste %1").arg(card.modelData.index + 1)
                         color: ZTheme.muted
-                        font.pixelSize: 15
+                        font.pixelSize: Math.round(15 * ZTheme.fontScale)
                     }
                 }
                 Text { // eingesetzt: nicht nur ueber die Farbe
@@ -150,7 +150,7 @@ Rectangle {
                     anchors { top: parent.top; right: parent.right; margins: 8 }
                     text: "✓"
                     color: ZTheme.padDark
-                    font.pixelSize: 20; font.bold: true
+                    font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                 }
                 TapHandler { onTapped: workbench.selectBox(card.modelData.index) }
             }

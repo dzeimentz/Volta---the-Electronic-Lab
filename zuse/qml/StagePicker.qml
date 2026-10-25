@@ -52,7 +52,7 @@ HeaderButton {
                                     Layout.fillWidth: true
                                     text: qsTr("Stufe %1: %2").arg(level.modelData.number).arg(level.modelData.title)
                                     color: level.modelData.unlocked ? ZTheme.text : ZTheme.muted
-                                    font.pixelSize: 17; font.bold: true
+                                    font.pixelSize: Math.round(17 * ZTheme.fontScale); font.bold: true
                                     wrapMode: Text.WordWrap
                                 }
                                 Text {
@@ -60,14 +60,14 @@ HeaderButton {
                                     text: level.modelData.planned ? level.modelData.question + " " + qsTr("Experimente folgen.")
                                                                   : level.modelData.question
                                     color: ZTheme.muted
-                                    font.pixelSize: 13; font.italic: true
+                                    font.pixelSize: Math.round(13 * ZTheme.fontScale); font.italic: true
                                     wrapMode: Text.WordWrap
                                 }
                             }
                             Text {
                                 text: level.modelData.done ? "✓" : level.modelData.unlocked ? "" : "🔒"
                                 color: ZTheme.ok
-                                font.pixelSize: 18; font.bold: true
+                                font.pixelSize: Math.round(18 * ZTheme.fontScale); font.bold: true
                                 font.family: level.modelData.done ? "" : "Segoe UI Emoji"
                                 Accessible.name: level.modelData.done ? qsTr("Stufe geschafft")
                                                : level.modelData.unlocked ? "" : qsTr("Stufe noch gesperrt")
@@ -101,7 +101,7 @@ HeaderButton {
                                             anchors.centerIn: parent
                                             text: level.modelData.number + "." + (item.index + 1)
                                             color: ZTheme.text
-                                            font.pixelSize: 13; font.bold: true
+                                            font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: true
                                         }
                                     }
                                     ColumnLayout {
@@ -112,14 +112,14 @@ HeaderButton {
                                             Layout.fillWidth: true
                                             text: item.modelData.title
                                             color: ZTheme.text
-                                            font.pixelSize: 16; font.bold: true
+                                            font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: true
                                             elide: Text.ElideRight
                                         }
                                         Text {
                                             Layout.fillWidth: true
                                             text: item.modelData.question
                                             color: ZTheme.muted
-                                            font.pixelSize: 13
+                                            font.pixelSize: Math.round(13 * ZTheme.fontScale)
                                             wrapMode: Text.WordWrap
                                             maximumLineCount: 2
                                             elide: Text.ElideRight
@@ -128,7 +128,7 @@ HeaderButton {
                                     Text {
                                         text: item.modelData.done ? "✓" : item.modelData.unlocked ? "" : "🔒"
                                         color: ZTheme.ok
-                                        font.pixelSize: 20; font.bold: true
+                                        font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                                         font.family: item.modelData.done ? "" : "Segoe UI Emoji"
                                     }
                                 }
@@ -158,7 +158,7 @@ HeaderButton {
                                     anchors.verticalCenter: parent.verticalCenter
                                     text: parent.modelData + " – " + qsTr("folgt")
                                     color: ZTheme.text
-                                    font.pixelSize: 15
+                                    font.pixelSize: Math.round(15 * ZTheme.fontScale)
                                     elide: Text.ElideRight
                                 }
                             }
@@ -169,7 +169,7 @@ HeaderButton {
                             Layout.leftMargin: 62
                             text: "→ " + level.modelData.outlook
                             color: ZTheme.muted
-                            font.pixelSize: 14; font.italic: true
+                            font.pixelSize: Math.round(14 * ZTheme.fontScale); font.italic: true
                             wrapMode: Text.WordWrap
                         }
                     }

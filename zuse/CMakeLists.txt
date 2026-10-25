@@ -1,11 +1,12 @@
 # Zuse-Prototyp Z0: Werkbank (docs/Konzept_Zuse.md, ADR-0010). Eigene App neben Volta, Logik aus logic/.
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Quick QuickControls2 Svg LinguistTools)
 qt_standard_project_setup(REQUIRES 6.8)
 
 # Werkbank-Modell ohne Oberflaeche (testbar)
 add_library(zuse_model STATIC
     src/chip_json.cpp
     src/workbench_controller.cpp
+    src/zuse_settings.cpp
 )
 target_include_directories(zuse_model PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(zuse_model PUBLIC volta::logic Qt6::Core Qt6::Gui)
@@ -48,6 +49,12 @@ qt_add_qml_module(zuse_app
         qml/PanelPort.qml
         qml/TruthPanel.qml
         qml/ZButton.qml
+        qml/TopBar.qml
+        qml/HelpIcon.qml
+        qml/GuideIcon.qml
+        qml/HelpDialog.qml
+        qml/QuickGuide.qml
+        qml/InfoDialog.qml
 )
 # Programmsymbol (Quelle resources/icons/zuse1.svg, Rasterbilder mit tools/make_icons.py)
 if(WIN32)
@@ -61,7 +68,17 @@ qt_add_resources(zuse_app "zuse_icons" PREFIX "/zuse" BASE resources/icons FILES
 file(GLOB zuse_zetti RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" CONFIGURE_DEPENDS resources/zetti/*.png)
 qt_add_resources(zuse_app "zuse_zetti" PREFIX "/zuse" BASE resources FILES ${zuse_zetti})
 qt_add_resources(zuse_app "zuse_content" PREFIX "/zuse" BASE content FILES content/stufen.json)
-target_link_libraries(zuse_app PRIVATE zuse_model Qt6::Quick Qt6::QuickControls2)
+# Flaggen der Sprachwahl (gemeinsam mit Volta)
+qt_add_resources(zuse_app "zuse_flags" PREFIX "/flags" BASE "${PROJECT_SOURCE_DIR}/app/resources/flags" FILES
+    "${PROJECT_SOURCE_DIR}/app/resources/flags/de.svg" "${PROJECT_SOURCE_DIR}/app/resources/flags/fr.svg"
+    "${PROJECT_SOURCE_DIR}/app/resources/flags/en.svg")
+# Uebersetzungen (Deutsch ist Quellsprache). qt_add_lrelease wie bei Volta (Leerzeichen im Pfad);
+# lupdate von Hand: lupdate zuse/src zuse/qml -ts i18n/zuse_fr.ts i18n/zuse_en.ts
+qt_add_lrelease(zuse_app
+    TS_FILES ${PROJECT_SOURCE_DIR}/i18n/zuse_fr.ts ${PROJECT_SOURCE_DIR}/i18n/zuse_en.ts
+    QM_FILES_OUTPUT_VARIABLE zuse_qm_files)
+qt_add_resources(zuse_app "zuse_translations" PREFIX "/i18n" BASE "${CMAKE_CURRENT_BINARY_DIR}" FILES ${zuse_qm_files})
+target_link_libraries(zuse_app PRIVATE zuse_model Qt6::Quick Qt6::QuickControls2 Qt6::Svg)
 
 if(VOLTA_BUILD_TESTS)
     find_package(Qt6 REQUIRED COMPONENTS Test)

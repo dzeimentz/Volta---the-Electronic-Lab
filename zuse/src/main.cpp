@@ -1,7 +1,7 @@
 // Zuse-Prototyp Z0 (docs/Konzept_Zuse.md): Stufen mit Geschichte, Raetselkisten, Werkbank und Werkzeugkiste.
 // Offline, keine Datenerhebung: eigene Chips und Entwuerfe liegen nur in AppDataLocation.
 // Entwicklerhilfen: ZUSE_SCREENSHOT=<bild.png> (Bildschirmfoto statt Bedienung), ZUSE_SIZE=<b>x<h>,
-// ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen loesen und zur letzten gehen),
+// ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|fr|en, ZUSE_FONT=0|1|2 (Schriftstufe), ZUSE_DEMO=<n> (n Stufen loesen und zur letzten gehen),
 // ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (Fenster oeffnen),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
 // ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen),
@@ -17,9 +17,12 @@
 #include <QQuickStyle>
 #include <QQuickWindow>
 #include <QStandardPaths>
+#include <QSysInfo>
+#include <QVariantMap>
 #include <QTimer>
 
 #include "workbench_controller.hpp"
+#include "zuse_settings.hpp"
 
 int main(int argc, char* argv[]) {
     QQuickStyle::setStyle(QStringLiteral("Basic")); // eigene Gestaltung; Release liefert nur diesen Stil aus
@@ -31,10 +34,16 @@ int main(int argc, char* argv[]) {
     icon.addFile(QStringLiteral(":/zuse/zuse1_256.png"));
     QGuiApplication::setWindowIcon(icon);
 
-    QString language = qEnvironmentVariable("ZUSE_LANG");
-    if (language.isEmpty()) language = QLocale().language() == QLocale::German ? "de" : "en";
     QString dataDir = qEnvironmentVariable("ZUSE_DATA_DIR");
     if (dataDir.isEmpty()) dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    // Sprache: gespeicherte Wahl, sonst die des Systems (DE, FR, sonst EN); ZUSE_LANG bzw. ZUSE_FONT setzen sie (Entwicklerhilfe)
+    const QLocale::Language system = QLocale().language();
+    zuse::ZuseSettings settings(dataDir, system == QLocale::German   ? QStringLiteral("de")
+                                         : system == QLocale::French ? QStringLiteral("fr")
+                                                                     : QStringLiteral("en"));
+    if (qEnvironmentVariableIsSet("ZUSE_LANG")) settings.setLanguage(qEnvironmentVariable("ZUSE_LANG"));
+    if (qEnvironmentVariableIsSet("ZUSE_FONT")) settings.setFontLevel(qEnvironmentVariableIntValue("ZUSE_FONT"));
+    const QString language = settings.language();
 
     zuse::WorkbenchController workbench(QStringLiteral(":/zuse/stufen.json"), dataDir, language);
     // Vorfuehrung: die ersten n Stufen mit der Musterloesung durchspielen
@@ -85,6 +94,25 @@ int main(int argc, char* argv[]) {
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty(QStringLiteral("workbench"), &workbench);
     engine.rootContext()->setContextProperty(QStringLiteral("startPage"), startPage);
+    engine.rootContext()->setContextProperty(QStringLiteral("settings"), &settings);
+    QString compiler = QStringLiteral("unbekannt");
+#if defined(__clang__)
+    compiler = QStringLiteral("Clang %1").arg(QStringLiteral(__clang_version__));
+#elif defined(__GNUC__)
+    compiler = QStringLiteral("GCC %1.%2").arg(__GNUC__).arg(__GNUC_MINOR__);
+#elif defined(_MSC_VER)
+    compiler = QStringLiteral("MSVC %1").arg(_MSC_VER);
+#endif
+    engine.rootContext()->setContextProperty(
+        QStringLiteral("appInfo"),
+        QVariantMap{{"version", QStringLiteral("0.1.0")},
+                    {"qtVersion", QString::fromLatin1(qVersion())},
+                    {"platform", QSysInfo::prettyProductName() + " (" + QSysInfo::currentCpuArchitecture() + ")"},
+                    {"compiler", compiler}});
+    QObject::connect(&settings, &zuse::ZuseSettings::languageChanged, &engine, [&](const QString& code) {
+        workbench.setLanguage(code);
+        engine.retranslate();
+    });
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, [] { QCoreApplication::exit(1); },
                      Qt::QueuedConnection);
     engine.loadFromModule("Zuse", "Main");

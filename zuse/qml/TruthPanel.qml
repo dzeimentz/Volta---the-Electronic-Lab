@@ -31,7 +31,7 @@ ColumnLayout {
                 visible: modelData.label !== ""
                 text: modelData.name + " = " + modelData.label
                 color: ZTheme.muted
-                font.pixelSize: 14
+                font.pixelSize: Math.round(14 * ZTheme.fontScale)
             }
         }
     }
@@ -44,17 +44,17 @@ ColumnLayout {
             Layout.preferredWidth: root.inWidth
             text: root.sequence ? qsTr("Schritt") + "  (" + root.inputs.map(p => p.name).join(" ") + ")"
                                 : root.withNotes ? qsTr("Rechnung") : root.inputs.map(p => p.name).join(" ")
-            color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 15; font.bold: true
+            color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
         }
         Text {
             Layout.preferredWidth: root.colWidth
             text: root.discover ? qsTr("Vermutung") : qsTr("soll")
-            color: ZTheme.muted; font.pixelSize: 14; font.bold: true
+            color: ZTheme.muted; font.pixelSize: Math.round(14 * ZTheme.fontScale); font.bold: true
         }
         Text {
             Layout.preferredWidth: root.colWidth
             text: root.discover ? qsTr("Kiste") : qsTr("ist")
-            color: ZTheme.muted; font.pixelSize: 14; font.bold: true
+            color: ZTheme.muted; font.pixelSize: Math.round(14 * ZTheme.fontScale); font.bold: true
         }
     }
     Repeater {
@@ -86,7 +86,7 @@ ColumnLayout {
                     visible: !root.sequence
                     Layout.preferredWidth: root.inWidth
                     text: root.withNotes ? row.modelData.note : row.modelData.inputs.split("").join(" ")
-                    color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
+                    color: ZTheme.text; font.family: ZTheme.mono; font.pixelSize: Math.round(17 * ZTheme.fontScale); font.bold: true
                 }
                 ColumnLayout { // Ablauf: Schritt in Worten, darunter die Stellung der Schalter und Taster
                     id: stepCol
@@ -96,12 +96,12 @@ ColumnLayout {
                     Text {
                         Layout.fillWidth: true
                         text: row.modelData.note ?? ""
-                        color: ZTheme.text; font.pixelSize: 14; font.bold: true
+                        color: ZTheme.text; font.pixelSize: Math.round(14 * ZTheme.fontScale); font.bold: true
                         wrapMode: Text.WordWrap
                     }
                     Text {
                         text: row.modelData.inputs.split("").join(" ")
-                        color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: 13
+                        color: ZTheme.muted; font.family: ZTheme.mono; font.pixelSize: Math.round(13 * ZTheme.fontScale)
                     }
                 }
                 Item { // Soll (bauen) bzw. Vermutung (entdecken, antippbar solange die Stufe offen ist)
@@ -124,21 +124,21 @@ ColumnLayout {
                         text: root.discover ? (row.modelData.guess !== "" ? row.modelData.guess : "?")
                                             : row.modelData.expected
                         color: root.discover && row.modelData.guess === "" ? ZTheme.accentText : ZTheme.text
-                        font.family: ZTheme.mono; font.pixelSize: 17; font.bold: root.discover
+                        font.family: ZTheme.mono; font.pixelSize: Math.round(17 * ZTheme.fontScale); font.bold: root.discover
                     }
                 }
                 Text {
                     Layout.preferredWidth: root.colWidth
                     text: row.filled ? row.modelData.actual : (root.discover && !workbench.guessing ? "?" : "")
                     color: row.filled ? ZTheme.text : ZTheme.muted
-                    font.family: ZTheme.mono; font.pixelSize: 17; font.bold: true
+                    font.family: ZTheme.mono; font.pixelSize: Math.round(17 * ZTheme.fontScale); font.bold: true
                 }
                 Text {
                     Layout.fillWidth: true
                     text: root.discover ? (row.modelData.match ?? "")
                                         : row.filled ? (row.modelData.ok ? "✓" : "✗") : ""
                     color: root.discover ? ZTheme.navy : row.modelData.ok ? ZTheme.ok : ZTheme.bad
-                    font.pixelSize: 20; font.bold: true
+                    font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                 }
             }
         }

@@ -219,7 +219,10 @@ public:
     Q_INVOKABLE void clearBench();
     Q_INVOKABLE void toggleInput(const QString& name);           // Kippschalter
     Q_INVOKABLE void setInput(const QString& name, bool on);     // Taster: druecken und loslassen
-    Q_INVOKABLE void toggleClock();                              // Taktgeber anhalten bzw. weiterlaufen lassen
+    Q_INVOKABLE void toggleClock();
+    // Anzeigesprache der Inhalte (Geschichten, Fragen, Bezeichnungen); Fortschritt und Aufbau bleiben
+    void setLanguage(const QString& language);
+    QString language() const { return m_language; }                              // Taktgeber anhalten bzw. weiterlaufen lassen
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
     Q_INVOKABLE void check();
@@ -287,6 +290,8 @@ private:
     std::vector<Stage> m_stages;
     std::vector<LearningLevel> m_levels;
     int m_stage = 0;
+    QString m_stagesFile;
+    QString m_language;
     QString m_dataDir;
     volta::logic::Library m_library; // erstellte Chips
     volta::logic::Library m_demoLibrary;  // alle Musterloesungen (Vorfuehrung)

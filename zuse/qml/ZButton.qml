@@ -8,7 +8,7 @@ Button {
     implicitHeight: ZTheme.control
     implicitWidth: Math.max(ZTheme.control, contentItem.implicitWidth + 32)
     font.bold: true
-    font.pixelSize: 16
+    font.pixelSize: Math.round(16 * ZTheme.fontScale)
     contentItem: Text {
         text: root.text
         font: root.font

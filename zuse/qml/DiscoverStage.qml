@@ -130,14 +130,14 @@ Item {
                 wrapMode: Text.WordWrap
                 text: qsTr("Setz eine Kiste ein")
                 color: ZTheme.muted
-                font.pixelSize: 16
+                font.pixelSize: Math.round(16 * ZTheme.fontScale)
             }
             Text {
                 visible: !!root.current && !root.current.revealed
                 anchors.centerIn: parent
                 text: "?"
                 color: ZTheme.padDark
-                font.pixelSize: 96; font.bold: true
+                font.pixelSize: Math.round(96 * ZTheme.fontScale); font.bold: true
             }
             GateShape {
                 visible: !!root.current && root.current.revealed
@@ -154,7 +154,7 @@ Item {
                 text: root.current ? (root.current.revealed ? root.current.name
                                                              : qsTr("Kiste %1").arg(root.current.index + 1)) : ""
                 color: ZTheme.text
-                font.pixelSize: 18; font.bold: true
+                font.pixelSize: Math.round(18 * ZTheme.fontScale); font.bold: true
             }
         }
     }

@@ -35,14 +35,14 @@ Rectangle {
             Layout.fillWidth: true
             text: workbench.stageTitle
             color: ZTheme.navy
-            font.pixelSize: 22; font.bold: true
+            font.pixelSize: Math.round(22 * ZTheme.fontScale); font.bold: true
             wrapMode: Text.WordWrap
         }
         Text {
             Layout.fillWidth: true
             text: workbench.stageQuestion
             color: ZTheme.accentText
-            font.pixelSize: 16; font.bold: true
+            font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: true
             wrapMode: Text.WordWrap
         }
         RowLayout {
@@ -69,7 +69,7 @@ Rectangle {
                     anchors { left: parent.left; right: parent.right; top: parent.top; margins: 12 }
                     wrapMode: Text.WordWrap
                     color: ZTheme.text
-                    font.pixelSize: 15
+                    font.pixelSize: Math.round(15 * ZTheme.fontScale)
                     lineHeight: 1.1
                     text: root.hintVisible ? workbench.stageHint
                                            : (workbench.message !== "" ? workbench.message : workbench.stageStory)
@@ -123,14 +123,14 @@ Rectangle {
                         : root.building ? (workbench.stageSequence ? qsTr("Ablauf") : qsTr("Wahrheitstabelle"))
                         : workbench.guessing ? qsTr("Was vermutest du?") : qsTr("Was passiert?")
                     color: ZTheme.navy
-                    font.pixelSize: 18; font.bold: true
+                    font.pixelSize: Math.round(18 * ZTheme.fontScale); font.bold: true
                 }
                 Text {
                     visible: workbench.guessing
                     Layout.fillWidth: true
                     text: qsTr("Tippe in der Spalte »Vermutung« für jede Schalterstellung: 1 = an, 0 = aus.")
                     color: ZTheme.muted
-                    font.pixelSize: 14
+                    font.pixelSize: Math.round(14 * ZTheme.fontScale)
                     wrapMode: Text.WordWrap
                 }
                 TruthPanel { visible: !root.counting && !root.free; Layout.fillWidth: true }
@@ -155,14 +155,14 @@ Rectangle {
                                                           : qsTr("Zeige die %1").arg(task.modelData.value)
                                 wrapMode: Text.WordWrap
                                 color: ZTheme.text
-                                font.pixelSize: 16; font.bold: task.modelData.current
+                                font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: task.modelData.current
                             }
                             Text { // binaer erst, wenn geschafft – sonst waere die Loesung verraten
                                 text: !task.modelData.done ? ""
                                     : task.modelData.text ? "= " + task.modelData.value + "  ✓"
                                     : (task.modelData.value + 16).toString(2).slice(1) + "  ✓"
                                 color: ZTheme.ok
-                                font.family: ZTheme.mono; font.pixelSize: 16; font.bold: true
+                                font.family: ZTheme.mono; font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: true
                             }
                         }
                     }
@@ -181,7 +181,7 @@ Rectangle {
                         wrapMode: Text.WordWrap
                         text: qsTr("Merke: ") + workbench.stageMerksatz
                         color: ZTheme.text
-                        font.pixelSize: 15; font.bold: true
+                        font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
                     }
                 }
             }

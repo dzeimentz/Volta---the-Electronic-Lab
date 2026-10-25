@@ -30,7 +30,7 @@ Rectangle {
             anchors.fill: parent
             anchors.margins: 16
             spacing: 14
-            Text { text: tile.icon; font.pixelSize: 32; font.family: "Segoe UI Emoji" }
+            Text { text: tile.icon; font.pixelSize: Math.round(32 * ZTheme.fontScale); font.family: "Segoe UI Emoji" }
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 2
@@ -38,14 +38,14 @@ Rectangle {
                     Layout.fillWidth: true
                     text: tile.title
                     color: ZTheme.navy
-                    font.pixelSize: 20; font.bold: true
+                    font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                     elide: Text.ElideRight
                 }
                 Text {
                     Layout.fillWidth: true
                     text: tile.subtitle
                     color: ZTheme.muted
-                    font.pixelSize: 13
+                    font.pixelSize: Math.round(13 * ZTheme.fontScale)
                     wrapMode: Text.WordWrap
                     maximumLineCount: 2
                     elide: Text.ElideRight
@@ -93,7 +93,7 @@ Rectangle {
                         anchors { left: parent.left; right: parent.right; top: parent.top; margins: 12 }
                         wrapMode: Text.WordWrap
                         color: ZTheme.text
-                        font.pixelSize: 15
+                        font.pixelSize: Math.round(15 * ZTheme.fontScale)
                         text: qsTr("Hallo! Ich bin Zetti. Ich zeige dir, wie ein Rechner denkt – vom Lichtschalter bis "
                                    + "zur Rechenmaschine. Fang beim Lernpfad an oder probiere im freien Labor eigene "
                                    + "Ideen aus.")
@@ -133,7 +133,7 @@ Rectangle {
                 Layout.topMargin: 6
                 text: qsTr("Lernpfad")
                 color: ZTheme.navy
-                font.pixelSize: 24; font.bold: true
+                font.pixelSize: Math.round(24 * ZTheme.fontScale); font.bold: true
             }
 
             // ---- Lernstufen
@@ -167,7 +167,7 @@ Rectangle {
                                     text: level.modelData.done ? "✓"
                                         : level.modelData.unlocked || level.modelData.planned ? level.modelData.number : "🔒"
                                     color: "white"
-                                    font.pixelSize: 20; font.bold: true
+                                    font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                                     font.family: text === "🔒" ? "Segoe UI Emoji" : ""
                                 }
                             }
@@ -178,14 +178,14 @@ Rectangle {
                                     Layout.fillWidth: true
                                     text: qsTr("Stufe %1: %2").arg(level.modelData.number).arg(level.modelData.title)
                                     color: ZTheme.text
-                                    font.pixelSize: 19; font.bold: true
+                                    font.pixelSize: Math.round(19 * ZTheme.fontScale); font.bold: true
                                     wrapMode: Text.WordWrap
                                 }
                                 Text {
                                     Layout.fillWidth: true
                                     text: level.modelData.question
                                     color: ZTheme.muted
-                                    font.pixelSize: 14; font.italic: true
+                                    font.pixelSize: Math.round(14 * ZTheme.fontScale); font.italic: true
                                     wrapMode: Text.WordWrap
                                 }
                             }
@@ -197,7 +197,7 @@ Rectangle {
                                     text: qsTr("%1 von %2 geschafft").arg(level.doneCount)
                                                                      .arg(level.modelData.experiments.length)
                                     color: ZTheme.muted
-                                    font.pixelSize: 13
+                                    font.pixelSize: Math.round(13 * ZTheme.fontScale)
                                 }
                                 Rectangle {
                                     Layout.preferredWidth: 190; Layout.preferredHeight: 8
@@ -217,7 +217,7 @@ Rectangle {
                             text: qsTr("Noch gesperrt – schaffe zuerst die Experimente der Stufe %1.")
                                   .arg(level.modelData.number - 1)
                             color: ZTheme.muted
-                            font.pixelSize: 14
+                            font.pixelSize: Math.round(14 * ZTheme.fontScale)
                         }
                         Flow { // Experimente der Stufe, danach geplante mit »folgt«
                             Layout.fillWidth: true
@@ -243,13 +243,13 @@ Rectangle {
                                         Text {
                                             text: card.modelData.label
                                             color: ZTheme.muted
-                                            font.pixelSize: 13; font.bold: true
+                                            font.pixelSize: Math.round(13 * ZTheme.fontScale); font.bold: true
                                         }
                                         Text {
                                             Layout.fillWidth: true
                                             text: card.modelData.title
                                             color: ZTheme.text
-                                            font.pixelSize: 15; font.bold: true
+                                            font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
                                             wrapMode: Text.WordWrap
                                             maximumLineCount: 2
                                             elide: Text.ElideRight
@@ -257,7 +257,7 @@ Rectangle {
                                         Text {
                                             text: card.modelData.done ? "✓" : card.modelData.unlocked ? "›" : "🔒"
                                             color: card.modelData.done ? ZTheme.ok : ZTheme.navy
-                                            font.pixelSize: 20; font.bold: true
+                                            font.pixelSize: Math.round(20 * ZTheme.fontScale); font.bold: true
                                             font.family: text === "🔒" ? "Segoe UI Emoji" : ""
                                         }
                                     }
@@ -287,7 +287,7 @@ Rectangle {
                                         verticalAlignment: Text.AlignVCenter
                                         text: parent.modelData + " – " + qsTr("folgt")
                                         color: ZTheme.text
-                                        font.pixelSize: 15
+                                        font.pixelSize: Math.round(15 * ZTheme.fontScale)
                                         wrapMode: Text.WordWrap
                                     }
                                 }
@@ -298,7 +298,7 @@ Rectangle {
                             Layout.fillWidth: true
                             text: "→ " + level.modelData.outlook
                             color: ZTheme.muted
-                            font.pixelSize: 14; font.italic: true
+                            font.pixelSize: Math.round(14 * ZTheme.fontScale); font.italic: true
                             wrapMode: Text.WordWrap
                         }
                     }
