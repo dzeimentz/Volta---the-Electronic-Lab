@@ -104,6 +104,8 @@ Popup {
             Line { text: qsTr("Elektronenröhre: Alex P. Kok (CC BY-SA 4.0)") }
             Line { text: qsTr("Nachbau des ersten Transistors: gemeinfrei") }
             Line { text: qsTr("Chip 7400 unter dem Mikroskop: Robert Baruch (CC BY-SA 4.0)") }
+            Line { text: qsTr("Chips von AMD (Ryzen) und Intel (Lunar Lake): FritzchensFritz (CC0, gemeinfrei)") }
+            Line { text: qsTr("ATmega328: Markus Kammerstetter (CC BY 4.0)") }
             Heading { text: qsTr("Datenschutz") }
             Line { text: qsTr("Zuse 1 erhebt keine Daten, zeigt keine Werbung und braucht kein Internet. Deine Erfindungen bleiben auf diesem Gerät.") }
             Line { text: "© 2026 DC Software Engineering"; color: ZTheme.muted; topPadding: 8 }

@@ -73,6 +73,11 @@ Rectangle {
           where: qsTr("In Zuse 1: Auf der Werkbank verbindest du Gatter selbst – fast wie in einem FPGA.") },
         { key: "heute", year: qsTr("heute"), title: qsTr("Milliarden Gatter"), pose: "begeistert",
           text: qsTr("Der Chip in einem Handy hat viele Milliarden Transistoren. Sie sind nur wenige Nanometer groß: Mehr als tausend passen nebeneinander in die Breite eines Haares. Und doch macht jedes Gatter darin genau das, was du in Zuse 1 entdeckst: UND, ODER, NICHT."),
+          photos: [
+              { src: "zen5.jpg", caption: qsTr("Rechenchip eines Prozessors von 2024 (AMD Ryzen, Zen 5): über 8 Milliarden Transistoren auf 9 × 7,5 Millimetern. Man erkennt die acht Rechenkerne."), credit: qsTr("Foto: FritzchensFritz · CC0 (gemeinfrei)") },
+              { src: "lunarlake.jpg", caption: qsTr("Notebook-Prozessor von 2024 (Intel Lunar Lake): oben der große Rechenchip, unten ein zweiter Chip für die Anschlüsse."), credit: qsTr("Foto: FritzchensFritz · CC0 (gemeinfrei)") },
+              { src: "atmega328.jpg", caption: qsTr("Der ATmega328 aus dem Arduino: ein ganzer kleiner Rechner auf einem Chip – mit Rechenwerk, Speicher und Anschlüssen."), credit: qsTr("Foto: Markus Kammerstetter · CC BY 4.0") }
+          ],
           where: qsTr("In Zuse 1: Fang beim Lernpfad an – genau wie die Geschichte.") },
         { key: "ueberblick", year: "", title: qsTr("Überblick"), pose: "erklaerend",
           text: qsTr("Hier siehst du noch einmal alle Gatter: woher die Idee kommt, womit man sie zuerst gebaut hat und wofür man sie braucht."),

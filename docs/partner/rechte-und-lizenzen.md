@@ -44,7 +44,7 @@ Berechtigung `INTERNET`, kein Netzwerkcode).
 **Nicht ausgeliefert** (nur Entwicklung): Catch2 (BSL-1.0, Tests), Python-Werkzeuge (reportlab, Pillow, PyMuPDF
 nur für Vorschauen), Android-SDK/NDK, Compiler.
 
-**Fotos in Zuse 1 (»Historische Entwicklung«, `zuse/resources/history/`):** sechs Fotos von Wikimedia Commons,
+**Fotos in Zuse 1 (»Historische Entwicklung«, `zuse/resources/history/`):** neun Fotos von Wikimedia Commons,
 verkleinert (ohne Metadaten), sonst unverändert. Urheber und Lizenz stehen unter jedem Foto, in der Großansicht und
 im Info-Fenster. CC BY-SA verlangt Namensnennung und Lizenzangabe; die Weitergabe-Pflicht gilt nur für das Bild
 selbst, nicht für die App.
@@ -57,6 +57,9 @@ selbst, nicht für die App.
 | roehre.jpg | File:Vacuum tube Teonex EC81 triode IMG 7756.jpg | Alex P. Kok | CC BY-SA 4.0 |
 | transistor.jpg | File:Replica-of-first-transistor.jpg | (Nachbau von Lucent Technologies) | gemeinfrei |
 | die7400.jpg | File:7400 NS 443 die 120nmpp.jpg | Robert Baruch | CC BY-SA 4.0 |
+| zen5.jpg | File:AMD@4nmCCD(6nmIOD)@Zen5@Granite Ridge@Ryzen 5 9600X@100-000001405 BY 2429SUY 9AEQ579S40073 DSCx15 CCD poly@5xBF.jpg | FritzchensFritz | CC0 |
+| lunarlake.jpg | File:Intel@TSMC N3 N6@LunarLake@LNL(4P+4LPE)@CoreUltra200Series@DSCx05 poly@5xBFPOL.jpg | FritzchensFritz | CC0 |
+| atmega328.jpg | File:Atmel atmega328 mz 20x.jpg | Markus Kammerstetter | CC BY 4.0 |
 
 **Schriften:** Die App nutzt die Schriften des Systems. Die PDF-Unterlagen (Anleitung, Flyer, Aufbaukarte)
 betten Teilmengen von Segoe UI ein; für eine Auslieferung durch einen Partner wird das gegen dessen Hausschrift
