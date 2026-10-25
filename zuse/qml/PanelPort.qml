@@ -176,8 +176,11 @@ Item {
         enabled: root.enabled && root.kind === "kipp"
         onTapped: workbench.toggleInput(root.name)
     }
-    TapHandler {
+    TapHandler { // Taster wie bei Volta: druecken = 1, loslassen (oder vom Knopf abrutschen) = 0
+        id: push
         enabled: root.enabled && root.kind === "taster"
+        gesturePolicy: TapHandler.WithinBounds
         onPressedChanged: workbench.setInput(root.name, pressed)
     }
+    Component.onDestruction: if (push.pressed) workbench.setInput(root.name, false)
 }

@@ -120,11 +120,13 @@ Item {
         }
 
         // Anschluesse am Rahmen: Kippschalter und Taster links, LEDs rechts
+        // Modell = Anzahl: die Elemente bleiben beim Umschalten bestehen (Taster behaelt sein Loslassen)
         Repeater {
-            model: workbench.ports
+            model: workbench.ports.length
             delegate: Item {
                 id: port
-                required property var modelData
+                required property int index
+                readonly property var modelData: workbench.ports[index] ?? ({})
                 x: modelData.x - width / 2
                 y: modelData.y - height / 2
                 width: ZTheme.pin; height: ZTheme.pin

@@ -104,7 +104,8 @@ python3 tools/build_testpaket.py        # -> Release/Testpaket/Volta1-<version>-
 # Zuse-Prototyp Z0 (Werkbank, docs/zuse1-planung.md): build/desktop-debug/zuse/zuse1.exe; Entwicklerhilfen
 #   ZUSE_SCREENSHOT=<bild.png>, ZUSE_SIZE=<b>x<h>, ZUSE_DATA_DIR=<ordner>, ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen mit
 #   Musterloesung), ZUSE_DEMO_ON=A,B (Eingaenge an), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein)
-#   ZUSE_DEMO_GUESS=0111 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Kiste einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox
+#   ZUSE_DEMO_GUESS=0111 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Kiste einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox,
+#   ZUSE_DEMO_PRESS=x,y[,los] (Maus an Fensterposition druecken, mit »los« wieder loslassen; z. B. Taster)
 python3 tools/zuse_stufen.py           # Zuse-Stufen (Texte, Tabellen, Musterloesungen) -> zuse/content/stufen.json
 
 # App-Symbole: Quellen app/resources/icons/volta.svg und zuse/resources/icons/zuse1.svg; PNG, ICO und Android daraus

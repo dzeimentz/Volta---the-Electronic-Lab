@@ -2,13 +2,14 @@
 // Offline, keine Datenerhebung: eigene Chips und Entwuerfe liegen nur in AppDataLocation.
 // Entwicklerhilfen: ZUSE_SCREENSHOT=<bild.png> (Bildschirmfoto statt Bedienung), ZUSE_SIZE=<b>x<h>,
 // ZUSE_DATA_DIR=<ordner> (Ablage), ZUSE_LANG=de|en, ZUSE_DEMO=<n> (n Stufen loesen und zur letzten gehen),
-// ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=numbers|toolbox (Fenster oeffnen),
+// ZUSE_DEMO_GUESS=10 (Vermutung je Zeile), ZUSE_DEMO_BOX=<i> (Raetselkiste i einsetzen), ZUSE_DEMO_POPUP=stagePicker|numbers|toolbox (Fenster oeffnen),
 // ZUSE_DEMO_ON=A,B (Eingaenge einschalten), ZUSE_DEMO_INSIDE=x1/o1 (Blick hinein entlang der Teil-IDs),
-// ZUSE_SYMBOLS=din|us (Schaltzeichen).
+// ZUSE_DEMO_PRESS=x,y[,los] (Maus druecken, mit »los« wieder loslassen), ZUSE_SYMBOLS=din|us (Schaltzeichen).
 #include <QDir>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QLocale>
+#include <QMouseEvent>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -85,6 +86,21 @@ int main(int argc, char* argv[]) {
     const QString popup = qEnvironmentVariable("ZUSE_DEMO_POPUP");
     if (window && !popup.isEmpty())
         if (QObject* p = window->findChild<QObject*>(popup)) QMetaObject::invokeMethod(p, "open");
+    // ZUSE_DEMO_PRESS=x,y[,los]: Maus an Fensterposition druecken (und wieder loslassen) – prueft z. B. den Taster
+    const QStringList press = qEnvironmentVariable("ZUSE_DEMO_PRESS").split(',');
+    if (window && press.size() >= 2) {
+        QTimer::singleShot(600, window, [window, press] {
+            const QPointF at(press[0].toDouble(), press[1].toDouble());
+            QMouseEvent down(QEvent::MouseButtonPress, at, window->mapToGlobal(at), Qt::LeftButton, Qt::LeftButton,
+                             Qt::NoModifier);
+            QGuiApplication::sendEvent(window, &down);
+            if (press.size() >= 3) {
+                QMouseEvent up(QEvent::MouseButtonRelease, at, window->mapToGlobal(at), Qt::LeftButton, Qt::NoButton,
+                               Qt::NoModifier);
+                QGuiApplication::sendEvent(window, &up);
+            }
+        });
+    }
     const QString shot = qEnvironmentVariable("ZUSE_SCREENSHOT");
     if (window && !shot.isEmpty()) {
         QTimer::singleShot(1200, &app, [window, shot] {

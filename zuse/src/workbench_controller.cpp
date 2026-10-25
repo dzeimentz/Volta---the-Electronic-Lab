@@ -408,7 +408,10 @@ void WorkbenchController::setInput(const QString& name, bool on) {
         m_sim.setInput(size_t(i), l);
         m_sim.settle();
     }
-    if (isDiscover() && m_box >= 0 && currentRow() < m_seen.size()) m_seen[currentRow()] = 1; // ausprobiert
+    if (isDiscover()) { // ausprobierte Zeile erscheint in der Tabelle, die Umrandung folgt der Schalterstellung
+        if (m_box >= 0 && currentRow() < m_seen.size()) m_seen[currentRow()] = 1;
+        emit checkChanged();
+    }
     emit viewChanged();
     if (isCounting()) checkTarget();
 }

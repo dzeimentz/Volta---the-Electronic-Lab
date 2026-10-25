@@ -85,12 +85,13 @@ Item {
             }
         }
 
-        // Schalter und Taster mit ihrer Bedeutung
+        // Schalter und Taster mit ihrer Bedeutung. Modell = Anzahl, damit die Elemente beim Umschalten bestehen
+        // bleiben (sonst ginge einem gedrueckten Taster das Loslassen verloren)
         Repeater {
-            model: root.inputs
+            model: root.inputs.length
             delegate: PanelPort {
-                required property var modelData
                 required property int index
+                readonly property var modelData: root.inputs[index] ?? ({})
                 x: 36
                 y: root.inY(index)
                 name: modelData.name
@@ -101,10 +102,10 @@ Item {
         }
         // LEDs
         Repeater {
-            model: root.outputs
+            model: root.outputs.length
             delegate: PanelPort {
-                required property var modelData
                 required property int index
+                readonly property var modelData: root.outputs[index] ?? ({})
                 x: root.fw - 160
                 y: root.outY(index)
                 name: modelData.name
