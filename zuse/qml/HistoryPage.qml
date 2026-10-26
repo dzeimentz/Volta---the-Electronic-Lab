@@ -46,6 +46,7 @@ Rectangle {
           where: qsTr("Nach Konrad Zuse heißt diese App – und ich, Zetti, auch ein bisschen.") },
         { key: "eniac", year: "1946", title: qsTr("Röhren statt Relais"), pose: "ueberrascht",
           text: qsTr("In den USA startete der ENIAC mit fast 18 000 Elektronenröhren. Röhren schalten ohne bewegliche Teile und sind dadurch etwa tausendmal schneller als Relais. Aber sie werden heiß, brauchen viel Strom und brennen immer wieder durch."),
+          photosInVisual: true,
           photos: [
               { src: "roehre.jpg", caption: qsTr("Eine Elektronenröhre (Triode). Der ENIAC hatte fast 18 000 davon."), credit: qsTr("Foto: Alex P. Kok · CC BY-SA 4.0") }
           ],
@@ -423,44 +424,82 @@ Rectangle {
             Canvas {
                 id: relayCanvas
                 Layout.alignment: Qt.AlignHCenter
-                Layout.preferredWidth: 420
-                Layout.preferredHeight: 220
+                Layout.preferredWidth: 470
+                Layout.preferredHeight: 300
                 onPaint: {
                     const c = getContext("2d")
                     c.reset()
-                    c.lineWidth = 3
-                    c.font = "bold 14px sans-serif"
-                    // Spule (Elektromagnet) unten links
-                    c.fillStyle = relay.on ? "#C9A45C" : "#D3DCE6"
-                    c.fillRect(60, 130, 90, 50)
-                    c.strokeStyle = "#8A6D35"
-                    for (let x = 66; x < 150; x += 10) { c.beginPath(); c.moveTo(x, 130); c.lineTo(x + 6, 180); c.stroke() }
-                    c.fillStyle = "#14213D"
-                    c.fillText(qsTr("Spule"), 76, 205)
-                    // Anker: Hebel ueber der Spule, Drehpunkt links
-                    c.strokeStyle = "#14213D"
-                    c.lineWidth = 6
-                    const tipY = relay.on ? 118 : 88
-                    c.beginPath(); c.moveTo(40, 110); c.lineTo(270, tipY); c.stroke()
-                    c.beginPath(); c.arc(40, 110, 6, 0, 2 * Math.PI); c.fill()
-                    c.fillText(qsTr("Anker"), 150, relay.on ? 100 : 78)
-                    // Kontakt rechts: Anker beruehrt ihn, wenn die Spule zieht
-                    c.lineWidth = 3
-                    c.fillStyle = "#C9A45C"
-                    c.fillRect(262, 122, 22, 8)
-                    c.fillStyle = "#14213D"
-                    c.fillText(qsTr("Kontakt"), 250, 150)
-                    // Lampenstromkreis
-                    c.strokeStyle = relay.on ? "#0E7490" : "#5B6B7C"
-                    c.beginPath(); c.moveTo(284, 126); c.lineTo(360, 126); c.lineTo(360, 70); c.stroke()
-                    c.beginPath(); c.arc(360, 52, 18, 0, 2 * Math.PI)
-                    c.fillStyle = relay.on ? "#FFD54A" : "#E6EDF3"; c.fill(); c.stroke()
-                    c.beginPath(); c.moveTo(347, 39); c.lineTo(373, 65); c.moveTo(373, 39); c.lineTo(347, 65); c.stroke()
-                    // Magnetfeld andeuten
-                    if (relay.on) {
-                        c.strokeStyle = "#06B6D4"; c.lineWidth = 2
-                        for (let i = 0; i < 3; ++i) { c.beginPath(); c.arc(105, 128, 14 + 8 * i, Math.PI * 1.15, Math.PI * 1.85); c.stroke() }
+                    const live = "#0E7490", dead = "#5B6B7C", ink = "#14213D"
+                    function wire(points, on) {
+                        c.strokeStyle = on ? live : dead
+                        c.lineWidth = on ? 4 : 3
+                        c.beginPath(); c.moveTo(points[0][0], points[0][1])
+                        for (let i = 1; i < points.length; ++i) c.lineTo(points[i][0], points[i][1])
+                        c.stroke()
                     }
+                    function battery(x, y, vertical) { // langer Strich = Pluspol
+                        c.strokeStyle = ink; c.lineWidth = 3
+                        c.beginPath()
+                        if (vertical) { c.moveTo(x - 14, y); c.lineTo(x + 14, y); c.moveTo(x - 7, y + 8); c.lineTo(x + 7, y + 8) }
+                        else { c.moveTo(x, y - 14); c.lineTo(x, y + 14); c.moveTo(x + 8, y - 7); c.lineTo(x + 8, y + 7) }
+                        c.stroke()
+                        c.fillStyle = ink; c.font = "bold 13px sans-serif"
+                        c.fillText("+", vertical ? x + 16 : x - 12, vertical ? y - 2 : y - 16)
+                    }
+                    const on = relay.on
+
+                    // --- Steuerstromkreis unten: Batterie 1 -> Schalter -> Spule -> zurueck
+                    wire([[128, 184], [128, 240], [150, 240]], on)
+                    wire([[182, 240], [208, 240]], on)
+                    wire([[216, 240], [252, 240], [252, 184]], on)
+                    battery(208, 240, false)
+                    c.strokeStyle = on ? live : ink; c.lineWidth = 3 // Schalter: offen schraeg, geschlossen gerade
+                    c.beginPath(); c.moveTo(150, 240); c.lineTo(on ? 182 : 178, on ? 240 : 222); c.stroke()
+                    c.fillStyle = ink
+                    c.beginPath(); c.arc(150, 240, 4, 0, 2 * Math.PI); c.arc(182, 240, 4, 0, 2 * Math.PI); c.fill()
+                    // Spule (Elektromagnet)
+                    c.fillStyle = on ? "#C9A45C" : "#D3DCE6"
+                    c.fillRect(120, 140, 140, 44)
+                    c.strokeStyle = "#8A6D35"; c.lineWidth = 3
+                    for (let x = 128; x < 256; x += 10) { c.beginPath(); c.moveTo(x, 140); c.lineTo(x + 6, 184); c.stroke() }
+                    if (on) { // Magnetfeld andeuten
+                        c.strokeStyle = "#06B6D4"; c.lineWidth = 2
+                        for (let i = 0; i < 2; ++i) { c.beginPath(); c.arc(190, 162, 30 + 9 * i, Math.PI * 1.2, Math.PI * 1.8); c.stroke() }
+                    }
+
+                    // --- Laststromkreis oben: Batterie 2 -> Anker -> Kontakt -> Lampe -> zurueck
+                    wire([[100, 104], [100, 30], [250, 30]], on)
+                    wire([[258, 30], [430, 30], [430, 62]], on)
+                    wire([[354, 128], [430, 128], [430, 98]], on)
+                    battery(250, 30, false)
+                    // Kontakt rechts
+                    c.fillStyle = "#C9A45C"
+                    c.fillRect(330, 124, 24, 8)
+                    // Anker: Hebel ueber der Spule, Drehpunkt links; beruehrt den Kontakt, wenn die Spule zieht
+                    c.strokeStyle = on ? live : ink
+                    c.lineWidth = 6
+                    c.beginPath(); c.moveTo(100, 110); c.lineTo(342, on ? 121 : 86); c.stroke()
+                    c.fillStyle = ink
+                    c.beginPath(); c.arc(100, 110, 6, 0, 2 * Math.PI); c.fill()
+                    // Lampe
+                    c.strokeStyle = on ? live : dead; c.lineWidth = 3
+                    c.beginPath(); c.arc(430, 80, 18, 0, 2 * Math.PI)
+                    c.fillStyle = on ? "#FFD54A" : "#E6EDF3"; c.fill(); c.stroke()
+                    c.beginPath(); c.moveTo(417, 67); c.lineTo(443, 93); c.moveTo(443, 67); c.lineTo(417, 93); c.stroke()
+
+                    // --- Beschriftung (Woerter, nicht nur Farbe)
+                    c.fillStyle = ink
+                    c.font = "bold 14px sans-serif"
+                    c.fillText(qsTr("Laststromkreis"), 290, 20)
+                    c.fillText(qsTr("Steuerstromkreis"), 130, 294)
+                    c.font = "13px sans-serif"
+                    c.fillText(qsTr("Anker"), 140, on ? 104 : 88)
+                    c.fillText(qsTr("Spule"), 268, 168)
+                    c.fillText(qsTr("Kontakt"), 318, 152)
+                    c.fillText(qsTr("Schalter"), 70, 244)
+                    c.fillText(qsTr("Batterie 1"), 186, 270)
+                    c.fillText(qsTr("Batterie 2"), 150, 20)
+                    c.fillText(on ? qsTr("leuchtet") : qsTr("aus"), 400, 118 + 34)
                 }
             }
             ZButton {
@@ -470,7 +509,7 @@ Rectangle {
                 text: relay.on ? qsTr("Strom in der Spule: an") : qsTr("Strom in der Spule: aus")
                 onClicked: relay.on = !relay.on
             }
-            Caption { text: qsTr("Fließt Strom durch die Spule, wird sie zum Magneten und zieht den Anker an. Der Anker schließt den Kontakt – die Lampe leuchtet. Das dauert ein paar Tausendstel Sekunden.") }
+            Caption { text: qsTr("Unten der Steuerstromkreis: Schließt du den Schalter, fließt Strom von Batterie 1 durch die Spule. Sie wird zum Magneten und zieht den Anker an. Oben der Laststromkreis mit Batterie 2: Der Anker berührt den Kontakt, der Kreis ist geschlossen – die Lampe leuchtet. Die beiden Stromkreise sind nicht miteinander verbunden; nur der Magnet schaltet. Das dauert ein paar Tausendstel Sekunden.") }
         }
     }
 
@@ -478,22 +517,32 @@ Rectangle {
         id: visEniac
         RowLayout {
             spacing: 24
-            Canvas {
-                Layout.preferredWidth: 120
-                Layout.preferredHeight: 200
-                onPaint: {
-                    const c = getContext("2d")
-                    c.reset()
-                    c.lineWidth = 3
-                    c.strokeStyle = "#5B6B7C"
-                    c.fillStyle = "#EEF3F7"
-                    c.beginPath(); c.moveTo(25, 170); c.lineTo(25, 50); c.arc(60, 50, 35, Math.PI, 0); c.lineTo(95, 170); c.closePath()
-                    c.fill(); c.stroke()
-                    c.strokeStyle = "#F59E0B"; c.lineWidth = 4 // Heizdraht gluehend
-                    c.beginPath(); c.moveTo(50, 150); c.lineTo(50, 70); c.lineTo(70, 70); c.lineTo(70, 150); c.stroke()
-                    c.fillStyle = "#14213D"
-                    c.fillRect(20, 170, 80, 16)
-                    for (let x = 30; x <= 90; x += 15) c.fillRect(x, 186, 4, 12)
+            ColumnLayout { // Foto der Roehre; Antippen vergroessert
+                id: tube
+                spacing: 4
+                readonly property var photo: root.station.photos[0]
+                Image {
+                    Layout.preferredHeight: 230
+                    Layout.preferredWidth: sourceSize.height > 0 ? sourceSize.width * 230 / sourceSize.height : 115
+                    source: "qrc:/zuse/history/" + tube.photo.src
+                    fillMode: Image.PreserveAspectFit
+                    mipmap: true
+                    Text {
+                        anchors { right: parent.right; bottom: parent.bottom; margins: 4 }
+                        text: "🔍"
+                        font.pixelSize: 16
+                        Accessible.ignored: true
+                    }
+                    TapHandler { onTapped: root.showPhoto(0) }
+                    Accessible.role: Accessible.Button
+                    Accessible.name: tube.photo.caption
+                }
+                Text {
+                    Layout.preferredWidth: 150
+                    text: tube.photo.credit
+                    wrapMode: Text.WordWrap
+                    color: ZTheme.muted
+                    font.pixelSize: Math.round(10 * ZTheme.fontScale)
                 }
             }
             ColumnLayout {
@@ -1009,7 +1058,7 @@ Rectangle {
                         }
                         Flow { // echte Fotos zur Station; Antippen vergroessert
                             objectName: "historyPhotos"
-                            visible: (root.station.photos || []).length > 0
+                            visible: (root.station.photos || []).length > 0 && !root.station.photosInVisual
                             Layout.fillWidth: true
                             Layout.topMargin: 4
                             spacing: 12
