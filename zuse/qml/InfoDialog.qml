@@ -106,6 +106,9 @@ Popup {
             Line { text: qsTr("Chip 7400 unter dem Mikroskop: Robert Baruch (CC BY-SA 4.0)") }
             Line { text: qsTr("Chips von AMD (Ryzen) und Intel (Lunar Lake): FritzchensFritz (CC0, gemeinfrei)") }
             Line { text: qsTr("ATmega328: Markus Kammerstetter (CC BY 4.0)") }
+            Line { text: qsTr("CD4049: Andrew Zonenberg (CC BY 4.0)") }
+            Line { text: qsTr("NE555: BregesT65421354 (CC BY-SA 4.0)") }
+            Line { text: qsTr("7555: ZeptoBars (CC BY 3.0)") }
             Heading { text: qsTr("Datenschutz") }
             Line { text: qsTr("Zuse 1 erhebt keine Daten, zeigt keine Werbung und braucht kein Internet. Deine Erfindungen bleiben auf diesem Gerät.") }
             Line { text: "© 2026 DC Software Engineering"; color: ZTheme.muted; topPadding: 8 }

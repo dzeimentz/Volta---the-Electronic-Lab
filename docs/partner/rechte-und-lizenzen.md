@@ -44,7 +44,7 @@ Berechtigung `INTERNET`, kein Netzwerkcode).
 **Nicht ausgeliefert** (nur Entwicklung): Catch2 (BSL-1.0, Tests), Python-Werkzeuge (reportlab, Pillow, PyMuPDF
 nur für Vorschauen), Android-SDK/NDK, Compiler.
 
-**Fotos in Zuse 1 (»Historische Entwicklung«, `zuse/resources/history/`):** neun Fotos von Wikimedia Commons,
+**Fotos in Zuse 1 (»Historische Entwicklung«, `zuse/resources/history/`):** zwölf Fotos von Wikimedia Commons,
 verkleinert (ohne Metadaten), sonst unverändert. Urheber und Lizenz stehen unter jedem Foto, in der Großansicht und
 im Info-Fenster. CC BY-SA verlangt Namensnennung und Lizenzangabe; die Weitergabe-Pflicht gilt nur für das Bild
 selbst, nicht für die App.
@@ -60,6 +60,9 @@ selbst, nicht für die App.
 | zen5.jpg | File:AMD@4nmCCD(6nmIOD)@Zen5@Granite Ridge@Ryzen 5 9600X@100-000001405 BY 2429SUY 9AEQ579S40073 DSCx15 CCD poly@5xBF.jpg | FritzchensFritz | CC0 |
 | lunarlake.jpg | File:Intel@TSMC N3 N6@LunarLake@LNL(4P+4LPE)@CoreUltra200Series@DSCx05 poly@5xBFPOL.jpg | FritzchensFritz | CC0 |
 | atmega328.jpg | File:Atmel atmega328 mz 20x.jpg | Markus Kammerstetter | CC BY 4.0 |
+| cd4049.jpg | File:Ti cd4049 01 bf neo5x annotated.jpg | Andrew Zonenberg | CC BY 4.0 |
+| ne555.jpg | File:TI NE555P HYC 3255G.jpg | BregesT65421354 | CC BY-SA 4.0 |
+| cmos7555.jpg | File:NXP-7555-HD.jpg | ZeptoBars | CC BY 3.0 |
 
 **Schriften:** Die App nutzt die Schriften des Systems. Die PDF-Unterlagen (Anleitung, Flyer, Aufbaukarte)
 betten Teilmengen von Segoe UI ein; für eine Auslieferung durch einen Partner wird das gegen dessen Hausschrift

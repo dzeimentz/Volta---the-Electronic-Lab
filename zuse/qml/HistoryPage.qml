@@ -68,6 +68,11 @@ Rectangle {
           where: qsTr("In Zuse 1: Die Werkzeugkiste ist wie eine Kiste voller Chips.") },
         { key: "cmos", year: "1968", title: qsTr("Strom sparen mit CMOS"), pose: "freundlich",
           text: qsTr("Mit den CMOS-Chips der 4000er-Reihe brauchen Gatter fast nur beim Umschalten Strom, im Ruhezustand beinahe keinen. Erst dadurch wurden Taschenrechner, Digitaluhren und später Handys möglich, die lange mit einer Batterie auskommen."),
+          photos: [
+              { src: "cd4049.jpg", caption: qsTr("CD4049 aus der 4000er-Reihe: sechs NICHT-Gatter in CMOS."), credit: qsTr("Foto: Andrew Zonenberg · CC BY 4.0") },
+              { src: "ne555.jpg", caption: qsTr("NE555 (1971), der berühmte Zeitgeber – noch mit bipolaren Transistoren gebaut, nicht in CMOS."), credit: qsTr("Foto: BregesT65421354 · CC BY-SA 4.0") },
+              { src: "cmos7555.jpg", caption: qsTr("7555: derselbe Zeitgeber in CMOS – er braucht viel weniger Strom."), credit: qsTr("Foto: ZeptoBars · CC BY 3.0") }
+          ],
           where: "" },
         { key: "fpga", year: "1985", title: qsTr("Gatter zum Umprogrammieren"), pose: "losgehts",
           text: qsTr("Bei programmierbaren Chips legt man selbst fest, welche Gatter wie verbunden sind – mit einem Programm statt mit dem Lötkolben. 1985 kam der erste FPGA auf den Markt. Tippe auf die Zellen und mach daraus andere Gatter!"),
@@ -577,6 +582,8 @@ Rectangle {
         ColumnLayout {
             spacing: 10
             Text {
+                Layout.preferredWidth: 500
+                wrapMode: Text.WordWrap
                 text: qsTr("So oft können sie in einer Sekunde umschalten (ungefähr):")
                 color: ZTheme.text
                 font.pixelSize: Math.round(16 * ZTheme.fontScale); font.bold: true
@@ -588,17 +595,17 @@ Rectangle {
                     required property var modelData
                     spacing: 10
                     Text {
-                        Layout.preferredWidth: 190
+                        Layout.preferredWidth: 120
                         text: modelData[0]
                         wrapMode: Text.WordWrap
                         color: ZTheme.text
                         font.pixelSize: Math.round(15 * ZTheme.fontScale)
                     }
                     Row {
-                        spacing: 3
+                        spacing: 2
                         Repeater {
                             model: parent.parent.modelData[1]
-                            delegate: Rectangle { width: 26; height: 24; radius: 4; color: ZTheme.accent }
+                            delegate: Rectangle { width: 20; height: 22; radius: 4; color: ZTheme.accent }
                         }
                     }
                     Text {
@@ -1057,6 +1064,7 @@ Rectangle {
                             font.pixelSize: Math.round(15 * ZTheme.fontScale); font.bold: true
                         }
                         Flow { // echte Fotos zur Station; Antippen vergroessert
+                            id: photoFlow
                             objectName: "historyPhotos"
                             visible: (root.station.photos || []).length > 0 && !root.station.photosInVisual
                             Layout.fillWidth: true
@@ -1089,7 +1097,7 @@ Rectangle {
                                         Accessible.name: photo.modelData.caption
                                     }
                                     Column {
-                                        width: photo.single ? 200 : Math.max(thumb.width, 110)
+                                        width: photo.single ? Math.max(120, Math.min(220, photoFlow.width - thumb.width - 12)) : Math.max(thumb.width, 110)
                                         spacing: 4
                                         Text {
                                             width: parent.width
