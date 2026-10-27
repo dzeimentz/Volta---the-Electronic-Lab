@@ -273,11 +273,7 @@ Item {
     }
     // Hintergrund des Steckbretts: jede Reihe eine eigene Farbe, nach rechts eine Abstufung wie ein Verlauf
     // (Reihenbuchstabe steht immer im Feld - Farbe nie allein)
-    readonly property var rowHues: [[0, 0.85], [30, 0.85], [50, 0.80], [130, 0.55], [210, 0.70]]
-    function boardTint(row, col) {
-        const t = columns > 1 ? (col - 1) / (columns - 1) : 0
-        return Qt.hsla(rowHues[row][0] / 360, rowHues[row][1], 0.92 - 0.24 * t, 1)
-    }
+    function boardTint(row, col) { return Theme.fieldTint(row, col, columns) }
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
@@ -332,6 +328,7 @@ Item {
     property string trayType: ""
     property var trayPreview: ({}) // Steckvorschau: alle Felder, die das gezogene Bauteil belegen wuerde
     property point trayPos
+    property point trayScenePos // Finger bzw. Maus in Lab-Koordinaten (schwebende Vorschau ueber Fach und Pult)
 
     Connections {
         target: lab.controller
@@ -750,6 +747,7 @@ Item {
             lab.beginEdit()
             lab.trayType = type
             lab.trayPos = lab.toCanvas(scenePos)
+            lab.trayScenePos = lab.mapFromItem(null, scenePos.x, scenePos.y)
             const start = lab.anchorAt(lab.trayPos, true)
             lab.highlightAnchor = start
             lab.trayPreview = start !== "" ? lab.controller.partPreview(type, start, false, type === "motor") : ({})
@@ -769,6 +767,7 @@ Item {
             lab.beginEdit()
             lab.trayModule = type
             lab.trayPos = lab.toCanvas(scenePos)
+            lab.trayScenePos = lab.mapFromItem(null, scenePos.x, scenePos.y)
             lab.highlightAnchor = lab.slotAt(lab.trayPos)
         }
         onModuleDragFinished: (type, scenePos) => {
@@ -1364,9 +1363,9 @@ Item {
                 opacity: 0.7
             }
 
-            // Vorschau: Modul aus dem Modulfach
+            // Vorschau: Modul aus dem Modulfach an seinem Platz in der Modulleiste (sonst schwebt es am Finger)
             Rectangle {
-                visible: lab.trayModule !== ""
+                visible: lab.trayModule !== "" && lab.highlightAnchor !== ""
                 width: 4 * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap; height: 32; radius: 8
                 x: lab.trayPos.x - Theme.slotWidth / 2
                 y: lab.trayPos.y - height / 2
@@ -1421,16 +1420,6 @@ Item {
                 partId: ""
                 partType: lab.trayType
                 points: visible ? lab.trayPreview.pins.map(p => lab.socketPoint(p.field, 2)) : []
-            }
-            Rectangle {
-                visible: lab.trayType !== "" && lab.trayPreview.ok !== true
-                width: 64; height: 32; radius: 8
-                x: lab.trayPos.x - width / 2
-                y: lab.trayPos.y - height / 2
-                color: Theme.solderAmber
-                opacity: 0.8
-                border.color: Theme.navy
-                Label { anchors.centerIn: parent; text: Texts.partName(lab.trayType); font.pixelSize: Math.round((10) * Theme.fontScale) }
             }
         }
 
@@ -1771,6 +1760,45 @@ Item {
             const list = lab.controller.parts
             for (let i = 0; i < list.length; ++i) if (list[i].id === lab.selectedPart) return list[i].type
             return ""
+        }
+    }
+
+    // Schwebende Vorschau beim Ziehen aus dem Fach: das Bauteil (mit Draehten) bzw. Modul folgt dem Finger ueber
+    // Fach, Pult und Grundplatte; passt es auf die Grundplatte, zeigt dort die Steckvorschau den genauen Platz.
+    Item {
+        id: dragFloat
+        objectName: "trayDragFloat"
+        readonly property bool partShown: lab.trayType !== "" && lab.trayPreview.ok !== true
+        readonly property bool moduleShown: lab.trayModule !== "" && lab.highlightAnchor === ""
+        visible: partShown || moduleShown
+        z: 50
+        readonly property int pins: {
+            const list = lab.controller.trayParts
+            for (let i = 0; i < list.length; ++i) if (list[i].type === lab.trayType) return list[i].pins
+            return 2
+        }
+        width: (pins === 4 ? 130 : pins === 3 ? 200 : 124) * canvas.scale
+        height: (pins === 4 ? 110 : 40) * canvas.scale
+        x: lab.trayScenePos.x - width / 2
+        y: lab.trayScenePos.y - height / 2
+        PartPreview {
+            visible: dragFloat.partShown
+            anchors.fill: parent
+            type: lab.trayType
+            pins: dragFloat.pins
+            opacity: 0.85
+        }
+        Rectangle {
+            visible: dragFloat.moduleShown
+            anchors.centerIn: parent
+            width: (4 * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap) * canvas.scale
+            height: 32 * canvas.scale
+            radius: 8
+            color: Qt.tint(Theme.modulePlate(lab.trayModule), "#B8FFFFFF")
+            border.color: Theme.modulePlate(lab.trayModule)
+            border.width: 2
+            opacity: 0.9
+            Label { anchors.centerIn: parent; text: Texts.moduleName(lab.trayModule); color: Theme.navy; font.bold: true; font.pixelSize: Math.round(12 * Theme.fontScale) }
         }
     }
 

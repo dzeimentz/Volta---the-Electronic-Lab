@@ -20,6 +20,12 @@ QtObject {
         for (let i = 0; i < partThemes.length; ++i) if (partThemes[i].key === key) return partThemes[i]
         return {key: "", color: "#8E9AA8", tint: "#E9D7B0", symbol: ""}
     }
+    // Hintergrund der Grundplatte: jede Reihe ein eigener Farbton (A rot ... E blau), nach rechts dunkler (Verlauf)
+    readonly property var rowHues: [[0, 0.85], [30, 0.85], [50, 0.80], [130, 0.55], [210, 0.70]]
+    function fieldTint(row, col, columns) {
+        const t = columns > 1 ? (col - 1) / (columns - 1) : 0
+        return Qt.hsla(rowHues[row][0] / 360, rowHues[row][1], 0.92 - 0.24 * t, 1)
+    }
     // Traegerplatte je Modul (Modulleiste und Modulfach), Kachel im Fach in der aufgehellten Farbe
     function modulePlate(type) {
         return type === "tonmodul" ? "#6A4C8C" : type === "zeitmodul" ? "#7A5A1E"

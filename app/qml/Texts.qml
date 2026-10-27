@@ -44,6 +44,25 @@ QtObject {
         return type
     }
 
+    // Wortanfaenge, an denen Aufbautexte ein Bauteil nennen (je Sprache, durch Komma getrennt); dahinter zeigt
+    // StepText das Schaltzeichen. Reihenfolge: das erste passende Bauteil gewinnt.
+    function partWords() {
+        return [
+            ["gluehlampe", qsTr("Glühlämpchen,Lämpchen", "Wortanfaenge im Aufbautext")],
+            ["taster", qsTr("Taster", "Wortanfaenge im Aufbautext")],
+            ["summer", qsTr("Summer", "Wortanfaenge im Aufbautext")],
+            ["motor", qsTr("Motor", "Wortanfaenge im Aufbautext")],
+            ["widerstand", qsTr("Widerstand,Widerstände", "Wortanfaenge im Aufbautext")],
+            ["led_rot", qsTr("Leuchtdiode,LED", "Wortanfaenge im Aufbautext")],
+            ["wechselschalter", qsTr("Wechselschalter", "Wortanfaenge im Aufbautext")],
+            ["reedkontakt", qsTr("Reedkontakt", "Wortanfaenge im Aufbautext")],
+            ["diode_si", qsTr("Diode", "Wortanfaenge im Aufbautext")],
+            ["blinkmodul", qsTr("Blinkmodul", "Wortanfaenge im Aufbautext")],
+            ["tonmodul", qsTr("Tonmodul", "Wortanfaenge im Aufbautext")],
+            ["lautsprecher", qsTr("Lautsprecher", "Wortanfaenge im Aufbautext")]
+        ]
+    }
+
     function moduleName(type) {
         switch (type) {
         case "blinkmodul": return qsTr("Blinkmodul")

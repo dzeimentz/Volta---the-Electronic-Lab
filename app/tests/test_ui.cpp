@@ -236,12 +236,16 @@ private slots:
         // waehrend des Ziehens: Schemen an Ort und Stelle, beide Felder hervorgehoben
         const QPoint from = centerOf(tile), to = centerOf(field);
         QTest::mousePress(m_window, Qt::LeftButton, {}, from);
+        // erst ueber dem Fach: das Bauteil schwebt sichtbar am Zeiger
+        for (int i = 1; i <= 3; ++i) QTest::mouseMove(m_window, from + QPoint(0, 8 * i), 10);
+        QTRY_VERIFY(item(QStringLiteral("trayDragFloat"))->isVisible());
         for (int i = 1; i <= 10; ++i) QTest::mouseMove(m_window, from + (to - from) * i / 10, 10);
         QQuickItem* ghost = item(QStringLiteral("trayGhostPart"));
         QTRY_VERIFY(ghost && ghost->isVisible());
         QTRY_VERIFY(item(QStringLiteral("field_D3"))->property("highlighted").toBool());
         QVERIFY(item(QStringLiteral("field_D2"))->property("highlighted").toBool());
         QVERIFY(!item(QStringLiteral("field_D4"))->property("highlighted").toBool());
+        QVERIFY(!item(QStringLiteral("trayDragFloat"))->isVisible()); // auf der Grundplatte: Steckvorschau
         QTest::mouseRelease(m_window, Qt::LeftButton, {}, to, 10);
         QTRY_COMPARE(board().parts.size(), std::size_t(3));
         QVERIFY(!ghost->isVisible());

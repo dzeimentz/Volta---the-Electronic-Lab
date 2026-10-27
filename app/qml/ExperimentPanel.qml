@@ -8,6 +8,8 @@ Rectangle {
     required property var controller
     property var speech: null // SpeechService; Knopf nur, wenn eine Stimme fuer die Sprache da ist
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
+    // Aufbauschritte mit Feldbildern und Schaltzeichen (zuerst fuer die Stufen 0-2)
+    readonly property bool pictureSteps: controller.experimentStage >= 0 && controller.experimentStage <= 2
 
     // Text eines Schritts der Aufbauhilfe (LabController::guideStep)
     function guideText(s) { return Texts.stepText(s) }
@@ -260,7 +262,15 @@ Rectangle {
                         color: Theme.accent
                         Label { anchors.centerIn: parent; text: index + 1; color: "white"; font.bold: true }
                     }
-                    Body { width: parent.width - 36; text: modelData }
+                    // Stufe 0-2: Felder als Bilder, Bauteile mit Schaltzeichen (leichter zu erfassen)
+                    Body { visible: !panel.pictureSteps; width: parent.width - 36; text: modelData }
+                    StepText {
+                        objectName: "stepText_" + index
+                        visible: panel.pictureSteps
+                        width: parent.width - 36
+                        text: modelData
+                        columns: panel.controller.boardColumns
+                    }
                 }
             }
             // Schritt-fuer-Schritt-Aufbauhilfe: das naechste Teil schemenhaft auf der Grundplatte, Zielfelder leuchten

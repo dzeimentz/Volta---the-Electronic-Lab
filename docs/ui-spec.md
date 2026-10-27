@@ -140,6 +140,8 @@ das iPad).
   unter »Bauteilfach | Modulfach«: »Alle« und je Thema ein Knopf in seiner Farbe mit typischem Schaltzeichen, Name als
   Tooltip und Ueberschrift (Farbe nie allein). Kacheln nach Thema sortiert, Hintergrund in der Themenfarbe.
   Die Aufbauhilfe waehlt das Thema des gesuchten Bauteils.
+- Beim Ziehen aus dem Fach schwebt das Bauteil (mit Draehten) bzw. Modul sichtbar am Finger, auch ueber Fach und
+  Pult; ueber einem passenden Platz zeigt die Steckvorschau auf der Grundplatte, wo es landet.
 - Kachel 112 x 80: oben wahlweise das Bauteil wie auf dem Steckbrett mit Anschlussdraehten (`PartPreview.qml`) oder
   das Schaltzeichen nach DIN EN 60617 (`SchematicSymbol.qml`), unten der Name. Umschalter »Bauteil | Symbol« als kleiner
   Knopf in der Themenleiste rechts neben »Alle« (im Modulfach allein), gewaehlte Ansicht fett und unterstrichen, gemerkt (`labor/fachsymbole`), gilt auch fuers
@@ -168,6 +170,10 @@ das iPad).
   Leitungen in beiden Richtungen, Modulanschluss = Feld der Leiste); keine Reihenfolgepflicht, Entfernen holt den
   Schritt zurueck. Ob das Experiment gelingt, entscheidet weiter die Erfolgsbedingung, nicht die Aehnlichkeit.
 - Nach »Fertig« und beim Start eines Experiments ist die Aufbauhilfe wieder aus.
+- Aufbauschritte mit Bildern (0.9.1, zuerst Stufe 0–2, `StepText.qml`): Feldnamen im Text erscheinen als kleine
+  Kontaktfelder in ihrer Reihenfarbe (`FieldChip.qml`; V+ rot, 0V schwarz, Pult- und Modulfelder), hinter dem ersten
+  Namen eines Bauteils steht sein Schaltzeichen. Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
+  uebersetzbar). Der Text bleibt vollstaendig (Vorlesen, Bildschirmleser).
 
 ## Forschungskreislauf und Forscherheft (D2)
 - Experimentfeld: 1 Frage mit Vermutung (wird ohne Wertung ins Forscherheft geschrieben) -> 2 Aufbau mit Schritten
