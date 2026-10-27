@@ -20,6 +20,11 @@ QtObject {
         for (let i = 0; i < partThemes.length; ++i) if (partThemes[i].key === key) return partThemes[i]
         return {key: "", color: "#8E9AA8", tint: "#E9D7B0", symbol: ""}
     }
+    // Traegerplatte je Modul (Modulleiste und Modulfach), Kachel im Fach in der aufgehellten Farbe
+    function modulePlate(type) {
+        return type === "tonmodul" ? "#6A4C8C" : type === "zeitmodul" ? "#7A5A1E"
+             : type === "verstaerkermodul" ? "#2E6B4A" : "#2F6F8F"
+    }
     readonly property color accent: "#2873B0" // Weiss darauf 5:1 (WCAG AA)
     readonly property color signalOrange: "#FF6B1A"
     readonly property color solderAmber: "#FFB07A"

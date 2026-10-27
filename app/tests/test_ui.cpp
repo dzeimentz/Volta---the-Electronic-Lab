@@ -670,6 +670,14 @@ private slots:
         QVERIFY(item(QStringLiteral("tray_gluehlampe")) != nullptr);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("theme_alle"))));
         QTRY_VERIFY(item(QStringLiteral("tray_widerstand")) != nullptr);
+        // Ansicht Bauteil / Symbol: Kacheln zeigen das Schaltzeichen statt des Bauteils, die Wahl wird gemerkt
+        QVERIFY(!item(QStringLiteral("symbol_widerstand"))->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("trayViewToggle"))));
+        QTRY_VERIFY(item(QStringLiteral("symbol_widerstand"))->isVisible());
+        QVERIFY(m_settings->traySymbols());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("trayViewToggle"))));
+        QTRY_VERIFY(!item(QStringLiteral("symbol_widerstand"))->isVisible());
+        QVERIFY(!m_settings->traySymbols());
         bool transistorLocked = false;
         for (const QVariant& v : m_lab->trayParts())
             if (v.toMap().value(QStringLiteral("type")).toString() == QStringLiteral("transistor_npn"))

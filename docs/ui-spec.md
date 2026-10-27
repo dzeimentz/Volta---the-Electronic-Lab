@@ -117,7 +117,6 @@ das iPad).
   offen war; 1,5 s nach jeder Aenderung und sofort beim Wechsel in den Hintergrund und beim Beenden, atomar in
   `laborstand.json` im privaten App-Speicher. Beim Start: war das Labor offen, geht es dort weiter (Hauptschalter
   aus, Steckmodus), sonst bietet die Startseite die Kachel »Weitermachen«. Rueckgaengig-Verlauf wird nicht gespeichert.
-- Bauteilfach kompakt (Kacheln 92 x 44, Abstand 4), damit alle Bauteile auch auf Tablets ohne Rollen passen.
 - Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (bei 8 Feldern je Reihe
   rechts neben M16): Antippen loescht das Ausgewaehlte (Bauteil, Leitung, Modul), ohne Auswahl »Alles abbauen«;
   Bauteile und Module lassen sich darauf ziehen (er faerbt sich rot). Immer mit Rueckfrage; Loeschen ist ein Befehl
@@ -141,9 +140,12 @@ das iPad).
   unter »Bauteilfach | Modulfach«: »Alle« und je Thema ein Knopf in seiner Farbe mit typischem Schaltzeichen, Name als
   Tooltip und Ueberschrift (Farbe nie allein). Kacheln nach Thema sortiert, Hintergrund in der Themenfarbe.
   Die Aufbauhilfe waehlt das Thema des gesuchten Bauteils.
-- Kachel 112 x 108: oben das Bauteil wie auf dem Steckbrett (`PartBody`, verkleinert), darunter das Schaltzeichen
-  nach DIN EN 60617 (`SchematicSymbol.qml`), unten der Name. Senkrecht wischen blaettert (Bildlaufleiste), zur Seite
-  ziehen nimmt das Bauteil heraus.
+- Kachel 112 x 80: oben wahlweise das Bauteil wie auf dem Steckbrett mit Anschlussdraehten (`PartPreview.qml`) oder
+  das Schaltzeichen nach DIN EN 60617 (`SchematicSymbol.qml`), unten der Name. Umschalter »Bauteil | Symbol« rechts
+  neben der Ueberschrift, gewaehlte Ansicht fett und unterstrichen, gemerkt (`labor/fachsymbole`), gilt auch fuers
+  Modulfach. Senkrecht wischen blaettert (Bildlaufleiste), zur Seite ziehen nimmt das Bauteil heraus.
+- Modulfach: Kacheln in derselben Groesse, Hintergrund in der aufgehellten Farbe der Traegerplatte
+  (`Theme.modulePlate`), Bild: Traegerplatte mit einem Anschlussfeld je Anschluss bzw. Schaltzeichen.
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 

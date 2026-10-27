@@ -150,24 +150,70 @@ Rectangle {
             }
         }
     }
-    Label {
-        id: themeTitle
-        visible: !tray.showModules
-        anchors { top: themeBar.bottom; topMargin: 4; left: parent.left; leftMargin: 10; right: parent.right; rightMargin: 8 }
-        text: Texts.themeName(tray.filter)
-        color: "white"
-        font.pixelSize: Math.round(13 * Theme.fontScale)
-        font.bold: true
-        elide: Text.ElideRight
+    // Ueberschrift (Thema bzw. Modulfach) und Umschalter Bauteil / Symbol: die Kacheln zeigen entweder das Bauteil
+    // wie auf dem Steckbrett oder sein Schaltzeichen (gewaehlte Ansicht fett und unterstrichen, Farbe nie allein)
+    property bool symbols: false
+    Item {
+        id: viewRow
+        anchors { top: tray.showModules ? heading.bottom : themeBar.bottom; topMargin: 4; left: parent.left; leftMargin: 8; right: parent.right; rightMargin: 8 }
+        height: Theme.control
+        Label {
+            id: themeTitle
+            anchors { left: parent.left; leftMargin: 2; right: viewToggle.left; rightMargin: 4; verticalCenter: parent.verticalCenter }
+            text: tray.showModules ? qsTr("Alle Module") : Texts.themeName(tray.filter)
+            color: "white"
+            font.pixelSize: Math.round(13 * Theme.fontScale)
+            font.bold: true
+            wrapMode: Text.WordWrap
+            maximumLineCount: 2
+            elide: Text.ElideRight
+        }
+        Button {
+            id: viewToggle
+            objectName: "trayViewToggle"
+            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+            width: 112
+            onClicked: tray.symbols = !tray.symbols
+            background: Rectangle {
+                radius: 8
+                color: viewToggle.down ? "#33FFFFFF" : (viewToggle.hovered ? "#22FFFFFF" : "#14FFFFFF")
+                border.color: "#66FFFFFF"
+                border.width: viewToggle.activeFocus ? 3 : 1
+            }
+            contentItem: Item {
+                Row {
+                    anchors.centerIn: parent
+                    spacing: 4
+                    scale: Math.min(1, (parent.width - 4) / Math.max(1, implicitWidth))
+                    Repeater {
+                        model: [qsTr("Bauteil"), "|", qsTr("Symbol")]
+                        Label {
+                            required property int index
+                            required property string modelData
+                            readonly property bool chosen: index === 0 ? !tray.symbols : index === 2 && tray.symbols
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: modelData
+                            color: chosen || index === 1 ? "white" : "#9FB2C4"
+                            font.pixelSize: Math.round(13 * Theme.fontScale)
+                            font.bold: chosen
+                            font.underline: chosen
+                        }
+                    }
+                }
+            }
+            Accessible.name: tray.symbols ? qsTr("Schaltzeichen, umschalten auf Bauteilbilder")
+                                          : qsTr("Bauteilbilder, umschalten auf Schaltzeichen")
+        }
     }
 
-    // Kacheln: oben das Bauteil wie auf dem Steckbrett, darunter das Schaltzeichen, unten der Name; Hintergrund in
-    // der Farbe des Themas. Senkrecht wischen blaettert, zur Seite ziehen nimmt das Bauteil heraus.
+    // Kacheln: oben das Bauteil wie auf dem Steckbrett (mit Anschlussdraehten) oder sein Schaltzeichen, unten der
+    // Name; Hintergrund in der Farbe des Themas. Senkrecht wischen blaettert, zur Seite ziehen nimmt es heraus.
+    readonly property int tileHeight: 80
     Flickable {
         id: partFlick
         objectName: "partFlick"
         visible: !tray.showModules
-        anchors { top: themeTitle.bottom; topMargin: 4; left: parent.left; right: parent.right; bottom: parent.bottom }
+        anchors { top: viewRow.bottom; topMargin: 4; left: parent.left; right: parent.right; bottom: parent.bottom }
         contentHeight: partGrid.height + 8
         flickableDirection: Flickable.VerticalFlick
         boundsBehavior: Flickable.StopAtBounds
@@ -187,7 +233,7 @@ Rectangle {
                     required property var modelData
                     objectName: "tray_" + modelData.type
                     width: tray.tileWidth
-                    height: 108
+                    height: tray.tileHeight
                     radius: 8
                     readonly property bool locked: modelData.locked === true
                     readonly property var theme: Theme.partTheme(modelData.theme)
@@ -196,41 +242,31 @@ Rectangle {
                     border.width: 2
                     opacity: locked ? 0.75 : 1
 
-                    // Bauteil wie auf dem Steckbrett (verkleinert, damit es in die Kachel passt)
-                    Item {
-                        id: preview
+                    PartPreview {
+                        visible: !tray.symbols
                         x: 6; y: 4
                         width: parent.width - 12
-                        height: 44
-                        readonly property string type: entry.modelData.type
-                        readonly property bool square: entry.modelData.pins === 4
-                        readonly property bool carrier: entry.modelData.pins === 3
-                        PartBody {
-                            type: preview.type
-                            width: preview.square ? 122 : preview.carrier ? 160 : 72
-                            height: preview.square ? 102 : 34
-                            feet: preview.square ? [Qt.point(13, 11), Qt.point(109, 11), Qt.point(13, 91), Qt.point(109, 91)] : []
-                            value: preview.type === "widerstand" ? 1000 : 0
-                            anchors.centerIn: parent
-                            scale: Math.min(1, preview.width / width, preview.height / height)
-                        }
+                        height: 40
+                        type: entry.modelData.type
+                        pins: entry.modelData.pins
                     }
                     // Schaltzeichen nach Norm (DIN EN 60617)
                     SchematicSymbol {
                         objectName: "symbol_" + entry.modelData.type
+                        visible: tray.symbols
                         type: entry.modelData.type
                         stroke: entry.locked ? "#3E4955" : Theme.navy
                         anchors.horizontalCenter: parent.horizontalCenter
-                        y: 50
-                        width: 50
-                        height: 20
+                        y: 8
+                        width: 64
+                        height: 30
                     }
                     Label {
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         anchors.margins: 3
-                        height: 32
+                        height: 30
                         text: Texts.partName(entry.modelData.type)
                         color: entry.locked ? "#26313C" : Theme.navy
                         font.pixelSize: Math.round((13) * Theme.fontScale)
@@ -275,71 +311,120 @@ Rectangle {
         }
     }
 
-    // Modulfach: Module auf ein Feld der Modulleiste ziehen (erster Anschluss liegt dort)
-    Grid {
+    // Modulfach: Module auf ein Feld der Modulleiste ziehen (erster Anschluss liegt dort). Kacheln wie im
+    // Bauteilfach, Hintergrund in der aufgehellten Farbe der Traegerplatte.
+    Flickable {
+        id: moduleFlick
         visible: tray.showModules
-        anchors { top: heading.bottom; topMargin: 6; left: parent.left; leftMargin: 8 }
-        columns: 2
-        spacing: 4
-        Repeater {
-            model: tray.modules
-            delegate: Rectangle {
-                id: modEntry
-                required property var modelData
-                objectName: "trayModule_" + modelData.type
-                width: 92
-                height: 44 // kompakt: alle Bauteile passen auch auf Tablets
-                radius: 8
-                readonly property bool locked: modelData.locked === true
-                color: locked ? "#8E9AA8" : (modDrag.active ? Theme.solderAmber : "#D8CCE8")
-                border.color: locked ? "#5D6B7A" : Theme.navy
-                opacity: locked ? 0.75 : 1
-                SchematicSymbol {
-                    type: modEntry.modelData.type
-                    stroke: modEntry.locked ? "#3E4955" : Theme.navy
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    y: 2
-                    width: 46
-                    height: 18
-                }
-                Label {
-                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 3 }
-                    height: 22
-                    text: Texts.moduleName(modEntry.modelData.type)
-                    color: modEntry.locked ? "#26313C" : Theme.navy
-                    font.pixelSize: Math.round((12) * Theme.fontScale)
-                    fontSizeMode: Text.Fit
-                    minimumPixelSize: 9
-                    wrapMode: Text.WordWrap
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                Label {
-                    visible: modEntry.locked
-                    x: parent.width - width - 4; y: 2
-                    text: "🔒" + modEntry.modelData.stage
-                    font.pixelSize: 13
-                    font.bold: true
-                    color: "#1E2833"
-                }
-                TapHandler {
-                    enabled: modEntry.locked
-                    onTapped: tray.moduleLockedTapped(modEntry.modelData.type, modEntry.modelData.stage)
-                }
-                Accessible.name: Texts.moduleName(modEntry.modelData.type) + (modEntry.locked ? ", " + qsTr("gesperrt bis Stufe %1").arg(modEntry.modelData.stage) : "")
+        anchors { top: viewRow.bottom; topMargin: 4; left: parent.left; right: parent.right; bottom: parent.bottom }
+        contentHeight: moduleGrid.height + 8
+        flickableDirection: Flickable.VerticalFlick
+        boundsBehavior: Flickable.StopAtBounds
+        clip: true
+        ScrollBar.vertical: ScrollBar { policy: moduleFlick.contentHeight > moduleFlick.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff }
 
-                property point lastScenePos
-                DragHandler {
-                    id: modDrag
-                    enabled: !modEntry.locked
-                    target: null
-                    onCentroidChanged: {
-                        if (active) {
-                            modEntry.lastScenePos = centroid.scenePosition
-                            tray.moduleDragUpdated(modEntry.modelData.type, modEntry.lastScenePos)
+        Grid {
+            id: moduleGrid
+            x: 8
+            columns: 2
+            spacing: 4
+            Repeater {
+                model: tray.modules
+                delegate: Rectangle {
+                    id: modEntry
+                    required property var modelData
+                    objectName: "trayModule_" + modelData.type
+                    width: tray.tileWidth
+                    height: tray.tileHeight
+                    radius: 8
+                    readonly property bool locked: modelData.locked === true
+                    readonly property color plate: Theme.modulePlate(modelData.type)
+                    color: locked ? "#8E9AA8" : (modDrag.active ? Theme.solderAmber : Qt.tint(plate, "#B8FFFFFF"))
+                    border.color: locked ? "#5D6B7A" : plate
+                    border.width: 2
+                    opacity: locked ? 0.75 : 1
+
+                    // Modul wie in der Modulleiste: Traegerplatte mit einem Anschlussfeld je Anschluss
+                    Rectangle {
+                        visible: !tray.symbols
+                        readonly property int count: Math.max(1, modEntry.modelData.pins.length)
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        y: 6
+                        width: Math.min(parent.width - 16, count * 18 + 8)
+                        height: 34
+                        radius: 4
+                        color: modEntry.locked ? "#5D6B7A" : modEntry.plate
+                        border.color: "#1E2B38"
+                        Row {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: 4
+                            spacing: 4
+                            Repeater {
+                                model: parent.parent.count
+                                Rectangle {
+                                    width: 14; height: 12; radius: 2
+                                    color: "#C9CED4"
+                                    border.color: "#2E2E2E"
+                                }
+                            }
+                        }
+                        Rectangle { // Leuchtpunkt der Zustandsanzeige
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: 21
+                            width: 8; height: 8; radius: 4
+                            color: "#E9EEF3"
+                            border.color: "#1E2B38"
                         }
                     }
-                    onActiveChanged: if (!active) tray.moduleDragFinished(modEntry.modelData.type, modEntry.lastScenePos)
+                    SchematicSymbol {
+                        visible: tray.symbols
+                        type: modEntry.modelData.type
+                        stroke: modEntry.locked ? "#3E4955" : Theme.navy
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        y: 8
+                        width: 64
+                        height: 30
+                    }
+                    Label {
+                        anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 3 }
+                        height: 30
+                        text: Texts.moduleName(modEntry.modelData.type)
+                        color: modEntry.locked ? "#26313C" : Theme.navy
+                        font.pixelSize: Math.round((13) * Theme.fontScale)
+                        font.bold: true
+                        fontSizeMode: Text.Fit
+                        minimumPixelSize: 9
+                        wrapMode: Text.WordWrap
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                    Label {
+                        visible: modEntry.locked
+                        x: parent.width - width - 4; y: 2
+                        text: "🔒" + modEntry.modelData.stage
+                        font.pixelSize: 13
+                        font.bold: true
+                        color: "#1E2833"
+                    }
+                    TapHandler {
+                        enabled: modEntry.locked
+                        onTapped: tray.moduleLockedTapped(modEntry.modelData.type, modEntry.modelData.stage)
+                    }
+                    Accessible.name: Texts.moduleName(modEntry.modelData.type) + (modEntry.locked ? ", " + qsTr("gesperrt bis Stufe %1").arg(modEntry.modelData.stage) : "")
+
+                    property point lastScenePos
+                    DragHandler {
+                        id: modDrag
+                        enabled: !modEntry.locked
+                        target: null
+                        onCentroidChanged: {
+                            if (active) {
+                                modEntry.lastScenePos = centroid.scenePosition
+                                tray.moduleDragUpdated(modEntry.modelData.type, modEntry.lastScenePos)
+                            }
+                        }
+                        onActiveChanged: if (!active) tray.moduleDragFinished(modEntry.modelData.type, modEntry.lastScenePos)
+                    }
                 }
             }
         }

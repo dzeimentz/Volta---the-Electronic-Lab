@@ -762,6 +762,8 @@ Item {
             if (field !== "") lab.controller.addPart(type, field, false, type === "motor")
         }
         modules: lab.controller.trayModules
+        symbols: lab.settings ? lab.settings.traySymbols : false // Bauteil / Symbol, gemerkt
+        onSymbolsChanged: if (lab.settings) lab.settings.traySymbols = symbols
         onModuleLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.moduleName(type)).arg(stage))
         onModuleDragUpdated: (type, scenePos) => {
             lab.beginEdit()

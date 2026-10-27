@@ -48,6 +48,7 @@ class AppSettings : public QObject {
     Q_PROPERTY(QString wireColor READ wireColor WRITE setWireColor NOTIFY changed)
     Q_PROPERTY(bool autoWireColor READ autoWireColor WRITE setAutoWireColor NOTIFY changed) // Plus rot, Minus schwarz
     Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY changed)
+    Q_PROPERTY(bool traySymbols READ traySymbols WRITE setTraySymbols NOTIFY changed)
     Q_PROPERTY(bool experimentPanelCollapsed READ experimentPanelCollapsed WRITE setExperimentPanelCollapsed NOTIFY changed)
 
 public:
@@ -101,6 +102,9 @@ public:
     void setWireColor(const QString& color);
     bool schematicVisible() const { return m_schematicVisible; }
     void setSchematicVisible(bool on) { set(m_schematicVisible, on, "labor/schaltplan"); }
+    // Bauteilfach: Kacheln mit Schaltzeichen statt Bauteilbild
+    bool traySymbols() const { return m_traySymbols; }
+    void setTraySymbols(bool on) { set(m_traySymbols, on, "labor/fachsymbole"); }
     bool experimentPanelCollapsed() const { return m_panelCollapsed; }
     void setExperimentPanelCollapsed(bool on) { set(m_panelCollapsed, on, "labor/experimentfeld_eingeklappt"); }
 
@@ -144,6 +148,7 @@ private:
     QString m_wireColor = QStringLiteral("rot");
     bool m_autoWireColor = true;
     bool m_schematicVisible = false;
+    bool m_traySymbols = false;
     bool m_panelCollapsed = false;
 };
 
