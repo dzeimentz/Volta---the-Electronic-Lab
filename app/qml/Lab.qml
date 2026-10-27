@@ -275,6 +275,37 @@ Item {
     // (Reihenbuchstabe steht immer im Feld - Farbe nie allein)
     function boardTint(row, col) { return Theme.fieldTint(row, col, columns) }
 
+    // ------------------------------------------------------------------ Leitungsfuehrung
+    // Leitungen laufen moeglichst nicht ueber Bauteile: nach jeder Aenderung am Aufbau oder an der Flaeche sucht
+    // der Router (LabController.routeWires) Wege um die Bauteilkoerper herum. {Leitungs-ID: {points, arc}}
+    property var wireRoutes: ({})
+    function routeWires() {
+        const obstacles = []
+        for (let i = 0; i < partRepeater.count; ++i) {
+            const it = partRepeater.itemAt(i)
+            if (it) obstacles.push(it.bodyRect)
+        }
+        const list = controller.wires
+        const ends = list.map(w => ({from: socketPoint(w.from, w.fromSocket), to: socketPoint(w.to, w.toSocket)}))
+        const routes = controller.routeWires(Qt.rect(-Theme.margin, -Theme.margin, canvas.width + 2 * Theme.margin,
+                                                     canvas.height + 2 * Theme.margin), obstacles, ends)
+        const out = {}
+        for (let i = 0; i < list.length && i < routes.length; ++i) out[list[i].id] = routes[i]
+        wireRoutes = out
+    }
+    Timer { id: routeTimer; interval: 20; onTriggered: lab.routeWires() }
+    Connections {
+        target: lab.controller
+        function onBoardChanged() { routeTimer.restart() }
+        function onDeskChanged() { routeTimer.restart() }
+    }
+    Connections {
+        target: canvas
+        function onWidthChanged() { routeTimer.restart() }
+        function onHeightChanged() { routeTimer.restart() }
+    }
+    Component.onCompleted: routeTimer.restart()
+
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""
     // Aufbauhilfe sichtbar (Aufbauphase, vom Kind eingeschaltet)
@@ -706,6 +737,7 @@ Item {
         objectName: "experimentPanel"
         controller: lab.controller
         speech: lab.speech
+        partImages: !tray.symbols // Aufbautext zeigt dieselbe Ansicht wie das Bauteilfach
         anchors { right: parent.right; top: toolbar.bottom; bottom: parent.bottom }
         width: lab.controller.phase > 0 ? (collapsed ? Theme.control + 8 : 340) : 0
         collapsed: lab.settings ? lab.settings.experimentPanelCollapsed : false
@@ -1187,6 +1219,7 @@ Item {
 
             // Bauteile
             Repeater {
+                id: partRepeater
                 model: lab.controller.parts
                 PartItem {
                     id: part
@@ -1260,6 +1293,15 @@ Item {
                         id: wireShape
                         from: wire.fromPoint
                         to: wire.toPoint
+                        // um die Bauteile herum gefuehrt; beim Umstecken eines Endes wieder der einfache Bogen
+                        waypoints: {
+                            const r = lab.wireRoutes[wire.modelData.id]
+                            if (!r || r.arc || wire.movingFrom || wire.movingTo) return []
+                            const p = r.points
+                            if (Math.hypot(p[0].x - wire.fromPoint.x, p[0].y - wire.fromPoint.y) > 1
+                                    || Math.hypot(p[p.length - 1].x - wire.toPoint.x, p[p.length - 1].y - wire.toPoint.y) > 1) return []
+                            return p.slice(1, p.length - 1)
+                        }
                         wireColor: Theme.wireColor(wire.modelData.color)
                         selected: lab.selectedWire === wire.modelData.id
                         Accessible.role: Accessible.Button

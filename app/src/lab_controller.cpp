@@ -29,6 +29,7 @@
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
+#include "model/wire_router.hpp"
 
 namespace volta {
 
@@ -689,6 +690,18 @@ QVariantList LabController::trayParts() const {
     std::stable_sort(out.begin(), out.end(), [](const QVariant& a, const QVariant& b) {
         return !a.toMap().value(QStringLiteral("locked")).toBool() && b.toMap().value(QStringLiteral("locked")).toBool();
     });
+    return out;
+}
+
+QVariantList LabController::templateParts() const {
+    QVariantList out;
+    if (m_freeLab || m_experiment.id.isEmpty()) return out;
+    for (const auto& p : m_experiment.templateBoard.parts) {
+        QStringList fields;
+        for (const auto& [pin, field] : p.pins)
+            if (!fields.contains(qs(field))) fields << qs(field);
+        out << QVariantMap{{QStringLiteral("type"), qs(p.type)}, {QStringLiteral("fields"), fields}};
+    }
     return out;
 }
 
@@ -1583,6 +1596,28 @@ QVariantMap LabController::partPreview(const QString& type, const QString& start
         if (!fields.contains(qs(field))) fields << qs(field);
     }
     return {{QStringLiteral("pins"), list}, {QStringLiteral("fields"), fields}, {QStringLiteral("ok"), ok}};
+}
+
+QVariantList LabController::routeWires(const QRectF& bounds, const QVariantList& obstacles,
+                                     const QVariantList& wires) const {
+    std::vector<model::RouterRect> rects;
+    for (const QVariant& v : obstacles) {
+        const QRectF r = v.toRectF();
+        rects.push_back({r.x(), r.y(), r.width(), r.height()});
+    }
+    std::vector<std::pair<model::RouterPoint, model::RouterPoint>> ends;
+    for (const QVariant& v : wires) {
+        const QVariantMap m = v.toMap();
+        const QPointF a = m.value(QStringLiteral("from")).toPointF(), b = m.value(QStringLiteral("to")).toPointF();
+        ends.push_back({{a.x(), a.y()}, {b.x(), b.y()}});
+    }
+    QVariantList out;
+    for (const auto& r : model::WireRouter::route({bounds.x(), bounds.y(), bounds.width(), bounds.height()}, rects, ends)) {
+        QVariantList pts;
+        for (const auto& p : r.points) pts << QPointF(p.x, p.y);
+        out << QVariantMap{{QStringLiteral("points"), pts}, {QStringLiteral("arc"), r.arc}};
+    }
+    return out;
 }
 
 bool LabController::movePart(const QString& id, const QString& start, bool vertical, bool longSpan) {

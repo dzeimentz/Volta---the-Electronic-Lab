@@ -9,6 +9,7 @@ Rectangle {
     property var speech: null // SpeechService; Knopf nur, wenn eine Stimme fuer die Sprache da ist
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
     // Aufbauschritte mit Feldbildern und Schaltzeichen (zuerst fuer die Stufen 0-2)
+    property bool partImages: true // Bauteil- oder Schaltzeichenbild im Text, wie im Bauteilfach eingestellt
     readonly property bool pictureSteps: controller.experimentStage >= 0 && controller.experimentStage <= 2
 
     // Text eines Schritts der Aufbauhilfe (LabController::guideStep)
@@ -270,6 +271,9 @@ Rectangle {
                         width: parent.width - 36
                         text: modelData
                         columns: panel.controller.boardColumns
+                        partImages: panel.partImages
+                        templateParts: panel.controller.templateParts
+                        catalog: panel.controller.catalogParts
                     }
                 }
             }

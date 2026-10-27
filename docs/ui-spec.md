@@ -170,9 +170,15 @@ das iPad).
   Leitungen in beiden Richtungen, Modulanschluss = Feld der Leiste); keine Reihenfolgepflicht, Entfernen holt den
   Schritt zurueck. Ob das Experiment gelingt, entscheidet weiter die Erfolgsbedingung, nicht die Aehnlichkeit.
 - Nach »Fertig« und beim Start eines Experiments ist die Aufbauhilfe wieder aus.
+- Leitungsfuehrung (0.9.1, `model/wire_router`): Leitungen laufen moeglichst nicht ueber Bauteile. Streift der
+  gewohnte Bogen einen Bauteilkoerper, sucht der Router (A* auf einem 8-px-Raster, acht Richtungen, Abstand zu den
+  Koerpern, Knicke und schon belegte Wege kosten extra) einen Weg zwischen den Bauteilen; er wird zu wenigen
+  Wegpunkten gestrafft und mit runden Ecken gezeichnet. Neu berechnet nach jeder Aufbauaenderung; beim Umstecken
+  eines Endes zeigt die Leitung den einfachen Bogen.
 - Aufbauschritte mit Bildern (0.9.1, zuerst Stufe 0–2, `StepText.qml`): Feldnamen im Text erscheinen als kleine
   Kontaktfelder in ihrer Reihenfarbe (`FieldChip.qml`; V+ rot, 0V schwarz, Pult- und Modulfelder), hinter dem ersten
-  Namen eines Bauteils steht sein Schaltzeichen. Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
+  Namen eines Bauteils steht sein Bild wie im Bauteilfach (Umschalter »Bauteil | Symbol« gilt auch hier). Die
+  Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »von A3 nach A4«, laut Musteraufbau) stehen direkt nebeneinander. Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
   uebersetzbar). Der Text bleibt vollstaendig (Vorlesen, Bildschirmleser).
 
 ## Forschungskreislauf und Forscherheft (D2)

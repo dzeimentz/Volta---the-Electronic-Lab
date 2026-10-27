@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QTimer>
 #include <QUrl>
+#include <QRectF>
 #include <QVariantList>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
@@ -109,6 +110,8 @@ class LabController : public QObject {
     Q_PROPERTY(QString experimentId READ experimentId NOTIFY experimentChanged)
     Q_PROPERTY(bool freeLab READ freeLab NOTIFY experimentChanged)
     Q_PROPERTY(int experimentStage READ experimentStage NOTIFY experimentChanged) // -1: freies Labor
+    // Bauteile des Musteraufbaus [{type, fields}] (Aufbautext: Steckfelder eines Bauteils nebeneinander)
+    Q_PROPERTY(QVariantList templateParts READ templateParts NOTIFY experimentChanged)
     // 0 freies Labor, 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung (Forschungskreislauf, Konzept 5.6)
     Q_PROPERTY(int phase READ phase NOTIFY flowChanged)
     Q_PROPERTY(QStringList observations READ observations NOTIFY experimentChanged)
@@ -335,6 +338,7 @@ public:
     QVariantList experiments() const { return m_experimentList; }
     QString experimentId() const { return m_experiment.id; }
     bool freeLab() const { return m_freeLab; }
+    QVariantList templateParts() const;
     int experimentStage() const { return m_freeLab || m_experiment.id.isEmpty() ? -1 : m_experiment.stage; }
     int phase() const { return static_cast<int>(m_flow.phase()); }
     bool destructive() const { return m_experiment.destructive; }
@@ -367,6 +371,9 @@ public:
     Q_INVOKABLE bool addPart(const QString& type, const QString& startField, bool vertical, bool longSpan);
     // Steckvorschau beim Ziehen aus dem Fach: {pins: [{name, field}], fields: [...], ok}
     Q_INVOKABLE QVariantMap partPreview(const QString& type, const QString& startField, bool vertical, bool longSpan) const;
+    // Leitungsfuehrung um die Bauteile herum (model/wire_router): bounds Arbeitsflaeche, obstacles [rect] der
+    // Bauteilkoerper, wires [{from, to}]; Ergebnis je Leitung {points: [point], arc: bool}
+    Q_INVOKABLE QVariantList routeWires(const QRectF& bounds, const QVariantList& obstacles, const QVariantList& wires) const;
     Q_INVOKABLE bool movePart(const QString& id, const QString& startField, bool vertical, bool longSpan);
     Q_INVOKABLE bool removePart(const QString& id);
     Q_INVOKABLE bool flipPart(const QString& id);

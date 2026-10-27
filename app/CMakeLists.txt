@@ -30,6 +30,7 @@ add_library(volta_model STATIC
     src/model/recorder.cpp
     src/model/formula.cpp
     src/model/schematic_layout.cpp
+    src/model/wire_router.cpp
     src/services/content_repository.cpp
     src/services/progress_store.cpp
     src/services/journal_store.cpp

@@ -1,5 +1,7 @@
 // Aufbauschritt mit Bildern (Stufe 0-2): Feldnamen im Text erscheinen als kleine Kontaktfelder (FieldChip), hinter
-// dem ersten Namen eines Bauteils steht sein Schaltzeichen. Der Text bleibt vollstaendig erhalten (Vorlesen, Barrierefreiheit).
+// dem ersten Namen eines Bauteils steht sein Bild wie im Bauteilfach (Bauteil oder Schaltzeichen, Umschalter im Fach).
+// Die Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »von A3 nach A4«) stehen unmittelbar nebeneinander.
+// Der Text bleibt vollstaendig erhalten (Vorlesen, Barrierefreiheit).
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -7,34 +9,51 @@ Flow {
     id: step
     property string text
     property int columns: 5
+    property bool partImages: true   // true: Bauteil wie auf dem Steckbrett, false: Schaltzeichen
+    property var templateParts: []   // [{type, fields}] des Musteraufbaus
+    property var catalog: []         // catalogParts (Anschlusszahl fuer das Bauteilbild)
     spacing: 5
 
     readonly property int lineHeight: 36
     // Feld auf der Grundplatte, am Pult (V+, 0V, S1, P1a, LS1 ...) oder in der Modulleiste (M1 ...)
     readonly property var fieldPattern: /^([A-E](1[0-2]|[1-9])|V\+|0V|S[12]|P[12][asb]|LS[12]|M(1[0-6]|[1-9]))$/
+    // Bindewoerter zwischen den zwei Feldern eines Bauteils bzw. davor (DE, EN, FR, LU)
+    readonly property var joinWords: ["und", "and", "et", "an", "a", "nach", "to", "à", "op", "bis", "mit", "with"]
+    readonly property var fromWords: ["von", "from", "de", "vu", "vun"]
 
-    // Woerter in Stuecke zerlegen: [{kind: "text"|"field"|"symbol", value}]
+    function pinsOf(type) {
+        for (let i = 0; i < catalog.length; ++i) if (catalog[i].type === type) return catalog[i].pins
+        return 2
+    }
+    function samePart(a, b) {
+        for (let i = 0; i < templateParts.length; ++i) {
+            const f = templateParts[i].fields
+            if (f.indexOf(a) >= 0 && f.indexOf(b) >= 0) return true
+        }
+        return false
+    }
+
+    // Woerter in Stuecke zerlegen: [{kind: "text"|"field"|"symbol", value}]; field: einzelnes Feld des Wortes
     readonly property var words: {
         const stems = Texts.partWords().map(e => [e[0], e[1].split(",").map(w => w.trim().toLowerCase())])
         const used = {}
-        const out = []
+        const list = []
         const parts = step.text.split(" ")
         for (let i = 0; i < parts.length; ++i) {
             const word = parts[i]
             if (word === "") continue
             const m = word.match(/^([(„"»«“]*)(.*?)([.,;:!?)"«»“”]*)$/)
             const lead = m ? m[1] : "", core = m ? m[2] : word, trail = m ? m[3] : ""
-            // Feld oder Feldbereich (A1–A2)
-            const pieces = core.split(/([–-])/)
-            let fields = pieces.length % 2 === 1
-            for (let k = 0; k < pieces.length && fields; k += 2) fields = step.fieldPattern.test(pieces[k])
-            if (fields && core !== "") {
+            // Feld oder Feldbereich (A1–A2): die Felder eines Bereichs stehen direkt nebeneinander
+            const pieces = core.split(/[–-]/)
+            let fields = core !== ""
+            for (let k = 0; k < pieces.length && fields; ++k) fields = step.fieldPattern.test(pieces[k])
+            if (fields) {
                 const w = []
                 if (lead !== "") w.push({kind: "text", value: lead})
-                for (let k = 0; k < pieces.length; ++k)
-                    w.push(k % 2 === 0 ? {kind: "field", value: pieces[k]} : {kind: "text", value: pieces[k]})
+                for (let k = 0; k < pieces.length; ++k) w.push({kind: "field", value: pieces[k]})
                 if (trail !== "") w.push({kind: "text", value: trail})
-                out.push(w)
+                list.push({pieces: w, field: pieces.length === 1 ? pieces[0] : "", lead: lead, trail: trail, raw: word})
                 continue
             }
             // Bauteilname: Wortanfang (auch nach Bindestrich oder Apostroph, z. B. »100-Ω-Widerstand«, »l'ampoule«)
@@ -45,12 +64,34 @@ Flow {
                 for (let k = 0; k < sub.length && type === ""; ++k)
                     if (stems[t][1].some(st => st !== "" && sub[k].startsWith(st))) type = stems[t][0]
             }
-            if (type !== "") {
-                used[type] = true
-                out.push([{kind: "text", value: word}, {kind: "symbol", value: type}])
-            } else out.push([{kind: "text", value: word}])
+            if (type !== "") used[type] = true
+            // LED: die Farbe aus dem Musteraufbau (»Leuchtdiode« sagt sie nicht immer)
+            if (type === "led_rot")
+                for (let k = 0; k < step.templateParts.length; ++k)
+                    if (step.templateParts[k].type.startsWith("led_")) { type = step.templateParts[k].type; break }
+            list.push({pieces: type !== "" ? [{kind: "text", value: word}, {kind: "symbol", value: type}]
+                                           : [{kind: "text", value: word}],
+                       field: "", raw: word})
         }
-        return out
+        // »A2 und A3«, »von A3 nach A4«: gehoeren beide Felder zu einem Bauteil, stehen sie direkt nebeneinander
+        const out = []
+        for (let i = 0; i < list.length; ++i) {
+            const a = list[i], j = list[i + 1], b = list[i + 2]
+            if (a.field !== "" && a.trail === "" && j && b && b.field !== "" && b.lead === ""
+                    && step.joinWords.indexOf(j.raw.toLowerCase()) >= 0 && step.samePart(a.field, b.field)) {
+                const prev = out.length > 0 ? out[out.length - 1] : null
+                if (prev && prev.field === "" && step.fromWords.indexOf(prev.raw.toLowerCase()) >= 0) out.pop()
+                const w = []
+                if (a.lead !== "") w.push({kind: "text", value: a.lead})
+                w.push({kind: "field", value: a.field}, {kind: "field", value: b.field})
+                if (b.trail !== "") w.push({kind: "text", value: b.trail})
+                out.push({pieces: w, field: "", raw: ""})
+                i += 2
+                continue
+            }
+            out.push(a)
+        }
+        return out.map(w => w.pieces)
     }
 
     Accessible.role: Accessible.StaticText
@@ -65,42 +106,63 @@ Flow {
             Repeater {
                 model: parent.modelData
                 Item {
+                    id: piece
                     required property var modelData
-                    width: modelData.kind === "field" ? chip.width
-                         : modelData.kind === "symbol" ? symbolBox.width + 3 : label.implicitWidth
+                    readonly property bool isText: modelData.kind === "text"
+                    readonly property bool isField: modelData.kind === "field"
+                    readonly property bool isSymbol: modelData.kind === "symbol"
+                    readonly property bool isModule: isSymbol && modelData.value.endsWith("modul")
+                    // Bauteilbild nur fuer Bauteile der Grundplatte (Module und Pultteile: Schaltzeichen)
+                    readonly property bool showPart: isSymbol && step.partImages && !isModule && modelData.value !== "lautsprecher"
+                    width: isField ? chip.width : isSymbol ? symbolBox.width + 3 : label.implicitWidth
                     height: step.lineHeight
                     Label {
                         id: label
-                        visible: parent.modelData.kind === "text"
+                        visible: piece.isText
                         anchors.verticalCenter: parent.verticalCenter
-                        text: parent.modelData.kind === "text" ? parent.modelData.value : ""
+                        text: piece.isText ? piece.modelData.value : ""
                         font.pixelSize: Math.round(14 * Theme.fontScale)
                         color: "#1E2B38"
                     }
                     FieldChip {
                         id: chip
-                        visible: parent.modelData.kind === "field"
+                        visible: piece.isField
                         anchors.verticalCenter: parent.verticalCenter
-                        name: parent.modelData.kind === "field" ? parent.modelData.value : ""
+                        name: piece.isField ? piece.modelData.value : ""
                         columns: step.columns
                     }
                     Rectangle {
                         id: symbolBox
-                        visible: parent.modelData.kind === "symbol"
+                        visible: piece.isSymbol
                         x: 3
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 44; height: 26; radius: 5
-                        color: "#EEF3F8"
+                        width: piece.showPart ? 62 : 44
+                        height: piece.showPart ? 30 : 26
+                        radius: 5
+                        color: piece.showPart ? Theme.partTheme(step.themeOf(piece.modelData.value)).tint : "#EEF3F8"
                         border.color: "#9FB2C4"
                         SchematicSymbol {
+                            visible: !piece.showPart
                             anchors.centerIn: parent
                             width: 36; height: 18
-                            type: parent.parent.modelData.kind === "symbol" ? parent.parent.modelData.value : ""
+                            type: piece.isSymbol && !piece.showPart ? piece.modelData.value : ""
                             stroke: Theme.navy
+                        }
+                        PartPreview {
+                            visible: piece.showPart
+                            anchors.fill: parent
+                            anchors.margins: 2
+                            type: piece.showPart ? piece.modelData.value : ""
+                            pins: piece.showPart ? step.pinsOf(piece.modelData.value) : 2
                         }
                     }
                 }
             }
         }
+    }
+
+    function themeOf(type) {
+        for (let i = 0; i < catalog.length; ++i) if (catalog[i].type === type) return catalog[i].theme
+        return ""
     }
 }

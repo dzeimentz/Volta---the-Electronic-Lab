@@ -19,6 +19,7 @@
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
+#include "model/wire_router.hpp"
 #include "model/netlist_builder.hpp"
 #include "services/content_repository.hpp"
 #include "volta/core/components/capacitor.hpp"
@@ -57,6 +58,31 @@ private:
     }
 
 private slots:
+    // Leitungsfuehrung: freier Bogen bleibt, sonst Weg um das Bauteil herum (kein Wegstueck im Koerper)
+    void wireRouterAvoidsParts() {
+        using namespace volta::model;
+        const RouterRect bounds{0, 0, 400, 300};
+        // ohne Hindernis: Bogen
+        auto free = WireRouter::route(bounds, {}, {{{50, 200}, {350, 200}}});
+        QCOMPARE(free.size(), std::size_t(1));
+        QVERIFY(free[0].arc);
+        // Bauteil genau unter dem Bogen und auf der Geraden: Weg aussen herum
+        const RouterRect body{120, 60, 160, 200};
+        auto routed = WireRouter::route(bounds, {body}, {{{50, 200}, {350, 200}}});
+        QVERIFY(!routed[0].arc);
+        const auto& pts = routed[0].points;
+        QVERIFY(pts.size() >= 3);
+        QCOMPARE(pts.front().x, 50.0);
+        QCOMPARE(pts.back().x, 350.0);
+        for (size_t i = 0; i + 1 < pts.size(); ++i)
+            for (int k = 0; k <= 20; ++k) {
+                const double t = k / 20.0;
+                const double x = pts[i].x + (pts[i + 1].x - pts[i].x) * t, y = pts[i].y + (pts[i + 1].y - pts[i].y) * t;
+                QVERIFY2(!(x > body.x && x < body.x + body.w && y > body.y && y < body.y + body.h),
+                         qPrintable(QStringLiteral("Wegpunkt im Bauteil: %1/%2").arg(x).arg(y)));
+            }
+    }
+
     // Automatisches Speichern: Aufbau verlustfrei als JSON; Hauptschalter startet aus
     void boardJsonRoundTrip() {
         model::Board b;

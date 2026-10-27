@@ -48,6 +48,13 @@ Item {
         for (let i = 0; i < points.length; ++i) { lo = Math.min(lo, points[i].y); hi = Math.max(hi, points[i].y) }
         return points.length > 0 ? hi - lo : 0
     }
+    // Umriss des Koerpers auf der Arbeitsflaeche (achsparallel, auch gedreht): Leitungen werden darum herum gefuehrt
+    readonly property rect bodyRect: {
+        const r = body.rotation * Math.PI / 180
+        const w = Math.abs(body.width * Math.cos(r)) + Math.abs(body.height * Math.sin(r))
+        const h = Math.abs(body.width * Math.sin(r)) + Math.abs(body.height * Math.cos(r))
+        return Qt.rect(cx - w / 2, cy - h / 2, w, h)
+    }
     readonly property bool destroyed: partState.destroyed === true
     readonly property bool overloaded: partState.overloaded === true
 
