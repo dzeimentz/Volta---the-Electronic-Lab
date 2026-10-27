@@ -325,8 +325,10 @@ Rectangle {
             Repeater {
                 model: panel.phase === 2 ? panel.controller.hints : []
                 TickSays {
+                    id: hint
                     required property int index
                     required property string modelData
+                    objectName: "hint_" + index
                     width: parent.width
                     figure: 80
                     figureShown: index === panel.controller.hints.length - 1
@@ -334,6 +336,18 @@ Rectangle {
                     text: "💡 " + modelData
                     bubbleColor: "#FFF4D6"
                     borderColor: Theme.solderAmber
+                    // Stufe 0-2: Felder als Bilder, Bauteile mit Bild bzw. Schaltzeichen wie in den Schritten
+                    body: panel.pictureSteps ? hintPictures : null
+                    Component {
+                        id: hintPictures
+                        StepText {
+                            text: hint.text
+                            columns: panel.controller.boardColumns
+                            partImages: panel.partImages
+                            templateParts: panel.controller.templateParts
+                            catalog: panel.controller.catalogParts
+                        }
+                    }
                 }
             }
             WideButton {

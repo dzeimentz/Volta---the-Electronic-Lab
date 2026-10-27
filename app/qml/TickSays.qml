@@ -14,6 +14,7 @@ Item {
     property color borderColor: Theme.fieldOutline
     property color textColor: "#1E2B38"
     property bool bold: false
+    property Component body: null // eigener Inhalt der Blase statt des Textes (z. B. StepText mit Feldbildern)
     property bool figureShown: true // false: nur die Blase (z. B. aeltere Tipps)
     readonly property bool showFigure: Theme.tick && figureShown
     readonly property real bubbleLeft: bubble.x
@@ -47,7 +48,7 @@ Item {
         id: bubble
         x: says.showFigure ? says.figure + 10 : 0
         width: says.width - x
-        height: label.implicitHeight + 20
+        height: (says.body ? bodyLoader.height : label.implicitHeight) + 20
         y: (says.height - height) / 2
         radius: 12
         color: says.bubbleColor
@@ -71,8 +72,16 @@ Item {
                 PathLine { x: 10; y: 16 }
             }
         }
+        Loader {
+            id: bodyLoader
+            x: 12
+            width: bubble.width - 24
+            anchors.verticalCenter: parent.verticalCenter
+            sourceComponent: says.body
+        }
         Label {
             id: label
+            visible: says.body === null
             x: 12
             width: bubble.width - 24
             anchors.verticalCenter: parent.verticalCenter

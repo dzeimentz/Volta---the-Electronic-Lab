@@ -178,7 +178,8 @@ das iPad).
 - Aufbauschritte mit Bildern (0.9.1, zuerst Stufe 0–2, `StepText.qml`): Feldnamen im Text erscheinen als kleine
   Kontaktfelder in ihrer Reihenfarbe (`FieldChip.qml`; V+ rot, 0V schwarz, Pult- und Modulfelder), hinter dem ersten
   Namen eines Bauteils steht sein Bild wie im Bauteilfach (Umschalter »Bauteil | Symbol« gilt auch hier). Die
-  Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »von A3 nach A4«, laut Musteraufbau) stehen direkt nebeneinander. Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
+  Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »von A3 nach A4«, laut Musteraufbau) stehen direkt nebeneinander.
+  Ebenso die Tipps in den Sprechblasen (`TickSays.body`). Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
   uebersetzbar). Der Text bleibt vollstaendig (Vorlesen, Bildschirmleser).
 
 ## Forschungskreislauf und Forscherheft (D2)
