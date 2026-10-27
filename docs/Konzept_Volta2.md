@@ -218,7 +218,7 @@ Reihenfolge nach Stufe 5 zwingend: Der 555 wird mit den Komparatoren erklärt.
 
 ## 9. Gestaltung und Begleitfigur
 
-Gestaltung wie Volta 1 (hell, ruhige Flächen, DC Learning Design Standard). Volta 2 erhält ein eigenes App-Symbol (Variante des Volta-Symbols mit Sinuswelle) und eine Kennfarbe für den Band. Die Begleitfigur **Tick** bleibt, mit etwas sachlicherem Ton für die ältere Zielgruppe; die Ebene »Mehr wissen« wird in Volta 2 öfter genutzt (Formeln, Hintergründe). Die Texte duzen weiterhin.
+Gestaltung wie Volta 1 (hell, ruhige Flächen, DC Learning Design Standard). Volta 2 und Volta 3 tragen von Anfang an das neue Reihensymbol (`docs/design/symbole/volta2.svg`, `volta3.svg`): das Volta-Symbol mit LED-Balkenanzeige, in der zwei bzw. drei Felder leuchten (entschieden 27.10.2026). Volta 1 behält sein bisheriges Symbol und wechselt erst mit Version 1.0 auf `volta1.svg`. Offen ist nur noch eine Kennfarbe für den Band. Die Begleitfigur **Tick** bleibt, mit etwas sachlicherem Ton für die ältere Zielgruppe; die Ebene »Mehr wissen« wird in Volta 2 öfter genutzt (Formeln, Hintergründe). Die Texte duzen weiterhin.
 
 ## 10. Technik
 
@@ -273,7 +273,7 @@ Schritte 2 und 3 können beginnen, sobald die Experimentliste freigegeben ist; S
 | Entscheidung | Spätestens |
 |---|---|
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
-| Kennfarbe und App-Symbol von Volta 2 | Schritt 2 |
+| Kennfarbe von Volta 2 (App-Symbol entschieden: Reihensymbol `volta2.svg`) | Schritt 2 |
 | Wechselquelle: fest 50 Hz oder einstellbar (für die Experimente reicht fest) | Schritt 3 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
 | Lehrplanzuordnung DE/LU/Ostbelgien | Schulpaket |
