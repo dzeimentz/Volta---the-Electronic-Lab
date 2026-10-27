@@ -164,8 +164,7 @@ int main(int argc, char* argv[]) {
         QTimer::singleShot(200, &lab, [&lab] {
             lab.loadExperiment(QStringLiteral("volta1.2.4"));
             lab.removePart(QStringLiteral("D1"));
-            lab.addPart(QStringLiteral("led_gruen"), QStringLiteral("B4"), true, false); // 470 Ohm -> leuchtet
-            lab.addWire(QStringLiteral("C4"), QStringLiteral("P:0V"), QStringLiteral("schwarz"));
+            lab.addPart(QStringLiteral("led_gruen"), QStringLiteral("A4"), true, false); // 470 Ohm -> leuchtet
             struct P { const char* type; const char* field; bool vertical; bool longSpan; };
             const P parts[] = {{"gluehlampe", "A1", false, false}, {"motor", "A4", false, true},
                                {"summer", "C1", false, false},     {"taster", "C6", false, false},

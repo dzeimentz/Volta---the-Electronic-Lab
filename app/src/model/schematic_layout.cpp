@@ -68,6 +68,7 @@ int anchorOrder(const std::string& a) {
 }
 
 std::string displayName(const std::string& a) {
+    if (a == "P:+9V") return "V+"; // Pluspol heisst auf dem Pult V+
     if (a.rfind("P:", 0) == 0) return a.substr(2);
     if (a.rfind("MESS:", 0) == 0) return a.substr(5) == "VOHM" ? "V/Ω" : a.substr(5);
     if (a.rfind("M:", 0) == 0) return "M" + a.substr(2);

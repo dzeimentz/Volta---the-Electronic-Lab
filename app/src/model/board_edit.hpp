@@ -21,10 +21,17 @@ inline constexpr int kMinColumns = 8;
 inline constexpr int kMaxColumns = 12;
 inline constexpr int kColumnStep = 2;
 
-// Liegt der Anschlusspunkt auf der genutzten Grundplatte? (Felder rechts von board.columns: nein; andere: ja)
+// Kleines Steckbrett der ersten Stufen (Stufenanpassung, docs/ui-spec.md): 2 x 5 bzw. 3 x 6 Felder
+inline constexpr int kMinRows = 2;
+inline constexpr int kMaxRows = 5;
+bool validBoardSize(int rows, int columns);
+
+// Liegt der Anschlusspunkt auf der genutzten Grundplatte? (Felder rechts von board.columns oder unter board.rows:
+// nein; andere: ja)
 bool withinBoard(const Board& board, const std::string& anchor);
-// Groesste von Bauteilen oder Leitungen belegte Spalte (0: keine)
+// Groesste von Bauteilen oder Leitungen belegte Spalte bzw. Reihe (1 = A; 0: keine)
 int highestUsedColumn(const Board& board);
+int highestUsedRow(const Board& board);
 
 // Felder, die ein Bauteil vom Startfeld aus belegt; leer, wenn es nicht auf die Grundplatte passt.
 // Zweipolig: Startfeld und Feld im Abstand span. Traegerplatine (drei Anschluesse): drei benachbarte Felder.

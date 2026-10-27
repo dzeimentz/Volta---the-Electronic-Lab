@@ -35,8 +35,8 @@
         "id": "M1",
         "typ": "motor",
         "felder": [
-          "C1",
-          "C3"
+          "B1",
+          "B3"
         ]
       }
     ],
@@ -49,11 +49,11 @@
       },
       {
         "von": "P:S2",
-        "nach": "C1",
+        "nach": "B1",
         "farbe": "rot"
       },
       {
-        "von": "C3",
+        "von": "B3",
         "nach": "P:0V",
         "farbe": "schwarz"
       }

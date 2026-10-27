@@ -139,7 +139,7 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
     // ---- Kurzschluss ueber Leitungen
     if (plus == minus)
         shorts.push_back({CircuitFinding::Kind::Short, "", {kPlus, kMinus},
-                          msg(QT_TRANSLATE_NOOP("Meldung", "Fließt der Strom hier von +9V direkt nach 0V, ohne durch ein "
+                          msg(QT_TRANSLATE_NOOP("Meldung", "Fließt der Strom hier von V+ direkt nach 0V, ohne durch ein "
                                                            "Bauteil zu gehen?"))});
 
     // ---- Bauteile mit ueberbrueckten oder losen Beinen
@@ -218,7 +218,7 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
                                  board.desk.meterMode == core::MeterMode::Ohm;
             if (plusFree && !ohmOnly)
                 noSupply.push_back({CircuitFinding::Kind::NoSupply, "", {kPlus},
-                                    msg(QT_TRANSLATE_NOOP("Meldung", "Ist dein Aufbau mit dem Pluspol +9V verbunden?"))});
+                                    msg(QT_TRANSLATE_NOOP("Meldung", "Ist dein Aufbau mit dem Pluspol V+ verbunden?"))});
             if (minusFree && !ohmOnly)
                 noSupply.push_back({CircuitFinding::Kind::NoSupply, "", {kMinus},
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Ist dein Aufbau mit dem Minuspol 0V verbunden?"))});
@@ -277,7 +277,7 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
             bat && shorts.empty() && std::fabs(bat->currentA) > 2.0)
             shorts.push_back({CircuitFinding::Kind::Short, "", {kPlus, kMinus},
                               msg(QT_TRANSLATE_NOOP("Meldung", "Aus der Batterie fließt sehr viel Strom. Gibt es einen "
-                                                               "Weg von +9V nach 0V, auf dem kein Bauteil den Strom "
+                                                               "Weg von V+ nach 0V, auf dem kein Bauteil den Strom "
                                                                "bremst?"))});
         for (const auto& p : board.parts) {
             const core::ComponentReading* r = in.reading(p.id);

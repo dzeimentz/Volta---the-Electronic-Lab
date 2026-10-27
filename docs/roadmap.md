@@ -24,6 +24,11 @@ Kurzanleitung, DE/FR/EN/LU). Android: Test-APK arm64/armv7, AAB fuer Google Play
 Bis 1.0: Erprobung mit Kindern und Pilot mit einer Lehrkraft, Korrekturen als 0.9.x; Schritte des Inhabers
 (Datenschutzerklaerung online, Markenbewertung »Volta«, Entwicklerkonto, Signatur, Verwertungsweg).
 
+## Version 0.9.1 (27.10.2026)
+Stufenanpassung von Steckbrett, Pult und Modulleiste (abschaltbar im Elternbereich), farbiger Steckbretthintergrund,
+Pult mit Rahmen je Bauteil, V+ statt +9V, Kippschalter, Potentiometer 1/2; Musteraufbauten der Stufen 0–3 auf das
+kleine Steckbrett umgesteckt. Version 0.9.0 bleibt als Tag `v0.9.0` und im Ordner `Release-0.9.0/` erhalten.
+
 ## Offene Entscheidungen
 Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, danach folgt Volta 2
 (`docs/volta2-planung.md`). 27.10.2026: Volta 1 bleibt auf dem Stand 0.9 (nur Korrekturen aus Vorfuehrungen und

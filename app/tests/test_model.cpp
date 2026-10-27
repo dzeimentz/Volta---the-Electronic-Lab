@@ -181,7 +181,7 @@ private slots:
         QCOMPARE(s.nodes[static_cast<std::size_t>(plus)].layer, 0);
         QCOMPARE(s.nodes[static_cast<std::size_t>(mid)].layer, 1);
         QCOMPARE(s.nodes[static_cast<std::size_t>(gnd)].layer, 2);
-        QVERIFY(s.nodes[static_cast<std::size_t>(plus)].label.find("+9V") != std::string::npos);
+        QVERIFY(s.nodes[static_cast<std::size_t>(plus)].label.find("V+") != std::string::npos);
         // Elemente: R1, D1, R2 und die Batterie
         int parallel = 0;
         bool battery = false;
@@ -339,10 +339,10 @@ private slots:
         QVERIFY(exp.destructive);
         QCOMPARE(exp.templateBoard.parts.size(), std::size_t(2));
         QCOMPARE(exp.templateBoard.wires.size(), std::size_t(2));
-        QCOMPARE(exp.shownVoltages, (QStringList{QStringLiteral("B3"), QStringLiteral("B4")}));
+        QCOMPARE(exp.shownVoltages, (QStringList{QStringLiteral("A3"), QStringLiteral("A4")}));
         const model::PartPlacement* led = exp.templateBoard.findPart("D1");
         QVERIFY(led != nullptr);
-        QCOMPARE(led->pins.at(0), (std::pair<std::string, std::string>{"anode", "B4"}));
+        QCOMPARE(led->pins.at(0), (std::pair<std::string, std::string>{"anode", "A4"}));
         QVERIFY(repo.loadTexts(QStringLiteral("volta1"), QStringLiteral("de")));
         QVERIFY(repo.text(exp.titleKey).contains(QStringLiteral("Leuchtdiode")));
         QCOMPARE(repo.text(QStringLiteral("gibt_es_nicht")), QStringLiteral("gibt_es_nicht"));
@@ -365,9 +365,9 @@ private slots:
         QVERIFY(simulate(board, m_catalog, net, sim2, 1.0));
         const double i = partCurrent(net, sim2, "D1");
         QVERIFY2(i > 14.5e-3 && i < 15.5e-3, qPrintable(QString::number(i * 1e3) + " mA"));
-        QVERIFY(nodeVoltage(net, sim2, "B3") > 8.9);
-        QVERIFY(nodeVoltage(net, sim2, "B4") > 1.8 && nodeVoltage(net, sim2, "B4") < 2.0);
-        QVERIFY(std::fabs(nodeVoltage(net, sim2, "C4")) < 1e-3);
+        QVERIFY(nodeVoltage(net, sim2, "A3") > 8.9);
+        QVERIFY(nodeVoltage(net, sim2, "A4") > 1.8 && nodeVoltage(net, sim2, "A4") < 2.0);
+        QVERIFY(std::fabs(nodeVoltage(net, sim2, "B4")) < 1e-3);
         QCOMPARE(net.wires.size(), std::size_t(2));
         // Leitungen tragen den Strom (Stromflussdarstellung)
         QVERIFY(std::fabs(sim2.probe().readings[net.wires.at("L1")].currentA - i) < 1e-6);

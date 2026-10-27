@@ -58,7 +58,7 @@
         "typ": "led_rot",
         "felder": {
           "anode": "B1",
-          "kathode": "C1"
+          "kathode": "B2"
         }
       },
       {
@@ -75,7 +75,7 @@
         "typ": "led_gruen",
         "felder": {
           "anode": "B3",
-          "kathode": "C3"
+          "kathode": "B4"
         }
       }
     ],
@@ -87,13 +87,13 @@
         "farbe": "rot"
       },
       {
-        "von": "C1",
+        "von": "B2",
         "nach": "P:0V",
         "farbe": "schwarz"
       },
       {
-        "von": "C3",
-        "nach": "C1",
+        "von": "B4",
+        "nach": "B2",
         "farbe": "schwarz"
       }
     ],

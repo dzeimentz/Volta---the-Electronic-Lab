@@ -33,9 +33,10 @@ QColor wireColor(const std::string& c) {
     return QColor(0x80, 0x80, 0x80);
 }
 
-// Kurzbeschriftung eines Anschlusspunkts: "P:+9V" -> "+9V", "M:3" -> "M3", "MESS:VOHM" -> "V/Ohm"
+// Kurzbeschriftung eines Anschlusspunkts: "P:+9V" -> "V+", "M:3" -> "M3", "MESS:VOHM" -> "V/Ohm"
 QString fieldLabel(const std::string& a) {
     QString s = QString::fromStdString(a);
+    if (s == QLatin1String("P:+9V")) return QStringLiteral("V+"); // Pluspol heisst auf dem Pult V+
     if (s.startsWith(QLatin1String("P:"))) return s.mid(2);
     if (s.startsWith(QLatin1String("M:"))) return QStringLiteral("M") + s.mid(2);
     if (s.startsWith(QLatin1String("MESS:"))) return s.mid(5).replace(QLatin1String("VOHM"), QStringLiteral("V/Ω"));

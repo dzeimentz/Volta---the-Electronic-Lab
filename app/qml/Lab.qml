@@ -21,11 +21,45 @@ Item {
     Binding { target: Theme; property: "showCurrentFlow"; value: lab.settings ? lab.settings.showCurrentFlow : true }
 
     // ------------------------------------------------------------------ Geometrie
-    readonly property var deskNames: ["P:+9V", "P:0V", "P:P1a", "P:P1s", "P:P1b", "P:P2a", "P:P2s", "P:P2b",
-                                      "P:S1", "P:S2", "P:LS1", "P:LS2"]
+    // Pultbauteile mit ihren Feldern; die Stufenanpassung blendet nicht benoetigte Bauteile aus (controller.deskGroups).
+    // Jedes Bauteil steht in einem Rahmen, der Bedienelement und Felder einfasst (ControlDesk).
+    readonly property var deskGroupDefs: [
+        {name: "batterie", fields: ["P:+9V", "P:0V"], minWidth: 128},
+        {name: "p1", fields: ["P:P1a", "P:P1s", "P:P1b"], minWidth: 120},
+        {name: "p2", fields: ["P:P2a", "P:P2s", "P:P2b"], minWidth: 120},
+        {name: "schalter", fields: ["P:S1", "P:S2"], minWidth: 96},
+        {name: "lautsprecher", fields: ["P:LS1", "P:LS2"], minWidth: 104}
+    ]
+    readonly property int deskFramePad: 8   // Rand zwischen Rahmen und Feldern
+    readonly property int deskFrameGap: 12  // Abstand zwischen zwei Rahmen
+    // sichtbare Gruppen mit Lage: {name, fields, left, right (Rahmen), first, last (Index in deskNames)}
+    readonly property var groups: {
+        const shown = controller.deskGroups
+        let out = [], x = 0, idx = 0
+        for (let g = 0; g < deskGroupDefs.length; ++g) {
+            const d = deskGroupDefs[g]
+            if (shown.indexOf(d.name) < 0) continue
+            const fw = d.fields.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
+            const w = Math.max(fw + 2 * deskFramePad, d.minWidth)
+            out.push({name: d.name, fields: d.fields, left: x, right: x + w, fieldsLeft: x + (w - fw) / 2,
+                      first: idx, last: idx + d.fields.length - 1})
+            x += w + deskFrameGap
+            idx += d.fields.length
+        }
+        return out
+    }
+    readonly property var deskNames: {
+        let a = []
+        for (let g = 0; g < groups.length; ++g) a = a.concat(groups[g].fields)
+        return a
+    }
+    function groupOf(name) {
+        for (let g = 0; g < groups.length; ++g) if (groups[g].name === name) return groups[g]
+        return null
+    }
     // Buchsen des Dreifach-Messgeraets: unten im Messgeraet rechts neben der Grundplatte (nur eingeblendet)
     readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
-    readonly property int deskStripWidth: deskNames.length * (Theme.deskFieldWidth + Theme.deskFieldGap) - Theme.deskFieldGap
+    readonly property int deskStripWidth: groups.length > 0 ? groups[groups.length - 1].right : 0
     // runde Knoepfe +/- fuer die Breite der Grundplatte: rechts neben den Feldern, in der Hoehe zentriert
     readonly property int sizerX: boardWidth + Theme.fieldGap
     readonly property int sizerY: boardY + (rows.length * (Theme.fieldHeight + Theme.fieldGap) - Theme.fieldGap) / 2
@@ -33,7 +67,8 @@ Item {
     readonly property int meterX: sizerX + Theme.control + Theme.fieldGap
     // Muelleimer unten rechts in Hoehe der Modulleiste, buendig mit dem rechten Feldrand (nie ueber M16)
     readonly property int slotsRight: slots * (Theme.slotWidth + Theme.slotGap) - Theme.slotGap
-    readonly property int trashX: Math.max(boardWidth - Theme.control, slotsRight + 12)
+    readonly property bool showModules: controller.moduleBarVisible // Stufenanpassung: nur wenn Module gebraucht werden
+    readonly property int trashX: showModules ? Math.max(boardWidth - Theme.control, slotsRight + 12) : boardWidth - Theme.control
     readonly property int trashY: moduleY + (Theme.fieldHeight - Theme.control) / 2
     property bool trashHot: false
     property var checkMarks: [] // Befunde der Fehlersuche: nummerierte Marken an ihrer ersten Stelle // ein Bauteil oder Modul wird gerade ueber den Muelleimer gezogen
@@ -53,25 +88,34 @@ Item {
     readonly property bool meterDocked: settings ? settings.meterDocked : false
     readonly property int meterDockX: deskStripWidth + Theme.fieldGap
     readonly property int meterJacksWidth: 3 * Theme.deskFieldWidth + 2 * Theme.deskFieldGap
-    readonly property var rows: ["A", "B", "C", "D", "E"]
-    readonly property int columns: controller.boardColumns // 8, 10 oder 12 (+/- in der Werkzeugleiste)
+    readonly property var rows: ["A", "B", "C", "D", "E"].slice(0, controller.boardRows) // Stufenanpassung: ab 2 Reihen
+    readonly property int columns: controller.boardColumns // 5, 6 (Stufenanpassung), 8, 10 oder 12 (+/-)
+    // +/- fuer die Breite: im freien Labor; im gefuehrten Experiment nur ohne Stufenanpassung
+    readonly property bool boardResizable: controller.freeLab || !controller.stageLayout
     readonly property int slots: 16
     // Pult (Bedienelemente), Gruppenlinien, Pultleiste, Grundplatte, Modulleiste von oben nach unten
-    readonly property int deskPanelHeight: 128
+    readonly property int deskPanelHeight: 128 // Bedienelemente; darunter im selben Pult die Felder
     readonly property int groupLineY: deskPanelHeight + 6
-    readonly property int deskY: groupLineY + 26
-    readonly property int boardY: deskY + Theme.fieldHeight + 2 * Theme.fieldGap
+    readonly property int deskY: deskPanelHeight + 4
+    readonly property int deskBottom: deskY + Theme.fieldHeight + 12 // Unterkante des Pults (schliesst die Felder ein)
+    readonly property int boardY: deskBottom + Theme.fieldGap + 4
     readonly property int boardWidth: columns * Theme.fieldWidth + (columns - 1) * Theme.fieldGap
-    readonly property int moduleY: boardY + rows.length * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
+    // Messgeraet neben der Grundplatte ist 5 Reihen hoch: die Modulleiste rutscht bei kleinem Steckbrett darunter
+    readonly property int moduleY: boardY + Math.max(rows.length, controller.meterVisible && !meterDocked ? 5 : 0)
+                                   * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
     readonly property var allAnchors: {
         let a = controller.meterVisible ? deskNames.concat(meterNames) : deskNames.slice()
         for (let r = 0; r < rows.length; ++r)
             for (let c = 1; c <= columns; ++c) a.push(rows[r] + c)
-        for (let m = 1; m <= slots; ++m) a.push("M:" + m)
+        if (showModules) for (let m = 1; m <= slots; ++m) a.push("M:" + m)
         return a
     }
 
-    function deskLabel(name) { return name.startsWith("MESS:") ? name.substring(5).replace("VOHM", "V/Ω") : name.substring(2) }
+    // Pluspol der Batterie heisst V+ (intern weiter P:+9V), Minuspol 0V mit GND darunter
+    function deskLabel(name) {
+        if (name.startsWith("MESS:")) return name.substring(5).replace("VOHM", "V/Ω")
+        return name === "P:+9V" ? "V+" : name.substring(2)
+    }
     function isBoardField(name) { return /^[A-E](1[0-2]|[1-9])$/.test(name) }
 
     function anchorSize(name) {
@@ -90,10 +134,12 @@ Item {
             return Qt.point(meterX + (Theme.meterAreaWidth - 3 * Theme.deskFieldWidth - 2 * Theme.deskFieldGap) / 2
                             + Theme.deskFieldWidth / 2 + m * (Theme.deskFieldWidth + Theme.deskFieldGap),
                             boardY + 4 * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldHeight / 2)
-        let i = deskNames.indexOf(name)
-        if (i >= 0)
-            return Qt.point(i * (Theme.deskFieldWidth + Theme.deskFieldGap) + Theme.deskFieldWidth / 2,
-                            deskY + Theme.fieldHeight / 2)
+        for (let g = 0; g < groups.length; ++g) {
+            const k = groups[g].fields.indexOf(name)
+            if (k >= 0)
+                return Qt.point(groups[g].fieldsLeft + k * (Theme.deskFieldWidth + Theme.deskFieldGap)
+                                + Theme.deskFieldWidth / 2, deskY + Theme.fieldHeight / 2)
+        }
         if (name.startsWith("M:")) {
             const n = parseInt(name.substring(2)) - 1
             return Qt.point(n * (Theme.slotWidth + Theme.slotGap) + Theme.slotWidth / 2, moduleY + Theme.fieldHeight / 2)
@@ -128,6 +174,7 @@ Item {
 
     // Feld der Modulleiste unter einem Punkt ("" wenn keins)
     function slotAt(p) {
+        if (!showModules) return ""
         for (let m = 1; m <= slots; ++m) {
             const c = anchorPoint("M:" + m)
             if (Math.abs(p.x - c.x) <= Theme.slotWidth / 2 + Theme.slotGap / 2 && Math.abs(p.y - c.y) <= Theme.fieldHeight / 2 + 40)
@@ -183,7 +230,8 @@ Item {
     // Selbsttaetig (autoView): die ganze Arbeitsflaeche passt ins Fenster (die Breite der Grundplatte waehlt die
     // Automatik 8/10/12). Zwei Finger, Strg + Mausrad, Mausrad, Leertaste + Ziehen und mittlere Maustaste stellen
     // Massstab und Ausschnitt von Hand ein; der Knopf oben rechts in der Arbeitsflaeche kehrt zur ganzen Platte zurueck.
-    readonly property real fitScale: Math.min(1, (boardArea.width - 2 * Theme.margin) / canvas.width,
+    // Kleine Steckbretter (Stufenanpassung) werden dabei groesser gezeigt: die Felder nutzen die freie Flaeche
+    readonly property real fitScale: Math.min(Theme.maxFitZoom, (boardArea.width - 2 * Theme.margin) / canvas.width,
                                               (boardArea.height - 2 * Theme.margin) / canvas.height)
     property bool autoView: true
     property bool spaceHeld: false // Leertaste gedrueckt: Ziehen mit der Maus verschiebt den Ausschnitt
@@ -215,23 +263,20 @@ Item {
         userPos = Qt.point(canvas.x + dx, canvas.y + dy)
         autoView = false
     }
-    // Mitte und Rand einer Gruppe von Pultfeldern (Index in deskNames)
-    function deskX(i) { return anchorPoint(deskNames[i]).x }
-    function groupCenter(first, last) { return (deskX(first) + deskX(last)) / 2 }
-    property string highlightGroup: "" // Gruppe, deren Felder hervorgehoben sind (Tippen auf Schaltzeichen)
-    readonly property var groups: [
-        {name: "batterie", symbol: "−|+", first: 0, last: 1},
-        {name: "p1", symbol: "P1", first: 2, last: 4},
-        {name: "p2", symbol: "P2", first: 5, last: 7},
-        {name: "schalter", symbol: "S", first: 8, last: 9},
-        {name: "lautsprecher", symbol: "LS", first: 10, last: 11}
-    ]
+    // Mitte eines Pultrahmens (-1: Bauteil ausgeblendet)
+    function groupCenter(name) { const g = groupOf(name); return g ? (g.left + g.right) / 2 : -1 }
+    property string highlightGroup: "" // Gruppe, deren Felder hervorgehoben sind (Tippen auf den Rahmen)
     function inHighlightedGroup(name) {
         if (meterNames.indexOf(name) >= 0) return highlightGroup === "messgeraet"
-        const i = deskNames.indexOf(name)
-        for (let g = 0; g < groups.length; ++g)
-            if (groups[g].name === highlightGroup && i >= groups[g].first && i <= groups[g].last) return true
-        return false
+        const g = groupOf(highlightGroup)
+        return g !== null && g.fields.indexOf(name) >= 0
+    }
+    // Hintergrund des Steckbretts: jede Reihe eine eigene Farbe, nach rechts eine Abstufung wie ein Verlauf
+    // (Reihenbuchstabe steht immer im Feld - Farbe nie allein)
+    readonly property var rowHues: [[0, 0.85], [30, 0.85], [50, 0.80], [130, 0.55], [210, 0.70]]
+    function boardTint(row, col) {
+        const t = columns > 1 ? (col - 1) / (columns - 1) : 0
+        return Qt.hsla(rowHues[row][0] / 360, rowHues[row][1], 0.92 - 0.24 * t, 1)
     }
 
     // ------------------------------------------------------------------ Bedienzustand
@@ -856,35 +901,42 @@ Item {
                             : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth)
                             : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
-            height: lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
+            height: lab.showModules ? lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
+                                    : lab.trashY + Theme.control + 8
             // Massstab und Ausschnitt aus der Ansicht (oben); selbsttaetig passt die ganze Flaeche ins Fenster
             transformOrigin: Item.TopLeft
             scale: lab.viewScale
             x: lab.autoView ? Theme.margin : lab.clampOffset(lab.userPos.x, width * scale, boardArea.width)
             y: lab.autoView ? Theme.margin : lab.clampOffset(lab.userPos.y, height * scale, boardArea.height)
 
+            // Pult: blaue Flaeche ueber Bedienelemente und Pultfelder, je Bauteil ein Rahmen um Bedienelement und Felder
             ControlDesk {
                 controller: lab.controller
                 x: -8
                 y: 0
                 width: canvas.width + 16
-                height: lab.deskPanelHeight
-                batteryX: lab.groupCenter(0, 1) + 8
-                p1X: lab.groupCenter(2, 4) + 8
-                p2X: lab.groupCenter(5, 7) + 8
-                switchX: lab.groupCenter(8, 9) + 8
-                speakerX: lab.groupCenter(10, 11) + 8
+                height: lab.deskBottom
+                groups: lab.groups
+                offsetX: 8
+                fieldsBottom: lab.deskY + Theme.fieldHeight + 6
+                highlightGroup: lab.highlightGroup
+                onGroupTapped: (name) => lab.highlightGroup = lab.highlightGroup === name ? "" : name
             }
 
+            // Farbiger Hintergrund des Steckbretts: eine Kachel je Feld (Reihenfarbe, nach rechts dunkler)
             Repeater {
-                model: lab.groups
-                GroupLine {
-                    required property var modelData
-                    y: lab.groupLineY
-                    fromX: lab.deskX(modelData.first) - Theme.deskFieldWidth / 2 + 4
-                    toX: lab.deskX(modelData.last) + Theme.deskFieldWidth / 2 - 4
-                    symbol: modelData.symbol
-                    onTapped: lab.highlightGroup = lab.highlightGroup === modelData.name ? "" : modelData.name
+                model: lab.rows.length * lab.columns
+                Rectangle {
+                    required property int index
+                    readonly property int row: Math.floor(index / lab.columns)
+                    readonly property int col: index % lab.columns + 1
+                    readonly property point at: lab.anchorPoint(lab.rows[row] + col)
+                    width: Theme.fieldWidth + Theme.fieldGap - 6
+                    height: Theme.fieldHeight + Theme.fieldGap - 6
+                    x: at.x - width / 2
+                    y: at.y - height / 2
+                    radius: 8
+                    color: lab.boardTint(row, col)
                 }
             }
 
@@ -899,15 +951,6 @@ Item {
                 y: docked ? 4 : lab.boardY - 6
                 width: docked ? Theme.meterDockWidth : Theme.meterAreaWidth
                 height: docked ? lab.deskPanelHeight - 8 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
-            }
-            // Gruppenlinie ueber den Buchsen, wenn das Messgeraet im Pult sitzt
-            GroupLine {
-                visible: lab.controller.meterVisible && lab.meterDocked
-                y: lab.groupLineY
-                fromX: lab.meterDockX + (Theme.meterDockWidth - lab.meterJacksWidth) / 2 + 4
-                toX: fromX + lab.meterJacksWidth - 8
-                symbol: "V A Ω"
-                onTapped: lab.highlightGroup = lab.highlightGroup === "messgeraet" ? "" : "messgeraet"
             }
 
             // Module in der Modulleiste (unter den Feldern, die sie belegen)
@@ -1014,6 +1057,7 @@ Item {
                 Accessible.name: ToolTip.text
             }
             Column {
+                visible: lab.boardResizable
                 x: lab.sizerX
                 y: lab.sizerY
                 spacing: 0
@@ -1094,6 +1138,9 @@ Item {
                          : modulePin !== "" ? Texts.pinName(modulePin)
                          : modelData.startsWith("M:") ? "M" + modelData.substring(2) : lab.deskLabel(modelData)
                     sockets: modelData.startsWith("M:") ? 1 : 5
+                    // Batteriepole: V+ rot, 0V/GND schwarz (mit Schrift - Farbe nie allein)
+                    fillColor: modelData === "P:+9V" ? "#C62828" : modelData === "P:0V" ? "#17191C" : "transparent"
+                    subLabel: modelData === "P:0V" ? "GND" : ""
                     pitch: lab.socketPitch(modelData)
                     width: lab.anchorSize(modelData).width
                     height: lab.anchorSize(modelData).height

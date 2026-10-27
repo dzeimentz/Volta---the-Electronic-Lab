@@ -475,7 +475,7 @@ private slots:
         // Meldungen des Modells und Befehlsnamen in der Anzeigesprache
         QVERIFY(!m_lab->addPart(QStringLiteral("gluehlampe"), QStringLiteral("E12"), true, false));
         QCOMPARE(m_lab->lastEditError(), QStringLiteral("The part doesn't fit on the board there."));
-        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C7"), QStringLiteral("rot")));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("B4"), QStringLiteral("rot")));
         QVERIFY2(m_lab->undoText().startsWith(QStringLiteral("Draw wire")), qPrintable(m_lab->undoText()));
         m_lab->undo();
         QVERIFY(m_language->setLanguage(QStringLiteral("de")));
@@ -557,7 +557,7 @@ private slots:
         QTRY_VERIFY(item(QStringLiteral("guideGhostWire"))->isVisible());
         QVERIFY(!item(QStringLiteral("guideGhostPart"))->isVisible());
         const QString text = item(QStringLiteral("guideText"))->property("text").toString();
-        QVERIFY2(text.contains(QStringLiteral("+9V")), qPrintable(text));
+        QVERIFY2(text.contains(QStringLiteral("V+")), qPrintable(text));
         clickInPanel(QStringLiteral("guideButton"));
         QTRY_VERIFY(!m_lab->guideActive());
         QTRY_VERIFY(!item(QStringLiteral("field_A1"))->property("target").toBool());
@@ -1175,6 +1175,8 @@ private slots:
 
     // Breite der Grundplatte automatisch: Lernpfad 8, freies Labor 12, Messgeraet daneben 10, im Pult 12
     void autoBoardColumns() {
+        m_settings->setStageLayout(false); // ohne Stufenanpassung (eigener Test stageLayout)
+        QTRY_VERIFY(!m_lab->stageLayout());
         m_settings->setUnlockAll(true);
         m_settings->setMeterDocked(false);
         m_settings->setAutoBoardColumns(true);
@@ -1201,6 +1203,52 @@ private slots:
         m_settings->setAutoBoardColumns(false);
         QTRY_VERIFY(!m_lab->autoColumns());
         m_lab->startFreeLab();
+        m_settings->setStageLayout(true);
+    }
+
+    // Stufenanpassung: kleines Steckbrett und nur benoetigte Pultbauteile; im Elternbereich abschaltbar
+    void stageLayout() {
+        m_settings->setUnlockAll(true);
+        m_settings->setStageLayout(true);
+        QTRY_VERIFY(m_lab->stageLayout());
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.0.1")));
+        QCOMPARE(m_lab->boardRows(), 2);
+        QCOMPARE(m_lab->boardColumns(), 5);
+        QCOMPARE(m_lab->deskGroups(), QStringList{QStringLiteral("batterie")});
+        QVERIFY(!item(QStringLiteral("knobP1"))->isVisible());
+        QTRY_VERIFY(item(QStringLiteral("field_B5")) != nullptr);
+        QVERIFY(item(QStringLiteral("field_C1")) == nullptr);
+        QVERIFY(!m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("C1"), QStringLiteral("rot"))); // ausserhalb
+        QVERIFY(m_lab->moduleBarVisible()); // 0.1 nutzt das Blinkmodul
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.1.1")));
+        QVERIFY(!m_lab->moduleBarVisible());
+        // Musteraufbau passt hinein
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.2.20")));
+        QCOMPARE(m_lab->boardRows(), 2);
+        QCOMPARE(m_lab->boardColumns(), 5);
+        QVERIFY(m_lab->deskGroups().contains(QStringLiteral("p1")));
+        QVERIFY(!m_lab->deskGroups().contains(QStringLiteral("p2")));
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.3.15")));
+        QCOMPARE(m_lab->boardRows(), 3);
+        QCOMPARE(m_lab->boardColumns(), 6);
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.4.10")));
+        QCOMPARE(m_lab->boardRows(), 5);
+        QCOMPARE(m_lab->boardColumns(), 10);
+        QCOMPARE(m_lab->deskGroups().size(), 5);
+        // +/- nur im freien Labor
+        QVERIFY(!item(QStringLiteral("columnsPlus"))->isVisible());
+        // Elternbereich: aus -> ganze Grundplatte und ganzes Pult
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.1.1")));
+        m_settings->setStageLayout(false);
+        QTRY_COMPARE(m_lab->boardRows(), 5);
+        QVERIFY(m_lab->boardColumns() >= 8);
+        QCOMPARE(m_lab->deskGroups().size(), 5);
+        QTRY_VERIFY(item(QStringLiteral("columnsPlus"))->isVisible());
+        m_settings->setStageLayout(true);
+        QTRY_COMPARE(m_lab->boardRows(), 2);
+        m_lab->startFreeLab();
+        QCOMPARE(m_lab->boardRows(), 5);
+        QCOMPARE(m_lab->deskGroups().size(), 5);
     }
 
     // Kontaktfelder silbern oder messingfarben (Einstellung, Menue und Theme folgen)
@@ -1653,11 +1701,13 @@ private slots:
         m_settings->setBoardColumns(8);
         m_settings->setMeterVisible(true);
         QTRY_COMPARE(m_lab->property("preferredColumns").toInt(), 8);
+        m_settings->setStageLayout(false); // gespeicherte Breite gilt ohne Stufenanpassung
         m_lab->startFreeLab();
         QCOMPARE(board().columns, 8);
         QVERIFY(board().desk.meterVisible);
         QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.1.1"))); // Vorlage passt in 8 Spalten
         QCOMPARE(board().columns, 8);
+        m_settings->setStageLayout(true);
         m_settings->setBoardColumns(12);
         m_settings->setMeterVisible(false);
     }

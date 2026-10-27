@@ -170,6 +170,18 @@ das iPad).
   `forscherheft.json` im privaten App-Speicher (`JournalStore`, `QSaveFile`). Zeichnungen, Fotos, PDF folgen.
 
 ## Grundplatte
+- Stufenanpassung (0.9.1, Elternbereich »Steckbrett und Pult an die Stufe anpassen«, Vorgabe an): im gefuehrten
+  Experiment Stufe 0–2 ein Steckbrett mit 2 x 5 Feldern (A–B, 1–5), Stufe 3 mit 3 x 6, ab Stufe 4 mit 5 x 10; passt die
+  Vorlage nicht hinein, waechst es mit. Das Pult zeigt nur die Bauteile der Stufe (0: Batterie, 1: + Schalter,
+  2: + Potentiometer 1 und Lautsprecher, 3: Batterie, Schalter, Potentiometer 1 und 2, ab 4: alles) und dazu alles, was
+  Vorlage oder Aufbau nutzen. Die Modulleiste erscheint nur, wenn das Experiment Module nutzt. +/- fuer die Breite nur im
+  freien Labor. Selbsttaetige Ansicht vergroessert kleine Bretter bis 1,6-fach (`Theme.maxFitZoom`).
+  Musteraufbauten der Stufen 0–3 liegen auf diesen Feldern.
+- Hintergrund: jede Reihe eine Farbe (A rot, B orange, C gelb, D gruen, E blau, sanft), nach rechts dunkler wie ein
+  Verlauf; die Feldnamen bleiben (Farbe nie allein).
+- Pult: die blaue Flaeche schliesst die Pultfelder ein; je Bauteil ein Rahmen um Bedienelement und Felder (Tippen hebt
+  die Felder hervor). Batteriepole: V+ (rot, intern weiter `P:+9V`) und 0V/GND (schwarz). Potentiometer 1 und 2,
+  Schalter als Kippschalter (Knebel oben = ein) mit Beschriftung darunter.
 - Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.

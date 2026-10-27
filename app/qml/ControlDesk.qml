@@ -1,52 +1,51 @@
-// Bedienpult I (docs/ui-spec.md, Bedienpult): Batterie mit Zellenwahl und Hauptschalter, Drehregler P1 und P2 mit
-// Lichtring, Pultschalter S, Lautsprecher. Jedes Element sitzt ueber seinen Feldern der Pultleiste (Positionen von
-// Lab.qml). Alles hier sind Bedienhandlungen (kein Verlauf).
+// Bedienpult I (docs/ui-spec.md, Bedienpult): Batterie mit Zellenwahl und Hauptschalter, Potentiometer 1 und 2 mit
+// Lichtring, Schalter (Kippschalter), Lautsprecher. Die blaue Pultflaeche schliesst die Pultfelder ein; jedes Bauteil
+// steht mit seinen Feldern in einem eigenen Rahmen (Lage aus Lab.groups). Ausgeblendete Bauteile (Stufenanpassung)
+// fehlen in groups. Alles hier sind Bedienhandlungen (kein Verlauf).
 import QtQuick
 import QtQuick.Controls.Basic
 
 Rectangle {
     id: desk
     required property var controller
-    // Mittelpunkte (x) der Gruppen ueber der Pultleiste
-    property real batteryX
-    property real p1X
-    property real p2X
-    property real switchX
-    property real speakerX
+    property var groups: []        // [{name, left, right, ...}] in Koordinaten der Arbeitsflaeche
+    property real offsetX: 0       // Pult beginnt links vor der Arbeitsflaeche
+    property real fieldsBottom: 0  // Unterkante der Pultfelder (Rahmen schliessen sie ein)
+    property string highlightGroup: ""
+    signal groupTapped(string name)
 
     color: Theme.desk
     radius: 10
-    height: 128
 
-    // Batterie: angedeutete 4,5-V-Flachbatterie als Hintergrund (Umriss etwas heller als das Pult, zwei
-    // Polzungen: kurz = Plus, lang = Minus), darauf Zellenwahl und Hauptschalter
-    Item {
-        id: flatBattery
-        x: Math.max(6, desk.batteryX - width / 2)
-        y: 16
-        width: 114 // Platz bis zum Drehregler P1
-        height: desk.height - 22
-        Rectangle { // Plus: kurze, breite Fahne (links neben der Beschriftung)
-            x: 6; y: -10; width: 18; height: 12; radius: 2
-            color: Qt.lighter(Theme.desk, 1.25); border.color: "#8FA6BC"; border.width: 2
-        }
-        Rectangle { // Minus: lange, schmale Fahne
-            x: parent.width - 18; y: -12; width: 10; height: 14; radius: 2
-            color: Qt.lighter(Theme.desk, 1.25); border.color: "#8FA6BC"; border.width: 2
-        }
-        Rectangle { // Gehaeuse: nur Umriss, etwas heller als das Pult
-            anchors.fill: parent
-            radius: 8
-            color: Qt.lighter(Theme.desk, 1.25)
-            border.color: "#8FA6BC"
+    function group(name) {
+        for (let g = 0; g < groups.length; ++g) if (groups[g].name === name) return groups[g]
+        return null
+    }
+    function centerOf(name) { const g = group(name); return g ? offsetX + (g.left + g.right) / 2 : 0 }
+    readonly property color frameColor: "#8FA6BC"
+
+    // Rahmen je Bauteil: Bedienelement oben, Felder unten; Tippen hebt die Felder hervor
+    Repeater {
+        model: desk.groups
+        Rectangle {
+            required property var modelData
+            x: desk.offsetX + modelData.left
+            y: 6
+            width: modelData.right - modelData.left
+            height: desk.fieldsBottom - y
+            radius: 10
+            color: Qt.lighter(Theme.desk, 1.12)
+            border.color: desk.highlightGroup === modelData.name ? Theme.signalOrange : desk.frameColor
             border.width: 2
+            TapHandler { onTapped: desk.groupTapped(modelData.name) }
         }
     }
 
     // Batterie: Zellenwahl und Hauptschalter
     Column {
-        x: desk.batteryX - width / 2
-        anchors.verticalCenter: parent.verticalCenter
+        visible: desk.group("batterie") !== null
+        x: desk.centerOf("batterie") - width / 2
+        y: 12
         spacing: 4
         Label { text: qsTr("Batterie"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
         ComboBox {
@@ -81,41 +80,85 @@ Rectangle {
 
     KnobRing {
         objectName: "knobP1"
-        x: desk.p1X - width / 2
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -8
-        label: "P1"
+        visible: desk.group("p1") !== null
+        x: desk.centerOf("p1") - width / 2
+        y: 8
+        label: qsTr("Potentiometer 1")
         value: desk.controller.pot1
         onMoved: (v) => desk.controller.pot1 = v
     }
     KnobRing {
         objectName: "knobP2"
-        x: desk.p2X - width / 2
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -8
-        label: "P2"
+        visible: desk.group("p2") !== null
+        x: desk.centerOf("p2") - width / 2
+        y: 8
+        label: qsTr("Potentiometer 2")
         value: desk.controller.pot2
         onMoved: (v) => desk.controller.pot2 = v
     }
 
-    // Pultschalter S
-    Column {
-        x: desk.switchX - width / 2
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 6
-        Label { text: "S"; color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
-        Switch {
-            objectName: "deskSwitch"
-            checked: desk.controller.deskSwitch
-            onToggled: desk.controller.deskSwitch = checked
-            Accessible.name: qsTr("Pultschalter")
+    // Schalter: Kippschalter (Knebel oben = ein, unten = aus), Beschriftung darunter
+    Item {
+        objectName: "deskSwitch"
+        visible: desk.group("schalter") !== null
+        x: desk.centerOf("schalter") - width / 2
+        y: 12
+        width: 80
+        height: 108
+        readonly property bool on: desk.controller.deskSwitch
+        Rectangle { // Metallplatte
+            id: plate
+            anchors.horizontalCenter: parent.horizontalCenter
+            width: 46; height: 72; radius: 9
+            color: "#3A434D"
+            border.color: "#8E99A4"; border.width: 2
+            Rectangle { // Drehpunkt
+                anchors.centerIn: parent
+                width: 18; height: 18; radius: 9
+                color: "#6B7580"
+            }
+            Rectangle { // Knebel
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: 14; height: 32; radius: 7
+                y: parent.parent.on ? 4 : parent.height - height - 4
+                color: "#D5DCE3"
+                border.color: "#8E99A4"
+                Behavior on y { enabled: !Theme.reduceMotion; NumberAnimation { duration: 90 } }
+            }
         }
+        // Stellungen wie auf einem echten Pult beschriftet (nie nur ueber die Lage)
+        Text {
+            anchors.left: plate.right; anchors.leftMargin: 3; y: 4
+            text: qsTr("ein"); color: parent.on ? "white" : "#8FA6BC"
+            font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: parent.on
+        }
+        Text {
+            anchors.left: plate.right; anchors.leftMargin: 3; y: plate.height - height - 4
+            text: qsTr("aus"); color: parent.on ? "#8FA6BC" : "white"
+            font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: !parent.on
+        }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: plate.bottom
+            anchors.topMargin: 6
+            text: qsTr("Schalter")
+            color: "white"
+            font.pixelSize: Math.round((13) * Theme.fontScale)
+            font.bold: true
+        }
+        TapHandler { onTapped: desk.controller.deskSwitch = !desk.controller.deskSwitch }
+        Accessible.role: Accessible.CheckBox
+        Accessible.name: qsTr("Schalter")
+        Accessible.checkable: true
+        Accessible.checked: on
+        Accessible.onPressAction: desk.controller.deskSwitch = !desk.controller.deskSwitch
     }
 
     // Lautsprecher mit Leuchtring (Klanganzeige)
     Column {
-        x: desk.speakerX - width / 2
-        anchors.verticalCenter: parent.verticalCenter
+        visible: desk.group("lautsprecher") !== null
+        x: desk.centerOf("lautsprecher") - width / 2
+        y: 12
         spacing: 2
         SpeakerRing {
             anchors.horizontalCenter: parent.horizontalCenter

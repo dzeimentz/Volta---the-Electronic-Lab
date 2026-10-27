@@ -82,6 +82,8 @@ public:
     bool removeModule(const std::string& id);
     // Breite der Grundplatte (8, 10, 12 Spalten). Verkleinern nur, wenn die wegfallenden Spalten frei sind.
     bool setColumns(int columns);
+    // Groesse der Grundplatte (Reihen ab A, Spalten; Stufenanpassung). Verkleinern nur, wenn der Rest frei ist.
+    bool setBoardSize(int rows, int columns);
     // Ganzer Aufbau auf einmal (z. B. Musteraufbau als Loesungshilfe); Pultstellung bleibt
     bool replaceBoard(const Board& after, const QString& text);
 

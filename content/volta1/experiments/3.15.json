@@ -36,8 +36,8 @@
         "id": "S1",
         "typ": "taster",
         "felder": [
-          "A3",
-          "B3"
+          "A2",
+          "B2"
         ],
         "geschlossen": true
       },
@@ -45,18 +45,18 @@
         "id": "K1",
         "typ": "relais",
         "felder": {
-          "a": "C3",
-          "b": "C4",
-          "com": "D3",
-          "no": "D4"
+          "a": "B3",
+          "b": "B4",
+          "com": "C3",
+          "no": "C4"
         }
       },
       {
         "id": "L1",
         "typ": "gluehlampe",
         "felder": [
-          "E4",
-          "E5"
+          "C5",
+          "C6"
         ],
         "wert": 10
       }
@@ -65,31 +65,31 @@
     "leitungen": [
       {
         "von": "P:+9V",
-        "nach": "A3",
+        "nach": "A2",
         "farbe": "rot"
       },
       {
-        "von": "B3",
-        "nach": "C3",
+        "von": "B2",
+        "nach": "B3",
         "farbe": "rot"
       },
       {
-        "von": "C4",
+        "von": "B4",
         "nach": "P:0V",
         "farbe": "schwarz"
       },
       {
         "von": "P:+9V",
-        "nach": "D3",
+        "nach": "C3",
         "farbe": "rot"
       },
       {
-        "von": "D4",
-        "nach": "E4",
+        "von": "C4",
+        "nach": "C5",
         "farbe": "rot"
       },
       {
-        "von": "E5",
+        "von": "C6",
         "nach": "P:0V",
         "farbe": "schwarz"
       }

@@ -2,6 +2,8 @@
 
 #include <QJsonArray>
 
+#include "board_edit.hpp"
+
 #include <algorithm>
 
 namespace volta::model {
@@ -55,7 +57,8 @@ QJsonObject boardToJson(const Board& board) {
                            {QStringLiteral("werkzeuge"), tools}};
     return QJsonObject{{QStringLiteral("bauteile"), parts},     {QStringLiteral("leitungen"), wires},
                        {QStringLiteral("module"), modules},     {QStringLiteral("anzeigen"), displays},
-                       {QStringLiteral("spalten"), board.columns}, {QStringLiteral("pult"), desk}};
+                       {QStringLiteral("spalten"), board.columns}, {QStringLiteral("reihen"), board.rows},
+                       {QStringLiteral("pult"), desk}};
 }
 
 bool boardFromJson(const QJsonObject& json, Board& out) {
@@ -94,7 +97,9 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     }
     for (const QJsonValue& v : json.value(QStringLiteral("anzeigen")).toArray()) b.voltageDisplays.push_back(ss(v));
     const int cols = json.value(QStringLiteral("spalten")).toInt(12);
-    b.columns = (cols == 8 || cols == 10 || cols == 12) ? cols : 12;
+    const int rows = json.value(QStringLiteral("reihen")).toInt(5); // aeltere Staende: ganze Grundplatte
+    b.columns = validBoardSize(5, cols) ? cols : 12;
+    b.rows = validBoardSize(rows, 12) ? rows : 5;
     const QJsonObject desk = json.value(QStringLiteral("pult")).toObject();
     DeskState& d = b.desk;
     const int cells = desk.value(QStringLiteral("zellen")).toInt(6);

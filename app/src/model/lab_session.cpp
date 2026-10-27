@@ -254,7 +254,16 @@ bool LabSession::setColumns(int columns) {
     if (columns == m_board.columns) return true;
     if (highestUsedColumn(m_board) > columns)
         return fail(msg(QT_TRANSLATE_NOOP("Meldung", "In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus."), {std::to_string(columns + 1), std::to_string(m_board.columns)}));
+    return setBoardSize(m_board.rows, columns);
+}
+
+bool LabSession::setBoardSize(int rows, int columns) {
+    if (!validBoardSize(rows, columns)) return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Diese Größe hat die Grundplatte nicht.")));
+    if (rows == m_board.rows && columns == m_board.columns) return true;
+    if (highestUsedColumn(m_board) > columns || highestUsedRow(m_board) > rows)
+        return fail(msg(QT_TRANSLATE_NOOP("Meldung", "Auf den wegfallenden Feldern steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.")));
     Board after = m_board;
+    after.rows = rows;
     after.columns = columns;
     // Spannungsanzeigen auf wegfallenden Feldern entfallen (kommen mit Rueckgaengig zurueck)
     after.voltageDisplays.erase(std::remove_if(after.voltageDisplays.begin(), after.voltageDisplays.end(),
@@ -266,6 +275,10 @@ bool LabSession::setColumns(int columns) {
 bool LabSession::replaceBoard(const Board& after, const QString& text) {
     Board b = after;
     b.desk = m_board.desk;
+    // Groesse bleibt (kleines Steckbrett der Stufe), solange der neue Aufbau hineinpasst
+    b.rows = std::max(m_board.rows, highestUsedRow(b));
+    b.columns = m_board.columns;
+    if (highestUsedColumn(b) > b.columns) b.columns = after.columns;
     return push(text, std::move(b));
 }
 

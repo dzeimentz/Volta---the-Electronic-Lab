@@ -41,7 +41,15 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList wires READ wires NOTIFY boardChanged)
     Q_PROPERTY(QVariantList modules READ modules NOTIFY boardChanged)
     Q_PROPERTY(QStringList voltageFields READ voltageFields NOTIFY boardChanged)
-    Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 8, 10 oder 12 Felder je Reihe
+    Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 5, 6, 8, 10 oder 12 Felder je Reihe
+    Q_PROPERTY(int boardRows READ boardRows NOTIFY boardChanged)       // 2 ... 5 Reihen ab A
+    // Stufenanpassung (Elternbereich, Vorgabe an): im gefuehrten Experiment Steckbrett und Pult nach der Stufe -
+    // Stufe 0-2: 2 x 5 Felder, Stufe 3: 3 x 6, ab Stufe 4: 5 x 10; das Pult zeigt nur die Bauteile der Stufe (und alles,
+    // was die Vorlage oder der Aufbau nutzt). Aus: ganze Grundplatte und ganzes Pult wie bisher.
+    Q_PROPERTY(bool stageLayout READ stageLayout WRITE setStageLayout NOTIFY columnsModeChanged)
+    Q_PROPERTY(QStringList deskGroups READ deskGroups NOTIFY boardChanged) // batterie, p1, p2, schalter, lautsprecher
+    // Modulleiste: mit Stufenanpassung nur, wenn das Experiment Module nutzt (sonst immer)
+    Q_PROPERTY(bool moduleBarVisible READ moduleBarVisible NOTIFY boardChanged)
     Q_PROPERTY(QVariantList catalogParts READ catalogParts CONSTANT)
     // Bauteilfach: im gefuehrten Experiment die freigegebenen Bauteile, im freien Labor alle (locked: noch gesperrt)
     Q_PROPERTY(QVariantList trayParts READ trayParts NOTIFY progressChanged)
@@ -275,6 +283,13 @@ public:
     Q_INVOKABLE void endDemo(); // Vorfuehrung verwerfen, Profil wieder laden
     bool autoColumns() const { return m_autoColumns; }
     void setAutoColumns(bool on);
+    bool stageLayout() const { return m_stageLayout; }
+    void setStageLayout(bool on);
+    QStringList deskGroups() const;
+    bool moduleBarVisible() const;
+    bool stageLayoutActive() const; // Stufenanpassung gilt fuer den aktuellen Aufbau (gefuehrtes Experiment)
+    // Groesse des Steckbretts fuer eine Stufe, vergroessert, bis der Aufbau hineinpasst
+    std::pair<int, int> stageBoardSize(int stage, const model::Board& mustFit) const;
     bool meterDocked() const { return m_meterDocked; }
     void setMeterDocked(bool docked);
     // Breite nach der Automatik fuer einen Aufbau (Vorlage bzw. eigener Aufbau muss hineinpassen)
@@ -382,6 +397,7 @@ public:
     // Muelleimer ohne Auswahl: alle Bauteile, Leitungen und Module abbauen (ein Befehl, rueckgaengig machbar)
     Q_INVOKABLE bool clearBoard();
     int boardColumns() const { return m_session->board().columns; }
+    int boardRows() const { return m_session->board().rows; }
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
 
@@ -488,6 +504,7 @@ private:
     void sampleRecorder();
     bool m_autoWireColor = true;
     bool m_autoColumns = false; // die App bindet die Einstellung (Vorgabe dort: an)
+    bool m_stageLayout = false; // die App bindet die Einstellung (Vorgabe dort: an)
     bool m_meterDocked = false;
     services::AudioService* m_audio = nullptr;
     double m_lastPulses = -1.0; // Impulszaehler des Pult-Lautsprechers (Knacken bei neuem Impuls)

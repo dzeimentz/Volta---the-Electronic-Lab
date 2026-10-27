@@ -47,17 +47,17 @@
         "id": "W2",
         "typ": "wechselschalter",
         "felder": {
-          "a": "C1",
-          "mitte": "C2",
-          "b": "C3"
+          "a": "B1",
+          "mitte": "B2",
+          "b": "B3"
         }
       },
       {
         "id": "L1",
         "typ": "gluehlampe",
         "felder": [
-          "C5",
-          "C6"
+          "B4",
+          "B5"
         ]
       }
     ],
@@ -70,21 +70,21 @@
       },
       {
         "von": "A1",
-        "nach": "C1",
+        "nach": "B1",
         "farbe": "blau"
       },
       {
         "von": "A3",
-        "nach": "C3",
+        "nach": "B3",
         "farbe": "gelb"
       },
       {
-        "von": "C2",
-        "nach": "C5",
+        "von": "B2",
+        "nach": "B4",
         "farbe": "rot"
       },
       {
-        "von": "C6",
+        "von": "B5",
         "nach": "P:0V",
         "farbe": "schwarz"
       }

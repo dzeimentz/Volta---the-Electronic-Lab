@@ -36,8 +36,8 @@
         "id": "R1",
         "typ": "widerstand",
         "felder": [
-          "B3",
-          "B4"
+          "A3",
+          "A4"
         ],
         "wert": 470
       },
@@ -45,16 +45,16 @@
         "id": "D1",
         "typ": "led_rot",
         "felder": {
-          "anode": "B4",
-          "kathode": "C4"
+          "anode": "A4",
+          "kathode": "B4"
         }
       },
       {
         "id": "D2",
         "typ": "led_gruen",
         "felder": {
-          "anode": "C4",
-          "kathode": "D4"
+          "anode": "B4",
+          "kathode": "B5"
         }
       }
     ],
@@ -62,11 +62,11 @@
     "leitungen": [
       {
         "von": "P:+9V",
-        "nach": "B3",
+        "nach": "A3",
         "farbe": "rot"
       },
       {
-        "von": "D4",
+        "von": "B5",
         "nach": "P:0V",
         "farbe": "schwarz"
       }

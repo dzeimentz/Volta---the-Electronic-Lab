@@ -36,8 +36,8 @@
         "id": "R1",
         "typ": "widerstand",
         "felder": [
-          "B3",
-          "B4"
+          "A3",
+          "A4"
         ],
         "wert": 470
       },
@@ -45,16 +45,16 @@
         "id": "D1",
         "typ": "led_rot",
         "felder": {
-          "anode": "B4",
-          "kathode": "C4"
+          "anode": "A4",
+          "kathode": "B4"
         }
       },
       {
         "id": "SU1",
         "typ": "summer",
         "felder": {
-          "plus": "D2",
-          "minus": "D3"
+          "plus": "B2",
+          "minus": "B3"
         }
       }
     ],
@@ -78,21 +78,21 @@
       },
       {
         "von": "P:+9V",
-        "nach": "B3",
+        "nach": "A3",
         "farbe": "rot"
       },
       {
-        "von": "C4",
+        "von": "B4",
         "nach": "BL1.aus",
         "farbe": "blau"
       },
       {
         "von": "P:+9V",
-        "nach": "D2",
+        "nach": "B2",
         "farbe": "rot"
       },
       {
-        "von": "D3",
+        "von": "B3",
         "nach": "BL1.aus",
         "farbe": "blau"
       }

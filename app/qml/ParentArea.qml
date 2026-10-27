@@ -360,6 +360,26 @@ Popup {
                 }
             }
 
+            // ---- Stufenanpassung von Steckbrett und Pult
+            Heading { text: qsTr("Steckbrett und Pult") }
+            Body { text: qsTr("In den ersten Stufen zeigt Volta ein kleines Steckbrett (2 × 5 Felder in Stufe 0–2, 3 × 6 in Stufe 3, 5 × 10 ab Stufe 4) und im Pult nur die Bauteile, die gebraucht werden. Das macht den Aufbau übersichtlich. Ausgeschaltet sind Grundplatte und Pult immer vollständig.") }
+            Row {
+                spacing: 8
+                Switch {
+                    objectName: "parentStageLayout"
+                    checked: area.settings ? area.settings.stageLayout : true
+                    enabled: area.settings !== null
+                    onToggled: area.settings.stageLayout = checked
+                    Accessible.name: qsTr("Steckbrett und Pult an die Stufe anpassen")
+                }
+                Label {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Steckbrett und Pult an die Stufe anpassen")
+                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                    color: "#1E2B38"
+                }
+            }
+
             // ---- Forscherprofile (geteilte Geraete)
             Heading { text: qsTr("Forscherprofile") }
             Body { text: qsTr("Teilen sich mehrere Kinder ein Gerät, bekommt jedes ein eigenes Profil mit Symbol und Spitznamen – ohne richtigen Namen und ohne Passwort. Fortschritt, Forscherheft und der letzte Aufbau werden je Profil gespeichert. Beim Start fragt Volta dann: »Wer forscht heute?«") }

@@ -131,10 +131,32 @@ std::string nextWireId(const Board& board) {
     return "L" + std::to_string(n);
 }
 
+bool validBoardSize(int rows, int columns) {
+    const bool colsOk = columns == 5 || columns == 6 ||
+                        (columns >= kMinColumns && columns <= kMaxColumns && (columns - kMinColumns) % kColumnStep == 0);
+    return colsOk && rows >= kMinRows && rows <= kMaxRows;
+}
+
 bool withinBoard(const Board& board, const std::string& anchor) {
     char row = 0;
     int col = 0;
-    return !parseField(anchor, row, col) || col <= board.columns;
+    return !parseField(anchor, row, col) || (col <= board.columns && row - 'A' < board.rows);
+}
+
+int highestUsedRow(const Board& board) {
+    int used = 0;
+    auto note = [&used](const std::string& anchor) {
+        char row = 0;
+        int col = 0;
+        if (parseField(anchor, row, col)) used = std::max(used, row - 'A' + 1);
+    };
+    for (const auto& p : board.parts)
+        for (const auto& pin : p.pins) note(pin.second);
+    for (const auto& w : board.wires) {
+        note(w.from);
+        note(w.to);
+    }
+    return used;
 }
 
 int highestUsedColumn(const Board& board) {
@@ -262,7 +284,7 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
             return false;
         }
         if (!withinBoard(board, pin.second)) {
-            error = msg(QT_TRANSLATE_NOOP("Meldung", "Feld %1 liegt außerhalb der Grundplatte (Felder 1–%2)."), {pin.second, std::to_string(board.columns)});
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Feld %1 liegt außerhalb der Grundplatte."), {pin.second});
             return false;
         }
         ++needed[pin.second];

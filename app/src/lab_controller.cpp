@@ -11,10 +11,12 @@
 #include <QSysInfo>
 
 #include <QLocale>
+#include <QSet>
 
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <tuple>
 
 #include "model/board_json.hpp"
 #include "model/qr_code.hpp"
@@ -118,7 +120,9 @@ bool LabController::startExperiment(const QString& id) {
     start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
     // Automatik: 8 Felder (bzw. passend zum Messgeraet); sonst die gespeicherte Breite - jeweils nur, wenn der
     // Musteraufbau hineinpasst
-    if (m_autoColumns)
+    if (m_stageLayout)
+        std::tie(start.rows, start.columns) = stageBoardSize(exp.stage, exp.templateBoard);
+    else if (m_autoColumns)
         start.columns = autoColumnsFor(exp.templateBoard, false, start.desk.meterVisible);
     else
         start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
@@ -131,6 +135,7 @@ bool LabController::startExperiment(const QString& id) {
     emit deskChanged();
     emit historyChanged();
     emit progressChanged(); // Bauteilfach des Experiments
+    emit boardChanged();    // Pultgruppen der Stufe
     return true;
 }
 
@@ -1234,9 +1239,10 @@ void LabController::setGuideActive(bool on) {
 }
 
 namespace {
-// Anschlusspunkt fuer Texte: "P:+9V" -> "+9V", "M:3" -> "M3", "MESS:VOHM" -> "V/Ohm"
+// Anschlusspunkt fuer Texte: "P:+9V" -> "V+", "M:3" -> "M3", "MESS:VOHM" -> "V/Ohm"
 QString anchorLabel(const std::string& a) {
     QString s = QString::fromStdString(a);
+    if (s == QLatin1String("P:+9V")) return QStringLiteral("V+"); // Pluspol heisst auf dem Pult V+
     if (s.startsWith(QLatin1String("P:"))) return s.mid(2);
     if (s.startsWith(QLatin1String("M:"))) return QStringLiteral("M") + s.mid(2);
     if (s.startsWith(QLatin1String("MESS:"))) return s.mid(5).replace(QLatin1String("VOHM"), QStringLiteral("V/Ω"));
@@ -1694,13 +1700,83 @@ int LabController::autoColumnsFor(const model::Board& board, bool freeLab, bool 
 }
 
 void LabController::applyAutoColumns() {
-    if (!m_autoColumns) return;
     const bool free = m_freeLab || m_experiment.id.isEmpty();
     const model::Board& b = m_session->board();
+    if (stageLayoutActive()) {
+        model::Board both = b; // eigener Aufbau und Musteraufbau muessen Platz haben
+        for (const auto& p : m_experiment.templateBoard.parts) both.parts.push_back(p);
+        for (const auto& w : m_experiment.templateBoard.wires) both.wires.push_back(w);
+        const auto [rows, cols] = stageBoardSize(m_experiment.stage, both);
+        if ((rows != b.rows || cols != b.columns) && result(m_session->setBoardSize(rows, cols))) emit boardChanged();
+        return;
+    }
+    if (!m_autoColumns) {
+        // nach der Stufenanpassung wieder die ganze Grundplatte (Breite wie gespeichert, mindestens 8)
+        if (b.rows < model::kMaxRows || b.columns < model::kMinColumns) {
+            const int cols = std::max({b.columns, model::kMinColumns, m_preferredColumns});
+            if (result(m_session->setBoardSize(model::kMaxRows, cols))) emit boardChanged();
+        }
+        return;
+    }
     int want = autoColumnsFor(b, free, b.desk.meterVisible);
     // im Experiment muss auch der Musteraufbau Platz haben
     if (!free) want = std::max(want, autoColumnsFor(m_experiment.templateBoard, false, b.desk.meterVisible));
-    if (want != b.columns && result(m_session->setColumns(want))) emit boardChanged();
+    if ((want != b.columns || b.rows != model::kMaxRows) && result(m_session->setBoardSize(model::kMaxRows, want)))
+        emit boardChanged();
+}
+
+void LabController::setStageLayout(bool on) {
+    if (m_stageLayout == on) return;
+    m_stageLayout = on;
+    emit columnsModeChanged();
+    applyAutoColumns();
+    emit boardChanged(); // Pultgruppen
+}
+
+bool LabController::stageLayoutActive() const {
+    return m_stageLayout && !m_freeLab && !m_experiment.id.isEmpty();
+}
+
+std::pair<int, int> LabController::stageBoardSize(int stage, const model::Board& mustFit) const {
+    int rows = stage <= 2 ? 2 : stage == 3 ? 3 : model::kMaxRows;
+    int cols = stage <= 2 ? 5 : stage == 3 ? 6 : 10;
+    rows = std::clamp(std::max(rows, model::highestUsedRow(mustFit)), model::kMinRows, model::kMaxRows);
+    const int used = model::highestUsedColumn(mustFit);
+    for (int c : {5, 6, 8, 10, 12})
+        if (c >= cols && c >= used) return {rows, c};
+    return {rows, model::kMaxColumns};
+}
+
+bool LabController::moduleBarVisible() const {
+    return !stageLayoutActive() || !m_experiment.templateBoard.modules.empty() || !m_session->board().modules.empty();
+}
+
+QStringList LabController::deskGroups() const {
+    static const QStringList all = {QStringLiteral("batterie"), QStringLiteral("p1"), QStringLiteral("p2"),
+                                    QStringLiteral("schalter"), QStringLiteral("lautsprecher")};
+    if (!stageLayoutActive()) return all;
+    const int s = m_experiment.stage;
+    QSet<QString> show = {QStringLiteral("batterie")};
+    if (s >= 1) show << QStringLiteral("schalter");
+    if (s >= 2 && s != 3) show << QStringLiteral("p1") << QStringLiteral("lautsprecher");
+    if (s >= 3) show << QStringLiteral("p1") << QStringLiteral("p2");
+    if (s >= 4) return all;
+    // was die Vorlage oder der eigene Aufbau am Pult nutzt, bleibt immer sichtbar
+    auto note = [&show](const std::string& a) {
+        if (a.rfind("P:P1", 0) == 0) show << QStringLiteral("p1");
+        else if (a.rfind("P:P2", 0) == 0) show << QStringLiteral("p2");
+        else if (a.rfind("P:S", 0) == 0) show << QStringLiteral("schalter");
+        else if (a.rfind("P:LS", 0) == 0) show << QStringLiteral("lautsprecher");
+    };
+    for (const model::Board* b : {&m_experiment.templateBoard, &m_session->board()})
+        for (const auto& w : b->wires) {
+            note(w.from);
+            note(w.to);
+        }
+    QStringList out;
+    for (const QString& g : all)
+        if (show.contains(g)) out << g;
+    return out;
 }
 
 void LabController::setMeterMode(int mode) {

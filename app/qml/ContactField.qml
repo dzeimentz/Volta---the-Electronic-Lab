@@ -13,6 +13,9 @@ Rectangle {
     property bool highlighted: false
     property bool target: false // Zielfeld der Schritt-fuer-Schritt-Aufbauhilfe
     property int recorderChannel: -1 // Zeitschreiber: Kanal 0/1 haengt an diesem Feld
+    property color fillColor: "transparent" // eigene Feldfarbe statt Metall (Batteriepole), Schrift dann weiss
+    property string subLabel: ""             // zweite Bezeichnung unten im Feld (0V: GND)
+    readonly property bool colored: fillColor.a > 0
 
     signal wireDragUpdated(point scenePos)
     signal wireDragFinished(point scenePos)
@@ -20,7 +23,10 @@ Rectangle {
 
     radius: 6
     // Metallglanz statt flacher Farbe (Silber oder Messing, Theme.silverFields)
-    gradient: Gradient {
+    color: colored ? fillColor : "transparent"
+    gradient: colored ? null : metal
+    Gradient {
+        id: metal
         GradientStop { position: 0.0; color: Theme.fieldShine }
         GradientStop { position: 0.42; color: Theme.fieldMetal }
         GradientStop { position: 0.58; color: Theme.fieldShade }
@@ -67,7 +73,17 @@ Rectangle {
         text: root.label
         font.pixelSize: Math.round((13) * Theme.fontScale)
         font.bold: true
-        color: Theme.navy
+        color: root.colored ? "white" : Theme.navy
+    }
+    Text {
+        visible: root.subLabel !== ""
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 3
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: root.subLabel
+        font.pixelSize: Math.round((11) * Theme.fontScale)
+        font.bold: true
+        color: root.colored ? "white" : Theme.navy
     }
 
     // Zielfeld: blauer, pulsierender Rahmen und Pfeil (bei reduzierter Bewegung ruhig)

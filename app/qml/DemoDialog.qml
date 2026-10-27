@@ -47,15 +47,15 @@ Popup {
         close()
         if (!controller.startDemo(entry.id)) return
         if (entry.burn) {
-            // Widerstand heraus, Plus direkt an die Leuchtdiode (Anode B4): sie brennt beim Einschalten durch;
+            // Widerstand heraus, Plus direkt an die Leuchtdiode (Anode A4): sie brennt beim Einschalten durch;
             // »Rueckgaengig« nimmt die Leitung zurueck und macht sie wieder heil
             controller.mainSwitch = false
             controller.removePart("R1")
             const wires = controller.wires
             for (let w = 0; w < wires.length; ++w)
-                if ((wires[w].from === "P:+9V" && wires[w].to === "B3") || (wires[w].to === "P:+9V" && wires[w].from === "B3"))
+                if ((wires[w].from === "P:+9V" && wires[w].to === "A3") || (wires[w].to === "P:+9V" && wires[w].from === "A3"))
                     controller.removeWire(wires[w].id)
-            controller.addWire("P:+9V", "B4", "rot")
+            controller.addWire("P:+9V", "A4", "rot")
             controller.mainSwitch = true
         }
         if (entry.recorder) {

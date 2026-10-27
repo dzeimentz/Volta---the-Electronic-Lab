@@ -35,16 +35,16 @@
         "id": "NTC1",
         "typ": "heissleiter",
         "felder": [
-          "C1",
-          "C3"
+          "B1",
+          "B3"
         ]
       },
       {
         "id": "D1",
         "typ": "led_rot",
         "felder": {
-          "anode": "C3",
-          "kathode": "D3"
+          "anode": "B3",
+          "kathode": "C3"
         }
       }
     ],
@@ -52,11 +52,11 @@
     "leitungen": [
       {
         "von": "P:+9V",
-        "nach": "C1",
+        "nach": "B1",
         "farbe": "rot"
       },
       {
-        "von": "D3",
+        "von": "C3",
         "nach": "P:0V",
         "farbe": "schwarz"
       }
@@ -65,7 +65,7 @@
     "werkzeuge": [
       {
         "typ": "foehn",
-        "feld": "C2"
+        "feld": "B2"
       }
     ]
   },
