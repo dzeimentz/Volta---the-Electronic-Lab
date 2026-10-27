@@ -197,6 +197,12 @@ int main(int argc, char* argv[]) {
             lab.showTemplate();
             lab.setMainSwitch(true);
         });
+        // VOLTA_DEMO_FINISH=1: sobald es funktioniert »Fertig« (Glueckwunsch)
+        if (qEnvironmentVariableIntValue("VOLTA_DEMO_FINISH") == 1) {
+            auto* poll = new QTimer(&lab);
+            QObject::connect(poll, &QTimer::timeout, &lab, [&lab, poll] { if (lab.finishExperiment()) poll->stop(); });
+            poll->start(200);
+        }
     }
 
     // Entwicklerhilfe: VOLTA_DEMO_GUIDE=1 startet das Experiment VOLTA_DEMO_EXP mit eingeschalteter Aufbauhilfe

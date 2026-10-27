@@ -101,78 +101,69 @@ Rectangle {
         return out
     }
 
+    // Knopf der Themenleiste (»Alle« bzw. ein Thema)
+    Component {
+        id: themeButtonComponent
+        Button {
+            id: themeButton
+            required property var modelData
+            objectName: "theme_" + (modelData.key === "" ? "alle" : modelData.key)
+            readonly property bool chosen: tray.filter === modelData.key
+            visible: !tray.showModules
+            width: themeBar.cell
+            height: Theme.control
+            onClicked: tray.filter = modelData.key
+            background: Rectangle {
+                radius: 8
+                color: themeButton.modelData.color
+                border.color: themeButton.chosen ? "white" : Qt.darker(themeButton.modelData.color, 1.4)
+                border.width: themeButton.chosen ? 3 : 1
+                opacity: themeButton.chosen || themeButton.hovered ? 1 : 0.85
+            }
+            contentItem: Item {
+                SchematicSymbol {
+                    visible: themeButton.modelData.symbol !== ""
+                    anchors.centerIn: parent
+                    type: themeButton.modelData.symbol
+                    stroke: "white"
+                    width: 34
+                    height: 18
+                }
+                Label {
+                    visible: themeButton.modelData.symbol === ""
+                    anchors.centerIn: parent
+                    text: qsTr("Alle")
+                    color: Theme.navy
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    font.bold: true
+                }
+            }
+            ToolTip.visible: hovered
+            ToolTip.text: Texts.themeName(modelData.key)
+            Accessible.name: Texts.themeName(modelData.key) + (chosen ? ", " + qsTr("gewählt") : "")
+        }
+    }
+
+    // Leiste: »Alle«, der Umschalter Bauteil / Symbol, dann die Themen. Im Modulfach bleibt nur der Umschalter.
+    // Die Kacheln zeigen entweder das Bauteil wie auf dem Steckbrett oder sein Schaltzeichen (gewaehlte Ansicht
+    // fett und unterstrichen, Farbe nie allein).
+    property bool symbols: false
     Grid {
         id: themeBar
         objectName: "themeBar"
-        visible: !tray.showModules
         anchors { top: heading.bottom; topMargin: 6; left: parent.left; leftMargin: 8; right: parent.right; rightMargin: 8 }
         columns: 4
         spacing: 4
         readonly property real cell: (width - 3 * spacing) / 4
         Repeater {
-            model: [{key: "", color: "#E9EEF3", symbol: ""}].concat(tray.themesShown)
-            delegate: Button {
-                id: themeButton
-                required property var modelData
-                objectName: "theme_" + (modelData.key === "" ? "alle" : modelData.key)
-                readonly property bool chosen: tray.filter === modelData.key
-                width: themeBar.cell
-                height: Theme.control
-                onClicked: tray.filter = modelData.key
-                background: Rectangle {
-                    radius: 8
-                    color: themeButton.modelData.color
-                    border.color: themeButton.chosen ? "white" : Qt.darker(themeButton.modelData.color, 1.4)
-                    border.width: themeButton.chosen ? 3 : 1
-                    opacity: themeButton.chosen || themeButton.hovered ? 1 : 0.85
-                }
-                contentItem: Item {
-                    SchematicSymbol {
-                        visible: themeButton.modelData.symbol !== ""
-                        anchors.centerIn: parent
-                        type: themeButton.modelData.symbol
-                        stroke: "white"
-                        width: 34
-                        height: 18
-                    }
-                    Label {
-                        visible: themeButton.modelData.symbol === ""
-                        anchors.centerIn: parent
-                        text: qsTr("Alle")
-                        color: Theme.navy
-                        font.pixelSize: Math.round(13 * Theme.fontScale)
-                        font.bold: true
-                    }
-                }
-                ToolTip.visible: hovered
-                ToolTip.text: Texts.themeName(modelData.key)
-                Accessible.name: Texts.themeName(modelData.key) + (chosen ? ", " + qsTr("gewählt") : "")
-            }
-        }
-    }
-    // Ueberschrift (Thema bzw. Modulfach) und Umschalter Bauteil / Symbol: die Kacheln zeigen entweder das Bauteil
-    // wie auf dem Steckbrett oder sein Schaltzeichen (gewaehlte Ansicht fett und unterstrichen, Farbe nie allein)
-    property bool symbols: false
-    Item {
-        id: viewRow
-        anchors { top: tray.showModules ? heading.bottom : themeBar.bottom; topMargin: 4; left: parent.left; leftMargin: 8; right: parent.right; rightMargin: 8 }
-        height: Theme.control
-        Label {
-            id: themeTitle
-            anchors { left: parent.left; leftMargin: 2; right: viewToggle.left; rightMargin: 4; verticalCenter: parent.verticalCenter }
-            text: tray.showModules ? qsTr("Alle Module") : Texts.themeName(tray.filter)
-            color: "white"
-            font.pixelSize: Math.round(13 * Theme.fontScale)
-            font.bold: true
-            wrapMode: Text.WordWrap
-            maximumLineCount: 2
-            elide: Text.ElideRight
+            model: [{key: "", color: "#E9EEF3", symbol: ""}]
+            delegate: themeButtonComponent
         }
         Button {
             id: viewToggle
             objectName: "trayViewToggle"
-            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
-            width: 112
+            width: themeBar.cell
+            height: Theme.control
             onClicked: tray.symbols = !tray.symbols
             background: Rectangle {
                 radius: 8
@@ -181,28 +172,47 @@ Rectangle {
                 border.width: viewToggle.activeFocus ? 3 : 1
             }
             contentItem: Item {
-                Row {
+                Column {
                     anchors.centerIn: parent
-                    spacing: 4
-                    scale: Math.min(1, (parent.width - 4) / Math.max(1, implicitWidth))
+                    scale: Math.min(1, (parent.width - 2) / Math.max(1, implicitWidth))
                     Repeater {
-                        model: [qsTr("Bauteil"), "|", qsTr("Symbol")]
+                        model: [qsTr("Bauteil"), qsTr("Symbol")]
                         Label {
                             required property int index
                             required property string modelData
-                            readonly property bool chosen: index === 0 ? !tray.symbols : index === 2 && tray.symbols
-                            anchors.verticalCenter: parent.verticalCenter
+                            readonly property bool chosen: (index === 1) === tray.symbols
+                            anchors.horizontalCenter: parent.horizontalCenter
                             text: modelData
-                            color: chosen || index === 1 ? "white" : "#9FB2C4"
-                            font.pixelSize: Math.round(13 * Theme.fontScale)
+                            color: chosen ? "white" : "#9FB2C4"
+                            font.pixelSize: Math.round(11 * Theme.fontScale)
                             font.bold: chosen
                             font.underline: chosen
                         }
                     }
                 }
             }
+            ToolTip.visible: hovered
+            ToolTip.text: tray.symbols ? qsTr("Bauteilbilder zeigen") : qsTr("Schaltzeichen zeigen")
             Accessible.name: tray.symbols ? qsTr("Schaltzeichen, umschalten auf Bauteilbilder")
                                           : qsTr("Bauteilbilder, umschalten auf Schaltzeichen")
+        }
+        Repeater {
+            model: tray.themesShown
+            delegate: themeButtonComponent
+        }
+    }
+    Item {
+        id: viewRow
+        anchors { top: themeBar.bottom; topMargin: 4; left: parent.left; leftMargin: 10; right: parent.right; rightMargin: 8 }
+        height: themeTitle.implicitHeight
+        Label {
+            id: themeTitle
+            width: parent.width
+            text: tray.showModules ? qsTr("Alle Module") : Texts.themeName(tray.filter)
+            color: "white"
+            font.pixelSize: Math.round(13 * Theme.fontScale)
+            font.bold: true
+            elide: Text.ElideRight
         }
     }
 

@@ -129,6 +129,7 @@ bool LabController::startExperiment(const QString& id) {
     m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
     m_session->loadBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
+    setGuideActive(false); // Aufbauhilfe beginnt jedes Experiment ausgeschaltet
     m_experiment = std::move(exp);
     emit experimentChanged();
     emit flowChanged();
@@ -1033,6 +1034,8 @@ bool LabController::finishExperiment() {
     if (!m_canFinish || !m_flow.reportSuccess()) return false;
     m_progress.markDone(m_experiment.id); // Lernpfad: erledigt (bleibt erledigt)
     updateFinish();
+    setGuideActive(false); // Aufgabe geloest: Schritt-fuer-Schritt-Hilfe aus
+    emit experimentSolved();
     emit flowChanged();
     emit progressChanged();
     return true;

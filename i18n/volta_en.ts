@@ -1554,7 +1554,7 @@
     </message>
     <message>
         <location filename="../app/qml/Lab.qml" line="1119"/>
-        <location filename="../app/qml/Lab.qml" line="1808"/>
+        <location filename="../app/qml/Lab.qml" line="1825"/>
         <source>Löschen</source>
         <translation>Delete</translation>
     </message>
@@ -1702,47 +1702,47 @@
         <translation>Delete wire</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1784"/>
+        <location filename="../app/qml/Lab.qml" line="1801"/>
         <source>Alles abbauen?</source>
         <translation>Take everything apart?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1784"/>
+        <location filename="../app/qml/Lab.qml" line="1801"/>
         <source>Löschen?</source>
         <translation>Delete?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1791"/>
+        <location filename="../app/qml/Lab.qml" line="1808"/>
         <source>%1 %2 von der Grundplatte nehmen?</source>
         <translation>Take %1 %2 off the board?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1792"/>
+        <location filename="../app/qml/Lab.qml" line="1809"/>
         <source>Diese Leitung entfernen?</source>
         <translation>Remove this wire?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1793"/>
+        <location filename="../app/qml/Lab.qml" line="1810"/>
         <source>%1 %2 aus der Modulleiste nehmen?</source>
         <translation>Take %1 %2 out of the module bar?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1794"/>
+        <location filename="../app/qml/Lab.qml" line="1811"/>
         <source>Alle Bauteile, Leitungen und Module von der Grundplatte nehmen?</source>
         <translation>Take all parts, wires and modules off the board?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1795"/>
+        <location filename="../app/qml/Lab.qml" line="1812"/>
         <source>Mit »Rückgängig« holst du es wieder zurück.</source>
         <translation>With &quot;Undo&quot; you can get it back.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1802"/>
+        <location filename="../app/qml/Lab.qml" line="1819"/>
         <source>Abbrechen</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1808"/>
+        <location filename="../app/qml/Lab.qml" line="1825"/>
         <source>Alles abbauen</source>
         <translation>Take everything apart</translation>
     </message>
@@ -2837,32 +2837,32 @@
 <context>
     <name>PartItem</name>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="119"/>
+        <location filename="../app/qml/PartItem.qml" line="120"/>
         <source>%1 kaputt</source>
         <translation>%1 broken</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="122"/>
+        <location filename="../app/qml/PartItem.qml" line="123"/>
         <source>%1 °C</source>
         <translation>%1 °C</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="124"/>
+        <location filename="../app/qml/PartItem.qml" line="125"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="177"/>
+        <location filename="../app/qml/PartItem.qml" line="179"/>
         <source>kaputt</source>
         <translation>broken</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="177"/>
+        <location filename="../app/qml/PartItem.qml" line="179"/>
         <source>überlastet</source>
         <translation>overloaded</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartItem.qml" line="178"/>
+        <location filename="../app/qml/PartItem.qml" line="180"/>
         <source>ausgewählt</source>
         <translation>selected</translation>
     </message>
@@ -2885,43 +2885,53 @@
         <translation>Parts tray, switch to module tray</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="141"/>
+        <location filename="../app/qml/PartTray.qml" line="135"/>
         <source>Alle</source>
         <translation>All</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="149"/>
+        <location filename="../app/qml/PartTray.qml" line="143"/>
         <source>gewählt</source>
         <translation>selected</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="163"/>
+        <location filename="../app/qml/PartTray.qml" line="195"/>
+        <source>Bauteilbilder zeigen</source>
+        <translation>Show part pictures</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/PartTray.qml" line="195"/>
+        <source>Schaltzeichen zeigen</source>
+        <translation>Show circuit symbols</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/PartTray.qml" line="211"/>
         <source>Alle Module</source>
         <translation>All modules</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="189"/>
+        <location filename="../app/qml/PartTray.qml" line="179"/>
         <source>Bauteil</source>
         <translation>Part</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="189"/>
+        <location filename="../app/qml/PartTray.qml" line="179"/>
         <source>Symbol</source>
         <translation>Symbol</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="204"/>
+        <location filename="../app/qml/PartTray.qml" line="196"/>
         <source>Schaltzeichen, umschalten auf Bauteilbilder</source>
         <translation>Circuit symbols, switch to part pictures</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="205"/>
+        <location filename="../app/qml/PartTray.qml" line="197"/>
         <source>Bauteilbilder, umschalten auf Schaltzeichen</source>
         <translation>Part pictures, switch to circuit symbols</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="294"/>
-        <location filename="../app/qml/PartTray.qml" line="413"/>
+        <location filename="../app/qml/PartTray.qml" line="304"/>
+        <location filename="../app/qml/PartTray.qml" line="423"/>
         <source>gesperrt bis Stufe %1</source>
         <translation>locked until level %1</translation>
     </message>
@@ -3368,6 +3378,34 @@
         <location filename="../app/qml/Splash.qml" line="37"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
+    </message>
+</context>
+<context>
+    <name>SuccessPopup</name>
+    <message>
+        <location filename="../app/qml/SuccessPopup.qml" line="26"/>
+        <source>Richtig gelöst!</source>
+        <translation>Solved correctly!</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SuccessPopup.qml" line="37"/>
+        <source>Super, geschafft! Deine Schaltung funktioniert – das ist die richtige Lösung.</source>
+        <translation>Great, you did it! Your circuit works – that is the right solution.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SuccessPopup.qml" line="38"/>
+        <source>Schau jetzt genau hin, was passiert.</source>
+        <translation>Now watch closely what happens.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SuccessPopup.qml" line="39"/>
+        <source>Lies jetzt, warum es funktioniert.</source>
+        <translation>Now read why it works.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SuccessPopup.qml" line="48"/>
+        <source>Weiter</source>
+        <translation>Next</translation>
     </message>
 </context>
 <context>
@@ -4188,33 +4226,33 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="514"/>
+        <location filename="../app/src/lab_controller.cpp" line="515"/>
         <source>Forscher</source>
         <translation>Researcher</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="880"/>
-        <location filename="../app/src/lab_controller.cpp" line="914"/>
+        <location filename="../app/src/lab_controller.cpp" line="881"/>
+        <location filename="../app/src/lab_controller.cpp" line="915"/>
         <source>Freies Labor</source>
         <translation>Free lab</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1013"/>
+        <location filename="../app/src/lab_controller.cpp" line="1014"/>
         <source>Alles abbauen</source>
         <translation>Take everything apart</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1018"/>
+        <location filename="../app/src/lab_controller.cpp" line="1019"/>
         <source>Musteraufbau zeigen</source>
         <translation>Show sample build</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1563"/>
+        <location filename="../app/src/lab_controller.cpp" line="1566"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>This part will be unlocked at level %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1602"/>
+        <location filename="../app/src/lab_controller.cpp" line="1605"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module will be unlocked at level %1.</translation>
     </message>

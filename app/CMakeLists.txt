@@ -154,6 +154,7 @@ qt_add_qml_module(volta_ui
         qml/PartItem.qml
         qml/PartBody.qml
         qml/PartPreview.qml
+        qml/SuccessPopup.qml
         qml/WireItem.qml
         qml/WireEndHandle.qml
         qml/PartTray.qml

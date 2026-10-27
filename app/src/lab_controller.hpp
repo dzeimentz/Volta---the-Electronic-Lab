@@ -436,6 +436,7 @@ signals:
     void deskChanged();
     void stateChanged();
     void partDestroyed(const QString& id, const QString& type); // ein Bauteil ist gerade kaputt gegangen
+    void experimentSolved(); // »Fertig« mit funktionierendem Aufbau (Glueckwunsch)
     void historyChanged();
     void editFailed();
     void flowChanged();

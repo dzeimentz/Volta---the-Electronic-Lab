@@ -115,15 +115,17 @@ Item {
     Text {
         anchors.horizontalCenter: body.horizontalCenter
         y: body.y + body.height + 4
-        // Beschriftung unter dem Bauteil (bei senkrechter Lage daneben)
-        text: root.destroyed ? qsTr("%1 kaputt").arg(root.partId)
-                             : root.partId + (root.partType === "widerstand" ? " " + Texts.ohm(root.value)
+        // Beschriftung unter dem Bauteil (bei senkrechter Lage daneben): Name und Kennung, z. B. »Widerstand R1«
+        readonly property string fullName: Texts.partName(root.partType) + " " + root.partId
+        text: root.destroyed ? qsTr("%1 kaputt").arg(fullName)
+                             : fullName + (root.partType === "widerstand" ? "\n" + Texts.ohm(root.value)
                                             : root.partType === "heissleiter" && root.partState.tempC !== undefined
-                                              ? " " + qsTr("%1 °C").arg(Math.round(root.partState.tempC))
+                                              ? "\n" + qsTr("%1 °C").arg(Math.round(root.partState.tempC))
                                             : root.partType === "gluehlampe" && root.value > 0
-                                              ? " " + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
+                                              ? "\n" + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
                                               : "")
         font.pixelSize: Math.round((12) * Theme.fontScale)
+        horizontalAlignment: Text.AlignHCenter
         color: Theme.navy
     }
     }

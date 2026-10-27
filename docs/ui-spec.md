@@ -141,11 +141,13 @@ das iPad).
   Tooltip und Ueberschrift (Farbe nie allein). Kacheln nach Thema sortiert, Hintergrund in der Themenfarbe.
   Die Aufbauhilfe waehlt das Thema des gesuchten Bauteils.
 - Kachel 112 x 80: oben wahlweise das Bauteil wie auf dem Steckbrett mit Anschlussdraehten (`PartPreview.qml`) oder
-  das Schaltzeichen nach DIN EN 60617 (`SchematicSymbol.qml`), unten der Name. Umschalter »Bauteil | Symbol« rechts
-  neben der Ueberschrift, gewaehlte Ansicht fett und unterstrichen, gemerkt (`labor/fachsymbole`), gilt auch fuers
+  das Schaltzeichen nach DIN EN 60617 (`SchematicSymbol.qml`), unten der Name. Umschalter »Bauteil | Symbol« als kleiner
+  Knopf in der Themenleiste rechts neben »Alle« (im Modulfach allein), gewaehlte Ansicht fett und unterstrichen, gemerkt (`labor/fachsymbole`), gilt auch fuers
   Modulfach. Senkrecht wischen blaettert (Bildlaufleiste), zur Seite ziehen nimmt das Bauteil heraus.
 - Modulfach: Kacheln in derselben Groesse, Hintergrund in der aufgehellten Farbe der Traegerplatte
   (`Theme.modulePlate`), Bild: Traegerplatte mit einem Anschlussfeld je Anschluss bzw. Schaltzeichen.
+- Beschriftung auf der Grundplatte mit Namen und Kennung (»Widerstand R1«), Wert bzw. Nennspannung in der Zeile
+  darunter.
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 
@@ -165,13 +167,15 @@ das iPad).
 - Erledigt ist ein Schritt, sobald das Teil an derselben Stelle steckt (ungepolte Bauteile in beliebiger Richtung,
   Leitungen in beiden Richtungen, Modulanschluss = Feld der Leiste); keine Reihenfolgepflicht, Entfernen holt den
   Schritt zurueck. Ob das Experiment gelingt, entscheidet weiter die Erfolgsbedingung, nicht die Aehnlichkeit.
+- Nach »Fertig« und beim Start eines Experiments ist die Aufbauhilfe wieder aus.
 
 ## Forschungskreislauf und Forscherheft (D2)
 - Experimentfeld: 1 Frage mit Vermutung (wird ohne Wertung ins Forscherheft geschrieben) -> 2 Aufbau mit Schritten
   und gestuften Hilfen; unten im Feld fest der Knopf »✓ Fertig«: grau und nicht klickbar, bis alle Bauteile und
   Module der Vorlage stecken (Anzahl je Typ) und die Erfolgsbedingung im aktuellen Aufbau erfuellt war (jede
   Aufbauaenderung verlangt einen neuen Nachweis, Bedienhandlungen nicht); ein Satz darunter nennt, was noch fehlt
-  -> 3 nach »Fertig« »Was hast du beobachtet?« (Auswahl) -> 4 Vergleich mit der Vermutung
+  -> 3 nach »Fertig« Glueckwunsch-Fenster mit Tick (»✓ Richtig gelöst!«, `SuccessPopup.qml`, »Weiter« schliesst),
+  dann »Was hast du beobachtet?« (Auswahl) -> 4 Vergleich mit der Vermutung
   (»hat gestimmt« / »Ueberraschung! …« / »Jetzt weisst du es!«, Symbol zusaetzlich zur Farbe), Erklaerung,
   Mehr wissen, Weiterforschen mit eigener Notiz, Jetzt in echt, naechstes Experiment.
 - Forscherheft-Seite (Kachel auf der Startseite): je Experiment Vermutung, Beobachtung, Vergleich, Notizen, Datum;

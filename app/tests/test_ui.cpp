@@ -145,8 +145,16 @@ private:
         QTRY_VERIFY_WITH_TIMEOUT(m_lab->canFinish(), 30000); // Haltedauer 2 s in Echtzeit (Reserve fuer Last)
         QTRY_VERIFY(finish->isEnabled());
         QCOMPARE(m_lab->phase(), 2); // kein automatischer Abschluss
+        m_lab->setGuideActive(true);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(finish)); // fest unten im Feld, nicht im Rollbereich
         QTRY_COMPARE(m_lab->phase(), 3); // Beobachtung
+        // Glueckwunsch, Schritt-fuer-Schritt-Hilfe ist wieder aus
+        QVERIFY(!m_lab->guideActive());
+        QObject* success = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("successPopup"));
+        QVERIFY(success);
+        QTRY_VERIFY(success->property("opened").toBool());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("successClose"))));
+        QTRY_VERIFY(!success->property("opened").toBool());
         clickInPanel(QStringLiteral("observation_0"));            // »mit zwei Leitungen hat es geleuchtet«
         QTRY_COMPARE(m_lab->phase(), 4);
         QCOMPARE(m_lab->comparison(), 1); // Vermutung »zwei Leitungen« passt
@@ -663,7 +671,9 @@ private slots:
         QVERIFY(!item(QStringLiteral("tray_widerstand"))->isVisible());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(trayToggle));
         QTRY_VERIFY(item(QStringLiteral("tray_widerstand"))->isVisible());
-        // Themenleiste: nur die Bauteile eines Themas, »Alle« zeigt wieder alles
+        // Themenleiste: nur die Bauteile eines Themas, »Alle« zeigt wieder alles (erst nach dem Neuordnen der Leiste)
+        QTRY_VERIFY(item(QStringLiteral("theme_licht"))->isVisible());
+        QTRY_VERIFY(item(QStringLiteral("trayViewToggle"))->x() > 0);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("theme_licht"))));
         QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("tray_widerstand")) == nullptr);
         QVERIFY(item(QStringLiteral("tray_led_rot")) != nullptr);

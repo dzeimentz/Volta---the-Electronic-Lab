@@ -1730,6 +1730,23 @@ Item {
         }
         function onBoardChanged() { lab.troubleShown = false }
     }
+
+    // Glueckwunsch nach »Fertig«: mittig ueber der Grundplatte
+    SuccessPopup {
+        id: success
+        parent: boardArea
+        width: Math.min(520, boardArea.width - 24)
+        x: Math.max(8, (boardArea.width - width) / 2)
+        y: Math.max(8, (boardArea.height - height) / 2)
+    }
+    Connections {
+        target: lab.controller
+        function onExperimentSolved() {
+            trouble.close()
+            success.observe = lab.controller.phase === 3
+            success.open()
+        }
+    }
     Timer {
         id: idleTrouble
         interval: 12000
