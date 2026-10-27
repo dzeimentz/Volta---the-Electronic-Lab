@@ -1,6 +1,6 @@
 # Planung Volta 2 – Das Elektronik-Labor (Entwurf)
 
-Stand: 10/2026, Entwurf zur Abstimmung. Grundlage: `docs/Konzept_Volta_v3.0.pdf`, Kapitel 4.1 (Reihe), 5 (Module)
+Stand: 10/2026, Entwurf zur Abstimmung. **Das ausgearbeitete Konzept steht seit 27.10.2026 in `docs/Konzept_Volta2.md`** (Entscheidungen, Bedienpult II, 61 Experimente, Umsetzungsplan); diese Datei bleibt als Arbeitsgrundlage (Leistungstest, 555-Quellensammlung). Grundlage: `docs/Konzept_Volta_v3.0.pdf`, Kapitel 4.1 (Reihe), 5 (Module)
 und 6.3 (Erweiterungen des Kerns). Volta 2 ist eine eigene App (`VOLTA_EDITION=volta2`,
 `com.dcsoftwareengineering.volta2`) aus derselben Codebasis und mit derselben Bedienung wie Volta 1.
 
@@ -175,7 +175,7 @@ Kfz-Elektrik (Drehzahlmesser an der Zuendspule, Scheinwerferschaltungen).
 | Entscheidung | Spaetestens |
 |---|---|
 | ~~Reihenfolge: Volta 1 erst veroeffentlichen (Phase 3) oder Volta 2 parallel~~ entschieden 10/2026: erst Volta 1 fertigstellen, dann Volta 2 | – |
-| Hoerbare Simulation zwingend oder Rueckfall auf erzeugten Ton bei langsamen Geraeten | nach Schritt 1 |
-| Bedienpult II: Anordnung zweites Messgeraet, Wechselquelle, Generator (oben im Pult oder seitlich) | Schritt 4 |
-| Stufenplanung und Experimentliste freigeben | vor Schritt 5 |
-| 556 (zwei Timer in einem Gehaeuse) aufnehmen oder zwei 555 verwenden | Schritt 3 |
+| ~~Hoerbare Simulation zwingend oder Rueckfall~~ entschieden 27.10.2026: hoerbar mit Rueckfall (Ton aus der simulierten Frequenz) und Zeitlupe | – |
+| ~~Bedienpult II: Anordnung~~ entschieden 27.10.2026: Pultleiste oben, Messgeraete und Oszilloskop andockbar | – |
+| Stufenplanung und Experimentliste freigeben (Entwurf: 9 Stufen, 61 Experimente in `docs/Konzept_Volta2.md`) | vor Schritt 2 |
+| ~~556 aufnehmen~~ entschieden 27.10.2026: zwei 555 verwenden | – |

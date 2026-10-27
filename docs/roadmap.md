@@ -26,7 +26,8 @@ Bis 1.0: Erprobung mit Kindern und Pilot mit einer Lehrkraft, Korrekturen als 0.
 
 ## Offene Entscheidungen
 Entschieden 10/2026: Volta 1 wird bis zur Veroeffentlichung fertiggestellt, danach folgt Volta 2
-(`docs/volta2-planung.md`).
+(`docs/volta2-planung.md`). 27.10.2026: Volta 1 bleibt auf dem Stand 0.9 (nur Korrekturen aus Vorfuehrungen und
+Pilot als 0.9.x); Volta 2 ist im Konzept `docs/Konzept_Volta2.md` (v0.1) definiert.
 
 | Entscheidung | Spaetestens |
 |---|---|
