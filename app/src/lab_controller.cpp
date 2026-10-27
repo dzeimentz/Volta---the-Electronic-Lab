@@ -1546,6 +1546,7 @@ QVariantList LabController::catalogParts() const {
         out << QVariantMap{{QStringLiteral("type"), qs(type)},
                            {QStringLiteral("model"), qs(e.model)},
                            {QStringLiteral("stage"), e.fromStage},
+                           {QStringLiteral("theme"), qs(e.theme)},
                            {QStringLiteral("pins"), static_cast<int>(e.pins.size())},
                            {QStringLiteral("voltages"), volts},
                            {QStringLiteral("defaultVolt"), e.param("u_nenn_V", 0.0)}};

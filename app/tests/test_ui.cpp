@@ -663,6 +663,13 @@ private slots:
         QVERIFY(!item(QStringLiteral("tray_widerstand"))->isVisible());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(trayToggle));
         QTRY_VERIFY(item(QStringLiteral("tray_widerstand"))->isVisible());
+        // Themenleiste: nur die Bauteile eines Themas, »Alle« zeigt wieder alles
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("theme_licht"))));
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("tray_widerstand")) == nullptr);
+        QVERIFY(item(QStringLiteral("tray_led_rot")) != nullptr);
+        QVERIFY(item(QStringLiteral("tray_gluehlampe")) != nullptr);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("theme_alle"))));
+        QTRY_VERIFY(item(QStringLiteral("tray_widerstand")) != nullptr);
         bool transistorLocked = false;
         for (const QVariant& v : m_lab->trayParts())
             if (v.toMap().value(QStringLiteral("type")).toString() == QStringLiteral("transistor_npn"))

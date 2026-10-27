@@ -20,6 +20,7 @@ struct CatalogEntry {
     // waehlt die Variante ueber u_nenn_V. Leer: keine Auswahl.
     std::vector<std::map<std::string, double>> variants;
     std::string lexiconKey; // "lexikon_key": Text im Bauteillexikon
+    std::string theme;      // "thema": Gruppe im Bauteilfach (licht, schalten, widerstaende, halbleiter, speicher, bewegung)
     int fromStage = 0;
 
     double param(const std::string& key, double fallback) const {

@@ -3,6 +3,20 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    // Themen des Bauteilfachs (Katalog »thema«)
+    function themeName(key) {
+        switch (key) {
+        case "licht": return qsTr("Licht")
+        case "schalten": return qsTr("Schalten")
+        case "widerstaende": return qsTr("Widerstände und Sensoren")
+        case "halbleiter": return qsTr("Dioden und Transistoren")
+        case "speicher": return qsTr("Kondensatoren")
+        case "bewegung": return qsTr("Bewegung und Ton")
+        case "": return qsTr("Alle Bauteile")
+        }
+        return key
+    }
+
     function partName(type) {
         switch (type) {
         case "widerstand": return qsTr("Widerstand")

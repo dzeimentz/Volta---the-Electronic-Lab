@@ -6,6 +6,20 @@ QtObject {
     // Farben
     readonly property color navy: "#0A2540"
     readonly property color desk: "#1A3A5C"
+    // Themen des Bauteilfachs (Katalog »thema«): Reihenfolge der Knopfleiste, Knopffarbe, Kachelfarbe und ein
+    // typisches Schaltzeichen fuer den Knopf (Farbe nie allein; Name als Tooltip und Ueberschrift)
+    readonly property var partThemes: [
+        {key: "licht", color: "#E0A800", tint: "#F8E7A6", symbol: "led_rot"},
+        {key: "schalten", color: "#2F74C8", tint: "#C7DCF4", symbol: "taster"},
+        {key: "widerstaende", color: "#2E8B47", tint: "#CBE7C7", symbol: "widerstand"},
+        {key: "halbleiter", color: "#7B52BF", tint: "#DDD0F0", symbol: "transistor_npn"},
+        {key: "speicher", color: "#1F8F8F", tint: "#C2E6E4", symbol: "kondensator"},
+        {key: "bewegung", color: "#D9692B", tint: "#F7CFB6", symbol: "motor"}
+    ]
+    function partTheme(key) {
+        for (let i = 0; i < partThemes.length; ++i) if (partThemes[i].key === key) return partThemes[i]
+        return {key: "", color: "#8E9AA8", tint: "#E9D7B0", symbol: ""}
+    }
     readonly property color accent: "#2873B0" // Weiss darauf 5:1 (WCAG AA)
     readonly property color signalOrange: "#FF6B1A"
     readonly property color solderAmber: "#FFB07A"

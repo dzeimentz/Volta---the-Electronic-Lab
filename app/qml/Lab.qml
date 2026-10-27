@@ -740,7 +740,7 @@ Item {
             function onGuideChanged() {
                 const k = lab.controller.guideStep.kind
                 if (k === "modul") tray.showModules = tray.hasModules
-                else if (k === "bauteil") tray.showModules = false
+                else if (k === "bauteil") { tray.showModules = false; tray.showType(lab.controller.guideStep.type) }
             }
         }
         onLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.partName(type)).arg(stage))

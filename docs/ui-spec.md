@@ -136,8 +136,14 @@ das iPad).
   (Batterie, P1, P2, Schalter, Lautsprecher). Tippen auf Schaltzeichen hebt Gruppe und Pultelement hervor.
 
 ## Bauteilfach
-- Jede Kachel zeigt das Schaltzeichen nach DIN EN 60617 (`SchematicSymbol.qml`, einfarbig) ueber dem Namen; die
-  Zeichen dienen spaeter auch der Schaltplanansicht.
+- Themen (0.9.1, Katalog `thema`, Farben in `Theme.partThemes`): Licht (gelb), Schalten (blau), Widerstaende und
+  Sensoren (gruen), Dioden und Transistoren (violett), Kondensatoren (tuerkis), Bewegung und Ton (orange). Knopfleiste
+  unter »Bauteilfach | Modulfach«: »Alle« und je Thema ein Knopf in seiner Farbe mit typischem Schaltzeichen, Name als
+  Tooltip und Ueberschrift (Farbe nie allein). Kacheln nach Thema sortiert, Hintergrund in der Themenfarbe.
+  Die Aufbauhilfe waehlt das Thema des gesuchten Bauteils.
+- Kachel 112 x 108: oben das Bauteil wie auf dem Steckbrett (`PartBody`, verkleinert), darunter das Schaltzeichen
+  nach DIN EN 60617 (`SchematicSymbol.qml`), unten der Name. Senkrecht wischen blaettert (Bildlaufleiste), zur Seite
+  ziehen nimmt das Bauteil heraus.
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 

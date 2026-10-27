@@ -123,10 +123,13 @@ Ausgangstransistor). Zuordnung wie bei Bauteilen ueber Kennung und Typ.
 ## Bauteilkatalog (`catalog/bauteile.json`)
 
 ```json
-{"typ": "led_rot", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"],
+{"typ": "led_rot", "thema": "licht", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"],
  "modell": "led", "parameter": {"uf_V": 1.9, "imax_mA": 20}, "ab_band": "volta1", "ab_stufe": 2,
  "lexikon_key": "lex_led"}
 ```
+
+`thema` ordnet das Bauteil einer Gruppe im Bauteilfach zu (Farbe und Knopf in `Theme.partThemes`):
+`licht`, `schalten`, `widerstaende`, `halbleiter`, `speicher`, `bewegung`.
 
 ## i18n-Dateien
 
