@@ -675,8 +675,10 @@ QVariantList LabController::trayParts() const {
     for (const QVariant& v : all) {
         QVariantMap p = v.toMap();
         const QString type = p.value(QStringLiteral("type")).toString();
-        // Gefuehrtes Experiment: nur seine Bauteile. Freies Labor: alle, gesperrte sichtbar, aber nicht benutzbar.
-        const bool locked = !m_unlockAll && p.value(QStringLiteral("stage")).toInt() > open;
+        // Gefuehrtes Experiment: nur seine Bauteile, und die bringt es mit (auch wenn sie sonst erst spaeter frei
+        // werden, z. B. LED und Widerstand in Stufe 0). Freies Labor: alle, gesperrte sichtbar, aber nicht benutzbar.
+        const bool ownPart = guided && m_experiment.freeParts.contains(type);
+        const bool locked = !m_unlockAll && !ownPart && p.value(QStringLiteral("stage")).toInt() > open;
         p.insert(QStringLiteral("locked"), locked);
         if (m_unlockAll || !guided)
             out << p;
@@ -704,7 +706,7 @@ QVariantList LabController::trayModules() const {
                            {QStringLiteral("kind"), qs(e.kind)},
                            {QStringLiteral("stage"), e.fromStage},
                            {QStringLiteral("pins"), pins},
-                           {QStringLiteral("locked"), !m_unlockAll && e.fromStage > open}};
+                           {QStringLiteral("locked"), !m_unlockAll && !(guided && inExperiment) && e.fromStage > open}};
     }
     return out;
 }

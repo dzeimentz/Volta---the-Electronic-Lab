@@ -968,6 +968,9 @@ private slots:
         QTRY_VERIFY(!gate->property("opened").toBool());
         // Freigabe im Elternbereich
         QTest::qWait(100);
+        QVERIFY(!item(QStringLiteral("parentUnlockAll"))->isVisible()); // Karteireiter »Lernpfad«
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("parentTab_1"))));
+        QTRY_VERIFY(item(QStringLiteral("parentUnlockAll"))->isVisible());
         clickInPanel(QStringLiteral("parentUnlockAll"));
         QTRY_VERIFY(m_settings->unlockAll());
         QMetaObject::invokeMethod(area, "close");
@@ -1169,6 +1172,21 @@ private slots:
     }
 
     // Kaputtes Bauteil: Tick meldet sich, »Zur Fehlersuche« oeffnet sie; antippen daneben schliesst den Hinweis
+    // Stufe 0 bringt LED und Widerstand mit (sonst erst ab Stufe 2): von Anfang an loesbar
+    void stageZeroSolvable() {
+        m_settings->setUnlockAll(false);
+        m_lab->resetProgress();
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.0.1")));
+        m_lab->chooseGuess(0);
+        for (const QVariant& v : m_lab->trayParts())
+            QVERIFY2(!v.toMap().value(QStringLiteral("locked")).toBool(), qPrintable(v.toMap().value(QStringLiteral("type")).toString()));
+        for (const QVariant& v : m_lab->trayModules())
+            QVERIFY(!v.toMap().value(QStringLiteral("locked")).toBool());
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("A3"), false, false));
+        m_lab->startFreeLab(); // im freien Labor bleiben sie bis Stufe 2 gesperrt
+        QVERIFY(!m_lab->addPart(QStringLiteral("led_rot"), QStringLiteral("A3"), false, false));
+    }
+
     void troublePopupOnDestroyed() {
         m_settings->setUnlockAll(true);
         m_lab->startFreeLab();

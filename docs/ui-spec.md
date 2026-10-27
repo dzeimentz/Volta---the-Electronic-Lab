@@ -273,6 +273,12 @@ das iPad).
   Freigaben (»Alle Stufen und Bauteile freigeben«, aus dem Kindermenue hierher verlegt), Lernpfad-Fortschritt
   zuruecksetzen und Forscherheft leeren (je mit Rueckfrage), Datenschutz (was lokal gespeichert wird),
   »So rechnet Volta« (offengelegte Vereinfachungen der Simulation), Lernpfad im Ueberblick, Kontakt mit Links.
+- Karteireiter (0.9.1) unter dem Kopf: Einstellungen (PIN, Ton im Klassenzimmer, Tick, Vorfuehrung), Lernpfad
+  (Freigaben, Steckbrett und Pult, Stufen im Ueberblick), Schule (Aufgabe fuer die Klasse, Praesentationsmodus),
+  Profile (Forscherprofile, Mitnehmen, Fortschritt und Forscherheft), Info (Datenschutz, So rechnet Volta, Kontakt).
+  Gewaehlter Reiter hell, fett und unterstrichen; Hinweise der Geraeteverwaltung und zur Start-PIN stehen ueber allen.
+- Ein gefuehrtes Experiment bringt seine Bauteile und Module mit, auch wenn sie sonst erst in einer spaeteren Stufe
+  frei werden (Stufe 0: LED und Widerstand); im freien Labor bleiben sie bis zu ihrer Stufe gesperrt.
 - Klassenmodus Ton (Elternbereich »Ton im Klassenzimmer«, `services/audio_route`): normal, nur mit Kopfhoerern
   (Android: AudioManager-Geraete Kabel/USB/Bluetooth; Desktop: Name des Ausgabegeraets), aus; gilt fuer Pult-Ton und
   Vorlesen. Die verwaltete Konfiguration kann ihn vorgeben, ebenso das Ausblenden des Elternbereichs.
