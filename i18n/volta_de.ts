@@ -106,70 +106,70 @@
 <context>
     <name>ControlDesk</name>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="56"/>
+        <location filename="../app/qml/ControlDesk.qml" line="58"/>
         <source>Was ist das?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="164"/>
+        <location filename="../app/qml/ControlDesk.qml" line="169"/>
         <source>Batterie</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="170"/>
-        <location filename="../app/qml/ControlDesk.qml" line="170"/>
-        <location filename="../app/qml/ControlDesk.qml" line="170"/>
+        <location filename="../app/qml/ControlDesk.qml" line="175"/>
+        <location filename="../app/qml/ControlDesk.qml" line="175"/>
+        <location filename="../app/qml/ControlDesk.qml" line="175"/>
         <source>%1 V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="173"/>
+        <location filename="../app/qml/ControlDesk.qml" line="178"/>
         <source>Batteriespannung</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="182"/>
+        <location filename="../app/qml/ControlDesk.qml" line="187"/>
         <source>Hauptschalter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="187"/>
+        <location filename="../app/qml/ControlDesk.qml" line="192"/>
         <source>Ein</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="187"/>
+        <location filename="../app/qml/ControlDesk.qml" line="192"/>
         <source>Aus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="200"/>
+        <location filename="../app/qml/ControlDesk.qml" line="205"/>
         <source>Potentiometer 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="209"/>
+        <location filename="../app/qml/ControlDesk.qml" line="214"/>
         <source>Potentiometer 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="246"/>
+        <location filename="../app/qml/ControlDesk.qml" line="251"/>
         <source>ein</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="251"/>
+        <location filename="../app/qml/ControlDesk.qml" line="256"/>
         <source>aus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="258"/>
-        <location filename="../app/qml/ControlDesk.qml" line="265"/>
+        <location filename="../app/qml/ControlDesk.qml" line="263"/>
+        <location filename="../app/qml/ControlDesk.qml" line="270"/>
         <source>Schalter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="281"/>
+        <location filename="../app/qml/ControlDesk.qml" line="286"/>
         <source>Lautsprecher</source>
         <translation type="unfinished"></translation>
     </message>
@@ -256,7 +256,7 @@
     </message>
     <message>
         <location filename="../app/qml/DeskPartInfo.qml" line="19"/>
-        <source>Ein Potentiometer (kurz Poti) ist ein Drehwiderstand mit 10 kΩ. Mit dem Drehknopf darüber verstellst du ihn; der Leuchtring zeigt die Stellung.</source>
+        <source>Ein Potentiometer – auch Drehregler oder kurz Poti genannt – ist ein Drehwiderstand mit 10 kΩ. Mit dem Drehknopf darüber verstellst du ihn; der Leuchtring zeigt die Stellung.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -281,7 +281,7 @@
     </message>
     <message>
         <location filename="../app/qml/DeskPartInfo.qml" line="24"/>
-        <source>Als Spannungsteiler: a an 0V, b an V+. Am Schleifer s greifst du dann eine Spannung ab, die du mit dem Knopf einstellst.</source>
+        <source>Als Spannungsteiler: V+ an a, 0V an b. Am Schleifer s greifst du dann eine Spannung ab, die du mit dem Knopf einstellst. Drehst du auf, wird sie kleiner.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

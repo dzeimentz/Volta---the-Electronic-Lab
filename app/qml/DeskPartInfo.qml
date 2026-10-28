@@ -16,12 +16,12 @@ Popup {
     readonly property var entry: {
         const pot = (n) => ({
             title: qsTr("Potentiometer %1").arg(n),
-            intro: qsTr("Ein Potentiometer (kurz Poti) ist ein Drehwiderstand mit 10 kΩ. Mit dem Drehknopf darüber verstellst du ihn; der Leuchtring zeigt die Stellung."),
+            intro: qsTr("Ein Potentiometer – auch Drehregler oder kurz Poti genannt – ist ein Drehwiderstand mit 10 kΩ. Mit dem Drehknopf darüber verstellst du ihn; der Leuchtring zeigt die Stellung."),
             fields: [["P" + n + "a", qsTr("Anschluss a: ein Ende der Widerstandsbahn.")],
                      ["P" + n + "s", qsTr("Schleifer: gleitet beim Drehen über die Bahn.")],
                      ["P" + n + "b", qsTr("Anschluss b: das andere Ende der Bahn.")]],
             tips: [qsTr("Drehst du auf, wandert der Schleifer von a nach b: Zwischen a und s wird der Widerstand größer, zwischen s und b kleiner."),
-                   qsTr("Als Spannungsteiler: a an 0V, b an V+. Am Schleifer s greifst du dann eine Spannung ab, die du mit dem Knopf einstellst."),
+                   qsTr("Als Spannungsteiler: V+ an a, 0V an b. Am Schleifer s greifst du dann eine Spannung ab, die du mit dem Knopf einstellst. Drehst du auf, wird sie kleiner."),
                    qsTr("Als regelbarer Widerstand nutzt du nur a und s.")]
         })
         switch (part) {
