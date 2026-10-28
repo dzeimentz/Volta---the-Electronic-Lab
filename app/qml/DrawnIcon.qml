@@ -1,19 +1,20 @@
 // Gezeichnete Symbole statt Schriftzeichen: Menue, Pfeil auf/ab, Schliessen, Rueckgaengig, Wiederholen, Loeschen,
-// Stift. Diese Zeichen (U+2630, U+25BE, U+25B4, U+2715, U+21B6/7, U+232B, U+270E) fehlen in den Schriften, die Qt auf
+// Stift, Stern. Diese Zeichen (U+2630, U+25BE, U+25B4, U+2715, U+21B6/7, U+232B, U+270E, U+2605/6) fehlen in den Schriften, die Qt auf
 // Android nutzt (leere Kaestchen); gezeichnet sehen sie auf allen Geraeten gleich aus. Zeichenflaeche 24 x 24.
 import QtQuick
 import QtQuick.Shapes
 
 Item {
     id: icon
-    property string kind: "menu" // menu, down, up, left, right, close, undo, redo, backspace, pencil, trash, fit
+    property string kind: "menu" // menu, down, up, left, right, close, undo, redo, backspace, pencil, trash, fit,
+                                 // star (gefuellt), starOutline
     property color color: "white"
     property real size: 20
 
     implicitWidth: size
     implicitHeight: size
 
-    readonly property bool filled: kind === "down" || kind === "up" || kind === "left" || kind === "right"
+    readonly property bool filled: kind === "down" || kind === "up" || kind === "left" || kind === "right" || kind === "star"
     readonly property string path: ({
         menu: "M4 6 H20 M4 12 H20 M4 18 H20",
         down: "M6 9 L18 9 L12 16 Z",
@@ -26,7 +27,9 @@ Item {
         backspace: "M8 6 H20 V18 H8 L3 12 Z M11 9 L17 15 M17 9 L11 15",
         pencil: "M4 20 L5 15 L16 4 L20 8 L9 19 Z M14 6 L18 10",
         trash: "M4 7 H20 M9 7 V4 H15 V7 M6 7 L7 20 H17 L18 7 M10 11 V17 M14 11 V17",
-        fit: "M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15 M8 8 H16 V16 H8 Z"
+        fit: "M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15 M8 8 H16 V16 H8 Z",
+        star: "M12.0 2.3 L14.6 9.2 L22.0 9.6 L16.2 14.2 L18.2 21.3 L12.0 17.2 L5.8 21.3 L7.8 14.2 L2.0 9.6 L9.4 9.2 Z",
+        starOutline: "M12.0 2.3 L14.6 9.2 L22.0 9.6 L16.2 14.2 L18.2 21.3 L12.0 17.2 L5.8 21.3 L7.8 14.2 L2.0 9.6 L9.4 9.2 Z"
     })[kind] || ""
 
     Shape {

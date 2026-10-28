@@ -718,12 +718,12 @@ Item {
                             indicator: null
                             contentItem: Row {
                                 spacing: 10
-                                Label {
+                                DrawnIcon { // gezeichnet: ★/☆ fehlen in den Schriften von Qt auf Android
+                                    objectName: "wireFavorite_" + colorItem.modelData
                                     anchors.verticalCenter: parent.verticalCenter
-                                    width: 22
-                                    text: colorItem.checked ? "★" : "☆"
+                                    size: 22
+                                    kind: colorItem.checked ? "star" : "starOutline"
                                     color: colorItem.checked ? Theme.solderAmber : "#8A96A3"
-                                    font.pixelSize: 20
                                 }
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
