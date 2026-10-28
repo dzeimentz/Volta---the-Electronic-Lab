@@ -89,7 +89,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `led_rot`, `led_gruen`, `led_gelb`, `led_blau` | Shockley-Diode + Bahnwiderstand (innerer Knoten); Is aus `uf_V` bei 20 mA; n = 2 (blau 3), Rs = 5 Ω (blau 10 Ω); Uf rot 1,9 / gelb 2,0 / gruen 2,1 / blau 3,1 V | Imax 20 mA dauerhaft, thermisch | `Destroyed` |
 | `diode_si`, `diode_ge` | Shockley-Diode + Bahnwiderstand; Si wie 1N4148 (0,70 V bei 10 mA, n = 1,75, Rs = 0,57 Ω), Ge 0,35 V bei 10 mA | Verlustleistung | `Destroyed` |
 | `widerstand` | linear, E12-Werte, Farbringe | 0,25 W | `Destroyed` |
-| `potentiometer` | zwei Teilwiderstaende, Stellung 0..1 | 0,25 W | – |
+| `potentiometer` | zwei Teilwiderstaende, Stellung 0..1 | 0,25 W anteilig zur Bahnlaenge, ein kurzes Bahnstueck mindestens ein Viertel davon (Waerme verteilt sich ueber Traeger und Gehaeuse); mehr als das 4-Fache 1 s lang oder mehr als das 16-Fache sofort -> Bahn offen. Dimmer mit 470 Ω (Experiment 2.18) bleibt in jeder Stellung unter der Grenze | `Destroyed` |
 | `kondensator`, `elko` | C als Spannungszweig (Rueckwaerts-Euler; im Arbeitspunkt Quelle der Ladung mit 10 µs/C) mit Leckwiderstand (Folie 1 GΩ, Elko 10 MΩ); Elko gepolt, 16 V | Verpolung > 1 V oder Ueberspannung laenger als 0,2 s -> offen | `Destroyed` |
 | `leitung` (`Wire`) | 0,01 Ω | glueht ab 1 A (nur Anzeige), wird nie zerstoert | – |
 | `spule`, `relais` | L mit R; Relaiskontakt ab Ansprechstrom mit Hysterese | – | `RelayClick` |

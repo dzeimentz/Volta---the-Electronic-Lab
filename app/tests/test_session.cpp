@@ -159,6 +159,51 @@ private slots:
         QVERIFY(s->reading("D1")->destroyed);
     }
 
+    // Fehlerbericht 10/2026: Dimmer aus Experiment 2.18 (470 Ohm, LED, Drehregler zwischen a und s) brannte bei
+    // Stellung 2 % den Drehregler durch; die LED blieb dunkel, ohne dass etwas als kaputt angezeigt wurde
+    void dimmerNearEndStop() {
+        for (double pos : {0.0, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.05, 0.1}) {
+            auto s = session();
+            s->setMainSwitch(true);
+            QVERIFY(s->addPart("widerstand", "A3", Orientation::Horizontal, Span::Short, nullptr, 470.0));
+            QVERIFY(s->addPart("led_rot", "A4", Orientation::Vertical, Span::Short));
+            QVERIFY(s->addWire("P:+9V", "A3", "rot"));
+            QVERIFY(s->addWire("B4", "P:P1a", "blau"));
+            QVERIFY(s->addWire("P:P1s", "P:0V", "schwarz"));
+            s->setPot(1, pos);
+            run(*s, 2.0);
+            const auto* pot = s->deskReading(model::desk_id::kPot1);
+            QVERIFY(pot);
+            QVERIFY2(!pot->destroyed && !s->reading("D1")->destroyed, qPrintable(QString::number(pos)));
+            QVERIFY(s->reading("D1")->currentA > 4e-3); // leuchtet
+        }
+    }
+
+    // Durchgebrannter Drehregler: Fehlersuche nennt ihn an seinen Pultfeldern, Reparieren ist ein Befehl
+    void burntPotIsFoundAndRepaired() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addWire("P:+9V", "P:P1a", "rot"));
+        QVERIFY(s->addWire("P:0V", "P:P1s", "schwarz"));
+        s->setPot(1, 0.001); // 9 V an 10 Ohm Bahn
+        run(*s, 0.2);
+        const auto* pot = s->deskReading(model::desk_id::kPot1);
+        QVERIFY(pot && pot->destroyed);
+        auto f = s->checkCircuit();
+        const auto it = std::find_if(f.begin(), f.end(),
+                                     [](const model::CircuitFinding& x) { return x.kind == model::CircuitFinding::Kind::Broken; });
+        QVERIFY(it != f.end());
+        QCOMPARE(it->anchors, (std::vector<std::string>{"P:P1a", "P:P1s", "P:P1b"}));
+        s->setPot(1, 0.5);   // Ursache beseitigen: 9 V an 5 kOhm
+        QVERIFY(s->repairPot(1));
+        QCOMPARE(s->undoStack().undoText(), QStringLiteral("Drehregler P1 reparieren"));
+        run(*s, 0.2);
+        QVERIFY(!s->deskReading(model::desk_id::kPot1)->destroyed);
+        s->undoStack().undo(); // Reparieren rueckgaengig: wieder kaputt
+        run(*s, 0.05);
+        QVERIFY(s->deskReading(model::desk_id::kPot1)->destroyed);
+    }
+
     void repairIsACommand() {
         auto s = session();
         s->setMainSwitch(true);

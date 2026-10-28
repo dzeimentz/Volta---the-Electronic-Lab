@@ -108,6 +108,8 @@ public:
     bool replaceMeterFuse();
     // Lautsprecher des Pults reparieren (Befehl, wie Reparieren eines Bauteils)
     bool repairSpeaker();
+    // Drehregler P1/P2 des Pults reparieren (Befehl, wie Reparieren eines Bauteils)
+    bool repairPot(int which);
     // Messwert eines Pultbauteils (z. B. desk_id::kMeter) aus dem aktuellen Schnappschuss
     const core::ComponentReading* deskReading(const std::string& deskId) const;
     // Messwerte eines Moduls (Netlist::moduleMain) aus dem aktuellen Schnappschuss

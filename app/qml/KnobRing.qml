@@ -1,7 +1,8 @@
 // Drehregler mit Lichtring (docs/ui-spec.md, Bedienpult): 16 Segmente ueber 270 Grad, Luecke unten; die Segmente
 // leuchten vom linken Anschlag bis zur Stellung, die uebrigen bleiben als blasse Umrisse sichtbar.
 // Bedienung: Kreisbewegung um den Knopf oder Wischen nach oben/unten, Mausrad, Doppeltippen = Mitte.
-// Die Stellung ist intern stufenlos; die Segmente runden nur die Anzeige.
+// Die Stellung ist intern stufenlos; die Segmente runden nur die Anzeige. Durchgebrannt: grau, Rauch steigt auf,
+// »kaputt« unter dem Knopf; Antippen repariert (repairRequested), Drehen ist dann gesperrt.
 import QtQuick
 import QtQuick.Shapes
 
@@ -9,7 +10,10 @@ Item {
     id: knob
     property real value: 0.5 // 0 = linker Anschlag, 1 = rechter Anschlag
     property string label
+    property bool broken: false
+    property bool overloaded: false
     signal moved(real value)
+    signal repairRequested()
 
     readonly property int segments: 16
     readonly property int lit: Math.round(value * segments)
@@ -38,8 +42,8 @@ Item {
                 width: 8
                 height: 14
                 radius: 3
-                color: seg.index < knob.lit ? Theme.signalOrange : "transparent"
-                border.color: seg.index < knob.lit ? Theme.solderAmber : "#7F93A8"
+                color: knob.broken ? "transparent" : (seg.index < knob.lit ? Theme.signalOrange : "transparent")
+                border.color: knob.broken ? Theme.destroyed : (seg.index < knob.lit ? Theme.solderAmber : "#7F93A8")
                 border.width: 1.5
             }
         }
@@ -50,8 +54,8 @@ Item {
         id: cap
         anchors.centerIn: parent
         width: 52; height: 52; radius: 26
-        color: "#2A4A6E"
-        border.color: "#0E2238"
+        color: knob.broken ? Theme.destroyed : "#2A4A6E"
+        border.color: knob.overloaded && !knob.broken ? Theme.signalOrange : "#0E2238"
         border.width: 2
         rotation: -135 + knob.value * 270
         Rectangle {
@@ -62,10 +66,34 @@ Item {
         }
     }
 
+    // Rauch ueber dem durchgebrannten Drehregler (wie bei Bauteilen)
+    Repeater {
+        model: knob.broken ? 3 : 0
+        Rectangle {
+            id: puff
+            required property int index
+            width: 12 + index * 4; height: width; radius: width / 2
+            color: "#8C8C8C"
+            x: knob.width / 2 - width / 2 + (index - 1) * 8
+            y: cap.y
+            SequentialAnimation on y {
+                loops: Animation.Infinite
+                PauseAnimation { duration: puff.index * 400 }
+                NumberAnimation { from: cap.y; to: cap.y - 40; duration: 1600 }
+            }
+            SequentialAnimation on opacity {
+                loops: Animation.Infinite
+                PauseAnimation { duration: puff.index * 400 }
+                NumberAnimation { from: 0.8; to: 0; duration: 1600 }
+            }
+        }
+    }
+
     Text {
         anchors.centerIn: parent
         anchors.verticalCenterOffset: 40
-        text: knob.label
+        // kaputt: Hinweis zusaetzlich als Text (Farbe nie allein)
+        text: knob.broken ? qsTr("kaputt – antippen") : knob.label
         color: "white"
         font.pixelSize: Math.round((13) * Theme.fontScale)
         font.bold: true
@@ -77,6 +105,7 @@ Item {
     DragHandler {
         id: drag
         target: null
+        enabled: !knob.broken
         onActiveChanged: if (active) { knob.startValue = knob.value; knob.startPos = centroid.position }
         onCentroidChanged: {
             if (!active) return
@@ -94,12 +123,14 @@ Item {
         }
     }
     WheelHandler {
+        enabled: !knob.broken
         onWheel: (event) => knob.setValue(knob.value + (event.angleDelta.y > 0 ? 1 : -1) / 32)
     }
     TapHandler {
-        onDoubleTapped: knob.setValue(0.5)
+        onTapped: if (knob.broken) knob.repairRequested()
+        onDoubleTapped: if (!knob.broken) knob.setValue(0.5)
     }
 
     Accessible.role: Accessible.Dial
-    Accessible.name: knob.label
+    Accessible.name: knob.broken ? qsTr("%1 kaputt – antippen zum Reparieren").arg(knob.label) : knob.label
 }

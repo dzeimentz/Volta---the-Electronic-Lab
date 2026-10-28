@@ -611,6 +611,11 @@ bool LabSession::replaceMeterFuse() {
                 {{desk_id::kMeter, core::ComponentState{}}});
 }
 
+bool LabSession::repairPot(int which) {
+    return push(QCoreApplication::translate("Befehl", "Drehregler P%1 reparieren").arg(which == 2 ? 2 : 1), m_board,
+                BoardCommand::NoMerge, {}, {{which == 2 ? desk_id::kPot2 : desk_id::kPot1, core::ComponentState{}}});
+}
+
 bool LabSession::repairSpeaker() {
     return push(QCoreApplication::translate("Befehl", "Lautsprecher reparieren"), m_board, BoardCommand::NoMerge, {},
                 {{desk_id::kSpeaker, core::ComponentState{}}});
@@ -646,7 +651,7 @@ bool LabSession::speakerReading(core::ComponentReading& out) const {
 
 std::vector<CircuitFinding> LabSession::checkCircuit() const {
     return model::checkCircuit({m_board, m_catalog, [this](const std::string& id) -> const core::ComponentReading* {
-                                    return id == desk_id::kBattery ? deskReading(id) : reading(id);
+                                    return id.rfind("PULT.", 0) == 0 ? deskReading(id) : reading(id);
                                 }});
 }
 

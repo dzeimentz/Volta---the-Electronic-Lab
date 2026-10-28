@@ -103,6 +103,9 @@ das iPad).
 - **Drehregler mit Lichtring**: 16 Segmente auf 270°, Luecke unten; Segmente vom linken Anschlag bis zur Stellung
   leuchtend (Akzentfarbe Signal Orange #FF6B1A / Solder Amber #FFB07A), Rest als blasse Umrisse. Stellung intern
   stufenlos. Ab Stufe 3 zeigt langer Druck Teilwiderstand in Ω und Stellung in %.
+  Durchgebrannter Drehregler (`KnobRing.qml`): Lichtring und Knopf grau, Rauch steigt auf, statt des Namens »kaputt – antippen«;
+  Drehen gesperrt, Antippen repariert ihn (Befehl »Drehregler P1 reparieren«). Heisser Drehregler: oranger Knopfrand. Die
+  Fehlersuche nennt durchgebrannte und heisse Drehregler sowie einen kaputten Lautsprecher an ihren Pultfeldern.
 - **Lautsprecher mit Leuchtring (Klanganzeige)**: Lautsprechersymbol im geschlossenen Ring.
   - Tonhoehe -> Farbton, logarithmisch: 100 Hz Gelb (#FFD400) ueber Orange bis ≥ 5 kHz Rot (#E8221B).
   - Signalstaerke -> Helligkeit; Stille -> dunkel.

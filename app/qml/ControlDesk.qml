@@ -20,6 +20,16 @@ Rectangle {
     property string highlightGroup: ""
     signal groupTapped(string name)
     signal infoRequested(string name)
+    // Zustand der Drehregler (durchgebrannt, ueberlastet) aus der laufenden Simulation
+    property var pot1: ({})
+    property var pot2: ({})
+    Connections {
+        target: desk.controller
+        function onStateChanged() {
+            desk.pot1 = desk.controller.potState(1)
+            desk.pot2 = desk.controller.potState(2)
+        }
+    }
 
     color: Theme.desk
     radius: 10
@@ -204,7 +214,10 @@ Rectangle {
         y: 8
         label: qsTr("Potentiometer 1")
         value: desk.controller.pot1
+        broken: desk.pot1.destroyed === true
+        overloaded: desk.pot1.overloaded === true
         onMoved: (v) => desk.controller.pot1 = v
+        onRepairRequested: desk.controller.repairPot(1)
     }
     KnobRing {
         objectName: "knobP2"
@@ -213,7 +226,10 @@ Rectangle {
         y: 8
         label: qsTr("Potentiometer 2")
         value: desk.controller.pot2
+        broken: desk.pot2.destroyed === true
+        overloaded: desk.pot2.overloaded === true
         onMoved: (v) => desk.controller.pot2 = v
+        onRepairRequested: desk.controller.repairPot(2)
     }
 
     // Schalter: Kippschalter (Knebel oben = ein, unten = aus), Beschriftung darunter

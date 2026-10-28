@@ -431,6 +431,9 @@ public:
     // Klanganzeige: frequencyHz, level 0..1, pulses (Zaehler), overloaded, destroyed
     Q_INVOKABLE QVariantMap speakerState() const;
     Q_INVOKABLE bool repairSpeaker(); // Befehl
+    // Drehregler P1/P2 des Pults: {destroyed, overloaded} (leer ohne gueltige Messung); Reparieren ist ein Befehl
+    Q_INVOKABLE QVariantMap potState(int which) const;
+    Q_INVOKABLE bool repairPot(int which);
 
     bool guideActive() const { return m_guideActive; }
     void setGuideActive(bool on);

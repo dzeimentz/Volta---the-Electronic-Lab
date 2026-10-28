@@ -321,6 +321,31 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
         }
     }
 
+    // Pultbauteile: durchgebrannter oder heisser Drehregler, kaputter Lautsprecher (keine Bauteil-ID, Stelle = Pultfelder)
+    if (board.desk.mainSwitch && in.reading) {
+        for (int k = 1; k <= 2; ++k) {
+            const core::ComponentReading* r = in.reading(k == 1 ? desk_id::kPot1 : desk_id::kPot2);
+            if (!r) continue;
+            const std::string n = std::to_string(k), p = "P:P" + n;
+            if (r->destroyed)
+                broken.push_back({CircuitFinding::Kind::Broken, "", {p + "a", p + "s", p + "b"},
+                                  msg(QT_TRANSLATE_NOOP("Meldung", "Drehregler P%1 ist durchgebrannt. Was hätte den "
+                                                                   "Strom durch ihn begrenzen können? Tippe auf den "
+                                                                   "Drehknopf, um ihn zu reparieren."),
+                                      {n})});
+            else if (r->overloaded)
+                overload.push_back({CircuitFinding::Kind::Overload, "", {p + "a", p + "s", p + "b"},
+                                    msg(QT_TRANSLATE_NOOP("Meldung", "Drehregler P%1 wird sehr warm. Fließt durch ihn "
+                                                                     "zu viel Strom?"),
+                                        {n})});
+        }
+        if (const core::ComponentReading* r = in.reading(desk_id::kSpeaker); r && r->destroyed)
+            broken.push_back({CircuitFinding::Kind::Broken, "", {"P:LS1", "P:LS2"},
+                              msg(QT_TRANSLATE_NOOP("Meldung", "Der Lautsprecher ist kaputt gegangen. Was hätte den "
+                                                               "Strom durch ihn begrenzen können? Tippe auf den "
+                                                               "Lautsprecher, um ihn zu reparieren."))});
+    }
+
     std::vector<CircuitFinding> out;
     for (auto* list : {&shorts, &broken, &reversed, &noResistor, &overload, &bridged, &dangling, &looseWires, &noSupply,
                        &openSwitch, &deadEnd, &mainSwitch})

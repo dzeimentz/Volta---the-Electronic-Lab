@@ -13,6 +13,10 @@ Potentiometer::Potentiometer(std::string id, NodeId a, NodeId wiper, NodeId b, P
     if (!std::isfinite(m_params.ohm) || m_params.ohm < 1.0) m_params.ohm = def.ohm;
     if (!std::isfinite(m_params.pmaxW) || m_params.pmaxW <= 0.0) m_params.pmaxW = def.pmaxW;
     if (!std::isfinite(m_params.minOhm) || m_params.minOhm < kMinOhm) m_params.minOhm = def.minOhm;
+    if (!std::isfinite(m_params.minShare) || m_params.minShare <= 0.0 || m_params.minShare > 1.0)
+        m_params.minShare = def.minShare;
+    if (!std::isfinite(m_params.overloadFailS) || m_params.overloadFailS < 0.0) m_params.overloadFailS = def.overloadFailS;
+    if (!std::isfinite(m_params.instantFactor) || m_params.instantFactor < 4.0) m_params.instantFactor = def.instantFactor;
     setPosition(position);
     applyPosition();
 }
@@ -47,7 +51,8 @@ double Potentiometer::terminalCurrent(const SolutionView& x, std::size_t t) cons
     return iSB - iAS;
 }
 
-void Potentiometer::thermal(const SolutionView& x, double /*dtS*/) noexcept {
+void Potentiometer::thermal(const SolutionView& x, double dtS) noexcept {
+    m_lastDtS = dtS;
     const double vas = x.voltage(terminal(0)) - x.voltage(terminal(1));
     const double vsb = x.voltage(terminal(1)) - x.voltage(terminal(2));
     m_lastPowerAS = m_destroyed ? 0.0 : vas * vas * m_gAS;
@@ -56,18 +61,32 @@ void Potentiometer::thermal(const SolutionView& x, double /*dtS*/) noexcept {
 
 void Potentiometer::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
     if (isDestroyed()) return;
-    // Belastbarkeit anteilig zur Bahnlaenge; ein kurzes Bahnstueck verkraftet nur einen Bruchteil von pmaxW.
-    const double limAS = m_params.pmaxW * std::max(m_position, 0.02);
-    const double limSB = m_params.pmaxW * std::max(1.0 - m_position, 0.02);
-    m_overloaded = m_lastPowerAS > limAS || m_lastPowerSB > limSB;
-    // Grob ueberlastete Bahn brennt sofort durch (vereinfachte Thermik; Kalibrierung Phase 0)
-    if (m_lastPowerAS > 4.0 * limAS || m_lastPowerSB > 4.0 * limSB) destroy(events, index, timeS);
+    // Belastbarkeit anteilig zur Bahnlaenge, fuer kurze Bahnstuecke mindestens minShare (Waerme verteilt sich)
+    const double limAS = m_params.pmaxW * std::max(m_position, m_params.minShare);
+    const double limSB = m_params.pmaxW * std::max(1.0 - m_position, m_params.minShare);
+    const double ratio = std::max(m_lastPowerAS / limAS, m_lastPowerSB / limSB);
+    m_overloaded = ratio > 1.0;
+    // Anhaltend stark ueberlastete Bahn brennt durch, grob ueberlastete sofort (vereinfachte Thermik)
+    m_overloadS = ratio > 4.0 ? m_overloadS + m_lastDtS : 0.0;
+    if (ratio > m_params.instantFactor || (ratio > 4.0 && m_overloadS >= m_params.overloadFailS - 1e-9))
+        destroy(events, index, timeS);
 }
 
 ComponentReading Potentiometer::read(const SolutionView& x) const noexcept {
     ComponentReading r = ComponentModel::read(x);
     r.level = m_position; // Stellung fuer den Lichtring
     return r;
+}
+
+ComponentState Potentiometer::saveState() const noexcept {
+    ComponentState s = ComponentModel::saveState();
+    s.internal[0] = m_overloadS;
+    return s;
+}
+
+void Potentiometer::restoreState(const ComponentState& state) noexcept {
+    ComponentModel::restoreState(state);
+    m_overloadS = std::isfinite(state.internal[0]) ? state.internal[0] : 0.0;
 }
 
 } // namespace volta::core

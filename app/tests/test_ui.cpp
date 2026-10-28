@@ -1693,6 +1693,25 @@ private slots:
         m_lab->setProperty("deskSwitch", false);
     }
 
+    // Durchgebrannter Drehregler: grau mit »kaputt – antippen«, Antippen repariert ihn
+    void burntPotShownAndRepaired() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        m_lab->setMainSwitch(true);
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("P:P1a"), QStringLiteral("rot")));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:0V"), QStringLiteral("P:P1s"), QStringLiteral("schwarz")));
+        m_lab->setPot(1, 0.001);
+        QQuickItem* knob = item(QStringLiteral("knobP1"));
+        QVERIFY(knob);
+        QTRY_VERIFY(knob->property("broken").toBool());
+        m_lab->setPot(1, 0.5);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(knob));
+        QTRY_VERIFY(!knob->property("broken").toBool());
+        QCOMPARE(m_lab->pot1(), 0.5);
+        m_lab->setMainSwitch(false);
+        m_lab->clearBoard();
+    }
+
     void wireColorAutoBadge() {
         m_window->setProperty("inLab", true);
         m_lab->startFreeLab();

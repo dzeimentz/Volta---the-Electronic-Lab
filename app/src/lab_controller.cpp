@@ -1837,6 +1837,17 @@ bool LabController::replaceMeterFuse() { return result(m_session->replaceMeterFu
 
 bool LabController::repairSpeaker() { return result(m_session->repairSpeaker()); }
 
+QVariantMap LabController::potState(int which) const {
+    QVariantMap m;
+    const core::ComponentReading* r = m_session->deskReading(which == 2 ? model::desk_id::kPot2 : model::desk_id::kPot1);
+    if (!r) return m;
+    m.insert(QStringLiteral("destroyed"), r->destroyed);
+    m.insert(QStringLiteral("overloaded"), r->overloaded);
+    return m;
+}
+
+bool LabController::repairPot(int which) { return result(m_session->repairPot(which)); }
+
 QVariantMap LabController::speakerState() const {
     QVariantMap m;
     core::ComponentReading reading;

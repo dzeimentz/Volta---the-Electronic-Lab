@@ -86,6 +86,11 @@
     </message>
     <message>
         <location filename="../app/src/model/lab_session.cpp" line="615"/>
+        <source>Drehregler P%1 reparieren</source>
+        <translation>Dréiregler P%1 reparéieren</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/lab_session.cpp" line="620"/>
         <source>Lautsprecher reparieren</source>
         <translation>Lautsprecher reparéieren</translation>
     </message>
@@ -106,70 +111,70 @@
 <context>
     <name>ControlDesk</name>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="58"/>
+        <location filename="../app/qml/ControlDesk.qml" line="68"/>
         <source>Was ist das?</source>
         <translation>Wat ass dat?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="169"/>
+        <location filename="../app/qml/ControlDesk.qml" line="179"/>
         <source>Batterie</source>
         <translation>Batterie</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="175"/>
-        <location filename="../app/qml/ControlDesk.qml" line="175"/>
-        <location filename="../app/qml/ControlDesk.qml" line="175"/>
+        <location filename="../app/qml/ControlDesk.qml" line="185"/>
+        <location filename="../app/qml/ControlDesk.qml" line="185"/>
+        <location filename="../app/qml/ControlDesk.qml" line="185"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="178"/>
+        <location filename="../app/qml/ControlDesk.qml" line="188"/>
         <source>Batteriespannung</source>
         <translation>Batteriespannung</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="187"/>
+        <location filename="../app/qml/ControlDesk.qml" line="197"/>
         <source>Hauptschalter</source>
         <translation>Haaptschalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="192"/>
+        <location filename="../app/qml/ControlDesk.qml" line="202"/>
         <source>Ein</source>
         <translation>Un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="192"/>
+        <location filename="../app/qml/ControlDesk.qml" line="202"/>
         <source>Aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="205"/>
+        <location filename="../app/qml/ControlDesk.qml" line="215"/>
         <source>Potentiometer 1</source>
         <translation>Potentiometer 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="214"/>
+        <location filename="../app/qml/ControlDesk.qml" line="227"/>
         <source>Potentiometer 2</source>
         <translation>Potentiometer 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="251"/>
+        <location filename="../app/qml/ControlDesk.qml" line="267"/>
         <source>ein</source>
         <translation>un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="256"/>
+        <location filename="../app/qml/ControlDesk.qml" line="272"/>
         <source>aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="263"/>
-        <location filename="../app/qml/ControlDesk.qml" line="270"/>
+        <location filename="../app/qml/ControlDesk.qml" line="279"/>
+        <location filename="../app/qml/ControlDesk.qml" line="286"/>
         <source>Schalter</source>
         <translation>Schalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="286"/>
+        <location filename="../app/qml/ControlDesk.qml" line="302"/>
         <source>Lautsprecher</source>
         <translation>Lautsprecher</translation>
     </message>
@@ -1526,6 +1531,19 @@
     </message>
 </context>
 <context>
+    <name>KnobRing</name>
+    <message>
+        <location filename="../app/qml/KnobRing.qml" line="96"/>
+        <source>kaputt – antippen</source>
+        <translation>futti – untippen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/KnobRing.qml" line="135"/>
+        <source>%1 kaputt – antippen zum Reparieren</source>
+        <translation>%1 futti – untippe fir ze reparéieren</translation>
+    </message>
+</context>
+<context>
     <name>Lab</name>
     <message>
         <location filename="../app/qml/Lab.qml" line="650"/>
@@ -2215,6 +2233,21 @@
         <location filename="../app/src/model/circuit_check.cpp" line="317"/>
         <source>%1 wird sehr warm. Fließt durch %1 zu viel Strom?</source>
         <translation>%1 gëtt ganz waarm. Fléisst duerch %1 ze vill Stroum?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="332"/>
+        <source>Drehregler P%1 ist durchgebrannt. Was hätte den Strom durch ihn begrenzen können? Tippe auf den Drehknopf, um ihn zu reparieren.</source>
+        <translation>Den Dréiregler P%1 ass duerchgebrannt. Wat hätt de Stroum duerch hie begrenze kënnen? Tipp op den Dréiknapp, fir en ze reparéieren.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="338"/>
+        <source>Drehregler P%1 wird sehr warm. Fließt durch ihn zu viel Strom?</source>
+        <translation>Den Dréiregler P%1 gëtt ganz waarm. Fléisst ze vill Stroum duerch hien?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="344"/>
+        <source>Der Lautsprecher ist kaputt gegangen. Was hätte den Strom durch ihn begrenzen können? Tippe auf den Lautsprecher, um ihn zu reparieren.</source>
+        <translation>De Lautsprecher ass futti gaangen. Wat hätt de Stroum duerch hie begrenze kënnen? Tipp op de Lautsprecher, fir en ze reparéieren.</translation>
     </message>
 </context>
 <context>
