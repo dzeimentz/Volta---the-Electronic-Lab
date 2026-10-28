@@ -267,8 +267,11 @@ das iPad).
   Konfigurationsschluessel fuer Schulen, Aenderungsliste. »Was ist neu« nach Updates. Kontexthilfe, Volltextsuche.
 - Umgesetzt (10/2026, `HelpDialog.qml`): Hilfe mit Tick, elf Kapitel fuer Kinder (Willkommen, Bauteile stecken,
   Leitungen, Bedienpult, Rueckgaengig und Loeschen, Messen, Werkzeugkasten, Experimente, Wenn etwas nicht klappt,
-  Sicher experimentieren, Oben rechts), je mit Tick in passender Stimmung; Kapitelknoepfe zum Springen. Erwachsenenteil
-  als Verweis in den Elternbereich (PIN) mit Tastenkuerzeln. Aufruf: »?« oben rechts (Startseite, Forscherheft), im
+  Sicher experimentieren, Oben rechts), je mit Tick in passender Stimmung; Kapitelknoepfe zum Springen. Jedes Kapitel
+  ausser »Sicher experimentieren« zeigt ein Teilbild der Oberflaeche mit orange markierten Knoepfen (z. B. Werkzeugleiste
+  mit dem Werkzeugkasten-Symbol und daneben der geoeffnete Werkzeugkasten), je Sprache aus der App:
+  `tools/manual_pdfs.py --app-bilder` -> `app/resources/help/<kapitel>_<sprache>.jpg` (760 x 300). Erwachsenenteil
+  als Verweis in die Einstellungen (PIN, abschaltbar) mit Tastenkuerzeln. Aufruf: »?« oben rechts (Startseite, Forscherheft), im
   Labor im Menue (Leiste voll), »Zeig mir, wie Volta funktioniert« unter Ticks Begruessung. Offen: Uebungsplatten mit
   Aufgaben, Rundgang beim ersten Start, »Was ist neu«, Volltextsuche.
 - Werkzeugkasten: verdeckte Reiter zeigt ein pulsierender Pfeil (rechts bzw. links), Antippen rollt die Leiste.

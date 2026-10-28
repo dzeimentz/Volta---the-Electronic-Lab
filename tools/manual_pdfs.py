@@ -725,8 +725,12 @@ GUIDE_SCENES = {
     "geloest": {"VOLTA_DEMO_SOLVE": "1", "VOLTA_DEMO_EXP": "volta1.1.1", "VOLTA_SCREENSHOT_S": "5"},
     "beobachten": {"VOLTA_DEMO_SOLVE": "1", "VOLTA_DEMO_EXP": "volta1.1.1", "VOLTA_DEMO_FINISH": "2",
                    "VOLTA_SCREENSHOT_S": "6"},
+    "messgeraet": {"VOLTA_DEMO_METER": "v", "VOLTA_SCREENSHOT_S": "4"},
+    "werkzeug": {"VOLTA_DEMO_TOOLBOX": "0", "VOLTA_SCREENSHOT_S": "4"},
+    "fehlersuche": {"VOLTA_DEMO_TOOLBOX": "4", "VOLTA_SCREENSHOT_S": "4"},
 }
 APP_GUIDE = ROOT / "app" / "resources" / "guide"
+APP_HELP = ROOT / "app" / "resources" / "help"
 GUIDE_STEPS = 8
 GUIDE_SIZE = (880, 440)
 GUIDE_JOIN = {6}   # Schritte mit Pfeil zwischen den Ausschnitten (sonst nur Abstand)
@@ -767,7 +771,7 @@ def _step_panels(n, shots):
         return [("geloest", (266, 330, 492, 470), [("box", (334, 350, 416, 428))]),
                 ("geloest", (944, 700, 1280, 796), [("box", (950, 709, 1270, 769))])]
     if n == 7:   # Beobachtung antippen
-        b = panel_buttons(shots["beobachten"], 300)
+        b = panel_buttons(shots["beobachten"], 200)
         return [("beobachten", (944, 108, 1280, b[-1][1] + 16), [("box", (950, b[0][0] - 2, 1270, b[-1][1] + 2))])]
     if n == 8:   # Schritt fuer Schritt, Tipp, Rueckgaengig
         b = panel_buttons(shots["aufbau"], 520)[-2:]
@@ -775,6 +779,46 @@ def _step_panels(n, shots):
                 ("aufbau", (944, b[0][0] - 22, 1280, b[-1][1] + 22),
                  [("box", (950, y0 - 2, 1270, y1 + 2)) for y0, y1 in b])]
     raise ValueError(n)
+
+
+# Hilfe (HelpDialog.qml): ein Bild je Kapitel, ruhiger als die Kurzanleitung (kleiner, wenige Rahmen)
+HELP_SIZE = (760, 300)
+HELP_JOIN = {"werkzeug"}
+
+
+def _help_panels(key, shots):
+    if key == "willkommen":   # Startseite: freies Labor, Forscherheft, Lernpfad
+        return [("start", (6, 240, 980, 552), [("box", (340, 247, 644, 355)), ("box", (22, 369, 326, 477)),
+                                                 ("box", (12, 486, 150, 542))])]
+    if key == "stecken":      # Bauteilfach -> Felder
+        return [("hilfe", (0, 228, 830, 540), [("box", (5, 240, 123, 309)), ("box", (265, 343, 487, 437)),
+                                               ("arrow", (128, 286), (258, 376))])]
+    if key == "leitungen":
+        return [("geloest", (266, 236, 512, 470), [("box", (283, 243, 356, 316)), ("box", (355, 243, 428, 316))])]
+    if key == "pult":         # Spannung waehlen, Hauptschalter
+        return [("geloest", (262, 78, 930, 330), [("box", (294, 114, 412, 170)), ("box", (298, 170, 422, 218))])]
+    if key == "rueckgaengig":  # Pfeile oben, Muelleimer
+        return [("geloest", (419, 0, 543, 60), [("box", (423, 1, 537, 55))]),
+                ("geloest", (740, 566, 815, 640), [("box", (747, 573, 808, 634))])]
+    if key == "messen":       # V A Ohm, Schaltplan, Zeitschreiber; Messgeraet
+        return [("messgeraet", (600, 0, 794, 60), [("box", (602, 1, 670, 55)), ("box", (674, 1, 730, 55)),
+                                                    ("box", (734, 1, 790, 55))]),
+                ("messgeraet", (1100, 262, 1262, 476), [])]
+    if key == "werkzeug":     # Koffer in der Leiste -> Werkzeugkasten
+        return [("werkzeug", (420, 0, 740, 60), [("box", (542, 1, 598, 55))]),
+                ("werkzeug", (822, 62, 1280, 340), [])]
+    if key == "experiment":   # Frage und Vermutung
+        b = panel_buttons(shots["frage"], 280)
+        return [("frage", (944, 108, 1280, b[-1][1] + 16), [("box", (950, b[0][0] - 2, 1270, b[-1][1] + 2))])]
+    if key == "fehler":       # Fehlersuche: pruefen, Fragen von Tick
+        return [("fehlersuche", (822, 62, 1280, 445), [("box", (833, 176, 1268, 228))])]
+    if key == "einstellungen":  # oben rechts: Schrift, Sprache, Hilfe, Kurzanleitung, Info, Menue
+        return [("start", (890, 0, 1280, 58), [])]
+    raise ValueError(key)
+
+
+HELP_KEYS = ["willkommen", "stecken", "leitungen", "pult", "rueckgaengig", "messen", "werkzeug", "experiment",
+             "fehler", "einstellungen"]
 
 
 def _arrow(d, a, b, width, color):
@@ -788,11 +832,20 @@ def _arrow(d, a, b, width, color):
 
 
 def guide_image(n, shots, dst):
-    """Ein Schrittbild: Ausschnitte nebeneinander auf hellem Grund, vergroessert, mit Rahmen und Pfeilen."""
-    panels = _step_panels(n, shots)
+    """Ein Schrittbild der Kurzanleitung."""
+    compose(_step_panels(n, shots), shots, dst, GUIDE_SIZE, n in GUIDE_JOIN)
+
+
+def help_image(key, shots, dst):
+    """Ein Kapitelbild der Hilfe."""
+    compose(_help_panels(key, shots), shots, dst, HELP_SIZE, key in HELP_JOIN)
+
+
+def compose(panels, shots, dst, size, join):
+    """Ausschnitte nebeneinander auf hellem Grund, vergroessert, mit Rahmen und Pfeilen."""
     k = 3   # Ueberabtastung fuer glatte Linien
-    W, H = GUIDE_SIZE
-    gap, pad = (90 if n in GUIDE_JOIN else 40), 24
+    W, H = size
+    gap, pad = (90 if join else 40), 20
     widths = sum(c[2] - c[0] for _, c, _ in panels)
     heights = max(c[3] - c[1] for _, c, _ in panels)
     s = min((W - 2 * pad - gap * (len(panels) - 1)) / widths, (H - 2 * pad) / heights, 2.2)
@@ -821,10 +874,10 @@ def guide_image(n, shots, dst):
                 _arrow(d, a, b, 7 * k, ORANGE)
         places.append((x, w))
         x += w + gap
-    if n in GUIDE_JOIN:
+    if join:
         for (ax, aw), (bx, _) in zip(places, places[1:]):
             _arrow(d, ((ax + aw + 14) * k, H / 2 * k), ((bx - 14) * k, H / 2 * k), 8 * k, ORANGE)
-    img = out.resize(GUIDE_SIZE, PILImage.LANCZOS)
+    img = out.resize(size, PILImage.LANCZOS)
     if str(dst).endswith(".jpg"):
         img.save(dst, quality=84, optimize=True)
     else:
@@ -847,10 +900,15 @@ def guide_shots(lang):
 
 
 def app_images():
-    """Schrittbilder der Kurzanleitung je Sprache fuer die App und (deutsch) fuer das PDF."""
+    """Schrittbilder der Kurzanleitung und Kapitelbilder der Hilfe je Sprache fuer die App, deutsch auch fuers PDF."""
     APP_GUIDE.mkdir(parents=True, exist_ok=True)
+    APP_HELP.mkdir(parents=True, exist_ok=True)
     for lang in ("de", "en", "fr", "lb"):
         shots = guide_shots(lang)
+        for key in HELP_KEYS:
+            help_image(key, shots, APP_HELP / f"{key}_{lang}.jpg")
+            if lang == "de":
+                help_image(key, shots, OUT / "bilder" / f"_hilfe_{key}_de.png")
         size = 0
         for n in range(1, GUIDE_STEPS + 1):
             dst = APP_GUIDE / f"schritt{n}_{lang}.jpg"

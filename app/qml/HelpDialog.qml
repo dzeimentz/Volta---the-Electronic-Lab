@@ -1,6 +1,6 @@
 // Hilfe mit Tick (docs/ui-spec.md, Interaktives Readme; docs/maskottchen-tick.md): Kapitel fuer Kinder, jedes mit
 // Tick in passender Stimmung und kurzen Punkten. Oben Kapitelknoepfe zum Springen. Der Teil fuer Erwachsene verweist
-// in den Elternbereich (hinter der PIN), statt Inhalte doppelt zu fuehren.
+// in die Einstellungen (hinter der PIN), statt Inhalte doppelt zu fuehren.
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -86,6 +86,8 @@ Popup {
     ]
 
     property string pendingKey: ""
+    readonly property string language: typeof volta_languageService !== "undefined" && volta_languageService
+                                       ? volta_languageService.language : "de"
     function show(key) {
         pendingKey = key || ""
         open()
@@ -213,6 +215,19 @@ Popup {
                             text: section.modelData.say
                             bubbleColor: section.modelData.mood === "warnend" ? "#FFE9DC" : "#EEF5FF"
                             borderColor: section.modelData.mood === "warnend" ? Theme.signalOrange : Theme.accent
+                        }
+                        // Teilbild der Oberflaeche mit markierten Knoepfen (nicht bei »Sicher experimentieren«)
+                        Image {
+                            objectName: "helpImage_" + section.modelData.key
+                            visible: section.modelData.key !== "sicher"
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width: Math.min(parent.width, 560)
+                            height: visible ? width * 300 / 760 : 0
+                            fillMode: Image.PreserveAspectFit
+                            asynchronous: true
+                            source: visible ? "qrc:/help/" + section.modelData.key + "_" + help.language + ".jpg" : ""
+                            Accessible.role: Accessible.Graphic
+                            Accessible.name: section.modelData.title
                         }
                         Repeater {
                             model: section.modelData.points

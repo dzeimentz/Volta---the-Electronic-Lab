@@ -1103,7 +1103,8 @@ private slots:
         QTRY_VERIFY(!box->property("opened").toBool());
     }
 
-    // Hilfe mit Tick: Fragezeichen oeffnet sie, Kapitelknopf springt, Erwachsenenteil fuehrt ueber die PIN-Abfrage
+    // Hilfe mit Tick: Fragezeichen oeffnet sie, Kapitel mit Teilbild, Kapitelknopf springt, Erwachsenenteil fuehrt ueber
+    // die PIN-Abfrage
     void helpWithTick() {
         QObject* root = m_engine->rootObjects().first();
         QObject* help = root->findChild<QObject*>(QStringLiteral("helpDialog"));
@@ -1116,6 +1117,14 @@ private slots:
         QVERIFY(button && button->isVisible());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
         QTRY_VERIFY(help->property("opened").toBool());
+        // je Kapitel ein Teilbild der Oberflaeche in der eigenen Sprache (ausser »Sicher experimentieren«)
+        for (const char* key : {"willkommen", "stecken", "leitungen", "pult", "rueckgaengig", "messen", "werkzeug",
+                                "experiment", "fehler", "einstellungen"}) {
+            QQuickItem* image = item(QStringLiteral("helpImage_") + QLatin1String(key));
+            QVERIFY2(image, key);
+            QTRY_COMPARE(image->property("status").toInt(), 1); // Image.Ready
+        }
+        QVERIFY(!item(QStringLiteral("helpImage_sicher"))->isVisible());
         QQuickItem* chip = item(QStringLiteral("helpChip_fehler"));
         QVERIFY(chip);
         QTest::qWait(100);
