@@ -35,7 +35,7 @@
 ## Experimentansicht (Lab)
 - Bereiche: Bedienpult (oben), Pultleiste, Grundplatte, Modulleiste (unten), Bauteilfach (seitlich), Werkzeugleiste.
 - Bauteil- und Modulfach teilen sich die Seitenleiste: Der Knopf »Bauteilfach | Modulfach« oben schaltet um, das
-  gewaehlte Fach ist fett und unterstrichen. Ohne Module bleibt es beim Bauteilfach. Die Aufbauhilfe schaltet auf das
+  gewaehlte Fach ist fett und unterstrichen. Kacheln 64 dp hoch (Bild bzw. Schaltzeichen, darunter der Name). Ohne Module bleibt es beim Bauteilfach. Die Aufbauhilfe schaltet auf das
   Fach um, das ihr naechster Schritt braucht.
 - Module tragen ein Piktogramm (`ModuleIcon.qml`; Farbe nie allein): Blinkmodul Gluehbirne mit Strahlen, Tonmodul
   Note, Verstaerkermodul kleine Welle -> grosse Welle (breiteres Format), Zeitmodul Stoppuhr. Es steht im Modulfach
@@ -219,7 +219,7 @@ das iPad).
 - Pult: die blaue Flaeche schliesst die Pultfelder ein; je Bauteil ein Rahmen um Bedienelement und Felder (Tippen hebt
   die Felder hervor). Batteriepole: V+ (rot, intern weiter `P:+9V`) und 0V/GND (schwarz). Potentiometer 1 und 2,
   Schalter als Kippschalter (Knebel oben = ein) mit Beschriftung darunter. Ueber den Feldern von Potentiometer,
-  Schalter und Lautsprecher steht ihr Schaltzeichen mit Leitungen zu jedem Feld (Potentiometer: Schleifer als Pfeil
+  Schalter, Lautsprecher und Batterie (langer Strich mit + ueber V+) steht ihr Schaltzeichen mit Leitungen zu jedem Feld (Potentiometer: Schleifer als Pfeil
   zum mittleren Feld; Schalter: zeigt die Stellung). Das Messgeraet oben im Pult bekommt einen eigenen Rahmen um
   Anzeige und Buchsen.
 - Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.

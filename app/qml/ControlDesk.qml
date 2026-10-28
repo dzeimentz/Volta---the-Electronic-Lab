@@ -60,10 +60,11 @@ Rectangle {
         border.width: 2
     }
 
-    // Schaltzeichen ueber den Feldern (DIN EN 60617) mit Leitungen hinunter zu jedem Feld: Potentiometer (Schleifer
-    // als Pfeil zum mittleren Feld), Schalter (zeigt die Stellung), Lautsprecher
+    // Schaltzeichen ueber den Feldern (DIN EN 60617) mit Leitungen hinunter zu jedem Feld: Batterie (langer Strich
+    // Pluspol ueber V+, kurzer dicker Minuspol ueber 0V), Potentiometer (Schleifer als Pfeil zum mittleren Feld),
+    // Schalter (zeigt die Stellung), Lautsprecher
     Repeater {
-        model: desk.groups.filter(g => ["p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
+        model: desk.groups.filter(g => ["batterie", "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
         Shape {
             id: deskSymbol
             required property var modelData
@@ -79,6 +80,11 @@ Rectangle {
             readonly property var paths: {
                 const t = fieldTop, y = y0
                 switch (modelData.name) {
+                case "batterie": { // V+, 0V
+                    const a = cx(0), b = cx(1), m = (a + b) / 2
+                    return {s: `M${a} ${t} V${y} H${m - 4} M${m + 4} ${y} H${b} V${t} M${m - 4} ${y - 9} V${y + 9}`,
+                            f: `M${m + 2} ${y - 5} H${m + 6} V${y + 5} H${m + 2} Z`, plus: m - 11}
+                }
                 case "p1": case "p2": { // a, s, b: Widerstand zwischen a und b, Schleifer von s
                     const a = cx(0), s = cx(1), b = cx(2)
                     return {s: `M${a} ${t} V${y} H${s - 22} M${s + 22} ${y} H${b} V${t} M${s - 22} ${y - 6} H${s + 22} V${y + 6} H${s - 22} Z M${s} ${t} V${y + 11}`,
@@ -110,6 +116,15 @@ Rectangle {
                 strokeColor: "transparent"
                 fillColor: "#D5E2EE"
                 PathSvg { path: deskSymbol.paths.f || "M0 0" }
+            }
+            Text { // Pluszeichen am langen Strich (Polaritaet nie nur ueber die Strichlaenge)
+                visible: deskSymbol.paths.plus !== undefined
+                x: (deskSymbol.paths.plus || 0) - width / 2
+                y: deskSymbol.y0 - 12 - height / 2
+                text: "+"
+                color: "#D5E2EE"
+                font.pixelSize: 12
+                font.bold: true
             }
         }
     }

@@ -218,7 +218,7 @@ Rectangle {
 
     // Kacheln: oben das Bauteil wie auf dem Steckbrett (mit Anschlussdraehten) oder sein Schaltzeichen, unten der
     // Name; Hintergrund in der Farbe des Themas. Senkrecht wischen blaettert, zur Seite ziehen nimmt es heraus.
-    readonly property int tileHeight: 80
+    readonly property int tileHeight: 64 // Bild bzw. Schaltzeichen und Name (Ansicht umschaltbar)
     Flickable {
         id: partFlick
         objectName: "partFlick"
@@ -254,9 +254,10 @@ Rectangle {
 
                     PartPreview {
                         visible: !tray.symbols
-                        x: 6; y: 4
+                        clip: true // Motor-Propeller und Spulendraht ragen sonst in den Namen
+                        x: 6; y: 3
                         width: parent.width - 12
-                        height: 40
+                        height: 36
                         type: entry.modelData.type
                         pins: entry.modelData.pins
                     }
@@ -267,7 +268,7 @@ Rectangle {
                         type: entry.modelData.type
                         stroke: entry.locked ? "#3E4955" : Theme.navy
                         anchors.horizontalCenter: parent.horizontalCenter
-                        y: 8
+                        y: 5
                         width: 64
                         height: 30
                     }
@@ -276,7 +277,7 @@ Rectangle {
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
                         anchors.margins: 3
-                        height: 30
+                        height: 22
                         text: Texts.partName(entry.modelData.type)
                         color: entry.locked ? "#26313C" : Theme.navy
                         font.pixelSize: Math.round((13) * Theme.fontScale)
@@ -359,9 +360,9 @@ Rectangle {
                         visible: !tray.symbols
                         readonly property int count: Math.max(1, modEntry.modelData.pins.length)
                         anchors.horizontalCenter: parent.horizontalCenter
-                        y: 5
+                        y: 3
                         width: Math.min(parent.width - 16, count * 18 + 8)
-                        height: 40
+                        height: 36
                         radius: 4
                         color: modEntry.locked ? "#5D6B7A" : modEntry.plate
                         border.color: "#1E2B38"
@@ -382,7 +383,7 @@ Rectangle {
                             objectName: "trayModuleIcon_" + modEntry.modelData.type
                             anchors.horizontalCenter: parent.horizontalCenter
                             y: 16
-                            height: 23
+                            height: 19
                             type: modEntry.modelData.type
                             color: modEntry.locked ? "#C9CED4" : "white"
                         }
@@ -392,13 +393,13 @@ Rectangle {
                         type: modEntry.modelData.type
                         stroke: modEntry.locked ? "#3E4955" : Theme.navy
                         anchors.horizontalCenter: parent.horizontalCenter
-                        y: 8
+                        y: 5
                         width: 64
                         height: 30
                     }
                     Label {
                         anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 3 }
-                        height: 28
+                        height: 22
                         text: Texts.moduleName(modEntry.modelData.type)
                         color: modEntry.locked ? "#26313C" : Theme.navy
                         font.pixelSize: Math.round((13) * Theme.fontScale)

@@ -264,6 +264,7 @@ Item {
                 id: prop
                 anchors.centerIn: housing
                 width: housing.width * 2.2; height: width
+                rotation: 45 // Grundstellung als X (Fluegel schraeg, im Bauteilfach flacher)
                 Rectangle { anchors.centerIn: parent; width: parent.width; height: 8; radius: 4; color: "#2E7DBE"; opacity: 0.85 }
                 Rectangle { anchors.centerIn: parent; width: 8; height: parent.height; radius: 4; color: "#2E7DBE"; opacity: 0.85 }
                 FrameAnimation {

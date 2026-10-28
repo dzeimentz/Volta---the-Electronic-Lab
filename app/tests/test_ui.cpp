@@ -1594,7 +1594,7 @@ private slots:
     void deskSymbols() {
         m_window->setProperty("inLab", true);
         m_lab->startFreeLab();
-        for (const char* g : {"deskSymbol_p1", "deskSymbol_p2", "deskSymbol_schalter", "deskSymbol_lautsprecher"}) {
+        for (const char* g : {"deskSymbol_batterie", "deskSymbol_p1", "deskSymbol_p2", "deskSymbol_schalter", "deskSymbol_lautsprecher"}) {
             QQuickItem* s = item(QString::fromLatin1(g));
             QVERIFY2(s && s->isVisible(), g);
         }
