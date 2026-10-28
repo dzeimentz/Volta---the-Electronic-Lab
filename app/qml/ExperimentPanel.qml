@@ -265,15 +265,39 @@ Rectangle {
                     }
                     // Stufe 0-4: Felder als Bilder, Bauteile mit Schaltzeichen (leichter zu erfassen)
                     Body { visible: !panel.pictureSteps; width: parent.width - 36; text: modelData }
-                    StepText {
-                        objectName: "stepText_" + index
+                    // in Stichpunkten: ein Handgriff je Zeile (Texts.stepBullets)
+                    Column {
+                        id: bulletColumn
+                        objectName: "stepBullets_" + index
+                        readonly property int stepIndex: index
+                        readonly property var bullets: Texts.stepBullets(modelData)
                         visible: panel.pictureSteps
                         width: parent.width - 36
-                        text: modelData
-                        columns: panel.controller.boardColumns
-                        partImages: panel.partImages
-                        templateParts: panel.controller.templateParts
-                        catalog: panel.controller.catalogParts
+                        spacing: 2
+                        Repeater {
+                            model: panel.pictureSteps ? bulletColumn.bullets : []
+                            Row {
+                                required property int index
+                                required property string modelData
+                                width: bulletColumn.width
+                                spacing: 6
+                                Rectangle {
+                                    visible: bulletColumn.bullets.length > 1
+                                    y: 15
+                                    width: 7; height: 7; radius: 3.5
+                                    color: Theme.accent
+                                }
+                                StepText {
+                                    objectName: "stepText_" + bulletColumn.stepIndex + "_" + index
+                                    width: parent.width - (bulletColumn.bullets.length > 1 ? 13 : 0)
+                                    text: modelData
+                                    columns: panel.controller.boardColumns
+                                    partImages: panel.partImages
+                                    templateParts: panel.controller.templateParts
+                                    catalog: panel.controller.catalogParts
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -1195,17 +1195,18 @@ private slots:
     void pictureStepsHigherStages() {
         m_settings->setUnlockAll(true);
         auto pieces = [this](const QString& name) {
-            QStringList out;
-            QObject* step = findItem(m_window->contentItem(), name);
-            if (!step) return out;
-            for (const QVariant& w : step->property("words").toList()) {
-                QStringList word;
-                for (const QVariant& p : w.toList())
-                    word << p.toMap().value(QStringLiteral("kind")).toString() + QLatin1Char(':')
-                                + p.toMap().value(QStringLiteral("value")).toString();
-                out << word.join(QLatin1Char(' '));
+            QStringList out; // alle Stichpunkte des Schritts
+            for (int k = 0;; ++k) {
+                QObject* step = findItem(m_window->contentItem(), name + QLatin1Char('_') + QString::number(k));
+                if (!step) return out;
+                for (const QVariant& w : step->property("words").toList()) {
+                    QStringList word;
+                    for (const QVariant& p : w.toList())
+                        word << p.toMap().value(QStringLiteral("kind")).toString() + QLatin1Char(':')
+                                    + p.toMap().value(QStringLiteral("value")).toString();
+                    out << word.join(QLatin1Char(' '));
+                }
             }
-            return out;
         };
         QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.4.10")));
         m_lab->chooseGuess(0);
@@ -1217,11 +1218,18 @@ private slots:
         QVERIFY(!cross.join(QLatin1Char(' ')).contains(QStringLiteral("field:C2")));
         const QStringList right = pieces(QStringLiteral("stepText_1"));
         QVERIFY(right.join(QLatin1Char(' ')).contains(QStringLiteral("symbol:led_gruen")));
-        QVERIFY(right.contains(QStringLiteral("text:10 kΩ")));
+        QVERIFY(right.contains(QStringLiteral("text:10 kΩ symbol:widerstand")));
         QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.3.15")));
         m_lab->chooseGuess(0);
         QTRY_VERIFY(pieces(QStringLiteral("stepText_0")).join(QLatin1Char(' ')).contains(QStringLiteral("symbol:relais")));
         QVERIFY(!pieces(QStringLiteral("stepText_0")).contains(QStringLiteral("field:B3 field:B4")));
+        // Stichpunkte: ein Handgriff je Zeile, Klammern und Nebensaetze bleiben ganz
+        QCOMPARE(m_lab->property("steps").toStringList().size(), 3);
+        const QVariant bullets = findItem(m_window->contentItem(), QStringLiteral("stepBullets_0"))->property("bullets");
+        QCOMPARE(bullets.toStringList(), QStringList({QStringLiteral("Stecke das Relais auf B3 (A, B oben; COM, NO unten)"),
+                                                     QStringLiteral("Stecke den Taster auf A2–B2"),
+                                                     QStringLiteral("Ziehe V+ nach A2"),
+                                                     QStringLiteral("B2 nach B3 und B4 nach 0V")}));
     }
 
     void troublePopupOnDestroyed() {

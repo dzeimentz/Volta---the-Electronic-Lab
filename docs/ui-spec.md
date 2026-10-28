@@ -183,6 +183,9 @@ das iPad).
   Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »B3/B4/C3/C4«, »von A3 nach A4«, laut Musteraufbau) stehen direkt nebeneinander.
   Ein Wert ohne Namen (»470 Ω A2–A3«) zeigt das Bild des Widerstands; eine Kennung hinter dem Bauteilnamen (»Elko C1
   D3–D4«) bleibt Text.
+  Jeder Schritt erscheint in Stichpunkten, ein Handgriff je Zeile (`Texts.stepBullets`): getrennt an Satzende,
+  Strichpunkt, Gedankenstrich und Komma, nicht in Klammern und nicht vor einem Nebensatz (Woerter wie »bis«, »damit«
+  je Sprache uebersetzbar). Die Inhaltstexte bleiben unveraendert.
   Ebenso die Tipps in den Sprechblasen (`TickSays.body`). Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
   uebersetzbar). Der Text bleibt vollstaendig (Vorlesen, Bildschirmleser).
 

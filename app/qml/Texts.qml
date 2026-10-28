@@ -44,6 +44,39 @@ QtObject {
         return type
     }
 
+    // Aufbauschritt in Stichpunkte zerlegen (ein Handgriff je Zeile): getrennt wird an Satzende, Strichpunkt,
+    // Gedankenstrich und Komma - nicht in Klammern und nicht vor einem Nebensatz (»…, bis das Messgeraet 3 V zeigt«)
+    function stepBullets(text) {
+        const keep = qsTr("bis,damit,dass,wenn,sodass,ob,sonst,aber,weil", "Woerter nach einem Komma, an dem der Aufbauschritt nicht in Stichpunkte geteilt wird")
+                         .split(",").map(w => w.trim().toLowerCase())
+        const out = []
+        let depth = 0, start = 0
+        const cut = (end, next) => {
+            const piece = text.substring(start, end).trim().replace(/[.,;]+$/, "").trim()
+            if (piece !== "") out.push(piece.charAt(0).toUpperCase() + piece.substring(1))
+            start = next
+        }
+        for (let i = 0; i < text.length; ++i) {
+            const c = text.charAt(i)
+            if (c === "(") ++depth
+            else if (c === ")") depth = Math.max(0, depth - 1)
+            if (depth > 0) continue
+            const after = text.charAt(i + 1)
+            if ((c === ";" || c === "." || c === "!") && after === " ") {
+                // Abkuerzung (»z. B.«): ein einzelner Buchstabe davor
+                if (c === "." && /(^|[\s(])\S$/.test(text.substring(0, i))) continue
+                cut(i, i + 2)
+            } else if (c === "," && after === " ") {
+                const word = text.substring(i + 2).split(/[\s']/)[0].toLowerCase()
+                if (keep.indexOf(word) < 0) cut(i, i + 2)
+            } else if ((c === "–" || c === "—") && text.charAt(i - 1) === " " && after === " ") {
+                cut(i - 1, i + 2)
+            }
+        }
+        cut(text.length, text.length)
+        return out
+    }
+
     // Wortanfaenge, an denen Aufbautexte ein Bauteil nennen (je Sprache, durch Komma getrennt); dahinter zeigt
     // StepText das Schaltzeichen. Reihenfolge: das erste passende Bauteil gewinnt.
     function partWords() {
