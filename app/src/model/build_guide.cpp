@@ -91,6 +91,9 @@ std::vector<GuideStep> buildGuide(const Board& tmpl, const Catalog& catalog, boo
         s.id = w.id;
         s.from = canonical(tmpl, catalog, w.from);
         s.to = canonical(tmpl, catalog, w.to);
+        // Leitungen an der Batterie beginnen immer dort (»von 0V nach A2«, nicht »von A2 nach 0V«)
+        const auto supply = [](const std::string& a) { return a == "P:+9V" || a == "P:0V"; };
+        if (supply(s.to) && !supply(s.from)) std::swap(s.from, s.to);
         s.color = w.color;
         s.targets = {s.from, s.to};
         steps.push_back(std::move(s));

@@ -1237,7 +1237,7 @@ private slots:
         QCOMPARE(bullets.toStringList(), QStringList({QStringLiteral("Stecke das Relais auf B3 (A, B oben; COM, NO unten)"),
                                                      QStringLiteral("Stecke den Taster auf A2–B2"),
                                                      QStringLiteral("Ziehe V+ nach A2"),
-                                                     QStringLiteral("B2 nach B3 und B4 nach 0V")}));
+                                                     QStringLiteral("B2 nach B3 und 0V nach B4")}));
         // Tipps ebenso in Stichpunkten; vier Felder am Stueck brechen paarweise um
         while (m_lab->property("moreHints").toBool()) m_lab->nextHint();
         const int last = m_lab->property("hints").toStringList().size() - 1;

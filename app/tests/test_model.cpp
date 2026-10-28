@@ -546,6 +546,12 @@ private slots:
         tmpl.parts.push_back({"D1", "led_rot", {{"anode", "B4"}, {"kathode", "C4"}}});
         tmpl.wires.push_back({"L1", "P:+9V", "B3", "rot"});
         tmpl.wires.push_back({"L2", "C4", "TM1.aus", "blau"});
+        // Leitung zur Batterie: der Schritt beginnt an der Batterie (»von 0V nach C4«)
+        model::Board minus = tmpl;
+        minus.wires.push_back({"L3", "C4", "P:0V", "schwarz"});
+        const auto withMinus = model::buildGuide(minus, m_catalog);
+        QCOMPARE(withMinus[5].from, std::string("P:0V"));
+        QCOMPARE(withMinus[5].to, std::string("C4"));
         const auto steps = model::buildGuide(tmpl, m_catalog);
         QCOMPARE(steps.size(), std::size_t(6)); // Modul, 2 Bauteile, 2 Leitungen, Hauptschalter
         QCOMPARE(steps[0].kind, model::GuideStep::Kind::Module);
