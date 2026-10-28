@@ -544,6 +544,12 @@ private slots:
         QTRY_VERIFY(std::abs(com->mapToScene(QPointF(0, 0)).y() - deskY) < 1.0);
         QVERIFY(deskY < besideY);
         QTRY_VERIFY(item(QStringLiteral("meterKey_0"))->isVisible());
+        // eigener Rahmen um Anzeige und Buchsen wie bei den Bauteilen des Pults
+        QQuickItem* frame = item(QStringLiteral("meterDeskFrame"));
+        QVERIFY(frame && frame->isVisible());
+        const QRectF fr(frame->mapToScene(QPointF(0, 0)), frame->size() * frame->scale());
+        QVERIFY(fr.contains(centerOf(com)));
+        QVERIFY(fr.contains(centerOf(item(QStringLiteral("meterKey_0")))));
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterKey_0"))));
         QTRY_COMPARE(m_lab->meterMode(), 0);
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("meterDockButton"))));
@@ -1554,6 +1560,53 @@ private slots:
 
     // Leitungsfarbe: Knopf oeffnet die Auswahl; das »A« schaltet die Automatik (Klick mit der Maus), langer Druck
     // (Touch) ebenso
+    // Farbe neuer Leitungen: am Pluspol rot, am Minuspol schwarz (auch ueber Leitungen verbunden), sonst die
+    // Lieblingsfarbe (Stern im Farbmenue, anfangs blau); der Farbknopf zeigt sie schon beim Druck auf ein Feld
+    void wireColorFavorite() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        m_settings->setAutoWireColor(true);
+        m_settings->setWireColor(QStringLiteral("blau"));
+        QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
+        QCOMPARE(m_lab->wireColorFor(QStringLiteral("P:0V"), QString(), QStringLiteral("blau")), QStringLiteral("schwarz"));
+        QCOMPARE(m_lab->wireColorFor(QStringLiteral("P:+9V"), QString(), QStringLiteral("blau")), QStringLiteral("rot"));
+        QCOMPARE(m_lab->wireColorFor(QStringLiteral("A1"), QStringLiteral("B1"), QStringLiteral("blau")), QStringLiteral("blau"));
+        QVERIFY(m_lab->addWire(QStringLiteral("A1"), QStringLiteral("B1"), QStringLiteral("blau")));
+        QCOMPARE(board().wires.back().color, std::string("blau"));
+        QVERIFY(m_lab->addWire(QStringLiteral("P:+9V"), QStringLiteral("A2"), QStringLiteral("blau")));
+        QCOMPARE(m_lab->wireColorFor(QStringLiteral("A2"), QString(), QStringLiteral("blau")), QStringLiteral("rot"));
+        // Druck auf das Feld 0V: der Farbknopf zeigt schwarz, bevor eine Leitung gezogen wird
+        QQuickItem* minus = item(QStringLiteral("field_P:0V"));
+        QTest::mousePress(m_window, Qt::LeftButton, {}, centerOf(minus));
+        QTRY_COMPARE(lab->property("nextWireColor").toString(), QStringLiteral("schwarz"));
+        QTest::mouseRelease(m_window, Qt::LeftButton, {}, centerOf(minus));
+        QTest::mousePress(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("field_C3"))));
+        QTRY_COMPARE(lab->property("nextWireColor").toString(), QStringLiteral("blau"));
+        QTest::mouseRelease(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("field_C3"))));
+        // Stern im Farbmenue: weiss wird Lieblingsfarbe
+        lab->setProperty("newWireColor", QStringLiteral("weiss"));
+        QTRY_COMPARE(m_settings->wireColor(), QStringLiteral("weiss"));
+        QTRY_COMPARE(lab->property("nextWireColor").toString(), QStringLiteral("weiss"));
+        m_settings->setWireColor(QStringLiteral("blau"));
+    }
+
+    // Schaltzeichen ueber den Pultfeldern (Potentiometer, Schalter, Lautsprecher)
+    void deskSymbols() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        for (const char* g : {"deskSymbol_p1", "deskSymbol_p2", "deskSymbol_schalter", "deskSymbol_lautsprecher"}) {
+            QQuickItem* s = item(QString::fromLatin1(g));
+            QVERIFY2(s && s->isVisible(), g);
+        }
+        // der Schalter zeigt seine Stellung
+        QQuickItem* sw = item(QStringLiteral("deskSymbol_schalter"));
+        m_lab->setProperty("deskSwitch", false);
+        const QString open = sw->property("paths").toMap().value(QStringLiteral("s")).toString();
+        m_lab->setProperty("deskSwitch", true);
+        QTRY_VERIFY(sw->property("paths").toMap().value(QStringLiteral("s")).toString() != open);
+        m_lab->setProperty("deskSwitch", false);
+    }
+
     void wireColorAutoBadge() {
         m_window->setProperty("inLab", true);
         m_lab->startFreeLab();

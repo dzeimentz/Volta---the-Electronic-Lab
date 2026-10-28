@@ -145,7 +145,7 @@ private:
     qint64 m_pinLockedUntil = 0; // ms seit Epoche
     static QString hashPin(const QString& salt, const QString& pin);
     void savePinState();
-    QString m_wireColor = QStringLiteral("rot");
+    QString m_wireColor = QStringLiteral("blau");
     bool m_autoWireColor = true;
     bool m_schematicVisible = false;
     bool m_traySymbols = false;

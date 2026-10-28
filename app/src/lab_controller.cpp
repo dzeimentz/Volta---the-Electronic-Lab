@@ -1655,10 +1655,13 @@ bool LabController::flipPart(const QString& id) { return result(m_session->flipP
 bool LabController::setPartValue(const QString& id, double v) { return result(m_session->setPartValue(ss(id), v)); }
 bool LabController::repairPart(const QString& id) { return result(m_session->repairPart(ss(id))); }
 bool LabController::addWire(const QString& from, const QString& to, const QString& color) {
-    std::string c = ss(color);
-    if (m_autoWireColor)
-        if (const std::string pole = model::poleColor(m_session->board(), ss(from), ss(to)); !pole.empty()) c = pole;
-    return result(m_session->addWire(ss(from), ss(to), c));
+    return result(m_session->addWire(ss(from), ss(to), ss(wireColorFor(from, to, color))));
+}
+QString LabController::wireColorFor(const QString& from, const QString& to, const QString& fallback) const {
+    if (m_autoWireColor && !from.isEmpty())
+        if (const std::string pole = model::poleColor(m_session->board(), ss(from), ss(to)); !pole.empty())
+            return QString::fromStdString(pole);
+    return fallback;
 }
 bool LabController::moveWireEnd(const QString& id, bool fromEnd, const QString& anchor) {
     return result(m_session->moveWireEnd(ss(id), fromEnd, ss(anchor), m_autoWireColor));

@@ -381,6 +381,9 @@ public:
     Q_INVOKABLE bool setPartValue(const QString& id, double value);
     Q_INVOKABLE bool repairPart(const QString& id);
     Q_INVOKABLE bool addWire(const QString& from, const QString& to, const QString& color);
+    // Farbe einer neuen Leitung von from (nach to, darf leer sein): mit Farbautomatik rot am Plus-, schwarz am
+    // Minuspol (auch ueber Leitungen verbunden), sonst fallback (Lieblingsfarbe)
+    Q_INVOKABLE QString wireColorFor(const QString& from, const QString& to, const QString& fallback) const;
     Q_INVOKABLE bool moveWireEnd(const QString& id, bool fromEnd, const QString& anchor);
     Q_INVOKABLE bool removeWire(const QString& id);
     Q_INVOKABLE bool setWireColor(const QString& id, const QString& color);

@@ -4,6 +4,7 @@
 // fehlen in groups. Alles hier sind Bedienhandlungen (kein Verlauf).
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Shapes
 
 Rectangle {
     id: desk
@@ -11,6 +12,10 @@ Rectangle {
     property var groups: []        // [{name, left, right, ...}] in Koordinaten der Arbeitsflaeche
     property real offsetX: 0       // Pult beginnt links vor der Arbeitsflaeche
     property real fieldsBottom: 0  // Unterkante der Pultfelder (Rahmen schliessen sie ein)
+    property real fieldsTop: 0     // Oberkante der Pultfelder (Schaltzeichen sitzen direkt darueber)
+    property bool meterFrame: false // Messgeraet oben im Pult: eigener Rahmen um Anzeige und Buchsen
+    property real meterLeft: 0
+    property real meterWidth: 0
     property string highlightGroup: ""
     signal groupTapped(string name)
 
@@ -38,6 +43,74 @@ Rectangle {
             border.color: desk.highlightGroup === modelData.name ? Theme.signalOrange : desk.frameColor
             border.width: 2
             TapHandler { onTapped: desk.groupTapped(modelData.name) }
+        }
+    }
+
+    // Rahmen um das Messgeraet oben im Pult (Anzeige oben, Buchsen COM, V/Ω, A unten) wie bei den Bauteilen
+    Rectangle {
+        objectName: "meterDeskFrame"
+        visible: desk.meterFrame
+        x: desk.offsetX + desk.meterLeft - 12
+        y: 6
+        width: desk.meterWidth + 24
+        height: desk.fieldsBottom - y
+        radius: 10
+        color: Qt.lighter(Theme.desk, 1.12)
+        border.color: desk.frameColor
+        border.width: 2
+    }
+
+    // Schaltzeichen ueber den Feldern (DIN EN 60617) mit Leitungen hinunter zu jedem Feld: Potentiometer (Schleifer
+    // als Pfeil zum mittleren Feld), Schalter (zeigt die Stellung), Lautsprecher
+    Repeater {
+        model: desk.groups.filter(g => ["p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
+        Shape {
+            id: deskSymbol
+            required property var modelData
+            objectName: "deskSymbol_" + modelData.name
+            anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
+            readonly property real fieldTop: desk.fieldsTop
+            readonly property real y0: fieldTop - 20 // Hoehe der Leitung im Schaltzeichen
+            function cx(k) {
+                return desk.offsetX + modelData.fieldsLeft + k * (Theme.deskFieldWidth + Theme.deskFieldGap)
+                       + Theme.deskFieldWidth / 2
+            }
+            readonly property var paths: {
+                const t = fieldTop, y = y0
+                switch (modelData.name) {
+                case "p1": case "p2": { // a, s, b: Widerstand zwischen a und b, Schleifer von s
+                    const a = cx(0), s = cx(1), b = cx(2)
+                    return {s: `M${a} ${t} V${y} H${s - 22} M${s + 22} ${y} H${b} V${t} M${s - 22} ${y - 6} H${s + 22} V${y + 6} H${s - 22} Z M${s} ${t} V${y + 11}`,
+                            f: `M${s} ${y + 7} L${s - 4} ${y + 14} L${s + 4} ${y + 14} Z`}
+                }
+                case "schalter": { // Schliesser; geschlossen, wenn der Schalter ein ist
+                    const a = cx(0), b = cx(1), l = a + 18, r = b - 18
+                    const end = desk.controller.deskSwitch ? `L${r + 2} ${y - 2}` : `L${r} ${y - 13}`
+                    return {s: `M${a} ${t} V${y} H${l} ${end} M${r} ${y} H${b} V${t}`,
+                            f: `M${l - 2.5} ${y} a2.5 2.5 0 1 0 5 0 a2.5 2.5 0 1 0 -5 0 Z`}
+                }
+                case "lautsprecher": { // Magnet mit Trichter nach oben
+                    const a = cx(0), b = cx(1), m = (a + b) / 2
+                    return {s: `M${a} ${t} V${y} H${m - 8} M${m + 8} ${y} H${b} V${t} M${m - 8} ${y - 4} H${m + 8} V${y + 4} H${m - 8} Z M${m - 6} ${y - 4} L${m - 12} ${y - 14} H${m + 12} L${m + 6} ${y - 4}`,
+                            f: ""}
+                }
+                }
+                return {s: "M0 0", f: ""}
+            }
+            ShapePath {
+                strokeColor: "#D5E2EE"
+                strokeWidth: 2
+                fillColor: "transparent"
+                capStyle: ShapePath.RoundCap
+                joinStyle: ShapePath.RoundJoin
+                PathSvg { path: deskSymbol.paths.s }
+            }
+            ShapePath {
+                strokeColor: "transparent"
+                fillColor: "#D5E2EE"
+                PathSvg { path: deskSymbol.paths.f || "M0 0" }
+            }
         }
     }
 

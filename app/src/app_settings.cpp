@@ -50,8 +50,9 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     m_pinLockedUntil = s.value(QStringLiteral("eltern/gesperrt_bis"), 0).toLongLong();
     const QString sound = s.value(QStringLiteral("anzeige/ton_klasse"), QStringLiteral("normal")).toString();
     m_classroomSound = (sound == QLatin1String("aus") || sound == QLatin1String("kopfhoerer")) ? sound : QStringLiteral("normal");
-    const QString color = s.value(QStringLiteral("labor/leitungsfarbe"), QStringLiteral("rot")).toString();
-    m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("rot");
+    // Lieblingsfarbe fuer Leitungen ohne Verbindung zu einem Pol (eigener Schluessel: frueher galt Rot fuer alles)
+    const QString color = s.value(QStringLiteral("labor/leitungsfarbe_favorit"), QStringLiteral("blau")).toString();
+    m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("blau");
     m_autoWireColor = s.value(QStringLiteral("labor/leitungsfarbe_automatisch"), true).toBool();
     m_schematicVisible = s.value(QStringLiteral("labor/schaltplan"), false).toBool();
     m_traySymbols = s.value(QStringLiteral("labor/fachsymbole"), false).toBool();
@@ -81,7 +82,7 @@ void AppSettings::setBoardColumns(int columns) {
 
 void AppSettings::setWireColor(const QString& color) {
     if (!kWireColors.contains(color)) return;
-    set(m_wireColor, color, "labor/leitungsfarbe");
+    set(m_wireColor, color, "labor/leitungsfarbe_favorit");
 }
 
 void AppSettings::setClassroomSound(const QString& mode) {

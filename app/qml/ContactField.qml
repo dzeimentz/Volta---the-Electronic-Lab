@@ -17,6 +17,7 @@ Rectangle {
     property string subLabel: ""             // zweite Bezeichnung unten im Feld (0V: GND)
     readonly property bool colored: fillColor.a > 0
 
+    readonly property bool pressed: press.pressed // Farbknopf zeigt die Farbe der Leitung von hier
     signal wireDragUpdated(point scenePos)
     signal wireDragFinished(point scenePos)
     signal menuRequested(point scenePos)
@@ -144,6 +145,7 @@ Rectangle {
         onActiveChanged: if (!active) root.wireDragFinished(root.lastScenePos)
     }
     TapHandler {
+        id: press
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onLongPressed: root.menuRequested(point.scenePosition)
         onTapped: (eventPoint, button) => { if (button === Qt.RightButton) root.menuRequested(eventPoint.scenePosition) }

@@ -218,7 +218,10 @@ das iPad).
   Verlauf; die Feldnamen bleiben (Farbe nie allein).
 - Pult: die blaue Flaeche schliesst die Pultfelder ein; je Bauteil ein Rahmen um Bedienelement und Felder (Tippen hebt
   die Felder hervor). Batteriepole: V+ (rot, intern weiter `P:+9V`) und 0V/GND (schwarz). Potentiometer 1 und 2,
-  Schalter als Kippschalter (Knebel oben = ein) mit Beschriftung darunter.
+  Schalter als Kippschalter (Knebel oben = ein) mit Beschriftung darunter. Ueber den Feldern von Potentiometer,
+  Schalter und Lautsprecher steht ihr Schaltzeichen mit Leitungen zu jedem Feld (Potentiometer: Schleifer als Pfeil
+  zum mittleren Feld; Schalter: zeigt die Stellung). Das Messgeraet oben im Pult bekommt einen eigenen Rahmen um
+  Anzeige und Buchsen.
 - Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
@@ -334,7 +337,9 @@ das iPad).
 ## Leitungsfarben
 - Farbautomatik (Einstellung »Leitungsfarbe automatisch«, Vorgabe an): Eine neue Leitung, deren Ende am Pluspol liegt
   (P:+9V oder ueber Leitungen damit verbunden), wird rot; am Minuspol (P:0V) schwarz (`model::poleColor`). Alle
-  anderen bekommen die in der Werkzeugleiste gewaehlte Farbe. Beim Umsetzen eines Endes gilt die Regel erneut.
+  anderen bekommen die Lieblingsfarbe (Stern im Farbmenue der Werkzeugleiste, Vorgabe blau, Schluessel
+  `labor/leitungsfarbe_favorit`). Beim Umsetzen eines Endes gilt die Regel erneut. Schon beim Druck auf ein Feld
+  zeigen Farbknopf und Vorschau die Farbe, die die Leitung von dort bekommt (`LabController::wireColorFor`).
 - Nachtraeglich aendern: langer Druck bzw. Rechtsklick auf ein Leitungsende -> Leitungsmenue mit den Farben (aktuelle
   mit Haken). Eine von Hand gewaehlte Farbe
   (`WirePlacement::colorFixed`) aendert die Automatik nicht mehr.

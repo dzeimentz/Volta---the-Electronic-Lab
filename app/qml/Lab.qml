@@ -94,7 +94,7 @@ Item {
     readonly property bool boardResizable: controller.freeLab || !controller.stageLayout
     readonly property int slots: 16
     // Pult (Bedienelemente), Gruppenlinien, Pultleiste, Grundplatte, Modulleiste von oben nach unten
-    readonly property int deskPanelHeight: 128 // Bedienelemente; darunter im selben Pult die Felder
+    readonly property int deskPanelHeight: 140 // Bedienelemente und Schaltzeichen; darunter im selben Pult die Felder
     readonly property int groupLineY: deskPanelHeight + 6
     readonly property int deskY: deskPanelHeight + 4
     readonly property int deskBottom: deskY + Theme.fieldHeight + 12 // Unterkante des Pults (schliesst die Felder ein)
@@ -338,7 +338,15 @@ Item {
     property bool recorderVisible: false // Zeitschreiber unter der Arbeitsflaeche
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
-    property string newWireColor: settings ? settings.wireColor : "rot"
+    // Lieblingsfarbe (Stern im Farbmenue): Leitungen ohne Verbindung zu einem Pol. Mit der Farbautomatik zeigt der
+    // Farbknopf schon beim Druck auf ein Feld, welche Farbe die Leitung von dort bekommt (Plus rot, Minus schwarz)
+    property string newWireColor: settings ? settings.wireColor : "blau"
+    property string colorField: ""
+    readonly property string nextWireColor: {
+        lab.controller.wires; lab.settings && lab.settings.autoWireColor // neu nach Aenderungen (Verbindungen zum Pol)
+        return lab.controller.wireColorFor(lab.wireFrom !== "" ? lab.wireFrom : lab.colorField,
+                                           lab.wireFrom !== "" ? lab.highlightAnchor : "", lab.newWireColor)
+    }
     // Arbeitsumgebung merken (AppSettings)
     onSchematicVisibleChanged: if (settings) settings.schematicVisible = schematicVisible
     onNewWireColorChanged: if (settings) settings.wireColor = newWireColor
@@ -646,7 +654,7 @@ Item {
                 onClicked: wireColorMenu.open()
                 onPressAndHold: toggleAuto()
                 ToolTip.visible: hovered
-                ToolTip.text: qsTr("Leitungsfarbe: %1").arg(Texts.colorName(lab.newWireColor)) + " – "
+                ToolTip.text: qsTr("Lieblingsfarbe: %1").arg(Texts.colorName(lab.newWireColor)) + " – "
                               + (auto ? qsTr("Automatik an (Plus rot, Minus schwarz)") : qsTr("Automatik aus"))
                 Accessible.name: ToolTip.text
                 Accessible.description: qsTr("Langer Druck schaltet die Automatik um.")
@@ -654,7 +662,7 @@ Item {
                     Rectangle {
                         anchors.centerIn: parent
                         width: 22; height: 22; radius: 11
-                        color: Theme.wireColor(lab.newWireColor)
+                        color: Theme.wireColor(lab.nextWireColor)
                         border.color: Theme.solderAmber
                         border.width: 3
                     }
@@ -706,10 +714,17 @@ Item {
                             checkable: true
                             checked: lab.newWireColor === modelData
                             onTriggered: lab.newWireColor = modelData
-                            // Farbe nie allein: Name daneben
+                            // Farbe nie allein: Name daneben; Stern = Lieblingsfarbe (gefuellt) bzw. waehlbar (leer)
+                            indicator: null
                             contentItem: Row {
                                 spacing: 10
-                                leftPadding: 28
+                                Label {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 22
+                                    text: colorItem.checked ? "★" : "☆"
+                                    color: colorItem.checked ? Theme.solderAmber : "#8A96A3"
+                                    font.pixelSize: 20
+                                }
                                 Rectangle {
                                     anchors.verticalCenter: parent.verticalCenter
                                     width: 22; height: 22; radius: 11
@@ -934,7 +949,7 @@ Item {
             id: canvas
             objectName: "canvas"
             width: Math.max(lab.trashX + Theme.control, lab.meterX, !lab.controller.meterVisible ? lab.boardWidth
-                            : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth)
+                            : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth + 12) // mit Rahmen
                             : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
             height: lab.showModules ? lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
@@ -955,6 +970,10 @@ Item {
                 groups: lab.groups
                 offsetX: 8
                 fieldsBottom: lab.deskY + Theme.fieldHeight + 6
+                fieldsTop: lab.deskY
+                meterFrame: lab.controller.meterVisible && lab.meterDocked
+                meterLeft: lab.meterDockX
+                meterWidth: Theme.meterDockWidth
                 highlightGroup: lab.highlightGroup
                 onGroupTapped: (name) => lab.highlightGroup = lab.highlightGroup === name ? "" : name
             }
@@ -984,9 +1003,9 @@ Item {
                 docked: lab.meterDocked
                 onDockToggled: if (lab.settings) lab.settings.meterDocked = !lab.settings.meterDocked
                 x: docked ? lab.meterDockX : lab.meterX
-                y: docked ? 4 : lab.boardY - 6
+                y: docked ? 14 : lab.boardY - 6
                 width: docked ? Theme.meterDockWidth : Theme.meterAreaWidth
-                height: docked ? lab.deskPanelHeight - 8 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
+                height: docked ? lab.deskPanelHeight - 22 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
             }
 
             // Module in der Modulleiste (unter den Feldern, die sie belegen)
@@ -1189,6 +1208,7 @@ Item {
                     recorderChannel: lab.controller.recorderChannels.indexOf(modelData.startsWith("MESS:") ? "MESS" : modelData)
                     target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
 
+                    onPressedChanged: if (pressed) lab.colorField = field.modelData
                     onWireDragUpdated: (scenePos) => {
                         lab.beginEdit()
                         lab.wireFrom = field.modelData
@@ -1402,7 +1422,7 @@ Item {
                 visible: lab.wireFrom !== ""
                 from: lab.wireFrom !== "" ? lab.anchorPoint(lab.wireFrom) : Qt.point(0, 0)
                 to: lab.wirePreviewEnd
-                wireColor: Theme.wireColor(lab.newWireColor)
+                wireColor: Theme.wireColor(lab.nextWireColor)
                 opacity: 0.7
             }
 
