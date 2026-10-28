@@ -5,7 +5,7 @@
     python3 tools/manual_pdfs.py --bilder   # vorher die Bildschirmfotos neu aufnehmen
     python3 tools/manual_pdfs.py --app-bilder   # nur die Schrittbilder der Kurzanleitung (App und PDF)
 
-- Volta1-Anleitung-de.pdf: ausfuehrliche Anleitung (alle Bereiche der App, Elternbereich, Sicherheit, Bauteile)
+- Volta1-Anleitung-de.pdf: ausfuehrliche Anleitung (alle Bereiche der App, Einstellungen, Sicherheit, Bauteile)
 - Volta1-Kurzanleitung-de.pdf: drei Seiten zum Ausdrucken (acht Schritte mit Bildern, Bedienung auf einen Blick)
 
 Bilder: Bildschirmfotos der Desktop-Ausgabe (build/desktop-debug/app/volta1.exe, 1280 x 800) ueber die
@@ -309,7 +309,7 @@ def long_manual(path):
                       "Tippe im Lernpfad auf das erste Experiment <b>»Dein erstes Blinklicht«</b> (Stufe 0).",
                       "Später bringt dich <b>»Weitermachen«</b> direkt zu deinem letzten Experiment."])
     story += [P("Forscherprofile", "h2"),
-              P("Teilen sich mehrere Kinder ein Gerät, können Eltern oder Lehrkräfte im Elternbereich "
+              P("Teilen sich mehrere Kinder ein Gerät, können Eltern oder Lehrkräfte in den Einstellungen "
                 "Forscherprofile einschalten. Dann fragt Volta beim Start: »Wer forscht heute?« Jedes Kind wählt "
                 "sein Symbol und hat seinen eigenen Fortschritt, sein Forscherheft und seinen Aufbau."),
               shot("profile", 120, "Profilauswahl mit drei Forscherprofilen", crop=(0, 0, 1280, 420))]
@@ -418,7 +418,7 @@ def long_manual(path):
                       "Die probierst du nur in Volta aus – nie mit echten Bauteilen."])
     story += [P("Der Lernpfad", "h2"),
               P("Die Stufen öffnen sich nacheinander: Hast du die Experimente einer Stufe geschafft, geht die "
-                "nächste auf. Eltern und Lehrkräfte können im Elternbereich alles sofort freigeben."),
+                "nächste auf. Eltern und Lehrkräfte können in den Einstellungen alles sofort freigeben."),
               table([["Stufe", "Thema", "Forscherfrage", "Exp."],
                      ["0", "Auftakt", "Wie bringe ich etwas zum Blinken?", "1"],
                      ["1", "Strom fließt im Kreis", "Wann leuchtet das Lämpchen?", "10"],
@@ -529,17 +529,18 @@ def long_manual(path):
                      ["Kontaktfelder silbern", "silberne Kontaktfelder; ausgeschaltet messingfarben"],
                      ["Animationen reduzieren", "weniger Bewegung auf dem Bildschirm"],
                      ["Messgerät anzeigen, Felder je Reihe", "wie die Tasten in der Leiste"],
-                     ["Elternbereich …", "Einstellungen für Erwachsene (mit PIN)"]], [58, 112]),
+                     ["Weitere Einstellungen …", "Einstellungen für Erwachsene (mit PIN)"]], [58, 112]),
               shot("hilfe", 140, "Die Hilfe mit Tick: Kapitel oben antippen", crop=(230, 0, 1050, 800))]
 
     # 11 Eltern und Lehrkraefte
     story += chapter("11  Für Eltern und Lehrkräfte")
-    story += [P("Der Elternbereich", "h2"),
-              P("Den Elternbereich öffnen Sie über das Menü (drei Striche) → »Elternbereich …« oder in der Hilfe "
-                "unter »Für Erwachsene«. Er ist durch eine PIN geschützt; die <b>Start-PIN ist 1234</b>. Bitte "
-                "legen Sie gleich eine eigene PIN mit 4 bis 8 Ziffern fest. Die PIN schützt auch alle Links aus "
-                "der App heraus. Am Computer lässt sie sich mit der Tastatur eingeben."),
-              shot("elternbereich", 150, "Der Elternbereich (Ausschnitt)", crop=(250, 0, 1030, 800)),
+    story += [P("Die Einstellungen", "h2"),
+              P("Die Einstellungen öffnen Sie über das Menü (drei Striche) → »Weitere Einstellungen …« oder in der "
+                "Hilfe unter »Für Erwachsene«. Sie sind durch eine PIN geschützt; die <b>Start-PIN ist 1234</b>. Bitte "
+                "legen Sie gleich eine eigene PIN mit 4 bis 8 Ziffern fest. Unter »Allgemein« lässt sich die "
+                "PIN-Abfrage für die Einstellungen abschalten (nur nach Eingabe der PIN); alle Links aus der App "
+                "heraus bleiben immer hinter der PIN. Am Computer lässt sie sich mit der Tastatur eingeben."),
+              shot("elternbereich", 150, "Die Einstellungen (Ausschnitt)", crop=(250, 0, 1030, 800)),
               table([["Bereich", "Was Sie dort einstellen"],
                      ["PIN", "eigene PIN festlegen (wird nur als Prüfwert gespeichert)"],
                      ["Ton im Klassenzimmer", "Normal, nur mit Kopfhörern oder aus – gilt auch für das Vorlesen"],
@@ -554,7 +555,7 @@ def long_manual(path):
                      ["Datenschutz, So rechnet Volta", "was gespeichert wird; welche Vereinfachungen die "
                       "Simulation enthält"]], [52, 118])]
     story += [P("Aufgaben für die Klasse", "h2"),
-              P("Wählen Sie im Elternbereich unter »Aufgabe für die Klasse« Experimente aus dem Lernpfad und/oder "
+              P("Wählen Sie in den Einstellungen unter »Aufgabe für die Klasse« Experimente aus dem Lernpfad und/oder "
                 "geben Sie den Aufbau mit, der gerade im Labor steckt – etwa mit dem Titel »Finde den Fehler« und "
                 "einem kurzen Aufgabentext. <b>»QR-Code zeigen«</b> zeigt einen großen Code für den Beamer:")]
     story += bullets(["Die Kinder scannen den QR-Code mit der <b>Kamera-App</b> ihres Tablets; Volta öffnet sich "
@@ -574,8 +575,8 @@ def long_manual(path):
                 "Sie in der Präsentation aufbauen, wird beim Beenden verworfen."),
               P("Verwaltete Geräte in der Schule", "h2"),
               P("Auf Tablets, die eine Schule über eine Geräteverwaltung (MDM) betreut, kann die Schule Sprache, "
-                "freigegebene Stufen, Ton und die Zahl der Forscherprofile vorgeben. Solche Einstellungen sind im "
-                "Elternbereich gekennzeichnet und lassen sich dort nicht ändern."),
+                "freigegebene Stufen, Ton und die Zahl der Forscherprofile vorgeben. Solche Vorgaben sind "
+                "in den Einstellungen gekennzeichnet und lassen sich dort nicht ändern."),
               P("Datenschutz", "h2"),
               P("Volta erhebt keine Daten. Es gibt kein Konto, keine Werbung, keine Käufe in der App und keine "
                 "Verbindung ins Internet; Kamera und Mikrofon werden nicht verwendet. Fortschritt, Forscherheft, "
@@ -584,7 +585,7 @@ def long_manual(path):
               P("So rechnet Volta", "h2"),
               P("Was in Volta passiert, ergibt sich aus einer echten Schaltungssimulation, nicht aus vorbereiteten "
                 "Ergebnissen. Deshalb verhalten sich auch selbst erfundene Schaltungen plausibel. Die wenigen "
-                "Vereinfachungen (etwa beim Tonmodul oder bei Spulen) sind im Elternbereich unter »So rechnet "
+                "Vereinfachungen (etwa beim Tonmodul oder bei Spulen) sind in den Einstellungen unter »So rechnet "
                 "Volta« offengelegt.")]
 
     # 12 Sicherheit
@@ -693,13 +694,13 @@ def short_manual(path):
                      ["Schaltzeichen", "Schaltplan"],
                      ["Kurve", "Zeitschreiber (ab Stufe 3)"],
                      ["A− A+ · Flagge", "Schriftgröße · Sprache (DE, FR, EN, LU)"],
-                     ["? · i · drei Striche", "Hilfe mit Tick · Info · Einstellungen und Elternbereich"]],
+                     ["? · i · drei Striche", "Hilfe mit Tick · Info · Einstellungen (weitere mit PIN)"]],
                     [45, 125]),
               tick_box("warnend", "<b>Mit echten Bauteilen:</b> nur Batterien bis 9 Volt, nie an die Steckdose! "
                        "Versuche mit »Nur in der App!« nicht in echt nachbauen. Bauteile können heiß werden.",
                        bg=WARN, border=colors.HexColor("#E57373")),
               P("Für Eltern und Lehrkräfte", "h2")]
-    story += bullets(["Elternbereich: Menü (drei Striche) → »Elternbereich …«, <b>Start-PIN 1234</b> – bitte gleich "
+    story += bullets(["Einstellungen: Menü (drei Striche) → »Weitere Einstellungen …«, <b>Start-PIN 1234</b> – bitte gleich "
                       "ändern.",
                       "Dort: Freigaben, Forscherprofile, Ton im Klassenzimmer, Aufgaben per QR-Code oder Code zum "
                       "Eintippen, Präsentationsmodus.",

@@ -118,12 +118,12 @@ EN = {
         "Guesses, observations, own notes and photos of the real build – the research notebook grows with every "
         "experiment. Several children on one device get their own researcher profiles (symbol and nickname, no real "
         "name).",
-    "Elternbereich und Datenschutz": "Parents' area and privacy",
+    "Einstellungen und Datenschutz": "Settings and privacy",
     "Kein Konto, keine Werbung, keine Käufe in der App": "No account, no ads, no in-app purchases",
     "Keine Datenerhebung, keine Internetverbindung, keine Berechtigungen":
         "No data collection, no internet connection, no permissions",
-    "Elternbereich mit PIN: Freigaben, Profile, Ton im Klassenzimmer":
-        "PIN-protected parents' area: unlocking, profiles, classroom sound",
+    "Einstellungen mit PIN: Freigaben, Profile, Ton im Klassenzimmer":
+        "PIN-protected settings: unlocking, profiles, classroom sound",
     "Verwaltete Geräte: Vorgaben der Schule (Sprache, Stufen, Ton)":
         "Managed devices: school settings (language, levels, sound)",
     "Bedienelemente ab 48 dp, Farbe nie allein, Vorlesen der Texte":
@@ -183,10 +183,6 @@ EN = {
         "From the bit via gates, ALU and memory to a self-built 4-bit computer – and programming it",
     "Kontakt": "Contact",
     "Aufm Rothenhügel 26 · 54666 Irrel · Deutschland": "Aufm Rothenhügel 26 · 54666 Irrel · Germany",
-    "Stand: Version 0.9.0, Testphase. Erprobung mit Kindern und Schulen läuft; Veröffentlichung zuerst für "
-    "Android-Tablets und Windows. Gerne zeigen wir Volta in einer Vorführung.":
-        "Status: version 0.9.0, test phase. Trials with children and schools are under way; release first for "
-        "Android tablets and Windows. We are happy to show Volta in a demo.",
 }
 
 TEXTE = {"en": {**{s: s for s in UNVERAENDERT}, **EN}}
@@ -195,4 +191,8 @@ MUSTER = {"en": [
     (r"(\d+)–(\d+) Jahre", r"ages \1–\2"),
     (r"Version ([0-9.]+) \(Testphase\) · Oktober 2026 · DC Software Engineering, Irrel",
      r"Version \1 (test phase) · October 2026 · DC Software Engineering, Irrel, Germany"),
+    (r"Stand: Version ([0-9.]+), Testphase\. Erprobung mit Kindern und Schulen läuft; Veröffentlichung zuerst für "
+     r"Android-Tablets und Windows\. Gerne zeigen wir Volta in einer Vorführung\.",
+     r"Status: version \1, test phase. Trials with children and schools are under way; release first for "
+     r"Android tablets and Windows. We are happy to show Volta in a demo."),
 ]}

@@ -69,9 +69,9 @@ Android-Tablet
 Zum Ausprobieren
 ----------------
 - Startseite → »Vorführung«: zehn fertige Aufbauten aus allen Stufen, ohne Spuren im Fortschritt.
-- Startseite → »Kurzanleitung«: in sechs Schritten zum ersten Experiment.
-- Elternbereich: Menü (drei Striche) → »Elternbereich …«, Start-PIN 1234.
-- Alle Stufen sofort öffnen: Elternbereich → »Alle Stufen und Bauteile freigeben«.
+- Startseite → »Kurzanleitung«: in acht Schritten zum ersten Experiment.
+- Einstellungen: Menü (drei Striche) → »Weitere Einstellungen …«, Start-PIN 1234.
+- Alle Stufen sofort öffnen: Einstellungen → »Alle Stufen und Bauteile freigeben«.
 
 Datenschutz
 -----------

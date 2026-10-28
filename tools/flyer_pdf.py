@@ -381,12 +381,12 @@ def page_school(p: Page):
     c.setFillColor(LIGHT)
     c.roundRect(x2, yl - 2 * mm, cw, box_h, 3 * mm, fill=1, stroke=0)
     yy = y - 6 * mm
-    p.text(x2 + 5 * mm, yy, "Elternbereich und Datenschutz", 12.5, "Segoe-Bold", BLUE)
+    p.text(x2 + 5 * mm, yy, "Einstellungen und Datenschutz", 12.5, "Segoe-Bold", BLUE)
     yy -= 7 * mm
     items = [
         "Kein Konto, keine Werbung, keine Käufe in der App",
         "Keine Datenerhebung, keine Internetverbindung, keine Berechtigungen",
-        "Elternbereich mit PIN: Freigaben, Profile, Ton im Klassenzimmer",
+        "Einstellungen mit PIN: Freigaben, Profile, Ton im Klassenzimmer",
         "Verwaltete Geräte: Vorgaben der Schule (Sprache, Stufen, Ton)",
         "Bedienelemente ab 48 dp, Farbe nie allein, Vorlesen der Texte",
         "Sprachen Deutsch, Français, English, Lëtzebuergesch",
