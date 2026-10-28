@@ -45,27 +45,32 @@ Rectangle {
             border.color: desk.highlightGroup === modelData.name ? Theme.signalOrange : desk.frameColor
             border.width: 2
             TapHandler { onTapped: desk.groupTapped(modelData.name) }
-            // »?«: sichtbar 24 dp, Tippflaeche 48 dp; liegt unter den Bedienelementen, damit diese Vorrang haben
+            // »?«: sichtbar 18 dp in der abgerundeten Ecke (gleicher Mittelpunkt wie der Eckbogen); Tippflaeche 48 dp,
+            // rechts buendig mit dem Rahmen (nicht im Nachbarrahmen) und unter den Bedienelementen, damit diese Vorrang haben
             AbstractButton {
+                id: infoButton
                 objectName: "deskInfo_" + parent.modelData.name
-                x: parent.width - 30 - (width - 24) / 2
-                y: 4 - (height - 24) / 2
+                x: parent.width - width
+                y: parent.radius - height / 2
                 width: Theme.control
                 height: Theme.control
                 onClicked: desk.infoRequested(parent.modelData.name)
                 Accessible.name: qsTr("Was ist das?")
-                background: Rectangle {
-                    anchors.centerIn: parent
-                    width: 24; height: 24; radius: 12
-                    color: parent.down ? "#FFFFFF" : (parent.hovered ? "#E6EEF6" : "#C9D6E3")
-                    border.color: "#FFFFFF"
-                    border.width: 1
-                    Text {
-                        anchors.centerIn: parent
-                        text: "?"
-                        color: Theme.navy
-                        font.pixelSize: 15
-                        font.bold: true
+                background: Item {
+                    Rectangle {
+                        x: parent.width - 10 - width / 2
+                        y: (parent.height - height) / 2
+                        width: 18; height: 18; radius: 9
+                        color: infoButton.down ? "#FFFFFF" : (infoButton.hovered ? "#E6EEF6" : "#C9D6E3")
+                        border.color: "#FFFFFF"
+                        border.width: 1
+                        Text {
+                            anchors.centerIn: parent
+                            text: "?"
+                            color: Theme.navy
+                            font.pixelSize: 12
+                            font.bold: true
+                        }
                     }
                 }
             }

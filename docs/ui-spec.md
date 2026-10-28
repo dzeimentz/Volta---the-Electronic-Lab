@@ -95,7 +95,7 @@ das iPad).
 
 ## Bedienpult
 - **Hauptschalter** fuer die Batterie.
-- **»?« je Pultbauteil**: rundes Fragezeichen oben rechts in jedem Rahmen (sichtbar 24 dp, Tippflaeche 48 dp, unter den
+- **»?« je Pultbauteil**: rundes Fragezeichen in der oberen rechten Rahmenecke (sichtbar 18 dp, Tippflaeche 48 dp buendig im Rahmen, unter den
   Bedienelementen, damit diese Vorrang haben). Oeffnet `DeskPartInfo.qml`: was das Bauteil tut, jedes Pultfeld als Feld
   wie am Pult mit Bedeutung (V+/0V, P1a/P1s/P1b, S1/S2, LS1/LS2) und kurze Hinweise (Spannungsteiler, Kurzschluss).
   Werte wie in der Simulation (Poti 10 kΩ linear, Lautsprecher 8 Ω). Beschriftung »ein«/»aus« des Schalters links
