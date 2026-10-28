@@ -189,7 +189,8 @@ das iPad).
   D3–D4«) bleibt Text.
   Jeder Schritt erscheint in Stichpunkten, ein Handgriff je Zeile (`Texts.stepBullets`): getrennt an Satzende,
   Strichpunkt, Gedankenstrich und Komma, nicht in Klammern und nicht vor einem Nebensatz (Woerter wie »bis«, »damit«
-  je Sprache uebersetzbar). Die Inhaltstexte bleiben unveraendert.
+  je Sprache uebersetzbar). Die Inhaltstexte bleiben unveraendert. Auch die Tipps erscheinen so in Stichpunkten
+  (Gluehbirne einmal vorn). Mehr als zwei Felder am Stueck (»B3/B4/C3/C4«) stehen paarweise, damit die Zeile umbricht.
   Ebenso die Tipps in den Sprechblasen (`TickSays.body`). Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
   uebersetzbar). Der Text bleibt vollstaendig (Vorlesen, Bildschirmleser).
 

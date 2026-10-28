@@ -1230,6 +1230,15 @@ private slots:
                                                      QStringLiteral("Stecke den Taster auf A2–B2"),
                                                      QStringLiteral("Ziehe V+ nach A2"),
                                                      QStringLiteral("B2 nach B3 und B4 nach 0V")}));
+        // Tipps ebenso in Stichpunkten; vier Felder am Stueck brechen paarweise um
+        while (m_lab->property("moreHints").toBool()) m_lab->nextHint();
+        const int last = m_lab->property("hints").toStringList().size() - 1;
+        QVERIFY(last >= 1);
+        QTRY_VERIFY(!pieces(QStringLiteral("hintText_1")).isEmpty());
+        QVERIFY(findItem(m_window->contentItem(), QStringLiteral("hintText_1_1")));
+        const QStringList solution = pieces(QStringLiteral("hintText_") + QString::number(last));
+        QVERIFY(solution.contains(QStringLiteral("field:B3 field:B4")));
+        QVERIFY(solution.contains(QStringLiteral("field:C3 field:C4")));
     }
 
     // Module mit Piktogramm im Modulfach (Bauteil-Ansicht) und in den Bild-Schritten

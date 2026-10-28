@@ -360,16 +360,50 @@ Rectangle {
                     text: "💡 " + modelData
                     bubbleColor: "#FFF4D6"
                     borderColor: Theme.solderAmber
-                    // Stufe 0-4: Felder als Bilder, Bauteile mit Bild bzw. Schaltzeichen wie in den Schritten
+                    // Stufe 0-4: Felder als Bilder, Bauteile mit Bild bzw. Schaltzeichen wie in den Schritten, in
+                    // Stichpunkten wie die Aufbauschritte (Gluehbirne einmal vorn)
                     body: panel.pictureSteps ? hintPictures : null
                     Component {
                         id: hintPictures
-                        StepText {
-                            text: hint.text
-                            columns: panel.controller.boardColumns
-                            partImages: panel.partImages
-                            templateParts: panel.controller.templateParts
-                            catalog: panel.controller.catalogParts
+                        Row {
+                            id: hintRow
+                            readonly property var bullets: Texts.stepBullets(hint.modelData)
+                            spacing: 4
+                            Label {
+                                text: "💡"
+                                font.pixelSize: Math.round(14 * Theme.fontScale)
+                                topPadding: 6
+                            }
+                            Column {
+                                id: hintColumn
+                                objectName: "hintBullets_" + hint.index
+                                width: hintRow.width - x
+                                spacing: 2
+                                Repeater {
+                                    model: hintRow.bullets
+                                    Row {
+                                        required property int index
+                                        required property string modelData
+                                        width: hintColumn.width
+                                        spacing: 6
+                                        Rectangle {
+                                            visible: hintRow.bullets.length > 1
+                                            y: 15
+                                            width: 7; height: 7; radius: 3.5
+                                            color: Theme.solderAmber
+                                        }
+                                        StepText {
+                                            objectName: "hintText_" + hint.index + "_" + index
+                                            width: parent.width - (hintRow.bullets.length > 1 ? 13 : 0)
+                                            text: modelData
+                                            columns: panel.controller.boardColumns
+                                            partImages: panel.partImages
+                                            templateParts: panel.controller.templateParts
+                                            catalog: panel.controller.catalogParts
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

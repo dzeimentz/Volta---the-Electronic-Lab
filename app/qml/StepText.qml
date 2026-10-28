@@ -53,11 +53,17 @@ Flow {
             let fields = core !== ""
             for (let k = 0; k < pieces.length && fields; ++k) fields = step.fieldPattern.test(pieces[k])
             if (fields) {
-                const w = []
-                if (lead !== "") w.push({kind: "text", value: lead})
-                for (let k = 0; k < pieces.length; ++k) w.push({kind: "field", value: pieces[k]})
-                if (trail !== "") w.push({kind: "text", value: trail})
-                list.push({pieces: w, field: pieces.length === 1 ? pieces[0] : "", lead: lead, trail: trail, raw: word})
+                // mehr als zwei Felder (Relais B3/B4/C3/C4): je zwei zusammen, damit die Zeile umbrechen kann
+                for (let s = 0; s < pieces.length; s += 2) {
+                    const chunk = pieces.slice(s, s + 2)
+                    const first = s === 0, last = s + 2 >= pieces.length
+                    const w = []
+                    if (first && lead !== "") w.push({kind: "text", value: lead})
+                    for (let k = 0; k < chunk.length; ++k) w.push({kind: "field", value: chunk[k]})
+                    if (last && trail !== "") w.push({kind: "text", value: trail})
+                    list.push({pieces: w, field: pieces.length === 1 ? pieces[0] : "", lead: first ? lead : "",
+                               trail: last ? trail : "", raw: word})
+                }
                 continue
             }
             // Bauteilname: Wortanfang (auch nach Bindestrich oder Apostroph, z. B. »100-Ω-Widerstand«, »l'ampoule«)
