@@ -177,10 +177,12 @@ das iPad).
   Koerpern, Knicke und schon belegte Wege kosten extra) einen Weg zwischen den Bauteilen; er wird zu wenigen
   Wegpunkten gestrafft und mit runden Ecken gezeichnet. Neu berechnet nach jeder Aufbauaenderung; beim Umstecken
   eines Endes zeigt die Leitung den einfachen Bogen.
-- Aufbauschritte mit Bildern (0.9.1, zuerst Stufe 0–2, `StepText.qml`): Feldnamen im Text erscheinen als kleine
+- Aufbauschritte mit Bildern (0.9.1, Stufe 0–4, `StepText.qml`): Feldnamen im Text erscheinen als kleine
   Kontaktfelder in ihrer Reihenfarbe (`FieldChip.qml`; V+ rot, 0V schwarz, Pult- und Modulfelder), hinter dem ersten
   Namen eines Bauteils steht sein Bild wie im Bauteilfach (Umschalter »Bauteil | Symbol« gilt auch hier). Die
-  Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »von A3 nach A4«, laut Musteraufbau) stehen direkt nebeneinander.
+  Steckfelder eines Bauteils (»A2 und A3«, »A2–A3«, »B3/B4/C3/C4«, »von A3 nach A4«, laut Musteraufbau) stehen direkt nebeneinander.
+  Ein Wert ohne Namen (»470 Ω A2–A3«) zeigt das Bild des Widerstands; eine Kennung hinter dem Bauteilnamen (»Elko C1
+  D3–D4«) bleibt Text.
   Ebenso die Tipps in den Sprechblasen (`TickSays.body`). Erkannt werden Wortanfaenge je Sprache (`Texts.partWords`,
   uebersetzbar). Der Text bleibt vollstaendig (Vorlesen, Bildschirmleser).
 

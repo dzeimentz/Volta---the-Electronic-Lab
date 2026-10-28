@@ -10,7 +10,7 @@ Rectangle {
     readonly property int phase: controller.phase // 1 Frage, 2 Aufbau, 3 Beobachtung, 4 Erklaerung
     // Aufbauschritte mit Feldbildern und Schaltzeichen (zuerst fuer die Stufen 0-2)
     property bool partImages: true // Bauteil- oder Schaltzeichenbild im Text, wie im Bauteilfach eingestellt
-    readonly property bool pictureSteps: controller.experimentStage >= 0 && controller.experimentStage <= 2
+    readonly property bool pictureSteps: controller.experimentStage >= 0 && controller.experimentStage <= 4
 
     // Text eines Schritts der Aufbauhilfe (LabController::guideStep)
     function guideText(s) { return Texts.stepText(s) }
@@ -263,7 +263,7 @@ Rectangle {
                         color: Theme.accent
                         Label { anchors.centerIn: parent; text: index + 1; color: "white"; font.bold: true }
                     }
-                    // Stufe 0-2: Felder als Bilder, Bauteile mit Schaltzeichen (leichter zu erfassen)
+                    // Stufe 0-4: Felder als Bilder, Bauteile mit Schaltzeichen (leichter zu erfassen)
                     Body { visible: !panel.pictureSteps; width: parent.width - 36; text: modelData }
                     StepText {
                         objectName: "stepText_" + index
@@ -336,7 +336,7 @@ Rectangle {
                     text: "💡 " + modelData
                     bubbleColor: "#FFF4D6"
                     borderColor: Theme.solderAmber
-                    // Stufe 0-2: Felder als Bilder, Bauteile mit Bild bzw. Schaltzeichen wie in den Schritten
+                    // Stufe 0-4: Felder als Bilder, Bauteile mit Bild bzw. Schaltzeichen wie in den Schritten
                     body: panel.pictureSteps ? hintPictures : null
                     Component {
                         id: hintPictures

@@ -1191,6 +1191,39 @@ private slots:
         QVERIFY(!m_lab->addPart(QStringLiteral("led_rot"), QStringLiteral("A3"), false, false));
     }
 
+    // Bild-Schritte ab Stufe 3: Kennung nach dem Bauteilnamen bleibt Text, »B3 und B4« am Relais sind zwei Leitungen
+    void pictureStepsHigherStages() {
+        m_settings->setUnlockAll(true);
+        auto pieces = [this](const QString& name) {
+            QStringList out;
+            QObject* step = findItem(m_window->contentItem(), name);
+            if (!step) return out;
+            for (const QVariant& w : step->property("words").toList()) {
+                QStringList word;
+                for (const QVariant& p : w.toList())
+                    word << p.toMap().value(QStringLiteral("kind")).toString() + QLatin1Char(':')
+                                + p.toMap().value(QStringLiteral("value")).toString();
+                out << word.join(QLatin1Char(' '));
+            }
+            return out;
+        };
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.4.10")));
+        m_lab->chooseGuess(0);
+        QTRY_VERIFY(!pieces(QStringLiteral("stepText_2")).isEmpty());
+        const QStringList cross = pieces(QStringLiteral("stepText_2"));
+        QVERIFY(cross.contains(QStringLiteral("text:Elko symbol:elko")));
+        QVERIFY(cross.contains(QStringLiteral("text:C1")));
+        QVERIFY(cross.contains(QStringLiteral("field:D3 field:D4")));
+        QVERIFY(!cross.join(QLatin1Char(' ')).contains(QStringLiteral("field:C2")));
+        const QStringList right = pieces(QStringLiteral("stepText_1"));
+        QVERIFY(right.join(QLatin1Char(' ')).contains(QStringLiteral("symbol:led_gruen")));
+        QVERIFY(right.contains(QStringLiteral("text:10 kΩ")));
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.3.15")));
+        m_lab->chooseGuess(0);
+        QTRY_VERIFY(pieces(QStringLiteral("stepText_0")).join(QLatin1Char(' ')).contains(QStringLiteral("symbol:relais")));
+        QVERIFY(!pieces(QStringLiteral("stepText_0")).contains(QStringLiteral("field:B3 field:B4")));
+    }
+
     void troublePopupOnDestroyed() {
         m_settings->setUnlockAll(true);
         m_lab->startFreeLab();

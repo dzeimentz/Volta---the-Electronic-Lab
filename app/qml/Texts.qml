@@ -59,7 +59,17 @@ QtObject {
             ["diode_si", qsTr("Diode", "Wortanfaenge im Aufbautext")],
             ["blinkmodul", qsTr("Blinkmodul", "Wortanfaenge im Aufbautext")],
             ["tonmodul", qsTr("Tonmodul", "Wortanfaenge im Aufbautext")],
-            ["lautsprecher", qsTr("Lautsprecher", "Wortanfaenge im Aufbautext")]
+            ["lautsprecher", qsTr("Lautsprecher", "Wortanfaenge im Aufbautext")],
+            ["fotowiderstand", qsTr("Fotowiderstand", "Wortanfaenge im Aufbautext")],
+            ["heissleiter", qsTr("Heißleiter", "Wortanfaenge im Aufbautext")],
+            ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
+            ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
+            ["relais", qsTr("Relais", "Wortanfaenge im Aufbautext")],
+            ["transistor_npn", qsTr("Transistor", "Wortanfaenge im Aufbautext")],
+            ["feuchtesonde", qsTr("Feuchtesonde", "Wortanfaenge im Aufbautext")],
+            ["piezo", qsTr("Piezo", "Wortanfaenge im Aufbautext")],
+            ["zeitmodul", qsTr("Zeitmodul", "Wortanfaenge im Aufbautext")],
+            ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")]
         ]
     }
 
