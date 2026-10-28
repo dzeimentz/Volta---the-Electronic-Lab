@@ -976,6 +976,7 @@ Item {
                 meterWidth: Theme.meterDockWidth
                 highlightGroup: lab.highlightGroup
                 onGroupTapped: (name) => lab.highlightGroup = lab.highlightGroup === name ? "" : name
+                onInfoRequested: (name) => deskPartInfo.show(name)
             }
 
             // Farbiger Hintergrund des Steckbretts: eine Kachel je Feld (Reihenfarbe, nach rechts dunkler)
@@ -1686,6 +1687,11 @@ Item {
             text: qsTr("Herausnehmen")
             onTriggered: { lab.beginEdit(); lab.controller.removeModule(moduleMenu.moduleId); lab.selectedModule = "" }
         }
+    }
+
+    DeskPartInfo {
+        id: deskPartInfo
+        objectName: "deskPartInfo"
     }
 
     ModuleInside {

@@ -513,6 +513,14 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_DESKINFO=<batterie|p1|p2|schalter|lautsprecher> oeffnet die Erklaerung eines Pultbauteils
+    if (const QString part = qEnvironmentVariable("VOLTA_DEMO_DESKINFO"); !part.isEmpty())
+        QTimer::singleShot(1500, &engine, [&engine, part] {
+            const auto roots = engine.rootObjects();
+            if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("deskPartInfo")))
+                QMetaObject::invokeMethod(dlg, "show", Q_ARG(QVariant, part));
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_HELP=<kapitel> oeffnet die Hilfe bei einem Kapitel (z. B. werkzeug, eltern; 1: Anfang)
     if (const QString helpKey = qEnvironmentVariable("VOLTA_DEMO_HELP"); !helpKey.isEmpty())
         QTimer::singleShot(600, &engine, [&engine, helpKey] {

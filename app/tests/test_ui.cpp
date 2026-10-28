@@ -1664,6 +1664,35 @@ private slots:
         m_lab->setProperty("deskSwitch", false);
     }
 
+    // »?« oben rechts an jedem Pultrahmen oeffnet die Erklaerung des Bauteils mit seinen Feldern; der Schalter bleibt dabei,
+    // wie er ist, und laesst sich weiter umlegen
+    void deskPartInfo() {
+        m_window->setProperty("inLab", true);
+        m_lab->startFreeLab();
+        QObject* info = m_window->findChild<QObject*>(QStringLiteral("deskPartInfo"));
+        QVERIFY(info);
+        m_lab->setProperty("deskSwitch", false);
+        const QList<QPair<const char*, QString>> parts = {
+            {"batterie", QStringLiteral("Batterie")}, {"p1", QStringLiteral("Potentiometer 1")},
+            {"p2", QStringLiteral("Potentiometer 2")}, {"schalter", QStringLiteral("Schalter")},
+            {"lautsprecher", QStringLiteral("Lautsprecher")}};
+        for (const auto& [name, title] : parts) {
+            QQuickItem* button = item(QStringLiteral("deskInfo_") + QLatin1String(name));
+            QVERIFY2(button && button->isVisible(), name);
+            QVERIFY(button->width() >= 48 && button->height() >= 48); // Tippflaeche
+            QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
+            QTRY_VERIFY2(info->property("opened").toBool(), name);
+            QCOMPARE(item(QStringLiteral("deskInfoTitle"))->property("text").toString(), title);
+            QMetaObject::invokeMethod(info, "close");
+            QTRY_VERIFY(!info->property("opened").toBool());
+        }
+        QCOMPARE(m_lab->property("deskSwitch").toBool(), false);
+        QQuickItem* sw = item(QStringLiteral("deskSwitch"));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(sw));
+        QTRY_COMPARE(m_lab->property("deskSwitch").toBool(), true);
+        m_lab->setProperty("deskSwitch", false);
+    }
+
     void wireColorAutoBadge() {
         m_window->setProperty("inLab", true);
         m_lab->startFreeLab();

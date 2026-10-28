@@ -95,6 +95,11 @@ das iPad).
 
 ## Bedienpult
 - **Hauptschalter** fuer die Batterie.
+- **»?« je Pultbauteil**: rundes Fragezeichen oben rechts in jedem Rahmen (sichtbar 24 dp, Tippflaeche 48 dp, unter den
+  Bedienelementen, damit diese Vorrang haben). Oeffnet `DeskPartInfo.qml`: was das Bauteil tut, jedes Pultfeld als Feld
+  wie am Pult mit Bedeutung (V+/0V, P1a/P1s/P1b, S1/S2, LS1/LS2) und kurze Hinweise (Spannungsteiler, Kurzschluss).
+  Werte wie in der Simulation (Poti 10 kΩ linear, Lautsprecher 8 Ω). Beschriftung »ein«/»aus« des Schalters links
+  vom Knebel. Entwicklerhilfe: `VOLTA_DEMO_DESKINFO=<batterie|p1|p2|schalter|lautsprecher>`.
 - **Drehregler mit Lichtring**: 16 Segmente auf 270°, Luecke unten; Segmente vom linken Anschlag bis zur Stellung
   leuchtend (Akzentfarbe Signal Orange #FF6B1A / Solder Amber #FFB07A), Rest als blasse Umrisse. Stellung intern
   stufenlos. Ab Stufe 3 zeigt langer Druck Teilwiderstand in Ω und Stellung in %.

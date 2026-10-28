@@ -179,6 +179,7 @@ qt_add_qml_module(volta_ui
         qml/SchematicView.qml
         qml/ModuleItem.qml
         qml/ModuleInside.qml
+        qml/DeskPartInfo.qml
         qml/ToolToken.qml
         qml/RecorderPanel.qml
         qml/FlyoutBar.qml

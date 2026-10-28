@@ -1,7 +1,8 @@
 // Bedienpult I (docs/ui-spec.md, Bedienpult): Batterie mit Zellenwahl und Hauptschalter, Potentiometer 1 und 2 mit
 // Lichtring, Schalter (Kippschalter), Lautsprecher. Die blaue Pultflaeche schliesst die Pultfelder ein; jedes Bauteil
 // steht mit seinen Feldern in einem eigenen Rahmen (Lage aus Lab.groups). Ausgeblendete Bauteile (Stufenanpassung)
-// fehlen in groups. Alles hier sind Bedienhandlungen (kein Verlauf).
+// fehlen in groups. Alles hier sind Bedienhandlungen (kein Verlauf). Rundes »?« oben rechts je Rahmen erklaert das
+// Bauteil und seine Felder (DeskPartInfo).
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Shapes
@@ -18,6 +19,7 @@ Rectangle {
     property real meterWidth: 0
     property string highlightGroup: ""
     signal groupTapped(string name)
+    signal infoRequested(string name)
 
     color: Theme.desk
     radius: 10
@@ -43,6 +45,30 @@ Rectangle {
             border.color: desk.highlightGroup === modelData.name ? Theme.signalOrange : desk.frameColor
             border.width: 2
             TapHandler { onTapped: desk.groupTapped(modelData.name) }
+            // »?«: sichtbar 24 dp, Tippflaeche 48 dp; liegt unter den Bedienelementen, damit diese Vorrang haben
+            AbstractButton {
+                objectName: "deskInfo_" + parent.modelData.name
+                x: parent.width - 30 - (width - 24) / 2
+                y: 4 - (height - 24) / 2
+                width: Theme.control
+                height: Theme.control
+                onClicked: desk.infoRequested(parent.modelData.name)
+                Accessible.name: qsTr("Was ist das?")
+                background: Rectangle {
+                    anchors.centerIn: parent
+                    width: 24; height: 24; radius: 12
+                    color: parent.down ? "#FFFFFF" : (parent.hovered ? "#E6EEF6" : "#C9D6E3")
+                    border.color: "#FFFFFF"
+                    border.width: 1
+                    Text {
+                        anchors.centerIn: parent
+                        text: "?"
+                        color: Theme.navy
+                        font.pixelSize: 15
+                        font.bold: true
+                    }
+                }
+            }
         }
     }
 
@@ -189,14 +215,14 @@ Rectangle {
     Item {
         objectName: "deskSwitch"
         visible: desk.group("schalter") !== null
-        x: desk.centerOf("schalter") - width / 2
+        x: desk.centerOf("schalter") - width + 23 // Platte mittig, Beschriftung links davon
         y: 12
-        width: 80
+        width: 70
         height: 108
         readonly property bool on: desk.controller.deskSwitch
         Rectangle { // Metallplatte
             id: plate
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.right: parent.right
             width: 46; height: 72; radius: 9
             color: "#3A434D"
             border.color: "#8E99A4"; border.width: 2
@@ -216,17 +242,17 @@ Rectangle {
         }
         // Stellungen wie auf einem echten Pult beschriftet (nie nur ueber die Lage)
         Text {
-            anchors.left: plate.right; anchors.leftMargin: 3; y: 4
+            anchors.right: plate.left; anchors.rightMargin: 3; y: 4
             text: qsTr("ein"); color: parent.on ? "white" : "#8FA6BC"
             font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: parent.on
         }
         Text {
-            anchors.left: plate.right; anchors.leftMargin: 3; y: plate.height - height - 4
+            anchors.right: plate.left; anchors.rightMargin: 3; y: plate.height - height - 4
             text: qsTr("aus"); color: parent.on ? "#8FA6BC" : "white"
             font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: !parent.on
         }
         Label {
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenter: plate.horizontalCenter
             anchors.top: plate.bottom
             anchors.topMargin: 6
             text: qsTr("Schalter")
