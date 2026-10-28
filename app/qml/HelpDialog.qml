@@ -232,7 +232,7 @@ Popup {
                 }
             }
 
-            // Fuer Erwachsene: Verweis in den Elternbereich (PIN)
+            // Fuer Erwachsene: Verweis in die Einstellungen (PIN)
             Rectangle {
                 objectName: "helpSection_eltern"
                 width: col.width
@@ -256,7 +256,7 @@ Popup {
                         wrapMode: Text.Wrap
                         font.pixelSize: Math.round(15 * Theme.fontScale)
                         color: "#1E2B38"
-                        text: qsTr("Volta braucht kein Internet, legt kein Konto an und sammelt keine Daten. Datenschutz, Freigaben, Forscherprofile, Ton im Klassenzimmer, die PIN und die Erklärung, wie Volta rechnet, finden Sie im Elternbereich. Er ist durch eine PIN geschützt.")
+                        text: qsTr("Volta braucht kein Internet, legt kein Konto an und sammelt keine Daten. Datenschutz, Freigaben, Forscherprofile, Ton im Klassenzimmer, die PIN und die Erklärung, wie Volta rechnet, finden Sie in den Einstellungen. Sie sind durch eine PIN geschützt.")
                     }
                     Label {
                         width: parent.width
@@ -268,7 +268,7 @@ Popup {
                     Button {
                         objectName: "helpParentArea"
                         height: Theme.control
-                        text: qsTr("Elternbereich öffnen")
+                        text: qsTr("Einstellungen öffnen")
                         font.bold: true
                         onClicked: { help.close(); help.parentAreaRequested() }
                     }

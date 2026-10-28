@@ -130,7 +130,7 @@ ApplicationWindow {
         onQuickGuideRequested: quickGuide.open()
         onTaskRequested: taskDialog.openTask()
         onDemoRequested: demoDialog.open()
-        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+        onParentAreaRequested: parentGate.askSettings(() => parentArea.open())
     }
 
     Lab {
@@ -147,7 +147,7 @@ ApplicationWindow {
         onHelpRequested: helpDialog.open()
         onQuickGuideRequested: quickGuide.open()
         onHelpTopicRequested: (key) => helpDialog.show(key)
-        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+        onParentAreaRequested: parentGate.askSettings(() => parentArea.open())
     }
 
     JournalView {
@@ -161,7 +161,7 @@ ApplicationWindow {
         onInfoRequested: infoDialog.open()
         onHelpRequested: helpDialog.open()
         onQuickGuideRequested: quickGuide.open()
-        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+        onParentAreaRequested: parentGate.askSettings(() => parentArea.open())
         onExperimentRequested: (id) => { if (labController.startExperiment(id)) { root.inJournal = false; root.inLab = true } }
     }
 
@@ -268,7 +268,7 @@ ApplicationWindow {
     }
     HelpDialog {
         id: helpDialog
-        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+        onParentAreaRequested: parentGate.askSettings(() => parentArea.open())
     }
 
     // Fortschrittscode (QR ueber die Kamera-App): Rueckfrage, dann in das aktuelle Profil uebernehmen. Mit Profilen
@@ -326,12 +326,13 @@ ApplicationWindow {
         visible: labController.profilesEnabled && labController.currentProfile.id === undefined
         controller: labController
         onChosen: (id) => { if (labController.selectProfile(id)) root.resume() }
-        onParentAreaRequested: parentGate.ask(() => parentArea.open())
+        onParentAreaRequested: parentGate.askSettings(() => parentArea.open())
     }
     ParentArea {
         id: parentArea
         controller: labController
         settings: root.settings
+        gate: parentGate
         onTaskQrRequested: (link, code) => taskQr.showTask(link, code)
     }
     TaskQrDialog { id: taskQr; controller: labController }

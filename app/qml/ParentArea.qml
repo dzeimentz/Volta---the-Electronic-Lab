@@ -1,4 +1,5 @@
-// Elternbereich (docs/ui-spec.md, docs/privacy-safety.md): nur hinter der Elternschranke erreichbar. Freigaben,
+// Einstellungen (frueher Elternbereich; docs/ui-spec.md, docs/privacy-safety.md): hinter der Elternschranke (PIN
+// abschaltbar, Abschalten nur mit PIN). Freigaben,
 // Zuruecksetzen von Fortschritt und Forscherheft (mit Rueckfrage), Datenschutz, offengelegte Vereinfachungen der
 // Simulation, Lernpfad im Ueberblick, Kontakt mit Links nach aussen (hier erlaubt, weil hinter der Schranke).
 import QtQuick
@@ -9,6 +10,7 @@ Popup {
     id: area
     required property var controller
     property var settings: null
+    property var gate: null // Elternschranke (PIN-Rueckfrage beim Abschalten der PIN)
     signal taskQrRequested(string link, string code) // grosser QR-Code (liegt im Hauptfenster)
     readonly property var managed: typeof volta_managed !== "undefined" ? volta_managed : null
     readonly property bool soundManaged: managed !== null && managed.soundMode !== ""
@@ -62,7 +64,7 @@ Popup {
         Label {
             x: 20
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("Elternbereich")
+            text: qsTr("Einstellungen")
             color: "white"
             font.pixelSize: Math.round(20 * Theme.fontScale)
             font.bold: true
@@ -79,7 +81,7 @@ Popup {
         }
     }
 
-    // Karteireiter: Einstellungen, Lernpfad, Schule, Profile, Info (gewaehlter Reiter hell mit Unterstrich)
+    // Karteireiter: Allgemein, Lernpfad, Schule, Profile, Info (gewaehlter Reiter hell mit Unterstrich)
     TabBar {
         id: tabs
         objectName: "parentTabs"
@@ -88,7 +90,7 @@ Popup {
         background: Rectangle { color: Theme.navy }
         onCurrentIndexChanged: scroll.contentItem.contentY = 0
         Repeater {
-            model: [qsTr("Einstellungen"), qsTr("Lernpfad"), qsTr("Schule"), qsTr("Profile"), qsTr("Info")]
+            model: [qsTr("Allgemein"), qsTr("Lernpfad"), qsTr("Schule"), qsTr("Profile"), qsTr("Info")]
             TabButton {
                 id: tabButton
                 required property int index
@@ -146,7 +148,7 @@ Popup {
                 }
             }
 
-            // ---- PIN fuer den Elternbereich
+            // ---- PIN fuer die Einstellungen
             Rectangle {
                 objectName: "pinDefaultWarning"
                 visible: area.settings !== null && area.settings.parentPinIsDefault
@@ -163,7 +165,7 @@ Popup {
                     font.pixelSize: Math.round(14 * Theme.fontScale)
                     font.bold: true
                     color: "#5A3A00"
-                    text: qsTr("Noch gilt die Start-PIN 1234, die Kinder leicht erraten. Bitte legen Sie unter »Einstellungen« eine eigene PIN fest.")
+                    text: qsTr("Noch gilt die Start-PIN 1234, die Kinder leicht erraten. Bitte legen Sie unter »Allgemein« eine eigene PIN fest.")
                 }
             }
 
@@ -171,8 +173,27 @@ Popup {
                 visible: tabs.currentIndex === 0
                 width: parent.width
                 spacing: 8
-                Heading { text: qsTr("PIN für den Elternbereich") }
-                Body { text: qsTr("Die PIN schützt den Elternbereich und Links aus der App heraus. Sie hat 4 bis 8 Ziffern und bleibt nur auf diesem Gerät.") }
+                Heading { text: qsTr("PIN für die Einstellungen") }
+                Body { text: qsTr("Die PIN schützt die Einstellungen und Links aus der App heraus. Sie hat 4 bis 8 Ziffern und bleibt nur auf diesem Gerät.") }
+                // Abschalten fragt die PIN noch einmal ab; Links nach aussen bleiben immer geschuetzt
+                CheckBox {
+                    objectName: "pinRequired"
+                    width: parent.width
+                    height: Theme.control
+                    text: qsTr("Einstellungen nur mit PIN öffnen")
+                    enabled: area.settings !== null
+                    checked: area.settings ? area.settings.settingsPinRequired : true
+                    onToggled: {
+                        if (checked) { area.settings.settingsPinRequired = true; return }
+                        checked = Qt.binding(() => area.settings ? area.settings.settingsPinRequired : true)
+                        if (area.gate) area.gate.ask(() => area.settings.settingsPinRequired = false)
+                    }
+                }
+                Body {
+                    visible: area.settings !== null && !area.settings.settingsPinRequired
+                    text: qsTr("Die Einstellungen öffnen sich jetzt ohne PIN. Links aus der App heraus fragen weiter nach der PIN.")
+                    color: "#5A3A00"
+                }
                 Flow {
                     width: parent.width
                     spacing: 10

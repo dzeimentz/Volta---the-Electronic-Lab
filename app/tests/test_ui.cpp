@@ -996,7 +996,53 @@ private slots:
         QTRY_VERIFY(!gate->property("opened").toBool());
     }
 
-    // PIN fuer den Elternbereich: aendern (nur Ziffern, 4-8), Pruefwert statt PIN, Sperre nach fuenf Fehlversuchen
+    // PIN-Abfrage der Einstellungen abschaltbar: Abschalten fragt die PIN noch einmal, danach oeffnen die Einstellungen
+    // ohne PIN; Links nach aussen bleiben hinter der PIN; Einschalten ohne Rueckfrage
+    void settingsPinSwitch() {
+        QObject* gate = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("parentGate"));
+        QObject* area = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("parentArea"));
+        QVERIFY(gate && area && m_settings->settingsPinRequired());
+        auto openSettings = [&] {
+            QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("settingsButton"))));
+            QQuickItem* entry = nullptr;
+            QTRY_VERIFY((entry = item(QStringLiteral("settingParentArea"))) && entry->isVisible());
+            QTest::qWait(100);
+            QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(entry));
+        };
+        auto type = [&](const QString& digits) {
+            QTest::qWait(100);
+            for (QChar ch : digits)
+                QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateKey_") + ch)));
+            QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("gateKey_ok"))));
+        };
+        openSettings();
+        QTRY_VERIFY(gate->property("opened").toBool());
+        type(QStringLiteral("1234"));
+        QTRY_VERIFY(area->property("opened").toBool());
+        QTest::qWait(100);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("parentTab_0")))); // Allgemein
+        clickInPanel(QStringLiteral("pinRequired"));
+        QTRY_VERIFY(gate->property("opened").toBool()); // Rueckfrage
+        QVERIFY(m_settings->settingsPinRequired());
+        QVERIFY(item(QStringLiteral("pinRequired"))->property("checked").toBool());
+        type(QStringLiteral("1234"));
+        QTRY_VERIFY(!m_settings->settingsPinRequired());
+        QTRY_VERIFY(!item(QStringLiteral("pinRequired"))->property("checked").toBool());
+        QVERIFY(area->property("opened").toBool());
+        QMetaObject::invokeMethod(area, "close");
+        QTRY_VERIFY(!area->property("opened").toBool());
+        openSettings(); // ohne PIN
+        QTRY_VERIFY(area->property("opened").toBool());
+        QVERIFY(!gate->property("opened").toBool());
+        QTest::qWait(100);
+        clickInPanel(QStringLiteral("pinRequired")); // wieder ein: ohne Rueckfrage
+        QTRY_VERIFY(m_settings->settingsPinRequired());
+        QVERIFY(!gate->property("opened").toBool());
+        QMetaObject::invokeMethod(area, "close");
+        QTRY_VERIFY(!area->property("opened").toBool());
+    }
+
+    // PIN fuer die Einstellungen: aendern (nur Ziffern, 4-8), Pruefwert statt PIN, Sperre nach fuenf Fehlversuchen
     void parentPin() {
         QTemporaryDir dir;
         const QString file = dir.filePath(QStringLiteral("einstellungen.ini"));

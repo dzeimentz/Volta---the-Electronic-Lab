@@ -1,5 +1,5 @@
-// Elternschranke (docs/ui-spec.md, docs/privacy-safety.md): PIN fuer Erwachsene (Start-PIN 1234, im Elternbereich
-// aenderbar) schuetzt Elternbereich und externe Links. Eingabe ueber einen Ziffernblock (>= 48 dp), verdeckt; nach
+// Elternschranke (docs/ui-spec.md, docs/privacy-safety.md): PIN fuer Erwachsene (Start-PIN 1234, in den Einstellungen
+// aenderbar) schuetzt die Einstellungen (abschaltbar: askSettings) und externe Links (immer). Eingabe ueber einen Ziffernblock (>= 48 dp), verdeckt; nach
 // fuenf Fehlversuchen 30 s Sperre (AppSettings). ask(action) ruft action() erst nach der richtigen PIN auf.
 // Am Rechner auch per Tastatur: Ziffern (auch Ziffernblock), Ruecktaste/Entf loescht, Eingabe bestaetigt.
 import QtQuick
@@ -21,6 +21,11 @@ Popup {
         gate.forgotShown = false
         gate.lockSeconds = gate.settings ? gate.settings.parentPinLockSeconds() : 0
         gate.open()
+    }
+    // Einstellungen oeffnen: ohne PIN, wenn sie in den Einstellungen abgeschaltet ist
+    function askSettings(action) {
+        if (gate.settings && !gate.settings.settingsPinRequired) action()
+        else gate.ask(action)
     }
     function typeDigit(d) {
         if (gate.lockSeconds > 0 || gate.pin.length >= 8) return
@@ -88,7 +93,7 @@ Popup {
         Label {
             width: parent.width
             wrapMode: Text.Wrap
-            text: qsTr("Bitte geben Sie die PIN für den Elternbereich ein.")
+            text: qsTr("Bitte geben Sie die PIN für Erwachsene ein.")
             font.pixelSize: Math.round(14 * Theme.fontScale)
             color: "#1E2B38"
         }

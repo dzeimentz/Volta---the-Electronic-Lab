@@ -42,7 +42,7 @@ Rectangle {
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
             height: Theme.control
-            text: qsTr("Elternbereich")
+            text: qsTr("Einstellungen")
             palette.buttonText: "white"
             onClicked: chooser.parentAreaRequested()
         }

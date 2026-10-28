@@ -45,6 +45,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(QString classroomSound READ classroomSound WRITE setClassroomSound NOTIFY changed)
     // Elternschranke: PIN (4-8 Ziffern), gespeichert nur als gesalzener SHA-256-Pruefwert; Start-PIN 1234
     Q_PROPERTY(bool parentPinIsDefault READ parentPinIsDefault NOTIFY changed)
+    // Einstellungen nur mit PIN oeffnen (abschaltbar; Links nach aussen bleiben immer hinter der PIN)
+    Q_PROPERTY(bool settingsPinRequired READ settingsPinRequired WRITE setSettingsPinRequired NOTIFY changed)
     Q_PROPERTY(QString wireColor READ wireColor WRITE setWireColor NOTIFY changed)
     Q_PROPERTY(bool autoWireColor READ autoWireColor WRITE setAutoWireColor NOTIFY changed) // Plus rot, Minus schwarz
     Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY changed)
@@ -88,6 +90,8 @@ public:
     QString classroomSound() const { return m_classroomSound; }
     void setClassroomSound(const QString& mode);
     bool parentPinIsDefault() const { return m_pinHash.isEmpty(); }
+    bool settingsPinRequired() const { return m_settingsPinRequired; }
+    void setSettingsPinRequired(bool on) { set(m_settingsPinRequired, on, "eltern/pin_einstellungen"); }
     // PIN pruefen; nach 5 Fehlversuchen 30 s gesperrt (auch ueber einen Neustart). false waehrend der Sperre.
     Q_INVOKABLE bool checkParentPin(const QString& pin);
     // verbleibende Sperre in Sekunden (0: frei)
@@ -137,6 +141,7 @@ private:
     bool m_silverFields = true;
     bool m_profilesEnabled = false;
     bool m_tickEnabled = true;
+    bool m_settingsPinRequired = true;
     bool m_demoEnabled = true;
     QString m_classroomSound = QStringLiteral("normal");
     QString m_pinHash; // leer: Start-PIN

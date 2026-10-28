@@ -14,8 +14,9 @@
 ## Kinderschutz
 - Aufgaben der Lehrkraft (QR-Code bzw. Code zum Eintippen) enthalten nur Experimente, Aufbau und Aufgabentext - keine
   Namen, kein Rueckkanal, kein Netz.
-- Elternschranke (PIN, Start 1234, aenderbar; Hinweis bis zur Aenderung) vor externen Links, Elternbereich und
-  Erwachsenenteil des Readme. Die PIN steht nur als gesalzener Pruefwert in den Einstellungen.
+- Elternschranke (PIN, Start 1234, aenderbar; Hinweis bis zur Aenderung) vor externen Links, Einstellungen (frueher
+  Elternbereich) und Erwachsenenteil des Readme. Fuer die Einstellungen abschaltbar (nur mit PIN), externe Links
+  bleiben immer dahinter. Die PIN steht nur als gesalzener Pruefwert in den Einstellungen.
 - Zerstoerende Experimente (`zerstoerend: true`) zeigen »Nur in der App!«.
 - »Jetzt in echt« schlaegt nie zerstoerende Versuche vor.
 - Sicherheitskapitel: Steckdose, Lithium-Akkus und Powerbanks sind tabu.

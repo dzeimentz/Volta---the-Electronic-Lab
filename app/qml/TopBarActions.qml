@@ -289,7 +289,7 @@ Row {
                 objectName: "settingParentArea"
                 visible: !bar.managed || bar.managed.parentArea
                 height: visible ? Theme.control : 0
-                text: qsTr("Elternbereich …")
+                text: qsTr("Weitere Einstellungen …")
                 onTriggered: bar.parentAreaRequested()
             }
             MenuItem {

@@ -301,13 +301,18 @@ das iPad).
   gesalzener SHA-256-Pruefwert. Eingabe verdeckt ueber Ziffernblock (48 dp); nach fuenf Fehlversuchen 30 s Sperre, die
   einen Neustart ueberdauert. »PIN vergessen?« erklaert das Zuruecksetzen ueber das Loeschen der App-Daten.
   Info-Fenster: »Website oeffnen« und »E-Mail schreiben« erst nach der Schranke.
+- PIN fuer die Einstellungen abschaltbar (10/2026, `AppSettings::settingsPinRequired`, Schluessel
+  `eltern/pin_einstellungen`, Grundwert an): Checkbox »Einstellungen nur mit PIN oeffnen« im Reiter Allgemein;
+  Abschalten fragt die PIN noch einmal ab, Einschalten nicht. Links nach aussen bleiben immer hinter der PIN
+  (`ParentGate.ask`), nur das Oeffnen der Einstellungen nutzt `askSettings`.
 
-## Elternbereich
-- Erreichbar ueber das Menue (☰ »Elternbereich …«) hinter der Elternschranke (`ParentArea.qml`):
+## Einstellungen (frueher Elternbereich)
+- Seit 10/2026 heisst der Elternbereich »Einstellungen«; Menue ☰ »Weitere Einstellungen …«.
+- Erreichbar ueber das Menue (☰ »Weitere Einstellungen …«) hinter der Elternschranke (`ParentArea.qml`):
   Freigaben (»Alle Stufen und Bauteile freigeben«, aus dem Kindermenue hierher verlegt), Lernpfad-Fortschritt
   zuruecksetzen und Forscherheft leeren (je mit Rueckfrage), Datenschutz (was lokal gespeichert wird),
   »So rechnet Volta« (offengelegte Vereinfachungen der Simulation), Lernpfad im Ueberblick, Kontakt mit Links.
-- Karteireiter (0.9.1) unter dem Kopf: Einstellungen (PIN, Ton im Klassenzimmer, Tick, Vorfuehrung), Lernpfad
+- Karteireiter (0.9.1) unter dem Kopf: Allgemein (PIN, PIN-Schalter, Ton im Klassenzimmer, Tick, Vorfuehrung), Lernpfad
   (Freigaben, Steckbrett und Pult, Stufen im Ueberblick), Schule (Aufgabe fuer die Klasse, Praesentationsmodus),
   Profile (Forscherprofile, Mitnehmen, Fortschritt und Forscherheft), Info (Datenschutz, So rechnet Volta, Kontakt).
   Gewaehlter Reiter hell, fett und unterstrichen; Hinweise der Geraeteverwaltung und zur Start-PIN stehen ueber allen.
