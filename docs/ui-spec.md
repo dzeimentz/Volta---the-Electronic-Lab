@@ -150,6 +150,8 @@ das iPad).
   (`Theme.modulePlate`), Bild: Traegerplatte mit einem Anschlussfeld je Anschluss bzw. Schaltzeichen.
 - Beschriftung auf der Grundplatte mit Namen und Kennung (»Widerstand R1«), Wert bzw. Nennspannung in der Zeile
   darunter.
+- Gepolte Bauteile (LED, Summer, Elko, Piezo): rotes, kraeftiges Pluszeichen mit heller Kontur unterhalb der
+  Mittellinie am Plus-Anschluss, damit es neben dem eingesteckten Bein sichtbar bleibt.
 - Gluehlampe: Nennspannung 2,5 / 6 / 10 V im Bauteilmenue »Nennspannung« (Befehl), Vorgabe 6 V; die Spannung steht
   an der Lampe.
 

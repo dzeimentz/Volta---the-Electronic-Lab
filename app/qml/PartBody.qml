@@ -7,6 +7,14 @@ import QtQuick.Shapes
 
 Item {
     id: root
+    // Pluszeichen gepolter Bauteile (LED, Summer, Elko, Piezo): rot, kraeftig, mit heller Kontur und unterhalb der
+    // Mittellinie, damit es neben dem eingesteckten Bein sichtbar bleibt
+    component PlusMark: Item {
+        width: 16; height: 16
+        Rectangle { anchors.centerIn: parent; width: 16; height: 5; radius: 1; color: "#D32F2F"; border.color: "white"; border.width: 1 }
+        Rectangle { anchors.centerIn: parent; width: 5; height: 16; radius: 1; color: "#D32F2F"; border.color: "white"; border.width: 1 }
+        Rectangle { anchors.centerIn: parent; width: 3; height: 3; color: "#D32F2F" } // Kreuzung ohne Kontur
+    }
     property string type
     property real value: 0
     property real level: 0
@@ -185,7 +193,7 @@ Item {
                 width: 4; height: kuppel.height - 6
                 color: Theme.navy
             }
-            Text { x: kuppel.x - 12; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: Math.round((14) * Theme.fontScale); font.bold: true; color: Theme.navy }
+            PlusMark { x: kuppel.x - 19; y: parent.height / 2 + 1 }
         }
     }
 
@@ -275,7 +283,7 @@ Item {
                 width: parent.height * 1.1; height: width; radius: width / 2
                 color: "#1E1E1E"
                 Rectangle { anchors.centerIn: parent; width: 6; height: 6; radius: 3; color: "#555555" }
-                Text { x: -12; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: Math.round((14) * Theme.fontScale); font.bold: true; color: Theme.navy }
+                PlusMark { x: -19; y: parent.height / 2 + 1 }
             }
             // Schallwellen: sichtbar, auch wenn der Ton stumm geschaltet ist (Klassenmodus)
             Repeater {
@@ -378,7 +386,7 @@ Item {
                 // Minus-Streifen rechts (zweiter Anschluss), mit Zeichen
                 Rectangle { anchors.right: parent.right; width: 10; height: parent.height; radius: 4; color: "#C9D6F0"
                     Text { anchors.centerIn: parent; text: "−"; font.pixelSize: Math.round((12) * Theme.fontScale); font.bold: true; color: "#2C62C9" } }
-                Text { x: 4; anchors.verticalCenter: parent.verticalCenter; text: "+"; font.pixelSize: Math.round((12) * Theme.fontScale); font.bold: true; color: "white" }
+                PlusMark { x: 3; y: parent.height - height - 1 }
             }
         }
     }
@@ -564,7 +572,7 @@ Item {
                 width: parent.height * 0.95; height: width; radius: width / 2
                 color: "#1E1E1E"; border.color: "#000000"
                 Rectangle { anchors.centerIn: parent; width: 6; height: 6; radius: 3; color: "#555555" }
-                Text { x: 3; y: 1; text: "+"; color: "white"; font.bold: true; font.pixelSize: Math.round(11 * Theme.fontScale) }
+                PlusMark { x: 1; y: parent.height - height }
             }
             Repeater {
                 model: root.level > 0.05 && !root.destroyed ? 2 : 0
