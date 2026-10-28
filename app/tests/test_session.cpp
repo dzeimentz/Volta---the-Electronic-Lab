@@ -185,8 +185,8 @@ private slots:
         s->setMainSwitch(true);
         QVERIFY(s->addWire("P:+9V", "P:P1a", "rot"));
         QVERIFY(s->addWire("P:0V", "P:P1s", "schwarz"));
-        s->setPot(1, 0.001); // 9 V an 10 Ohm Bahn
-        run(*s, 0.2);
+        s->setPot(1, 0.001); // 9 V an 10 Ohm Bahn: brennt nach etwa 0,2 s durch
+        run(*s, 0.5);
         const auto* pot = s->deskReading(model::desk_id::kPot1);
         QVERIFY(pot && pot->destroyed);
         auto f = s->checkCircuit();

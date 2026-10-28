@@ -6,6 +6,19 @@
 
 namespace volta::core {
 
+namespace {
+
+// Exakte Loesung von Cth*dT/dt = P - (T - Tamb)/Rth ueber dtS fuer eine Teilbahn (stabil fuer jede Schrittweite)
+double stepTemp(double tempK, double powerW, double rthKPerW, double tauS, double dtS) noexcept {
+    if (!std::isfinite(powerW)) powerW = 0.0;
+    const double steady = kAmbientK + std::max(powerW, 0.0) * rthKPerW;
+    return steady + (tempK - steady) * std::exp(-dtS / tauS);
+}
+
+double validTemp(double tempK) noexcept { return std::isfinite(tempK) && tempK > 0.0 ? tempK : kAmbientK; }
+
+} // namespace
+
 Potentiometer::Potentiometer(std::string id, NodeId a, NodeId wiper, NodeId b, PotentiometerParams params,
                              double position)
     : ComponentModel(std::move(id), {a, wiper, b}), m_params(params) {
@@ -15,8 +28,10 @@ Potentiometer::Potentiometer(std::string id, NodeId a, NodeId wiper, NodeId b, P
     if (!std::isfinite(m_params.minOhm) || m_params.minOhm < kMinOhm) m_params.minOhm = def.minOhm;
     if (!std::isfinite(m_params.minShare) || m_params.minShare <= 0.0 || m_params.minShare > 1.0)
         m_params.minShare = def.minShare;
-    if (!std::isfinite(m_params.overloadFailS) || m_params.overloadFailS < 0.0) m_params.overloadFailS = def.overloadFailS;
-    if (!std::isfinite(m_params.instantFactor) || m_params.instantFactor < 4.0) m_params.instantFactor = def.instantFactor;
+    const ThermalParams& t = m_params.thermal;
+    if (!(t.rthKPerW > 0.0) || !(t.cthJPerK > 0.0) || !std::isfinite(t.rthKPerW) || !std::isfinite(t.cthJPerK) ||
+        !std::isfinite(t.tmaxK))
+        m_params.thermal = def.thermal;
     setPosition(position);
     applyPosition();
 }
@@ -29,6 +44,9 @@ void Potentiometer::applyPosition() noexcept {
     m_gAS = 1.0 / std::max(m_position * m_params.ohm, m_params.minOhm);
     m_gSB = 1.0 / std::max((1.0 - m_position) * m_params.ohm, m_params.minOhm);
 }
+
+// Waermewirksamer Anteil einer Teilbahn: ihre Laenge, fuer kurze Stuecke mindestens minShare
+double Potentiometer::share(double fraction) const noexcept { return std::max(fraction, m_params.minShare); }
 
 void Potentiometer::beginSolve(const StampContext& /*ctx*/) noexcept { applyPosition(); }
 
@@ -52,24 +70,24 @@ double Potentiometer::terminalCurrent(const SolutionView& x, std::size_t t) cons
 }
 
 void Potentiometer::thermal(const SolutionView& x, double dtS) noexcept {
-    m_lastDtS = dtS;
     const double vas = x.voltage(terminal(0)) - x.voltage(terminal(1));
     const double vsb = x.voltage(terminal(1)) - x.voltage(terminal(2));
     m_lastPowerAS = m_destroyed ? 0.0 : vas * vas * m_gAS;
     m_lastPowerSB = m_destroyed ? 0.0 : vsb * vsb * m_gSB;
+    if (dtS > 0.0) {
+        const ThermalParams& p = m_params.thermal;
+        const double tauS = p.rthKPerW * p.cthJPerK;
+        m_tempASK = stepTemp(m_tempASK, m_lastPowerAS, p.rthKPerW / share(m_position), tauS, dtS);
+        m_tempSBK = stepTemp(m_tempSBK, m_lastPowerSB, p.rthKPerW / share(1.0 - m_position), tauS, dtS);
+    }
+    m_tempK = std::max(m_tempASK, m_tempSBK);
 }
 
 void Potentiometer::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
     if (isDestroyed()) return;
-    // Belastbarkeit anteilig zur Bahnlaenge, fuer kurze Bahnstuecke mindestens minShare (Waerme verteilt sich)
-    const double limAS = m_params.pmaxW * std::max(m_position, m_params.minShare);
-    const double limSB = m_params.pmaxW * std::max(1.0 - m_position, m_params.minShare);
-    const double ratio = std::max(m_lastPowerAS / limAS, m_lastPowerSB / limSB);
-    m_overloaded = ratio > 1.0;
-    // Anhaltend stark ueberlastete Bahn brennt durch, grob ueberlastete sofort (vereinfachte Thermik)
-    m_overloadS = ratio > 4.0 ? m_overloadS + m_lastDtS : 0.0;
-    if (ratio > m_params.instantFactor || (ratio > 4.0 && m_overloadS >= m_params.overloadFailS - 1e-9))
-        destroy(events, index, timeS);
+    m_overloaded = m_lastPowerAS > m_params.pmaxW * share(m_position) ||
+                   m_lastPowerSB > m_params.pmaxW * share(1.0 - m_position);
+    checkThermalLimit(m_params.thermal, events, index, timeS); // heissere Teilbahn (tempK)
 }
 
 ComponentReading Potentiometer::read(const SolutionView& x) const noexcept {
@@ -80,13 +98,17 @@ ComponentReading Potentiometer::read(const SolutionView& x) const noexcept {
 
 ComponentState Potentiometer::saveState() const noexcept {
     ComponentState s = ComponentModel::saveState();
-    s.internal[0] = m_overloadS;
+    s.internal[0] = m_tempASK;
+    s.internal[1] = m_tempSBK;
     return s;
 }
 
 void Potentiometer::restoreState(const ComponentState& state) noexcept {
     ComponentModel::restoreState(state);
-    m_overloadS = std::isfinite(state.internal[0]) ? state.internal[0] : 0.0;
+    // neues Bauteil (Reparieren, ComponentState{}): beide Teilbahnen auf Umgebungstemperatur
+    m_tempASK = validTemp(state.internal[0]);
+    m_tempSBK = validTemp(state.internal[1]);
+    m_tempK = std::max(m_tempASK, m_tempSBK);
 }
 
 } // namespace volta::core
