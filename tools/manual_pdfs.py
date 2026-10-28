@@ -3,10 +3,10 @@
 
     python3 tools/manual_pdfs.py            # beide PDFs nach Release/Anleitung/
     python3 tools/manual_pdfs.py --bilder   # vorher die Bildschirmfotos neu aufnehmen
-    python3 tools/manual_pdfs.py --app-bilder   # nur die Bilder der Kurzanleitung in der App (QuickGuide.qml)
+    python3 tools/manual_pdfs.py --app-bilder   # nur die Schrittbilder der Kurzanleitung (App und PDF)
 
 - Volta1-Anleitung-de.pdf: ausfuehrliche Anleitung (alle Bereiche der App, Elternbereich, Sicherheit, Bauteile)
-- Volta1-Kurzanleitung-de.pdf: zwei Seiten zum Ausdrucken (erstes Experiment, Bedienung auf einen Blick)
+- Volta1-Kurzanleitung-de.pdf: drei Seiten zum Ausdrucken (acht Schritte mit Bildern, Bedienung auf einen Blick)
 
 Bilder: Bildschirmfotos der Desktop-Ausgabe (build/desktop-debug/app/volta1.exe, 1280 x 800) ueber die
 Entwicklerhilfen VOLTA_SCREENSHOT/VOLTA_DEMO_*; sie liegen in Release/Anleitung/bilder/de/ und werden nur mit
@@ -644,29 +644,37 @@ def long_manual(path):
 # ---------------------------------------------------------------- Kurzanleitung
 
 def short_manual(path):
-    story = [P("Kurzanleitung", "h1"),
-             P("In sechs Schritten zum ersten Experiment", "h2")]
-    annotated(SHOTS / "aufbauhilfe.png", OUT / "bilder" / "_kurz_nummern.png", QUICK_MARKS)
-    w, h = PILImage.open(OUT / "bilder" / "_kurz_nummern.png").size
-    story += [_frame(Image(str(OUT / "bilder" / "_kurz_nummern.png"), width=170 * mm, height=170 * mm * h / w)),
-              Spacer(1, 6)]
-    steps = [["1", "<b>Bauteil holen</b> – Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im "
-                   "selben Kontaktfeld ist verbunden. Zweimal tippen dreht ein Bauteil."],
-             ["2", "<b>Leitungen ziehen</b> – Ziehe mit dem Finger von Feld zu Feld. Plus wird rot, Minus schwarz."],
-             ["3", "<b>Schritt für Schritt</b> – Lies die Frage, wähle deine Vermutung und lass dir mit »Schritt "
-                   "für Schritt bauen« jedes Teil zeigen. Die Zielfelder blinken blau."],
-             ["4", "<b>Einschalten</b> – Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, Strom fließt. Zum "
-                   "Umbauen wieder antippen."],
-             ["5", "<b>Fertig</b> – Funktioniert es, tippe auf »Fertig« und wähle, was du beobachtet hast. Tick "
-                   "erklärt dir, was passiert ist."],
-             ["6", "<b>Hilfe</b> – Kommst du nicht weiter: »Ich brauche einen Tipp«. Ist etwas kaputt: "
-                   "»Rückgängig« macht es wieder heil."]]
-    t = Table([[P(f"<font size=14><b>{n}</b></font>", "center"), P(txt, "cell")] for n, txt in steps],
-              colWidths=[11 * mm, 159 * mm])
-    t.setStyle(TableStyle([("BACKGROUND", (0, 0), (0, -1), YELLOW), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                           ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#C9D1DA")),
-                           ("TOPPADDING", (0, 0), (-1, -1), 3), ("BOTTOMPADDING", (0, 0), (-1, -1), 4)]))
-    story += [t, PageBreak()]
+    # dieselben acht Schritte und Bilder wie in der App (QuickGuide.qml), je Seite vier
+    steps = [("Experiment aussuchen", "Tippe auf der Startseite im Lernpfad auf ein Experiment. Fang ganz oben bei "
+                                      "Stufe 0 an."),
+             ("Frage lesen und raten", "Tick stellt dir eine Forscherfrage. Was glaubst du? Tippe auf deine Antwort. "
+                                       "Raten ist erlaubt!"),
+             ("Bauteil holen", "Zieh das Bauteil mit dem Finger aus dem Bauteilfach auf die Felder. Alles, was im "
+                               "selben Feld steckt, ist verbunden."),
+             ("Leitungen ziehen", "Zieh mit dem Finger von einem Feld zum anderen. Eine Leitung von Plus (V+) wird "
+                                  "rot, eine von Minus (0V) schwarz."),
+             ("Strom einschalten", "Tippe an der Batterie auf den Hauptschalter, bis »Ein« dasteht. Oben steht jetzt "
+                                   "»Betrieb«. Zum Umbauen schaltest du wieder aus."),
+             ("Hinschauen und »Fertig«", "Leuchtet das Lämpchen? Dann hat es geklappt! Tippe auf »Fertig«."),
+             ("Sagen, was du gesehen hast", "Tippe an, was passiert ist. Danach erklärt dir Tick, warum es so ist."),
+             ("Hilfe holen", "»Schritt für Schritt bauen« zeigt dir jedes Teil. »Ich brauche einen Tipp« gibt dir "
+                             "einen Hinweis. Ging etwas schief? Der Pfeil oben macht es wieder rückgängig.")]
+    story = []
+    for page in range(2):
+        story += ([P("Kurzanleitung", "h1"), P("In acht Schritten zum ersten Experiment", "h2")] if page == 0
+                  else [P("Kurzanleitung – weiter", "h1")])
+        rows = []
+        for n in range(page * 4 + 1, page * 4 + 5):
+            title, text = steps[n - 1]
+            img = Image(str(OUT / "bilder" / f"_schritt{n}_de.png"), width=92 * mm, height=46 * mm)
+            rows.append([P(f"<font size=16><b>{n}</b></font>", "center"),
+                         [P(f"<font size=13><b>{title}</b></font>", "body"), P(text, "body")], img])
+        t = Table(rows, colWidths=[11 * mm, 66 * mm, 93 * mm])
+        t.setStyle(TableStyle([("BACKGROUND", (0, 0), (0, -1), YELLOW), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                               ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#C9D1DA")),
+                               ("TOPPADDING", (0, 0), (-1, -1), 5), ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+                               ("LEFTPADDING", (2, 0), (2, -1), 0), ("RIGHTPADDING", (2, 0), (2, -1), 0)]))
+        story += [t, PageBreak()]
 
     story += [P("Bedienung auf einen Blick", "h1"),
               table([["So geht's", "Finger / Maus"],
@@ -703,26 +711,154 @@ def short_manual(path):
     doc.build(story)
 
 
-# Kurzanleitung: Nummern der sechs Schritte im Bild »aufbauhilfe« (1280 x 800); 1 zeigt allgemein auf das Bauteilfach,
-# weil dessen Reihenfolge von der Sprache abhaengt
-QUICK_MARKS = [(1, (196, 140)), (2, (222, 205)), (3, (1255, 455)), (4, (412, 12)), (5, (1255, 712)), (6, (1255, 562))]
+# ---------------------------------------------------------------- Bilder der Kurzanleitung (App und PDF)
+
+# Je Schritt ein vergroesserter Ausschnitt des Labors mit orangem Rahmen und Pfeil, je Sprache aufgenommen:
+# app/resources/guide/schritt<n>_<sprache>.jpg (QuickGuide.qml) und Release/Anleitung/bilder/_schritt<n>_de.png (PDF).
+# Koordinaten im Bild 1280 x 800 (Aufbau: 1280 x 1000); Knoepfe im Seitenfeld rechts werden gesucht, weil ihre Lage
+# von der Textlaenge der Sprache abhaengt.
+GUIDE_SCENES = {
+    "start": {"VOLTA_SCREENSHOT_S": "3"},
+    "frage": {"VOLTA_DEMO_QUESTION": "1", "VOLTA_SCREENSHOT_S": "4"},
+    "aufbau": {"VOLTA_DEMO_QUESTION": "2", "VOLTA_DEMO_SIZE": "1280x1000", "VOLTA_SCREENSHOT_S": "4"},
+    "hilfe": {"VOLTA_DEMO_GUIDE": "1", "VOLTA_DEMO_EXP": "volta1.1.1", "VOLTA_SCREENSHOT_S": "4"},
+    "geloest": {"VOLTA_DEMO_SOLVE": "1", "VOLTA_DEMO_EXP": "volta1.1.1", "VOLTA_SCREENSHOT_S": "5"},
+    "beobachten": {"VOLTA_DEMO_SOLVE": "1", "VOLTA_DEMO_EXP": "volta1.1.1", "VOLTA_DEMO_FINISH": "2",
+                   "VOLTA_SCREENSHOT_S": "6"},
+}
 APP_GUIDE = ROOT / "app" / "resources" / "guide"
+GUIDE_STEPS = 8
+GUIDE_SIZE = (880, 440)
+GUIDE_JOIN = {6}   # Schritte mit Pfeil zwischen den Ausschnitten (sonst nur Abstand)
+ORANGE = (240, 120, 0)
+
+
+def panel_buttons(img, top=100):
+    """Knoepfe im Seitenfeld rechts (Antworten, Hilfen): [(oben, unten)] am blauen Rand bei x = 958."""
+    lines = []
+    for y in range(top, img.height - 110):
+        r, g, b = img.getpixel((958, y))
+        if not (r < 70 and 100 < g < 135 and b > 160):
+            continue
+        if lines and y - lines[-1][1] <= 2:
+            lines[-1][1] = y
+        else:
+            lines.append([y, y])
+    return [(lines[i][0] - 3, lines[i + 1][1] + 3) for i in range(0, len(lines) - 1, 2)]
+
+
+def _step_panels(n, shots):
+    """Ausschnitte eines Schritts: [(Szene, (links, oben, rechts, unten), [Markierungen])]; Markierung
+    ("box", (x0, y0, x1, y1)) oder ("arrow", (x0, y0), (x1, y1)) im Bild der Szene."""
+    if n == 1:   # Experiment im Lernpfad antippen
+        return [("start", (16, 496, 700, 716), [("box", (36, 607, 334, 699)), ("arrow", (580, 653), (350, 653))])]
+    if n == 2:   # Frage lesen, Vermutung antippen
+        b = panel_buttons(shots["frage"], 280)
+        return [("frage", (944, 108, 1280, b[-1][1] + 16), [("box", (950, b[0][0] - 2, 1270, b[-1][1] + 2))])]
+    if n == 3:   # Bauteil aus dem Fach auf die blinkenden Felder ziehen
+        return [("hilfe", (0, 228, 830, 540), [("box", (5, 240, 123, 309)), ("box", (265, 343, 487, 437)),
+                                               ("arrow", (128, 286), (258, 376))])]
+    if n == 4:   # Leitungen: rot von V+, schwarz von 0V
+        return [("geloest", (266, 236, 512, 470), [("box", (283, 243, 356, 316)), ("box", (355, 243, 428, 316))])]
+    if n == 5:   # Hauptschalter ein, oben steht »Betrieb«
+        return [("geloest", (262, 0, 620, 322), [("box", (293, 1, 417, 55)), ("box", (298, 170, 422, 218)),
+                                                ("arrow", (284, 170), (300, 62))])]
+    if n == 6:   # Laempchen leuchtet -> »Fertig«
+        return [("geloest", (266, 330, 492, 470), [("box", (334, 350, 416, 428))]),
+                ("geloest", (944, 700, 1280, 796), [("box", (950, 709, 1270, 769))])]
+    if n == 7:   # Beobachtung antippen
+        b = panel_buttons(shots["beobachten"], 300)
+        return [("beobachten", (944, 108, 1280, b[-1][1] + 16), [("box", (950, b[0][0] - 2, 1270, b[-1][1] + 2))])]
+    if n == 8:   # Schritt fuer Schritt, Tipp, Rueckgaengig
+        b = panel_buttons(shots["aufbau"], 520)[-2:]
+        return [("geloest", (419, 0, 483, 60), [("box", (423, 1, 477, 55))]),
+                ("aufbau", (944, b[0][0] - 22, 1280, b[-1][1] + 22),
+                 [("box", (950, y0 - 2, 1270, y1 + 2)) for y0, y1 in b])]
+    raise ValueError(n)
+
+
+def _arrow(d, a, b, width, color):
+    import math
+    ang = math.atan2(b[1] - a[1], b[0] - a[0])
+    head = width * 2.6
+    base = (b[0] - head * math.cos(ang), b[1] - head * math.sin(ang))
+    d.line([a, base], fill=color, width=round(width))
+    side = (head * 0.62 * math.sin(ang), head * 0.62 * math.cos(ang))
+    d.polygon([b, (base[0] + side[0], base[1] - side[1]), (base[0] - side[0], base[1] + side[1])], fill=color)
+
+
+def guide_image(n, shots, dst):
+    """Ein Schrittbild: Ausschnitte nebeneinander auf hellem Grund, vergroessert, mit Rahmen und Pfeilen."""
+    panels = _step_panels(n, shots)
+    k = 3   # Ueberabtastung fuer glatte Linien
+    W, H = GUIDE_SIZE
+    gap, pad = (90 if n in GUIDE_JOIN else 40), 24
+    widths = sum(c[2] - c[0] for _, c, _ in panels)
+    heights = max(c[3] - c[1] for _, c, _ in panels)
+    s = min((W - 2 * pad - gap * (len(panels) - 1)) / widths, (H - 2 * pad) / heights, 2.2)
+    out = PILImage.new("RGB", (W * k, H * k), (255, 248, 230))
+    d = ImageDraw.Draw(out)
+    x = (W - widths * s - gap * (len(panels) - 1)) / 2
+    places = []
+    for scene, (x0, y0, x1, y1), marks in panels:
+        w, h = (x1 - x0) * s, (y1 - y0) * s
+        y = (H - h) / 2
+        crop = shots[scene].crop((x0, y0, x1, y1)).resize((round(w * k), round(h * k)), PILImage.LANCZOS)
+        out.paste(crop, (round(x * k), round(y * k)))
+        d.rounded_rectangle([(x - 2) * k, (y - 2) * k, (x + w + 2) * k, (y + h + 2) * k], radius=6 * k,
+                            outline=(10, 37, 64), width=2 * k)
+
+        def to(px, py, x=x, y=y, x0=x0, y0=y0):
+            return ((x + (px - x0) * s) * k, (y + (py - y0) * s) * k)
+        for m in marks:
+            if m[0] == "box":
+                a, b = to(*m[1][:2]), to(*m[1][2:])
+                for col, wid in (((255, 255, 255), 9), (ORANGE, 5)):
+                    d.rounded_rectangle([a, b], radius=8 * k, outline=col, width=wid * k)
+            else:
+                a, b = to(*m[1]), to(*m[2])
+                _arrow(d, a, b, 13 * k, (255, 255, 255))
+                _arrow(d, a, b, 7 * k, ORANGE)
+        places.append((x, w))
+        x += w + gap
+    if n in GUIDE_JOIN:
+        for (ax, aw), (bx, _) in zip(places, places[1:]):
+            _arrow(d, ((ax + aw + 14) * k, H / 2 * k), ((bx - 14) * k, H / 2 * k), 8 * k, ORANGE)
+    img = out.resize(GUIDE_SIZE, PILImage.LANCZOS)
+    if str(dst).endswith(".jpg"):
+        img.save(dst, quality=84, optimize=True)
+    else:
+        img.save(dst)
+
+
+def guide_shots(lang):
+    folder = OUT / "bilder" / f"kurz_{lang}"
+    folder.mkdir(parents=True, exist_ok=True)
+    shots = {}
+    for name, extra in GUIDE_SCENES.items():
+        target = folder / f"{name}.png"
+        env = dict(os.environ)
+        env.update({"VOLTA_NO_SPLASH": "1", "VOLTA_DEMO_LANG": lang, "VOLTA_SCREENSHOT": str(target)})
+        env.update(extra)
+        subprocess.run([str(EXE)], env=env, timeout=60, check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        shots[name] = PILImage.open(target).convert("RGB")
+    return shots
 
 
 def app_images():
-    """Bild der Kurzanleitung in der App je Sprache: app/resources/guide/kurz_<sprache>.jpg (1024 x 640)."""
+    """Schrittbilder der Kurzanleitung je Sprache fuer die App und (deutsch) fuer das PDF."""
     APP_GUIDE.mkdir(parents=True, exist_ok=True)
     for lang in ("de", "en", "fr", "lb"):
-        raw = OUT / "bilder" / f"_app_{lang}.png"
-        env = dict(os.environ)
-        env.update({"VOLTA_NO_SPLASH": "1", "VOLTA_DEMO_LANG": lang, "VOLTA_SCREENSHOT": str(raw)})
-        env.update(SCENES["aufbauhilfe"])
-        subprocess.run([str(EXE)], env=env, timeout=60, check=False,
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        annotated(raw, raw, QUICK_MARKS)
-        PILImage.open(raw).convert("RGB").resize((1024, 640), PILImage.LANCZOS).save(
-            APP_GUIDE / f"kurz_{lang}.jpg", quality=82, optimize=True)
-        print(f"  App-Bild {lang}: {(APP_GUIDE / f'kurz_{lang}.jpg').stat().st_size // 1024} KB")
+        shots = guide_shots(lang)
+        size = 0
+        for n in range(1, GUIDE_STEPS + 1):
+            dst = APP_GUIDE / f"schritt{n}_{lang}.jpg"
+            guide_image(n, shots, dst)
+            size += dst.stat().st_size
+            if lang == "de":
+                guide_image(n, shots, OUT / "bilder" / f"_schritt{n}_de.png")
+        print(f"  App-Bilder {lang}: {size // 1024} KB")
 
 
 def main() -> int:
@@ -735,6 +871,8 @@ def main() -> int:
     if missing:
         print("Bilder fehlen:", ", ".join(missing))
         return 1
+    if not all((OUT / "bilder" / f"_schritt{n}_de.png").exists() for n in range(1, GUIDE_STEPS + 1)):
+        app_images()
     fonts()
     S = styles()
     long_manual(OUT / "Volta1-Anleitung-de.pdf")

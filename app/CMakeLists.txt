@@ -228,9 +228,14 @@ qt_add_resources(volta_ui "tick" PREFIX "/tick" BASE resources/tick FILES
     resources/tick/tick_froehlich.png resources/tick/tick_gut.png resources/tick/tick_motivierend.png
     resources/tick/tick_nachdenklich.png resources/tick/tick_neugierig.png resources/tick/tick_ueberrascht.png
     resources/tick/tick_warnend.png)
-# Kurzanleitung: Labor mit den Nummern der sechs Schritte je Sprache (tools/manual_pdfs.py --app-bilder)
-qt_add_resources(volta_ui "guide" PREFIX "/guide" BASE resources/guide FILES
-    resources/guide/kurz_de.jpg resources/guide/kurz_en.jpg resources/guide/kurz_fr.jpg resources/guide/kurz_lb.jpg)
+# Kurzanleitung: ein Bild je Schritt und Sprache (tools/manual_pdfs.py --app-bilder)
+set(VOLTA_GUIDE_IMAGES)
+foreach(lang de en fr lb)
+    foreach(step RANGE 1 8)
+        list(APPEND VOLTA_GUIDE_IMAGES resources/guide/schritt${step}_${lang}.jpg)
+    endforeach()
+endforeach()
+qt_add_resources(volta_ui "guide" PREFIX "/guide" BASE resources/guide FILES ${VOLTA_GUIDE_IMAGES})
 # Runde Flaggen der Anzeigesprachen (Werkzeugleiste oben rechts)
 qt_add_resources(volta_ui "flags" PREFIX "/flags" BASE resources/flags FILES
     resources/flags/de.svg resources/flags/fr.svg resources/flags/en.svg resources/flags/lb.svg)

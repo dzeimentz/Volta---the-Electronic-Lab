@@ -1,5 +1,6 @@
-// Kurzanleitung (neben der Hilfe): in sechs Schritten zum ersten Experiment und die Bedienung auf einen Blick.
-// Das Bild ist ein Bildschirmfoto des Labors mit Nummern, je Sprache erzeugt (tools/manual_pdfs.py --app-bilder).
+// Kurzanleitung (neben der Hilfe) fuer Kinder ab etwa 9 Jahren: acht Schritte zum ersten Experiment, jeder mit einem
+// vergroesserten Bildausschnitt (orange Rahmen und Pfeile zeigen, wo man tippt oder zieht), dazu die Bedienung auf einen
+// Blick. Die Bilder sind je Sprache aus der App erzeugt (tools/manual_pdfs.py --app-bilder).
 // Die ausfuehrliche Hilfe mit Tick bleibt im HelpDialog; die PDF-Anleitungen liegen ausserhalb der App.
 import QtQuick
 import QtQuick.Controls.Basic
@@ -21,18 +22,22 @@ Popup {
     readonly property string language: typeof volta_languageService !== "undefined" && volta_languageService
                                        ? volta_languageService.language : "de"
     readonly property var steps: [
+        { title: qsTr("Experiment aussuchen"),
+          text: qsTr("Tippe auf der Startseite im Lernpfad auf ein Experiment. Fang ganz oben bei Stufe 0 an.") },
+        { title: qsTr("Frage lesen und raten"),
+          text: qsTr("Tick stellt dir eine Forscherfrage. Was glaubst du? Tippe auf deine Antwort. Raten ist erlaubt!") },
         { title: qsTr("Bauteil holen"),
-          text: qsTr("Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.") },
+          text: qsTr("Zieh das Bauteil mit dem Finger aus dem Bauteilfach auf die Felder. Alles, was im selben Feld steckt, ist verbunden.") },
         { title: qsTr("Leitungen ziehen"),
-          text: qsTr("Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.") },
-        { title: qsTr("Schritt für Schritt"),
-          text: qsTr("Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.") },
-        { title: qsTr("Einschalten"),
-          text: qsTr("Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.") },
-        { title: qsTr("Fertig"),
-          text: qsTr("Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.") },
-        { title: qsTr("Hilfe"),
-          text: qsTr("Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.") }
+          text: qsTr("Zieh mit dem Finger von einem Feld zum anderen. Eine Leitung von Plus (V+) wird rot, eine von Minus (0V) schwarz.") },
+        { title: qsTr("Strom einschalten"),
+          text: qsTr("Tippe an der Batterie auf den Hauptschalter, bis »Ein« dasteht. Oben steht jetzt »Betrieb«. Zum Umbauen schaltest du wieder aus.") },
+        { title: qsTr("Hinschauen und »Fertig«"),
+          text: qsTr("Leuchtet das Lämpchen? Dann hat es geklappt! Tippe auf »Fertig«.") },
+        { title: qsTr("Sagen, was du gesehen hast"),
+          text: qsTr("Tippe an, was passiert ist. Danach erklärt dir Tick, warum es so ist.") },
+        { title: qsTr("Hilfe holen"),
+          text: qsTr("»Schritt für Schritt bauen« zeigt dir jedes Teil. »Ich brauche einen Tipp« gibt dir einen Hinweis. Ging etwas schief? Der Pfeil oben macht es wieder rückgängig.") }
     ]
     readonly property var gestures: [
         [qsTr("Bauteil stecken oder verschieben"), qsTr("ziehen")],
@@ -92,56 +97,76 @@ Popup {
             spacing: 14
 
             Label {
-                text: qsTr("In sechs Schritten zum ersten Experiment")
+                width: parent.width
+                wrapMode: Text.Wrap
+                text: qsTr("In acht Schritten zum ersten Experiment")
                 font.pixelSize: Math.round(19 * Theme.fontScale)
                 font.bold: true
                 color: Theme.navy
             }
-            // Labor mit den Nummern 1 bis 6
-            Rectangle {
-                width: parent.width
-                height: width * 640 / 1024 + 4
-                color: "white"
-                border.color: Theme.fieldOutline
-                Image {
-                    objectName: "quickGuideImage"
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    fillMode: Image.PreserveAspectFit
-                    asynchronous: true
-                    source: "qrc:/guide/kurz_" + guide.language + ".jpg"
-                    Accessible.role: Accessible.Graphic
-                    Accessible.name: qsTr("Das Labor mit den Nummern der sechs Schritte")
-                }
-            }
+            // je Schritt eine Karte: Nummer, Ueberschrift, kurzer Text, Bild mit Rahmen und Pfeil
             Repeater {
                 model: guide.steps
-                Row {
+                Rectangle {
+                    id: card
                     required property var modelData
                     required property int index
+                    objectName: "quickGuideStep_" + (index + 1)
                     width: col.width
-                    spacing: 12
-                    Rectangle {
-                        width: 40; height: 40; radius: 20
-                        color: "#FFD23F"
-                        border.color: Theme.navy
-                        border.width: 2
-                        Label {
-                            anchors.centerIn: parent
-                            text: index + 1
-                            font.pixelSize: 19
-                            font.bold: true
-                            color: Theme.navy
+                    height: cardCol.implicitHeight + 24
+                    radius: 10
+                    color: "white"
+                    border.color: Theme.fieldOutline
+                    Column {
+                        id: cardCol
+                        x: 12; y: 12
+                        width: parent.width - 24
+                        spacing: 8
+                        Row {
+                            width: parent.width
+                            spacing: 12
+                            Rectangle {
+                                width: 44; height: 44; radius: 22
+                                color: "#FFD23F"
+                                border.color: Theme.navy
+                                border.width: 2
+                                Label {
+                                    anchors.centerIn: parent
+                                    text: card.index + 1
+                                    font.pixelSize: 21
+                                    font.bold: true
+                                    color: Theme.navy
+                                }
+                            }
+                            Label {
+                                width: parent.width - 56
+                                anchors.verticalCenter: parent.verticalCenter
+                                wrapMode: Text.Wrap
+                                text: card.modelData.title
+                                font.pixelSize: Math.round(18 * Theme.fontScale)
+                                font.bold: true
+                                color: Theme.navy
+                            }
                         }
-                    }
-                    Label {
-                        width: parent.width - 52
-                        anchors.verticalCenter: parent.verticalCenter
-                        wrapMode: Text.Wrap
-                        textFormat: Text.StyledText
-                        text: "<b>" + modelData.title + "</b> – " + modelData.text
-                        font.pixelSize: Math.round(15 * Theme.fontScale)
-                        color: "#1E2B38"
+                        Label {
+                            width: parent.width
+                            wrapMode: Text.Wrap
+                            text: card.modelData.text
+                            font.pixelSize: Math.round(16 * Theme.fontScale)
+                            lineHeight: 1.15
+                            color: "#1E2B38"
+                        }
+                        Image {
+                            objectName: "quickGuideImage_" + (card.index + 1)
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width: Math.min(parent.width, 640)
+                            height: width / 2
+                            fillMode: Image.PreserveAspectFit
+                            asynchronous: true
+                            source: "qrc:/guide/schritt" + (card.index + 1) + "_" + guide.language + ".jpg"
+                            Accessible.role: Accessible.Graphic
+                            Accessible.name: card.modelData.title
+                        }
                     }
                 }
             }

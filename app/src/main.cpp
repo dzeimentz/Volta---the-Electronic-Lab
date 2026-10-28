@@ -152,7 +152,8 @@ int main(int argc, char* argv[]) {
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
-                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE", "VOLTA_DEMO_SENSORS", "VOLTA_DEMO_RECORDER"})
+                             "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE", "VOLTA_DEMO_SENSORS", "VOLTA_DEMO_RECORDER",
+                             "VOLTA_DEMO_QUESTION"})
         if (!qEnvironmentVariable(demo).isEmpty() && !engine.rootObjects().isEmpty())
             engine.rootObjects().first()->setProperty("inLab", true);
 
@@ -197,12 +198,32 @@ int main(int argc, char* argv[]) {
             lab.showTemplate();
             lab.setMainSwitch(true);
         });
-        // VOLTA_DEMO_FINISH=1: sobald es funktioniert »Fertig« (Glueckwunsch)
-        if (qEnvironmentVariableIntValue("VOLTA_DEMO_FINISH") == 1) {
+        // VOLTA_DEMO_FINISH=1: sobald es funktioniert »Fertig« (Glueckwunsch); =2 schliesst danach den Glueckwunsch
+        // (Beobachtungsfrage frei sichtbar)
+        if (const int finish = qEnvironmentVariableIntValue("VOLTA_DEMO_FINISH"); finish > 0) {
             auto* poll = new QTimer(&lab);
-            QObject::connect(poll, &QTimer::timeout, &lab, [&lab, poll] { if (lab.finishExperiment()) poll->stop(); });
+            QObject::connect(poll, &QTimer::timeout, &lab, [&lab, &engine, poll, finish] {
+                if (!lab.finishExperiment()) return;
+                poll->stop();
+                if (finish == 2 && !engine.rootObjects().isEmpty())
+                    QTimer::singleShot(500, &lab, [&engine] {
+                        if (auto* popup = engine.rootObjects().first()->findChild<QObject*>(QStringLiteral("successPopup")))
+                            QMetaObject::invokeMethod(popup, "close");
+                    });
+            });
             poll->start(200);
         }
+    }
+
+    // Entwicklerhilfe: VOLTA_DEMO_QUESTION=1 startet das Experiment VOLTA_DEMO_EXP bei der Frage (Vermutung noch offen),
+    // =2 mit gewaehlter Vermutung beim Aufbau ohne Hilfen (Bilder der Kurzanleitung)
+    if (const int question = qEnvironmentVariableIntValue("VOLTA_DEMO_QUESTION"); question > 0) {
+        const QString exp = qEnvironmentVariable("VOLTA_DEMO_EXP", QStringLiteral("volta1.1.1"));
+        QTimer::singleShot(300, &lab, [&lab, exp, question] {
+            lab.setUnlockAll(true);
+            lab.startExperiment(exp);
+            if (question == 2) lab.chooseGuess(0);
+        });
     }
 
     // Entwicklerhilfe: VOLTA_DEMO_GUIDE=1 startet das Experiment VOLTA_DEMO_EXP mit eingeschalteter Aufbauhilfe

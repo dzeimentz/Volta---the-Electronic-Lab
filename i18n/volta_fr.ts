@@ -106,65 +106,65 @@
 <context>
     <name>ControlDesk</name>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="123"/>
+        <location filename="../app/qml/ControlDesk.qml" line="138"/>
         <source>Batterie</source>
         <translation>Pile</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="129"/>
-        <location filename="../app/qml/ControlDesk.qml" line="129"/>
-        <location filename="../app/qml/ControlDesk.qml" line="129"/>
+        <location filename="../app/qml/ControlDesk.qml" line="144"/>
+        <location filename="../app/qml/ControlDesk.qml" line="144"/>
+        <location filename="../app/qml/ControlDesk.qml" line="144"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="132"/>
+        <location filename="../app/qml/ControlDesk.qml" line="147"/>
         <source>Batteriespannung</source>
         <translation>Tension de la pile</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="141"/>
+        <location filename="../app/qml/ControlDesk.qml" line="156"/>
         <source>Hauptschalter</source>
         <translation>Interrupteur principal</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="146"/>
+        <location filename="../app/qml/ControlDesk.qml" line="161"/>
         <source>Ein</source>
         <translation>Marche</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="146"/>
+        <location filename="../app/qml/ControlDesk.qml" line="161"/>
         <source>Aus</source>
         <translation>Arrêt</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="159"/>
+        <location filename="../app/qml/ControlDesk.qml" line="174"/>
         <source>Potentiometer 1</source>
         <translation>Potentiomètre 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="168"/>
+        <location filename="../app/qml/ControlDesk.qml" line="183"/>
         <source>Potentiometer 2</source>
         <translation>Potentiomètre 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="205"/>
+        <location filename="../app/qml/ControlDesk.qml" line="220"/>
         <source>ein</source>
         <translation>marche</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="210"/>
+        <location filename="../app/qml/ControlDesk.qml" line="225"/>
         <source>aus</source>
         <translation>arrêt</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="217"/>
-        <location filename="../app/qml/ControlDesk.qml" line="224"/>
+        <location filename="../app/qml/ControlDesk.qml" line="232"/>
+        <location filename="../app/qml/ControlDesk.qml" line="239"/>
         <source>Schalter</source>
         <translation>Interrupteur</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="240"/>
+        <location filename="../app/qml/ControlDesk.qml" line="255"/>
         <source>Lautsprecher</source>
         <translation>Haut-parleur</translation>
     </message>
@@ -2960,8 +2960,8 @@
         <translation>Images des composants, passer aux symboles</translation>
     </message>
     <message>
-        <location filename="../app/qml/PartTray.qml" line="304"/>
-        <location filename="../app/qml/PartTray.qml" line="424"/>
+        <location filename="../app/qml/PartTray.qml" line="305"/>
+        <location filename="../app/qml/PartTray.qml" line="425"/>
         <source>gesperrt bis Stufe %1</source>
         <translation>verrouillé jusqu&apos;au niveau %1</translation>
     </message>
@@ -3121,157 +3121,220 @@
 <context>
     <name>QuickGuide</name>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="24"/>
+        <location filename="../app/qml/QuickGuide.qml" line="29"/>
         <source>Bauteil holen</source>
         <translation>Prendre un composant</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="25"/>
         <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
-        <translation>Fais glisser un composant de la boîte à composants sur la plaque de base. Tout ce qui est dans la même case de contact est relié.</translation>
+        <translation type="vanished">Fais glisser un composant de la boîte à composants sur la plaque de base. Tout ce qui est dans la même case de contact est relié.</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="26"/>
+        <location filename="../app/qml/QuickGuide.qml" line="31"/>
         <source>Leitungen ziehen</source>
         <translation>Tirer des fils</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="27"/>
         <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
-        <translation>Fais glisser ton doigt d&apos;une case à l&apos;autre. Les fils au plus deviennent rouges, ceux au moins noirs.</translation>
+        <translation type="vanished">Fais glisser ton doigt d&apos;une case à l&apos;autre. Les fils au plus deviennent rouges, ceux au moins noirs.</translation>
+    </message>
+    <message>
+        <source>Schritt für Schritt</source>
+        <translation type="vanished">Pas à pas</translation>
+    </message>
+    <message>
+        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
+        <translation type="vanished">Lis la question, choisis ton idée et touche « Construire pas à pas ». Les cases cibles clignotent en bleu.</translation>
+    </message>
+    <message>
+        <source>Einschalten</source>
+        <translation type="vanished">Allumer</translation>
+    </message>
+    <message>
+        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
+        <translation type="vanished">Touche « Montage » : le bouton devient « En marche » et le courant passe. Pour modifier ton montage, touche-le de nouveau.</translation>
+    </message>
+    <message>
+        <source>Fertig</source>
+        <translation type="vanished">Terminé</translation>
+    </message>
+    <message>
+        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
+        <translation type="vanished">Ça marche ? Alors touche « Terminé » et choisis ce que tu as observé.</translation>
+    </message>
+    <message>
+        <source>Hilfe</source>
+        <translation type="vanished">Aide</translation>
+    </message>
+    <message>
+        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
+        <translation type="vanished">Tu es bloqué ? Touche « J&apos;ai besoin d&apos;un indice ». Si quelque chose est cassé, « Annuler » le répare.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="25"/>
+        <source>Experiment aussuchen</source>
+        <translation>Choisis une expérience</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="26"/>
+        <source>Tippe auf der Startseite im Lernpfad auf ein Experiment. Fang ganz oben bei Stufe 0 an.</source>
+        <translation>Sur la page d’accueil, touche une expérience dans le parcours. Commence tout en haut, au niveau 0.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="27"/>
+        <source>Frage lesen und raten</source>
+        <translation>Lis la question et devine</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="28"/>
-        <source>Schritt für Schritt</source>
-        <translation>Pas à pas</translation>
-    </message>
-    <message>
-        <location filename="../app/qml/QuickGuide.qml" line="29"/>
-        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
-        <translation>Lis la question, choisis ton idée et touche « Construire pas à pas ». Les cases cibles clignotent en bleu.</translation>
+        <source>Tick stellt dir eine Forscherfrage. Was glaubst du? Tippe auf deine Antwort. Raten ist erlaubt!</source>
+        <translation>Tick te pose une question de chercheur. Qu’en penses-tu ? Touche ta réponse. Tu as le droit de deviner !</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="30"/>
-        <source>Einschalten</source>
-        <translation>Allumer</translation>
-    </message>
-    <message>
-        <location filename="../app/qml/QuickGuide.qml" line="31"/>
-        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
-        <translation>Touche « Montage » : le bouton devient « En marche » et le courant passe. Pour modifier ton montage, touche-le de nouveau.</translation>
+        <source>Zieh das Bauteil mit dem Finger aus dem Bauteilfach auf die Felder. Alles, was im selben Feld steckt, ist verbunden.</source>
+        <translation>Fais glisser le composant avec ton doigt de la boîte à composants sur les cases. Tout ce qui est dans la même case est relié.</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="32"/>
-        <source>Fertig</source>
-        <translation>Terminé</translation>
+        <source>Zieh mit dem Finger von einem Feld zum anderen. Eine Leitung von Plus (V+) wird rot, eine von Minus (0V) schwarz.</source>
+        <translation>Fais glisser ton doigt d’une case à l’autre. Un fil partant du plus (V+) devient rouge, un fil partant du moins (0V) noir.</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="33"/>
-        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
-        <translation>Ça marche ? Alors touche « Terminé » et choisis ce que tu as observé.</translation>
+        <source>Strom einschalten</source>
+        <translation>Allume le courant</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="34"/>
-        <source>Hilfe</source>
-        <translation>Aide</translation>
+        <source>Tippe an der Batterie auf den Hauptschalter, bis »Ein« dasteht. Oben steht jetzt »Betrieb«. Zum Umbauen schaltest du wieder aus.</source>
+        <translation>Touche l’interrupteur principal de la pile jusqu’à ce que « Marche » s’affiche. En haut, il est maintenant écrit « En marche ». Pour modifier ton montage, éteins à nouveau.</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="35"/>
-        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
-        <translation>Tu es bloqué ? Touche « J&apos;ai besoin d&apos;un indice ». Si quelque chose est cassé, « Annuler » le répare.</translation>
+        <source>Hinschauen und »Fertig«</source>
+        <translation>Observe et « Terminé »</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="36"/>
+        <source>Leuchtet das Lämpchen? Dann hat es geklappt! Tippe auf »Fertig«.</source>
+        <translation>L’ampoule s’allume ? Alors c’est réussi ! Touche « Terminé ».</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="37"/>
+        <source>Sagen, was du gesehen hast</source>
+        <translation>Dis ce que tu as vu</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="38"/>
+        <source>Tippe an, was passiert ist. Danach erklärt dir Tick, warum es so ist.</source>
+        <translation>Touche ce qui s’est passé. Ensuite, Tick t’explique pourquoi.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="39"/>
+        <source>Hilfe holen</source>
+        <translation>Demander de l’aide</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="40"/>
+        <source>»Schritt für Schritt bauen« zeigt dir jedes Teil. »Ich brauche einen Tipp« gibt dir einen Hinweis. Ging etwas schief? Der Pfeil oben macht es wieder rückgängig.</source>
+        <translation>« Construire pas à pas » te montre chaque pièce. « J’ai besoin d’un indice » te donne une piste. Quelque chose a raté ? La flèche en haut l’annule.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/QuickGuide.qml" line="43"/>
         <source>Bauteil stecken oder verschieben</source>
         <translation>Placer ou déplacer un composant</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="38"/>
+        <location filename="../app/qml/QuickGuide.qml" line="43"/>
         <source>ziehen</source>
         <translation>faire glisser</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="39"/>
+        <location filename="../app/qml/QuickGuide.qml" line="44"/>
         <source>Bauteil drehen</source>
         <translation>Faire pivoter un composant</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="39"/>
+        <location filename="../app/qml/QuickGuide.qml" line="44"/>
         <source>zweimal schnell tippen (am Computer: Doppelklick)</source>
         <translation>toucher deux fois rapidement (sur ordinateur : double-clic)</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="40"/>
+        <location filename="../app/qml/QuickGuide.qml" line="45"/>
         <source>Menü: Drehen, Farbe, Wert, Löschen …</source>
         <translation>Menu : pivoter, couleur, valeur, supprimer …</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="40"/>
+        <location filename="../app/qml/QuickGuide.qml" line="45"/>
         <source>lange drücken (am Computer: Rechtsklick)</source>
         <translation>appui long (sur ordinateur : clic droit)</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="41"/>
+        <location filename="../app/qml/QuickGuide.qml" line="46"/>
         <source>Leitung ziehen</source>
         <translation>Tirer un fil</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="41"/>
+        <location filename="../app/qml/QuickGuide.qml" line="46"/>
         <source>von Feld zu Feld ziehen</source>
         <translation>faire glisser d&apos;une case à l&apos;autre</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="42"/>
+        <location filename="../app/qml/QuickGuide.qml" line="47"/>
         <source>Etwas entfernen</source>
         <translation>Retirer quelque chose</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="42"/>
+        <location filename="../app/qml/QuickGuide.qml" line="47"/>
         <source>antippen und dann den Mülleimer antippen</source>
         <translation>le toucher, puis toucher la poubelle</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="43"/>
+        <location filename="../app/qml/QuickGuide.qml" line="48"/>
         <source>Rückgängig und Wiederholen</source>
         <translation>Annuler et rétablir</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="43"/>
+        <location filename="../app/qml/QuickGuide.qml" line="48"/>
         <source>gebogene Pfeile oben in der Leiste</source>
         <translation>flèches courbes dans la barre du haut</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="77"/>
+        <location filename="../app/qml/QuickGuide.qml" line="82"/>
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="95"/>
+        <location filename="../app/qml/QuickGuide.qml" line="102"/>
+        <source>In acht Schritten zum ersten Experiment</source>
+        <translation>Ta première expérience en huit étapes</translation>
+    </message>
+    <message>
         <source>In sechs Schritten zum ersten Experiment</source>
-        <translation>Ta première expérience en six étapes</translation>
+        <translation type="vanished">Ta première expérience en six étapes</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="114"/>
         <source>Das Labor mit den Nummern der sechs Schritte</source>
-        <translation>Le labo avec les numéros des six étapes</translation>
+        <translation type="vanished">Le labo avec les numéros des six étapes</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="151"/>
+        <location filename="../app/qml/QuickGuide.qml" line="176"/>
         <source>Bedienung auf einen Blick</source>
         <translation>Les commandes en un coup d&apos;œil</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="207"/>
+        <location filename="../app/qml/QuickGuide.qml" line="232"/>
         <source>Mit echten Bauteilen: nur Batterien bis 9 Volt, niemals an der Steckdose! Versuche mit »Nur in der App!« baust du nicht in echt nach.</source>
         <translation>Avec de vrais composants : seulement des piles jusqu&apos;à 9 volts, jamais la prise de courant ! Ne refais pas en vrai les expériences « Seulement dans l&apos;appli ! ».</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="213"/>
+        <location filename="../app/qml/QuickGuide.qml" line="238"/>
         <source>Zur ausführlichen Hilfe</source>
         <translation>Vers l&apos;aide complète</translation>
     </message>
     <message>
-        <location filename="../app/qml/QuickGuide.qml" line="63"/>
+        <location filename="../app/qml/QuickGuide.qml" line="68"/>
         <source>Kurzanleitung</source>
         <translation>Guide rapide</translation>
     </message>
@@ -4304,6 +4367,9 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="171"/>
         <location filename="../app/qml/TopBarActions.qml" line="172"/>
+        <location filename="../app/tests/test_ui.cpp" line="479"/>
+        <location filename="../app/tests/test_ui.cpp" line="483"/>
+        <location filename="../app/tests/test_ui.cpp" line="494"/>
         <source>Einstellungen</source>
         <translation>Réglages</translation>
     </message>

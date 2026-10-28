@@ -272,6 +272,12 @@ das iPad).
   Labor im Menue (Leiste voll), »Zeig mir, wie Volta funktioniert« unter Ticks Begruessung. Offen: Uebungsplatten mit
   Aufgaben, Rundgang beim ersten Start, »Was ist neu«, Volltextsuche.
 - Werkzeugkasten: verdeckte Reiter zeigt ein pulsierender Pfeil (rechts bzw. links), Antippen rollt die Leiste.
+- Kurzanleitung (`QuickGuide.qml`, Kinder ab etwa 9 Jahren): acht Schrittkarten zum ersten Experiment (Experiment
+  aussuchen, Frage lesen und raten, Bauteil holen, Leitungen ziehen, Strom einschalten, Hinschauen und »Fertig«, sagen,
+  was man gesehen hat, Hilfe holen), je Nummer, Ueberschrift, ein bis drei kurze Saetze und ein vergroesserter
+  Bildausschnitt mit orangem Rahmen und Pfeil (Hinweis zusaetzlich im Text, Farbe nie allein). Bilder je Sprache aus der
+  App: `tools/manual_pdfs.py --app-bilder` -> `app/resources/guide/schritt<n>_<sprache>.jpg` (880 x 440); dieselben
+  Schritte und Bilder in `Volta1-Kurzanleitung-de.pdf`. Danach »Bedienung auf einen Blick« und Sicherheitshinweis.
 
 ## Info-Seite
 - Produkt: »Volta 1 – Das Elektronik-Labor«, Version, Build, Paket- und Kernversion.

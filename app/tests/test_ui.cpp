@@ -1139,7 +1139,7 @@ private slots:
         QTRY_VERIFY(!reset->isVisible());
     }
 
-    // Kurzanleitung neben der Hilfe: Knopf auf der Startseite oeffnet sie mit Bild der eigenen Sprache; von dort geht
+    // Kurzanleitung neben der Hilfe: Knopf auf der Startseite oeffnet sie mit acht Schrittbildern der eigenen Sprache; von dort geht
     // es in die ausfuehrliche Hilfe
     void quickGuide() {
         QObject* root = m_engine->rootObjects().first();
@@ -1153,9 +1153,11 @@ private slots:
         QVERIFY(button && button->isVisible());
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
         QTRY_VERIFY(guide->property("opened").toBool());
-        QQuickItem* image = item(QStringLiteral("quickGuideImage"));
-        QVERIFY(image);
-        QTRY_COMPARE(image->property("status").toInt(), 1); // Image.Ready: Bild ist in den Ressourcen
+        for (int step = 1; step <= 8; ++step) { // ein Bild je Schritt, alle in den Ressourcen
+            QQuickItem* image = item(QStringLiteral("quickGuideImage_%1").arg(step));
+            QVERIFY(image);
+            QTRY_COMPARE(image->property("status").toInt(), 1); // Image.Ready
+        }
         QMetaObject::invokeMethod(guide, "close");
         QTRY_VERIFY(!guide->property("opened").toBool());
         QMetaObject::invokeMethod(guide, "helpRequested");
