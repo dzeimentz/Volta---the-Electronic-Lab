@@ -761,6 +761,7 @@ Item {
 
     PartTray {
         id: tray
+        objectName: "partTray"
         anchors { left: parent.left; top: toolbar.bottom; bottom: parent.bottom }
         parts: lab.controller.trayParts
         // Aufbauhilfe: das Fach zeigt, was der naechste Schritt braucht
@@ -1840,7 +1841,12 @@ Item {
             border.color: Theme.modulePlate(lab.trayModule)
             border.width: 2
             opacity: 0.9
-            Label { anchors.centerIn: parent; text: Texts.moduleName(lab.trayModule); color: Theme.navy; font.bold: true; font.pixelSize: Math.round(12 * Theme.fontScale) }
+            Row {
+                anchors.centerIn: parent
+                spacing: 6
+                ModuleIcon { anchors.verticalCenter: parent.verticalCenter; height: 22; type: lab.trayModule; color: Theme.modulePlate(lab.trayModule) }
+                Label { anchors.verticalCenter: parent.verticalCenter; text: Texts.moduleName(lab.trayModule); color: Theme.navy; font.bold: true; font.pixelSize: Math.round(12 * Theme.fontScale) }
+            }
         }
     }
 

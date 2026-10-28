@@ -76,19 +76,33 @@ Item {
             }
             Column {
                 anchors.verticalCenter: parent.verticalCenter
+                // Platz bis zum Knopf »Blick hinein«: der Name wird nur bei Bedarf kleiner
+                width: body.width - x - Theme.control - 6
                 Label {
                     text: Texts.moduleName(mod.moduleType)
+                    width: parent.width
+                    fontSizeMode: Text.HorizontalFit
+                    minimumPixelSize: 9
                     color: "white"
                     font.pixelSize: Math.round(12 * Theme.fontScale)
                     font.bold: true
                 }
-                Label {
-                    // Text zusaetzlich zur Lampe (Farbe nie allein)
-                    text: mod.moduleId + "  " + (mod.moduleType === "tonmodul"
-                                                 ? (mod.active ? "♪" : "–")
-                                                 : (mod.active ? qsTr("an") : qsTr("aus")))
-                    color: "#E6ECF2"
-                    font.pixelSize: Math.round(11 * Theme.fontScale)
+                Row {
+                    spacing: 5
+                    ModuleIcon {
+                        objectName: "moduleIcon_" + mod.moduleId
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: 15
+                        type: mod.moduleType
+                    }
+                    Label {
+                        // Text zusaetzlich zur Lampe (Farbe nie allein)
+                        text: mod.moduleId + "  " + (mod.moduleType === "tonmodul"
+                                                     ? (mod.active ? "♪" : "–")
+                                                     : (mod.active ? qsTr("an") : qsTr("aus")))
+                        color: "#E6ECF2"
+                        font.pixelSize: Math.round(11 * Theme.fontScale)
+                    }
                 }
             }
         }

@@ -354,14 +354,14 @@ Rectangle {
                     border.width: 2
                     opacity: locked ? 0.75 : 1
 
-                    // Modul wie in der Modulleiste: Traegerplatte mit einem Anschlussfeld je Anschluss
+                    // Modul wie in der Modulleiste: Traegerplatte mit einem Anschlussfeld je Anschluss und Piktogramm
                     Rectangle {
                         visible: !tray.symbols
                         readonly property int count: Math.max(1, modEntry.modelData.pins.length)
                         anchors.horizontalCenter: parent.horizontalCenter
-                        y: 6
+                        y: 5
                         width: Math.min(parent.width - 16, count * 18 + 8)
-                        height: 34
+                        height: 40
                         radius: 4
                         color: modEntry.locked ? "#5D6B7A" : modEntry.plate
                         border.color: "#1E2B38"
@@ -378,12 +378,13 @@ Rectangle {
                                 }
                             }
                         }
-                        Rectangle { // Leuchtpunkt der Zustandsanzeige
+                        ModuleIcon {
+                            objectName: "trayModuleIcon_" + modEntry.modelData.type
                             anchors.horizontalCenter: parent.horizontalCenter
-                            y: 21
-                            width: 8; height: 8; radius: 4
-                            color: "#E9EEF3"
-                            border.color: "#1E2B38"
+                            y: 16
+                            height: 23
+                            type: modEntry.modelData.type
+                            color: modEntry.locked ? "#C9CED4" : "white"
                         }
                     }
                     SchematicSymbol {
@@ -397,7 +398,7 @@ Rectangle {
                     }
                     Label {
                         anchors { left: parent.left; right: parent.right; bottom: parent.bottom; margins: 3 }
-                        height: 30
+                        height: 28
                         text: Texts.moduleName(modEntry.modelData.type)
                         color: modEntry.locked ? "#26313C" : Theme.navy
                         font.pixelSize: Math.round((13) * Theme.fontScale)

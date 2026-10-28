@@ -441,6 +441,14 @@ int main(int argc, char* argv[]) {
                 l->setProperty("selectedWire", qEnvironmentVariable("VOLTA_DEMO_SELECT_WIRE"));
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_MODULES=1 oeffnet das Modulfach (Sichtpruefung)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_MODULES") == 1)
+        QTimer::singleShot(1500, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* t = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("partTray")))
+                t->setProperty("showModules", true);
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_FLYOUT=1 klappt die Werkzeugleiste »Licht und Waerme« aus (Sichtpruefung)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FLYOUT") == 1)
         QTimer::singleShot(1500, &engine, [&engine] {

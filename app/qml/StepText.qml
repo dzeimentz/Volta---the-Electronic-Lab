@@ -139,6 +139,8 @@ Flow {
                     readonly property bool isModule: isSymbol && modelData.value.endsWith("modul")
                     // Bauteilbild nur fuer Bauteile der Grundplatte (Module und Pultteile: Schaltzeichen)
                     readonly property bool showPart: isSymbol && step.partImages && !isModule && modelData.value !== "lautsprecher"
+                    // Module in der Bauteil-Ansicht: Platte in ihrer Farbe mit Piktogramm
+                    readonly property bool showModule: isSymbol && step.partImages && isModule
                     width: isField ? chip.width : isSymbol ? symbolBox.width + 3 : label.implicitWidth
                     height: step.lineHeight
                     Label {
@@ -164,13 +166,20 @@ Flow {
                         width: piece.showPart ? 62 : 44
                         height: piece.showPart ? 30 : 26
                         radius: 5
-                        color: piece.showPart ? Theme.partTheme(step.themeOf(piece.modelData.value)).tint : "#EEF3F8"
+                        color: piece.showModule ? Theme.modulePlate(piece.modelData.value)
+                             : piece.showPart ? Theme.partTheme(step.themeOf(piece.modelData.value)).tint : "#EEF3F8"
                         border.color: "#9FB2C4"
+                        ModuleIcon {
+                            visible: piece.showModule
+                            anchors.centerIn: parent
+                            height: 20
+                            type: piece.showModule ? piece.modelData.value : ""
+                        }
                         SchematicSymbol {
-                            visible: !piece.showPart
+                            visible: !piece.showPart && !piece.showModule
                             anchors.centerIn: parent
                             width: 36; height: 18
-                            type: piece.isSymbol && !piece.showPart ? piece.modelData.value : ""
+                            type: piece.isSymbol && !piece.showPart && !piece.showModule ? piece.modelData.value : ""
                             stroke: Theme.navy
                         }
                         PartPreview {

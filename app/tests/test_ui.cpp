@@ -1232,6 +1232,23 @@ private slots:
                                                      QStringLiteral("B2 nach B3 und B4 nach 0V")}));
     }
 
+    // Module mit Piktogramm im Modulfach (Bauteil-Ansicht) und in den Bild-Schritten
+    void moduleIcons() {
+        m_settings->setUnlockAll(true);
+        m_settings->setTraySymbols(false);
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.4.15")));
+        m_lab->chooseGuess(0);
+        QQuickItem* tray = item(QStringLiteral("partTray"));
+        QVERIFY(tray);
+        tray->setProperty("showModules", true);
+        QTRY_VERIFY(item(QStringLiteral("trayModuleIcon_zeitmodul")) && item(QStringLiteral("trayModuleIcon_zeitmodul"))->isVisible());
+        QQuickItem* amp = item(QStringLiteral("trayModuleIcon_verstaerkermodul"));
+        QVERIFY(amp->width() > amp->height()); // kleine Welle -> grosse Welle braucht Breite
+        tray->setProperty("showModules", false);
+        QTRY_VERIFY(item(QStringLiteral("stepText_0_0")));
+        QVERIFY(item(QStringLiteral("stepText_0_0"))->property("words").toList().first().toList().size() == 2); // Name + Bild
+    }
+
     void troublePopupOnDestroyed() {
         m_settings->setUnlockAll(true);
         m_lab->startFreeLab();
