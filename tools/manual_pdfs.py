@@ -76,6 +76,7 @@ SCENES = {
     "pin": {"VOLTA_DEMO_PARENT": "gate"},
     "elternbereich": {"VOLTA_DEMO_PARENT": "area"},
     "aufgabe_qr": {"VOLTA_DEMO_TASK": "qr"},
+    "pultinfo": {"VOLTA_DEMO_FREELAB": "1", "VOLTA_DEMO_DESKINFO": "p1", "VOLTA_SCREENSHOT_S": "4"},
 }
 
 
@@ -348,8 +349,8 @@ def long_manual(path):
                 "verbunden.</b> Die Felder heißen nach Reihe und Spalte: A1, A2 … bis E12. Über der Grundplatte "
                 "liegt die Pultleiste mit den Anschlüssen des Bedienpults:"),
               table([["Feld", "führt zu"],
-                     ["+9V und 0V", "Plus- und Minuspol der Batterie (die Beschriftung zeigt die gewählte "
-                      "Spannung: 3 V, 4,5 V oder 9 V)"],
+                     ["V+ und 0V", "Plus- und Minuspol der Batterie (oben an der Batterie wählst du 3 V, 4,5 V "
+                      "oder 9 V)"],
                      ["P1a, P1s, P1b / P2a, P2s, P2b", "Drehregler P1 und P2: die beiden Enden (a, b) und der "
                       "Schleifer (s)"],
                      ["S1, S2", "Schalter S"],
@@ -357,7 +358,12 @@ def long_manual(path):
               P("Mit den runden Tasten <b>+</b> und <b>−</b> rechts neben der Grundplatte wählst du 8, 10 oder "
                 "12 Felder je Reihe. Ist im Menü »Steckfeld-Breite automatisch« eingeschaltet, passt Volta die "
                 "Breite selbst an: im Lernpfad 8, im freien Labor 12 Felder; mit dem Messgerät daneben 10, mit dem "
-                "Messgerät im Pult 12.")]
+                "Messgerät im Pult 12."),
+              P("Das »?« am Pult", "h2"),
+              P("Batterie, Drehregler P1 und P2, Schalter und Lautsprecher haben oben rechts in ihrem Rahmen ein "
+                "kleines <b>»?«</b>. Tippe darauf: Volta erklärt, was das Bauteil macht, was jedes seiner Felder "
+                "bedeutet und wie man es anschließt – zum Beispiel den Drehregler als Spannungsteiler."),
+              shot("pultinfo", 120, "Das »?« am Drehregler P1 erklärt das Bauteil und seine drei Felder")]
 
     # 4 Aufbauen
     story += chapter("4  Aufbauen: Bauteile und Leitungen")
@@ -387,7 +393,7 @@ def long_manual(path):
                 "Hauptschalter der Batterie ein: Jetzt fließt Strom, und du kannst Taster, Schalter und Regler "
                 "bedienen. Zum Umbauen geht es zurück auf »Stecken«. Den Hauptschalter kannst du auch direkt an "
                 "der Batterie im Bedienpult umlegen."),
-              tick_box("erklaerend", "<b>Merke:</b> Strom braucht einen geschlossenen Weg – von +9V durch die "
+              tick_box("erklaerend", "<b>Merke:</b> Strom braucht einen geschlossenen Weg – von V+ durch die "
                        "Bauteile zurück nach 0V. Ist der Weg irgendwo unterbrochen, passiert nichts.")]
 
     # 5 Experiment
@@ -495,14 +501,18 @@ def long_manual(path):
               shot("fehlersuche", caption="Die Fehlersuche hat zwei Stellen gefunden; Tick fragt nach"),
               P("Typische Ursachen", "h2")]
     story += bullets(["<b>Hauptschalter aus?</b> Erst im »Betrieb« fließt Strom.",
-                      "<b>Kein geschlossener Weg?</b> Führt ein Weg von +9V durch die Bauteile zurück nach 0V?",
+                      "<b>Kein geschlossener Weg?</b> Führt ein Weg von V+ durch die Bauteile zurück nach 0V?",
                       "<b>Leuchtdiode falsch herum?</b> Leuchtdioden haben eine Richtung: Das lange Bein kommt zu "
                       "Plus.",
                       "<b>Ein Bein steckt allein in einem Feld?</b> Dann ist es mit nichts verbunden.",
                       "<b>Bauteil durchgebrannt?</b> Zu viel Strom – meist fehlt ein Vorwiderstand. Mit "
                       "»Rückgängig« oder »Reparieren« im Bauteilmenü ist es wieder heil.",
                       "<b>Sicherung durchgebrannt?</b> Ein Kurzschluss: Plus und Minus sind direkt verbunden. "
-                      "Kurzschluss beseitigen und »Sicherung tauschen« an der Batterie antippen."])
+                      "Kurzschluss beseitigen und »Sicherung tauschen« an der Batterie antippen.",
+                      "<b>Drehregler durchgebrannt?</b> Auch die Drehregler im Pult vertragen nur eine begrenzte "
+                      "Leistung. Wird einer zu heiß, bekommt sein Knopf einen orangen Rand; brennt er durch, wird er "
+                      "grau, es raucht, und darunter steht »kaputt – antippen«. Antippen repariert ihn. Abhilfe: "
+                      "einen Vorwiderstand einbauen oder nicht ganz an den Anschlag drehen."])
 
     # 9 Forscherheft
     story += chapter("9  Das Forscherheft")
@@ -633,6 +643,11 @@ def long_manual(path):
                      ["Entf oder Rücktaste", "Ausgewähltes entfernen"],
                      ["Rechtsklick", "Menü eines Bauteils, einer Leitung oder eines Feldes"],
                      ["Doppelklick", "Bauteil drehen"]], [62, 108]),
+              P("Lizenzen", "h2"),
+              P("Volta ist mit freier Software gebaut, vor allem mit Qt. Im Info-Fenster (<b>i</b> oben rechts) "
+                "zeigt <b>»Lizenzen anzeigen«</b> alle Fremdbestandteile mit Version und Lizenz; ein Tippen auf einen "
+                "Eintrag öffnet den Lizenztext im englischen Original. Alles ist in der App gespeichert, es braucht "
+                "kein Internet."),
               P("Kontakt", "h2"),
               P("DC Software Engineering, Daniel Zeimentz, Aufm Rothenhügel 26, 54666 Irrel (Deutschland)<br/>"
                 "Web: dc-software-engineering.com · E-Mail: info@dc-software-engineering.com"),

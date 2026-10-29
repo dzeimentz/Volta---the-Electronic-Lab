@@ -291,7 +291,8 @@ def page_lab(p: Page):
     yr = p.feature(x2, y, cw, "Physik, die ehrlich ist",
                    "Volta rechnet jede Schaltung aus, auch selbst erfundene: Lämpchen glühen heller oder dunkler, "
                    "Motoren drehen sich, Bauteile werden warm – und eine Leuchtdiode ohne Schutzwiderstand brennt "
-                   "durch. Ein Tippen auf »Rückgängig« macht sie wieder heil.", img("blinker"))
+                   "durch, ein überlasteter Drehregler ebenso. Ein Tippen auf »Rückgängig« macht alles wieder heil.",
+                   img("blinker"))
     y = min(yl, yr) - 6 * mm
     yl = p.feature(x1, y, cw, "Der Lernpfad",
                    "61 Experimente in fünf Stufen, jedes mit einer Forscherfrage: Vermutung wählen, aufbauen, "
@@ -299,8 +300,8 @@ def page_lab(p: Page):
                    "Transistor, Relais und Zeitmodul.", img("start"))
     yr = p.feature(x2, y, cw, "Tick hilft",
                    "Das Maskottchen Tick stellt die Forscherfrage, zeigt Schritt für Schritt, wohin jedes Teil "
-                   "gehört, und gibt Tipps, wenn es nicht weitergeht. Eine Kurzanleitung und eine Hilfe mit Tick "
-                   "sind immer einen Fingertipp entfernt.", img("hilfe"))
+                   "gehört, und gibt Tipps, wenn es nicht weitergeht. Kurzanleitung, Hilfe mit Tick und ein »?« an "
+                   "jedem Bauteil im Pult sind immer einen Fingertipp entfernt.", img("hilfe"))
     # Die fuenf Stufen
     y = min(yl, yr) - 8 * mm
     stages = [("0", "Auftakt", "Wie bringe ich etwas zum Blinken?", "1"),
@@ -390,12 +391,13 @@ def page_school(p: Page):
         "Verwaltete Geräte: Vorgaben der Schule (Sprache, Stufen, Ton)",
         "Bedienelemente ab 48 dp, Farbe nie allein, Vorlesen der Texte",
         "Sprachen Deutsch, Français, English, Lëtzebuergesch",
+        "Freie Software: alle Lizenzen in der App einsehbar",
         "Sicherheit: nur Batterien bis 9 V, zerstörende Versuche »Nur in der App!«",
     ]
     for it in items:
         c.setFillColor(GREEN)
         c.circle(x2 + 6.5 * mm, yy + 1.2 * mm, 1.3 * mm, fill=1, stroke=0)
-        yy = p.para(x2 + 10 * mm, yy, cw - 14 * mm, it, 9.5) - 1.8 * mm
+        yy = p.para(x2 + 10 * mm, yy, cw - 14 * mm, it, 9.5) - 1.1 * mm
     # Jetzt in echt
     y = min(yl, yy) - 8 * mm
     c.setFillColor(CREAM)

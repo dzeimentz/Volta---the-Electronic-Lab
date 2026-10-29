@@ -43,20 +43,22 @@ EN = {
         "“Undo” takes back every step.",
     "Physik, die ehrlich ist": "Physics that is honest",
     "Volta rechnet jede Schaltung aus, auch selbst erfundene: Lämpchen glühen heller oder dunkler, Motoren drehen "
-    "sich, Bauteile werden warm – und eine Leuchtdiode ohne Schutzwiderstand brennt durch. Ein Tippen auf "
-    "»Rückgängig« macht sie wieder heil.":
+    "sich, Bauteile werden warm – und eine Leuchtdiode ohne Schutzwiderstand brennt durch, ein überlasteter "
+    "Drehregler ebenso. Ein Tippen auf »Rückgängig« macht alles wieder heil.":
         "Volta calculates every circuit, even invented ones: bulbs glow brighter or dimmer, motors turn, parts get "
-        "warm – and an LED without a protective resistor burns out. One tap on “Undo” makes it whole again.",
+        "warm – and an LED without a protective resistor burns out, as does an overloaded potentiometer. One tap on "
+        "“Undo” makes everything whole again.",
     "Der Lernpfad": "The learning path",
     "61 Experimente in fünf Stufen, jedes mit einer Forscherfrage: Vermutung wählen, aufbauen, beobachten, "
     "verstehen. Stufe für Stufe kommen neue Bauteile dazu – vom Lämpchen bis zum Transistor, Relais und Zeitmodul.":
         "61 experiments on five levels, each with a research question: make a guess, build, observe, understand. "
         "Level by level new parts are added – from the bulb to the transistor, relay and timer module.",
     "Das Maskottchen Tick stellt die Forscherfrage, zeigt Schritt für Schritt, wohin jedes Teil gehört, und gibt "
-    "Tipps, wenn es nicht weitergeht. Eine Kurzanleitung und eine Hilfe mit Tick sind immer einen Fingertipp "
-    "entfernt.":
+    "Tipps, wenn es nicht weitergeht. Kurzanleitung, Hilfe mit Tick und ein »?« an jedem Bauteil im Pult sind "
+    "immer einen Fingertipp entfernt.":
         "The mascot Tick asks the research question, shows step by step where each part goes and gives hints when "
-        "children get stuck. A quick guide and help with Tick are always one tap away.",
+        "children get stuck. A quick guide, help with Tick and a “?” on every part of the control desk are always "
+        "one tap away.",
     "Die fünf Stufen": "The five levels",
     "Auftakt": "Kick-off",
     "Wie bringe ich etwas zum Blinken?": "How do I make something blink?",
@@ -129,6 +131,7 @@ EN = {
     "Bedienelemente ab 48 dp, Farbe nie allein, Vorlesen der Texte":
         "Controls of at least 48 dp, colour never alone, texts read aloud",
     "Sprachen Deutsch, Français, English, Lëtzebuergesch": "Languages: Deutsch, Français, English, Lëtzebuergesch",
+    "Freie Software: alle Lizenzen in der App einsehbar": "Free software: all licences viewable in the app",
     "Sicherheit: nur Batterien bis 9 V, zerstörende Versuche »Nur in der App!«":
         "Safety: batteries up to 9 V only, destructive tests “Only in the app!”",
     "Jetzt in echt": "Now for real",
