@@ -171,6 +171,12 @@ ApplicationWindow {
         controller: labController
         // Links nach aussen erst nach der Elternschranke
         onLinkRequested: (url) => { infoDialog.close(); parentGate.ask(() => Qt.openUrlExternally(url)) }
+        onLicensesRequested: { infoDialog.close(); licensesDialog.open() }
+    }
+    LicensesDialog {
+        id: licensesDialog
+        objectName: "licensesDialog"
+        controller: labController
     }
     ParentGate { id: parentGate; settings: root.settings }
     // Aufgabe der Lehrkraft (QR-Code ueber die Kamera-App oder Code zum Eintippen). Mit Profilen wartet sie, bis

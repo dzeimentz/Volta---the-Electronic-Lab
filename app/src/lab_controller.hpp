@@ -320,6 +320,10 @@ public:
     Q_INVOKABLE void setContentLanguage(const QString& code);
     // Programminfo fuer das Info-Fenster: name, version, qtVersion, compiler, platform, hasLogo
     Q_INVOKABLE QVariantMap appInfo() const;
+    // Seite »Lizenzen«: Fremdbestandteile dieser Plattform (name, version, license, copyright, texts, modules) und
+    // die Lizenztexte im Original (tools/make_licenses.py)
+    Q_INVOKABLE QVariantList licenses() const;
+    Q_INVOKABLE QString licenseText(const QString& id) const;
     Q_INVOKABLE void chooseGuess(int index);
     Q_INVOKABLE void nextHint();
     Q_INVOKABLE void chooseObservation(int index);

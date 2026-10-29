@@ -1332,112 +1332,117 @@
 <context>
     <name>InfoDialog</name>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="130"/>
+        <location filename="../app/qml/InfoDialog.qml" line="131"/>
         <source>Deutschland</source>
         <translation>Allemagne</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="57"/>
+        <location filename="../app/qml/InfoDialog.qml" line="58"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="67"/>
+        <location filename="../app/qml/InfoDialog.qml" line="68"/>
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="87"/>
+        <location filename="../app/qml/InfoDialog.qml" line="88"/>
         <source>Virtueller Elektronik-Experimentierkasten für Kinder von 8 bis 12 Jahren. Alles, was leuchtet, summt oder sich dreht, berechnet eine echte Schaltungssimulation.</source>
         <translation>Coffret virtuel d&apos;expériences d&apos;électronique pour les enfants de 8 à 12 ans. Tout ce qui s&apos;allume, bourdonne ou tourne est calculé par une vraie simulation de circuit.</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="91"/>
+        <location filename="../app/qml/InfoDialog.qml" line="92"/>
         <source>Plattformen</source>
         <translation>Plateformes</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="92"/>
+        <location filename="../app/qml/InfoDialog.qml" line="93"/>
         <source>Diese Ausgabe: %1</source>
         <translation>Cette version : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="93"/>
+        <location filename="../app/qml/InfoDialog.qml" line="94"/>
         <source>Vorgesehen: Android (arm64, armv7), Windows und Linux (x86-64), iPadOS</source>
         <translation>Prévu : Android (arm64, armv7), Windows et Linux (x86-64), iPadOS</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="95"/>
+        <location filename="../app/qml/InfoDialog.qml" line="96"/>
         <source>Verwendete Technik</source>
         <translation>Technique utilisée</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="96"/>
+        <location filename="../app/qml/InfoDialog.qml" line="97"/>
         <source>Qt %1 – Qt Quick, Qt Quick Controls, Qt Quick Shapes, Qt SVG (Lizenz LGPL v3)</source>
         <translation>Qt %1 – Qt Quick, Qt Quick Controls, Qt Quick Shapes, Qt SVG (licence LGPL v3)</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="97"/>
+        <location filename="../app/qml/InfoDialog.qml" line="98"/>
         <source>C++17 mit eigenem Simulationskern: Knotenanalyse (MNA), Newton-Raphson, Zeitintegration, Wärmemodell</source>
         <translation>C++17 avec un noyau de simulation propre : analyse nodale (MNA), Newton-Raphson, intégration temporelle, modèle thermique</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="98"/>
+        <location filename="../app/qml/InfoDialog.qml" line="99"/>
         <source>Übersetzer: %1 · Build-System: CMake, Ninja</source>
         <translation>Compilateur : %1 · Système de build : CMake, Ninja</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="99"/>
+        <location filename="../app/qml/InfoDialog.qml" line="100"/>
         <source>Prüfung: Catch2 und Qt Test</source>
         <translation>Tests : Catch2 et Qt Test</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="101"/>
+        <location filename="../app/qml/InfoDialog.qml" line="102"/>
         <source>Hersteller</source>
         <translation>Éditeur</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="131"/>
+        <location filename="../app/qml/InfoDialog.qml" line="132"/>
         <source>E-Mail: %1</source>
         <translation>E-mail : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="132"/>
+        <location filename="../app/qml/InfoDialog.qml" line="133"/>
         <source>Web: %1</source>
         <translation>Web : %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="139"/>
+        <location filename="../app/qml/InfoDialog.qml" line="140"/>
         <source>Website öffnen</source>
         <translation>Ouvrir le site web</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="145"/>
+        <location filename="../app/qml/InfoDialog.qml" line="146"/>
         <source>E-Mail schreiben</source>
         <translation>Écrire un e-mail</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="152"/>
+        <location filename="../app/qml/InfoDialog.qml" line="153"/>
         <source>Für Erwachsene: Vor dem Öffnen kommt eine kleine Rechenaufgabe.</source>
         <translation>Pour les adultes : avant l&apos;ouverture, un petit calcul est demandé.</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="157"/>
+        <location filename="../app/qml/InfoDialog.qml" line="158"/>
         <source>Fremdbestandteile</source>
         <translation>Composants tiers</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="158"/>
+        <location filename="../app/qml/InfoDialog.qml" line="159"/>
         <source>QR-Code: qrcodegen von Project Nayuki, MIT-Lizenz (Copyright Project Nayuki).</source>
         <translation>Code QR : qrcodegen de Project Nayuki, licence MIT (Copyright Project Nayuki).</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="160"/>
+        <location filename="../app/qml/InfoDialog.qml" line="163"/>
+        <source>Lizenzen anzeigen</source>
+        <translation>Afficher les licences</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/InfoDialog.qml" line="167"/>
         <source>Datenschutz</source>
         <translation>Protection des données</translation>
     </message>
     <message>
-        <location filename="../app/qml/InfoDialog.qml" line="161"/>
+        <location filename="../app/qml/InfoDialog.qml" line="168"/>
         <source>Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.</source>
         <translation>Volta ne collecte aucune donnée, n&apos;affiche aucune publicité et n&apos;a pas besoin d&apos;Internet.</translation>
     </message>
@@ -1927,55 +1932,88 @@
     </message>
 </context>
 <context>
+    <name>LicensesDialog</name>
+    <message>
+        <location filename="../app/qml/LicensesDialog.qml" line="58"/>
+        <source>Zurück zur Liste</source>
+        <translation>Retour à la liste</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LicensesDialog.qml" line="67"/>
+        <source>Lizenzen</source>
+        <translation>Licences</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LicensesDialog.qml" line="81"/>
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LicensesDialog.qml" line="105"/>
+        <source>Volta wurde mit freier Software gebaut. Danke an alle, die daran mitgearbeitet haben! Tippe auf einen Eintrag, um die Lizenz zu lesen. Die Lizenztexte stehen im englischen Original.</source>
+        <translation>Volta a été construit avec des logiciels libres. Merci à toutes celles et tous ceux qui y ont contribué ! Touche une entrée pour lire sa licence. Les textes des licences sont en anglais, dans leur version originale.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LicensesDialog.qml" line="110"/>
+        <source>Qt steht unter der GNU LGPL v3. Volta bindet Qt unverändert als eigene Bibliotheken ein (Windows: DLL-Dateien im Programmordner, Android: Bibliotheken in der App); sie können durch kompatible Qt-Bibliotheken ersetzt werden. Den Quelltext der verwendeten Qt-Version gibt es auf download.qt.io oder auf Anfrage an info@dc-software-engineering.com.</source>
+        <translation>Qt est distribué sous la licence GNU LGPL v3. Volta intègre Qt sans modification sous forme de bibliothèques séparées (Windows : fichiers DLL dans le dossier du programme, Android : bibliothèques dans l’application) ; elles peuvent être remplacées par des bibliothèques Qt compatibles. Le code source de la version de Qt utilisée est disponible sur download.qt.io ou sur demande à info@dc-software-engineering.com.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LicensesDialog.qml" line="175"/>
+        <source>Enthaltene Qt-Teile: %1</source>
+        <translation>Composants Qt inclus : %1</translation>
+    </message>
+</context>
+<context>
     <name>Main</name>
     <message>
-        <location filename="../app/qml/Main.qml" line="252"/>
+        <location filename="../app/qml/Main.qml" line="258"/>
         <source>Vorführung</source>
         <translation>Démonstration</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="259"/>
+        <location filename="../app/qml/Main.qml" line="265"/>
         <source>Andere Vorführung</source>
         <translation>Autre démonstration</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="294"/>
+        <location filename="../app/qml/Main.qml" line="300"/>
         <source>Fortschritt übernehmen?</source>
         <translation>Reprendre la progression ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="301"/>
+        <location filename="../app/qml/Main.qml" line="307"/>
         <source>Dieser Code enthält keine Experimente von Volta 1.</source>
         <translation>Ce code ne contient aucune expérience de Volta 1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="303"/>
+        <location filename="../app/qml/Main.qml" line="309"/>
         <source>%1 erledigte Experimente in das Profil »%2« übernehmen?</source>
         <translation>Reprendre %1 expériences terminées dans le profil « %2 » ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="304"/>
+        <location filename="../app/qml/Main.qml" line="310"/>
         <source>%1 erledigte Experimente übernehmen?</source>
         <translation>Reprendre %1 expériences terminées ?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="309"/>
+        <location filename="../app/qml/Main.qml" line="315"/>
         <source>Abbrechen</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="314"/>
+        <location filename="../app/qml/Main.qml" line="320"/>
         <source>Übernehmen</source>
         <translation>Reprendre</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="376"/>
+        <location filename="../app/qml/Main.qml" line="382"/>
         <source>Präsentation – es wird nichts gespeichert</source>
         <translation>Présentation – rien n&apos;est enregistré</translation>
     </message>
     <message>
-        <location filename="../app/qml/Main.qml" line="264"/>
-        <location filename="../app/qml/Main.qml" line="383"/>
+        <location filename="../app/qml/Main.qml" line="270"/>
+        <location filename="../app/qml/Main.qml" line="389"/>
         <source>Beenden</source>
         <translation>Terminer</translation>
     </message>
@@ -4692,33 +4730,33 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="516"/>
+        <location filename="../app/src/lab_controller.cpp" line="517"/>
         <source>Forscher</source>
         <translation>Chercheur</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="896"/>
-        <location filename="../app/src/lab_controller.cpp" line="930"/>
+        <location filename="../app/src/lab_controller.cpp" line="897"/>
+        <location filename="../app/src/lab_controller.cpp" line="957"/>
         <source>Freies Labor</source>
         <translation>Labo libre</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1029"/>
+        <location filename="../app/src/lab_controller.cpp" line="1056"/>
         <source>Alles abbauen</source>
         <translation>Tout démonter</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1034"/>
+        <location filename="../app/src/lab_controller.cpp" line="1061"/>
         <source>Musteraufbau zeigen</source>
         <translation>Afficher le montage modèle</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1581"/>
+        <location filename="../app/src/lab_controller.cpp" line="1608"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1642"/>
+        <location filename="../app/src/lab_controller.cpp" line="1669"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
     </message>

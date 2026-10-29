@@ -9,6 +9,7 @@ Popup {
     required property var controller
     readonly property var app: controller.appInfo()
     signal linkRequested(string url)
+    signal licensesRequested()
 
     modal: true
     focus: true
@@ -156,6 +157,12 @@ Popup {
 
             Heading { text: qsTr("Fremdbestandteile") }
             Line { text: qsTr("QR-Code: qrcodegen von Project Nayuki, MIT-Lizenz (Copyright Project Nayuki).") }
+            Button {
+                objectName: "infoLicenses"
+                height: Theme.control
+                text: qsTr("Lizenzen anzeigen")
+                onClicked: info.licensesRequested()
+            }
 
             Heading { text: qsTr("Datenschutz") }
             Line { text: qsTr("Volta erhebt keine Daten, zeigt keine Werbung und braucht kein Internet.") }

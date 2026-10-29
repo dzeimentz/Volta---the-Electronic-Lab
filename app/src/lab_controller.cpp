@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QGuiApplication>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QBuffer>
 #include <QFile>
@@ -917,6 +918,32 @@ QVariantMap LabController::appInfo() const {
             {QStringLiteral("platform"), QSysInfo::prettyProductName() + QStringLiteral(" (") +
                                              QSysInfo::currentCpuArchitecture() + QStringLiteral(")")},
             {QStringLiteral("hasLogo"), QFile::exists(QStringLiteral(":/brand/dc_logo.png"))}};
+}
+
+QVariantList LabController::licenses() const {
+    QFile f(QStringLiteral(":/licenses/licenses.json"));
+    if (!f.open(QIODevice::ReadOnly)) return {};
+#if defined(Q_OS_ANDROID)
+    const QString platform = QStringLiteral("android");
+#else
+    const QString platform = QStringLiteral("windows");
+#endif
+    QVariantList out;
+    for (const QJsonValue& v : QJsonDocument::fromJson(f.readAll()).object().value(QStringLiteral("components")).toArray()) {
+        const QJsonObject c = v.toObject();
+        if (!c.value(QStringLiteral("platforms")).toArray().contains(platform)) continue;
+        QVariantMap m = c.toVariantMap();
+        if (c.contains(QStringLiteral("modules"))) // enthaltene Qt-Teile je Plattform
+            m.insert(QStringLiteral("modules"), c.value(QStringLiteral("modules")).toObject().value(platform).toVariant());
+        out.append(m);
+    }
+    return out;
+}
+
+QString LabController::licenseText(const QString& id) const {
+    if (id.contains(QLatin1Char('/')) || id.contains(QLatin1Char('\\'))) return {};
+    QFile f(QStringLiteral(":/licenses/texts/%1.txt").arg(id));
+    return f.open(QIODevice::ReadOnly) ? QString::fromUtf8(f.readAll()) : QString();
 }
 
 void LabController::startFreeLab() {

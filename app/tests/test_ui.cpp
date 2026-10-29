@@ -506,6 +506,38 @@ private slots:
         QTRY_VERIFY(!dlg->property("opened").toBool());
     }
 
+    // Lizenzen: aus dem Info-Fenster erreichbar, Liste mit Qt und Drittsoftware, Antippen zeigt den Lizenztext
+    void licensesPage() {
+        QObject* info = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("infoDialog"));
+        QObject* dlg = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("licensesDialog"));
+        QVERIFY(info && dlg);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("infoButton"))));
+        QTRY_VERIFY(info->property("opened").toBool());
+        QQuickItem* button = item(QStringLiteral("infoLicenses"));
+        QVERIFY(button);
+        QVERIFY(button->height() >= 48);
+        QMetaObject::invokeMethod(button, "clicked");
+        QTRY_VERIFY(dlg->property("opened").toBool());
+        QTRY_VERIFY(!info->property("opened").toBool());
+        const QVariantList entries = dlg->property("entries").toList();
+        QVERIFY(entries.size() > 20);
+        QCOMPARE(entries.first().toMap().value(QStringLiteral("name")).toString(), QStringLiteral("Qt"));
+        for (const QVariant& e : entries)
+            for (const QVariant& id : e.toMap().value(QStringLiteral("texts")).toList())
+                QVERIFY2(!m_lab->licenseText(id.toString()).isEmpty(), qPrintable(id.toString()));
+        QVERIFY(m_lab->licenseText(QStringLiteral("../licenses")).isEmpty());
+        QQuickItem* first = item(QStringLiteral("license_0"));
+        QTRY_VERIFY(first && first->isVisible());
+        QVERIFY(first->height() >= 48);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(first));
+        QQuickItem* text = item(QStringLiteral("licenseText"));
+        QTRY_VERIFY(text && text->property("text").toString().contains(QStringLiteral("GNU LESSER GENERAL PUBLIC LICENSE")));
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("licensesBack"))));
+        QTRY_VERIFY(dlg->property("current").isNull());
+        QTest::keyClick(m_window, Qt::Key_Escape);
+        QTRY_VERIFY(!dlg->property("opened").toBool());
+    }
+
     // Experimentfeld einklappen schafft Platz fuer die Grundplatte
     void experimentPanelCollapses() {
         QQuickItem* panel = item(QStringLiteral("experimentPanel"));

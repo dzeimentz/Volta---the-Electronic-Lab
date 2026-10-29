@@ -55,6 +55,9 @@ UNWANTED = [
     r"VirtualKeyboard", r"virtualkeyboard",                                            # Android-Tastatur des Systems
     r"plugins_tls_", r"plugins_networkinformation_",                                   # kein Netz
     r"imageformats_q(gif|icns|ico|tga|tiff|wbmp|webp)_", r"vectorimageformats_",
+    # nur GPL v3 bzw. kommerziell (nicht LGPL), ungenutzt: Lottie, Quick 3D (Profiler); dazu der Vektorbild-Erzeuger
+    r"Qt6Lottie", r"Qt6Quick3D", r"quick3dprofiler", r"Qt6QuickVectorImageGenerator",
+    r"Qt6FFmpegStub",                                                                  # nur fuer das FFmpeg-Modul
 ]
 
 

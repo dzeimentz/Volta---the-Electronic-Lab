@@ -80,7 +80,9 @@ externe Links hinter der Elternschranke.
 1. Anwaltliche Bewertung der Marke »Volta« und des Namens »Zuse«.
 2. Schutzfähigkeit der Figuren Tick und Zetti; ggf. eigene Figur des Partners.
 3. Rechte an den LU-Texten: schriftliche Rechteeinräumung der Übersetzer einholen.
-4. Lizenzhinweise gesammelt in der App (eigene Seite »Lizenzen« mit allen Texten) – technisch vorbereitet, Inhalt
-   wird ergänzt.
+4. ~~Lizenzhinweise gesammelt in der App~~ – erledigt (10/2026): Seite »Lizenzen« im Info-Fenster mit allen
+   Fremdbestandteilen je Plattform und den Lizenztexten im Original, erzeugt aus den Qt-Stücklisten
+   (`tools/make_licenses.py`). Dabei entfernt: Qt Lottie und Qt Quick 3D (nur GPL v3/kommerziell, von Volta nicht
+   genutzt) aus der Android-Ausgabe.
 5. Qt-Lizenzweg für iPad/Mac.
 6. Vertraulichkeitsvereinbarung vor Weitergabe von mehr als dem Testpaket; Quellcode wird nicht weitergegeben.

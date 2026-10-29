@@ -312,6 +312,13 @@ das iPad).
   gesalzener SHA-256-Pruefwert. Eingabe verdeckt ueber Ziffernblock (48 dp); nach fuenf Fehlversuchen 30 s Sperre, die
   einen Neustart ueberdauert. »PIN vergessen?« erklaert das Zuruecksetzen ueber das Loeschen der App-Daten.
   Info-Fenster: »Website oeffnen« und »E-Mail schreiben« erst nach der Schranke.
+- Lizenzen (10/2026, `LicensesDialog.qml`): Knopf »Lizenzen anzeigen« im Info-Fenster (Fremdbestandteile). Liste aller
+  Fremdbestandteile der laufenden Plattform (Qt, qrcodegen, Compiler-Laufzeit, die in Qt enthaltene Drittsoftware) mit
+  Version und Lizenz, Zeilen mindestens 48 dp; Antippen zeigt Copyright und Lizenztext im englischen Original, »‹«
+  fuehrt zur Liste zurueck. Oben der LGPL-Hinweis (Qt unveraendert und dynamisch, austauschbar, Quelltext auf
+  download.qt.io oder auf Anfrage). Daten: `app/resources/licenses/`, erzeugt mit `tools/make_licenses.py` aus den
+  Qt-Stuecklisten (SBOM) und den tatsaechlich ausgelieferten Bibliotheken; das Werkzeug bricht ab, wenn ein
+  ausgelieferter Qt-Teil nicht unter LGPL steht. Keine Links (nur Text), also keine Schranke noetig.
 - PIN fuer die Einstellungen abschaltbar (10/2026, `AppSettings::settingsPinRequired`, Schluessel
   `eltern/pin_einstellungen`, Grundwert an): Checkbox »Einstellungen nur mit PIN oeffnen« im Reiter Allgemein;
   Abschalten fragt die PIN noch einmal ab, Einschalten nicht. Links nach aussen bleiben immer hinter der PIN

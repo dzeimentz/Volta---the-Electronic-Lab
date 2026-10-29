@@ -180,6 +180,7 @@ qt_add_qml_module(volta_ui
         qml/ModuleItem.qml
         qml/ModuleInside.qml
         qml/DeskPartInfo.qml
+        qml/LicensesDialog.qml
         qml/ToolToken.qml
         qml/RecorderPanel.qml
         qml/FlyoutBar.qml
@@ -229,6 +230,10 @@ qt_add_resources(volta_ui "tick" PREFIX "/tick" BASE resources/tick FILES
     resources/tick/tick_froehlich.png resources/tick/tick_gut.png resources/tick/tick_motivierend.png
     resources/tick/tick_nachdenklich.png resources/tick/tick_neugierig.png resources/tick/tick_ueberrascht.png
     resources/tick/tick_warnend.png)
+# Lizenzen der Fremdbestandteile (tools/make_licenses.py): Liste und Lizenztexte im Original
+file(GLOB VOLTA_LICENSE_TEXTS CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} resources/licenses/texts/*.txt)
+qt_add_resources(volta_ui "licenses" PREFIX "/licenses" BASE resources/licenses FILES
+    resources/licenses/licenses.json ${VOLTA_LICENSE_TEXTS})
 # Kurzanleitung: ein Bild je Schritt und Sprache (tools/manual_pdfs.py --app-bilder)
 set(VOLTA_GUIDE_IMAGES)
 foreach(lang de en fr lb)

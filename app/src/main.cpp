@@ -488,6 +488,16 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_LICENSES=1 oeffnet die Lizenzliste, =2 den ersten Lizenztext (Qt)
+    if (const int lic = qEnvironmentVariableIntValue("VOLTA_DEMO_LICENSES"); lic > 0)
+        QTimer::singleShot(600, &engine, [&engine, lic] {
+            const auto roots = engine.rootObjects();
+            QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("licensesDialog"));
+            if (!dlg) return;
+            QMetaObject::invokeMethod(dlg, "open");
+            if (lic == 2) dlg->setProperty("current", dlg->property("entries").toList().value(0));
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_SHOW=1 oeffnet die Auswahl der Vorfuehrung, VOLTA_DEMO_SHOW=<Experiment-ID> startet
     // diese Vorfuehrung (wie Antippen in der Auswahl)
     if (const QString show = qEnvironmentVariable("VOLTA_DEMO_SHOW"); !show.isEmpty())
