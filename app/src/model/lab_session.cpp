@@ -275,11 +275,45 @@ bool LabSession::setBoardSize(int rows, int columns) {
 bool LabSession::replaceBoard(const Board& after, const QString& text) {
     Board b = after;
     b.desk = m_board.desk;
+    // Pult nach Bedarf: was schon im Pult steht, bleibt; dazu, was der neue Aufbau benutzt
+    if (m_board.deskParts && !b.deskParts) b.deskParts = m_board.deskParts;
+    if (b.deskParts)
+        for (const auto& g : deskPartsUsed(b))
+            if (std::find(b.deskParts->begin(), b.deskParts->end(), g) == b.deskParts->end()) b.deskParts->push_back(g);
     // Groesse bleibt (kleines Steckbrett der Stufe), solange der neue Aufbau hineinpasst
     b.rows = std::max(m_board.rows, highestUsedRow(b));
     b.columns = m_board.columns;
     if (highestUsedColumn(b) > b.columns) b.columns = after.columns;
     return push(text, std::move(b));
+}
+
+bool LabSession::addDeskPart(const std::string& group) {
+    const auto& names = deskGroupNames();
+    if (!m_board.deskParts || std::find(names.begin(), names.end(), group) == names.end()) return false;
+    if (hasDeskPart(m_board, group)) return true;
+    Board after = m_board;
+    std::vector<std::string> parts;
+    for (const auto& g : names) // Anzeigereihenfolge
+        if (g == group || hasDeskPart(m_board, g)) parts.push_back(g);
+    after.deskParts = std::move(parts);
+    return push(QCoreApplication::translate("Befehl", "Pultteil einsetzen"), std::move(after));
+}
+
+bool LabSession::removeDeskPart(const std::string& group) {
+    if (!m_board.deskParts || group == "batterie") return false;
+    if (!hasDeskPart(m_board, group)) return true;
+    Board after = m_board;
+    after.deskParts->erase(std::remove(after.deskParts->begin(), after.deskParts->end(), group), after.deskParts->end());
+    // Leitungen und Spannungsanzeigen an seinen Feldern gehen mit (kommen mit Rueckgaengig zurueck)
+    after.wires.erase(std::remove_if(after.wires.begin(), after.wires.end(),
+                                     [&group](const WirePlacement& w) {
+                                         return deskGroupOf(w.from) == group || deskGroupOf(w.to) == group;
+                                     }),
+                      after.wires.end());
+    after.voltageDisplays.erase(std::remove_if(after.voltageDisplays.begin(), after.voltageDisplays.end(),
+                                               [&group](const std::string& f) { return deskGroupOf(f) == group; }),
+                                after.voltageDisplays.end());
+    return push(QCoreApplication::translate("Befehl", "Pultteil herausnehmen"), std::move(after));
 }
 
 bool LabSession::push(const QString& text, Board after, int mergeId, const QString& key,
@@ -514,6 +548,15 @@ bool LabSession::toggleVoltageDisplay(const std::string& field) {
 void LabSession::setMainSwitch(bool on) {
     m_board.desk.mainSwitch = on;
     m_bridge.post({desk_id::kMainSwitch, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+    if (hasDeskPart(m_board, "batterie2"))
+        m_bridge.post({desk_id::kMainSwitch2, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+}
+
+void LabSession::setCells2(int cells) {
+    m_board.desk.cells2 = cells == 3 ? 3 : 6;
+    m_bars.clear();
+    if (hasDeskPart(m_board, "batterie2"))
+        m_bridge.post({desk_id::kBattery2, sim::Action::Type::SetCells, static_cast<double>(m_board.desk.cells2)});
 }
 
 void LabSession::setCells(int cells) {

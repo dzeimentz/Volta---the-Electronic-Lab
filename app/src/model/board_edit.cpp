@@ -140,7 +140,32 @@ bool validBoardSize(int rows, int columns) {
 bool withinBoard(const Board& board, const std::string& anchor) {
     char row = 0;
     int col = 0;
-    return !parseField(anchor, row, col) || (col <= board.columns && row - 'A' < board.rows);
+    if (parseField(anchor, row, col)) return col <= board.columns && row - 'A' < board.rows;
+    const std::string group = deskGroupOf(anchor);
+    return group.empty() || hasDeskPart(board, group);
+}
+
+bool hasDeskPart(const Board& board, const std::string& group) {
+    if (group == "batterie") return true;
+    if (!board.deskParts) return group != "batterie2"; // Volta 1: festes Pult ohne Batterie 2
+    return std::find(board.deskParts->begin(), board.deskParts->end(), group) != board.deskParts->end();
+}
+
+std::vector<std::string> deskPartsUsed(const Board& board) {
+    std::vector<std::string> used{"batterie"};
+    auto note = [&used](const std::string& anchor) {
+        const std::string g = deskGroupOf(anchor);
+        if (!g.empty() && std::find(used.begin(), used.end(), g) == used.end()) used.push_back(g);
+    };
+    for (const auto& w : board.wires) {
+        note(w.from);
+        note(w.to);
+    }
+    for (const auto& d : board.voltageDisplays) note(d);
+    std::vector<std::string> out;
+    for (const auto& g : deskGroupNames())
+        if (std::find(used.begin(), used.end(), g) != used.end()) out.push_back(g);
+    return out;
 }
 
 int highestUsedRow(const Board& board) {

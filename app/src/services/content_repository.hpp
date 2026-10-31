@@ -46,6 +46,12 @@ struct Stage {
     QString questionKey;
 };
 
+// Pultteil im Geraetefach (paket.json "pult_nach_bedarf", Pult nach Bedarf ab Volta 2)
+struct DeskOffer {
+    QString part; // Pultteil (model::deskGroupNames), z. B. "batterie2"
+    int fromStage = 0;
+};
+
 // Laedt Inhaltspakete (JSON) und Bauteilkatalog aus einem Inhaltsverzeichnis. Kein Netzwerkzugriff.
 class ContentRepository {
 public:
@@ -63,6 +69,8 @@ public:
     QStringList lineage(const QString& band);
     // IDs aller Experimente eines Bandes (z. B. "volta1.2.4"), numerisch nach Stufe und Nummer sortiert
     QStringList experimentIds(const QString& band) const;
+    // Pultteile des Geraetefachs; leer: festes Pult wie Volta 1
+    QList<DeskOffer> deskOffers(const QString& band);
     // Stufen eines Bandes; leer, wenn stufen.json fehlt
     QList<Stage> stages(const QString& band);
     // Experiment nach id (z. B. "volta1.2.4") aus content/<band>/experiments/<stufe>.<nr>.json

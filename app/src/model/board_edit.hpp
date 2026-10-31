@@ -27,8 +27,12 @@ inline constexpr int kMaxRows = 5;
 bool validBoardSize(int rows, int columns);
 
 // Liegt der Anschlusspunkt auf der genutzten Grundplatte? (Felder rechts von board.columns oder unter board.rows:
-// nein; andere: ja)
+// nein; Pultfelder nur, wenn ihr Pultteil im Pult steht; andere: ja)
 bool withinBoard(const Board& board, const std::string& anchor);
+// Steht das Pultteil im Pult? Ohne Pult nach Bedarf alle Pultteile von Volta 1.
+bool hasDeskPart(const Board& board, const std::string& group);
+// Pultteile, die ein Aufbau benutzt (Leitungen an Pultfeldern), immer mit der Batterie, in Anzeigereihenfolge
+std::vector<std::string> deskPartsUsed(const Board& board);
 // Groesste von Bauteilen oder Leitungen belegte Spalte bzw. Reihe (1 = A; 0: keine)
 int highestUsedColumn(const Board& board);
 int highestUsedRow(const Board& board);

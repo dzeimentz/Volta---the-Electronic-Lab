@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "anchor.hpp"
+#include "board_edit.hpp"
 #include "environment.hpp"
 #include "volta/core/components/magnet.hpp"
 #include "volta/core/components/sensors.hpp"
@@ -127,6 +128,16 @@ private:
         core::Meter& meter = c.add<core::Meter>(desk_id::kMeter, com, vo, amp);
         meter.setMode(d.meterMode);
         meter.setAnalog(d.meterAnalog);
+        if (hasDeskPart(m_board, "batterie2")) {
+            NodeId plus2 = 0, minus2 = 0;
+            node("P:+B2", plus2, "Pult");
+            node("P:-B2", minus2, "Pult");
+            const NodeId cell2 = internalNode();
+            m_net.desk[desk_id::kBattery2] = c.componentCount();
+            c.add<core::Battery>(desk_id::kBattery2, cell2, minus2, core::BatteryParams{d.cells2});
+            m_net.desk[desk_id::kMainSwitch2] = c.componentCount();
+            c.add<core::Switch>(desk_id::kMainSwitch2, cell2, plus2, d.mainSwitch);
+        }
     }
 
     // Anschlusspunkt eines Bauteilanschlusses nach Katalogname

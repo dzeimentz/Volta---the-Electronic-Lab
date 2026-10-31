@@ -2,6 +2,7 @@
 
 #include <QJsonArray>
 
+#include "anchor.hpp"
 #include "board_edit.hpp"
 
 #include <algorithm>
@@ -46,7 +47,7 @@ QJsonObject boardToJson(const Board& board) {
                                  {QStringLiteral("zeile"), t.row},
                                  {QStringLiteral("an"), t.on}});
     const DeskState& d = board.desk;
-    const QJsonObject desk{{QStringLiteral("zellen"), d.cells},
+    QJsonObject desk{{QStringLiteral("zellen"), d.cells},
                            {QStringLiteral("schalter"), d.switchClosed},
                            {QStringLiteral("p1"), d.p1},
                            {QStringLiteral("p2"), d.p2},
@@ -55,10 +56,18 @@ QJsonObject boardToJson(const Board& board) {
                            {QStringLiteral("messgeraet"), d.meterVisible},
                            {QStringLiteral("raumlicht"), d.roomLight},
                            {QStringLiteral("werkzeuge"), tools}};
-    return QJsonObject{{QStringLiteral("bauteile"), parts},     {QStringLiteral("leitungen"), wires},
+    QJsonObject out{{QStringLiteral("bauteile"), parts},     {QStringLiteral("leitungen"), wires},
                        {QStringLiteral("module"), modules},     {QStringLiteral("anzeigen"), displays},
                        {QStringLiteral("spalten"), board.columns}, {QStringLiteral("reihen"), board.rows},
                        {QStringLiteral("pult"), desk}};
+    if (board.deskParts) { // Pult nach Bedarf (ab Volta 2); Volta-1-Staende bleiben unveraendert
+        QJsonArray groups;
+        for (const auto& g : *board.deskParts) groups.append(qs(g));
+        out.insert(QStringLiteral("pultteile"), groups);
+        desk.insert(QStringLiteral("zellen2"), d.cells2);
+        out.insert(QStringLiteral("pult"), desk);
+    }
+    return out;
 }
 
 bool boardFromJson(const QJsonObject& json, Board& out) {
@@ -104,6 +113,20 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     DeskState& d = b.desk;
     const int cells = desk.value(QStringLiteral("zellen")).toInt(6);
     d.cells = (cells == 2 || cells == 3 || cells == 6) ? cells : 6;
+    const int cells2 = desk.value(QStringLiteral("zellen2")).toInt(6);
+    d.cells2 = (cells2 == 3 || cells2 == 6) ? cells2 : 6;
+    if (json.contains(QStringLiteral("pultteile"))) {
+        std::vector<std::string> groups;
+        for (const QJsonValue& v : json.value(QStringLiteral("pultteile")).toArray()) {
+            const std::string g = ss(v);
+            const auto& names = deskGroupNames();
+            if (std::find(names.begin(), names.end(), g) != names.end() &&
+                std::find(groups.begin(), groups.end(), g) == groups.end())
+                groups.push_back(g);
+        }
+        if (std::find(groups.begin(), groups.end(), "batterie") == groups.end()) groups.insert(groups.begin(), "batterie");
+        b.deskParts = std::move(groups);
+    }
     d.mainSwitch = false; // Start im Steckmodus
     d.switchClosed = desk.value(QStringLiteral("schalter")).toBool(false);
     d.p1 = std::clamp(desk.value(QStringLiteral("p1")).toDouble(0.5), 0.0, 1.0);

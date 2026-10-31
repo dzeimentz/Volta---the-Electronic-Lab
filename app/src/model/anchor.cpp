@@ -16,6 +16,34 @@ const std::vector<std::string>& deskFields() {
     return fields;
 }
 
+const std::vector<std::string>& extraDeskFields() {
+    static const std::vector<std::string> fields = {"P:+B2", "P:-B2"};
+    return fields;
+}
+
+const std::vector<std::string>& deskGroupNames() {
+    static const std::vector<std::string> names = {"batterie", "batterie2", "p1", "p2", "schalter", "lautsprecher"};
+    return names;
+}
+
+std::vector<std::string> deskGroupFields(const std::string& group) {
+    if (group == "batterie") return {"P:+9V", "P:0V"};
+    if (group == "batterie2") return {"P:+B2", "P:-B2"};
+    if (group == "p1") return {"P:P1a", "P:P1s", "P:P1b"};
+    if (group == "p2") return {"P:P2a", "P:P2s", "P:P2b"};
+    if (group == "schalter") return {"P:S1", "P:S2"};
+    if (group == "lautsprecher") return {"P:LS1", "P:LS2"};
+    return {};
+}
+
+std::string deskGroupOf(const std::string& anchor) {
+    for (const auto& g : deskGroupNames()) {
+        const auto f = deskGroupFields(g);
+        if (std::find(f.begin(), f.end(), anchor) != f.end()) return g;
+    }
+    return {};
+}
+
 const std::vector<std::string>& meterJacks() {
     static const std::vector<std::string> jacks = {"MESS:COM", "MESS:VOHM", "MESS:A"};
     return jacks;
@@ -58,6 +86,8 @@ AnchorKind classifyAnchor(const std::string& a, const BoardLayout& layout) {
     }
     const auto& desk = deskFields();
     if (std::find(desk.begin(), desk.end(), a) != desk.end()) return AnchorKind::Desk;
+    const auto& extra = extraDeskFields();
+    if (std::find(extra.begin(), extra.end(), a) != extra.end()) return AnchorKind::Desk;
     const auto& jacks = meterJacks();
     if (std::find(jacks.begin(), jacks.end(), a) != jacks.end()) return AnchorKind::MeterJack;
     if (a.rfind("M:", 0) == 0) {

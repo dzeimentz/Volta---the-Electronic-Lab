@@ -31,6 +31,15 @@ AnchorKind classifyAnchor(const std::string& anchor, const BoardLayout& layout =
 std::vector<std::string> boardFields(const BoardLayout& layout = BoardLayout::volta1());
 // Pultfelder in Anzeigereihenfolge (P:+9V, P:0V, P:P1a, ...).
 const std::vector<std::string>& deskFields();
+// Pultfelder, die es erst ab Volta 2 gibt (Batterie 2: P:+B2, P:-B2); nur steckbar, wenn das Pultteil im Pult
+// steht (Board::deskParts, Pult nach Bedarf).
+const std::vector<std::string>& extraDeskFields();
+// Pultteile (Gruppen der Pultleiste) in Anzeigereihenfolge: batterie, batterie2, p1, p2, schalter, lautsprecher
+const std::vector<std::string>& deskGroupNames();
+// Pultfelder eines Pultteils (leer bei unbekanntem Namen)
+std::vector<std::string> deskGroupFields(const std::string& group);
+// Pultteil eines Pultfelds ("P:P1s" -> "p1"); leer fuer andere Anschlusspunkte
+std::string deskGroupOf(const std::string& anchor);
 // Buchsen des Messgeraets (MESS:COM, MESS:VOHM, MESS:A).
 const std::vector<std::string>& meterJacks();
 // Feld der Modulleiste, 1-basiert: "M:<n>".

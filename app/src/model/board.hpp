@@ -49,6 +49,7 @@ struct ToolPlacement {
 // Zustand des Bedienpults (Bedienhandlungen, nicht Teil des Undo-Verlaufs).
 struct DeskState {
     int cells = 6;              // 2 / 3 / 6 Zellen = 3 / 4,5 / 9 V
+    int cells2 = 6;             // Batterie 2 (ab Volta 2): 3 / 6 Zellen = 4,5 / 9 V
     bool mainSwitch = false;    // Hauptschalter der Batterie
     bool switchClosed = false;  // Pultschalter S1-S2
     double p1 = 0.5;            // Drehregler P1
@@ -69,6 +70,9 @@ struct Board {
     std::vector<std::string> voltageDisplays; // Felder mit eingeschalteter Spannungsanzeige (Aufbau, undo-faehig)
     int columns = 12; // genutzte Spalten der Grundplatte: 5, 6, 8, 10 oder 12 (Aufbau, undo-faehig)
     int rows = 5;     // genutzte Reihen ab A: 2 ... 5 (kleines Steckbrett der ersten Stufen)
+    // Pult nach Bedarf (ab Volta 2, Konzept 5.5): Pultteile im Pult (deskGroupNames); ohne Wert das feste Pult von
+    // Volta 1. Gehoert zum Aufbau (undo-faehig, gespeichert); die Batterie steht immer im Pult.
+    std::optional<std::vector<std::string>> deskParts;
     DeskState desk;
 
     const PartPlacement* findPart(const std::string& id) const;

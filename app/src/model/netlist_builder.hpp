@@ -18,6 +18,8 @@ namespace volta::model {
 namespace desk_id {
 inline constexpr const char* kBattery = "PULT.B";
 inline constexpr const char* kMainSwitch = "PULT.HS";
+inline constexpr const char* kBattery2 = "PULT.B2";     // Batterie 2 (ab Volta 2, nur im Pult nach Bedarf)
+inline constexpr const char* kMainSwitch2 = "PULT.HS2"; // derselbe Hauptschalter schaltet auch Batterie 2
 inline constexpr const char* kPot1 = "PULT.P1";
 inline constexpr const char* kPot2 = "PULT.P2";
 inline constexpr const char* kSwitch = "PULT.S";
@@ -50,6 +52,8 @@ struct Netlist {
 //    (ADR-0007).
 //  - Das Bedienpult ist immer bestueckt: Batterie mit Hauptschalter an P:+9V, Drehregler P1/P2, Schalter S1-S2,
 //    Lautsprecher LS1-LS2 (vorerst 8 Ohm als ohmsche Last), Dreifach-Messgeraet an MESS:COM/VOHM/A.
+//  - Steht Batterie 2 im Pult (Board::deskParts), liegt sie zwischen P:-B2 und P:+B2, ueber den Hauptschalter
+//    geschaltet; sie hat keine feste Verbindung zu P:0V (das Kind steckt die symmetrische Versorgung selbst).
 //  - Module werden als Teilschaltung expandiert; ihre Anschluesse sind die Felder der Modulleiste.
 Netlist buildNetlist(const Board& board, const Catalog& catalog);
 

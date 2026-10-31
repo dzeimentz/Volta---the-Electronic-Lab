@@ -86,10 +86,15 @@ public:
     bool setBoardSize(int rows, int columns);
     // Ganzer Aufbau auf einmal (z. B. Musteraufbau als Loesungshilfe); Pultstellung bleibt
     bool replaceBoard(const Board& after, const QString& text);
+    // Pult nach Bedarf (Board::deskParts): Pultteil ins Pult setzen bzw. herausnehmen (Befehl); Herausnehmen zieht
+    // die Leitungen an seinen Feldern im selben Befehl ab. Die Batterie bleibt immer im Pult.
+    bool addDeskPart(const std::string& group);
+    bool removeDeskPart(const std::string& group);
 
     // ---- Bedienhandlungen (kein Verlauf)
     void setMainSwitch(bool on);
     void setCells(int cells);
+    void setCells2(int cells); // Batterie 2: 3 oder 6 Zellen
     void setPartClosed(const std::string& id, bool closed); // Schalter, Taster, Reedkontakt, Wechselschalter
     void setDeskSwitch(bool closed);
     void setPot(int which, double position); // Pult-Drehregler 1/2

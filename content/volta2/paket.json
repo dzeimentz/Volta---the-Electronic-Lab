@@ -10,5 +10,31 @@
     "en",
     "lb"
   ],
-  "quellsprache": "de"
+  "quellsprache": "de",
+  "pult_nach_bedarf": [
+    {
+      "teil": "batterie",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "batterie2",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "schalter",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "p1",
+      "ab_stufe": 1
+    },
+    {
+      "teil": "p2",
+      "ab_stufe": 1
+    },
+    {
+      "teil": "lautsprecher",
+      "ab_stufe": 2
+    }
+  ]
 }

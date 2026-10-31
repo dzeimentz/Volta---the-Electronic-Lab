@@ -55,6 +55,17 @@ QStringList ContentRepository::lineage(const QString& band) {
     return out;
 }
 
+QList<DeskOffer> ContentRepository::deskOffers(const QString& band) {
+    QList<DeskOffer> out;
+    QJsonObject pkg;
+    if (!readJson(band + QStringLiteral("/paket.json"), pkg)) return out;
+    for (const QJsonValue& v : pkg.value(QStringLiteral("pult_nach_bedarf")).toArray()) {
+        const QJsonObject o = v.toObject();
+        out << DeskOffer{o.value(QStringLiteral("teil")).toString(), o.value(QStringLiteral("ab_stufe")).toInt()};
+    }
+    return out;
+}
+
 QStringList ContentRepository::experimentIds(const QString& band) const {
     QStringList out;
     const QDir dir(QDir(m_root).filePath(band + QStringLiteral("/experiments")));

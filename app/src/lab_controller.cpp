@@ -61,6 +61,8 @@ LabController::LabController(QString contentRoot, QString band, QObject* parent)
     m_repo.loadTexts(m_band, QStringLiteral("de"));
     m_experimentIds = m_repo.experimentIds(m_band);
     m_stages = m_repo.stages(m_band);
+    m_deskOffers = m_repo.deskOffers(m_band);
+    if (deskOnDemand()) loadSessionBoard({}); // Pult beginnt mit der Batterie
     rebuildExperimentList();
     m_session->onBoardChanged = [this] {
         m_errors.clear();
@@ -95,7 +97,7 @@ bool LabController::loadExperiment(const QString& id) {
     m_title = m_repo.text(exp.titleKey);
     m_flow.stop();
     m_session->clearSuccess();
-    m_session->loadBoard(exp.templateBoard);
+    loadSessionBoard(exp.templateBoard);
     m_experiment = std::move(exp);
     emit experimentChanged();
     emit flowChanged();
@@ -122,6 +124,7 @@ bool LabController::startExperiment(const QString& id) {
     start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
     start.desk.mainSwitch = false;
     start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
+    if (deskOnDemand()) start.deskParts = model::deskPartsUsed(exp.templateBoard); // Pult nach Bedarf (5.5)
     // Automatik: 8 Felder (bzw. passend zum Messgeraet); sonst die gespeicherte Breite - jeweils nur, wenn der
     // Musteraufbau hineinpasst
     if (m_stageLayout)
@@ -131,7 +134,7 @@ bool LabController::startExperiment(const QString& id) {
     else
         start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
     m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
-    m_session->loadBoard(start);
+    loadSessionBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
     setGuideActive(false); // Aufbauhilfe beginnt jedes Experiment ausgeschaltet
     m_experiment = std::move(exp);
@@ -230,7 +233,7 @@ bool LabController::resumeSession() {
         board.parts.erase(std::remove_if(board.parts.begin(), board.parts.end(),
                                          [this](const model::PartPlacement& p) { return !m_session->catalog().part(p.type); }),
                           board.parts.end());
-        m_session->loadBoard(board);
+        loadSessionBoard(board);
         emit flowChanged();
         emit deskChanged();
         emit historyChanged();
@@ -263,7 +266,7 @@ void LabController::activateDataDir(const QString& dir, bool saveFirst) {
     m_session->clearSuccess();
     model::Board empty;
     empty.columns = m_preferredColumns;
-    m_session->loadBoard(empty);
+    loadSessionBoard(empty);
     emit experimentChanged();
     emit flowChanged();
     emit deskChanged();
@@ -475,7 +478,7 @@ bool LabController::startTaskBoard() {
     startFreeLab();
     model::Board b = *t.board;
     b.desk.mainSwitch = false;
-    m_session->loadBoard(b);
+    loadSessionBoard(b);
     if (!t.title.isEmpty()) m_title = t.title;
     emit experimentChanged();
     emit deskChanged();
@@ -960,7 +963,7 @@ void LabController::startFreeLab() {
     empty.desk.meterVisible = m_preferMeter; // Messgeraet wie zuletzt im freien Labor
     empty.columns = m_autoColumns ? autoColumnsFor(empty, true, empty.desk.meterVisible)
                                   : m_preferredColumns; // gespeicherte Breite
-    m_session->loadBoard(empty);
+    loadSessionBoard(empty);
     emit experimentChanged();
     emit flowChanged();
     emit deskChanged();
@@ -1258,6 +1261,48 @@ double LabController::simTime() const { return m_session->snapshot().timeS; }
 double LabController::realtimeRatio() const { return m_session->snapshot().realtimeRatio; }
 bool LabController::mainSwitch() const { return m_session->board().desk.mainSwitch; }
 int LabController::cells() const { return m_session->board().desk.cells; }
+int LabController::cells2() const { return m_session->board().desk.cells2; }
+
+void LabController::setCells2(int cells) {
+    if (cells2() == cells) return;
+    m_session->setCells2(cells);
+    emit deskChanged();
+}
+
+void LabController::adaptDesk(model::Board& board) const {
+    if (deskOnDemand() && !board.deskParts) board.deskParts = model::deskPartsUsed(board);
+}
+
+void LabController::loadSessionBoard(model::Board board) {
+    adaptDesk(board);
+    m_session->loadBoard(board);
+}
+
+QVariantList LabController::deskTray() const {
+    QVariantList out;
+    const int open = highestUnlockedStage();
+    for (const auto& o : m_deskOffers)
+        out << QVariantMap{{QStringLiteral("part"), o.part},
+                           {QStringLiteral("present"), model::hasDeskPart(m_session->board(), ss(o.part))},
+                           {QStringLiteral("locked"), !m_unlockAll && o.fromStage > open},
+                           {QStringLiteral("stage"), o.fromStage}};
+    return out;
+}
+
+bool LabController::addDeskPart(const QString& part) {
+    for (const auto& o : m_deskOffers)
+        if (o.part == part) return result(m_session->addDeskPart(ss(part)));
+    return false;
+}
+
+bool LabController::removeDeskPart(const QString& part) { return result(m_session->removeDeskPart(ss(part))); }
+
+int LabController::deskPartWires(const QString& part) const {
+    int n = 0;
+    for (const auto& w : m_session->board().wires)
+        if (model::deskGroupOf(w.from) == ss(part) || model::deskGroupOf(w.to) == ss(part)) ++n;
+    return n;
+}
 
 double LabController::voltage(const QString& anchor) const { return m_session->voltage(ss(anchor)); }
 int LabController::voltageBars(const QString& anchor) { return m_session->voltageBars(ss(anchor)); }
@@ -1840,6 +1885,11 @@ bool LabController::moduleBarVisible() const {
 }
 
 QStringList LabController::deskGroups() const {
+    if (const auto& parts = m_session->board().deskParts) { // Pult nach Bedarf: was im Pult steht
+        QStringList out;
+        for (const auto& g : *parts) out << qs(g);
+        return out;
+    }
     static const QStringList all = {QStringLiteral("batterie"), QStringLiteral("p1"), QStringLiteral("p2"),
                                     QStringLiteral("schalter"), QStringLiteral("lautsprecher")};
     if (!stageLayoutActive()) return all;
