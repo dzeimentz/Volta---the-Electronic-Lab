@@ -2,18 +2,19 @@
 
 _Konzept des dritten Bandes: Schwingkreis, Radio, Stromversorgung, Messtechnik und digitale Grundschaltungen für 13 bis 16 Jahre_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.2.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.3.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.2 |
+| Version | 0.3 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
 | Datum | 31.10.2026 |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 4.3, 5.4); Konzept Volta 2 v0.2; Konzept Zuse v0.3; Konzept MCU Explorer v0.1; Farb- und Leitkonzept Volta 1 (0.9.1, `docs/ui-spec.md`) |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 und 2 |
 | Änderungen zu v0.1 | Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler getroffen (31.10.2026, Kapitel 4); Masse/GND bleibt schwarz; Messstellen und Tastköpfe (auch D0–D7) als Bauteile wie in Volta 2 |
+| Änderungen zu v0.2 | Abgleich mit Volta 2 v0.3 (31.10.2026): Pult nach Bedarf mit Gerätefach, erweiterte Spannungsanzeige (negativ, Wechselspannung), Start mit 10 Spalten, Bezugspunkte von Generator und Wechselquelle, Namenskonflikt der Tastköpfe D0–D7 mit den Feldern D1–D7 |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -78,7 +79,7 @@ Ebenfalls entschieden: **Digitale Module** (Gatter, Zähler, Decoder) rechnen ih
 
 ## 5. Bedienung und Bedienpult III
 
-Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je Feld oder automatisch auf allen belegten Feldern), Stromfluss, Schaltplan, Aufbauhilfe, Werkzeugkasten, Messstellen als Bauteile (V1/V2, A1/A2, Ω1/Ω2 mit Wert am Bauteil), Einfach- und Doppelmessgerät, Oszilloskop mit Tastköpfen K1/K2 und Funktionsgenerator sind dieselben wie in Volta 2.
+Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je Feld oder automatisch auf allen belegten Feldern; negativ als umgedrehtes blaues Balkendiagramm mit Minuszeichen, Wechselspannung mit »~« und Effektivwert), Pult nach Bedarf mit Gerätefach, Stromfluss, Schaltplan, Aufbauhilfe, Werkzeugkasten, Messstellen als Bauteile (V1/V2, A1/A2, Ω1/Ω2 mit Wert am Bauteil), Einfach- und Doppelmessgerät, Oszilloskop mit Tastköpfen K1/K2 und Funktionsgenerator sind dieselben wie in Volta 2.
 
 ### 5.1 Pultleiste
 
@@ -259,8 +260,10 @@ Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen gro�
 
 ### 9.4 Bedienpult III und Stufenanpassung
 
-- Das Pult wächst mit den Stufen: Stufe 0 Batterie 1, Messgeräte, Generator, Oszilloskop, Frequenzgang-Schreiber, Logikanalysator; ab Stufe 2 Senderanlage; ab Stufe 4 Wechselquelle; Batterie 2 ab Stufe 6 (Messverstärker mit symmetrischer Versorgung); Drehregler, Schalter und Lautsprecher, sobald ein Experiment sie nutzt; dazu immer, was Vorlage oder Aufbau verwenden.
-- Steckbrett: 5 × 10 Felder zu Beginn, wächst mit der Vorlage; im freien Labor 12 Spalten. Radio- und Zählerprojekte nutzen die Modulleiste, damit die Grundplatte übersichtlich bleibt.
+- **Pult nach Bedarf** wie Volta 2 (dort 5.5): Im Experiment zeigt das Pult nur, was Vorlage, Aufbauschritte und Musteraufbau verwenden; im freien Labor stellt man es sich über das Gerätefach selbst zusammen. Bei Volta 3 ist das unverzichtbar – mit Senderanlage, Frequenzgang-Schreiber und Logikanalysator hätte nicht alles gleichzeitig Platz.
+- **Freischaltung** im Gerätefach: Stufe 0 Batterie 1, Messgeräte, Generator, Oszilloskop, Frequenzgang-Schreiber, Logikanalysator; ab Stufe 2 Senderanlage; ab Stufe 4 Wechselquelle; Batterie 2 ab Stufe 6 (Messverstärker mit symmetrischer Versorgung); Drehregler, Schalter und Lautsprecher, sobald ein Experiment sie nutzt.
+- **Bezugspunkte** wie Volta 2: Generatormasse an `0V`, Wechselquelle potentialfrei – für Thyristor und Triac wichtig, weil der Phasenanschnitt sonst über die Masse kurzgeschlossen werden kann.
+- Steckbrett: 5 × 10 Felder zu Beginn, wächst mit der Vorlage; im freien Labor ebenfalls 10 Spalten, 8 und 12 wählbar. Radio- und Zählerprojekte nutzen die Modulleiste, damit die Grundplatte übersichtlich bleibt.
 - Schmale Fenster: Pultleiste zweizeilig; Frequenzgang und Logikanalysator öffnen sich auf kleinen Tablets als Blatt über der Grundplatte (wie das Oszilloskop in Volta 2).
 
 ## 10. Technik
@@ -319,6 +322,7 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 |---|---|
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2) | Schritt 2 |
+| Benennung der Tastköpfe D0–D7 (Konflikt mit den Feldern D1–D7) und der Amperemeter A1/A2 – gemeinsam mit Volta 2 | Schritt 4 |
 | Kennfarbe von Volta 3 (App-Symbol entschieden: Reihensymbol `volta3.svg`) | Schritt 2 |
 | Name der Reihe (Markenfrage Volta) | vor Schritt 6 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
