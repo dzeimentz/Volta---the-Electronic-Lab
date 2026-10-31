@@ -147,7 +147,8 @@ class LabController : public QObject {
     Q_PROPERTY(bool showNumbers READ showNumbers NOTIFY experimentChanged)
 
 public:
-    explicit LabController(QString contentRoot, QObject* parent = nullptr);
+    // band: Band der Edition (z. B. "volta2"), dessen Inhaltspaket die App zeigt
+    explicit LabController(QString contentRoot, QString band = QStringLiteral("volta1"), QObject* parent = nullptr);
     ~LabController() override;
 
     QString title() const { return m_title; }
@@ -489,6 +490,7 @@ private:
     void rebuildExperimentList();
 
     services::ContentRepository m_repo;
+    QString m_band; // Band der Edition, z. B. "volta1"
     std::unique_ptr<model::LabSession> m_session;
     QString m_title;
     services::Experiment m_experiment;

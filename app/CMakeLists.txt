@@ -54,10 +54,17 @@ target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads:
 qt_add_executable(volta_app
     src/main.cpp
 )
-# App-Symbol (Quelle resources/icons/volta.svg, Rasterbilder mit tools/make_icons.py)
+# App-Symbol (Quelle resources/icons/volta.svg, Rasterbilder mit tools/make_icons.py); Baende mit eigenem
+# Reihensymbol haben es in resources/icons/<band>/ (z. B. volta2) und eine eigene resources/<band>.rc
+set(VOLTA_ICON_DIR "resources/icons")
+set(VOLTA_RC_FILE "resources/volta.rc")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/${VOLTA_EDITION}/volta.svg")
+    set(VOLTA_ICON_DIR "resources/icons/${VOLTA_EDITION}")
+    set(VOLTA_RC_FILE "resources/${VOLTA_EDITION}.rc")
+endif()
 if(WIN32)
     # eigene Objektbibliothek ohne Include-Pfade: windres (MinGW) scheitert an Leerzeichen in Include-Pfaden
-    add_library(volta_app_rc OBJECT resources/volta.rc)
+    add_library(volta_app_rc OBJECT ${VOLTA_RC_FILE})
     set_target_properties(volta_app_rc PROPERTIES AUTOMOC OFF AUTOUIC OFF AUTORCC OFF)
     target_sources(volta_app PRIVATE $<TARGET_OBJECTS:volta_app_rc>)
 endif()
@@ -87,7 +94,9 @@ endif()
 option(VOLTA_EMBED_CONTENT "Inhaltspakete in die App einbetten" ${_volta_embed_default})
 if(VOLTA_EMBED_CONTENT)
     file(GLOB_RECURSE volta_content_files RELATIVE "${PROJECT_SOURCE_DIR}/content" CONFIGURE_DEPENDS
-         "${PROJECT_SOURCE_DIR}/content/catalog/*.json" "${PROJECT_SOURCE_DIR}/content/volta1/*.json")
+         "${PROJECT_SOURCE_DIR}/content/catalog/*.json" "${PROJECT_SOURCE_DIR}/content/volta1/*.json"
+         "${PROJECT_SOURCE_DIR}/content/${VOLTA_EDITION}/*.json")
+    list(REMOVE_DUPLICATES volta_content_files)
     list(TRANSFORM volta_content_files PREPEND "${PROJECT_SOURCE_DIR}/content/")
     qt_add_resources(volta_app "volta_content" PREFIX "/content" BASE "${PROJECT_SOURCE_DIR}/content"
                      FILES ${volta_content_files})
@@ -221,8 +230,9 @@ qt_add_qml_module(volta_ui
 )
 target_link_libraries(volta_ui PUBLIC volta_model Qt6::Quick Qt6::QuickControls2 Qt6::QuickDialogs2 Qt6::Multimedia Qt6::TextToSpeech)
 # Programmsymbol (Fenster, Info), Flaggen, Logo: in volta_ui, damit App und UI-Tests sie haben
-qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE resources/icons FILES
-    resources/icons/volta_32.png resources/icons/volta_64.png resources/icons/volta_256.png
+qt_add_resources(volta_ui "icons" PREFIX "/icons" BASE ${VOLTA_ICON_DIR} FILES
+    ${VOLTA_ICON_DIR}/volta_32.png ${VOLTA_ICON_DIR}/volta_64.png ${VOLTA_ICON_DIR}/volta_256.png)
+qt_add_resources(volta_ui "icons_ui" PREFIX "/icons" BASE resources/icons FILES
     resources/icons/toolbox_light.svg resources/icons/toolbox_dark.svg resources/icons/home_light.svg)
 # Maskottchen Tick: zehn Stimmungen (docs/maskottchen-tick.md), PNG mit 256 Farben (WebP fehlt in der APK)
 qt_add_resources(volta_ui "tick" PREFIX "/tick" BASE resources/tick FILES

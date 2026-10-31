@@ -248,6 +248,21 @@ def load_catalog(rep: Report) -> dict:
     return {"types": types, "modules": modules, "keys": keys}
 
 
+def lineage(band: str, rep: Report) -> list[str]:
+    """Grundbaende (paket.json "basis") und Band selbst, vom aeltesten an; wie ContentRepository::lineage."""
+    out: list[str] = []
+    b = band
+    while b and b not in out:
+        out.insert(0, b)
+        pkg = load_json(CONTENT / b / "paket.json", rep) if (CONTENT / b / "paket.json").exists() else None
+        if pkg is None:
+            if b != band:
+                rep.error(f"content/{band}/paket.json", f"Grundband '{b}' fehlt")
+            break
+        b = pkg.get("basis", "")
+    return out
+
+
 def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
     band = band_dir.name
     pkg = load_json(band_dir / "paket.json", rep)
@@ -283,14 +298,22 @@ def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
             texts[lang] = load_json(p, rep) or {}
         elif lang == pkg.get("quellsprache", "de"):
             rep.error(f"content/{band}/i18n", f"Quellsprache '{lang}' fehlt")
-    src = texts.get(pkg.get("quellsprache", "de"), {})
+    # Texte der Grundbaende gelten mit (z. B. Lexikon der Bauteile aus volta1 in volta2)
+    base_texts: dict[str, dict] = {lang: {} for lang in LANGS}
+    for b in lineage(band, rep)[:-1]:
+        for lang in LANGS:
+            p = CONTENT / b / "i18n" / f"{lang}.json"
+            if p.exists():
+                base_texts[lang].update(load_json(p, rep) or {})
+    src_lang = pkg.get("quellsprache", "de")
+    src = {**base_texts.get(src_lang, {}), **texts.get(src_lang, {})}
     for k in sorted(used):
         if k not in src:
             rep.error(f"content/{band}/i18n/de.json", f"Schluessel '{k}' fehlt")
     for lang in LANGS:
         if lang == "de":
             continue
-        missing = [k for k in used if k not in texts.get(lang, {})]
+        missing = [k for k in used if k not in texts.get(lang, {}) and k not in base_texts[lang]]
         if missing:
             rep.warn(f"content/{band}/i18n/{lang}.json", f"{len(missing)} Uebersetzungen fehlen")
     for lang, tx in texts.items():

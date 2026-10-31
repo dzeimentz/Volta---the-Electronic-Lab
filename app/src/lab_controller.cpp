@@ -43,9 +43,9 @@ constexpr double kNotifyS = 0.1; // Anzeigen mit ca. 10 Hz aktualisieren
 QString qs(const std::string& s) { return QString::fromStdString(s); }
 std::string ss(const QString& s) { return s.toStdString(); }
 
-model::Catalog loadCatalog(services::ContentRepository& repo, QStringList& errors) {
+model::Catalog loadCatalog(services::ContentRepository& repo, const QString& band, QStringList& errors) {
     model::Catalog c;
-    if (!repo.loadCatalog(c)) errors << repo.lastError();
+    if (!repo.loadCatalog(c, band)) errors << repo.lastError();
     return c;
 }
 
@@ -55,12 +55,12 @@ model::Orientation orient(bool vertical) {
 model::Span spanOf(bool longSpan) { return longSpan ? model::Span::Long : model::Span::Short; }
 } // namespace
 
-LabController::LabController(QString contentRoot, QObject* parent)
-    : QObject(parent), m_repo(std::move(contentRoot)) {
-    m_session = std::make_unique<model::LabSession>(loadCatalog(m_repo, m_errors));
-    m_repo.loadTexts(QStringLiteral("volta1"), QStringLiteral("de"));
-    m_experimentIds = m_repo.experimentIds(QStringLiteral("volta1"));
-    m_stages = m_repo.stages(QStringLiteral("volta1"));
+LabController::LabController(QString contentRoot, QString band, QObject* parent)
+    : QObject(parent), m_repo(std::move(contentRoot)), m_band(std::move(band)) {
+    m_session = std::make_unique<model::LabSession>(loadCatalog(m_repo, m_band, m_errors));
+    m_repo.loadTexts(m_band, QStringLiteral("de"));
+    m_experimentIds = m_repo.experimentIds(m_band);
+    m_stages = m_repo.stages(m_band);
     rebuildExperimentList();
     m_session->onBoardChanged = [this] {
         m_errors.clear();
@@ -344,9 +344,7 @@ void LabController::removeAllProfiles() {
     emit profilesChanged();
 }
 
-QString LabController::band() const {
-    return m_experimentIds.isEmpty() ? QStringLiteral("volta1") : m_experimentIds.first().section(QLatin1Char('.'), 0, 0);
-}
+QString LabController::band() const { return m_band; }
 
 QString LabController::progressLink() const { return services::transfer::progressLink(band(), m_progress.doneIds()); }
 
@@ -891,7 +889,7 @@ QVariantList LabController::lexicon() const {
 
 void LabController::setContentLanguage(const QString& code) {
     m_contentLanguage = code;
-    m_repo.loadTexts(QStringLiteral("volta1"), code);
+    m_repo.loadTexts(m_band, code);
     rebuildExperimentList();
     emit progressChanged();
     emit journalChanged(); // Titel in der neuen Sprache

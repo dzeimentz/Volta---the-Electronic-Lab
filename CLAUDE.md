@@ -60,6 +60,11 @@ cmake --preset desktop-debug
 cmake --build --preset desktop-debug
 ctest --preset desktop-debug
 
+# Volta 2 (Worktree volta-volta2, Zweig volta2): eigener Build-Ordner mit Edition volta2 -> build/volta2-debug/app/volta2.exe
+#   (Inhaltspaket content/volta2 mit Grundband volta1, ADR-0012; Catch2 ueber FETCHCONTENT_SOURCE_DIR_CATCH2)
+cmake -S . -B build/volta2-debug -G Ninja -DVOLTA_EDITION=volta2 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="$QT_ROOT_DESKTOP"
+cmake --build build/volta2-debug
+
 # Nur der Simulationskern (ohne Qt, schnell)
 cmake --preset core-only
 cmake --build --preset core-only

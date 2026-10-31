@@ -1,0 +1,20 @@
+{
+  "stufe_0_titel": "Kick-off",
+  "stufe_0_frage": "What is new on my desk?",
+  "stufe_1_titel": "Measuring more precisely",
+  "stufe_1_frage": "Is that always true – and how exact is it?",
+  "stufe_2_titel": "Alternating voltage made visible",
+  "stufe_2_frage": "What does an oscilloscope show?",
+  "stufe_3_titel": "Rectifying and stabilising",
+  "stufe_3_frage": "How does alternating voltage become a steady direct voltage?",
+  "stufe_4_titel": "The transistor as an amplifier",
+  "stufe_4_frage": "How does a quiet signal become loud?",
+  "stufe_5_titel": "Operational amplifiers",
+  "stufe_5_frage": "What can an amplifier with two inputs do?",
+  "stufe_6_titel": "The 555 timer chip",
+  "stufe_6_frage": "One chip for clock and time?",
+  "stufe_7_titel": "Oscillations and sound",
+  "stufe_7_frage": "How is a tone made?",
+  "stufe_8_titel": "Light you cannot see",
+  "stufe_8_frage": "How does a light barrier work?"
+}

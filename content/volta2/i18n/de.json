@@ -1,0 +1,20 @@
+{
+  "stufe_0_titel": "Auftakt",
+  "stufe_0_frage": "Was ist neu auf meinem Pult?",
+  "stufe_1_titel": "Genauer messen",
+  "stufe_1_frage": "Gilt das immer – und wie genau?",
+  "stufe_2_titel": "Wechselspannung sichtbar",
+  "stufe_2_frage": "Was zeigt ein Oszilloskop?",
+  "stufe_3_titel": "Gleichrichten und stabilisieren",
+  "stufe_3_frage": "Wie wird aus Wechselspannung eine ruhige Gleichspannung?",
+  "stufe_4_titel": "Der Transistor als Verstärker",
+  "stufe_4_frage": "Wie wird ein leises Signal laut?",
+  "stufe_5_titel": "Operationsverstärker",
+  "stufe_5_frage": "Was kann ein Verstärker mit zwei Eingängen?",
+  "stufe_6_titel": "Der Timer-Baustein 555",
+  "stufe_6_frage": "Ein Chip für Takt und Zeit?",
+  "stufe_7_titel": "Schwingungen und Klang",
+  "stufe_7_frage": "Wie entsteht ein Ton?",
+  "stufe_8_titel": "Licht, das man nicht sieht",
+  "stufe_8_frage": "Wie funktioniert eine Lichtschranke?"
+}

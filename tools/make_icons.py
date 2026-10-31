@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Erzeugt die App-Symbole aus app/resources/icons/volta.svg und zuse/resources/icons/zuse1.svg (Quellen, von Hand
-gepflegt).
+"""Erzeugt die App-Symbole aus app/resources/icons/volta.svg, app/resources/icons/volta2/volta.svg (Reihensymbol,
+Kopie aus docs/design/symbole) und zuse/resources/icons/zuse1.svg (Quellen, von Hand gepflegt).
 
 Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/make_icons.py
@@ -59,7 +59,7 @@ def main() -> int:
            f"-L{qt_root / 'lib'}", "-lQt6Svg", "-lQt6Gui", "-lQt6Core"]
     if subprocess.run(cmd, env=env).returncode != 0:
         return 1
-    for icons, name, android in ((ICONS, "volta", "android"),
+    for icons, name, android in ((ICONS, "volta", "android"), (ICONS / "volta2", "volta", None),
                                  (ROOT / "zuse" / "resources" / "icons", "zuse1", "android-zuse")):
         if subprocess.run([str(exe), str(icons / f"{name}.svg"), str(icons)] + [str(s) for s in SIZES],
                           env=env).returncode != 0:
@@ -68,6 +68,8 @@ def main() -> int:
         # Pillow verkleinert selbst; fuer kleine Groessen die von Qt gerenderten (schaerferen) Bilder verwenden
         frames = [Image.open(icons / f"{name}_{s}.png").convert("RGBA") for s in ICO_SIZES]
         base.save(icons / f"{name}.ico", sizes=[(s, s) for s in ICO_SIZES], append_images=frames)
+        if android is None:  # Band noch ohne Android-Paket
+            continue
         # Android-Startsymbole (packaging/<android>/res/mipmap-*/ic_launcher.png)
         big = Image.open(icons / f"{name}_1024.png").convert("RGBA")
         for density, size in {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}.items():
@@ -75,7 +77,7 @@ def main() -> int:
             target.mkdir(parents=True, exist_ok=True)
             big.resize((size, size), Image.LANCZOS).save(target / "ic_launcher.png")
     apple_icons(Image)
-    print("Symbole erzeugt: app/resources/icons, zuse/resources/icons, packaging/android*/res, packaging/ios, "
+    print("Symbole erzeugt: app/resources/icons (mit volta2/), zuse/resources/icons, packaging/android*/res, packaging/ios, "
           "packaging/macos")
     return 0
 

@@ -1,0 +1,20 @@
+{
+  "stufe_0_titel": "Lancement",
+  "stufe_0_frage": "Qu'y a-t-il de nouveau sur mon pupitre ?",
+  "stufe_1_titel": "Mesurer plus précisément",
+  "stufe_1_frage": "Est-ce toujours vrai – et avec quelle précision ?",
+  "stufe_2_titel": "La tension alternative devient visible",
+  "stufe_2_frage": "Que montre un oscilloscope ?",
+  "stufe_3_titel": "Redresser et stabiliser",
+  "stufe_3_frage": "Comment une tension alternative devient-elle une tension continue calme ?",
+  "stufe_4_titel": "Le transistor amplificateur",
+  "stufe_4_frage": "Comment un signal faible devient-il fort ?",
+  "stufe_5_titel": "Amplificateurs opérationnels",
+  "stufe_5_frage": "Que peut faire un amplificateur à deux entrées ?",
+  "stufe_6_titel": "Le circuit minuteur 555",
+  "stufe_6_frage": "Une puce pour la cadence et le temps ?",
+  "stufe_7_titel": "Oscillations et son",
+  "stufe_7_frage": "Comment naît un son ?",
+  "stufe_8_titel": "La lumière qu'on ne voit pas",
+  "stufe_8_frage": "Comment fonctionne une barrière lumineuse ?"
+}

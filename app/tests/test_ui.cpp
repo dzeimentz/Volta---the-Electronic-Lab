@@ -19,6 +19,7 @@
 
 #include "lab_controller.hpp"
 #include "services/audio_route.hpp"
+#include "services/content_repository.hpp"
 #include "services/managed_config.hpp"
 #include "app_settings.hpp"
 #include "language_service.hpp"
@@ -805,6 +806,27 @@ private slots:
         QVERIFY(m_lab->canUndo());
         QMetaObject::invokeMethod(box, "close");
         QTRY_VERIFY(!box->property("opened").toBool());
+    }
+
+    // Edition volta2: eigener Band mit Grundband volta1 (Bauteile von Anfang an frei, Texte und Lexikon geerbt)
+    void editionVolta2() {
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        QCOMPARE(repo.lineage(QStringLiteral("volta2")), (QStringList{QStringLiteral("volta1"), QStringLiteral("volta2")}));
+        QCOMPARE(repo.lineage(QStringLiteral("volta1")), QStringList{QStringLiteral("volta1")});
+        model::Catalog v1, v2;
+        QVERIFY(repo.loadCatalog(v1, QStringLiteral("volta1")));
+        QVERIFY(repo.loadCatalog(v2, QStringLiteral("volta2")));
+        QCOMPARE(v2.parts.size(), v1.parts.size());
+        QVERIFY(v1.parts.at("widerstand").fromStage > 0);
+        QCOMPARE(v2.parts.at("widerstand").fromStage, 0); // aus dem Grundband: sofort frei
+        QVERIFY(repo.loadTexts(QStringLiteral("volta2"), QStringLiteral("fr")));
+        QCOMPARE(repo.text(QStringLiteral("stufe_0_frage")), QStringLiteral("Qu'y a-t-il de nouveau sur mon pupitre ?"));
+        QVERIFY(repo.text(QStringLiteral("lex_widerstand")) != QStringLiteral("lex_widerstand")); // aus volta1
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta2"));
+        QCOMPARE(lab.stages().size(), 9);
+        QCOMPARE(lab.stages().first().toMap().value(QStringLiteral("title")).toString(), QStringLiteral("Auftakt"));
+        for (const QVariant& e : lab.experiments())
+            QVERIFY(e.toMap().value(QStringLiteral("id")).toString().startsWith(QStringLiteral("volta2.")));
     }
 
     // Forscherprofile: getrennte Daten je Profil (Fortschritt, Laborstand), Loeschen entfernt den Ordner

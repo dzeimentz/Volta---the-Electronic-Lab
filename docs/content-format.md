@@ -12,7 +12,7 @@ content/
   catalog/bauteile.json          Bauteiltypen mit Anschluessen, Parametern, Freischaltstufe
   <band>/stufen.json             Stufen des Lernpfads: nr, titel_key, frage_key (Leitfrage)
   volta1/
-    paket.json                   Paketkopf: band, version, schema_version, sprachen
+    paket.json                   Paketkopf: band, version, schema_version, sprachen, basis (Grundband, ADR-0012)
     experiments/<id>.json        ein Experiment je Datei, Dateiname = id ohne Bandpraefix
     i18n/de.json, fr.json, en.json, lb.json
     audio/lb/<schluessel>.ogg    eigene luxemburgische Aufnahmen

@@ -44,6 +44,17 @@ QStringList ContentRepository::bands() const {
     return out;
 }
 
+QStringList ContentRepository::lineage(const QString& band) {
+    QStringList out;
+    for (QString b = band; !b.isEmpty() && !out.contains(b);) {
+        out.prepend(b);
+        QJsonObject pkg;
+        if (!readJson(b + QStringLiteral("/paket.json"), pkg)) break;
+        b = pkg.value(QStringLiteral("basis")).toString();
+    }
+    return out;
+}
+
 QStringList ContentRepository::experimentIds(const QString& band) const {
     QStringList out;
     const QDir dir(QDir(m_root).filePath(band + QStringLiteral("/experiments")));
@@ -59,7 +70,14 @@ QStringList ContentRepository::experimentIds(const QString& band) const {
     return out;
 }
 
-bool ContentRepository::loadCatalog(model::Catalog& out) {
+bool ContentRepository::loadCatalog(model::Catalog& out, const QString& band) {
+    const QStringList bands = band.isEmpty() ? QStringList{} : lineage(band);
+    // false: Eintrag gehoert zu einem spaeteren Band; base: Eintrag aus einem Grundband (sofort frei)
+    const auto admit = [&](const QJsonObject& o, bool& base) {
+        const QString b = o.value(QStringLiteral("ab_band")).toString();
+        base = !bands.isEmpty() && !b.isEmpty() && b != band;
+        return bands.isEmpty() || b.isEmpty() || bands.contains(b);
+    };
     QJsonObject root;
     if (!readJson(QStringLiteral("catalog/bauteile.json"), root)) return false;
     if (root.value(QStringLiteral("schema_version")).toInt() != kSchemaVersion) {
@@ -69,10 +87,12 @@ bool ContentRepository::loadCatalog(model::Catalog& out) {
     out = model::Catalog{};
     for (const QJsonValue& v : root.value(QStringLiteral("bauteile")).toArray()) {
         const QJsonObject o = v.toObject();
+        bool base = false;
+        if (!admit(o, base)) continue;
         model::CatalogEntry e;
         e.type = str(o.value(QStringLiteral("typ")));
         e.model = str(o.value(QStringLiteral("modell")));
-        e.fromStage = o.value(QStringLiteral("ab_stufe")).toInt();
+        e.fromStage = base ? 0 : o.value(QStringLiteral("ab_stufe")).toInt();
         e.lexiconKey = str(o.value(QStringLiteral("lexikon_key")));
         e.theme = str(o.value(QStringLiteral("thema")));
         for (const QJsonValue& p : o.value(QStringLiteral("anschluesse")).toArray()) e.pins.push_back(str(p));
@@ -92,10 +112,12 @@ bool ContentRepository::loadCatalog(model::Catalog& out) {
     }
     for (const QJsonValue& v : root.value(QStringLiteral("module")).toArray()) {
         const QJsonObject o = v.toObject();
+        bool base = false;
+        if (!admit(o, base)) continue;
         model::ModuleEntry e;
         e.type = str(o.value(QStringLiteral("typ")));
         e.kind = str(o.value(QStringLiteral("art")));
-        e.fromStage = o.value(QStringLiteral("ab_stufe")).toInt();
+        e.fromStage = base ? 0 : o.value(QStringLiteral("ab_stufe")).toInt();
         for (const QJsonValue& p : o.value(QStringLiteral("anschluesse")).toArray()) e.pins.push_back(str(p));
         out.modules[e.type] = e;
     }
@@ -360,17 +382,25 @@ QList<Stage> ContentRepository::stages(const QString& band) {
 }
 
 bool ContentRepository::loadTexts(const QString& band, const QString& language) {
-    // Deutsch ist Quellsprache und vollstaendig (docs/i18n.md); fehlende Uebersetzungen fallen darauf zurueck
-    QJsonObject de;
-    if (!readJson(QStringLiteral("%1/i18n/de.json").arg(band), de)) return false;
+    // Deutsch ist Quellsprache und vollstaendig (docs/i18n.md); fehlende Uebersetzungen fallen darauf zurueck.
+    // Je Band erst Deutsch, dann die Sprache, damit ein Text des Bandes auch auf Deutsch vor der Uebersetzung
+    // des Grundbandes steht.
     m_texts.clear();
-    for (auto it = de.begin(); it != de.end(); ++it) m_texts.insert(it.key(), it.value().toString());
-    if (language == QLatin1String("de")) return true;
-    QJsonObject o;
-    if (!readJson(QStringLiteral("%1/i18n/%2.json").arg(band, language), o)) return false;
-    for (auto it = o.begin(); it != o.end(); ++it)
-        if (!it.value().toString().isEmpty()) m_texts.insert(it.key(), it.value().toString());
-    return true;
+    bool ok = true;
+    for (const QString& b : lineage(band)) {
+        QJsonObject de;
+        if (!readJson(QStringLiteral("%1/i18n/de.json").arg(b), de)) return false;
+        for (auto it = de.begin(); it != de.end(); ++it) m_texts.insert(it.key(), it.value().toString());
+        if (language == QLatin1String("de")) continue;
+        QJsonObject o;
+        if (!readJson(QStringLiteral("%1/i18n/%2.json").arg(b, language), o)) {
+            ok = false;
+            continue;
+        }
+        for (auto it = o.begin(); it != o.end(); ++it)
+            if (!it.value().toString().isEmpty()) m_texts.insert(it.key(), it.value().toString());
+    }
+    return ok;
 }
 
 QString ContentRepository::text(const QString& key) const { return m_texts.value(key, key); }

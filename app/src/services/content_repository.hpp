@@ -54,9 +54,13 @@ public:
     const QString& root() const { return m_root; }
     QString lastError() const { return m_error; }
 
-    bool loadCatalog(model::Catalog& out);
+    // Bauteilkatalog; mit band nur die Eintraege dieses Bandes und seiner Grundbaende (paket.json "basis"),
+    // Eintraege eines Grundbandes sind von Anfang an frei (Stufe 0)
+    bool loadCatalog(model::Catalog& out, const QString& band = {});
     // Baende im Inhaltsverzeichnis (Verzeichnisse mit paket.json), z. B. "volta1"
     QStringList bands() const;
+    // Grundbaende und Band selbst, vom aeltesten an (z. B. volta2 -> volta1, volta2)
+    QStringList lineage(const QString& band);
     // IDs aller Experimente eines Bandes (z. B. "volta1.2.4"), numerisch nach Stufe und Nummer sortiert
     QStringList experimentIds(const QString& band) const;
     // Stufen eines Bandes; leer, wenn stufen.json fehlt
@@ -64,7 +68,8 @@ public:
     // Experiment nach id (z. B. "volta1.2.4") aus content/<band>/experiments/<stufe>.<nr>.json
     bool loadExperiment(const QString& id, Experiment& out);
     // Texte einer Sprache (z. B. "fr") fuer einen Band, Deutsch als Rueckfall; text() liefert den Schluessel, wenn
-    // er auch auf Deutsch fehlt. false, wenn die Sprachdatei fehlt (dann gilt Deutsch).
+    // er auch auf Deutsch fehlt. false, wenn die Sprachdatei fehlt (dann gilt Deutsch). Texte der Grundbaende
+    // (lineage) gelten mit, der Band selbst hat Vorrang.
     bool loadTexts(const QString& band, const QString& language);
     QString text(const QString& key) const;
 

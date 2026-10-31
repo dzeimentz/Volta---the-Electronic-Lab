@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     const bool deployed = QFileInfo::exists(besideExe + QStringLiteral("/catalog/bauteile.json"));
     const QString contentDir = deployed ? besideExe : QStringLiteral(VOLTA_CONTENT_DIR);
 #endif
-    volta::LabController lab(contentDir);
+    volta::LabController lab(contentDir, QStringLiteral(VOLTA_EDITION));
     // Fortschritt im Lernpfad lokal speichern; Entwicklerhilfen (VOLTA_SCREENSHOT ...) lassen ihn unberuehrt
     if (qEnvironmentVariable("VOLTA_SCREENSHOT").isEmpty()) {
         // Fortschritt, Forscherheft, Laborstand und Forscherprofile im privaten App-Speicher
