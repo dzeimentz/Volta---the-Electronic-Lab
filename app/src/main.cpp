@@ -547,6 +547,14 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_GENERATOR=1 oeffnet das Generatorfenster (ab Volta 2; Generator per VOLTA_DEMO_DESK)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GENERATOR") == 1)
+        QTimer::singleShot(1500, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("generatorPanel")))
+                QMetaObject::invokeMethod(dlg, "open");
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_HELP=<kapitel> oeffnet die Hilfe bei einem Kapitel (z. B. werkzeug, eltern; 1: Anfang)
     if (const QString helpKey = qEnvironmentVariable("VOLTA_DEMO_HELP"); !helpKey.isEmpty())
         QTimer::singleShot(600, &engine, [&engine, helpKey] {

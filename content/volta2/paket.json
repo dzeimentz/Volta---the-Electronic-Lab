@@ -21,6 +21,14 @@
       "ab_experiment": "volta2.0.3"
     },
     {
+      "teil": "wechselquelle",
+      "ab_stufe": 3
+    },
+    {
+      "teil": "generator",
+      "ab_stufe": 2
+    },
+    {
       "teil": "schalter",
       "bei_nutzung": true
     },

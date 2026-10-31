@@ -54,6 +54,23 @@ Popup {
             tips: [qsTr("Verbindest du +B2 mit 0V, liegt −B2 unter 0V: Dort misst du eine negative Spannung. So entsteht eine Versorgung mit Plus, Minus und der Mitte 0V."),
                    qsTr("Verbinde +B2 nie direkt mit −B2 – das ist ein Kurzschluss.")]
         }
+        case "wechselquelle": return {
+            title: qsTr("Wechselquelle"),
+            intro: qsTr("Die Wechselquelle liefert eine Wechselspannung wie ein kleiner Transformator: 6 oder 9 Volt (Effektivwert), 50 Schwingungen je Sekunde. Plus und Minus tauschen ständig die Seiten."),
+            fields: [["W~a", qsTr("Anschluss a der Wicklung.")],
+                     ["W~b", qsTr("Anschluss b der Wicklung.")]],
+            tips: [qsTr("Die Wechselquelle hat keine Verbindung zu 0V – wie die Wicklung eines echten Transformators. Willst du die Spannung gegen 0V messen oder am Oszilloskop sehen, verbinde einen Anschluss mit 0V."),
+                   qsTr("Der Hauptschalter schaltet sie zusammen mit der Batterie ein und aus."),
+                   qsTr("Bei 9 V~ ist die Spitze 9 V · 1,41 = 12,7 V. Das ist eine Kleinspannung – mit der Steckdose experimentierst du nie!")]
+        }
+        case "generator": return {
+            title: qsTr("Funktionsgenerator"),
+            intro: qsTr("Der Funktionsgenerator erzeugt Sinus, Dreieck oder Rechteck mit 1 Hz bis 10 kHz. Tippe auf seinen Knopf, um Form, Frequenz, Spitze und Gleichanteil einzustellen."),
+            fields: [["G", qsTr("Ausgang des Generators (50 Ω Innenwiderstand).")],
+                     ["G0", qsTr("Masse des Generators (schwarz), fest mit 0V verbunden.")]],
+            tips: [qsTr("Weil G0 schon an 0V liegt, misst das Oszilloskop das Signal an G direkt."),
+                   qsTr("Am Lautsprecher hörst du die Frequenz als Tonhöhe.")]
+        }
         case "p1": return pot(1)
         case "p2": return pot(2)
         case "schalter": return {

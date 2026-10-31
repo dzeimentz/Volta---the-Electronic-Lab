@@ -1277,6 +1277,36 @@ void LabController::setCells2(int cells) {
     emit deskChanged();
 }
 
+void LabController::setAcRms(int volt) {
+    if (acRms() == volt) return;
+    m_session->setAcRms(volt);
+    emit deskChanged();
+}
+
+void LabController::setGenWaveform(int waveform) {
+    if (genWaveform() == waveform) return;
+    m_session->setGenWaveform(waveform);
+    emit deskChanged();
+}
+
+void LabController::setGenFrequency(double hz) {
+    if (genFrequency() == hz) return;
+    m_session->setGenFrequency(hz);
+    emit deskChanged();
+}
+
+void LabController::setGenAmplitude(double peakV) {
+    if (genAmplitude() == peakV) return;
+    m_session->setGenAmplitude(peakV);
+    emit deskChanged();
+}
+
+void LabController::setGenOffset(double volt) {
+    if (genOffset() == volt) return;
+    m_session->setGenOffset(volt);
+    emit deskChanged();
+}
+
 void LabController::adaptDesk(model::Board& board) const {
     if (deskOnDemand() && !board.deskParts) board.deskParts = model::deskPartsUsed(board);
 }

@@ -831,7 +831,7 @@ private slots:
         QVERIFY(lab.deskOnDemand());
         lab.startFreeLab();
         QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
-        QCOMPARE(lab.deskTray().size(), 6);
+        QCOMPARE(lab.deskTray().size(), 8);
         QCOMPARE(lab.startColumns(), 10); // Grundplatte 5 x 10 von Anfang an
         lab.setProperty("autoColumns", true);
         lab.startFreeLab();
@@ -851,7 +851,7 @@ private slots:
         // »Pult zeigen«: alles Freigeschaltete in einem Befehl, Rueckgaengig nimmt es wieder heraus
         lab.setUnlockAll(true);
         QVERIFY(lab.showWholeDesk());
-        QCOMPARE(lab.deskGroups().size(), 6);
+        QCOMPARE(lab.deskGroups().size(), 8);
         lab.undo();
         QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
         // Aufgabe der Lehrkraft mit Pultvorgabe (ohne Bauteile)

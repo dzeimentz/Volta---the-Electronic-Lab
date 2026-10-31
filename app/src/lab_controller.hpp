@@ -93,6 +93,12 @@ class LabController : public QObject {
     Q_PROPERTY(bool mainSwitch READ mainSwitch WRITE setMainSwitch NOTIFY deskChanged)
     Q_PROPERTY(int cells READ cells WRITE setCells NOTIFY deskChanged)
     Q_PROPERTY(int cells2 READ cells2 WRITE setCells2 NOTIFY deskChanged) // Batterie 2: 3 oder 6 Zellen
+    Q_PROPERTY(int acRms READ acRms WRITE setAcRms NOTIFY deskChanged)    // Wechselquelle: 6 oder 9 V~
+    // Funktionsgenerator: Signalform 0 Sinus, 1 Dreieck, 2 Rechteck; Frequenz in Hz, Spitze und Gleichanteil in V
+    Q_PROPERTY(int genWaveform READ genWaveform WRITE setGenWaveform NOTIFY deskChanged)
+    Q_PROPERTY(double genFrequency READ genFrequency WRITE setGenFrequency NOTIFY deskChanged)
+    Q_PROPERTY(double genAmplitude READ genAmplitude WRITE setGenAmplitude NOTIFY deskChanged)
+    Q_PROPERTY(double genOffset READ genOffset WRITE setGenOffset NOTIFY deskChanged)
     // Pult nach Bedarf (ab Volta 2): Geraetefach statt Stufenanpassung; deskTray: [{part, present, locked, stage}]
     //   locked: noch nicht frei; unlock: "stufe" (stage), "experiment" (experiment: Nummer, z. B. "0.3") oder "nutzung"
     Q_PROPERTY(bool deskOnDemand READ deskOnDemand CONSTANT)
@@ -285,6 +291,16 @@ public:
     void setCells(int cells);
     int cells2() const;
     void setCells2(int cells);
+    int acRms() const { return m_session->board().desk.acRmsV; }
+    void setAcRms(int volt);
+    int genWaveform() const { return m_session->board().desk.genWaveform; }
+    void setGenWaveform(int waveform);
+    double genFrequency() const { return m_session->board().desk.genFrequencyHz; }
+    void setGenFrequency(double hz);
+    double genAmplitude() const { return m_session->board().desk.genAmplitudeV; }
+    void setGenAmplitude(double peakV);
+    double genOffset() const { return m_session->board().desk.genOffsetV; }
+    void setGenOffset(double volt);
     bool deskOnDemand() const { return !m_deskOffers.isEmpty(); }
     int startColumns() const { return m_startColumns; }
     QVariantList deskTray() const;

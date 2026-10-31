@@ -40,7 +40,8 @@ double AcSource::rmsCurrentA() const noexcept { return std::sqrt(std::max(m_mean
 void AcSource::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
     // Zeitschritt: Wert am Ende des Schritts; Arbeitspunkt: Wert zur aktuellen Phase
     const double p = ctx.isDc() ? m_phase : m_phase + m_params.frequencyHz * ctx.dtS;
-    sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emfAt(p) * ctx.sourceScale, m_params.innerOhm);
+    const double emf = m_enabled ? emfAt(p) * ctx.sourceScale : 0.0;
+    sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emf, m_params.innerOhm);
 }
 
 double AcSource::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {

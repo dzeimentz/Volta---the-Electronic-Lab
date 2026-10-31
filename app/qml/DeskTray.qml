@@ -12,6 +12,8 @@ Popup {
         switch (part) {
         case "batterie": return qsTr("Batterie")
         case "batterie2": return qsTr("Batterie 2")
+        case "wechselquelle": return qsTr("Wechselquelle")
+        case "generator": return qsTr("Funktionsgenerator")
         case "p1": return qsTr("Potentiometer 1")
         case "p2": return qsTr("Potentiometer 2")
         case "schalter": return qsTr("Schalter")
@@ -25,7 +27,8 @@ Popup {
         return qsTr("ab Stufe %1").arg(item.stage)
     }
     function groupOf(part) {
-        return part.startsWith("batterie") ? "quellen" : part === "lautsprecher" ? "hoeren" : "bedienen"
+        return part.startsWith("batterie") || part === "wechselquelle" || part === "generator" ? "quellen"
+               : part === "lautsprecher" ? "hoeren" : "bedienen"
     }
     readonly property var groups: [
         {key: "quellen", name: qsTr("Quellen"), sign: "+", color: "#C62828"},

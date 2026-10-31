@@ -344,6 +344,57 @@ private slots:
         QCOMPARE(model::poleColor(c, "P:-B2", "A1"), std::string("rot"));
     }
 
+    // Volta 2: Wechselquelle (potentialfrei, Hauptschalter) und Funktionsgenerator (G0 an 0V) als Pultteile
+    void acSourceAndGenerator() {
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(!s->addWire("P:W~b", "P:0V", "schwarz")); // noch nicht im Pult
+        QVERIFY(s->addDeskParts({"wechselquelle", "generator"}));
+        // Wechselquelle: ohne Bezug zu 0V zeigt W~a nichts Sinnvolles; ein Pol an 0V, dann 9 V~ = 12,7 V Spitze
+        QVERIFY(s->addWire("P:W~b", "P:0V", "schwarz"));
+        s->setMainSwitch(true);
+        auto peak = [&](const char* field) {
+            double hi = 0.0, lo = 0.0;
+            for (int k = 0; k < 60; ++k) { // 60 ms = drei Perioden, 1-ms-Schritte
+                run(*s, 0.001);
+                hi = std::max(hi, s->voltage(field));
+                lo = std::min(lo, s->voltage(field));
+            }
+            return std::make_pair(hi, lo);
+        };
+        auto [hi, lo] = peak("P:W~a");
+        QVERIFY2(hi > 12.0 && hi < 12.8, qPrintable(QString::number(hi)));
+        QVERIFY2(lo < -12.0 && lo > -12.8, qPrintable(QString::number(lo)));
+        s->setAcRms(6);
+        std::tie(hi, lo) = peak("P:W~a");
+        QVERIFY2(hi > 8.0 && hi < 8.5, qPrintable(QString::number(hi)));
+        s->setMainSwitch(false);
+        std::tie(hi, lo) = peak("P:W~a");
+        QVERIFY2(hi < 0.05 && lo > -0.05, qPrintable(QString::number(hi)));
+        // Generator: Rechteck 2 V Spitze um 1 V, im Leerlauf an G genau 3 V bzw. -1 V; unabhaengig vom Hauptschalter
+        s->setGenWaveform(2);
+        s->setGenFrequency(10.0);
+        s->setGenAmplitude(2.0);
+        s->setGenOffset(1.0);
+        std::tie(hi, lo) = peak("P:G");
+        QVERIFY2(std::fabs(hi - 3.0) < 1e-3 && std::fabs(lo + 1.0) < 1e-3, qPrintable(QString::number(hi)));
+        QVERIFY(std::fabs(s->voltage("P:G0")) < 1e-6); // ueber die Leitung an 0V
+        s->setGenFrequency(1e6);
+        QCOMPARE(s->board().desk.genFrequencyHz, 10000.0);
+        // Leitungsfarbe: G0 ist Masse, die Wechselquelle hat keine feste Farbe
+        QCOMPARE(model::poleColor(s->board(), "P:G0", "A1"), std::string("schwarz"));
+        QCOMPARE(model::poleColor(s->board(), "P:W~a", "A1"), std::string());
+        // Einstellungen werden mit dem Aufbau gespeichert
+        model::Board back;
+        QVERIFY(model::boardFromJson(model::boardToJson(s->board()), back));
+        QCOMPARE(back.desk.acRmsV, 6);
+        QCOMPARE(back.desk.genWaveform, 2);
+        QCOMPARE(back.desk.genFrequencyHz, 10000.0);
+        QCOMPARE(back.desk.genOffsetV, 1.0);
+    }
+
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage
     void successMatchesPartsByType() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));

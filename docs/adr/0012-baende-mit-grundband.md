@@ -28,6 +28,14 @@ fuehren muessen.
   `"pultteile"`, Befehl mit Rueckgaengig); sonst gilt das feste Pult von Volta 1. Batterie 2 (`P:+B2`, `P:-B2`) ist
   potentialfrei, haengt zweipolig am Hauptschalter und hat 10 MOhm von `P:-B2` nach `0V` (rechenbar, ausgeschaltet
   unter 0,05 V, als Last 0,45 uA).
+- Wechselquelle (`P:W~a`, `P:W~b`, Pultteil `wechselquelle`): `AcSource` direkt zwischen den Feldern, potentialfrei
+  mit 100 MOhm von `W~b` nach `0V`. Der Hauptschalter trennt wie beim Transformator die Primaerseite: ausgeschaltet
+  ist die Quellenspannung null, die Wicklung (2 Ohm) bleibt liegen. Zwei Schalter in Reihe wie bei Batterie 2 haetten
+  ausgeschaltet ueber die Isolationsleitwerte eine Scheinspannung von einigen Volt gezeigt.
+- Funktionsgenerator (`P:G`, `P:G0`, Pultteil `generator`): `FunctionGenerator` mit fester Leitung von `G0` nach `0V`,
+  unabhaengig vom Hauptschalter (Laborgeraet); Einstellungen im Generatorfenster, gespeichert im Pult des Aufbaus.
+  Solange die App mit 1-ms-Schritten rechnet, sind Signale ueber etwa 50 Hz grob abgetastet; die feine Schrittweite
+  fuer Ton und Oszilloskop folgt in Schritt 4.
 - Leitungsfarbe nach Funktion (Konzept Volta 2, 9.3): `+B2` an `0V` ist Masse (schwarz), `-B2` dann negative
   Versorgung (blau); sonst `+B2` rot und `-B2` schwarz, an `V+` gehaengt (obere Batterie) rot.
 - `paket.json "start_spalten"` (8, 10, 12) setzt die Startbreite der Grundplatte; ohne den Wert gelten die kleinen

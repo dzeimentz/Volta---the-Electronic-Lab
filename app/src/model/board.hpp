@@ -50,6 +50,12 @@ struct ToolPlacement {
 struct DeskState {
     int cells = 6;              // 2 / 3 / 6 Zellen = 3 / 4,5 / 9 V
     int cells2 = 6;             // Batterie 2 (ab Volta 2): 3 / 6 Zellen = 4,5 / 9 V
+    int acRmsV = 9;             // Wechselquelle (ab Volta 2): 6 oder 9 V~ Effektivwert, fest 50 Hz
+    // Funktionsgenerator (ab Volta 2): Signalform 0 Sinus, 1 Dreieck, 2 Rechteck; Frequenz, Spitze, Gleichanteil
+    int genWaveform = 0;
+    double genFrequencyHz = 100.0;
+    double genAmplitudeV = 1.0;
+    double genOffsetV = 0.0;
     bool mainSwitch = false;    // Hauptschalter der Batterie
     bool switchClosed = false;  // Pultschalter S1-S2
     double p1 = 0.5;            // Drehregler P1

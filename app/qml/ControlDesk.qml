@@ -20,6 +20,7 @@ Rectangle {
     property string highlightGroup: ""
     signal groupTapped(string name)
     signal infoRequested(string name)
+    signal generatorRequested() // Generatorfenster oeffnen
     signal trayRequested()          // Pult nach Bedarf: Geraetefach oeffnen
     property real trayX: 0          // Lage des Knopfs »+« (Arbeitsflaeche)
     // Zustand der Drehregler (durchgebrannt, ueberlastet) aus der laufenden Simulation
@@ -107,7 +108,8 @@ Rectangle {
     // Pluspol ueber V+, kurzer dicker Minuspol ueber 0V), Potentiometer (Schleifer als Pfeil zum mittleren Feld),
     // Schalter (zeigt die Stellung), Lautsprecher
     Repeater {
-        model: desk.groups.filter(g => ["batterie", "batterie2", "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
+        model: desk.groups.filter(g => ["batterie", "batterie2", "wechselquelle", "generator", "p1", "p2", "schalter",
+                                        "lautsprecher"].indexOf(g.name) >= 0)
         Shape {
             id: deskSymbol
             required property var modelData
@@ -127,6 +129,14 @@ Rectangle {
                     const a = cx(0), b = cx(1), m = (a + b) / 2
                     return {s: `M${a} ${t} V${y} H${m - 4} M${m + 4} ${y} H${b} V${t} M${m - 4} ${y - 9} V${y + 9}`,
                             f: `M${m + 2} ${y - 5} H${m + 6} V${y + 5} H${m + 2} Z`, plus: m - 11}
+                }
+                case "wechselquelle": case "generator": { // Kreis mit ~ (Wechselquelle) bzw. Sinus (Generator)
+                    const a = cx(0), b = cx(1), m = (a + b) / 2, r = 9
+                    const wave = modelData.name === "generator"
+                        ? ` M${m - 6} ${y} C${m - 4} ${y - 8} ${m - 2} ${y - 8} ${m} ${y} C${m + 2} ${y + 8} ${m + 4} ${y + 8} ${m + 6} ${y}`
+                        : ""
+                    return {s: `M${a} ${t} V${y} H${m - r} M${m + r} ${y} H${b} V${t} M${m - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0` + wave,
+                            f: "", mark: modelData.name === "wechselquelle" ? "~" : undefined, mx: m}
                 }
                 case "p1": case "p2": { // a, s, b: Widerstand zwischen a und b, Schleifer von s
                     const a = cx(0), s = cx(1), b = cx(2)
@@ -159,6 +169,15 @@ Rectangle {
                 strokeColor: "transparent"
                 fillColor: "#D5E2EE"
                 PathSvg { path: deskSymbol.paths.f || "M0 0" }
+            }
+            Text { // Wechselzeichen im Kreis der Wechselquelle
+                visible: deskSymbol.paths.mark !== undefined
+                x: (deskSymbol.paths.mx || 0) - width / 2
+                y: deskSymbol.y0 - height / 2 - 1
+                text: deskSymbol.paths.mark || ""
+                color: "#D5E2EE"
+                font.pixelSize: 15
+                font.bold: true
             }
             Text { // Pluszeichen am langen Strich (Polaritaet nie nur ueber die Strichlaenge)
                 visible: deskSymbol.paths.plus !== undefined
@@ -231,6 +250,59 @@ Rectangle {
             color: "white"
             font.pixelSize: Math.round((14) * Theme.fontScale)
             font.bold: true
+        }
+    }
+
+    // Wechselquelle (ab Volta 2): 6 / 9 V~, fest 50 Hz; der Hauptschalter der Batterie schaltet sie mit
+    Column {
+        visible: desk.group("wechselquelle") !== null
+        x: desk.centerOf("wechselquelle") - width / 2
+        y: 12
+        spacing: 4
+        Label { text: qsTr("Wechselquelle"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        ComboBox {
+            objectName: "acRmsBox"
+            width: 104
+            height: Theme.control - 6
+            model: [qsTr("%1 V~").arg(6), qsTr("%1 V~").arg(9)]
+            currentIndex: desk.controller.acRms === 6 ? 0 : 1
+            onActivated: (index) => { desk.controller.acRms = [6, 9][index] }
+            Accessible.name: qsTr("Spannung der Wechselquelle")
+        }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: (desk.controller.mainSwitch ? qsTr("Ein") : qsTr("Aus")) + " · 50 Hz"
+            color: "white"
+            font.pixelSize: Math.round((14) * Theme.fontScale)
+            font.bold: true
+        }
+    }
+
+    // Funktionsgenerator (ab Volta 2): Knopf mit Signalform und Werten oeffnet das Generatorfenster
+    Column {
+        visible: desk.group("generator") !== null
+        x: desk.centerOf("generator") - width / 2
+        y: 12
+        spacing: 4
+        Label { text: qsTr("Generator"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        Button {
+            objectName: "generatorButton"
+            width: 112
+            height: Theme.control
+            readonly property var forms: [qsTr("Sinus"), qsTr("Dreieck"), qsTr("Rechteck")]
+            readonly property real hz: desk.controller.genFrequency
+            text: forms[desk.controller.genWaveform] + "\n"
+                  + (hz >= 1000 ? qsTr("%1 kHz").arg(Number(hz / 1000).toLocaleString(Qt.locale(), "f", 1))
+                                : qsTr("%1 Hz").arg(Number(hz).toLocaleString(Qt.locale(), "f", hz >= 100 ? 0 : 1)))
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+            onClicked: desk.generatorRequested()
+            Accessible.name: qsTr("Funktionsgenerator einstellen")
+        }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("%1 V Spitze").arg(Number(desk.controller.genAmplitude).toLocaleString(Qt.locale(), "f", 1))
+            color: "white"
+            font.pixelSize: Math.round((12) * Theme.fontScale)
         }
     }
 

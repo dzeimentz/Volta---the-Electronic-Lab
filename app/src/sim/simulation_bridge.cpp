@@ -7,6 +7,7 @@
 
 #include "model/netlist_builder.hpp"
 #include "volta/core/components/sensors.hpp"
+#include "volta/core/components/sources.hpp"
 #include "volta/core/components/battery.hpp"
 #include "volta/core/components/meter.hpp"
 #include "volta/core/components/motor.hpp"
@@ -118,6 +119,7 @@ void SimulationBridge::apply(const Action& a) {
     case Action::Type::SetSwitch:
         if (auto* s = dynamic_cast<core::Switch*>(&c)) s->setClosed(on);
         else if (auto* w = dynamic_cast<core::ChangeoverSwitch*>(&c)) w->setToB(on);
+        else if (auto* ac = dynamic_cast<core::AcSource*>(&c)) ac->setEnabled(on); // Hauptschalter
         break;
     case Action::Type::SetPotPosition:
         if (auto* p = dynamic_cast<core::Potentiometer*>(&c)) p->setPosition(a.value);
@@ -143,6 +145,22 @@ void SimulationBridge::apply(const Action& a) {
         break;
     case Action::Type::SetWetness:
         if (auto* f = dynamic_cast<core::MoistureProbe*>(&c)) f->setWetness(a.value);
+        break;
+    case Action::Type::SetAcRms:
+        if (auto* w = dynamic_cast<core::AcSource*>(&c)) w->setRms(a.value);
+        break;
+    case Action::Type::SetGenWaveform:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c))
+            g->setWaveform(static_cast<core::Waveform>(std::clamp(static_cast<int>(std::lround(a.value)), 0, 2)));
+        break;
+    case Action::Type::SetGenFrequency:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setFrequency(a.value);
+        break;
+    case Action::Type::SetGenAmplitude:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setAmplitude(a.value);
+        break;
+    case Action::Type::SetGenOffset:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setOffset(a.value);
         break;
     }
 }

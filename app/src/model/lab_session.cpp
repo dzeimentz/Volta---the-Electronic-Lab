@@ -558,6 +558,36 @@ void LabSession::setMainSwitch(bool on) {
     if (hasDeskPart(m_board, "batterie2"))
         for (const char* id : {desk_id::kMainSwitch2, desk_id::kMainSwitch2Minus})
             m_bridge.post({id, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+    if (hasDeskPart(m_board, "wechselquelle"))
+        m_bridge.post({desk_id::kAcSource, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+}
+
+void LabSession::setAcRms(int volt) {
+    m_board.desk.acRmsV = volt == 6 ? 6 : 9;
+    m_bars.clear();
+    m_bridge.post({desk_id::kAcSource, sim::Action::Type::SetAcRms, static_cast<double>(m_board.desk.acRmsV)});
+}
+
+void LabSession::setGenWaveform(int waveform) {
+    m_board.desk.genWaveform = std::clamp(waveform, 0, 2);
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenWaveform, double(m_board.desk.genWaveform)});
+}
+
+void LabSession::setGenFrequency(double hz) {
+    m_board.desk.genFrequencyHz = std::isfinite(hz) ? std::clamp(hz, 1.0, 10000.0) : 100.0;
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenFrequency, m_board.desk.genFrequencyHz});
+}
+
+void LabSession::setGenAmplitude(double peakV) {
+    m_board.desk.genAmplitudeV = std::isfinite(peakV) ? std::clamp(peakV, 0.0, 4.0) : 0.0;
+    m_bars.clear();
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenAmplitude, m_board.desk.genAmplitudeV});
+}
+
+void LabSession::setGenOffset(double volt) {
+    m_board.desk.genOffsetV = std::isfinite(volt) ? std::clamp(volt, -4.0, 4.0) : 0.0;
+    m_bars.clear();
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenOffset, m_board.desk.genOffsetV});
 }
 
 void LabSession::setCells2(int cells) {

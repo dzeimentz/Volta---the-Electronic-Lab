@@ -26,6 +26,10 @@ public:
 
     const AcSourceParams& params() const noexcept { return m_params; }
     void setRms(double rmsV) noexcept; // Bedienhandlung (6 / 9 V~)
+    // Hauptschalter (Bedienhandlung): trennt die Primaerseite; die Sekundaerwicklung (Innenwiderstand) bleibt
+    // zwischen den Anschluessen, die Quellenspannung ist dann null
+    void setEnabled(bool on) noexcept { m_enabled = on; }
+    bool isEnabled() const noexcept { return m_enabled; }
     double peakV() const noexcept;
     double phase() const noexcept { return m_phase; } // 0 .. 1
     // Quellenspannung bei der Phase p (ohne Innenwiderstand)
@@ -43,6 +47,7 @@ public:
 
 private:
     AcSourceParams m_params;
+    bool m_enabled = true;
     double m_phase = 0.0;   // Phase am Ende des letzten angenommenen Schritts
     double m_meanSqA2 = 0.0; // gleitendes Mittel von i^2
 };

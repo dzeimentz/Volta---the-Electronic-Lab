@@ -147,7 +147,8 @@ bool withinBoard(const Board& board, const std::string& anchor) {
 
 bool hasDeskPart(const Board& board, const std::string& group) {
     if (group == "batterie") return true;
-    if (!board.deskParts) return group != "batterie2"; // Volta 1: festes Pult ohne Batterie 2
+    if (!board.deskParts) // Volta 1: festes Pult ohne die Pultteile ab Volta 2
+        return group != "batterie2" && group != "wechselquelle" && group != "generator";
     return std::find(board.deskParts->begin(), board.deskParts->end(), group) != board.deskParts->end();
 }
 
@@ -455,6 +456,10 @@ std::string poleColor(const Board& board, const std::string& from, const std::st
     };
     auto plus = reach(kPlusAnchor);
     auto minus = reach(kGroundAnchor);
+    if (hasDeskPart(board, "generator")) { // G0 ist fest mit 0V verbunden (Konzept Volta 2, 5.1)
+        const auto g0 = reach("P:G0");
+        minus.insert(g0.begin(), g0.end());
+    }
     std::set<std::string> negative;
     if (hasDeskPart(board, "batterie2")) {
         const auto plus2 = reach("P:+B2");

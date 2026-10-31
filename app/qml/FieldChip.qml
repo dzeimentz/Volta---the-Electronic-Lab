@@ -11,7 +11,7 @@ Rectangle {
     readonly property bool boardField: /^[A-E](1[0-2]|[1-9])$/.test(name)
     readonly property bool plus: name === "V+" || name === "+B2"
     readonly property bool minus2: name === "\u2212B2" // Minuspol von Batterie 2: blau
-    readonly property bool minus: name === "0V"
+    readonly property bool minus: name === "0V" || name === "G0" // G0 ist fest mit 0V verbunden
     readonly property bool moduleField: /^M\d+$/.test(name)
 
     width: 46

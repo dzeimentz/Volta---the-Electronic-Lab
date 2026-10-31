@@ -1,5 +1,6 @@
 #include "netlist_builder.hpp"
 
+#include <algorithm>
 #include <unordered_map>
 
 #include "anchor.hpp"
@@ -15,6 +16,7 @@
 #include "volta/core/components/meter.hpp"
 #include "volta/core/components/motor.hpp"
 #include "volta/core/components/potentiometer.hpp"
+#include "volta/core/components/sources.hpp"
 #include "volta/core/components/speaker.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/components/switch.hpp"
@@ -90,6 +92,8 @@ private:
         }
     }
 
+    static constexpr double kFloatingLeakOhm = 100e6; // Konzept Volta 2, 5.1
+
     void buildDesk() {
         auto& c = m_net.circuit;
         const DeskState& d = m_board.desk;
@@ -147,6 +151,35 @@ private:
             core::ResistorParams leak;
             leak.ohm = 10e6;
             c.add<core::Resistor>(desk_id::kBattery2Leak, minus2, core::kGround, leak);
+        }
+        if (hasDeskPart(m_board, "wechselquelle")) {
+            // Potentialfrei wie die Wicklung eines Transformators (Konzept 5.1). Der Hauptschalter trennt wie beim
+            // echten Geraet die Primaerseite: ausgeschaltet liegt nur die Sekundaerwicklung zwischen W~a und W~b.
+            // Der Ableitwiderstand von W~b nach 0V haelt sie rechenbar (offengelegt unter »So rechnet Volta«).
+            NodeId wa = 0, wb = 0;
+            node("P:W~a", wa, "Pult");
+            node("P:W~b", wb, "Pult");
+            m_net.desk[desk_id::kAcSource] = c.componentCount();
+            core::AcSourceParams ac;
+            ac.rmsV = d.acRmsV;
+            c.add<core::AcSource>(desk_id::kAcSource, wa, wb, ac).setEnabled(d.mainSwitch);
+            core::ResistorParams leak;
+            leak.ohm = kFloatingLeakOhm;
+            c.add<core::Resistor>(desk_id::kAcLeak, wb, core::kGround, leak);
+        }
+        if (hasDeskPart(m_board, "generator")) {
+            // Laborgeraet mit eigenem Netzteil: unabhaengig vom Hauptschalter; G0 fest an 0V (Konzept 5.1)
+            NodeId g = 0, g0 = 0;
+            node("P:G", g, "Pult");
+            node("P:G0", g0, "Pult");
+            core::GeneratorParams gp;
+            gp.waveform = static_cast<core::Waveform>(std::clamp(d.genWaveform, 0, 2));
+            gp.frequencyHz = d.genFrequencyHz;
+            gp.amplitudeV = d.genAmplitudeV;
+            gp.offsetV = d.genOffsetV;
+            m_net.desk[desk_id::kGenerator] = c.componentCount();
+            c.add<core::FunctionGenerator>(desk_id::kGenerator, g, g0, gp);
+            c.add<core::Wire>(desk_id::kGeneratorGround, g0, core::kGround);
         }
     }
 

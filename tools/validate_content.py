@@ -271,7 +271,7 @@ def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
     if pkg.get("band") != band:
         rep.error(f"content/{band}/paket.json", "Feld 'band' passt nicht zum Verzeichnis")
     # Pult nach Bedarf (ab Volta 2): bekannte Pultteile, genau eine Freischaltregel je Teil
-    desk_parts = {"batterie", "batterie2", "p1", "p2", "schalter", "lautsprecher"}
+    desk_parts = {"batterie", "batterie2", "wechselquelle", "generator", "p1", "p2", "schalter", "lautsprecher"}
     seen_parts: set[str] = set()
     for o in pkg.get("pult_nach_bedarf", []):
         teil = o.get("teil")

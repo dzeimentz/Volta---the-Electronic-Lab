@@ -26,7 +26,12 @@ struct Action {
         SetMeterAnalog,  // Messgeraet: value != 0 analog
         SetIlluminance,  // Fotowiderstand: value = Beleuchtungsstaerke in lx
         SetAmbient,      // Heissleiter: value = Lufttemperatur am Bauteil in K
-        SetWetness       // Feuchtesonde: value = Naesse 0..1
+        SetWetness,      // Feuchtesonde: value = Naesse 0..1
+        SetAcRms,        // Wechselquelle: value = Effektivwert in V
+        SetGenWaveform,  // Funktionsgenerator: value = 0 Sinus, 1 Dreieck, 2 Rechteck
+        SetGenFrequency, // Funktionsgenerator: value = Frequenz in Hz
+        SetGenAmplitude, // Funktionsgenerator: value = Spitze in V
+        SetGenOffset     // Funktionsgenerator: value = Gleichanteil in V
     };
     std::string componentId;
     Type type = Type::SetSwitch;
