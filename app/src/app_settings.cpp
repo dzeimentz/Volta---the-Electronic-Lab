@@ -55,6 +55,7 @@ AppSettings::AppSettings(bool persist, QString file, QObject* parent)
     const QString color = s.value(QStringLiteral("labor/leitungsfarbe_favorit"), QStringLiteral("blau")).toString();
     m_wireColor = kWireColors.contains(color) ? color : QStringLiteral("blau");
     m_autoWireColor = s.value(QStringLiteral("labor/leitungsfarbe_automatisch"), true).toBool();
+    m_autoVoltageBars = s.value(QStringLiteral("labor/spannungsanzeige_automatisch"), false).toBool();
     m_schematicVisible = s.value(QStringLiteral("labor/schaltplan"), false).toBool();
     m_traySymbols = s.value(QStringLiteral("labor/fachsymbole"), false).toBool();
     m_panelCollapsed = s.value(QStringLiteral("labor/experimentfeld_eingeklappt"), false).toBool();

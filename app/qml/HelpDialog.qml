@@ -49,7 +49,7 @@ Popup {
         { key: "messen", title: qsTr("Messen und Anzeigen"), mood: "neugierig",
           say: qsTr("Wie viel Strom fließt da eigentlich? Das kannst du nachmessen."),
           points: [qsTr("»V A Ω« holt das Messgerät: Spannung in Volt, Strom in Ampere, Widerstand in Ohm."),
-                   qsTr("Im Menü eines Feldes (langer Druck) schaltest du dort eine Spannungsanzeige ein."),
+                   qsTr("Der Knopf mit den grünen Balken zeigt auf allen belegten Feldern, wie viel Spannung dort anliegt. Für ein einzelnes Feld geht das auch im Menü des Feldes (langer Druck)."),
                    qsTr("Das Schaltzeichen-Symbol zeigt deinen Aufbau als Schaltplan."),
                    qsTr("Kleine Pfeile zeigen, wohin der Strom fließt. Ab Stufe 3 zeichnet der Zeitschreiber Spannungen über die Zeit auf.")] },
         { key: "werkzeug", title: qsTr("Werkzeugkasten"), mood: "erklaerend",

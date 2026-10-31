@@ -78,7 +78,7 @@ Ebenfalls entschieden: **Digitale Module** (Gatter, Zähler, Decoder) rechnen ih
 
 ## 5. Bedienung und Bedienpult III
 
-Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Stromfluss, Schaltplan, Aufbauhilfe, Werkzeugkasten, Messstellen als Bauteile (V1/V2, A1/A2, Ω1/Ω2 mit Wert am Bauteil), Einfach- und Doppelmessgerät, Oszilloskop mit Tastköpfen K1/K2 und Funktionsgenerator sind dieselben wie in Volta 2.
+Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je Feld oder automatisch auf allen belegten Feldern), Stromfluss, Schaltplan, Aufbauhilfe, Werkzeugkasten, Messstellen als Bauteile (V1/V2, A1/A2, Ω1/Ω2 mit Wert am Bauteil), Einfach- und Doppelmessgerät, Oszilloskop mit Tastköpfen K1/K2 und Funktionsgenerator sind dieselben wie in Volta 2.
 
 ### 5.1 Pultleiste
 

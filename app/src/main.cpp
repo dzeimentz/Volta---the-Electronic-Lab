@@ -93,7 +93,11 @@ int main(int argc, char* argv[]) {
     const QString demoDocked = qEnvironmentVariable("VOLTA_DEMO_METER_DOCKED");
     // VOLTA_DEMO_PROFILES=1: Forscherprofile mit drei Beispielprofilen (Profilauswahl, ohne Speichern)
     const bool demoProfiles = qEnvironmentVariableIntValue("VOLTA_DEMO_PROFILES") == 1;
-    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty() && demoDocked.isEmpty() && !demoProfiles);
+    // VOLTA_DEMO_VOLTAGE_AUTO=1: Spannungsanzeige auf allen belegten Feldern (ohne Speichern)
+    const bool demoVoltageAuto = qEnvironmentVariableIntValue("VOLTA_DEMO_VOLTAGE_AUTO") == 1;
+    volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty() && demoDocked.isEmpty() && !demoProfiles
+                                && !demoVoltageAuto);
+    if (demoVoltageAuto) settings.setAutoVoltageBars(true);
     if (demoProfiles) {
         settings.setProfilesEnabled(true);
         lab.addProfile(QStringLiteral("🦊"), QStringLiteral("Funkenfuchs"));

@@ -44,7 +44,8 @@
 - Ziehen aus dem Fach: Das Bauteil erscheint schemenhaft an dem Platz, an dem es landen wuerde, und alle Felder, die
   es belegt, sind hervorgehoben (z. B. A1 und A2). Passt es dort nicht, bleibt nur das Namensschild am Finger.
 - Im Betrieb oeffnet ein langer Druck auf ein Bauteil kein Menue (ein Taster bleibt gedrueckt); Rechtsklick weiterhin.
-- Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen (gerahmt wie »V A Ω« und Werkzeugkasten), Spannungsanzeigen ein/aus, Schaltplan, Werkzeugkasten, Fragezeichen,
+- Werkzeugleiste: Experimente, Rueckgaengig, Wiederholen (gerahmt wie »V A Ω« und Werkzeugkasten), Spannungsanzeige automatisch (Knopf mit
+  gruenen Balken, links neben »V A Ω«), Schaltplan, Werkzeugkasten, Fragezeichen,
   Flaggensymbol, Hauptmenue.
 - Breite der Grundplatte (8/10/12 Felder je Reihe, Befehl): runde Knoepfe »+« und »−« uebereinander rechts neben den
   Feldern, in der Hoehe zentriert, gelb mit schwarzem Ring, dazwischen »1–12«; was nicht geht, ist grau. Das
@@ -230,7 +231,10 @@ das iPad).
   Schalter, Lautsprecher und Batterie (langer Strich mit + ueber V+) steht ihr Schaltzeichen mit Leitungen zu jedem Feld (Potentiometer: Schleifer als Pfeil
   zum mittleren Feld; Schalter: zeigt die Stellung). Das Messgeraet oben im Pult bekommt einen eigenen Rahmen um
   Anzeige und Buchsen.
-- Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar.
+- Kontaktfelder mit Feldnamen; Spannungsanzeige (4 hellgruene Balken) je Feld zuschaltbar (Feldmenue, Befehl im Aufbau).
+  Spannungsanzeige automatisch (Knopf in der Werkzeugleiste, auch im Einstellungsmenue ganz rechts; Vorgabe aus, wird
+  gespeichert): zeigt die Balken auf allen belegten Feldern der Grundplatte und des Pults (Bauteilbein oder
+  Leitungsende), ohne den Aufbau zu aendern; gilt fuer die ganze Reihe (Volta 1–3).
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
 - Wassermodell als zuschaltbare Erklaerebene.

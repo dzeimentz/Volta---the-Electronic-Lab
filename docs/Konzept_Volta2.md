@@ -71,7 +71,7 @@ Der technisch schwierigste Teil ist erledigt: Ein Leistungstest (14.10.2026) hat
 
 ## 5. Bedienung und Bedienpult II
 
-Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Stromfluss, Schaltplan, Aufbauhilfe und Werkzeugkasten sind dieselben wie in Volta 1. Volta 2 beginnt mit der breiten Grundplatte (12 Spalten); 8 und 10 bleiben wählbar.
+Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je Feld oder automatisch auf allen belegten Feldern per Knopf in der Werkzeugleiste), Stromfluss, Schaltplan, Aufbauhilfe und Werkzeugkasten sind dieselben wie in Volta 1. Volta 2 beginnt mit der breiten Grundplatte (12 Spalten); 8 und 10 bleiben wählbar.
 
 ### 5.1 Pultleiste
 

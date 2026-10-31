@@ -573,6 +573,31 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
+            // Spannungsanzeige automatisch: Balken auf allen belegten Feldern
+            ToolButton {
+                objectName: "voltageAutoToggle"
+                width: Theme.control; height: Theme.control
+                checkable: true
+                checked: lab.settings ? lab.settings.autoVoltageBars : false
+                enabled: lab.settings !== null
+                onClicked: {
+                    lab.settings.autoVoltageBars = !lab.settings.autoVoltageBars
+                    toast.show(lab.settings.autoVoltageBars ? qsTr("Spannungsanzeige auf allen belegten Feldern")
+                                                            : qsTr("Spannungsanzeige automatisch aus"))
+                }
+                ToolTip.visible: hovered
+                ToolTip.text: checked ? qsTr("Spannungsanzeige automatisch ausschalten")
+                                      : qsTr("Spannungsanzeige auf allen belegten Feldern zeigen")
+                Accessible.name: ToolTip.text
+                contentItem: Item {
+                    VoltageBars { anchors.centerIn: parent; bars: 3 }
+                }
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
             // Messgeraet ein-/ausblenden
             ToolButton {
                 objectName: "meterToggle"
@@ -1205,7 +1230,11 @@ Item {
                     highlighted: lab.highlightAnchor === modelData || lab.inHighlightedGroup(modelData)
                                  || lab.highlightFields.indexOf(modelData) >= 0
                                  || (lab.trayPreview.fields || []).indexOf(modelData) >= 0
+                    // einzeln eingeschaltet (Feldmenue) oder automatisch auf allen belegten Feldern (Werkzeugleiste)
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
+                                 || (lab.settings !== null && lab.settings.autoVoltageBars
+                                     && lab.controller.occupiedFields.indexOf(modelData) >= 0)
+                    onShowVoltageChanged: if (showVoltage) bars = lab.controller.voltageBars(anchorName)
                     recorderChannel: lab.controller.recorderChannels.indexOf(modelData.startsWith("MESS:") ? "MESS" : modelData)
                     target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
 

@@ -42,6 +42,8 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList wires READ wires NOTIFY boardChanged)
     Q_PROPERTY(QVariantList modules READ modules NOTIFY boardChanged)
     Q_PROPERTY(QStringList voltageFields READ voltageFields NOTIFY boardChanged)
+    // Felder der Grundplatte und des Pults, an denen ein Bauteil oder eine Leitung steckt (Spannungsanzeige automatisch)
+    Q_PROPERTY(QStringList occupiedFields READ occupiedFields NOTIFY boardChanged)
     Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 5, 6, 8, 10 oder 12 Felder je Reihe
     Q_PROPERTY(int boardRows READ boardRows NOTIFY boardChanged)       // 2 ... 5 Reihen ab A
     // Stufenanpassung (Elternbereich, Vorgabe an): im gefuehrten Experiment Steckbrett und Pult nach der Stufe -
@@ -153,6 +155,7 @@ public:
     QVariantList wires() const;
     QVariantList modules() const;
     QStringList voltageFields() const;
+    QStringList occupiedFields() const;
     QVariantList catalogParts() const;
     QVariantList trayParts() const;
     QVariantList trayModules() const;

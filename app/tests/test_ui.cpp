@@ -1744,6 +1744,41 @@ private slots:
         m_lab->clearBoard();
     }
 
+    // Spannungsanzeige automatisch: Knopf in der Werkzeugleiste zeigt Balken auf allen belegten Feldern
+    void voltageBarsAuto() {
+        m_window->setProperty("inLab", true);
+        QVERIFY(m_lab->loadExperiment(QStringLiteral("volta1.2.4")));
+        QTRY_VERIFY(!board().parts.empty());
+        m_settings->setAutoVoltageBars(false);
+        const QStringList manual = m_lab->voltageFields(); // von der Vorlage einzeln eingeschaltet
+        QStringList occupied;
+        for (const QString& f : m_lab->occupiedFields())
+            if (!manual.contains(f)) occupied << f;
+        QVERIFY(!occupied.isEmpty());
+        QString freeField;
+        for (const QString& f : {QStringLiteral("E12"), QStringLiteral("E11"), QStringLiteral("A12")})
+            if (!occupied.contains(f)) { freeField = f; break; }
+        QVERIFY(!freeField.isEmpty());
+        QQuickItem* used = item(QStringLiteral("field_") + occupied.first());
+        QVERIFY(used);
+        QTRY_VERIFY(!used->property("showVoltage").toBool());
+        QQuickItem* button = item(QStringLiteral("voltageAutoToggle"));
+        QVERIFY(button && button->isVisible());
+        QVERIFY(button->width() >= 48 && button->height() >= 48);
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
+        QTRY_VERIFY(m_settings->autoVoltageBars());
+        for (const QString& f : occupied) {
+            QQuickItem* field = item(QStringLiteral("field_") + f);
+            if (field) QTRY_VERIFY2(field->property("showVoltage").toBool(), qPrintable(f));
+        }
+        QQuickItem* empty = item(QStringLiteral("field_") + freeField);
+        QVERIFY(!empty || !empty->property("showVoltage").toBool());
+        QCOMPARE(m_lab->voltageFields(), manual); // Aufbau unveraendert (kein Befehl)
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
+        QTRY_VERIFY(!m_settings->autoVoltageBars());
+        QTRY_VERIFY(!used->property("showVoltage").toBool());
+    }
+
     void wireColorAutoBadge() {
         m_window->setProperty("inLab", true);
         m_lab->startFreeLab();

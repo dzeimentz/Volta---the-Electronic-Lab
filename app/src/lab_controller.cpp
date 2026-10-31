@@ -19,6 +19,8 @@
 #include <cstdlib>
 #include <tuple>
 
+#include "model/anchor.hpp"
+#include "model/board_edit.hpp"
 #include "model/board_json.hpp"
 #include "model/qr_code.hpp"
 #include "services/profile_transfer.hpp"
@@ -1578,6 +1580,23 @@ QVariantList LabController::modules() const {
 QStringList LabController::voltageFields() const {
     QStringList out;
     for (const auto& f : m_session->board().voltageDisplays) out << qs(f);
+    return out;
+}
+
+QStringList LabController::occupiedFields() const {
+    const model::Board& b = m_session->board();
+    QStringList out;
+    auto add = [&](const std::string& anchor) {
+        const model::AnchorKind k = model::classifyAnchor(anchor);
+        if ((k != model::AnchorKind::Field && k != model::AnchorKind::Desk) || !model::withinBoard(b, anchor)) return;
+        if (const QString f = qs(anchor); !out.contains(f)) out << f;
+    };
+    for (const auto& p : b.parts)
+        for (const auto& pin : p.pins) add(pin.second);
+    for (const auto& w : b.wires) {
+        add(w.from);
+        add(w.to);
+    }
     return out;
 }
 

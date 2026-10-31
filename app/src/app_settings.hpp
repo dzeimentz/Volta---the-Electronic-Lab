@@ -49,6 +49,8 @@ class AppSettings : public QObject {
     Q_PROPERTY(bool settingsPinRequired READ settingsPinRequired WRITE setSettingsPinRequired NOTIFY changed)
     Q_PROPERTY(QString wireColor READ wireColor WRITE setWireColor NOTIFY changed)
     Q_PROPERTY(bool autoWireColor READ autoWireColor WRITE setAutoWireColor NOTIFY changed) // Plus rot, Minus schwarz
+    // Spannungsanzeige auf allen belegten Feldern (Knopf in der Werkzeugleiste)
+    Q_PROPERTY(bool autoVoltageBars READ autoVoltageBars WRITE setAutoVoltageBars NOTIFY changed)
     Q_PROPERTY(bool schematicVisible READ schematicVisible WRITE setSchematicVisible NOTIFY changed)
     Q_PROPERTY(bool traySymbols READ traySymbols WRITE setTraySymbols NOTIFY changed)
     Q_PROPERTY(bool experimentPanelCollapsed READ experimentPanelCollapsed WRITE setExperimentPanelCollapsed NOTIFY changed)
@@ -103,6 +105,8 @@ public:
     QString wireColor() const { return m_wireColor; }
     bool autoWireColor() const { return m_autoWireColor; }
     void setAutoWireColor(bool on) { set(m_autoWireColor, on, "labor/leitungsfarbe_automatisch"); }
+    bool autoVoltageBars() const { return m_autoVoltageBars; }
+    void setAutoVoltageBars(bool on) { set(m_autoVoltageBars, on, "labor/spannungsanzeige_automatisch"); }
     void setWireColor(const QString& color);
     bool schematicVisible() const { return m_schematicVisible; }
     void setSchematicVisible(bool on) { set(m_schematicVisible, on, "labor/schaltplan"); }
@@ -152,6 +156,7 @@ private:
     void savePinState();
     QString m_wireColor = QStringLiteral("blau");
     bool m_autoWireColor = true;
+    bool m_autoVoltageBars = false;
     bool m_schematicVisible = false;
     bool m_traySymbols = false;
     bool m_panelCollapsed = false;

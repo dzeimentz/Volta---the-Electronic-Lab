@@ -225,6 +225,15 @@ Row {
                 onTriggered: bar.settings.autoWireColor = checked
             }
             MenuItem {
+                objectName: "settingAutoVoltage"
+                height: Theme.control
+                text: qsTr("Spannungsanzeige auf allen belegten Feldern")
+                checkable: true
+                enabled: bar.settings !== null
+                checked: bar.settings ? bar.settings.autoVoltageBars : false
+                onTriggered: bar.settings.autoVoltageBars = checked
+            }
+            MenuItem {
                 objectName: "settingAutoColumns"
                 height: Theme.control
                 text: qsTr("Steckfeld-Breite automatisch")
