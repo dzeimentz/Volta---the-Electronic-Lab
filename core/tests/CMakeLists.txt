@@ -30,6 +30,8 @@ add_executable(volta_core_tests
     components/test_potentiometer.cpp
     components/test_speaker.cpp
     components/test_sensors_magnet.cpp
+    components/test_sources.cpp
+    components/test_inductor.cpp
 )
 target_include_directories(volta_core_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(volta_core_tests PRIVATE volta::core Catch2::Catch2WithMain)

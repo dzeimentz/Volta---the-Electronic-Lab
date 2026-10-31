@@ -90,7 +90,7 @@ Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je 
 |---|---|---|
 | `V+`, `0V` | Batterie 1 | wie Volta 1, wählbar 3 / 4,5 / 9 V |
 | `+B2`, `−B2` | Batterie 2 (neu) | zweite, getrennte Batterie 4,5 / 9 V. In Reihe mit Batterie 1 gesteckt ergibt sie eine **symmetrische Versorgung** (+4,5 / 0 / −4,5 V) für den OP – das Kind steckt sie selbst (Experiment 0.3) |
-| `W~a`, `W~b` | Wechselquelle (neu) | Kleinspannung, wählbar 6 / 9 V~ (Effektivwert), 50 Hz, **potentialfrei**; Hauptschalter wie Batterie 1 |
+| `W~a`, `W~b` | Wechselquelle (neu) | Kleinspannung, wählbar 6 / 9 V~ (Effektivwert), fest 50 Hz (entschieden 01.11.2026), **potentialfrei**; Hauptschalter wie Batterie 1 |
 | `G`, `G0` | Funktionsgenerator (neu) | Ausgang und Masse; `G0` ist mit `0V` verbunden; Bedienung im Generatorfenster |
 | `KS+`, `KS−` | Kennlinienschreiber (neu) | Prüfspannung für das Bauteil zwischen den beiden Feldern; zeichnet Strom über Spannung |
 | `P1a`, `P1s`, `P1b`, `P2…` | Drehregler P1, P2 | wie Volta 1 |
@@ -372,7 +372,7 @@ Schritte 2 und 3 können beginnen, sobald die Experimentliste freigegeben ist; S
 |---|---|
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Kennfarbe von Volta 2 (App-Symbol entschieden: Reihensymbol `volta2.svg`) | Schritt 2 |
-| Wechselquelle: fest 50 Hz oder einstellbar (für die Experimente reicht fest) | Schritt 3 |
+| ~~Wechselquelle: fest 50 Hz oder einstellbar~~ – **entschieden 01.11.2026: fest 50 Hz** | erledigt |
 | Übernahme von Forscherprofil und Forscherheft aus Volta 1 (ohne Netz: Export und Import als Datei) | Schritt 5 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
 | Lehrplanzuordnung DE/LU/Ostbelgien | Schulpaket |

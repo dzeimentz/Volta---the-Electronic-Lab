@@ -29,6 +29,7 @@ Npn::Npn(std::string id, NodeId base, NodeId collector, NodeId emitter, BjtParam
     fix(m_params.tauRS, def.tauRS, 0.0);
     fix(m_params.overloadFactor, def.overloadFactor, 1.0);
     fix(m_params.overloadFailS, def.overloadFailS, 0.0);
+    m_sign = m_params.pnp ? -1.0 : 1.0;
     m_vt = kBoltzmannJPerK * kAmbientK / kElementaryChargeC;
     m_vcrit = m_vt * std::log(m_vt / (std::sqrt(2.0) * m_params.isA));
     if (!std::isfinite(m_vcrit) || m_vcrit < m_vt) m_vcrit = m_vt;
@@ -123,7 +124,7 @@ void Npn::stamp(MnaSystem& sys, const StampContext& /*ctx*/) const noexcept {
         sys.stampNodeMatrix(n, b(), m_dbe[t] + m_dbc[t]);
         sys.stampNodeMatrix(n, e(), -m_dbe[t]);
         sys.stampNodeMatrix(n, c(), -m_dbc[t]);
-        sys.stampNodeRhs(n, -(m_i0[t] - m_dbe[t] * m_vbe0 - m_dbc[t] * m_vbc0));
+        sys.stampNodeRhs(n, -m_sign * (m_i0[t] - m_dbe[t] * m_vbe0 - m_dbc[t] * m_vbc0));
     }
 }
 
@@ -135,7 +136,7 @@ void Npn::updateState(const SolutionView& x, double /*dtS*/) noexcept {
 
 double Npn::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
     if (m_destroyed || t > 2) return 0.0;
-    return linearCurrent(t, vbe(x), vbc(x));
+    return m_sign * linearCurrent(t, vbe(x), vbc(x));
 }
 
 void Npn::thermal(const SolutionView& x, double dtS) noexcept {
@@ -161,7 +162,7 @@ ComponentReading Npn::read(const SolutionView& x) const noexcept {
     ComponentReading r = ComponentModel::read(x); // voltV = Vbc, currentA = Ib (Anschluss 0/1)
     r.voltV = x.voltage(c()) - x.voltage(e());     // fuer die Anzeige: Uce
     r.currentA = terminalCurrent(x, 1);            // und Ic
-    r.level = r.currentA / m_params.icMaxA;
+    r.level = m_sign * r.currentA / m_params.icMaxA; // PNP: Ic fliesst heraus, Wirkung trotzdem positiv
     return r;
 }
 

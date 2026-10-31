@@ -19,6 +19,11 @@ struct DiodeParams {
     // nach wenigen Sekunden kaputt, waehrend sie bei 50 mA nur als ueberlastet gilt.
     double overloadFactor = 2.5;
     double overloadFailS = 3.0;
+    // Durchbruch in Sperrrichtung (Z-Diode, ab Volta 2): bei der Sperrspannung bvV am Uebergang fliesst ibvA;
+    // Steilheit ueber nbv (dynamischer Widerstand rz = nbv * Vt / ibvA). bvV <= 0: kein Durchbruch.
+    double bvV = 0.0;
+    double ibvA = 0.005;
+    double nbv = 1.0;
 
     // Thermik: Rth nach Datenblatt (DO-35 bzw. 5-mm-LED ca. 350 K/W), Zeitkonstante didaktisch gewaehlt.
     // LED: tau = 12,6 s, Grenze 125 Grad C. Ohne Vorwiderstand an 9 V (ca. 1 A, 7,7 W) wird sie nach ca. 0,5 s
@@ -36,9 +41,22 @@ struct DiodeParams {
     static DiodeParams ledYellow() noexcept { return {2.0, 0.02, 2.0, 5.0, 0.02, kLedThermal, 2.5, 3.0}; }
     static DiodeParams ledGreen() noexcept { return {2.1, 0.02, 2.0, 5.0, 0.02, kLedThermal, 2.5, 3.0}; }
     static DiodeParams ledBlue() noexcept { return {3.1, 0.02, 3.0, 10.0, 0.02, kLedThermal, 2.5, 3.0}; }
+    // Z-Dioden nach BZX55 (Datenblatt: Uz bei Iz = 5 mA; rzj hoechstens 80 bzw. 25 Ohm, angesetzt 60 bzw. 20 Ohm;
+    // Izmax 85 bzw. 70 mA bei Ptot 0,5 W). Durchlassrichtung wie Siliziumdiode, Bahnwiderstand 1 Ohm.
+    static DiodeParams zener(double uzV, double rzOhm, double izMaxA) noexcept {
+        DiodeParams p{0.75, 0.01, 1.75, 1.0, izMaxA, kSiliconThermal, 2.5, 3.0};
+        p.ibvA = 0.005;
+        p.bvV = uzV - p.ibvA * p.rsOhm; // Uz gilt an den Anschluessen
+        p.nbv = (rzOhm - p.rsOhm) * p.ibvA / 0.02526;
+        return p;
+    }
+    static DiodeParams zener4V7() noexcept { return zener(4.7, 60.0, 0.085); }
+    static DiodeParams zener5V6() noexcept { return zener(5.6, 20.0, 0.070); }
 };
 
-// Shockley-Diode mit Bahnwiderstand (Katalogtypen `diode_si`, `diode_ge`, `led_*`).
+// Shockley-Diode mit Bahnwiderstand (Katalogtypen `diode_si`, `diode_ge`, `led_*`, ab Volta 2 `zdiode_*`).
+// Mit Durchbruch (bvV > 0) zusaetzlich der Sperrstrom -ibv * (exp(-(vd + bv) / (nbv Vt)) - exp(-bv / (nbv Vt))),
+// in Sperrrichtung wie SPICE begrenzt.
 // Anschluss 0 = Anode, Anschluss 1 = Kathode. Der Bahnwiderstand liegt zwischen Anode und einem inneren Knoten.
 // Newton-Linearisierung mit Spannungsbegrenzung nach SPICE (pnjlim). Ueberlastet oberhalb imaxA, zerstoert
 // (danach offen) bei Uebertemperatur oder anhaltender starker Stromueberlast.
@@ -79,6 +97,11 @@ private:
     double m_nVt = 0.0;   // n * Temperaturspannung
     double m_vcrit = 0.0; // kritische Spannung fuer die Begrenzung
     double m_xMax = 80.0; // darueber Kennlinie linear (Steigung = Leitwertgrenze)
+    // Durchbruch (nur bei bvV > 0)
+    double m_nbvVt = 0.0;
+    double m_vcritBv = 0.0;
+    double m_xMaxBv = 80.0;
+    double m_bvOffset = 0.0; // exp(-bv / (nbv Vt)): Strom bei vd = 0 genau null
     // Linearisierung i = m_g * vd + m_ieq um m_vdLin
     double m_vdLin = 0.0;
     double m_g = kJunctionGmin;

@@ -22,18 +22,33 @@ struct BjtParams {
     // Starke Stromueberlast (Ic > overloadFactor * icMaxA) zerstoert nach overloadFailS
     double overloadFactor = 2.5;
     double overloadFailS = 3.0;
+    // PNP (ab Volta 2): alle Spannungen und Stroeme mit umgekehrtem Vorzeichen
+    bool pnp = false;
+
+    // PNP-Komplementaertyp zum BC547B, angelehnt an BC557B (gleiche Stromverstaerkungsgruppe B, Ic 0,1 A, Ptot
+    // 0,5 W); Kennwerte gespiegelt wie BC547B, damit Gegentaktstufen symmetrisch arbeiten.
+    static BjtParams bc557() noexcept {
+        BjtParams p;
+        p.pnp = true;
+        return p;
+    }
 };
 
-// NPN-Transistor auf 2-x-2-Platine (Katalogtyp `transistor_npn`; zweiter E-Fuss als Leitung in der Netzliste), vereinfachtes Ebers-Moll-Modell
+// NPN- bzw. PNP-Transistor auf 2-x-2-Platine (Katalogtypen `transistor_npn`, ab Volta 2 `transistor_pnp`; zweiter
+// E-Fuss als Leitung in der Netzliste), vereinfachtes Ebers-Moll-Modell
 // (Transportform, ohne Bahnwiderstaende und Early-Effekt, mit Ladungsspeicher Q = C*V + tau*I je Uebergang):
 //   Ic = Is*(e^(Vbe/Vt) - e^(Vbc/Vt)) - Is/BR*(e^(Vbc/Vt) - 1)
 //   Ib = Is/BF*(e^(Vbe/Vt) - 1) + Is/BR*(e^(Vbc/Vt) - 1)
 // Anschluesse: 0 = Basis, 1 = Kollektor, 2 = Emitter (wie im Katalog b, c, e). Beide Uebergaenge mit pnjlim
 // begrenzt, kJunctionGmin parallel zu jedem Uebergang, Ladungsspeicher als Begleitmodell (Rueckwaerts-Euler,
 // im Arbeitspunkt ohne Wirkung). Zerstoert: alle Anschluesse offen.
+// PNP: dieselben Gleichungen mit Veb, Vcb und umgekehrten Anschlussstroemen (Vorzeichen s = -1). Die Ableitungen
+// nach den Knotenspannungen sind dabei unveraendert (s * s = 1); nur Strom und Konstante wechseln das Vorzeichen.
 class Npn final : public ComponentModel {
 public:
     Npn(std::string id, NodeId base, NodeId collector, NodeId emitter, BjtParams params = {});
+
+    bool isPnp() const noexcept { return m_sign < 0.0; }
 
     const BjtParams& params() const noexcept { return m_params; }
 
@@ -54,8 +69,9 @@ private:
     NodeId b() const noexcept { return terminal(0); }
     NodeId c() const noexcept { return terminal(1); }
     NodeId e() const noexcept { return terminal(2); }
-    double vbe(const SolutionView& x) const noexcept { return x.voltage(b()) - x.voltage(e()); }
-    double vbc(const SolutionView& x) const noexcept { return x.voltage(b()) - x.voltage(c()); }
+    // Uebergangsspannungen in Durchlassrichtung gezaehlt (PNP: Veb, Vcb)
+    double vbe(const SolutionView& x) const noexcept { return m_sign * (x.voltage(b()) - x.voltage(e())); }
+    double vbc(const SolutionView& x) const noexcept { return m_sign * (x.voltage(b()) - x.voltage(c())); }
     void evaluate(double vbe, double vbc) noexcept;
     double chargeBe(double vbe) const noexcept;
     double chargeBc(double vbc) const noexcept;
@@ -63,6 +79,7 @@ private:
     double linearCurrent(std::size_t t, double vbe, double vbc) const noexcept;
 
     BjtParams m_params;
+    double m_sign = 1.0; // +1 NPN, -1 PNP
     double m_vt = 0.0;
     double m_vcrit = 0.0;
     double m_xMax = 80.0; // darueber Kennlinien linear (Steigung = Leitwertgrenze)
@@ -84,5 +101,8 @@ private:
     double m_qbeNext = 0.0;
     double m_qbcNext = 0.0;
 };
+
+// Bipolartransistor allgemein (NPN oder PNP nach BjtParams::pnp)
+using Bjt = Npn;
 
 } // namespace volta::core

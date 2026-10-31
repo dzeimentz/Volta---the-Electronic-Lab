@@ -1,5 +1,6 @@
 #include "volta/core/components/diode.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <utility>
 
@@ -36,6 +37,17 @@ Diode::Diode(std::string id, NodeId anode, NodeId cathode, DiodeParams params)
     // nicht definiert.
     if (!std::isfinite(m_vcrit) || m_vcrit < m_nVt) m_vcrit = m_nVt;
     m_xMax = pn::linearFromArg(m_isA, m_nVt, kMaxConductance - kJunctionGmin);
+    if (!(m_params.bvV > 0.0) || !std::isfinite(m_params.bvV)) m_params.bvV = 0.0;
+    if (m_params.bvV > 0.0) {
+        if (!(m_params.ibvA > 0.0) || !std::isfinite(m_params.ibvA)) m_params.ibvA = 0.005;
+        if (!(m_params.nbv > 0.0) || !std::isfinite(m_params.nbv)) m_params.nbv = 1.0;
+        m_nbvVt = m_params.nbv * vt;
+        m_vcritBv = m_nbvVt * std::log(m_nbvVt / (std::sqrt(2.0) * m_params.ibvA));
+        if (!std::isfinite(m_vcritBv) || m_vcritBv < m_nbvVt) m_vcritBv = m_nbvVt;
+        // Durchlass- und Durchbruchast teilen sich die Leitwertgrenze
+        m_xMaxBv = pn::linearFromArg(m_params.ibvA, m_nbvVt, (kMaxConductance - kJunctionGmin) / 2.0);
+        m_bvOffset = std::exp(-m_params.bvV / m_nbvVt);
+    }
     evaluate(0.0);
 }
 
@@ -43,17 +55,27 @@ double Diode::junctionCurrentA(double vdV) const noexcept {
     double e = 0.0;
     double de = 0.0;
     pn::safeExp(vdV / m_nVt, m_xMax, e, de);
-    return m_isA * (e - 1.0);
+    double i = m_isA * (e - 1.0);
+    if (m_params.bvV > 0.0) {
+        pn::safeExp(-(vdV + m_params.bvV) / m_nbvVt, m_xMaxBv, e, de);
+        i -= m_params.ibvA * (e - m_bvOffset);
+    }
+    return i;
 }
 
 void Diode::evaluate(double vdV) noexcept {
     double e = 0.0;
     double de = 0.0;
     pn::safeExp(vdV / m_nVt, m_xMax, e, de);
-    const double id = m_isA * (e - 1.0);
+    double id = m_isA * (e - 1.0);
     // Oberhalb m_xMax ist die Kennlinie linear mit der Steigung kMaxConductance: Leitwert und Kennlinie passen
     // zusammen (Vertrag ComponentModel), Newton konvergiert dort sofort.
-    const double gd = m_isA * de / m_nVt;
+    double gd = m_isA * de / m_nVt;
+    if (m_params.bvV > 0.0) { // Durchbruchast
+        pn::safeExp(-(vdV + m_params.bvV) / m_nbvVt, m_xMaxBv, e, de);
+        id -= m_params.ibvA * (e - m_bvOffset);
+        gd += m_params.ibvA * de / m_nbvVt;
+    }
     m_vdLin = vdV;
     m_g = gd + kJunctionGmin; // parallel zum Uebergang (SPICE GMIN), haelt den inneren Knoten in Sperrrichtung
     m_ieq = id - gd * vdV;
@@ -65,7 +87,13 @@ bool Diode::linearize(const SolutionView& iterate) noexcept {
         return false;
     }
     bool limited = false;
-    const double vd = pn::pnjlim(junctionVoltage(iterate), m_vdLin, m_nVt, m_vcrit, limited);
+    double vd = junctionVoltage(iterate);
+    const double bv = m_params.bvV;
+    if (bv > 0.0 && vd < std::min(0.0, -bv + 10.0 * m_nbvVt)) { // Durchbruch: Begrenzung gespiegelt (SPICE3)
+        vd = -(pn::pnjlim(-(vd + bv), -(m_vdLin + bv), m_nbvVt, m_vcritBv, limited) + bv);
+    } else {
+        vd = pn::pnjlim(vd, m_vdLin, m_nVt, m_vcrit, limited);
+    }
     evaluate(vd);
     return limited;
 }
@@ -105,7 +133,7 @@ double Diode::terminalCurrent(const SolutionView& x, std::size_t t) const noexce
 
 void Diode::thermal(const SolutionView& x, double dtS) noexcept {
     m_lastDtS = dtS;
-    m_lastCurrentA = terminalCurrent(x, 0);
+    m_lastCurrentA = std::fabs(terminalCurrent(x, 0)); // auch im Durchbruch
     const double p = (x.voltage(terminal(0)) - x.voltage(terminal(1))) * m_lastCurrentA;
     integrateThermal(m_destroyed ? 0.0 : p, dtS, m_params.thermal);
 }

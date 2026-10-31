@@ -132,3 +132,104 @@ TEST_CASE("Transistor: erster Schritt nach dem Arbeitspunkt ohne kuenstlichen La
     REQUIRE(s.sim.step(1e-9) == Status::Ok); // sehr kleiner Schritt: ein Ladungssprung waere riesig
     CHECK(s.sim.probe().readings[3].terminalCurrentA[0] == Approx(ibOp).epsilon(1e-3));
 }
+
+// ---------------------------------------------------------------- PNP (ab Volta 2)
+
+namespace {
+// PNP-Stufe: Emitter an +9 V, Basiswiderstand rb nach Masse, Kollektorwiderstand rc nach Masse
+struct PnpStage {
+    Simulator sim;
+    NodeId plus = kGround, base = kGround, coll = kGround;
+};
+void buildPnp(PnpStage& s, double rc, double rb) {
+    Circuit c;
+    s.plus = c.addNode();
+    s.base = c.addNode();
+    s.coll = c.addNode();
+    c.add<Battery>("B1", s.plus, kGround);
+    c.add<Resistor>("RC", s.coll, kGround, ResistorParams{rc});
+    c.add<Resistor>("RB", s.base, kGround, ResistorParams{rb});
+    c.add<Npn>("T1", s.base, s.coll, s.plus, BjtParams::bc557());
+    REQUIRE(s.sim.setCircuit(std::move(c)) == Status::Ok);
+}
+
+// Gegentaktstufe an +-4,5 V: Basen am Eingang (ideale Quelle vin), Emitter gemeinsam an 100 Ohm nach 0 V
+double pushPull(double vin) {
+    Circuit c;
+    const NodeId plus = c.addNode();
+    const NodeId minus = c.addNode();
+    const NodeId in = c.addNode();
+    const NodeId out = c.addNode();
+    BatteryParams half;
+    half.cells = 3;
+    c.add<Battery>("B1", plus, kGround, half);
+    c.add<Battery>("B2", kGround, minus, half);
+    BatteryParams src;
+    src.cells = 1;
+    src.cellVolt = std::fabs(vin);
+    src.cellInnerOhm = 1e-3;
+    if (vin >= 0.0)
+        c.add<Battery>("VIN", in, kGround, src);
+    else
+        c.add<Battery>("VIN", kGround, in, src);
+    c.add<Npn>("T1", in, plus, out);
+    c.add<Npn>("T2", in, minus, out, BjtParams::bc557());
+    c.add<Resistor>("RL", out, kGround, ResistorParams{100.0});
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    requireKirchhoff(sim);
+    return sim.probe().voltage(out);
+}
+} // namespace
+
+TEST_CASE("PNP im aktiven Bereich: Ic = beta * Ib, Stroeme fliessen heraus", "[referenz][transistor][pnp]") {
+    PnpStage s;
+    buildPnp(s, 1000.0, 1e6);
+    const ComponentReading& t = s.sim.probe().readings[3];
+    const double ic = -t.terminalCurrentA[1]; // aus dem Kollektor heraus
+    const double ib = -t.terminalCurrentA[0];
+    CHECK(ib > 0.0);
+    CHECK(ic / ib == Approx(200.0).epsilon(0.01));
+    const double veb = s.sim.probe().voltage(s.plus) - s.sim.probe().voltage(s.base);
+    CHECK(veb == Approx(kVt * std::log(ic / 1.8e-14)).margin(2e-3)); // gespiegelte Eingangskennlinie
+    const double vb = s.sim.probe().voltage(s.base);
+    CHECK(ib == Approx(vb / 1e6 + kGmin * vb).epsilon(1e-3)); // RB und GMIN am Basisknoten
+    CHECK(s.sim.probe().voltage(s.coll) == Approx(ic * 1000.0).epsilon(1e-3));
+    CHECK(ic == Approx(1.67e-3).epsilon(0.02)); // wie der NPN, gespiegelt
+    CHECK(t.level > 0.0);
+    requireKirchhoff(s.sim);
+}
+
+TEST_CASE("PNP als Schalter: Saettigung wie der NPN, ohne Basisstrom gesperrt", "[referenz][transistor][pnp]") {
+    PnpStage s;
+    buildPnp(s, 1000.0, 10000.0);
+    const double vec = s.sim.probe().voltage(s.plus) - s.sim.probe().voltage(s.coll);
+    CHECK(vec < 0.2);
+    CHECK(vec > 0.0);
+    requireKirchhoff(s.sim);
+    // Basis an den Emitter gelegt: kein Basisstrom, der Transistor sperrt
+    Circuit c;
+    const NodeId plus = c.addNode();
+    const NodeId coll = c.addNode();
+    c.add<Battery>("B1", plus, kGround);
+    c.add<Resistor>("RC", coll, kGround, ResistorParams{1000.0});
+    c.add<Npn>("T1", plus, coll, plus, BjtParams::bc557());
+    Simulator off;
+    REQUIRE(off.setCircuit(std::move(c)) == Status::Ok);
+    CHECK(off.probe().voltage(coll) < 1e-3);
+    requireKirchhoff(off);
+}
+
+TEST_CASE("Gegentaktstufe aus NPN und PNP: Uebernahmeluecke und Folgen um eine Ube", "[referenz][transistor][pnp]") {
+    for (double vin : {-0.3, 0.0, 0.3}) {
+        INFO("Uein = " << vin);
+        CHECK(std::fabs(pushPull(vin)) < 0.01); // beide Transistoren sperren
+    }
+    for (double vin : {-3.0, 3.0}) {
+        const double vout = pushPull(vin);
+        INFO("Uein = " << vin << " V, Uaus = " << vout << " V");
+        CHECK(vout * vin > 0.0);
+        CHECK(std::fabs(vout) == Approx(std::fabs(vin) - 0.7).margin(0.1)); // eine Ube darunter
+    }
+    CHECK(pushPull(3.0) == Approx(-pushPull(-3.0)).epsilon(1e-6)); // gespiegelt symmetrisch
+}

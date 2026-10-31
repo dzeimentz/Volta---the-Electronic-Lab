@@ -349,3 +349,82 @@ TEST_CASE("Diode: unsinnig grosses Is ergibt endliche Begrenzung", "[robust][dio
     for (int i = 0; i < 10; ++i) REQUIRE(sim.step() == Status::Ok);
     requireKirchhoff(sim);
 }
+
+// ---------------------------------------------------------------- Z-Diode (ab Volta 2)
+
+namespace {
+// Sperrspannung der Z-Diode beim Strom iz (unabhaengig vom Simulator aus der Durchbruchformel umgestellt)
+double zenerVoltage(const DiodeParams& p, double iz) {
+    const double nbvVt = p.nbv * 0.025259;
+    return p.bvV + nbvVt * std::log(iz / p.ibvA + std::exp(-p.bvV / nbvVt)) + iz * p.rsOhm;
+}
+
+struct ZenerCircuit {
+    Simulator sim;
+    NodeId k = kGround;
+    Diode* z = nullptr;
+};
+// 9 V ueber Vorwiderstand r an der Kathode, Anode an Masse (Sperrrichtung)
+void buildZener(ZenerCircuit& zc, double r, const DiodeParams& p) {
+    Circuit c;
+    const NodeId plus = c.addNode();
+    zc.k = c.addNode();
+    c.add<Battery>("B1", plus, kGround);
+    c.add<Resistor>("R1", plus, zc.k, ResistorParams{r});
+    zc.z = &c.add<Diode>("Z1", kGround, zc.k, p);
+    REQUIRE(zc.sim.setCircuit(std::move(c)) == Status::Ok);
+}
+} // namespace
+
+TEST_CASE("Z-Diode: Datenblattwert Uz bei Iz = 5 mA", "[referenz][diode][zdiode]") {
+    const DiodeParams types[] = {DiodeParams::zener4V7(), DiodeParams::zener5V6()};
+    const double uz[] = {4.7, 5.6};
+    for (int i = 0; i < 2; ++i) {
+        ZenerCircuit zc;
+        buildZener(zc, (9.0 - uz[i]) / 0.005 - 1.5, types[i]); // so bemessen, dass 5 mA fliessen
+        INFO("Uz = " << uz[i]);
+        CHECK(zc.sim.probe().voltage(zc.k) == Catch::Approx(uz[i]).margin(0.005));
+        CHECK(-zc.sim.probe().readings[2].currentA == Catch::Approx(0.005).epsilon(0.01));
+        requireKirchhoff(zc.sim);
+    }
+}
+
+TEST_CASE("Z-Diode stabilisiert: Uz folgt der Durchbruchkennlinie", "[referenz][diode][zdiode]") {
+    const DiodeParams p = DiodeParams::zener5V6();
+    for (double r : {200.0, 470.0, 1000.0, 2200.0}) {
+        ZenerCircuit zc;
+        buildZener(zc, r, p);
+        const double vz = zc.sim.probe().voltage(zc.k);
+        const double iz = (9.0 - vz) / (r + 1.5);
+        INFO("R = " << r << " Ohm, Iz = " << iz * 1e3 << " mA");
+        CHECK(vz == Catch::Approx(zenerVoltage(p, iz)).margin(1e-3));
+        CHECK(vz > 5.4);
+        CHECK(vz < 5.9);
+        requireKirchhoff(zc.sim);
+    }
+}
+
+TEST_CASE("Z-Diode in Durchlassrichtung wie eine Siliziumdiode, unter Uz kein Sperrstrom", "[diode][zdiode]") {
+    Circuit c;
+    const NodeId plus = c.addNode();
+    const NodeId a = c.addNode();
+    c.add<Battery>("B1", plus, kGround);
+    c.add<Resistor>("R1", plus, a, ResistorParams{820.0});
+    c.add<Diode>("Z1", a, kGround, DiodeParams::zener4V7());
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    CHECK(sim.probe().voltage(a) == Catch::Approx(0.75).margin(0.03));
+    Diode z("Z2", 1, 0, DiodeParams::zener4V7());
+    // Datenblatt BZX55C4V7: Sperrstrom hoechstens 2 uA bei 1 V (der Knick ist bei kleinen Uz weich)
+    CHECK(std::fabs(z.junctionCurrentA(-1.0)) < 2e-6);
+    CHECK(std::fabs(z.junctionCurrentA(-3.0)) < 1e-4);
+    CHECK(z.junctionCurrentA(0.0) == Catch::Approx(0.0).margin(1e-15));
+}
+
+TEST_CASE("Z-Diode mit zu kleinem Vorwiderstand wird zerstoert", "[diode][zdiode][thermik]") {
+    ZenerCircuit zc;
+    buildZener(zc, 10.0, DiodeParams::zener4V7()); // (9 - 4,7) / 11,5 Ohm = 0,37 A >> Izmax 85 mA
+    for (int i = 0; i < 4000 && !zc.z->isDestroyed(); ++i) zc.sim.step();
+    CHECK(zc.z->isDestroyed());
+    requireFinite(zc.sim.probe());
+}
