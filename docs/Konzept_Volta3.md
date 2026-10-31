@@ -2,17 +2,18 @@
 
 _Konzept des dritten Bandes: Schwingkreis, Radio, Stromversorgung, Messtechnik und digitale Grundschaltungen für 13 bis 16 Jahre_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.1.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.2.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
 | Datum | 31.10.2026 |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 4.3, 5.4); Konzept Volta 2 v0.2; Konzept Zuse v0.3; Konzept MCU Explorer v0.1; Farb- und Leitkonzept Volta 1 (0.9.1, `docs/ui-spec.md`) |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 und 2 |
+| Änderungen zu v0.1 | Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler getroffen (31.10.2026, Kapitel 4); Masse/GND bleibt schwarz |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -27,7 +28,7 @@ Der Lernpfad umfasst wie Volta 1 und 2 **neun Stufen (0–8) mit 61 Experimenten
 
 Volta 3 setzt die Technik von Volta 2 voraus (Oszilloskop, Funktionsgenerator, Wechselquelle, hörbare Simulation, OP und 555). Die größten neuen technischen Aufgaben sind die **Wechselstromanalyse** im Kern (Frequenzgang), die **ehrliche Behandlung von Hochfrequenz** (Radio) und die **Kopplung digitaler Bausteine** an den analogen Kern; die letzte teilt sich Volta 3 mit dem MCU Explorer.
 
-**Empfehlung:** Dieses Konzept als Richtung festhalten, die drei technischen Grundsatzentscheidungen in Kapitel 4 treffen und vor dem Start einen Leistungs- und Machbarkeitstest für Frequenzgang, Radiomodell und Schaltwandler machen (Schritt 1). Begonnen wird erst, wenn Volta 2 als Testversion steht.
+**Empfehlung:** Dieses Konzept als Richtung festhalten; die drei technischen Grundsatzentscheidungen sind getroffen (31.10.2026, Kapitel 4). Vor dem Start bestätigt ein Leistungs- und Machbarkeitstest Frequenzgang, Radiomodell und Schaltwandler auf dem Tablet (Schritt 1). Begonnen wird erst, wenn Volta 2 als Testversion steht.
 
 ## 2. Einordnung in die Reihe
 
@@ -63,17 +64,17 @@ Volta 3 setzt die Technik von Volta 2 voraus (Oszilloskop, Funktionsgenerator, W
 - Kein Mikrofon und keine Kamera des Geräts als Eingang.
 - Keine Kopie des gestalterischen Vorbilds (Regel 2); alle Experimente sind Eigenentwicklungen.
 
-## 4. Technische Grundsatzentscheidungen (vorgeschlagen)
+## 4. Technische Grundsatzentscheidungen (31.10.2026)
 
 Die Simulation rechnet für hörbare Signale mit 20 µs Schrittweite (Volta 2). Echte Rundfunk- und Schaltwandlerfrequenzen liegen weit darüber (Mittelwelle um 1 MHz, UKW um 100 MHz, Schaltwandler 50 kHz bis 2 MHz). Volta 3 braucht deshalb drei Grundsatzentscheidungen, die alle der Regel »Physik ist ehrlich« folgen:
 
-| Frage | Vorschlag |
+| Frage | Entscheidung |
 |---|---|
 | Frequenzgang | **Wechselstromanalyse im Kern**: Die Schaltung wird am Arbeitspunkt linearisiert und für jede Frequenz komplex gelöst (dieselbe Knotenmatrix wie im Zeitbereich). So entstehen Resonanzkurven und Filterkennlinien von 1 Hz bis 10 MHz in Sekundenbruchteilen, exakt für lineare Schaltungen. |
 | Radio | **Abstimmen echt, Hochfrequenz als Hüllkurve:** Welche Sender der Schwingkreis auf der Grundplatte durchlässt, rechnet die Wechselstromanalyse an den echten Senderfrequenzen. Die Trägerschwingung selbst wird nicht Schritt für Schritt gerechnet, sondern als Hüllkurve (Ton mal Durchlass des Kreises); Detektor, Verstärker und Lautsprecher laufen danach normal in der Simulation und sind hörbar. Das Oszilloskop zeigt den Träger **zeitgedehnt** (z. B. 1 MHz als 1 kHz, deutlich mit Lupenzeichen und Faktor beschriftet). Die UKW-Stufe (Frequenzmodulation) ist ein erklärtes Verhaltensmodell im UKW-Modul. |
 | Schaltwandler und Klasse D | **echte Rechnung bei niedrigerer Schaltfrequenz:** Abwärts-, Aufwärtswandler und Klasse-D-Stufe schalten in Volta 3 mit 1–5 kHz und entsprechend großen Spulen und Kondensatoren. Das ist physikalisch dieselbe Schaltung, nur langsamer, und wird vollständig im Zeitbereich gerechnet; »Mehr wissen« erklärt, warum echte Wandler viel schneller schalten (kleinere Bauteile). |
 
-Ebenfalls vorgeschlagen: **Digitale Module** (Gatter, Zähler, Decoder) rechnen ihre Logik ereignisgesteuert (wie die Zuse-Logiksimulation) und sind an ihren Anschlüssen als Schaltschwelle (Eingang) und Spannungsquelle mit Innenwiderstand (Ausgang) an den analogen Kern gekoppelt. Das NAND aus Einzeltransistoren auf der Grundplatte bleibt vollständig analog.
+Ebenfalls entschieden: **Digitale Module** (Gatter, Zähler, Decoder) rechnen ihre Logik ereignisgesteuert (wie die Zuse-Logiksimulation) und sind an ihren Anschlüssen als Schaltschwelle (Eingang) und Spannungsquelle mit Innenwiderstand (Ausgang) an den analogen Kern gekoppelt. Das NAND aus Einzeltransistoren auf der Grundplatte bleibt vollständig analog.
 
 ## 5. Bedienung und Bedienpult III
 
@@ -230,7 +231,7 @@ Gestaltung wie Volta 1 und 2 (hell, ruhige Flächen, DC Learning Design Standard
 
 ### 9.1 Grundsatz: dasselbe Farb- und Leitkonzept wie Volta 1 und 2
 
-Volta 3 übernimmt das Farb- und Leitkonzept aus Volta 1 (0.9.1) mit den Erweiterungen aus Volta 2 (Konzept Volta 2, Kapitel 9) **unverändert**: sechs Themen im Bauteilfach mit Farbe und Schaltzeichen, Reihenfarben der Grundplatte (A rot … E blau), Felder im Text als kleine Kontaktfelder in ihrer Farbe, automatische Leitungsfarben (Plus rot, Masse schwarz, negative Versorgung blau, sonst Lieblingsfarbe), Rahmen, Schaltzeichen und »?« je Pultbauteil, eigene Trägerplattenfarbe je Modul, Kanalfarben der Messgeräte (1 Blau, 2 Orange) und des Oszilloskops (K1 gelb, K2 türkis), Stufenanpassung von Steckbrett und Pult. Grundregel: **Farbe nie allein**.
+Volta 3 übernimmt das Farb- und Leitkonzept aus Volta 1 (0.9.1) mit den Erweiterungen aus Volta 2 (Konzept Volta 2, Kapitel 9) **unverändert**: sechs Themen im Bauteilfach mit Farbe und Schaltzeichen, Reihenfarben der Grundplatte (A rot … E blau), Felder im Text als kleine Kontaktfelder in ihrer Farbe, automatische Leitungsfarben (Plus rot, Masse/GND schwarz, negative Versorgung blau, sonst Lieblingsfarbe), Rahmen, Schaltzeichen und »?« je Pultbauteil, eigene Trägerplattenfarbe je Modul, Kanalfarben der Messgeräte (1 Blau, 2 Orange) und des Oszilloskops (K1 gelb, K2 türkis), Stufenanpassung von Steckbrett und Pult. Grundregel: **Farbe nie allein**.
 
 ### 9.2 Einordnung der neuen Bauteile
 
@@ -316,7 +317,6 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 
 | Entscheidung | Spätestens |
 |---|---|
-| Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler (Kapitel 4) | vor Schritt 1 |
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2) | Schritt 2 |
 | Kennfarbe von Volta 3 (App-Symbol entschieden: Reihensymbol `volta3.svg`) | Schritt 2 |
@@ -326,4 +326,4 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 
 ## 15. Fazit
 
-Volta 3 schließt die Elektronik-Reihe ab: vom Schwingkreis über Radio, Stromversorgung und Messtechnik bis zum Zähler mit Anzeige, der direkt in die Zuse-Linie führt. Inhaltlich ist der Band mit 61 Experimenten in neun Stufen umrissen; gestalterisch übernimmt er das Farb- und Leitkonzept von Volta 1 und 2 vollständig. Technisch ist er anspruchsvoller als Volta 2, weil er Vorgänge zeigt, die schneller sind, als ein Tablet Schritt für Schritt rechnen kann – dafür schlägt das Konzept ehrliche, gekennzeichnete Wege vor, die ein Machbarkeitstest vor dem Start bestätigen soll. Der Aufwand liegt bei rund 157 Personentagen nach Abschluss von Volta 2.
+Volta 3 schließt die Elektronik-Reihe ab: vom Schwingkreis über Radio, Stromversorgung und Messtechnik bis zum Zähler mit Anzeige, der direkt in die Zuse-Linie führt. Inhaltlich ist der Band mit 61 Experimenten in neun Stufen umrissen; gestalterisch übernimmt er das Farb- und Leitkonzept von Volta 1 und 2 vollständig. Technisch ist er anspruchsvoller als Volta 2, weil er Vorgänge zeigt, die schneller sind, als ein Tablet Schritt für Schritt rechnen kann – dafür sind ehrliche, gekennzeichnete Wege entschieden (Kapitel 4), die ein Machbarkeitstest vor dem Start bestätigt. Der Aufwand liegt bei rund 157 Personentagen nach Abschluss von Volta 2.
