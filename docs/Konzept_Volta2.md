@@ -248,7 +248,7 @@ Volta 1 (0.9.1) hat ein Farb- und Leitkonzept, das Kinder ohne Lesen durch den A
 
 ### 9.3 Leitungen, Messgeräte und Kanäle
 
-- **Leitungsfarben automatisch** wie Volta 1 (`V+` und `+B2` rot, `0V` schwarz). **Masse/GND (`0V`) bleibt in allen Bänden schwarz**, auch bei symmetrischer Versorgung, wo `0V` die Mitte ist (entschieden 31.10.2026). Neu: Eine Leitung an der **negativen Versorgung** (`−B2`, wenn zwei Batterien symmetrisch gesteckt sind) wird **blau** – so, wie es in der Elektronik üblich ist. Die Vorgabe der Lieblingsfarbe wechselt dafür in Volta 2 von Blau auf **Grün** (offene Entscheidung, Kapitel 14). Wechselquelle und Generatorausgang bekommen keine feste Farbe, sie haben keinen Plus- und Minuspol.
+- **Leitungsfarben automatisch** wie Volta 1 (`V+` und `+B2` rot, `0V` schwarz). **Masse/GND (`0V`) bleibt in allen Bänden schwarz**, auch bei symmetrischer Versorgung, wo `0V` die Mitte ist (entschieden 31.10.2026). Neu: Eine Leitung an der **negativen Versorgung** (`−B2`, wenn zwei Batterien symmetrisch gesteckt sind) wird **blau** – so, wie es in der Elektronik üblich ist. Die Vorgabe der Lieblingsfarbe bleibt wie in Volta 1 **Blau** (beides entschieden 31.10.2026). Eine blaue Leitung ist damit nicht allein an der Farbe als Minusleitung erkennbar; das zeigen wie immer Feldname (`−B2`), Leitungsmenü und Spannungsanzeige (Farbe nie allein). Wechselquelle und Generatorausgang bekommen keine feste Farbe, sie haben keinen Plus- und Minuspol.
 - **Messgeräte 1 und 2:** Rahmen in zwei Farben (1 Blau, 2 Orange) und groß beschriftet »1« / »2«; die Messleitungen tragen die Farbe ihres Geräts, Buchsen weiter COM, V/Ω, A.
 - **Oszilloskop:** Kanal K1 gelb, K2 türkis, wie bei vielen echten Geräten. Die Messspitze steckt mit einem kleinen Fähnchen »K1« bzw. »K2« am Feld; Kurve, Beschriftung und Zahlenwerte stehen in derselben Kanalfarbe. Bezug ist immer `0V` (schwarzes Massezeichen).
 - **Felder der Geräte und des Pults** erscheinen in den Aufbauschritten als kleine Kontaktfelder wie in Volta 1 (z. B. `K1`, `G`, `W~a`), mit dem Bildzeichen des Geräts.
@@ -313,7 +313,6 @@ Schritte 2 und 3 können beginnen, sobald die Experimentliste freigegeben ist; S
 |---|---|
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Kennfarbe von Volta 2 (App-Symbol entschieden: Reihensymbol `volta2.svg`) | Schritt 2 |
-| Leitungsfarbe der negativen Versorgung (Vorschlag Blau) und neue Vorgabe der Lieblingsfarbe (Vorschlag Grün) | Schritt 2 |
 | Wechselquelle: fest 50 Hz oder einstellbar (für die Experimente reicht fest) | Schritt 3 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
 | Lehrplanzuordnung DE/LU/Ostbelgien | Schulpaket |
