@@ -2,15 +2,16 @@
 
 _Konzept des zweiten Bandes: Klassische Analogelektronik für 11 bis 14 Jahre_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta2_v0.1.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta2_v0.2.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
-| Datum | 27.10.2026 |
+| Datum | 31.10.2026 |
+| Änderungen zu v0.1 | Farb- und Leitkonzept aus Volta 1 (0.9.1) übernommen und für Bedienpult II, Messgeräte, Oszilloskop und die neuen Bauteile erweitert (Kapitel 9); Pluspol heißt wie in Volta 1 `V+` |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 5, 6.3, 11.2); `docs/volta2-planung.md` (Planungsentwurf, Leistungstest Audio, Auswertung 555-Quellensammlung); DC Learning Design Standard v1.0 |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 |
 
@@ -76,7 +77,7 @@ Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Str
 
 | Pultfeld | Bauteil | Bedeutung |
 |---|---|---|
-| `+9V`, `0V` | Batterie 1 | wie Volta 1, wählbar 3 / 4,5 / 9 V |
+| `V+`, `0V` | Batterie 1 | wie Volta 1, wählbar 3 / 4,5 / 9 V |
 | `+B2`, `−B2` | Batterie 2 (neu) | zweite, getrennte Batterie 4,5 / 9 V. In Reihe mit Batterie 1 gesteckt ergibt sie eine **symmetrische Versorgung** (+4,5 / 0 / −4,5 V) für den OP – das Kind steckt sie selbst (Experiment 0.3) |
 | `W~a`, `W~b` | Wechselquelle (neu) | Kleinspannung, wählbar 6 / 9 V~ (Effektivwert), 50 Hz; Hauptschalter wie Batterie 1 |
 | `G`, `G0` | Funktionsgenerator (neu) | Ausgang und Masse; Bedienung im Generatorfenster |
@@ -216,9 +217,47 @@ Reihenfolge nach Stufe 5 zwingend: Der 555 wird mit den Komparatoren erklärt.
 
 **Summe:** 3 + 6 + 8 + 7 + 8 + 8 + 9 + 6 + 6 = **61 Experimente**, davon 7 Projekte. Weitere Ideen aus der 555-Quellensammlung (Morsetaste, Frequenzteiler, Kondensatoren messen, Herzschlag-Wächter) stehen für das **Freie Labor** und Aufgaben der Lehrkraft bereit.
 
-## 9. Gestaltung und Begleitfigur
+## 9. Gestaltung, Farb- und Leitkonzept
 
 Gestaltung wie Volta 1 (hell, ruhige Flächen, DC Learning Design Standard). Volta 2 und Volta 3 tragen von Anfang an das neue Reihensymbol (`docs/design/symbole/volta2.svg`, `volta3.svg`): das Volta-Symbol mit LED-Balkenanzeige, in der zwei bzw. drei Felder leuchten (entschieden 27.10.2026). Volta 1 behält sein bisheriges Symbol und wechselt erst mit Version 1.0 auf `volta1.svg`. Offen ist nur noch eine Kennfarbe für den Band. Die Begleitfigur **Tick** bleibt, mit etwas sachlicherem Ton für die ältere Zielgruppe; die Ebene »Mehr wissen« wird in Volta 2 öfter genutzt (Formeln, Hintergründe). Die Texte duzen weiterhin.
+
+### 9.1 Grundsatz: ein Farb- und Leitkonzept für die ganze Reihe
+
+Volta 1 (0.9.1) hat ein Farb- und Leitkonzept, das Kinder ohne Lesen durch den Aufbau führt. Volta 2 übernimmt es **unverändert** und erweitert es nur dort, wo neue Dinge hinzukommen. Wer von Volta 1 kommt, findet sich sofort zurecht; dieselbe Farbe bedeutet in jedem Band dasselbe. Grundregel bleibt: **Farbe nie allein** – jede Farbe hat zusätzlich Namen, Zeichen oder Beschriftung (Regel 7).
+
+| Element | Regel aus Volta 1 | Volta 2 |
+|---|---|---|
+| Bauteilfach | sechs Themen mit Farbe und typischem Schaltzeichen: Licht (gelb), Schalten (blau), Widerstände und Sensoren (grün), Dioden und Transistoren (violett), Kondensatoren (türkis), Bewegung und Ton (orange); Kacheln im Themenfarbton, Umschalter »Bauteil / Symbol« | gleiche Themen und Farben; neue Bauteile werden eingeordnet (9.2) |
+| Grundplatte | jede Reihe ein Farbton (A rot, B orange, C gelb, D grün, E blau), nach rechts dunkler; Feldnamen bleiben | unverändert |
+| Aufbauschritte | Felder als kleine Kontaktfelder in ihrer Reihenfarbe, Bauteilbild hinter dem Namen, ein Handgriff je Stichpunkt; die Aufbauhilfe öffnet das Thema des gesuchten Bauteils | unverändert, auch für Pult-, Modul- und Gerätefelder (9.3) |
+| Leitungsfarben | automatisch: Leitung am Pluspol rot, am Minuspol schwarz, sonst Lieblingsfarbe (Stern); von Hand gewählte Farbe bleibt | erweitert um die negative Versorgung (9.3) |
+| Pult | je Bauteil ein Rahmen um Bedienelement und Felder, Schaltzeichen mit Leitungen zu jedem Feld, »?« erklärt Bauteil und Felder; `V+` rot, `0V` schwarz | gilt für jedes neue Pultbauteil (9.4) |
+| Module | eigene Trägerplattenfarbe und Bildzeichen je Modul; Kachel im Modulfach in der aufgehellten Farbe | OP-Modul und 555 bekommen eigene Farbe und Bildzeichen (9.2) |
+| Stufenanpassung | Steckbrett und Pult wachsen mit der Stufe; das Pult zeigt nur, was die Stufe braucht; Modulleiste nur bei Modulen | Pult II wächst mit den Stufen (9.4) |
+
+### 9.2 Einordnung der neuen Bauteile
+
+| Thema (Farbe) | neu in Volta 2 |
+|---|---|
+| Licht (gelb) | IR-LED (mit Hinweis »unsichtbares Licht«, Strahlen gestrichelt) |
+| Widerstände und Sensoren (grün) | Trimmer 10 kΩ / 100 kΩ, Fototransistor |
+| Dioden und Transistoren (violett) | Transistor PNP, Z-Dioden, Spannungsregler 5 V, Optokoppler |
+| Kondensatoren (türkis) | Folienkondensatoren; die **Spule** kommt dazu, das Thema heißt ab Volta 2 »Kondensatoren und Spulen« (beide speichern Energie) |
+
+**Module:** OP-Modul (Trägerplatte dunkelrot, Bildzeichen Dreieck mit + und −) und Timer 555 (Trägerplatte anthrazit, Bildzeichen Rechteckpuls). Die Module aus Volta 1 behalten Farbe und Bildzeichen, damit sie beim Nachbau wiedererkannt werden.
+
+### 9.3 Leitungen, Messgeräte und Kanäle
+
+- **Leitungsfarben automatisch** wie Volta 1 (`V+` und `+B2` rot, `0V` schwarz). Neu: Eine Leitung an der **negativen Versorgung** (`−B2`, wenn zwei Batterien symmetrisch gesteckt sind) wird **blau** – so, wie es in der Elektronik üblich ist. Die Vorgabe der Lieblingsfarbe wechselt dafür in Volta 2 von Blau auf **Grün** (offene Entscheidung, Kapitel 14). Wechselquelle und Generatorausgang bekommen keine feste Farbe, sie haben keinen Plus- und Minuspol.
+- **Messgeräte 1 und 2:** Rahmen in zwei Farben (1 Blau, 2 Orange) und groß beschriftet »1« / »2«; die Messleitungen tragen die Farbe ihres Geräts, Buchsen weiter COM, V/Ω, A.
+- **Oszilloskop:** Kanal K1 gelb, K2 türkis, wie bei vielen echten Geräten. Die Messspitze steckt mit einem kleinen Fähnchen »K1« bzw. »K2« am Feld; Kurve, Beschriftung und Zahlenwerte stehen in derselben Kanalfarbe. Bezug ist immer `0V` (schwarzes Massezeichen).
+- **Felder der Geräte und des Pults** erscheinen in den Aufbauschritten als kleine Kontaktfelder wie in Volta 1 (z. B. `K1`, `G`, `W~a`), mit dem Bildzeichen des Geräts.
+
+### 9.4 Bedienpult II und Stufenanpassung
+
+- Jedes neue Pultbauteil – **Batterie 2, Wechselquelle, Funktionsgenerator** – bekommt wie in Volta 1 einen Rahmen, sein Schaltzeichen über den Feldern (Batterie, Wechselspannungsquelle ~, Generator mit Sinus) und ein **»?«** mit Erklärung der Felder.
+- Das Pult wächst mit den Stufen: Stufe 0 Batterie 1, Messgeräte 1 und 2, ab Experiment 0.3 Batterie 2; ab Stufe 1 Kennlinienschreiber; ab Stufe 2 Funktionsgenerator und Oszilloskop; ab Stufe 3 Wechselquelle; Drehregler, Schalter und Lautsprecher, sobald ein Experiment sie nutzt. Dazu immer alles, was Vorlage oder Aufbau verwenden.
+- Steckbrett: Volta 2 beginnt mit 5 × 10 Feldern (die kleinen Bretter von Volta 1 entfallen für die ältere Zielgruppe) und wächst, wenn die Vorlage mehr braucht; im freien Labor 12 Spalten. Die Einstellung »Steckbrett und Pult an die Stufe anpassen« bleibt.
 
 ## 10. Technik
 
@@ -274,6 +313,7 @@ Schritte 2 und 3 können beginnen, sobald die Experimentliste freigegeben ist; S
 |---|---|
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Kennfarbe von Volta 2 (App-Symbol entschieden: Reihensymbol `volta2.svg`) | Schritt 2 |
+| Leitungsfarbe der negativen Versorgung (Vorschlag Blau) und neue Vorgabe der Lieblingsfarbe (Vorschlag Grün) | Schritt 2 |
 | Wechselquelle: fest 50 Hz oder einstellbar (für die Experimente reicht fest) | Schritt 3 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
 | Lehrplanzuordnung DE/LU/Ostbelgien | Schulpaket |
