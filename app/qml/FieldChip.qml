@@ -9,7 +9,8 @@ Rectangle {
 
     readonly property int row: "ABCDE".indexOf(name.charAt(0))
     readonly property bool boardField: /^[A-E](1[0-2]|[1-9])$/.test(name)
-    readonly property bool plus: name === "V+"
+    readonly property bool plus: name === "V+" || name === "+B2"
+    readonly property bool minus2: name === "\u2212B2" // Minuspol von Batterie 2: blau
     readonly property bool minus: name === "0V"
     readonly property bool moduleField: /^M\d+$/.test(name)
 
@@ -24,8 +25,8 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 3
         radius: 4
-        color: chip.plus ? "#C62828" : chip.minus ? "#17191C" : "transparent"
-        gradient: chip.plus || chip.minus ? null : metal
+        color: chip.plus ? "#C62828" : chip.minus ? "#17191C" : chip.minus2 ? "#2C62C9" : "transparent"
+        gradient: chip.plus || chip.minus || chip.minus2 ? null : metal
         border.color: Theme.fieldEdge
         Gradient {
             id: metal

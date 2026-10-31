@@ -21,6 +21,12 @@ fuehren muessen.
   kommen aus `app/resources/icons/<band>/` bzw. `app/resources/<band>.rc`, sofern vorhanden.
 - Entwickelt wird Volta 2 im Worktree `volta-volta2` (Zweig `volta2`); Volta 1 auf `main` bleibt eingefroren.
 
+- Pult nach Bedarf (Konzept Volta 2, 5.5): `paket.json` nennt in `"pult_nach_bedarf"` die Pultteile des
+  Geraetefachs mit `ab_stufe`. Ist die Liste da, traegt der Aufbau seine Pultbelegung (`Board::deskParts`, JSON
+  `"pultteile"`, Befehl mit Rueckgaengig); sonst gilt das feste Pult von Volta 1. Batterie 2 (`P:+B2`, `P:-B2`) ist
+  potentialfrei, haengt zweipolig am Hauptschalter und hat 10 MOhm von `P:-B2` nach `0V` (rechenbar, ausgeschaltet
+  unter 0,05 V, als Last 0,45 uA).
+
 ## Folgen
 - Volta 1 aendert sich nicht (kein Grundband, ganzer Katalog gehoert ihm).
 - Experimente des Grundbandes bleiben ladbar (z. B. Vorfuehrung); eigene Vorfuehrungen fuer Volta 2 folgen mit den

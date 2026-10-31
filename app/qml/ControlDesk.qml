@@ -20,6 +20,8 @@ Rectangle {
     property string highlightGroup: ""
     signal groupTapped(string name)
     signal infoRequested(string name)
+    signal trayRequested()          // Pult nach Bedarf: Geraetefach oeffnen
+    property real trayX: 0          // Lage des Knopfs »+« (Arbeitsflaeche)
     // Zustand der Drehregler (durchgebrannt, ueberlastet) aus der laufenden Simulation
     property var pot1: ({})
     property var pot2: ({})
@@ -105,7 +107,7 @@ Rectangle {
     // Pluspol ueber V+, kurzer dicker Minuspol ueber 0V), Potentiometer (Schleifer als Pfeil zum mittleren Feld),
     // Schalter (zeigt die Stellung), Lautsprecher
     Repeater {
-        model: desk.groups.filter(g => ["batterie", "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
+        model: desk.groups.filter(g => ["batterie", "batterie2", "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
         Shape {
             id: deskSymbol
             required property var modelData
@@ -121,7 +123,7 @@ Rectangle {
             readonly property var paths: {
                 const t = fieldTop, y = y0
                 switch (modelData.name) {
-                case "batterie": { // V+, 0V
+                case "batterie": case "batterie2": { // V+, 0V bzw. +B2, -B2
                     const a = cx(0), b = cx(1), m = (a + b) / 2
                     return {s: `M${a} ${t} V${y} H${m - 4} M${m + 4} ${y} H${b} V${t} M${m - 4} ${y - 9} V${y + 9}`,
                             f: `M${m + 2} ${y - 5} H${m + 6} V${y + 5} H${m + 2} Z`, plus: m - 11}
@@ -204,6 +206,59 @@ Rectangle {
                 font.pixelSize: Math.round((14) * Theme.fontScale)
                 font.bold: true
             }
+        }
+    }
+
+    // Batterie 2 (ab Volta 2): Spannungswahl; sie haengt am Hauptschalter der Batterie
+    Column {
+        visible: desk.group("batterie2") !== null
+        x: desk.centerOf("batterie2") - width / 2
+        y: 12
+        spacing: 4
+        Label { text: qsTr("Batterie 2"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        ComboBox {
+            objectName: "cells2Box"
+            width: 96
+            height: Theme.control - 6
+            model: [qsTr("%1 V").arg((4.5).toLocaleString(Qt.locale(), "f", 1)), qsTr("%1 V").arg(9)]
+            currentIndex: desk.controller.cells2 === 3 ? 0 : 1
+            onActivated: (index) => { desk.controller.cells2 = [3, 6][index] }
+            Accessible.name: qsTr("Spannung von Batterie 2")
+        }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: desk.controller.mainSwitch ? qsTr("Ein") : qsTr("Aus")
+            color: "white"
+            font.pixelSize: Math.round((14) * Theme.fontScale)
+            font.bold: true
+        }
+    }
+
+    // Pult nach Bedarf: »+« oeffnet das Geraetefach
+    RoundButton {
+        objectName: "deskTrayButton"
+        visible: desk.controller.deskOnDemand
+        x: desk.offsetX + desk.trayX
+        y: desk.fieldsTop - height / 2
+        width: Theme.control
+        height: Theme.control
+        onClicked: desk.trayRequested()
+        Accessible.name: qsTr("Gerätefach")
+        ToolTip.visible: hovered
+        ToolTip.text: qsTr("Gerätefach: Pultteile einsetzen")
+        background: Rectangle {
+            radius: width / 2
+            color: parent.down ? "#E6EEF6" : "#C9D6E3"
+            border.color: "white"
+            border.width: 2
+        }
+        contentItem: Text {
+            text: "+"
+            color: Theme.navy
+            font.pixelSize: 26
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
 

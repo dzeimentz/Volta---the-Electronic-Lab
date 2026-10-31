@@ -189,6 +189,7 @@ qt_add_qml_module(volta_ui
         qml/ModuleItem.qml
         qml/ModuleInside.qml
         qml/DeskPartInfo.qml
+        qml/DeskTray.qml
         qml/LicensesDialog.qml
         qml/ToolToken.qml
         qml/RecorderPanel.qml

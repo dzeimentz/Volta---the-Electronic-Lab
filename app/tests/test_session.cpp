@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "model/board_edit.hpp"
+#include "model/board_json.hpp"
 #include "model/environment.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
@@ -291,6 +292,44 @@ private slots:
         run(*s, 0.01);
         QCOMPARE(s->voltageBars("A1"), 4);
         QVERIFY(std::fabs(s->voltage("A1") - 3.0) < 0.01);
+    }
+
+    // Pult nach Bedarf (ab Volta 2): Pultteile als Befehl, Batterie 2 potentialfrei, symmetrische Versorgung
+    void deskOnDemandAndSecondBattery() {
+        auto s = session();
+        QVERIFY(!s->addDeskPart("batterie2"));         // Volta 1: festes Pult
+        QVERIFY(!model::withinBoard(s->board(), "P:+B2"));
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(!s->addWire("P:S1", "A1", "rot"));     // Schalter steht nicht im Pult
+        QVERIFY(s->addDeskPart("batterie2"));
+        QCOMPARE(*s->board().deskParts, (std::vector<std::string>{"batterie", "batterie2"}));
+        s->setMainSwitch(true);
+        s->setCells2(3); // 4,5 V
+        QVERIFY(s->addWire("P:-B2", "A1", "blau"));
+        run(*s, 0.01);
+        QVERIFY2(std::fabs(s->voltage("A1")) < 0.1, qPrintable(QString::number(s->voltage("A1")))); // ohne Bezug zu 0V
+        QVERIFY(s->addWire("P:+B2", "P:0V", "schwarz"));
+        run(*s, 0.01);
+        QVERIFY2(std::fabs(s->voltage("A1") + 4.5) < 0.05, qPrintable(QString::number(s->voltage("A1"))));
+        s->setMainSwitch(false); // derselbe Hauptschalter schaltet auch Batterie 2
+        run(*s, 0.01);
+        QVERIFY2(std::fabs(s->voltage("A1")) < 0.1, qPrintable(QString::number(s->voltage("A1"))));
+        // Herausnehmen zieht die Leitungen mit ab; Rueckgaengig holt alles zurueck
+        QVERIFY(!s->removeDeskPart("batterie"));
+        QVERIFY(s->removeDeskPart("batterie2"));
+        QVERIFY(s->board().wires.empty());
+        QVERIFY(!model::withinBoard(s->board(), "P:-B2"));
+        s->undoStack().undo();
+        QCOMPARE(s->board().wires.size(), std::size_t(2));
+        QVERIFY(model::hasDeskPart(s->board(), "batterie2"));
+        // Speichern und Laden behalten Pultbelegung und Zellen
+        model::Board back;
+        QVERIFY(model::boardFromJson(model::boardToJson(s->board()), back));
+        QCOMPARE(*back.deskParts, *s->board().deskParts);
+        QCOMPARE(back.desk.cells2, 3);
+        QVERIFY(model::deskPartsUsed(back) == (std::vector<std::string>{"batterie", "batterie2"}));
     }
 
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage

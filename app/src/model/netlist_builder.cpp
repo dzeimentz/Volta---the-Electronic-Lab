@@ -132,11 +132,21 @@ private:
             NodeId plus2 = 0, minus2 = 0;
             node("P:+B2", plus2, "Pult");
             node("P:-B2", minus2, "Pult");
-            const NodeId cell2 = internalNode();
+            // Zellen zwischen zwei inneren Knoten; der Hauptschalter trennt beide Pole (zweipolig), damit die
+            // ausgeschaltete Batterie keine Scheinspannung ueber die Isolationsleitwerte zeigt
+            const NodeId cell2 = internalNode(), cell2m = internalNode();
             m_net.desk[desk_id::kBattery2] = c.componentCount();
-            c.add<core::Battery>(desk_id::kBattery2, cell2, minus2, core::BatteryParams{d.cells2});
+            c.add<core::Battery>(desk_id::kBattery2, cell2, cell2m, core::BatteryParams{d.cells2});
             m_net.desk[desk_id::kMainSwitch2] = c.componentCount();
             c.add<core::Switch>(desk_id::kMainSwitch2, cell2, plus2, d.mainSwitch);
+            m_net.desk[desk_id::kMainSwitch2Minus] = c.componentCount();
+            c.add<core::Switch>(desk_id::kMainSwitch2Minus, cell2m, minus2, d.mainSwitch);
+            // Ableitwiderstand 10 MOhm von -B2 nach 0V: haelt die potentialfreie Batterie fuer den Kern rechenbar und
+            // bei offenem Hauptschalter nahe 0 V (< 0,05 V); als Last 0,45 uA bei 4,5 V, also ohne sichtbare Wirkung
+            // (offengelegt unter »So rechnet Volta«, Konzept 5.1)
+            core::ResistorParams leak;
+            leak.ohm = 10e6;
+            c.add<core::Resistor>(desk_id::kBattery2Leak, minus2, core::kGround, leak);
         }
     }
 

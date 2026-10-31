@@ -155,6 +155,9 @@ int main(int argc, char* argv[]) {
     // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
+    // VOLTA_DEMO_DESK=batterie2,p1: Pultteile ins Pult setzen (Pult nach Bedarf, ab Volta 2)
+    for (const QString& part : qEnvironmentVariable("VOLTA_DEMO_DESK").split(QLatin1Char(','), Qt::SkipEmptyParts))
+        lab.addDeskPart(part);
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
                              "VOLTA_DEMO_FREELAB", "VOLTA_DEMO_GUIDE", "VOLTA_DEMO_SENSORS", "VOLTA_DEMO_RECORDER",
                              "VOLTA_DEMO_QUESTION"})
@@ -527,12 +530,20 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
-    // Entwicklerhilfe: VOLTA_DEMO_DESKINFO=<batterie|p1|p2|schalter|lautsprecher> oeffnet die Erklaerung eines Pultbauteils
+    // Entwicklerhilfe: VOLTA_DEMO_DESKINFO=<batterie|batterie2|p1|p2|schalter|lautsprecher> oeffnet die Erklaerung eines Pultbauteils
     if (const QString part = qEnvironmentVariable("VOLTA_DEMO_DESKINFO"); !part.isEmpty())
         QTimer::singleShot(1500, &engine, [&engine, part] {
             const auto roots = engine.rootObjects();
             if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("deskPartInfo")))
                 QMetaObject::invokeMethod(dlg, "show", Q_ARG(QVariant, part));
+        });
+
+    // Entwicklerhilfe: VOLTA_DEMO_DESKTRAY=1 oeffnet das Geraetefach (Pult nach Bedarf)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_DESKTRAY") == 1)
+        QTimer::singleShot(1500, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("deskTray")))
+                QMetaObject::invokeMethod(dlg, "open");
         });
 
     // Entwicklerhilfe: VOLTA_DEMO_HELP=<kapitel> oeffnet die Hilfe bei einem Kapitel (z. B. werkzeug, eltern; 1: Anfang)

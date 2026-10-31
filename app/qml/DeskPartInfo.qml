@@ -6,10 +6,23 @@ import QtQuick.Controls.Basic
 Popup {
     id: info
     property string part: ""
+    property var controller: null
+    property bool confirmRemove: false // Rueckfrage: Leitungen stecken noch an den Feldern
+    // Pult nach Bedarf: jedes Pultteil ausser der Batterie laesst sich herausnehmen (Befehl)
+    readonly property bool removable: controller !== null && controller.deskOnDemand && part !== "batterie"
 
     function show(name) {
         part = name
+        confirmRemove = false
         open()
+    }
+    function removePart() {
+        if (!confirmRemove && controller.deskPartWires(part) > 0) {
+            confirmRemove = true
+            return
+        }
+        controller.removeDeskPart(part)
+        close()
     }
 
     // Inhalt je Bauteil: Titel, Einleitung, Felder [[Feld, Bedeutung]], Hinweise
@@ -32,6 +45,14 @@ Popup {
                      ["0V", qsTr("Minuspol (schwarz), auch GND oder Masse: Hierhin fließt der Strom zurück. Spannungen misst du gegen 0V.")]],
             tips: [qsTr("Der Hauptschalter schaltet den Strom für die ganze Schaltung ein und aus (»Ein« / »Aus«)."),
                    qsTr("Verbinde V+ nie direkt mit 0V – das ist ein Kurzschluss.")]
+        }
+        case "batterie2": return {
+            title: qsTr("Batterie 2"),
+            intro: qsTr("Die zweite Batterie ist von der ersten getrennt. Du wählst 4,5 oder 9 Volt; der Hauptschalter schaltet beide Batterien zugleich."),
+            fields: [["+B2", qsTr("Pluspol (rot) der zweiten Batterie.")],
+                     ["\u2212B2", qsTr("Minuspol (blau) der zweiten Batterie.")]],
+            tips: [qsTr("Verbindest du +B2 mit 0V, liegt −B2 unter 0V: Dort misst du eine negative Spannung. So entsteht eine Versorgung mit Plus, Minus und der Mitte 0V."),
+                   qsTr("Verbinde +B2 nie direkt mit −B2 – das ist ein Kurzschluss.")]
         }
         case "p1": return pot(1)
         case "p2": return pot(2)
@@ -153,6 +174,22 @@ Popup {
                     lineHeight: 1.1
                     color: "#1E2B38"
                 }
+            }
+            Label {
+                visible: info.removable && info.confirmRemove
+                width: body.width
+                wrapMode: Text.Wrap
+                text: qsTr("An den Feldern stecken noch Leitungen. Sie werden mit abgezogen – »Rückgängig« holt alles zurück.")
+                font.pixelSize: Math.round(15 * Theme.fontScale)
+                font.bold: true
+                color: "#8A3A00"
+            }
+            Button {
+                objectName: "deskPartRemove"
+                visible: info.removable
+                height: Theme.control
+                text: info.confirmRemove ? qsTr("Trotzdem herausnehmen") : qsTr("Aus dem Pult nehmen")
+                onClicked: info.removePart()
             }
         }
     }

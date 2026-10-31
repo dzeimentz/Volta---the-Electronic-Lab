@@ -827,6 +827,22 @@ private slots:
         QCOMPARE(lab.stages().first().toMap().value(QStringLiteral("title")).toString(), QStringLiteral("Auftakt"));
         for (const QVariant& e : lab.experiments())
             QVERIFY(e.toMap().value(QStringLiteral("id")).toString().startsWith(QStringLiteral("volta2.")));
+        // Pult nach Bedarf: das freie Labor beginnt mit der Batterie, das Geraetefach setzt freie Pultteile ein
+        QVERIFY(lab.deskOnDemand());
+        lab.startFreeLab();
+        QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
+        QCOMPARE(lab.deskTray().size(), 6);
+        QVERIFY(lab.addDeskPart(QStringLiteral("batterie2")));
+        QCOMPARE(lab.deskTray().last().toMap().value(QStringLiteral("stage")).toInt(), 2); // Lautsprecher ab Stufe 2
+        QCOMPARE(lab.deskGroups(), (QStringList{QStringLiteral("batterie"), QStringLiteral("batterie2")}));
+        QVERIFY(lab.addWire(QStringLiteral("P:+B2"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
+        QCOMPARE(lab.deskPartWires(QStringLiteral("batterie2")), 1);
+        QVERIFY(lab.removeDeskPart(QStringLiteral("batterie2")));
+        QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
+        // Volta 1 behaelt sein festes Pult
+        LabController volta1Lab(QStringLiteral(VOLTA_CONTENT_DIR));
+        QVERIFY(!volta1Lab.deskOnDemand());
+        QVERIFY(volta1Lab.deskTray().isEmpty());
     }
 
     // Forscherprofile: getrennte Daten je Profil (Fortschritt, Laborstand), Loeschen entfernt den Ordner

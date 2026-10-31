@@ -25,6 +25,7 @@ Item {
     // Jedes Bauteil steht in einem Rahmen, der Bedienelement und Felder einfasst (ControlDesk).
     readonly property var deskGroupDefs: [
         {name: "batterie", fields: ["P:+9V", "P:0V"], minWidth: 128},
+        {name: "batterie2", fields: ["P:+B2", "P:-B2"], minWidth: 128}, // ab Volta 2 (Pult nach Bedarf)
         {name: "p1", fields: ["P:P1a", "P:P1s", "P:P1b"], minWidth: 120},
         {name: "p2", fields: ["P:P2a", "P:P2s", "P:P2b"], minWidth: 120},
         {name: "schalter", fields: ["P:S1", "P:S2"], minWidth: 96},
@@ -59,7 +60,10 @@ Item {
     }
     // Buchsen des Dreifach-Messgeraets: unten im Messgeraet rechts neben der Grundplatte (nur eingeblendet)
     readonly property var meterNames: ["MESS:COM", "MESS:VOHM", "MESS:A"]
-    readonly property int deskStripWidth: groups.length > 0 ? groups[groups.length - 1].right : 0
+    // Pult nach Bedarf: rechts neben dem letzten Rahmen der Knopf »+« zum Geraetefach
+    readonly property int deskTrayX: (groups.length > 0 ? groups[groups.length - 1].right : 0) + deskFrameGap
+    readonly property int deskStripWidth: controller.deskOnDemand ? deskTrayX + Theme.control
+                                        : groups.length > 0 ? groups[groups.length - 1].right : 0
     // runde Knoepfe +/- fuer die Breite der Grundplatte: rechts neben den Feldern, in der Hoehe zentriert
     readonly property int sizerX: boardWidth + Theme.fieldGap
     readonly property int sizerY: boardY + (rows.length * (Theme.fieldHeight + Theme.fieldGap) - Theme.fieldGap) / 2
@@ -114,7 +118,7 @@ Item {
     // Pluspol der Batterie heisst V+ (intern weiter P:+9V), Minuspol 0V mit GND darunter
     function deskLabel(name) {
         if (name.startsWith("MESS:")) return name.substring(5).replace("VOHM", "V/Ω")
-        return name === "P:+9V" ? "V+" : name.substring(2)
+        return name === "P:+9V" ? "V+" : name.substring(2).replace("-", "\u2212")
     }
     function isBoardField(name) { return /^[A-E](1[0-2]|[1-9])$/.test(name) }
 
@@ -1002,6 +1006,8 @@ Item {
                 highlightGroup: lab.highlightGroup
                 onGroupTapped: (name) => lab.highlightGroup = lab.highlightGroup === name ? "" : name
                 onInfoRequested: (name) => deskPartInfo.show(name)
+                trayX: lab.deskTrayX
+                onTrayRequested: deskTray.open()
             }
 
             // Farbiger Hintergrund des Steckbretts: eine Kachel je Feld (Reihenfarbe, nach rechts dunkler)
@@ -1220,7 +1226,9 @@ Item {
                          : modelData.startsWith("M:") ? "M" + modelData.substring(2) : lab.deskLabel(modelData)
                     sockets: modelData.startsWith("M:") ? 1 : 5
                     // Batteriepole: V+ rot, 0V/GND schwarz (mit Schrift - Farbe nie allein)
-                    fillColor: modelData === "P:+9V" ? "#C62828" : modelData === "P:0V" ? "#17191C" : "transparent"
+                    // Batterie 2: +B2 rot, -B2 blau (negative Versorgung, Farbkonzept 9.3)
+                    fillColor: modelData === "P:+9V" || modelData === "P:+B2" ? "#C62828"
+                             : modelData === "P:0V" ? "#17191C" : modelData === "P:-B2" ? "#2C62C9" : "transparent"
                     subLabel: modelData === "P:0V" ? "GND" : ""
                     pitch: lab.socketPitch(modelData)
                     width: lab.anchorSize(modelData).width
@@ -1721,6 +1729,13 @@ Item {
     DeskPartInfo {
         id: deskPartInfo
         objectName: "deskPartInfo"
+        controller: lab.controller
+    }
+
+    DeskTray {
+        id: deskTray
+        objectName: "deskTray"
+        controller: lab.controller
     }
 
     ModuleInside {

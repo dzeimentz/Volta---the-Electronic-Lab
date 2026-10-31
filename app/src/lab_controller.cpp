@@ -1291,7 +1291,8 @@ QVariantList LabController::deskTray() const {
 
 bool LabController::addDeskPart(const QString& part) {
     for (const auto& o : m_deskOffers)
-        if (o.part == part) return result(m_session->addDeskPart(ss(part)));
+        if (o.part == part)
+            return (m_unlockAll || o.fromStage <= highestUnlockedStage()) && result(m_session->addDeskPart(ss(part)));
     return false;
 }
 

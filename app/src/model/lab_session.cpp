@@ -549,7 +549,8 @@ void LabSession::setMainSwitch(bool on) {
     m_board.desk.mainSwitch = on;
     m_bridge.post({desk_id::kMainSwitch, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
     if (hasDeskPart(m_board, "batterie2"))
-        m_bridge.post({desk_id::kMainSwitch2, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+        for (const char* id : {desk_id::kMainSwitch2, desk_id::kMainSwitch2Minus})
+            m_bridge.post({id, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
 }
 
 void LabSession::setCells2(int cells) {
