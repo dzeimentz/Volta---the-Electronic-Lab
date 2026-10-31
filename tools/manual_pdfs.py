@@ -76,6 +76,8 @@ SCENES = {
     "pin": {"VOLTA_DEMO_PARENT": "gate"},
     "elternbereich": {"VOLTA_DEMO_PARENT": "area"},
     "aufgabe_qr": {"VOLTA_DEMO_TASK": "qr"},
+    "spannung_auto": {"VOLTA_DEMO_SOLVE": "1", "VOLTA_DEMO_EXP": "volta1.1.1", "VOLTA_DEMO_VOLTAGE_AUTO": "1",
+                      "VOLTA_SCREENSHOT_S": "5"},
     "pultinfo": {"VOLTA_DEMO_FREELAB": "1", "VOLTA_DEMO_DESKINFO": "p1", "VOLTA_SCREENSHOT_S": "4"},
 }
 
@@ -98,10 +100,10 @@ def take_screenshots(force: bool):
 
 # Labor mit geloestem Experiment 1.1 (1280 x 800): Nummer -> Bildpunkt (rechts oben am jeweiligen Element)
 LAB_MARKS = [
-    (1, (66, 12)), (2, (282, 12)), (3, (412, 12)), (4, (500, 12)), (5, (577, 12)), (6, (663, 12)),
-    (7, (724, 12)), (8, (783, 12)), (9, (838, 12)), (10, (990, 28)), (11, (195, 140)), (12, (905, 95)),
-    (13, (870, 215)), (14, (640, 480)), (15, (918, 330)), (16, (875, 465)), (17, (1255, 130)),
-    (18, (1255, 712)), (19, (700, 760)),
+    (1, (66, 12)), (2, (282, 12)), (3, (412, 12)), (4, (500, 12)), (5, (577, 12)), (6, (640, 12)),
+    (7, (705, 12)), (8, (770, 12)), (9, (830, 12)), (10, (890, 12)), (11, (990, 28)), (12, (195, 140)),
+    (13, (905, 95)), (14, (870, 215)), (15, (640, 480)), (16, (918, 330)), (17, (875, 465)), (18, (1255, 130)),
+    (19, (1255, 712)), (20, (700, 760)),
 ]
 
 
@@ -328,21 +330,22 @@ def long_manual(path):
                       "ist an, Strom fließt, Taster und Schalter lassen sich bedienen."],
                      ["4", "Pfeile", "Rückgängig und Wiederholen"],
                      ["5", "Werkzeugkasten", "Farbcode, E-Reihen, Lexikon, Rechner, Fehlersuche, Teileliste"],
-                     ["6", "V A Ω", "Messgerät ein- und ausblenden"],
-                     ["7", "Schaltzeichen", "Schaltplan des Aufbaus zeigen"],
-                     ["8", "Kurve", "Zeitschreiber (ab Stufe 3)"],
-                     ["9", "Farbpunkt", "Farbe für neue Leitungen"],
-                     ["10", "A− A+, Flagge, ?, i, Menü", "Schriftgröße, Sprache, Hilfe, Info, Einstellungen"],
-                     ["11", "Bauteilfach / Modulfach", "Bauteile und Module zum Herausziehen"],
-                     ["12", "Bedienpult", "Batterie mit Hauptschalter und Spannungswahl, Drehregler P1 und P2, "
+                     ["6", "Grüne Balken", "Spannungsanzeige auf allen belegten Feldern ein- und ausschalten"],
+                     ["7", "V A Ω", "Messgerät ein- und ausblenden"],
+                     ["8", "Schaltzeichen", "Schaltplan des Aufbaus zeigen"],
+                     ["9", "Kurve", "Zeitschreiber (ab Stufe 3)"],
+                     ["10", "Farbpunkt", "Farbe für neue Leitungen"],
+                     ["11", "A− A+, Flagge, ?, i, Menü", "Schriftgröße, Sprache, Hilfe, Info, Einstellungen"],
+                     ["12", "Bauteilfach / Modulfach", "Bauteile und Module zum Herausziehen"],
+                     ["13", "Bedienpult", "Batterie mit Hauptschalter und Spannungswahl, Drehregler P1 und P2, "
                       "Schalter S, Lautsprecher"],
-                     ["13", "Grundplatte", "Kontaktfelder A1 bis E12 – hier wird gesteckt"],
-                     ["14", "Modulleiste", "Plätze M1 bis M16 für Module (z. B. das Blinkmodul)"],
-                     ["15", "+ und −", "mehr oder weniger Felder je Reihe"],
-                     ["16", "Mülleimer", "Ausgewähltes entfernen oder alles abbauen"],
-                     ["17", "Experimentfeld", "Frage, Vermutung, Aufbau, Tipps – einklappbar mit »"],
-                     ["18", "Fertig", "wenn die Schaltung funktioniert"],
-                     ["19", "Licht, Wärme, Wasser", "Taschenlampe, Föhn, Wassertropfen und Raumlicht für "
+                     ["14", "Grundplatte", "Kontaktfelder A1 bis E12 – hier wird gesteckt"],
+                     ["15", "Modulleiste", "Plätze M1 bis M16 für Module (z. B. das Blinkmodul)"],
+                     ["16", "+ und −", "mehr oder weniger Felder je Reihe"],
+                     ["17", "Mülleimer", "Ausgewähltes entfernen oder alles abbauen"],
+                     ["18", "Experimentfeld", "Frage, Vermutung, Aufbau, Tipps – einklappbar mit »"],
+                     ["19", "Fertig", "wenn die Schaltung funktioniert"],
+                     ["20", "Licht, Wärme, Wasser", "Taschenlampe, Föhn, Wassertropfen und Raumlicht für "
                       "Sensoren (ab Stufe 3)"]], [12, 48, 110])]
     story += [P("Die Grundplatte", "h2"),
               P("Jedes Kontaktfeld hat fünf Steckplätze. <b>Alles, was im selben Feld steckt, ist miteinander "
@@ -379,7 +382,7 @@ def long_manual(path):
     story += [P("Leitungen ziehen", "h2")]
     story += bullets(["Ziehe mit dem Finger von einem Feld zu einem anderen – schon liegt dort eine Leitung.",
                       "Leitungen an Plus werden automatisch rot, an Minus schwarz. Für andere Leitungen wählst du "
-                      "die Farbe mit dem Farbpunkt oben (9).",
+                      "die Farbe mit dem Farbpunkt oben (10).",
                       "Ein Leitungsende kannst du anfassen und in ein anderes Feld umstecken.",
                       "Lange auf eine Leitung drücken: Farbe ändern oder Leitung entfernen."])
     story += [P("Rückgängig, Löschen, Abbauen", "h2")]
@@ -450,11 +453,17 @@ def long_manual(path):
                 "und A sind Kontaktfelder wie alle anderen."),
               shot("messgeraet", caption="Das Messgerät zeigt die Spannung der Batterie: 9,00 V"),
               P("Spannungsanzeige und Stromfluss", "h2")]
-    story += bullets(["Langer Druck auf ein Feld öffnet das Feldmenü. Dort schaltest du eine <b>Spannungsanzeige</b> "
-                      "ein: Bis zu vier grüne Balken zeigen, wie viel Spannung an diesem Feld anliegt.",
+    story += bullets(["Der Knopf mit den <b>grünen Balken</b> oben in der Leiste schaltet die <b>Spannungsanzeige</b> "
+                      "auf allen belegten Feldern der Grundplatte ein: Bis zu vier grüne Balken zeigen, wie viel "
+                      "Spannung an jedem Feld anliegt, an dem ein Bauteil oder eine Leitung steckt. Volle Balken "
+                      "heißen viel Spannung, leere Umrisse fast keine. Ab Werk ist der Knopf aus – probiere ihn aus!",
+                      "Für ein einzelnes Feld – auch am Pult – geht es mit langem Druck auf das Feld: Im Feldmenü "
+                      "schaltest du dort eine Spannungsanzeige ein.",
                       "Kleine gelbe Pfeile auf Leitungen und Bauteilen zeigen, <b>wohin der Strom fließt</b> "
                       "(abschaltbar im Menü)."])
-    story += [P("Schaltplan", "h2"),
+    story += [shot("spannung_auto", 120, "Knopf mit den grünen Balken eingeschaltet: A1 hat Spannung, A2 fast keine",
+                   crop=(262, 0, 940, 540)),
+              P("Schaltplan", "h2"),
               P("Das Schaltzeichen-Symbol zeigt deinen Aufbau als Schaltplan – so, wie ihn Elektroniker zeichnen. "
                 "Er wächst mit, während du baust."),
               shot("schaltplan", caption="Aufbau und Schaltplan nebeneinander"),
@@ -705,6 +714,7 @@ def short_manual(path):
               table([["Oben in der Leiste", ""],
                      ["Haus", "Startseite"],
                      ["Koffer", "Werkzeugkasten: Farbcode, E-Reihen, Lexikon, Rechner, Fehlersuche, Teileliste"],
+                     ["Grüne Balken", "Spannungsanzeige auf allen belegten Feldern"],
                      ["V A Ω", "Messgerät (Spannung, Strom, Widerstand)"],
                      ["Schaltzeichen", "Schaltplan"],
                      ["Kurve", "Zeitschreiber (ab Stufe 3)"],
@@ -816,9 +826,9 @@ def _help_panels(key, shots):
     if key == "rueckgaengig":  # Pfeile oben, Muelleimer
         return [("geloest", (419, 0, 543, 60), [("box", (423, 1, 537, 55))]),
                 ("geloest", (740, 566, 815, 640), [("box", (747, 573, 808, 634))])]
-    if key == "messen":       # V A Ohm, Schaltplan, Zeitschreiber; Messgeraet
-        return [("messgeraet", (600, 0, 794, 60), [("box", (602, 1, 670, 55)), ("box", (674, 1, 730, 55)),
-                                                    ("box", (734, 1, 790, 55))]),
+    if key == "messen":       # Spannungsanzeige, V A Ohm, Schaltplan, Zeitschreiber; Messgeraet
+        return [("messgeraet", (600, 0, 852, 60), [("box", (602, 1, 658, 55)), ("box", (662, 1, 729, 55)),
+                                                    ("box", (734, 1, 789, 55)), ("box", (794, 1, 849, 55))]),
                 ("messgeraet", (1100, 262, 1262, 476), [])]
     if key == "werkzeug":     # Koffer in der Leiste -> Werkzeugkasten
         return [("werkzeug", (420, 0, 740, 60), [("box", (542, 1, 598, 55))]),

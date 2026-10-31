@@ -332,7 +332,8 @@ def page_measure(p: Page):
     y = H - 38 * mm
     yl = p.feature(x1, y, cw, "Dreifach-Messgerät",
                    "Spannung, Strom und Widerstand – digital oder mit Zeiger, neben der Grundplatte oder oben im "
-                   "Pult. Spannungsanzeigen an jedem Feld und laufende Pfeile zeigen, wohin der Strom fließt.",
+                   "Pult. Ein Knopf zeigt die Spannung an allen belegten Feldern, laufende Pfeile zeigen, wohin der "
+                   "Strom fließt.",
                    img("messgeraet"))
     yr = p.feature(x2, y, cw, "Zeitschreiber",
                    "Zwei Kanäle zeichnen Spannungen über die Zeit auf: wie sich ein Kondensator füllt, wie ein "

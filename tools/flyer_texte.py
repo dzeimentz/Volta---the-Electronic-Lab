@@ -74,9 +74,9 @@ EN = {
     "Werkzeuge wie im Elektronik-Labor – kindgerecht erklärt": "Tools like in an electronics lab – explained for children",
     "Dreifach-Messgerät": "Multimeter",
     "Spannung, Strom und Widerstand – digital oder mit Zeiger, neben der Grundplatte oder oben im Pult. "
-    "Spannungsanzeigen an jedem Feld und laufende Pfeile zeigen, wohin der Strom fließt.":
+    "Ein Knopf zeigt die Spannung an allen belegten Feldern, laufende Pfeile zeigen, wohin der Strom fließt.":
         "Voltage, current and resistance – digital or with a needle, next to the board or up in the control desk. "
-        "Voltage displays on every field and moving arrows show where the current flows.",
+        "One button shows the voltage on all occupied fields, moving arrows show where the current flows.",
     "Zeitschreiber": "Chart recorder",
     "Zwei Kanäle zeichnen Spannungen über die Zeit auf: wie sich ein Kondensator füllt, wie ein Blinker kippt, wie "
     "ein Sensor auf Licht oder Wärme reagiert.":
