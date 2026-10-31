@@ -2,17 +2,18 @@
 
 _Konzept des zweiten Bandes: Klassische Analogelektronik für 11 bis 14 Jahre_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta2_v0.3.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta2_v0.4.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
 | Datum | 31.10.2026 |
 | Änderungen zu v0.1 | Farb- und Leitkonzept aus Volta 1 (0.9.1) übernommen und für Bedienpult II, Messgeräte, Oszilloskop und die neuen Bauteile erweitert (Kapitel 9); Pluspol heißt wie in Volta 1 `V+`; Messstellen V1/V2, A1/A2, Ω1/Ω2 und Tastköpfe K1/K2 als Bauteile auf der Grundplatte, Anzeigegerät einfach oder doppelt ohne Messleitungen (5.2) |
 | Änderungen zu v0.2 | Prüfung auf Widersprüche und fehlende Funktionen (31.10.2026): Start mit 10 Spalten; Spannungsanzeige für negative Spannung und Wechselspannung (5.4); Bezugspunkte von Generator und Wechselquelle (5.1); Pult nach Bedarf mit Gerätefach (5.5); Kennlinienschreiber als Pultteil; Wechselstrom am Amperemeter; Leitungsfarbe von `+B2` nach Funktion; Ton nie allein; Einstieg ohne Volta 1; Aufwand neu geschätzt |
+| Änderungen zu v0.3 | Entscheidungen 31.10.2026: Bezugspunkte wie vorgeschlagen (`G0` an `0V`, Wechselquelle potentialfrei); Messstellen behalten ihre Namen V1/V2, A1/A2, Ω1/Ω2; Zeitschreiber geht als Rollbetrieb ins Oszilloskop über |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 5, 6.3, 11.2); `docs/volta2-planung.md` (Planungsentwurf, Leistungstest Audio, Auswertung 555-Quellensammlung); DC Learning Design Standard v1.0 |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 |
 
@@ -75,6 +76,9 @@ Der technisch schwierigste Teil ist erledigt: Ein Leistungstest (14.10.2026) hat
 | Spannungsanzeige (31.10.) | negativ als umgedrehtes blaues Balkendiagramm mit Minuszeichen, Wechselspannung mit »~« und Effektivwert (5.4) |
 | Wechselgrößen (31.10.) | Anzeigegeräte zeigen Wechselspannung **und** Wechselstrom als Effektivwert (5.2) |
 | Pult (31.10.) | Pult nach Bedarf: im Experiment nur das Benötigte, im freien Labor über ein Gerätefach selbst zusammengestellt (5.5) |
+| Bezugspunkte (31.10.) | `G0` fest an `0V`, Wechselquelle `W~a`/`W~b` potentialfrei (5.1) |
+| Namen der Messstellen (31.10.) | bleiben V1/V2, A1/A2, Ω1/Ω2 und K1/K2; die Verwechslung mit den Feldern A1/A2 löst das Kreissymbol (5.2) |
+| Zeitschreiber (31.10.) | geht als **Rollbetrieb** ins Oszilloskop über – ein Gerät statt zwei (5.2) |
 
 ## 5. Bedienung und Bedienpult II
 
@@ -95,22 +99,22 @@ Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je 
 
 Die Pultleiste wird bei schmalen Fenstern zweizeilig; jedes Feld behält Namen und Schaltzeichen (Gruppenlinie wie Volta 1). Welche Pultteile zu sehen sind, regelt 5.5.
 
-**Bezugspunkte (Vorschlag zur Entscheidung, 14):**
+**Bezugspunkte (entschieden 31.10.2026):**
 - **Generator:** `G0` ist fest mit `0V` verbunden – wie bei echten Laborgeräten, deren Masse über das Netzkabel gemeinsam ist. Das Oszilloskop (Bezug `0V`) misst den Generator damit direkt; Kinder müssen nichts verbinden.
 - **Wechselquelle:** `W~a` und `W~b` sind **potentialfrei**, wie die Wicklung eines Transformators. Nur so funktioniert der Brückengleichrichter (3.3): Wäre `W~b` fest an `0V`, schlösse der Minusausgang der Brücke eine Diode kurz – ein echter, typischer Fehler, der aber nicht der Normalfall sein darf. Um die Wechselspannung mit dem Oszilloskop zu sehen, verbindet man einen Pol mit `0V` (3.1) bzw. den Minus des Gleichrichters mit `0V` (3.3). Im Kern hält ein sehr hochohmiger Ableitwiderstand (100 MΩ) die Quelle rechenbar; er verändert keine Messung sichtbar und wird unter »So rechnet Volta« offengelegt. Die Fehlersuche erkennt »Wechselquelle ohne Bezug« und erklärt sie.
 
 
 ### 5.2 Messgeräte und Anzeigegeräte
 
-- **Messstellen als Bauteile** (entschieden 31.10.2026): Voltmeter **V1, V2**, Amperemeter **A1, A2** und Ohmmeter **Ω1, Ω2** sind Bauteile – ein Kreis mit Buchstabe und Nummer wie im Schaltplan (DIN EN 60617), zwei Anschlussbeine und ein »+« am Pluspol. Sie liegen im Modulfach in der Gruppe »Messen«, werden aber **direkt auf die Grundplatte** gesteckt wie ein Widerstand: das Voltmeter **neben** das Bauteil, das Amperemeter **in** den Stromkreis. Es gibt keine Messleitungen vom Steckbrett zum Anzeigegerät. Je Art höchstens zwei Messstellen.
+- **Messstellen als Bauteile** (entschieden 31.10.2026): Voltmeter **V1, V2**, Amperemeter **A1, A2** und Ohmmeter **Ω1, Ω2** sind Bauteile – ein Kreis mit Buchstabe und Nummer wie im Schaltplan (DIN EN 60617), zwei Anschlussbeine und ein »+« am Pluspol. Sie liegen im Modulfach in der Gruppe »Messen«, werden aber **direkt auf die Grundplatte** gesteckt wie ein Widerstand: das Voltmeter **neben** das Bauteil, das Amperemeter **in** den Stromkreis. Es gibt keine Messleitungen vom Steckbrett zum Anzeigegerät. Je Art höchstens zwei Messstellen. Die Namen bleiben so (entschieden 31.10.2026); dass auch ein Kontaktfeld »A1« heißt, stört nicht, weil die Messstelle immer als Kreis mit Buchstabe erscheint und das Feld als Feld – Hilfetexte schreiben dazu »Amperemeter A1« bzw. »Feld A1«.
 - **Physik der Messstellen** (Regel 3): Amperemeter mit kleinem Innenwiderstand (Spannungsabfall im mV-Bereich), Voltmeter mit 10 MΩ, Ohmmeter mit Messstrom. Fehler wirken wie in echt: Amperemeter parallel zur Batterie ist ein Kurzschluss (Sicherung), Voltmeter in Reihe lässt die Lampe aus, das Ohmmeter zeigt »Strom aus!«, sobald Spannung anliegt. Die Fehlersuche erkennt diese Fälle.
 - **Wert am Bauteil:** Jede Messstelle zeigt ihren Wert klein neben dem Kreis (mit Einheit, abschaltbar im Menü), damit man beim Bauen sieht, was passiert.
 - **Anzeigegerät, einfach oder doppelt:** Ein Messgerät zeigt eine Messstelle, das Doppelmessgerät zwei nebeneinander; Knöpfe »V1 V2 A1 A2 Ω1 Ω2« wählen, welche (nur gesteckte Messstellen sind wählbar). Aus V und A daneben rechnet es auf Wunsch die Leistung. **Handbereichswahl** (200 mV … 20 V, 2 mA … 2 A, 200 Ω … 2 MΩ) mit Überlaufanzeige »1«, wahlweise selbsttätig; Gleich- und Wechselgrößen umschaltbar – bei Wechselspannung **und Wechselstrom** zeigt das Gerät den **Effektivwert** (Anzeige »V~« bzw. »A~«). Anzeigegeräte andockbar oben im Pult oder frei neben der Grundplatte.
 - **»Jetzt in echt«** erklärt zu jedem Messexperiment, wie man dasselbe mit einem echten Vielfachmessgerät misst (COM- und A-Buchse, Messbereich, beim Strom den Kreis auftrennen). Volta 1 behält sein Messgerät mit Buchsen.
-- **Oszilloskop** (Ausbau des Zeitschreibers): zwei Kanäle; die **Tastköpfe K1 und K2 sind Bauteile mit einem Bein**, das in ein beliebiges Kontaktfeld gesteckt wird, Bezug ist automatisch `0V`; der Wert (Spitze bzw. Frequenz) steht klein am Tastkopf. Zeitbasis 1 s … 100 µs je Teilung, Spannung je Teilung, Trigger (Flanke, Pegel, Kanal), Standbild, XY-Betrieb für Kennlinien. Kanäle sind durch Farbe **und** Beschriftung unterschieden; Periode, Frequenz und Spitzenwert stehen zusätzlich als Zahl daneben.
+- **Oszilloskop** (Ausbau des Zeitschreibers, mit Rollbetrieb): zwei Kanäle; die **Tastköpfe K1 und K2 sind Bauteile mit einem Bein**, das in ein beliebiges Kontaktfeld gesteckt wird, Bezug ist automatisch `0V`; der Wert (Spitze bzw. Frequenz) steht klein am Tastkopf. Zeitbasis 1 s … 100 µs je Teilung, Spannung je Teilung, Trigger (Flanke, Pegel, Kanal), Standbild, XY-Betrieb für Kennlinien. Kanäle sind durch Farbe **und** Beschriftung unterschieden; Periode, Frequenz und Spitzenwert stehen zusätzlich als Zahl daneben.
 - **Funktionsgenerator**: Sinus, Dreieck, Rechteck; 1 Hz … 10 kHz (in Dekaden mit Feineinstellung); Amplitude 0 … 4 V Spitze; Gleichanteil −4 … +4 V. Bei 20 µs Schrittweite sind Signalformen bis etwa 5 kHz sauber dargestellt; darüber werden sie eckiger, hörbar bleiben sie (offengelegt unter »So rechnet Volta«).
 - **Kennlinienschreiber** (Pultteil mit den Feldern `KS+` und `KS−`, 5.1): Das Bauteil wird zwischen die beiden Felder geschaltet; der Schreiber fährt die Prüfspannung durch und zeichnet Strom über Spannung (Widerstand, Glühlampe, Diode, LED, Z-Diode, Transistor). Keine Messleitungen, passend zu den Messstellen.
-- **Zeitschreiber** bleibt neben dem Oszilloskop: Das Oszilloskop reicht bei 1 s je Teilung über 10 s, der Zeitschreiber zeichnet langsame Vorgänge über Minuten auf (Elko mit großem Widerstand, Erwärmung). Dank Pult nach Bedarf (5.5) erscheinen beide nur, wenn sie gebraucht werden. Ob der Zeitschreiber als Rollbetrieb ins Oszilloskop wandert, ist offen (14).
+- **Zeitschreiber als Rollbetrieb** (entschieden 31.10.2026): Der Zeitschreiber aus Volta 1 geht ins Oszilloskop über. Im Rollbetrieb läuft die Kurve ohne Trigger von rechts nach links und zeichnet langsame Vorgänge über Minuten auf (Zeitbasis bis 1 min je Teilung, Elko mit großem Widerstand, Erwärmung); umschalten auf Normalbetrieb mit Trigger. Bevor das Oszilloskop in Stufe 2 freigeschaltet ist, erscheint dasselbe Gerät nur im Rollbetrieb und mit einem Kanal unter dem vertrauten Namen »Zeitschreiber«. So gibt es ein Gerät weniger im Pult. Volta 1 behält seinen Zeitschreiber unverändert.
 - Alle Geräte sind **andockbar** (oben im Pult) oder frei neben der Grundplatte; auf kleinen Tablets wird das Oszilloskop als Blatt über der Grundplatte geöffnet.
 
 ### 5.3 Hörbare Simulation und Zeitlupe
@@ -138,12 +142,12 @@ Die Spannungsanzeige aus Volta 1 (vier grüne Balken je Feld, einzeln oder per K
 
 ### 5.5 Pult nach Bedarf (neu in v0.3)
 
-Mit Batterie 2, Wechselquelle, Generator, Kennlinienschreiber, Anzeigegeräten, Oszilloskop und Zeitschreiber wird das Pult in Volta 2 – und erst recht in Volta 3 – zu voll, um alles gleichzeitig zu zeigen. Volta 2 trennt deshalb **Pultteile mit Feldern** von **Anzeigegeräten ohne Felder** und zeigt beides nur, wenn es gebraucht wird.
+Mit Batterie 2, Wechselquelle, Generator, Kennlinienschreiber, Anzeigegeräten und Oszilloskop wird das Pult in Volta 2 – und erst recht in Volta 3 – zu voll, um alles gleichzeitig zu zeigen. Volta 2 trennt deshalb **Pultteile mit Feldern** von **Anzeigegeräten ohne Felder** und zeigt beides nur, wenn es gebraucht wird.
 
 | Art | Beispiele | Ort |
 |---|---|---|
 | Pultteile mit Feldern (Teil der Schaltung) | Batterie 1 und 2, Wechselquelle, Generator, Kennlinienschreiber, Drehregler, Schalter, Lautsprecher | Pultleiste |
-| Anzeigegeräte ohne Felder (lesen nur ab) | Einfach- und Doppelmessgerät, Oszilloskop, Zeitschreiber | andockbar oben im Pult oder frei neben der Grundplatte; auf kleinen Tablets als Reiter |
+| Anzeigegeräte ohne Felder (lesen nur ab) | Einfach- und Doppelmessgerät, Oszilloskop (mit Rollbetrieb als Zeitschreiber) | andockbar oben im Pult oder frei neben der Grundplatte; auf kleinen Tablets als Reiter |
 
 - **Im Experiment** bestimmt das Experiment das Pult: Es zeigt genau die Pultteile und Anzeigegeräte, die Vorlage, Aufbauschritte und Musteraufbau verwenden (Volta 1 passt bisher nur je Stufe an). Ein Knopf »Pult zeigen« blendet bei Bedarf alles Freigeschaltete ein.
 - **Im freien Labor** stellt man sich das Pult selbst zusammen: Neben Bauteilfach und Modulfach gibt es ein **Gerätefach** mit allen freigeschalteten Pultteilen und Anzeigegeräten. Antippen oder Hineinziehen setzt ein Teil ins Pult, das Menü des Teils nimmt es wieder heraus. Zu Beginn steht nur Batterie 1 im Pult.
@@ -307,7 +311,7 @@ Volta 1 (0.9.1) hat ein Farb- und Leitkonzept, das Kinder ohne Lesen durch den A
 ### 9.4 Bedienpult II und Stufenanpassung
 
 - Jedes neue Pultbauteil – **Batterie 2, Wechselquelle, Funktionsgenerator** – bekommt wie in Volta 1 einen Rahmen, sein Schaltzeichen über den Feldern (Batterie, Wechselspannungsquelle ~, Generator mit Sinus) und ein **»?«** mit Erklärung der Felder.
-- **Freischaltung** der Pultteile und Anzeigegeräte im Gerätefach: Stufe 0 Batterie 1, Einfach- und Doppelmessgerät mit den Messstellen, ab Experiment 0.3 Batterie 2; ab Stufe 1 Kennlinienschreiber; ab Stufe 2 Funktionsgenerator und Oszilloskop; ab Stufe 3 Wechselquelle; Drehregler, Schalter, Lautsprecher und Zeitschreiber, sobald ein Experiment sie nutzt. **Sichtbar** ist im Experiment nur, was es verwendet, im freien Labor, was man sich ins Pult gestellt hat (5.5).
+- **Freischaltung** der Pultteile und Anzeigegeräte im Gerätefach: Stufe 0 Batterie 1, Einfach- und Doppelmessgerät mit den Messstellen, ab Experiment 0.3 Batterie 2; ab Stufe 1 Kennlinienschreiber; ab Stufe 2 Funktionsgenerator und Oszilloskop (vorher nur im Rollbetrieb als Zeitschreiber, sobald ein Experiment ihn nutzt); ab Stufe 3 Wechselquelle; Drehregler, Schalter und Lautsprecher, sobald ein Experiment sie nutzt. **Sichtbar** ist im Experiment nur, was es verwendet, im freien Labor, was man sich ins Pult gestellt hat (5.5).
 - Steckbrett: Volta 2 beginnt mit 5 × 10 Feldern (entschieden 31.10.2026; die kleinen Bretter von Volta 1 entfallen für die ältere Zielgruppe) und wächst, wenn die Vorlage mehr braucht; im freien Labor ebenfalls 10 Spalten, 8 und 12 wählbar. Die Einstellung »Steckbrett und Pult an die Stufe anpassen« bleibt.
 
 ## 10. Technik
@@ -323,7 +327,7 @@ Volta 1 (0.9.1) hat ein Farb- und Leitkonzept, das Kinder ohne Lesen durch den A
 | Spannungsanzeige | Vorzeichen, Wechselerkennung und Effektivwert je Feld im Kern; Skala nach größter Quelle | Volta 1: nur positiv (0–4 Balken) |
 | Tonausgabe | Rechnung im Puffer mit Vorlauf, Ausgabe über Qt Multimedia; Echtzeitprüfung und Rückfall | offen |
 | Messstellen | V, A, Ω und Tastköpfe als Bauteilmodelle im Kern (Innenwiderstand, Messstrom); Anzeigegeräte lesen die Messstellen nur ab, ohne eigene Leitungen | neu |
-| Oszilloskop | Ringpuffer je Kanal im Kern, Trigger im Modell, Darstellung in QML (Qt Quick Shapes) | Zeitschreiber als Grundlage vorhanden |
+| Oszilloskop | Ringpuffer je Kanal im Kern, Trigger und Rollbetrieb im Modell, Darstellung in QML (Qt Quick Shapes) | Zeitschreiber als Grundlage vorhanden, geht im Rollbetrieb auf |
 | Messwerte | Veröffentlichung an die Oberfläche höchstens 60-mal je Sekunde, unabhängig von der Schrittweite | offen |
 
 Alle Regeln von Volta 1 gelten unverändert: Kern ohne Qt, jede Aufbauänderung ein Befehl, Physik ehrlich (Referenztests < 2 %), kein Netz, keine Datenerhebung, Bedienelemente ≥ 48 dp, Farbe nie allein, DE/FR/EN/LU.
@@ -369,9 +373,6 @@ Schritte 2 und 3 können beginnen, sobald die Experimentliste freigegeben ist; S
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Kennfarbe von Volta 2 (App-Symbol entschieden: Reihensymbol `volta2.svg`) | Schritt 2 |
 | Wechselquelle: fest 50 Hz oder einstellbar (für die Experimente reicht fest) | Schritt 3 |
-| Bezugspunkte: `G0` fest an `0V`, Wechselquelle potentialfrei (Vorschlag 5.1) | Schritt 3 |
-| Benennung der Messstellen wegen der Feldnamen A1/A2 (in Volta 3 auch D0–D7) | Schritt 4 |
-| Zeitschreiber als eigenes Gerät oder als Rollbetrieb des Oszilloskops | Schritt 4 |
 | Übernahme von Forscherprofil und Forscherheft aus Volta 1 (ohne Netz: Export und Import als Datei) | Schritt 5 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
 | Lehrplanzuordnung DE/LU/Ostbelgien | Schulpaket |

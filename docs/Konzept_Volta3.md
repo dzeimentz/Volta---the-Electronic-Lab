@@ -2,19 +2,20 @@
 
 _Konzept des dritten Bandes: Schwingkreis, Radio, Stromversorgung, Messtechnik und digitale Grundschaltungen für 13 bis 16 Jahre_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.3.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.4.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.3 |
+| Version | 0.4 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
 | Datum | 31.10.2026 |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 4.3, 5.4); Konzept Volta 2 v0.2; Konzept Zuse v0.3; Konzept MCU Explorer v0.1; Farb- und Leitkonzept Volta 1 (0.9.1, `docs/ui-spec.md`) |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 und 2 |
 | Änderungen zu v0.1 | Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler getroffen (31.10.2026, Kapitel 4); Masse/GND bleibt schwarz; Messstellen und Tastköpfe (auch D0–D7) als Bauteile wie in Volta 2 |
-| Änderungen zu v0.2 | Abgleich mit Volta 2 v0.3 (31.10.2026): Pult nach Bedarf mit Gerätefach, erweiterte Spannungsanzeige (negativ, Wechselspannung), Start mit 10 Spalten, Bezugspunkte von Generator und Wechselquelle, Namenskonflikt der Tastköpfe D0–D7 mit den Feldern D1–D7 |
+| Änderungen zu v0.2 | Abgleich mit Volta 2 v0.3 (31.10.2026): Pult nach Bedarf mit Gerätefach, erweiterte Spannungsanzeige (negativ, Wechselspannung), Start mit 10 Spalten, Bezugspunkte von Generator und Wechselquelle |
+| Änderungen zu v0.3 | Entscheidungen 31.10.2026 wie Volta 2: Bezugspunkte bestätigt; Messstellen und Tastköpfe behalten ihre Namen (V1, A1, K1, D0–D7); Zeitschreiber ist Rollbetrieb des Oszilloskops; Forscherheft bleibt vorerst in der jeweiligen App |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -97,7 +98,7 @@ Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige (je 
 ### 5.2 Neue Mess- und Anzeigegeräte
 
 - **Frequenzgang-Schreiber** (Werkzeug, ab Stufe 0): Eingang am Generator, Ausgang am Tastkopf K1; zeichnet Verstärkung in dB und wahlweise die Phase über der Frequenz (logarithmisch, 1 Hz … 10 MHz). Markiert Resonanzfrequenz, Grenzfrequenz (−3 dB) und Bandbreite und nennt sie als Zahl. Bei nichtlinearen Schaltungen (Gleichrichter, Komparator) zeigt er einen Hinweis statt einer falschen Kurve.
-- **Logikanalysator** (ab Stufe 7): acht Kanäle; die **Tastköpfe D0 … D7 sind Bauteile mit einem Bein** wie K1/K2, Bezug automatisch `0V`, der Pegel (H/L) steht klein am Tastkopf; zeigt H und L als Zeitdiagramm, Schaltschwellen einstellbar (Vorgabe nach Betriebsspannung), Trigger auf Flanke oder Muster, Zeitmarken mit Abstand in µs/ms. Der Zustand jedes Kanals steht zusätzlich als Buchstabe H/L bzw. 1/0.
+- **Logikanalysator** (ab Stufe 7): acht Kanäle; die **Tastköpfe D0 … D7 sind Bauteile mit einem Bein** wie K1/K2 (die Namen bleiben, entschieden 31.10.2026: der Tastkopf erscheint immer als Bauteil mit Fähnchen, das Feld D1 als Feld), Bezug automatisch `0V`, der Pegel (H/L) steht klein am Tastkopf; zeigt H und L als Zeitdiagramm, Schaltschwellen einstellbar (Vorgabe nach Betriebsspannung), Trigger auf Flanke oder Muster, Zeitmarken mit Abstand in µs/ms. Der Zustand jedes Kanals steht zusätzlich als Buchstabe H/L bzw. 1/0.
 - **Zeitgedehnte Darstellung** (Lupe): Oszilloskop und Logikanalysator zeigen Vorgänge, die schneller sind, als die Simulation Schritt für Schritt rechnet, mit einem Dehnungsfaktor (×10 … ×1000). Gedehnte Anzeigen tragen immer Lupenzeichen, Faktor und einen gestrichelten Rahmen.
 - **Frequenzzähler** (im Anzeigegerät an der Messstelle V1, ab Stufe 8): zählt Flanken in einer Torzeit von 0,1 / 1 s – derselbe Grundgedanke wie Experiment 8.6.
 
@@ -322,7 +323,6 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 |---|---|
 | Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
 | Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2) | Schritt 2 |
-| Benennung der Tastköpfe D0–D7 (Konflikt mit den Feldern D1–D7) und der Amperemeter A1/A2 – gemeinsam mit Volta 2 | Schritt 4 |
 | Kennfarbe von Volta 3 (App-Symbol entschieden: Reihensymbol `volta3.svg`) | Schritt 2 |
 | Name der Reihe (Markenfrage Volta) | vor Schritt 6 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
