@@ -11,7 +11,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta2_v0.2.pdf`
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
 | Datum | 31.10.2026 |
-| Änderungen zu v0.1 | Farb- und Leitkonzept aus Volta 1 (0.9.1) übernommen und für Bedienpult II, Messgeräte, Oszilloskop und die neuen Bauteile erweitert (Kapitel 9); Pluspol heißt wie in Volta 1 `V+` |
+| Änderungen zu v0.1 | Farb- und Leitkonzept aus Volta 1 (0.9.1) übernommen und für Bedienpult II, Messgeräte, Oszilloskop und die neuen Bauteile erweitert (Kapitel 9); Pluspol heißt wie in Volta 1 `V+`; Messstellen V1/V2, A1/A2, Ω1/Ω2 und Tastköpfe K1/K2 als Bauteile auf der Grundplatte, Anzeigegerät einfach oder doppelt ohne Messleitungen (5.2) |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 5, 6.3, 11.2); `docs/volta2-planung.md` (Planungsentwurf, Leistungstest Audio, Auswertung 555-Quellensammlung); DC Learning Design Standard v1.0 |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 |
 
@@ -34,7 +34,7 @@ Der technisch schwierigste Teil ist erledigt: Ein Leistungstest (14.10.2026) hat
 | Band | Alter | Schwerpunkt | Messen und Zeigen |
 |---|---|---|---|
 | Volta 1 | 8–12 | Stromkreis, Reihe und parallel, Wirkungen des Stroms, Sensoren, erste Elektronik mit Modulen | ein Dreifach-Messgerät, Zeitschreiber |
-| **Volta 2** | **11–14** | **Messtechnik, Wechselspannung, Netzteil, Transistorverstärker, Operationsverstärker, 555, Klang, Infrarot** | **zwei Messgeräte, Oszilloskop, Funktionsgenerator, hörbare Simulation** |
+| **Volta 2** | **11–14** | **Messtechnik, Wechselspannung, Netzteil, Transistorverstärker, Operationsverstärker, 555, Klang, Infrarot** | **Messstellen als Bauteile mit Einfach- und Doppelmessgerät, Oszilloskop, Funktionsgenerator, hörbare Simulation** |
 | Volta 3 | 13–16 | Schwingkreis und Radio, Schaltregler-Grundlagen, Verstärkerklassen, Messverstärker, digitale Grundschaltungen | Frequenzgang, Logikanalysator |
 | Zuse 1 | ab 10 | Computertechnik: vom Gatter zum selbst gebauten Rechner (eigene Linie) | Bedienfeld, Wahrheitstabellen |
 
@@ -48,7 +48,7 @@ Der technisch schwierigste Teil ist erledigt: Ein Leistungstest (14.10.2026) hat
 
 **Ziele**
 - Analogelektronik **verstehen statt nachbauen**: jedes Experiment beantwortet eine Frage, die Simulation zeigt das Unsichtbare (Spannung, Strom, Signalform, Klang).
-- **Messen lernen**: zwei Messgeräte, Handbereichswahl, Oszilloskop; Messfehler und Grenzen der Geräte offen ansprechen.
+- **Messen lernen**: Messstellen als Bauteile (Voltmeter daneben, Amperemeter im Kreis), Handbereichswahl, Oszilloskop; Messfehler und Grenzen der Geräte offen ansprechen.
 - **Rechnen mit Rechenweg**: Formeln der Sek. I im Formelrechner (Verstärkung, Grenzfrequenz, 555-Frequenz, Leistung), immer mit dem Rechenweg in einer Zeile.
 - **Hören, was man baut**: Verstärker, Filter, Oszillatoren und Sirenen klingen so, wie die Schaltung es berechnet.
 - **Die Module von Volta 1 entzaubern**: Verstärker-, Ton- und Blinkmodul werden aus Einzelteilen gebaut.
@@ -89,8 +89,12 @@ Die Pultleiste wird bei schmalen Fenstern zweizeilig; jedes Feld behält Namen u
 
 ### 5.2 Messgeräte und Anzeigegeräte
 
-- **Zwei Dreifach-Messgeräte** (Volt, Ampere, Ohm), farblich und mit »1« / »2« beschriftet. Neu: **Handbereichswahl** (200 mV … 20 V, 2 mA … 2 A, 200 Ω … 2 MΩ) mit Überlaufanzeige »1«, wahlweise selbsttätig wie in Volta 1; Gleich- und Wechselspannung (Effektivwert) umschaltbar.
-- **Oszilloskop** (Ausbau des Zeitschreibers): zwei Kanäle (K1, K2) mit Messspitze auf ein beliebiges Kontaktfeld, Bezug ist `0V`; Zeitbasis 1 s … 100 µs je Teilung, Spannung je Teilung, Trigger (Flanke, Pegel, Kanal), Standbild, XY-Betrieb für Kennlinien. Kanäle sind durch Farbe **und** Beschriftung unterschieden; Periode, Frequenz und Spitzenwert stehen zusätzlich als Zahl daneben.
+- **Messstellen als Bauteile** (entschieden 31.10.2026): Voltmeter **V1, V2**, Amperemeter **A1, A2** und Ohmmeter **Ω1, Ω2** sind Bauteile – ein Kreis mit Buchstabe und Nummer wie im Schaltplan (DIN EN 60617), zwei Anschlussbeine und ein »+« am Pluspol. Sie liegen im Modulfach in der Gruppe »Messen«, werden aber **direkt auf die Grundplatte** gesteckt wie ein Widerstand: das Voltmeter **neben** das Bauteil, das Amperemeter **in** den Stromkreis. Es gibt keine Messleitungen vom Steckbrett zum Anzeigegerät. Je Art höchstens zwei Messstellen.
+- **Physik der Messstellen** (Regel 3): Amperemeter mit kleinem Innenwiderstand (Spannungsabfall im mV-Bereich), Voltmeter mit 10 MΩ, Ohmmeter mit Messstrom. Fehler wirken wie in echt: Amperemeter parallel zur Batterie ist ein Kurzschluss (Sicherung), Voltmeter in Reihe lässt die Lampe aus, das Ohmmeter zeigt »Strom aus!«, sobald Spannung anliegt. Die Fehlersuche erkennt diese Fälle.
+- **Wert am Bauteil:** Jede Messstelle zeigt ihren Wert klein neben dem Kreis (mit Einheit, abschaltbar im Menü), damit man beim Bauen sieht, was passiert.
+- **Anzeigegerät, einfach oder doppelt:** Ein Messgerät zeigt eine Messstelle, das Doppelmessgerät zwei nebeneinander; Knöpfe »V1 V2 A1 A2 Ω1 Ω2« wählen, welche (nur gesteckte Messstellen sind wählbar). Aus V und A daneben rechnet es auf Wunsch die Leistung. **Handbereichswahl** (200 mV … 20 V, 2 mA … 2 A, 200 Ω … 2 MΩ) mit Überlaufanzeige »1«, wahlweise selbsttätig; Gleich- und Wechselspannung (Effektivwert) umschaltbar. Anzeigegeräte andockbar oben im Pult oder frei neben der Grundplatte.
+- **»Jetzt in echt«** erklärt zu jedem Messexperiment, wie man dasselbe mit einem echten Vielfachmessgerät misst (COM- und A-Buchse, Messbereich, beim Strom den Kreis auftrennen). Volta 1 behält sein Messgerät mit Buchsen.
+- **Oszilloskop** (Ausbau des Zeitschreibers): zwei Kanäle; die **Tastköpfe K1 und K2 sind Bauteile mit einem Bein**, das in ein beliebiges Kontaktfeld gesteckt wird, Bezug ist automatisch `0V`; der Wert (Spitze bzw. Frequenz) steht klein am Tastkopf. Zeitbasis 1 s … 100 µs je Teilung, Spannung je Teilung, Trigger (Flanke, Pegel, Kanal), Standbild, XY-Betrieb für Kennlinien. Kanäle sind durch Farbe **und** Beschriftung unterschieden; Periode, Frequenz und Spitzenwert stehen zusätzlich als Zahl daneben.
 - **Funktionsgenerator**: Sinus, Dreieck, Rechteck; 1 Hz … 10 kHz (in Dekaden mit Feineinstellung); Amplitude 0 … 4 V Spitze; Gleichanteil −4 … +4 V. Bei 20 µs Schrittweite sind Signalformen bis etwa 5 kHz sauber dargestellt; darüber werden sie eckiger, hörbar bleiben sie (offengelegt unter »So rechnet Volta«).
 - **Kennlinienschreiber** (Werkzeug): misst Strom über Spannung eines Bauteils zwischen zwei Feldern und zeichnet die Kennlinie (Widerstand, Glühlampe, Diode, LED, Z-Diode, Transistor).
 - Alle Geräte sind **andockbar** (oben im Pult) oder frei neben der Grundplatte; auf kleinen Tablets wird das Oszilloskop als Blatt über der Grundplatte geöffnet.
@@ -136,7 +140,7 @@ Wie Volta 1 (Farbcode, E-Reihen, Lexikon, Formelrechner, Fehlersuche, Teileliste
 Aufbau wie Volta 1: Stufen mit Leitfrage, Experimente mit Forschungskreislauf (Frage → Vermutung → Aufbau → Beobachtung → Erklärung → »Mehr wissen« → »Jetzt in echt«), Freischaltung der Reihe nach, Projekte am Ende einer Stufe. Die Liste ist ein Entwurf zur Freigabe; Bezeichnungen der Experimente sind Arbeitstitel.
 
 ### Stufe 0 – Auftakt: Was ist neu auf meinem Pult? (3)
-- 0.1 **Zwei Messgeräte zugleich** – Spannung und Strom an einer Lampe, daraus die Leistung.
+- 0.1 **Messen ohne Kabelsalat** – Voltmeter V1 neben die Lampe, Amperemeter A1 in den Kreis; das Doppelmessgerät zeigt beides, daraus die Leistung.
 - 0.2 **Den Messbereich selbst wählen** – Handbereichswahl, Überlauf »1«, warum ein kleiner Bereich genauer ist.
 - 0.3 **Plus, Minus und die Mitte** – zwei Batterien in Reihe, die Mitte als Bezug: Die Spannungsanzeige zeigt zum ersten Mal negative Spannungen.
 
@@ -168,7 +172,7 @@ Aufbau wie Volta 1: Stufen mit Leitfrage, Experimente mit Forschungskreislauf (F
 - 3.7 **Projekt: ein Netzteil** – Wechselquelle (9 V~), Gleichrichter, Elko, Regler, Kontroll-LED; Messung unter Last. Mit 6 V~ reicht die Spannung nach Gleichrichter und Brumm nicht für den Regler – ein Grund zum Nachrechnen.
 
 ### Stufe 4 – Der Transistor als Verstärker: Wie wird ein leises Signal laut? (8)
-- 4.1 **Kleiner Strom steuert großen Strom** – Basis- und Kollektorstrom mit zwei Messgeräten, Stromverstärkung.
+- 4.1 **Kleiner Strom steuert großen Strom** – Basis- und Kollektorstrom mit A1 und A2, Stromverstärkung.
 - 4.2 **Der Arbeitspunkt** – Basisspannungsteiler: Kollektor auf halber Betriebsspannung.
 - 4.3 **Die Emitterschaltung** – Wechselsignal verstärken; Eingang und Ausgang am Oszilloskop (umgedreht!).
 - 4.4 **Übersteuert!** – zu großes Signal wird abgeschnitten, hörbar verzerrt.
@@ -249,14 +253,14 @@ Volta 1 (0.9.1) hat ein Farb- und Leitkonzept, das Kinder ohne Lesen durch den A
 ### 9.3 Leitungen, Messgeräte und Kanäle
 
 - **Leitungsfarben automatisch** wie Volta 1 (`V+` und `+B2` rot, `0V` schwarz). **Masse/GND (`0V`) bleibt in allen Bänden schwarz**, auch bei symmetrischer Versorgung, wo `0V` die Mitte ist (entschieden 31.10.2026). Neu: Eine Leitung an der **negativen Versorgung** (`−B2`, wenn zwei Batterien symmetrisch gesteckt sind) wird **blau** – so, wie es in der Elektronik üblich ist. Die Vorgabe der Lieblingsfarbe bleibt wie in Volta 1 **Blau** (beides entschieden 31.10.2026). Eine blaue Leitung ist damit nicht allein an der Farbe als Minusleitung erkennbar; das zeigen wie immer Feldname (`−B2`), Leitungsmenü und Spannungsanzeige (Farbe nie allein). Wechselquelle und Generatorausgang bekommen keine feste Farbe, sie haben keinen Plus- und Minuspol.
-- **Messgeräte 1 und 2:** Rahmen in zwei Farben (1 Blau, 2 Orange) und groß beschriftet »1« / »2«; die Messleitungen tragen die Farbe ihres Geräts, Buchsen weiter COM, V/Ω, A.
-- **Oszilloskop:** Kanal K1 gelb, K2 türkis, wie bei vielen echten Geräten. Die Messspitze steckt mit einem kleinen Fähnchen »K1« bzw. »K2« am Feld; Kurve, Beschriftung und Zahlenwerte stehen in derselben Kanalfarbe. Bezug ist immer `0V` (schwarzes Massezeichen).
+- **Messstellen und Anzeigegeräte:** Nummer 1 blau, Nummer 2 orange – der Kreis von V1, A1, Ω1 ist blau umrandet, der von V2, A2, Ω2 orange; im Doppelmessgerät steht jede Anzeige in der Farbe ihrer Messstelle. Buchstabe und Nummer stehen immer dabei (Farbe nie allein). Die Messstellen gehören zu keinem Bauteilthema; im Modulfach bilden sie mit den Tastköpfen die Gruppe »Messen«.
+- **Oszilloskop:** Kanal K1 gelb, K2 türkis, wie bei vielen echten Geräten. Der Tastkopf (Bauteil mit einem Bein) trägt Farbe und Fähnchen »K1« bzw. »K2«; Kurve, Beschriftung und Zahlenwerte stehen in derselben Kanalfarbe. Bezug ist immer `0V` (schwarzes Massezeichen).
 - **Felder der Geräte und des Pults** erscheinen in den Aufbauschritten als kleine Kontaktfelder wie in Volta 1 (z. B. `K1`, `G`, `W~a`), mit dem Bildzeichen des Geräts.
 
 ### 9.4 Bedienpult II und Stufenanpassung
 
 - Jedes neue Pultbauteil – **Batterie 2, Wechselquelle, Funktionsgenerator** – bekommt wie in Volta 1 einen Rahmen, sein Schaltzeichen über den Feldern (Batterie, Wechselspannungsquelle ~, Generator mit Sinus) und ein **»?«** mit Erklärung der Felder.
-- Das Pult wächst mit den Stufen: Stufe 0 Batterie 1, Messgeräte 1 und 2, ab Experiment 0.3 Batterie 2; ab Stufe 1 Kennlinienschreiber; ab Stufe 2 Funktionsgenerator und Oszilloskop; ab Stufe 3 Wechselquelle; Drehregler, Schalter und Lautsprecher, sobald ein Experiment sie nutzt. Dazu immer alles, was Vorlage oder Aufbau verwenden.
+- Das Pult wächst mit den Stufen: Stufe 0 Batterie 1, Einfach- und Doppelmessgerät mit den Messstellen, ab Experiment 0.3 Batterie 2; ab Stufe 1 Kennlinienschreiber; ab Stufe 2 Funktionsgenerator und Oszilloskop; ab Stufe 3 Wechselquelle; Drehregler, Schalter und Lautsprecher, sobald ein Experiment sie nutzt. Dazu immer alles, was Vorlage oder Aufbau verwenden.
 - Steckbrett: Volta 2 beginnt mit 5 × 10 Feldern (die kleinen Bretter von Volta 1 entfallen für die ältere Zielgruppe) und wächst, wenn die Vorlage mehr braucht; im freien Labor 12 Spalten. Die Einstellung »Steckbrett und Pult an die Stufe anpassen« bleibt.
 
 ## 10. Technik
@@ -269,6 +273,7 @@ Volta 1 (0.9.1) hat ein Farb- und Leitkonzept, das Kinder ohne Lesen durch den A
 | OP | Makromodell (siehe Kapitel 6) | offen |
 | Quellen | Wechselquelle, Funktionsgenerator als zeitabhängige Quellen im Kern | offen |
 | Tonausgabe | Rechnung im Puffer mit Vorlauf, Ausgabe über Qt Multimedia; Echtzeitprüfung und Rückfall | offen |
+| Messstellen | V, A, Ω und Tastköpfe als Bauteilmodelle im Kern (Innenwiderstand, Messstrom); Anzeigegeräte lesen die Messstellen nur ab, ohne eigene Leitungen | neu |
 | Oszilloskop | Ringpuffer je Kanal im Kern, Trigger im Modell, Darstellung in QML (Qt Quick Shapes) | Zeitschreiber als Grundlage vorhanden |
 | Messwerte | Veröffentlichung an die Oberfläche höchstens 60-mal je Sekunde, unabhängig von der Schrittweite | offen |
 
@@ -289,7 +294,7 @@ Alle Regeln von Volta 1 gelten unverändert: Kern ohne Qt, jede Aufbauänderung 
 | 1 Leistungstest Audio | 20-µs-Schritte, Faktorisierung wiederverwenden, Messung auf dem Tablet | – | **erledigt** |
 | 2 Band-Infrastruktur | Edition volta2, Inhaltspaket, Bandfreigabe im Katalog, Pultleiste II, App-Symbol | 15 | zweite App aus derselben Codebasis |
 | 3 Bauteilmodelle | PNP, Z-Diode, Regler, Spule, Trimmer, IR-LED, Fototransistor, Optokoppler, OP-Makromodell, 555 mit Ereignisortung, Wechselquelle, Generator | 30 | Referenztests (< 2 %) |
-| 4 Geräte und Ton | zweites Messgerät mit Handbereichswahl, Oszilloskop, Funktionsgenerator, Kennlinienschreiber, Tonausgabe mit Rückfall, Zeitlupe | 35 | Bedienpult II |
+| 4 Geräte und Ton | Messstellen als Bauteile, Einfach- und Doppelmessgerät mit Handbereichswahl, Oszilloskop, Funktionsgenerator, Kennlinienschreiber, Tonausgabe mit Rückfall, Zeitlupe | 35 | Bedienpult II |
 | 5 Inhalte | 61 Experimente mit Musteraufbau und Prüfbedingungen, Lexikon, Formelrechner, Hilfe; FR/EN/LU | 50 | inhaltlich vollständiger Band |
 | 6 Plattformen | Android-APK, Windows, Mac; Prüfung auf allen Tablets; Anleitung und Flyer | 15 | Testversion Volta 2 (0.9) |
 | | **Summe** | **145** | (Konzept v3.0: 130–150 PT) |

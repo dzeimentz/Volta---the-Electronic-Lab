@@ -13,7 +13,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.2.pdf`
 | Datum | 31.10.2026 |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 4.3, 5.4); Konzept Volta 2 v0.2; Konzept Zuse v0.3; Konzept MCU Explorer v0.1; Farb- und Leitkonzept Volta 1 (0.9.1, `docs/ui-spec.md`) |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 und 2 |
-| Änderungen zu v0.1 | Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler getroffen (31.10.2026, Kapitel 4); Masse/GND bleibt schwarz |
+| Änderungen zu v0.1 | Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler getroffen (31.10.2026, Kapitel 4); Masse/GND bleibt schwarz; Messstellen und Tastköpfe (auch D0–D7) als Bauteile wie in Volta 2 |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -35,7 +35,7 @@ Volta 3 setzt die Technik von Volta 2 voraus (Oszilloskop, Funktionsgenerator, W
 | Band | Alter | Schwerpunkt | Messen und Zeigen |
 |---|---|---|---|
 | Volta 1 | 8–12 | Stromkreis, Reihe und parallel, Wirkungen des Stroms, Sensoren, erste Elektronik mit Modulen | Dreifach-Messgerät, Zeitschreiber |
-| Volta 2 | 11–14 | Messtechnik, Wechselspannung, Netzteil, Transistorverstärker, Operationsverstärker, 555, Klang, Infrarot | zwei Messgeräte, Oszilloskop, Funktionsgenerator, hörbare Simulation |
+| Volta 2 | 11–14 | Messtechnik, Wechselspannung, Netzteil, Transistorverstärker, Operationsverstärker, 555, Klang, Infrarot | Messstellen als Bauteile, Einfach- und Doppelmessgerät, Oszilloskop, Funktionsgenerator, hörbare Simulation |
 | **Volta 3** | **13–16** | **Schwingkreis und Resonanz, Radio, Schaltwandler, Thyristor bei Kleinspannung, Verstärkerklassen, Sensoren und Messverstärker, Logikpegel, Gatter, Flipflop, Zähler** | **Frequenzgang-Schreiber, Logikanalysator, zeitgedehnte Darstellung, Senderanlage** |
 | Zuse 1 | 10–14 | Computertechnik: vom Gatter zum selbst gebauten Rechner (eigene Linie) | Bedienfeld, Wahrheitstabellen |
 | MCU Explorer | ab 14 | echter Mikrocontroller in C/C++ an der Volta-Grundplatte | Emulator, Pinansicht |
@@ -78,7 +78,7 @@ Ebenfalls entschieden: **Digitale Module** (Gatter, Zähler, Decoder) rechnen ih
 
 ## 5. Bedienung und Bedienpult III
 
-Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Stromfluss, Schaltplan, Aufbauhilfe, Werkzeugkasten, Messgeräte 1 und 2, Oszilloskop und Funktionsgenerator sind dieselben wie in Volta 2.
+Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Stromfluss, Schaltplan, Aufbauhilfe, Werkzeugkasten, Messstellen als Bauteile (V1/V2, A1/A2, Ω1/Ω2 mit Wert am Bauteil), Einfach- und Doppelmessgerät, Oszilloskop mit Tastköpfen K1/K2 und Funktionsgenerator sind dieselben wie in Volta 2.
 
 ### 5.1 Pultleiste
 
@@ -95,10 +95,10 @@ Grundplatte, Kontaktfelder, gezogene Leitungen, Undo/Redo, Spannungsanzeige, Str
 
 ### 5.2 Neue Mess- und Anzeigegeräte
 
-- **Frequenzgang-Schreiber** (Werkzeug, ab Stufe 0): Eingang am Generator, Ausgang an einem beliebigen Feld; zeichnet Verstärkung in dB und wahlweise die Phase über der Frequenz (logarithmisch, 1 Hz … 10 MHz). Markiert Resonanzfrequenz, Grenzfrequenz (−3 dB) und Bandbreite und nennt sie als Zahl. Bei nichtlinearen Schaltungen (Gleichrichter, Komparator) zeigt er einen Hinweis statt einer falschen Kurve.
-- **Logikanalysator** (ab Stufe 7): acht Kanäle mit Messspitze auf ein beliebiges Feld; zeigt H und L als Zeitdiagramm, Schaltschwellen einstellbar (Vorgabe nach Betriebsspannung), Trigger auf Flanke oder Muster, Zeitmarken mit Abstand in µs/ms. Der Zustand jedes Kanals steht zusätzlich als Buchstabe H/L bzw. 1/0.
+- **Frequenzgang-Schreiber** (Werkzeug, ab Stufe 0): Eingang am Generator, Ausgang am Tastkopf K1; zeichnet Verstärkung in dB und wahlweise die Phase über der Frequenz (logarithmisch, 1 Hz … 10 MHz). Markiert Resonanzfrequenz, Grenzfrequenz (−3 dB) und Bandbreite und nennt sie als Zahl. Bei nichtlinearen Schaltungen (Gleichrichter, Komparator) zeigt er einen Hinweis statt einer falschen Kurve.
+- **Logikanalysator** (ab Stufe 7): acht Kanäle; die **Tastköpfe D0 … D7 sind Bauteile mit einem Bein** wie K1/K2, Bezug automatisch `0V`, der Pegel (H/L) steht klein am Tastkopf; zeigt H und L als Zeitdiagramm, Schaltschwellen einstellbar (Vorgabe nach Betriebsspannung), Trigger auf Flanke oder Muster, Zeitmarken mit Abstand in µs/ms. Der Zustand jedes Kanals steht zusätzlich als Buchstabe H/L bzw. 1/0.
 - **Zeitgedehnte Darstellung** (Lupe): Oszilloskop und Logikanalysator zeigen Vorgänge, die schneller sind, als die Simulation Schritt für Schritt rechnet, mit einem Dehnungsfaktor (×10 … ×1000). Gedehnte Anzeigen tragen immer Lupenzeichen, Faktor und einen gestrichelten Rahmen.
-- **Frequenzzähler** (im Messgerät 1, ab Stufe 8): zählt Flanken in einer Torzeit von 0,1 / 1 s – derselbe Grundgedanke wie Experiment 8.6.
+- **Frequenzzähler** (im Anzeigegerät an der Messstelle V1, ab Stufe 8): zählt Flanken in einer Torzeit von 0,1 / 1 s – derselbe Grundgedanke wie Experiment 8.6.
 
 ### 5.3 Senderanlage und Inhalte
 
@@ -231,7 +231,7 @@ Gestaltung wie Volta 1 und 2 (hell, ruhige Flächen, DC Learning Design Standard
 
 ### 9.1 Grundsatz: dasselbe Farb- und Leitkonzept wie Volta 1 und 2
 
-Volta 3 übernimmt das Farb- und Leitkonzept aus Volta 1 (0.9.1) mit den Erweiterungen aus Volta 2 (Konzept Volta 2, Kapitel 9) **unverändert**: sechs Themen im Bauteilfach mit Farbe und Schaltzeichen, Reihenfarben der Grundplatte (A rot … E blau), Felder im Text als kleine Kontaktfelder in ihrer Farbe, automatische Leitungsfarben (Plus rot, Masse/GND schwarz, negative Versorgung blau, sonst Lieblingsfarbe), Rahmen, Schaltzeichen und »?« je Pultbauteil, eigene Trägerplattenfarbe je Modul, Kanalfarben der Messgeräte (1 Blau, 2 Orange) und des Oszilloskops (K1 gelb, K2 türkis), Stufenanpassung von Steckbrett und Pult. Grundregel: **Farbe nie allein**.
+Volta 3 übernimmt das Farb- und Leitkonzept aus Volta 1 (0.9.1) mit den Erweiterungen aus Volta 2 (Konzept Volta 2, Kapitel 9) **unverändert**: sechs Themen im Bauteilfach mit Farbe und Schaltzeichen, Reihenfarben der Grundplatte (A rot … E blau), Felder im Text als kleine Kontaktfelder in ihrer Farbe, automatische Leitungsfarben (Plus rot, Masse/GND schwarz, negative Versorgung blau, sonst Lieblingsfarbe), Rahmen, Schaltzeichen und »?« je Pultbauteil, eigene Trägerplattenfarbe je Modul, Messstellen als Bauteile mit Kanalfarben (1 Blau, 2 Orange) und Wert am Bauteil, Tastköpfe des Oszilloskops (K1 gelb, K2 türkis), Stufenanpassung von Steckbrett und Pult. Grundregel: **Farbe nie allein**.
 
 ### 9.2 Einordnung der neuen Bauteile
 
@@ -250,7 +250,7 @@ Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen gro�
 
 ### 9.3 Neue Geräte im selben Konzept
 
-- **Logikanalysator:** Die acht Kanäle tragen die Farben des Widerstands-Farbcodes in der Reihenfolge 0 bis 7 (schwarz, braun, rot, orange, gelb, grün, blau, violett) – dieselben Farben, die die Kinder seit Volta 1 aus dem Farbcode kennen – und immer zusätzlich die Kanalnummer D0 … D7 an Fähnchen, Spur und Beschriftung.
+- **Logikanalysator:** Die acht Kanäle tragen die Farben des Widerstands-Farbcodes in der Reihenfolge 0 bis 7 (schwarz, braun, rot, orange, gelb, grün, blau, violett) – dieselben Farben, die die Kinder seit Volta 1 aus dem Farbcode kennen – und immer zusätzlich die Kanalnummer D0 … D7 an Tastkopf, Spur und Beschriftung.
 - **Logikpegel an den Feldern** (Stufen 7–8): Neben dem grünen Spannungsbalken aus Volta 1 kann ein Feld seinen Pegel zeigen: ein Kästchen mit **H** (gefüllt) bzw. **L** (leer), im verbotenen Bereich ein **?** mit gestricheltem Rand.
 - **Frequenzgang-Schreiber:** Kurve in der Farbe des Messkanals (K1 gelb), Resonanz- und Grenzfrequenz als senkrechte Marke mit Zahl.
 - **Zeitgedehnte Darstellung:** gestrichelter Rahmen, Lupenzeichen und Faktor (»×1000 gedehnt«) – nie nur eine andere Farbe.
@@ -273,7 +273,7 @@ Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen gro�
 | Schaltwandler, Klasse D | Zeitbereich mit 1–5 kHz Schaltfrequenz, Ereignisortung an Schaltflanken (aus dem 555 von Volta 2) | auf Grundlage Volta 2 |
 | Thyristor, Triac | Zünd- und Haltelogik als Zustand im Bauteil, für Undo im Zustandsschnappschuss | neu |
 | Digitale Module | ereignisgesteuerte Logik (Wiederverwendung aus `logic/`), Kopplung an den Kern über Schaltschwelle und Ausgangsquelle | gemeinsam mit MCU Explorer |
-| Logikanalysator | Ringpuffer je Kanal im Kern, Schwellen im Modell, Darstellung in QML | Oszilloskop aus Volta 2 als Grundlage |
+| Logikanalysator | Tastköpfe D0–D7 als Bauteile, Ringpuffer je Kanal im Kern, Schwellen im Modell, Darstellung in QML | Oszilloskop aus Volta 2 als Grundlage |
 | Senderanlage | eigene Tonaufnahmen als Qt-Ressource je Sprache | neu |
 
 Alle Regeln von Volta 1 gelten unverändert: Kern ohne Qt, jede Aufbauänderung ein Befehl, Physik ehrlich (Referenztests < 2 %), kein Netz, keine Datenerhebung, Bedienelemente ≥ 48 dp, Farbe nie allein, DE/FR/EN/LU.
