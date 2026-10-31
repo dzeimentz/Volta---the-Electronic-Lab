@@ -1773,6 +1773,10 @@ private slots:
         }
         QQuickItem* empty = item(QStringLiteral("field_") + freeField);
         QVERIFY(!empty || !empty->property("showVoltage").toBool());
+        for (const QString& f : m_lab->occupiedFields()) // nicht am Pult und an den Batterien
+            QVERIFY2(!f.startsWith(QStringLiteral("P:")), qPrintable(f));
+        QQuickItem* battery = item(QStringLiteral("field_P:+9V"));
+        QVERIFY(!battery || manual.contains(QStringLiteral("P:+9V")) || !battery->property("showVoltage").toBool());
         QCOMPARE(m_lab->voltageFields(), manual); // Aufbau unveraendert (kein Befehl)
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(button));
         QTRY_VERIFY(!m_settings->autoVoltageBars());

@@ -1588,7 +1588,7 @@ QStringList LabController::occupiedFields() const {
     QStringList out;
     auto add = [&](const std::string& anchor) {
         const model::AnchorKind k = model::classifyAnchor(anchor);
-        if ((k != model::AnchorKind::Field && k != model::AnchorKind::Desk) || !model::withinBoard(b, anchor)) return;
+        if (k != model::AnchorKind::Field || !model::withinBoard(b, anchor)) return; // Pult und Batterie nicht
         if (const QString f = qs(anchor); !out.contains(f)) out << f;
     };
     for (const auto& p : b.parts)

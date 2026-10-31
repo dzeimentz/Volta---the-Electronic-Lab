@@ -573,7 +573,7 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
-            // Spannungsanzeige automatisch: Balken auf allen belegten Feldern
+            // Spannungsanzeige automatisch: Balken auf allen belegten Feldern der Grundplatte
             ToolButton {
                 objectName: "voltageAutoToggle"
                 width: Theme.control; height: Theme.control
