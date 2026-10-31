@@ -453,13 +453,28 @@ std::string poleColor(const Board& board, const std::string& from, const std::st
         }
         return seen;
     };
-    const auto plus = reach(kPlusAnchor);
-    const auto minus = reach(kGroundAnchor);
-    const bool toPlus = plus.count(from) || plus.count(to);
-    const bool toMinus = minus.count(from) || minus.count(to);
-    if (toPlus && !toMinus) return "rot";
-    if (toMinus && !toPlus) return "schwarz";
-    return {};
+    auto plus = reach(kPlusAnchor);
+    auto minus = reach(kGroundAnchor);
+    std::set<std::string> negative;
+    if (hasDeskPart(board, "batterie2")) {
+        const auto plus2 = reach("P:+B2");
+        const auto minus2 = reach("P:-B2");
+        // die Leitung, die +B2 an 0V legt, ist selbst schon Masse
+        if ((plus2.count(from) && minus.count(to)) || (plus2.count(to) && minus.count(from)))
+            if (!plus2.count(kPlusAnchor) && !plus2.count("P:-B2")) return "schwarz";
+        if (minus.count("P:+B2")) {
+            negative = minus2; // symmetrisch: +B2 ist die Mitte
+        } else {
+            plus.insert(plus2.begin(), plus2.end());
+            if (!plus.count("P:-B2")) minus.insert(minus2.begin(), minus2.end());
+        }
+    }
+    const auto touches = [&](const std::set<std::string>& set) { return set.count(from) || set.count(to); };
+    const int poles = int(touches(plus)) + int(touches(minus)) + int(touches(negative));
+    if (poles != 1) return {}; // kein Pol oder Kurzschluss
+    if (touches(plus)) return "rot";
+    if (touches(minus)) return "schwarz";
+    return "blau";
 }
 
 bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlacement& module, Message& error,

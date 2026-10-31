@@ -94,7 +94,10 @@ class LabController : public QObject {
     Q_PROPERTY(int cells READ cells WRITE setCells NOTIFY deskChanged)
     Q_PROPERTY(int cells2 READ cells2 WRITE setCells2 NOTIFY deskChanged) // Batterie 2: 3 oder 6 Zellen
     // Pult nach Bedarf (ab Volta 2): Geraetefach statt Stufenanpassung; deskTray: [{part, present, locked, stage}]
+    //   locked: noch nicht frei; unlock: "stufe" (stage), "experiment" (experiment: Nummer, z. B. "0.3") oder "nutzung"
     Q_PROPERTY(bool deskOnDemand READ deskOnDemand CONSTANT)
+    // Startbreite der Grundplatte des Bandes (0: wie Volta 1); die App setzt damit die Vorgabe der Einstellung
+    Q_PROPERTY(int startColumns READ startColumns CONSTANT)
     Q_PROPERTY(QVariantList deskTray READ deskTray NOTIFY boardChanged)
     Q_PROPERTY(double pot1 READ pot1 WRITE setPot1 NOTIFY deskChanged)
     Q_PROPERTY(double pot2 READ pot2 WRITE setPot2 NOTIFY deskChanged)
@@ -283,8 +286,10 @@ public:
     int cells2() const;
     void setCells2(int cells);
     bool deskOnDemand() const { return !m_deskOffers.isEmpty(); }
+    int startColumns() const { return m_startColumns; }
     QVariantList deskTray() const;
     Q_INVOKABLE bool addDeskPart(const QString& part);    // Befehl
+    Q_INVOKABLE bool showWholeDesk(); // »Pult zeigen«: alles Freigeschaltete in einem Befehl ins Pult
     Q_INVOKABLE bool removeDeskPart(const QString& part); // Befehl; Leitungen an seinen Feldern gehen mit
     // Leitungen an den Feldern eines Pultteils (Rueckfrage vor dem Herausnehmen)
     Q_INVOKABLE int deskPartWires(const QString& part) const;
@@ -504,8 +509,10 @@ private:
     services::ContentRepository m_repo;
     QString m_band; // Band der Edition, z. B. "volta1"
     QList<services::DeskOffer> m_deskOffers; // Geraetefach; leer: festes Pult (Volta 1)
+    int m_startColumns = 0;                  // ab Volta 2: 5 x 10 von Anfang an (Konzept Volta 2, 9.4)
     // Aufbau laden; im Pult nach Bedarf ohne gespeicherte Pultbelegung das, was der Aufbau benutzt
     void loadSessionBoard(model::Board board);
+    bool deskOfferOpen(const services::DeskOffer& offer) const;
     void adaptDesk(model::Board& board) const;
     std::unique_ptr<model::LabSession> m_session;
     QString m_title;

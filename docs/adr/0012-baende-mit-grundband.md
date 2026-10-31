@@ -22,10 +22,18 @@ fuehren muessen.
 - Entwickelt wird Volta 2 im Worktree `volta-volta2` (Zweig `volta2`); Volta 1 auf `main` bleibt eingefroren.
 
 - Pult nach Bedarf (Konzept Volta 2, 5.5): `paket.json` nennt in `"pult_nach_bedarf"` die Pultteile des
-  Geraetefachs mit `ab_stufe`. Ist die Liste da, traegt der Aufbau seine Pultbelegung (`Board::deskParts`, JSON
+  Geraetefachs mit genau einer Freischaltregel: `ab_stufe`, `ab_experiment` (sobald das Experiment frei ist; fehlt
+  es noch im Paket, gilt seine Stufe) oder `bei_nutzung` (mit dem ersten freien Experiment, dessen Vorlage das Teil
+  benutzt). »Pult zeigen« setzt alles Freigeschaltete in einem Befehl ein. Ist die Liste da, traegt der Aufbau seine Pultbelegung (`Board::deskParts`, JSON
   `"pultteile"`, Befehl mit Rueckgaengig); sonst gilt das feste Pult von Volta 1. Batterie 2 (`P:+B2`, `P:-B2`) ist
   potentialfrei, haengt zweipolig am Hauptschalter und hat 10 MOhm von `P:-B2` nach `0V` (rechenbar, ausgeschaltet
   unter 0,05 V, als Last 0,45 uA).
+- Leitungsfarbe nach Funktion (Konzept Volta 2, 9.3): `+B2` an `0V` ist Masse (schwarz), `-B2` dann negative
+  Versorgung (blau); sonst `+B2` rot und `-B2` schwarz, an `V+` gehaengt (obere Batterie) rot.
+- `paket.json "start_spalten"` (8, 10, 12) setzt die Startbreite der Grundplatte; ohne den Wert gelten die kleinen
+  Bretter der ersten Stufen von Volta 1. Volta 2: 10, auch als Vorgabe der Einstellung, solange keine gespeichert ist.
+- Aufgaben der Lehrkraft mit Aufbau tragen dessen Pultbelegung mit; im Pult nach Bedarf genuegt auch ein Pult ohne
+  Bauteile.
 
 ## Folgen
 - Volta 1 aendert sich nicht (kein Grundband, ganzer Katalog gehoert ihm).

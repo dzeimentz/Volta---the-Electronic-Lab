@@ -47,9 +47,13 @@ struct Stage {
 };
 
 // Pultteil im Geraetefach (paket.json "pult_nach_bedarf", Pult nach Bedarf ab Volta 2)
+// Frei wird es ab einer Stufe ("ab_stufe"), mit einem Experiment ("ab_experiment", sobald es freigeschaltet ist)
+// oder mit dem ersten freigeschalteten Experiment, das es benutzt ("bei_nutzung").
 struct DeskOffer {
     QString part; // Pultteil (model::deskGroupNames), z. B. "batterie2"
     int fromStage = 0;
+    QString fromExperiment;
+    bool onUse = false;
 };
 
 // Laedt Inhaltspakete (JSON) und Bauteilkatalog aus einem Inhaltsverzeichnis. Kein Netzwerkzugriff.
@@ -71,6 +75,9 @@ public:
     QStringList experimentIds(const QString& band) const;
     // Pultteile des Geraetefachs; leer: festes Pult wie Volta 1
     QList<DeskOffer> deskOffers(const QString& band);
+    // Startbreite der Grundplatte (paket.json "start_spalten": 8, 10 oder 12); 0: wie Volta 1 (kleine Bretter der
+    // ersten Stufen, freies Labor 12 Spalten)
+    int startColumns(const QString& band);
     // Stufen eines Bandes; leer, wenn stufen.json fehlt
     QList<Stage> stages(const QString& band);
     // Experiment nach id (z. B. "volta1.2.4") aus content/<band>/experiments/<stufe>.<nr>.json

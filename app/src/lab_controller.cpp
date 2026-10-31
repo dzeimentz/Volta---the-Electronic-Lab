@@ -62,6 +62,7 @@ LabController::LabController(QString contentRoot, QString band, QObject* parent)
     m_experimentIds = m_repo.experimentIds(m_band);
     m_stages = m_repo.stages(m_band);
     m_deskOffers = m_repo.deskOffers(m_band);
+    m_startColumns = m_repo.startColumns(m_band);
     if (deskOnDemand()) loadSessionBoard({}); // Pult beginnt mit der Batterie
     rebuildExperimentList();
     m_session->onBoardChanged = [this] {
@@ -160,6 +161,11 @@ void LabController::rebuildExperimentList() {
         m.insert(QStringLiteral("title"), m_repo.text(exp.titleKey));
         m.insert(QStringLiteral("stage"), exp.stage);
         m.insert(QStringLiteral("destructive"), exp.destructive);
+        if (deskOnDemand()) { // Pultteile der Vorlage (Freischaltung im Geraetefach "bei_nutzung")
+            QStringList parts;
+            for (const auto& g : model::deskPartsUsed(exp.templateBoard)) parts << qs(g);
+            m.insert(QStringLiteral("deskParts"), parts);
+        }
         m_experimentList << m;
     }
 }
@@ -397,7 +403,9 @@ services::task::Task makeTask(const QString& band, const QStringList& ids) {
 QString LabController::makeTaskLink(const QStringList& ids, const QString& text, bool withBoard, const QString& title) const {
     services::task::Task t = makeTask(band(), ids);
     t.text = text.trimmed();
-    if (withBoard && !m_session->board().parts.empty()) {
+    // Pult nach Bedarf: auch ein Aufbau ohne Bauteile legt die Pultbelegung fest (Konzept Volta 2, 5.5)
+    const auto& parts = m_session->board().deskParts;
+    if (withBoard && (!m_session->board().parts.empty() || (parts && parts->size() > 1))) {
         model::Board b = m_session->board();
         b.desk.mainSwitch = false;
         t.board = b;
@@ -1278,22 +1286,54 @@ void LabController::loadSessionBoard(model::Board board) {
     m_session->loadBoard(board);
 }
 
+bool LabController::deskOfferOpen(const services::DeskOffer& o) const {
+    if (m_unlockAll) return true;
+    if (o.onUse) { // mit dem ersten freigeschalteten Experiment, das es benutzt
+        const int open = highestUnlockedStage();
+        for (const QVariant& v : m_experimentList) {
+            const QVariantMap e = v.toMap();
+            if (e.value(QStringLiteral("stage")).toInt() <= open &&
+                e.value(QStringLiteral("deskParts")).toStringList().contains(o.part))
+                return true;
+        }
+        return false;
+    }
+    if (!o.fromExperiment.isEmpty()) {
+        for (const QVariant& v : m_experimentList)
+            if (v.toMap().value(QStringLiteral("id")).toString() == o.fromExperiment) return isUnlocked(o.fromExperiment);
+        // Experiment (noch) nicht im Paket: ab seiner Stufe ("volta2.0.3" -> 0)
+        return o.fromExperiment.section(QLatin1Char('.'), 1, 1).toInt() <= highestUnlockedStage();
+    }
+    return o.fromStage <= highestUnlockedStage();
+}
+
 QVariantList LabController::deskTray() const {
     QVariantList out;
-    const int open = highestUnlockedStage();
-    for (const auto& o : m_deskOffers)
+    for (const auto& o : m_deskOffers) {
+        const QString unlock = o.onUse ? QStringLiteral("nutzung")
+                               : o.fromExperiment.isEmpty() ? QStringLiteral("stufe")
+                                                            : QStringLiteral("experiment");
         out << QVariantMap{{QStringLiteral("part"), o.part},
                            {QStringLiteral("present"), model::hasDeskPart(m_session->board(), ss(o.part))},
-                           {QStringLiteral("locked"), !m_unlockAll && o.fromStage > open},
-                           {QStringLiteral("stage"), o.fromStage}};
+                           {QStringLiteral("locked"), !deskOfferOpen(o)},
+                           {QStringLiteral("unlock"), unlock},
+                           {QStringLiteral("stage"), o.fromStage},
+                           {QStringLiteral("experiment"), o.fromExperiment.section(QLatin1Char('.'), 1)}};
+    }
     return out;
 }
 
 bool LabController::addDeskPart(const QString& part) {
     for (const auto& o : m_deskOffers)
-        if (o.part == part)
-            return (m_unlockAll || o.fromStage <= highestUnlockedStage()) && result(m_session->addDeskPart(ss(part)));
+        if (o.part == part) return deskOfferOpen(o) && result(m_session->addDeskPart(ss(part)));
     return false;
+}
+
+bool LabController::showWholeDesk() {
+    std::vector<std::string> parts;
+    for (const auto& o : m_deskOffers)
+        if (deskOfferOpen(o)) parts.push_back(ss(o.part));
+    return result(m_session->addDeskParts(parts));
 }
 
 bool LabController::removeDeskPart(const QString& part) { return result(m_session->removeDeskPart(ss(part))); }
@@ -1825,8 +1865,8 @@ void LabController::setMeterDocked(bool docked) {
 }
 
 int LabController::autoColumnsFor(const model::Board& board, bool freeLab, bool meterVisible) const {
-    int want = freeLab ? 12 : 8;
-    if (meterVisible) want = m_meterDocked ? 12 : 10;
+    int want = m_startColumns > 0 ? m_startColumns : freeLab ? 12 : 8;
+    if (meterVisible) want = std::max(m_startColumns, m_meterDocked ? 12 : 10);
     // was schon steckt (bzw. die Vorlage) muss hineinpassen: auf 8/10/12 aufrunden
     const int used = model::highestUsedColumn(board);
     while (want < used && want < 12) want += 2;
@@ -1874,6 +1914,10 @@ bool LabController::stageLayoutActive() const {
 std::pair<int, int> LabController::stageBoardSize(int stage, const model::Board& mustFit) const {
     int rows = stage <= 2 ? 2 : stage == 3 ? 3 : model::kMaxRows;
     int cols = stage <= 2 ? 5 : stage == 3 ? 6 : 10;
+    if (m_startColumns > 0) { // ab Volta 2 keine kleinen Bretter: volle Hoehe, Startbreite des Bandes
+        rows = model::kMaxRows;
+        cols = m_startColumns;
+    }
     rows = std::clamp(std::max(rows, model::highestUsedRow(mustFit)), model::kMinRows, model::kMaxRows);
     const int used = model::highestUsedColumn(mustFit);
     for (int c : {5, 6, 8, 10, 12})

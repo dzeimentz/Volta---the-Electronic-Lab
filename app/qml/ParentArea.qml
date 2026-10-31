@@ -409,9 +409,15 @@ Popup {
                         id: taskWithBoard
                         objectName: "taskWithBoard"
                         height: Theme.control
-                        enabled: area.controller.parts.length > 0
+                        // Pult nach Bedarf (ab Volta 2): auch nur die Pultbelegung laesst sich mitgeben
+                        readonly property bool deskOnly: area.controller.deskOnDemand && area.controller.parts.length === 0
+                                                         && area.controller.deskGroups.length > 1
+                        enabled: area.controller.parts.length > 0 || deskOnly
                         text: area.controller.parts.length > 0
-                              ? qsTr("Aufbau aus dem Labor mitgeben (%1 Bauteile)").arg(area.controller.parts.length)
+                              ? (area.controller.deskOnDemand
+                                 ? qsTr("Aufbau und Pult aus dem Labor mitgeben (%1 Bauteile)").arg(area.controller.parts.length)
+                                 : qsTr("Aufbau aus dem Labor mitgeben (%1 Bauteile)").arg(area.controller.parts.length))
+                              : deskOnly ? qsTr("Pult aus dem Labor mitgeben (%1 Pultteile)").arg(area.controller.deskGroups.length)
                               : qsTr("Aufbau aus dem Labor mitgeben (im Labor ist noch nichts gesteckt)")
                     }
                 }

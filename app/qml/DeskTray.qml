@@ -19,6 +19,11 @@ Popup {
         }
         return part
     }
+    function lockText(item) {
+        if (item.unlock === "nutzung") return qsTr("kommt mit einem Experiment")
+        if (item.unlock === "experiment") return qsTr("ab Experiment %1").arg(item.experiment)
+        return qsTr("ab Stufe %1").arg(item.stage)
+    }
     function groupOf(part) {
         return part.startsWith("batterie") ? "quellen" : part === "lautsprecher" ? "hoeren" : "bedienen"
     }
@@ -108,12 +113,22 @@ Popup {
                             enabled: !modelData.present && !modelData.locked
                             text: tray.title(modelData.part) + "  –  "
                                   + (modelData.present ? qsTr("steht im Pult")
-                                     : modelData.locked ? qsTr("ab Stufe %1").arg(modelData.stage)
+                                     : modelData.locked ? tray.lockText(modelData)
                                      : qsTr("einsetzen"))
                             onClicked: if (tray.controller.addDeskPart(modelData.part)) tray.close()
                         }
                     }
                 }
+            }
+            Button { // »Pult zeigen« (Konzept 5.5): alles Freigeschaltete auf einmal
+                objectName: "deskTrayAll"
+                width: list.width
+                height: Theme.control
+                readonly property bool anyMissing: tray.controller
+                    ? tray.controller.deskTray.some(t => !t.present && !t.locked) : false
+                enabled: anyMissing
+                text: qsTr("Pult zeigen: alles Freigeschaltete einsetzen")
+                onClicked: if (tray.controller.showWholeDesk()) tray.close()
             }
         }
     }

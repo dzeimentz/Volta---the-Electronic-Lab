@@ -330,6 +330,18 @@ private slots:
         QCOMPARE(*back.deskParts, *s->board().deskParts);
         QCOMPARE(back.desk.cells2, 3);
         QVERIFY(model::deskPartsUsed(back) == (std::vector<std::string>{"batterie", "batterie2"}));
+        // Leitungsfarbe nach Funktion (Konzept Volta 2, 9.3)
+        model::Board c;
+        c.deskParts = std::vector<std::string>{"batterie", "batterie2"};
+        QCOMPARE(model::poleColor(c, "P:+B2", "A1"), std::string("rot"));     // Batterie 2 allein
+        QCOMPARE(model::poleColor(c, "P:-B2", "A1"), std::string("schwarz"));
+        QCOMPARE(model::poleColor(c, "P:+B2", "P:0V"), std::string("schwarz")); // wird zur Mitte
+        c.wires.push_back({"L1", "P:+B2", "P:0V", "schwarz"});
+        QCOMPARE(model::poleColor(c, "P:-B2", "A1"), std::string("blau"));    // negative Versorgung
+        QCOMPARE(model::poleColor(c, "P:+B2", "A1"), std::string("schwarz"));
+        c.wires.front() = {"L1", "P:-B2", "P:+9V", "rot"};                    // obere Batterie
+        QCOMPARE(model::poleColor(c, "P:+B2", "A1"), std::string("rot"));
+        QCOMPARE(model::poleColor(c, "P:-B2", "A1"), std::string("rot"));
     }
 
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage

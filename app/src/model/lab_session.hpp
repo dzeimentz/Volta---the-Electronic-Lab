@@ -89,6 +89,7 @@ public:
     // Pult nach Bedarf (Board::deskParts): Pultteil ins Pult setzen bzw. herausnehmen (Befehl); Herausnehmen zieht
     // die Leitungen an seinen Feldern im selben Befehl ab. Die Batterie bleibt immer im Pult.
     bool addDeskPart(const std::string& group);
+    bool addDeskParts(const std::vector<std::string>& groups); // mehrere in einem Befehl (»Pult zeigen«)
     bool removeDeskPart(const std::string& group);
 
     // ---- Bedienhandlungen (kein Verlauf)

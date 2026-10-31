@@ -18,23 +18,24 @@
     },
     {
       "teil": "batterie2",
-      "ab_stufe": 0
+      "ab_experiment": "volta2.0.3"
     },
     {
       "teil": "schalter",
-      "ab_stufe": 0
+      "bei_nutzung": true
     },
     {
       "teil": "p1",
-      "ab_stufe": 1
+      "bei_nutzung": true
     },
     {
       "teil": "p2",
-      "ab_stufe": 1
+      "bei_nutzung": true
     },
     {
       "teil": "lautsprecher",
-      "ab_stufe": 2
+      "bei_nutzung": true
     }
-  ]
+  ],
+  "start_spalten": 10
 }

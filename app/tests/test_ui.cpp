@@ -832,16 +832,44 @@ private slots:
         lab.startFreeLab();
         QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
         QCOMPARE(lab.deskTray().size(), 6);
+        QCOMPARE(lab.startColumns(), 10); // Grundplatte 5 x 10 von Anfang an
+        lab.setProperty("autoColumns", true);
+        lab.startFreeLab();
+        QCOMPARE(lab.boardColumns(), 10);
+        // Freischaltung (Konzept 9.4): Batterie 2 mit Experiment 0.3, Regler, Schalter und Lautsprecher erst mit
+        // einem Experiment, das sie nutzt - solange Volta 2 noch keine Experimente hat, also gesperrt
+        QCOMPARE(lab.deskTray().at(1).toMap().value(QStringLiteral("experiment")).toString(), QStringLiteral("0.3"));
+        QCOMPARE(lab.deskTray().last().toMap().value(QStringLiteral("unlock")).toString(), QStringLiteral("nutzung"));
+        QVERIFY(lab.deskTray().last().toMap().value(QStringLiteral("locked")).toBool());
+        QVERIFY(!lab.addDeskPart(QStringLiteral("lautsprecher")));
         QVERIFY(lab.addDeskPart(QStringLiteral("batterie2")));
-        QCOMPARE(lab.deskTray().last().toMap().value(QStringLiteral("stage")).toInt(), 2); // Lautsprecher ab Stufe 2
         QCOMPARE(lab.deskGroups(), (QStringList{QStringLiteral("batterie"), QStringLiteral("batterie2")}));
         QVERIFY(lab.addWire(QStringLiteral("P:+B2"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
         QCOMPARE(lab.deskPartWires(QStringLiteral("batterie2")), 1);
         QVERIFY(lab.removeDeskPart(QStringLiteral("batterie2")));
         QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
+        // »Pult zeigen«: alles Freigeschaltete in einem Befehl, Rueckgaengig nimmt es wieder heraus
+        lab.setUnlockAll(true);
+        QVERIFY(lab.showWholeDesk());
+        QCOMPARE(lab.deskGroups().size(), 6);
+        lab.undo();
+        QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
+        // Aufgabe der Lehrkraft mit Pultvorgabe (ohne Bauteile)
+        QVERIFY(lab.makeTaskLink({}, {}, true, {}).isEmpty()); // nur die Batterie: nichts vorzugeben
+        QVERIFY(lab.addDeskPart(QStringLiteral("batterie2")));
+        const QString deskTask = lab.makeTaskLink({}, QStringLiteral("Plus, Minus und die Mitte"), true, {});
+        QVERIFY(!deskTask.isEmpty());
+        lab.setUnlockAll(false);
+        QVERIFY(lab.acceptTask(deskTask));
+        lab.startFreeLab();
+        QCOMPARE(lab.deskGroups(), QStringList{QStringLiteral("batterie")});
+        QVERIFY(lab.startTaskBoard());
+        QCOMPARE(lab.deskGroups(), (QStringList{QStringLiteral("batterie"), QStringLiteral("batterie2")}));
+        lab.clearTask();
         // Volta 1 behaelt sein festes Pult
         LabController volta1Lab(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY(!volta1Lab.deskOnDemand());
+        QCOMPARE(volta1Lab.startColumns(), 0);
         QVERIFY(volta1Lab.deskTray().isEmpty());
     }
 

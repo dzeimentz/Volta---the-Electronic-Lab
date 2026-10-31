@@ -79,6 +79,9 @@ int socketCount(const std::string& anchor);
 // (P:+9V) oder ueber andere Leitungen damit verbunden -, ist sie "rot"; am Minuspol (P:0V) "schwarz"; sonst "" (die
 // gewaehlte Farbe gilt). Beruehrt sie beide Pole (Kurzschluss), ebenfalls "". ignoreWire: diese Leitung nicht
 // mitzaehlen (beim Umsetzen eines Endes).
+// Batterie 2 nach Funktion (Konzept Volta 2, 9.3): Ist P:+B2 mit P:0V verbunden (symmetrische Versorgung), gehoert
+// +B2 zur Masse und eine Leitung an P:-B2 wird "blau" (negative Versorgung); sonst ist +B2 ein Pluspol (rot) und
+// -B2 ein Minuspol (schwarz), es sei denn, -B2 haengt am Pluspol (obere Batterie).
 std::string poleColor(const Board& board, const std::string& from, const std::string& to,
                       const std::string& ignoreWire = {});
 

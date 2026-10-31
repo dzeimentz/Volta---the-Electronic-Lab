@@ -82,6 +82,13 @@ void AppSettings::setBoardColumns(int columns) {
     set(m_boardColumns, columns, "labor/felder_je_reihe");
 }
 
+void AppSettings::setDefaultColumns(int columns) {
+    if (columns != 8 && columns != 10 && columns != 12 || m_boardColumns == columns) return;
+    if (m_persist && QSettings(m_file, QSettings::IniFormat).contains(QStringLiteral("labor/felder_je_reihe"))) return;
+    m_boardColumns = columns;
+    emit changed();
+}
+
 void AppSettings::setWireColor(const QString& color) {
     if (!kWireColors.contains(color)) return;
     set(m_wireColor, color, "labor/leitungsfarbe_favorit");

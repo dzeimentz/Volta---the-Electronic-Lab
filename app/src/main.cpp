@@ -97,6 +97,7 @@ int main(int argc, char* argv[]) {
     const bool demoVoltageAuto = qEnvironmentVariableIntValue("VOLTA_DEMO_VOLTAGE_AUTO") == 1;
     volta::AppSettings settings(demoLang.isEmpty() && demoFont.isEmpty() && demoDocked.isEmpty() && !demoProfiles
                                 && !demoVoltageAuto);
+    if (lab.startColumns() > 0) settings.setDefaultColumns(lab.startColumns());
     if (demoVoltageAuto) settings.setAutoVoltageBars(true);
     if (demoProfiles) {
         settings.setProfilesEnabled(true);

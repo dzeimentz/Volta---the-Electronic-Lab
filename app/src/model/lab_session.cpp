@@ -287,14 +287,21 @@ bool LabSession::replaceBoard(const Board& after, const QString& text) {
     return push(text, std::move(b));
 }
 
-bool LabSession::addDeskPart(const std::string& group) {
+bool LabSession::addDeskPart(const std::string& group) { return addDeskParts({group}); }
+
+bool LabSession::addDeskParts(const std::vector<std::string>& groups) {
     const auto& names = deskGroupNames();
-    if (!m_board.deskParts || std::find(names.begin(), names.end(), group) == names.end()) return false;
-    if (hasDeskPart(m_board, group)) return true;
+    if (!m_board.deskParts) return false;
+    bool missing = false;
+    for (const auto& g : groups) {
+        if (std::find(names.begin(), names.end(), g) == names.end()) return false;
+        if (!hasDeskPart(m_board, g)) missing = true;
+    }
+    if (!missing) return true;
     Board after = m_board;
     std::vector<std::string> parts;
     for (const auto& g : names) // Anzeigereihenfolge
-        if (g == group || hasDeskPart(m_board, g)) parts.push_back(g);
+        if (hasDeskPart(m_board, g) || std::find(groups.begin(), groups.end(), g) != groups.end()) parts.push_back(g);
     after.deskParts = std::move(parts);
     return push(QCoreApplication::translate("Befehl", "Pultteil einsetzen"), std::move(after));
 }

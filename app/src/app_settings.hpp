@@ -74,6 +74,8 @@ public:
     void setFontLevel(int level);
     int boardColumns() const { return m_boardColumns; }
     void setBoardColumns(int columns);
+    // Vorgabe der Breite, solange keine gespeichert ist (Volta 2: 10 statt 12); wird nicht gespeichert
+    void setDefaultColumns(int columns);
     bool meterVisible() const { return m_meterVisible; }
     void setMeterVisible(bool on) { set(m_meterVisible, on, "labor/messgeraet"); }
     bool meterDocked() const { return m_meterDocked; }

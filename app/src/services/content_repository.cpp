@@ -61,9 +61,18 @@ QList<DeskOffer> ContentRepository::deskOffers(const QString& band) {
     if (!readJson(band + QStringLiteral("/paket.json"), pkg)) return out;
     for (const QJsonValue& v : pkg.value(QStringLiteral("pult_nach_bedarf")).toArray()) {
         const QJsonObject o = v.toObject();
-        out << DeskOffer{o.value(QStringLiteral("teil")).toString(), o.value(QStringLiteral("ab_stufe")).toInt()};
+        out << DeskOffer{o.value(QStringLiteral("teil")).toString(), o.value(QStringLiteral("ab_stufe")).toInt(),
+                         o.value(QStringLiteral("ab_experiment")).toString(),
+                         o.value(QStringLiteral("bei_nutzung")).toBool()};
     }
     return out;
+}
+
+int ContentRepository::startColumns(const QString& band) {
+    QJsonObject pkg;
+    if (!readJson(band + QStringLiteral("/paket.json"), pkg)) return 0;
+    const int c = pkg.value(QStringLiteral("start_spalten")).toInt();
+    return (c == 8 || c == 10 || c == 12) ? c : 0;
 }
 
 QStringList ContentRepository::experimentIds(const QString& band) const {
