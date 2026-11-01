@@ -29,6 +29,12 @@ Item {
     implicitWidth: 72
     implicitHeight: 34
 
+    // Grosse Koerper zeichnerisch kleiner (Beine reichen weiter bis zu den Steckpunkten); Symbole unberuehrt
+    readonly property real sizeFactor: isLed || type === "ir_led" || type.startsWith("trimmer")
+        || ["taster", "wechselschalter", "reedkontakt", "widerstand", "kondensator", "elko", "motor"].indexOf(type) >= 0
+        ? 0.85 : 1.0
+    scale: sizeFactor
+
     readonly property bool isLed: type.startsWith("led")
     readonly property color ledColor: type === "led_gruen" ? "#22B14C" : type === "led_gelb" ? "#F2C318"
                                     : type === "led_blau" ? "#2C6BE0" : "#E8221B"
