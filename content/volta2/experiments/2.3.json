@@ -1,0 +1,104 @@
+{
+  "id": "volta2.2.3",
+  "band": "volta2",
+  "stufe": 2,
+  "titel_key": "exp2_2_3_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp2_2_3_frage",
+  "vermutungen": [
+    "exp2_2_3_v1",
+    "exp2_2_3_v2",
+    "exp2_2_3_v3"
+  ],
+  "beobachtungen": [
+    "exp2_2_3_b1",
+    "exp2_2_3_b2",
+    "exp2_2_3_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 440,
+        "spitze_V": 2
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.001,
+        "volt_je_teilung": [
+          0.1
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A1"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A1",
+        "nach": "P:LS1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "A2",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "P:G0",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_2_3_s1",
+    "exp2_2_3_s2",
+    "exp2_2_3_s3"
+  ],
+  "erfolg": {
+    "bauteil": "LS",
+    "groesse": "frequenz_Hz",
+    "zwischen": [
+      400,
+      480
+    ],
+    "dauer_s": 1
+  },
+  "hilfen": [
+    "exp2_2_3_h1",
+    "exp2_2_3_h2",
+    "exp2_2_3_loesung"
+  ],
+  "erklaerung_key": "exp2_2_3_erklaerung",
+  "mehr_wissen_key": "exp2_2_3_mehr",
+  "weiterforschen": [
+    "exp2_2_3_w1",
+    "exp2_2_3_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_2_3_echt"
+}

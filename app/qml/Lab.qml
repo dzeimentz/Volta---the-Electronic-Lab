@@ -857,7 +857,10 @@ Item {
                 else if (k === "bauteil") { tray.showModules = false; tray.showType(lab.controller.guideStep.type) }
             }
             // neues Experiment bzw. freies Labor: wieder alle Themen
-            function onExperimentChanged() { tray.filter = "" }
+            function onExperimentChanged() {
+                tray.filter = ""
+                if (lab.controller.experimentScope) lab.recorderVisible = true // Vorlage stellt das Oszilloskop ein
+            }
         }
         onLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.partName(type)).arg(stage))
         onDragUpdated: (type, scenePos) => {

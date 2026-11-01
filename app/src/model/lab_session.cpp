@@ -211,12 +211,11 @@ void LabSession::updateScope() {
         c.capacity = 2 * kScopePointsPerScreen + 200; // zwei Bilder: Trigger mit Vorlauf findet immer ein ganzes
         c.stepS = s.simStepS();
     }
-    if (needsAudioStep(m_board) && m_timeScale == 1.0) { // 20 us auch bei Ton aus (needsAudioStep)
-        c.stepS = std::min(c.stepS, kAudioStepS);
-        if (m_audible && m_audio) {
-            c.audio = m_audio;
-            c.audioId = desk_id::kSpeaker;
-        }
+    // Schrittweite nach dem Aufbau (Generator, Lautsprecher), unabhaengig davon, ob der Ton laeuft
+    c.stepS = std::min(c.stepS, requiredStepS(m_board, m_timeScale == 1.0));
+    if (needsAudioStep(m_board) && m_timeScale == 1.0 && m_audible && m_audio) {
+        c.audio = m_audio;
+        c.audioId = desk_id::kSpeaker;
     }
     if (m_timeScale < 1.0) // Zeitlupe: etwa gleich viele Schritte je Sekunde wie in Echtzeit, hoechstens 20 us fein
         c.stepS = std::min(c.stepS, std::clamp(core::kDefaultStepS * m_timeScale, kAudioStepS, core::kDefaultStepS));
@@ -659,6 +658,7 @@ void LabSession::setGenWaveform(int waveform) {
 void LabSession::setGenFrequency(double hz) {
     m_board.desk.genFrequencyHz = std::isfinite(hz) ? std::clamp(hz, 1.0, 10000.0) : 100.0;
     m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenFrequency, m_board.desk.genFrequencyHz});
+    updateScope(); // Schrittweite folgt der Frequenz (requiredStepS)
 }
 
 void LabSession::setGenAmplitude(double peakV) {

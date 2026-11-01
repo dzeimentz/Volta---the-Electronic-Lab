@@ -1,0 +1,147 @@
+{
+  "id": "volta2.2.1",
+  "band": "volta2",
+  "stufe": 2,
+  "titel_key": "exp2_2_1_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "tastkopf",
+    "widerstand",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp2_2_1_frage",
+  "vermutungen": [
+    "exp2_2_1_v1",
+    "exp2_2_1_v2",
+    "exp2_2_1_v3"
+  ],
+  "beobachtungen": [
+    "exp2_2_1_b1",
+    "exp2_2_1_b2",
+    "exp2_2_1_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "oszilloskop": {
+        "zeitbasis_s": 0.5,
+        "volt_je_teilung": [
+          5,
+          5
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A3",
+          "A4"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A4",
+          "kathode": "B4"
+        }
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A3"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "B4"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "BL1",
+        "typ": "blinkmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "BL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "BL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A3",
+        "farbe": "rot"
+      },
+      {
+        "von": "B4",
+        "nach": "BL1.aus",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_2_1_s1",
+    "exp2_2_1_s2",
+    "exp2_2_1_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "B4",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 2,
+        "min": 3
+      },
+      {
+        "feld": "A3",
+        "groesse": "spannung_V",
+        "zwischen": [
+          8.5,
+          9.1
+        ]
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_2_1_h1",
+    "exp2_2_1_h2",
+    "exp2_2_1_loesung"
+  ],
+  "erklaerung_key": "exp2_2_1_erklaerung",
+  "mehr_wissen_key": "exp2_2_1_mehr",
+  "weiterforschen": [
+    "exp2_2_1_w1",
+    "exp2_2_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_2_1_echt"
+}

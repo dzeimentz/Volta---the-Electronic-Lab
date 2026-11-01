@@ -208,7 +208,8 @@ ApplicationWindow {
         onDemoStarted: (experimentId) => {
             root.inJournal = false
             root.inLab = true
-            labView.recorderVisible = experimentId === "volta1.3.12" // Ladekurve im Zeitschreiber
+            // Ladekurve im Zeitschreiber; ab Volta 2 das Oszilloskop, wenn die Vorlage es einstellt
+            labView.recorderVisible = experimentId === "volta1.3.12" || labController.experimentScope
         }
     }
     // Knopf in den Leisten unten links (Vorfuehrung, Praesentation): runde Pille in der Farbe der Leiste

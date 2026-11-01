@@ -143,6 +143,7 @@ class LabController : public QObject {
     // Forscherheft: [{id, title, date, guess, observation, comparison, notes[]}], neueste zuerst
     Q_PROPERTY(QVariantList journal READ journal NOTIFY journalChanged)
     Q_PROPERTY(bool destructive READ destructive NOTIFY experimentChanged)
+    Q_PROPERTY(bool experimentScope READ experimentScope NOTIFY experimentChanged) // Oszilloskop beim Start zeigen
     Q_PROPERTY(QString question READ question NOTIFY experimentChanged)
     Q_PROPERTY(QStringList guesses READ guesses NOTIFY experimentChanged)
     Q_PROPERTY(int guess READ guess NOTIFY flowChanged)
@@ -390,6 +391,7 @@ public:
     int experimentStage() const { return m_freeLab || m_experiment.id.isEmpty() ? -1 : m_experiment.stage; }
     int phase() const { return static_cast<int>(m_flow.phase()); }
     bool destructive() const { return m_experiment.destructive; }
+    bool experimentScope() const { return !m_freeLab && m_experiment.scopeShown; }
     QString question() const { return m_repo.text(m_experiment.questionKey); }
     QStringList guesses() const { return texts(m_experiment.guessKeys); }
     int guess() const { return m_flow.guess(); }

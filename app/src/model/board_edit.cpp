@@ -5,6 +5,8 @@
 #include <set>
 
 #include "anchor.hpp"
+#include "audio_stream.hpp"
+#include "volta/core/simulator.hpp"
 
 namespace volta::model {
 
@@ -168,6 +170,19 @@ bool speakerWired(const Board& board) {
 }
 
 bool needsAudioStep(const Board& board) { return board.deskParts.has_value() && speakerWired(board); }
+
+double requiredStepS(const Board& board, bool audio) {
+    if (audio && needsAudioStep(board)) return kAudioStepS;
+    double step = core::kDefaultStepS;
+    if (hasDeskPart(board, "generator"))
+        for (const auto& w : board.wires)
+            if (w.from == "P:G" || w.to == "P:G") {
+                const double f = std::max(board.desk.genFrequencyHz, 1.0);
+                step = std::clamp(1.0 / (40.0 * f), kAudioStepS, core::kDefaultStepS);
+                break;
+            }
+    return step;
+}
 
 std::vector<std::string> deskPartsUsed(const Board& board) {
     std::vector<std::string> used{"batterie"};

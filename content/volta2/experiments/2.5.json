@@ -1,0 +1,106 @@
+{
+  "id": "volta2.2.5",
+  "band": "volta2",
+  "stufe": 2,
+  "titel_key": "exp2_2_5_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "kondensator",
+    "messstelle_a",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp2_2_5_frage",
+  "vermutungen": [
+    "exp2_2_5_v1",
+    "exp2_2_5_v2",
+    "exp2_2_5_v3"
+  ],
+  "beobachtungen": [
+    "exp2_2_5_b1",
+    "exp2_2_5_b2",
+    "exp2_2_5_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 1000,
+        "spitze_V": 4
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A3"
+        ]
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "A3",
+          "A5"
+        ],
+        "wert": 1e-06
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A5",
+        "nach": "P:G0",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_2_5_s1",
+    "exp2_2_5_s2",
+    "exp2_2_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "C1",
+        "groesse": "strom_mA",
+        "auswertung": "effektiv",
+        "fenster_s": 0.2,
+        "min": 10
+      },
+      {
+        "bauteil": "C1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_2_5_h1",
+    "exp2_2_5_h2",
+    "exp2_2_5_loesung"
+  ],
+  "erklaerung_key": "exp2_2_5_erklaerung",
+  "mehr_wissen_key": "exp2_2_5_mehr",
+  "weiterforschen": [
+    "exp2_2_5_w1",
+    "exp2_2_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_2_5_echt"
+}

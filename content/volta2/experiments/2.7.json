@@ -1,0 +1,138 @@
+{
+  "id": "volta2.2.7",
+  "band": "volta2",
+  "stufe": 2,
+  "titel_key": "exp2_2_7_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "kondensator",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp2_2_7_frage",
+  "vermutungen": [
+    "exp2_2_7_v1",
+    "exp2_2_7_v2",
+    "exp2_2_7_v3"
+  ],
+  "beobachtungen": [
+    "exp2_2_7_b1",
+    "exp2_2_7_b2",
+    "exp2_2_7_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 1600,
+        "spitze_V": 4
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.0005,
+        "volt_je_teilung": [
+          1,
+          1
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A3"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "A3",
+          "A5"
+        ],
+        "wert": 1e-07
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A1"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A3"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A5",
+        "nach": "P:G0",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_2_7_s1",
+    "exp2_2_7_s2",
+    "exp2_2_7_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "A1",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.2,
+        "min": 7
+      },
+      {
+        "feld": "A3",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.2,
+        "zwischen": [
+          4.8,
+          6.2
+        ]
+      },
+      {
+        "bauteil": "R1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_2_7_h1",
+    "exp2_2_7_h2",
+    "exp2_2_7_loesung"
+  ],
+  "erklaerung_key": "exp2_2_7_erklaerung",
+  "mehr_wissen_key": "exp2_2_7_mehr",
+  "weiterforschen": [
+    "exp2_2_7_w1",
+    "exp2_2_7_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_2_7_echt"
+}

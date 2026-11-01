@@ -150,6 +150,8 @@ bool SuccessEvaluator::evaluate(Node& node, const core::Simulator& sim, const Ne
         std::size_t index = sim.probe().readings.size();
         if (c.part == "MESS") { // Dreifach-Messgeraet des Pults
             if (const auto d = net.desk.find(desk_id::kMeter); d != net.desk.end()) index = d->second;
+        } else if (c.part == "LS") { // Lautsprecher des Pults
+            if (const auto d = net.desk.find(desk_id::kSpeaker); d != net.desk.end()) index = d->second;
         } else if (const auto p = net.parts.find(c.part); p != net.parts.end())
             index = p->second;
         else if (const auto m = net.moduleMain.find(c.part); m != net.moduleMain.end())

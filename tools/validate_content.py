@@ -88,6 +88,9 @@ def check_condition(cond, where: str, part_ids: set[str], rep: Report, measure_i
     if ref == "MESS":  # Dreifach-Messgeraet des Pults: nur seine Anzeige
         if cond.get("groesse") not in (None, "anzeige"):
             rep.error(where, "Messgeraet (MESS): nur 'anzeige' pruefbar")
+    elif ref == "LS":  # Lautsprecher des Pults (ab Volta 2 in Bedingungen): Strom, Spannung, Frequenz
+        if cond.get("groesse") not in (None, "strom_mA", "spannung_V", "frequenz_Hz", "leistung_mW"):
+            rep.error(where, "Lautsprecher (LS): nur strom_mA, spannung_V, frequenz_Hz oder leistung_mW")
     elif cond.get("groesse") == "anzeige" and ref not in measure_ids:
         rep.error(where, "'anzeige' gibt es nur am Messgeraet (bauteil 'MESS') und an Messstellen")
     if "auswertung" in cond and cond["auswertung"] not in STATISTICS:
@@ -96,7 +99,7 @@ def check_condition(cond, where: str, part_ids: set[str], rep: Report, measure_i
         rep.error(where, "fenster_s muss zwischen 0,02 und 10 s liegen")
     if "feld" in cond and cond.get("groesse") not in ("spannung_V", "frequenz_Hz"):
         rep.error(where, "am Feld nur spannung_V oder frequenz_Hz")
-    if ref is not None and ref != "MESS" and ref not in part_ids:
+    if ref is not None and ref not in ("MESS", "LS") and ref not in part_ids:
         rep.error(where, f"Bauteil '{ref}' ist nicht in der Vorlage")
     if "feld" in cond and not ANCHOR.match(str(cond["feld"])):
         rep.error(where, f"ungueltiges Feld '{cond['feld']}'")

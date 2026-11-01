@@ -438,6 +438,8 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     out.stage = o.value(QStringLiteral("stufe")).toInt();
     out.destructive = o.value(QStringLiteral("zerstoerend")).toBool();
     out.colourFixed = o.value(QStringLiteral("farbe_fest")).toBool();
+    out.scopeShown = o.value(QStringLiteral("vorlage")).toObject().value(QStringLiteral("pult_stellung")).toObject()
+                         .contains(QStringLiteral("oszilloskop"));
     out.titleKey = o.value(QStringLiteral("titel_key")).toString();
     out.success = o.value(QStringLiteral("erfolg")).toObject();
     out.durationMin = o.value(QStringLiteral("dauer_min")).toInt();

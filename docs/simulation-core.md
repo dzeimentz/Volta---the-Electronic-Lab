@@ -275,6 +275,14 @@ Zeitlupe (1/10, 1/100, 1/1000) ist stumm und verfeinert die Schritte auf 1 ms x 
 Die Bruecke uebergibt die Schrittweite dem Kern (`Simulator::step(m_stepS)`); bis Inkrement 6 rechnete der Kern trotz
 feinerer Vorgabe des Oszilloskops mit 1 ms.
 
+**Schrittweite nach dem Aufbau** (`model::requiredStepS`, ab Volta 2 Stufe 2): Unabhaengig vom Oszilloskop gilt die
+feinste der Vorgaben: 1 ms Standard; haengt der Generator in der Schaltung (Leitung an `G`), mindestens 40 Schritte je
+Periode, also 1/(40·f), begrenzt auf 20 µs ... 1 ms (100 Hz -> 250 µs, 1 kHz -> 25 µs); haengt der Pult-Lautsprecher in
+der Schaltung, 20 µs (in der Zeitlupe gilt dort die Zeitlupenregel). Die Sitzung rechnet die Schrittweite beim
+Umstellen der Generatorfrequenz neu. Die Inhaltstests rechnen mit derselben Regel. Grenze: Ab etwa 5 kHz bleiben bei
+20 µs nur 10 Schritte je Periode; Rueckwaerts-Euler daempft dann sichtbar (Hochpass 1 kHz/100 nF bei 10 kHz rund 10 %
+zu wenig). Experimente nennen deshalb Zahlen nur bis etwa 3 kHz.
+
 **Kennlinienschreiber** (ab Volta 2): Steht er im Pult, tastet die Bruecke nach jedem Schritt alle 2 ms Spannung und
 Strom an seinen Klemmen ab (1000 Punkte = ein Durchlauf hin und zurueck) und gibt sie mit dem Schnappschuss heraus.
 Neue Einstellungen leeren den Puffer. Weil der Durchlauf in der laufenden Simulation stattfindet, zeigen Bauteile mit

@@ -444,10 +444,15 @@ private slots:
         core::ComponentReading ls;
         QVERIFY(s->speakerReading(ls));
         QVERIFY2(std::fabs(ls.frequencyHz - 1000.0) < 20.0, qPrintable(QString::number(ls.frequencyHz)));
-        // Zeitlupe: kein Tonstrom, Schritte 1 ms * Massstab, hoechstens 20 us fein
+        // Zeitlupe: kein Tonstrom, Schritte 1 ms * Massstab, hoechstens 20 us fein; der Generator mit 1 kHz
+        // verlangt aber 40 Schritte je Periode (25 us, requiredStepS)
         s->setTimeScale(0.1);
         run(*s, 0.01);
+        QCOMPARE(s->bridge().stepS(), 25e-6);
+        s->setGenFrequency(100.0); // 250 us: jetzt bestimmt die Zeitlupe (100 us)
+        run(*s, 0.01);
         QCOMPARE(s->bridge().stepS(), 1e-4);
+        s->setGenFrequency(1000.0);
         s->setTimeScale(0.001);
         run(*s, 0.001);
         QCOMPARE(s->bridge().stepS(), model::kAudioStepS);

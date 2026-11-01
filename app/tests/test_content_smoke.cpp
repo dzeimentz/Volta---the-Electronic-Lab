@@ -54,7 +54,7 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
         if (std::any_of(used.begin(), used.end(), [&](const std::string& g) { return !model::hasDeskPart(start, g); }))
             start.deskParts = used;
     }
-    const double stepS = model::needsAudioStep(start) ? model::kAudioStepS : core::kDefaultStepS;
+    const double stepS = model::requiredStepS(start); // wie die App (LabSession::updateScope)
     std::vector<std::string> pressed;
     for (auto& p : start.parts)
         if (p.type == "taster" && p.closed) {

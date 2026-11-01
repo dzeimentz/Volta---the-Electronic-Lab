@@ -123,7 +123,7 @@ Experiment erscheinen, ergibt sich aus diesen Leitungen (Pult nach Bedarf). `pul
 `batterie2_V` (4.5 | 9), `wechsel_V` (6 | 9, Effektivwert), `generator` (`form` sinus | dreieck | rechteck,
 `frequenz_Hz` 1 ... 10000, `spitze_V` 0 ... 4, `gleichanteil_V` -4 ... 4), `kennlinienschreiber` (`spannung_V`
 2 | 5 | 10 | 20, `beide_richtungen`, `strom_mA` 5 | 20 | 50 | 200), `oszilloskop` (`zeitbasis_s` je Teilung,
-`volt_je_teilung` je Kanal; jeweils die naechste Stufe) und `anzeigegeraet` (`doppelt`, `leistung`). Messstellen
+`volt_je_teilung` je Kanal; jeweils die naechste Stufe; das Oszilloskop ist dann beim Start eingeblendet) und `anzeigegeraet` (`doppelt`, `leistung`). Messstellen
 in der Vorlage blenden das Anzeigegeraet ein; ihre Anzeige prueft `{"bauteil": "UM1", "groesse": "anzeige", ...}`
 (Betrag in V bzw. A).
 
@@ -132,7 +132,9 @@ Auswertung ueber ein Zeitfenster (ab Volta 2, fuer Wechselgroessen): `"auswertun
 (Durchgaenge durch die Mitte, 10 % Hysterese); `"fenster_s"` 0,02 ... 10 s (Vorgabe 0,2 s, Frequenz mindestens
 1 s). Ausgewertet wird je abgeschlossenem Fenster, das Ergebnis gilt bis zum Ende des naechsten. Am Feld ist
 ausser `spannung_V` auch `frequenz_Hz` erlaubt: `{"feld": "B3", "groesse": "frequenz_Hz", "zwischen": [49, 51]}`.
-Haengt der Pult-Lautsprecher in der Schaltung, rechnet die Simulation mit 20 µs - auch bei ausgeschaltetem Ton,
+Der Pult-Lautsprecher heisst in Bedingungen `LS` (`strom_mA`, `spannung_V`, `frequenz_Hz`, `leistung_mW`).
+Haengt der Generator in der Schaltung, rechnet die Simulation mit mindestens 40 Schritten je Periode (hoechstens
+20 µs fein). Haengt der Pult-Lautsprecher in der Schaltung, rechnet die Simulation mit 20 µs - auch bei ausgeschaltetem Ton,
 damit das Ergebnis nie an der Tonausgabe haengt.
 
 Module in Bedingungen: `bauteil` darf auch eine Modulkennung der Vorlage sein (z. B. `TM1`); gemessen werden die

@@ -1,0 +1,106 @@
+{
+  "id": "volta2.2.6",
+  "band": "volta2",
+  "stufe": 2,
+  "titel_key": "exp2_2_6_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "spule_100mh",
+    "spule_1h",
+    "messstelle_a",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp2_2_6_frage",
+  "vermutungen": [
+    "exp2_2_6_v1",
+    "exp2_2_6_v2",
+    "exp2_2_6_v3"
+  ],
+  "beobachtungen": [
+    "exp2_2_6_b1",
+    "exp2_2_6_b2",
+    "exp2_2_6_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 100,
+        "spitze_V": 4
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A3"
+        ]
+      },
+      {
+        "id": "SP1",
+        "typ": "spule_100mh",
+        "felder": [
+          "A3",
+          "A5"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A5",
+        "nach": "P:G0",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_2_6_s1",
+    "exp2_2_6_s2",
+    "exp2_2_6_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "SP1",
+        "groesse": "strom_mA",
+        "auswertung": "effektiv",
+        "fenster_s": 0.2,
+        "min": 15
+      },
+      {
+        "bauteil": "SP1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_2_6_h1",
+    "exp2_2_6_h2",
+    "exp2_2_6_loesung"
+  ],
+  "erklaerung_key": "exp2_2_6_erklaerung",
+  "mehr_wissen_key": "exp2_2_6_mehr",
+  "weiterforschen": [
+    "exp2_2_6_w1",
+    "exp2_2_6_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_2_6_echt"
+}
