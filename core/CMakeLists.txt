@@ -21,6 +21,7 @@ add_library(volta_core STATIC
     src/components/potentiometer.cpp
     src/components/speaker.cpp
     src/components/optics.cpp
+    src/components/regulator.cpp
     src/components/sensors.cpp
     src/components/magnet.cpp
     src/components/sources.cpp

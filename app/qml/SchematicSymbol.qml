@@ -77,6 +77,8 @@ Item {
                        + arrowLine(25, 12, 33, 12) + " " + arrowLine(25, 19, 33, 19)
                        + " M38 9 V23 M38 12 L46 6 V2 M38 20 L46 26 V30",
                     f: arrowHead(25, 12, 33, 12) + " " + arrowHead(25, 19, 33, 19) + " " + arrowHead(38, 20, 46, 26)}
+        case "spannungsregler_5v": // Kasten mit Ein links, Aus rechts, Masse unten
+            return {s: "M0 16 H16 M48 16 H64 M16 5 H48 V25 H16 Z M32 25 V32", f: "", t: "5V", tx: 32, ty: 15}
         case "kondensator":
             return {s: "M0 16 H29 M35 16 H64 M29 6 V26 M35 6 V26", f: ""}
         case "elko": // gepolt: Plusbelag hohl, Minusbelag gefuellt

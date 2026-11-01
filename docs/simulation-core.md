@@ -149,6 +149,13 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
   letzten angenommenen Schritts (in beginSolve festgeschrieben). Kopplung nach Abstand der Bauteilmitten
   k = 0,2 / (1 + d^2) (d in Feldern), ohne Abstrahlrichtung; Abdeckkarte (Werkzeug `karte`) laesst direkt darunter
   0,5 % von Licht und IR-Strahlung durch. Imax 20 mA, Rth 450 K/W.
+- **Spannungsregler 5 V** (`VoltageRegulator`, `spannungsregler_5v`, ab Volta 2, Traegerplatine IN, GND, OUT):
+  Verhaltensmodell 78L05-artig. Laengsstrom I = 0,14 A * c * f * s mit c = (1 + tanh((4,98 V - Uaus) / 20 mV)) / 2
+  (Lastregelung ca. 40 mV von 1 bis 100 mA, Datenblatt hoechstens 60 mV) und f = (1 + tanh((Uein - Uaus - 1,6 V) /
+  0,1 V)) / 2 (Mindestabfall ca. 1,7 V); Ruhestrom 3 mA, innerer Teiler 5 kOhm. Strombegrenzung 140 mA; Thermik
+  200 K/W, tau 2 s; ab 125 Grad C nimmt der Schutz den Strom zurueck (25 K darueber null), keine Zerstoerung.
+  Newton: Ausgangsspannung je Iteration hoechstens 0,5 V, im Regelbereich 40 mV (sonst pendelt es an der steilen
+  Regelstufe).
 - **Optokoppler** (`Optocoupler`, ab Volta 2, 2-x-2-Platine A, K, C, E): IR-LED (1,2 V bei 20 mA) und
   Fototransistor in einem Bauteil, Uebertragungsfaktor 100 % (PC817-artig), Ausgang bis 50 mA; zerstoert, sobald
   ein Teil zerstoert ist.

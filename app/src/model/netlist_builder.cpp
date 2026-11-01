@@ -23,6 +23,7 @@
 #include "volta/core/components/transistor.hpp"
 #include "volta/core/components/inductor.hpp"
 #include "volta/core/components/optics.hpp"
+#include "volta/core/components/regulator.hpp"
 #include "volta/core/components/wire.hpp"
 
 namespace volta::model {
@@ -272,6 +273,8 @@ private:
             core::OptocouplerParams op;
             op.ctr = e->param("ctr", op.ctr);
             c.add<core::Optocoupler>(p.id, n[0], n[1], n[2], n[3], op);
+        } else if (m == "regulator" && n.size() == 3) {
+            c.add<core::VoltageRegulator>(p.id, n[0], n[1], n[2]); // 78L05-artig (Kennwerte im Kern)
         } else if (m == "inductor" && n.size() == 2) {
             // 100 mH oder 1 H (Katalog l_H); Wicklungswiderstand und Grenzstrom wie die Vorgaben des Kerns
             const double l = e->param("l_H", 0.1);

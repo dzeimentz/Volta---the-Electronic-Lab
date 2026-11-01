@@ -556,6 +556,24 @@ private slots:
         QVERIFY(r->terminalCurrentA[0] > 5e-3); // LED-Strom rund 7 mA
     }
 
+    // Spannungsregler: aus 9 V werden 5 V, auch unter Last
+    void regulatorGivesFiveVolt() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("spannungsregler_5v", "A1", Orientation::Horizontal, Span::Short)); // IN A1, GND A2, OUT A3
+        QVERIFY(s->addPart("widerstand", "C3", Orientation::Horizontal, Span::Short, nullptr, 100.0)); // C3-C4
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("A3", "C3", "gelb"));
+        QVERIFY(s->addWire("C4", "P:0V", "schwarz"));
+        run(*s, 0.05);
+        QVERIFY2(std::fabs(s->voltage("A3") - 5.0) < 0.1, qPrintable(QString::number(s->voltage("A3"))));
+        const core::ComponentReading* r = s->reading("IC1");
+        QVERIFY(r);
+        QVERIFY(!r->overloaded);
+        QVERIFY2(std::fabs(r->displayValue - s->voltage("A3")) < 1e-3, qPrintable(QString::number(r->displayValue) + " " + QString::number(s->voltage("A3"))));
+    }
+
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage
     void successMatchesPartsByType() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));

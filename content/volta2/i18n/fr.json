@@ -23,5 +23,6 @@
   "lex_trimmer": "Un trimmer est un petit potentiomètre de réglage : le curseur s partage la piste entre a et b. On le règle une fois avec un tournevis – touche-le et le curseur apparaît.",
   "lex_ir_led": "Une LED IR brille dans l’infrarouge – nos yeux ne voient pas cette lumière. Comme toute LED, elle a besoin d’une résistance en série. L’appareil photo de nombreux téléphones montre sa lueur.",
   "lex_fototransistor": "Un phototransistor est un transistor commandé par la lumière : plus il reçoit de lumière ou de rayonnement IR, plus il laisse passer de courant de C vers E. Tu peux le masquer avec la carte.",
-  "lex_optokoppler": "Un optocoupleur contient une LED IR et un phototransistor dans un boîtier sombre. Quand la LED brille (A et K), le transistor conduit (C et E) – sans que les deux circuits soient reliés."
+  "lex_optokoppler": "Un optocoupleur contient une LED IR et un phototransistor dans un boîtier sombre. Quand la LED brille (A et K), le transistor conduit (C et E) – sans que les deux circuits soient reliés.",
+  "lex_spannungsregler": "Un régulateur de tension transforme une tension continue plus élevée et variable en exactement 5 V. L’entrée (IN) a besoin d’au moins 1,7 V de plus que la sortie (OUT). En cas de court-circuit ou de surchauffe, il se protège et fournit moins de courant."
 }

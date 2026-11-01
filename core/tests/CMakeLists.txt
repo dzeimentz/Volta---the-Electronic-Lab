@@ -31,6 +31,7 @@ add_executable(volta_core_tests
     components/test_speaker.cpp
     components/test_sensors_magnet.cpp
     components/test_optics.cpp
+    components/test_regulator.cpp
     components/test_sources.cpp
     components/test_inductor.cpp
 )

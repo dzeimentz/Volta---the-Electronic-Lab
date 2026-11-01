@@ -118,7 +118,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
     // a liegt unter b (nur wenn beide gezeichnet)
     auto below = [&](std::size_t a, std::size_t b) { return has(a) && has(b) && row(a) > row(b) + kEps; };
     const std::string& t = e.type;
-    if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler") {
+    if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler" || t == "spannungsregler_5v") {
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
@@ -132,6 +132,18 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
             const bool relayTop = t == "relais" && n == "a", relayBottom = t == "relais" && n == "b";
             const bool relayRight = (t == "relais" && n == "no") || (t == "optokoppler" && (n == "c" || n == "e"));
             if (t == "optokoppler") p.label = n == "anode" ? "A" : n == "kathode" ? "K" : n == "c" ? "C" : "E";
+            if (t == "spannungsregler_5v") { // Ein links, Aus rechts, Masse unten (wie im Datenblatt)
+                p.label = n == "ein" ? "IN" : n == "aus" ? "OUT" : "GND";
+                if (n == "masse") {
+                    p.y = g.h / 2;
+                    p.exit = Exit::Down;
+                    continue;
+                }
+                if (n == "aus") {
+                    right.push_back(k);
+                    continue;
+                }
+            }
             if (n == "plus" || n == "VOHM" || relayTop) {
                 p.y = -g.h / 2;
                 p.exit = Exit::Up;

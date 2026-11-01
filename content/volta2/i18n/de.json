@@ -23,5 +23,6 @@
   "lex_trimmer": "Ein Trimmer ist ein kleines Potentiometer zum Einstellen: Der Schleifer s teilt die Bahn zwischen a und b. Man stellt ihn einmal mit dem Schraubendreher ein – tippe ihn an, dann erscheint der Regler.",
   "lex_ir_led": "Eine IR-LED leuchtet im Infrarot – dieses Licht sehen unsere Augen nicht. Sie braucht wie jede LED einen Vorwiderstand. Die Kamera vieler Handys zeigt ihr Leuchten.",
   "lex_fototransistor": "Ein Fototransistor ist ein Transistor, den Licht steuert: Je mehr Licht oder IR-Strahlung auf ihn fällt, desto mehr Strom lässt er von C nach E durch. Mit der Abdeckkarte kannst du ihn abschatten.",
-  "lex_optokoppler": "Ein Optokoppler enthält eine IR-LED und einen Fototransistor in einem dunklen Gehäuse. Leuchtet die LED (A und K), leitet der Transistor (C und E) – ohne dass die beiden Stromkreise verbunden sind."
+  "lex_optokoppler": "Ein Optokoppler enthält eine IR-LED und einen Fototransistor in einem dunklen Gehäuse. Leuchtet die LED (A und K), leitet der Transistor (C und E) – ohne dass die beiden Stromkreise verbunden sind.",
+  "lex_spannungsregler": "Ein Spannungsregler macht aus einer höheren, schwankenden Gleichspannung genau 5 V. Der Eingang (IN) braucht mindestens etwa 1,7 V mehr als der Ausgang (OUT). Bei Kurzschluss oder zu viel Wärme schützt er sich selbst und liefert weniger Strom."
 }

@@ -64,7 +64,9 @@
     {"typ": "fototransistor", "thema": "widerstaende", "anschluesse": ["c", "e"], "spannweite": ["kurz", "lang"], "modell": "phototransistor",
      "parameter": {"s_uA_lx": 0.5}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_fototransistor"},
     {"typ": "optokoppler", "thema": "halbleiter", "anschluesse": ["anode", "kathode", "c", "e"], "spannweite": ["platine_2x2"], "lage": ["anode", "c", "kathode", "e"], "modell": "optocoupler",
-     "parameter": {"ctr": 1.0}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_optokoppler"}
+     "parameter": {"ctr": 1.0}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_optokoppler"},
+    {"typ": "spannungsregler_5v", "thema": "halbleiter", "anschluesse": ["ein", "masse", "aus"], "spannweite": ["traeger"], "lage": ["ein", "masse", "aus"], "modell": "regulator",
+     "parameter": {"u_aus_V": 5.0}, "ab_band": "volta2", "ab_stufe": 3, "lexikon_key": "lex_spannungsregler"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",

@@ -47,6 +47,7 @@ QtObject {
         case "ir_led": return qsTr("IR-LED")
         case "fototransistor": return qsTr("Fototransistor")
         case "optokoppler": return qsTr("Optokoppler")
+        case "spannungsregler_5v": return qsTr("Spannungsregler 5 V")
         case "heissleiter": return qsTr("Heißleiter")
         case "elektromagnet": return qsTr("Elektromagnet")
         case "relais": return qsTr("Relais")
@@ -112,6 +113,7 @@ QtObject {
             ["fotowiderstand", qsTr("Fotowiderstand", "Wortanfaenge im Aufbautext")],
             ["fototransistor", qsTr("Fototransistor", "Wortanfaenge im Aufbautext")],
             ["optokoppler", qsTr("Optokoppler", "Wortanfaenge im Aufbautext")],
+            ["spannungsregler_5v", qsTr("Spannungsregler", "Wortanfaenge im Aufbautext")],
             ["heissleiter", qsTr("Heißleiter", "Wortanfaenge im Aufbautext")],
             ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
             ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
@@ -198,6 +200,7 @@ QtObject {
             if (s.type.startsWith("led_") || s.type === "ir_led") t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
             else if (s.type.startsWith("diode") || s.type.startsWith("zdiode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
             else if (s.type === "summer" || s.type === "elko" || s.type === "piezo") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))
+            else if (s.type === "spannungsregler_5v") t += " " + qsTr("IN kommt an %1, OUT an %2.").arg(pinField("ein")).arg(pinField("aus"))
             else if (s.type === "fototransistor") t += " " + qsTr("C kommt an %1.").arg(pinField("c"))
             else if (s.type === "optokoppler") t += " " + qsTr("A kommt an %1, C an %2.").arg(pinField("anode")).arg(pinField("c"))
             else if (s.type.startsWith("transistor")) t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))

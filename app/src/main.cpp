@@ -221,13 +221,14 @@ int main(int argc, char* argv[]) {
     }
 
     // VOLTA_DEMO_GALLERY=3 (mit VOLTA_DEMO_FREELAB=1): Infrarot - Lichtschranke mit IR-LED und Fototransistor,
-    // Optokoppler, Abdeckkarte
+    // Optokoppler, Abdeckkarte; Spannungsregler
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 3) {
         QTimer::singleShot(400, &lab, [&lab] {
             struct P { const char* type; const char* field; bool vertical; };
             const P parts[] = {{"widerstand", "B1", false}, {"ir_led", "A1", false},       {"widerstand", "C3", false},
                                {"fototransistor", "A3", false}, {"optokoppler", "C6", false}, {"widerstand", "A6", false},
-                               {"widerstand", "A8", false},  {"led_gruen", "B9", true}};
+                               {"widerstand", "A8", false},  {"led_gruen", "B9", true},
+                               {"spannungsregler_5v", "E1", false}};
             for (const auto& p : parts)
                 lab.addPart(QString::fromLatin1(p.type), QString::fromLatin1(p.field), p.vertical, false);
             lab.setPartValue(QStringLiteral("R1"), 470.0);
@@ -236,7 +237,8 @@ int main(int argc, char* argv[]) {
             lab.setPartValue(QStringLiteral("R4"), 1000.0);
             const char* wires[][2] = {{"P:+9V", "B1"}, {"B2", "A1"}, {"A2", "P:0V"}, {"P:+9V", "C4"}, {"C3", "A3"},
                                       {"A4", "P:0V"},  {"P:+9V", "A6"}, {"A7", "C6"}, {"D6", "P:0V"},
-                                      {"P:+9V", "A8"}, {"A9", "B9"}, {"C9", "C7"}, {"D7", "P:0V"}};
+                                      {"P:+9V", "A8"}, {"A9", "B9"}, {"C9", "C7"}, {"D7", "P:0V"},
+                                      {"P:+9V", "E1"}, {"E2", "P:0V"}};
             for (const auto& w : wires)
                 lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
             lab.placeTool(QStringLiteral("karte"), 5.0, 4.0);

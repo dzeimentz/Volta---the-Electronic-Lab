@@ -95,6 +95,7 @@ Item {
             case "ir_led": return irLed
             case "fototransistor": return phototransistor
             case "optokoppler": return optocoupler
+            case "spannungsregler_5v": return regulator
             case "fotowiderstand": return photo
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
@@ -487,6 +488,26 @@ Item {
                     y: okPcb.f[index].y + (okPcb.f[index].y < okPcb.height / 2 ? 4 : -4 - height)
                 }
             }
+        }
+    }
+
+    // Spannungsregler 5 V (ab Volta 2) auf Traegerplatine: TO-92-Gehaeuse mit Aufdruck, Anschluesse IN, GND, OUT;
+    // wird bei Ueberlast bzw. Uebertemperatur ueber den Glutrand angezeigt
+    Component {
+        id: regulator
+        Rectangle {
+            anchors.fill: parent; radius: 6
+            color: "#E9D7B0"; border.color: Theme.navy
+            Rectangle {
+                anchors.centerIn: parent
+                width: 34; height: parent.height * 0.82; radius: 4
+                color: "#1E1E1E"; border.color: "#000000"
+                Rectangle { anchors.top: parent.top; width: parent.width; height: parent.height / 2; radius: 10; color: "#1E1E1E" }
+                Text { anchors.centerIn: parent; text: "5V"; color: "#E0E0E0"; font.pixelSize: Math.round(11 * Theme.fontScale); font.bold: true }
+            }
+            Text { x: 5; anchors.verticalCenter: parent.verticalCenter; text: "IN"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy }
+            Text { anchors.right: parent.right; anchors.rightMargin: 5; anchors.verticalCenter: parent.verticalCenter; text: "OUT"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy }
+            Text { anchors.horizontalCenter: parent.horizontalCenter; anchors.bottom: parent.bottom; anchors.bottomMargin: -1; text: "GND"; font.pixelSize: Math.round(8 * Theme.fontScale); font.bold: true; color: Theme.navy }
         }
     }
 

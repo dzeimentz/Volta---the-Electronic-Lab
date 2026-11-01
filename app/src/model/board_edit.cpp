@@ -45,7 +45,8 @@ std::string prefixFor(const std::string& type) {
         {"feuchtesonde", "F"},  {"piezo", "PZ"},
         {"zdiode_4v7", "D"},    {"zdiode_5v6", "D"},     {"transistor_pnp", "T"}, // ab Volta 2
         {"spule_100mh", "SP"},  {"spule_1h", "SP"},      {"trimmer_10k", "TR"},   {"trimmer_100k", "TR"},
-        {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"}};
+        {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
+        {"spannungsregler_5v", "IC"}};
     const auto it = prefixes.find(type);
     if (it != prefixes.end()) return it->second;
     if (type.rfind("led_", 0) == 0) return "D";
