@@ -28,6 +28,11 @@
 #include "volta/core/simulator.hpp"
 #include "volta_paths.hpp"
 
+// Link im Schema der Ausgabe (volta1://, volta2://)
+static QString appLink(const char* rest) {
+    return QLatin1String(volta::services::transfer::kScheme) + QStringLiteral("://") + QString::fromUtf8(rest);
+}
+
 using namespace volta;
 using model::AnchorKind;
 
@@ -128,9 +133,9 @@ private slots:
         namespace t = services::transfer;
         const QStringList known{"volta1.1.1", "volta1.1.2", "volta1.4.15"};
         const QString link = t::progressLink(QStringLiteral("volta1"), {"volta1.4.15", "volta1.1.1"});
-        QCOMPARE(link, QStringLiteral("volta1://fortschritt?d=1.1,4.15"));
+        QCOMPARE(link, appLink("fortschritt?d=1.1,4.15"));
         QCOMPARE(t::parseProgressLink(link, QStringLiteral("volta1"), known), QStringList({"volta1.1.1", "volta1.4.15"}));
-        QVERIFY(t::parseProgressLink(QStringLiteral("volta1://fortschritt?d=9.9,1.2,1.2"), QStringLiteral("volta1"), known) ==
+        QVERIFY(t::parseProgressLink(appLink("fortschritt?d=9.9,1.2,1.2"), QStringLiteral("volta1"), known) ==
                 QStringList{"volta1.1.2"}); // unbekannt verworfen, doppelt einmal
         QVERIFY(t::parseProgressLink(QStringLiteral("https://example.org/?d=1.1"), QStringLiteral("volta1"), known).isEmpty());
         // alle 61 Experimente: der QR-Code bleibt klein genug fuer die Kamera
@@ -577,7 +582,7 @@ private slots:
         QVERIFY(task::fromCode(code, back));
         QCOMPARE(back.experiments, t.experiments);
         QVERIFY(task::fromCode(code.toLower().remove(QLatin1Char('-')), back)); // klein, ohne Strich
-        QCOMPARE(task::toLink(t), QStringLiteral("volta1://aufgabe?c=") + code); // kurzer Link, grober QR-Code
+        QCOMPARE(task::toLink(t), appLink("aufgabe?c=") + code); // kurzer Link, grober QR-Code
         QVERIFY(task::parse(task::toLink(t), back));
         QCOMPARE(back.experiments, t.experiments);
         // ein falsches Zeichen faellt auf
@@ -597,7 +602,7 @@ private slots:
         b.wires.push_back({"L1", "P:+9V", "B3", "rot"});
         withBoard.board = b;
         const QString link = task::toLink(withBoard);
-        QVERIFY(link.startsWith(QStringLiteral("volta1://aufgabe?d=")));
+        QVERIFY(link.startsWith(appLink("aufgabe?d=")));
         QVERIFY(link.size() < 600); // gut lesbarer QR-Code
         task::Task read;
         QVERIFY(task::parse(link, read));
@@ -606,8 +611,8 @@ private slots:
         QVERIFY(read.board.has_value());
         QCOMPARE(read.board->parts.size(), std::size_t(1));
         QCOMPARE(read.board->parts[0].value, 470.0);
-        QVERIFY(!task::parse(QStringLiteral("volta1://aufgabe?d=kaputt"), read));
-        QVERIFY(!task::parse(QStringLiteral("volta1://fortschritt?d=1.1"), read));
+        QVERIFY(!task::parse(appLink("aufgabe?d=kaputt"), read));
+        QVERIFY(!task::parse(appLink("fortschritt?d=1.1"), read));
     }
 
     // Teileliste: gleiche Bauteile mit gleichem Wert zusammengefasst, Module zuerst, Leitungen nach Farbe
@@ -903,3 +908,4 @@ private slots:
 
 QTEST_GUILESS_MAIN(ModelTest)
 #include "test_model.moc"
+

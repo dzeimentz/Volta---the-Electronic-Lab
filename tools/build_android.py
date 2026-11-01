@@ -8,6 +8,7 @@ Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/build_android.py --armv7    # Test-APK fuer aeltere 32-Bit-Tablets (...-armv7-debug.apk)
     python3 tools/build_android.py --aab      # Release/android/Volta1-<version>-release-unsigned.aab
     python3 tools/build_android.py --zuse     # Zuse-Prototyp Z0: ../ZUSE/Release/android/Zuse1-Prototyp-arm64-debug.apk
+    python3 tools/build_android.py --volta2   # Volta 2 (Worktree volta-volta2): Release/android/Volta2-<version>-arm64-debug.apk
 
 AAB: Release-Bau fuer arm64-v8a und armeabi-v7a in einem Paket (build/android-release, QT_ANDROID_ABIS), Gradle
 bundleRelease ohne Signatur. Signieren mit dem eigenen Upload-Schluessel ist Sache des Inhabers (CLAUDE.md: keine
@@ -36,14 +37,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ZUSE = "--zuse" in sys.argv  # Zuse-Prototyp (eigener Build-Ordner, nur arm64-Test-APK)
-AAB = "--aab" in sys.argv and not ZUSE
-ARMV7 = "--armv7" in sys.argv and not AAB and not ZUSE
+VOLTA2 = "--volta2" in sys.argv and not ZUSE  # Volta 2: eigener Build-Ordner und Paket, nur arm64-Test-APK
+AAB = "--aab" in sys.argv and not ZUSE and not VOLTA2
+ARMV7 = "--armv7" in sys.argv and not AAB and not ZUSE and not VOLTA2
 PRESET = "android-armv7" if ARMV7 else "android-arm64"
-BUILD = ROOT / "build" / ("android-zuse" if ZUSE else "android-release" if AAB else PRESET)
+BUILD = ROOT / "build" / ("android-zuse" if ZUSE else "android-volta2" if VOLTA2 else "android-release" if AAB else PRESET)
 APP_DIR, APP_TARGET = ("zuse", "zuse_app") if ZUSE else ("app", "volta_app")
 ANDROID_BUILD = BUILD / APP_DIR / "android-build"
 LIBS = ANDROID_BUILD / "libs" # je ABI ein Unterordner
-PACKAGE = "com.dcsoftwareengineering.zuse1" if ZUSE else "com.dcsoftwareengineering.volta1"
+PACKAGE = "com.dcsoftwareengineering." + ("zuse1" if ZUSE else "volta2" if VOLTA2 else "volta1")
 ACTIVITY = "org.qtproject.qt.android.bindings.QtActivity"
 
 # Bibliotheken, die Volta nicht braucht (Muster auf Dateinamen in libs/<abi>)
@@ -104,6 +106,10 @@ def prune_libs_xml(path: Path) -> None:
 
 
 def version() -> str:
+    if VOLTA2:  # eigene Version der Ausgabe (app/CMakeLists.txt, VOLTA_APP_VERSION)
+        text = (ROOT / "app" / "CMakeLists.txt").read_text(encoding="utf-8")
+        m = re.search(r'STREQUAL "volta2"\)\s*set\(VOLTA_APP_VERSION "([0-9.]+)"\)', text)
+        return m.group(1) if m else "0"
     text = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
     m = re.search(r"project\(Volta\s+VERSION\s+([0-9.]+)", text)
     return m.group(1) if m else "0"
@@ -149,6 +155,8 @@ def main() -> int:
         extra = ["-B", str(BUILD), "-DQT_ANDROID_ABIS=arm64-v8a;armeabi-v7a"] if AAB else []
         if ZUSE:
             extra = ["-B", str(BUILD), "-DVOLTA_BUILD_ZUSE=ON"]
+        if VOLTA2:
+            extra = ["-B", str(BUILD), "-DVOLTA_EDITION=volta2"]
         run(["cmake", "--preset", PRESET] + extra, env, BUILD / "configure.log")
     run(["cmake", "--build", str(BUILD)] + (["--target", APP_TARGET, f"{APP_TARGET}_prepare_apk_dir"] if ZUSE else []), env, BUILD / "native.log")
     deploy = str(Path(env["QT_HOST_PATH"]) / "bin" / "androiddeployqt")
@@ -177,6 +185,7 @@ def main() -> int:
     target = (ROOT.parent / "ZUSE" / "Release" if ZUSE else ROOT / "Release") / "android"
     target.mkdir(parents=True, exist_ok=True)
     apk = target / ("Zuse1-Prototyp-arm64-debug.apk" if ZUSE
+                    else f"Volta2-{version()}-arm64-debug.apk" if VOLTA2
                     else f"Volta1-{version()}-{'armv7' if ARMV7 else 'arm64'}-debug.apk")
     shutil.copy2(apk_in, apk)
 

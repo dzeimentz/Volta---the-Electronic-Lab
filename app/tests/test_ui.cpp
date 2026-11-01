@@ -28,6 +28,12 @@
 #include "volta_paths.hpp"
 #include <QImage>
 #include <QImageReader>
+#include "services/profile_transfer.hpp"
+
+// Link im Schema der Ausgabe (volta1://, volta2://)
+static QString appLink(const char* rest) {
+    return QLatin1String(volta::services::transfer::kScheme) + QStringLiteral("://") + QString::fromUtf8(rest);
+}
 
 Q_IMPORT_QML_PLUGIN(VoltaPlugin)
 
@@ -1032,7 +1038,7 @@ private slots:
         from.useDataRoot(a.path());
         from.setProfilesEnabled(true);
         QVERIFY(from.selectProfile(from.addProfile(QStringLiteral("🦉"), QStringLiteral("Eule"))));
-        QCOMPARE(from.importProgressLink(QStringLiteral("volta1://fortschritt?d=1.1,1.2")), 2);
+        QCOMPARE(from.importProgressLink(appLink("fortschritt?d=1.1,1.2")), 2);
         const QUrl file = QUrl::fromLocalFile(a.filePath(QStringLiteral("eule.volta1profil")));
         QVERIFY(from.exportProfile(file));
         const QVariantMap info = from.inspectProfileFile(file);
@@ -1067,7 +1073,7 @@ private slots:
         m_lab->resetProgress();
         QObject* dialog = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("linkDialog"));
         QVERIFY(dialog);
-        m_lab->handleUrl(QUrl(QStringLiteral("volta1://fortschritt?d=1.1,1.3")));
+        m_lab->handleUrl(QUrl(appLink("fortschritt?d=1.1,1.3")));
         QTRY_VERIFY(dialog->property("opened").toBool());
         QCOMPARE(dialog->property("count").toInt(), 2);
         QVERIFY(!m_lab->isDone(QStringLiteral("volta1.1.1"))); // erst nach der Rueckfrage
@@ -1774,7 +1780,7 @@ private slots:
         QTemporaryDir dir;
         LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
         lab.useDataRoot(dir.path());
-        QVERIFY(lab.importProgressLink(QStringLiteral("volta1://fortschritt?d=1.1")) == 1);
+        QVERIFY(lab.importProgressLink(appLink("fortschritt?d=1.1")) == 1);
         lab.startFreeLab();
         QVERIFY(lab.addPart(QStringLiteral("gluehlampe"), QStringLiteral("B3"), false, false));
         lab.saveSession();
@@ -1782,7 +1788,7 @@ private slots:
         lab.setPresentation(true);
         QVERIFY(lab.unlockedStage() > 10);
         QVERIFY(!lab.isDone(QStringLiteral("volta1.1.1"))); // leerer Stand in der Praesentation
-        QVERIFY(lab.importProgressLink(QStringLiteral("volta1://fortschritt?d=2.1")) == 1);
+        QVERIFY(lab.importProgressLink(appLink("fortschritt?d=2.1")) == 1);
         lab.startFreeLab();
         QVERIFY(lab.addPart(QStringLiteral("led_rot"), QStringLiteral("C3"), false, false));
         lab.setPresentation(false);
@@ -1960,7 +1966,7 @@ private slots:
         QTemporaryDir dir;
         LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
         lab.useDataRoot(dir.path());
-        QVERIFY(lab.importProgressLink(QStringLiteral("volta1://fortschritt?d=1.1")) == 1);
+        QVERIFY(lab.importProgressLink(appLink("fortschritt?d=1.1")) == 1);
         lab.startFreeLab();
         QVERIFY(lab.addPart(QStringLiteral("gluehlampe"), QStringLiteral("B3"), false, false));
         lab.saveSession();
@@ -2246,3 +2252,4 @@ private slots:
 
 QTEST_MAIN(UiTest)
 #include "test_ui.moc"
+

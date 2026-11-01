@@ -2,6 +2,7 @@
 """Testpaket fuer Partner, Schulen und Verlage (nicht fuer den Store):
 
     python3 tools/build_testpaket.py          # Release/Testpaket/Volta1-<version>-Testpaket(.zip)
+    python3 tools/build_testpaket.py --volta2 # Volta 2 (Worktree volta-volta2): Release/Testpaket/Volta2-<version>-...
 
 Inhalt:
 - Volta1-<version>-Windows-Setup.exe  NSIS-Installer (packaging/windows/volta1.nsi), ohne Administratorrechte,
@@ -23,10 +24,13 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+VOLTA2 = "--volta2" in sys.argv
+# Ausgabe: Anzeigename, Dateipraefix, Programmdatei
+APP, PRE, EXE = ("Volta 2", "Volta2", "volta2.exe") if VOLTA2 else ("Volta 1", "Volta1", "volta1.exe")
 RELEASE = ROOT / "Release"
 OUT = RELEASE / "Testpaket"
 NSI = ROOT / "packaging" / "windows" / "volta1.nsi"
-ICON = ROOT / "app" / "resources" / "icons" / "volta.ico"
+ICON = ROOT / "app" / "resources" / "icons" / ("volta2/volta.ico" if VOLTA2 else "volta.ico")
 MAKENSIS = [Path("C:/Program Files (x86)/NSIS/makensis.exe"), Path("C:/Program Files/NSIS/makensis.exe")]
 # Programmdateien im Release-Ordner (alles andere dort sind Begleitdateien: APK, Store, Anleitungen ...)
 PROGRAM_DIRS = ["content", "generic", "iconengines", "imageformats", "multimedia", "platforminputcontexts",
@@ -34,11 +38,15 @@ PROGRAM_DIRS = ["content", "generic", "iconengines", "imageformats", "multimedia
 
 
 def version() -> str:
+    if VOLTA2:  # eigene Version der Ausgabe (app/CMakeLists.txt, VOLTA_APP_VERSION)
+        text = (ROOT / "app" / "CMakeLists.txt").read_text(encoding="utf-8")
+        m = re.search(r'STREQUAL "volta2"\)\s*set\(VOLTA_APP_VERSION "([0-9.]+)"\)', text)
+        return m.group(1) if m else "0"
     m = re.search(r"project\(Volta\s+VERSION\s+([0-9.]+)", (ROOT / "CMakeLists.txt").read_text(encoding="utf-8"))
     return m.group(1) if m else "0"
 
 
-LIESMICH = """Volta 1 – Das Elektronik-Labor · Testversion {ver}
+LIESMICH = """{app} – Das Elektronik-Labor · Testversion {ver}
 ==================================================
 
 Vielen Dank, dass Sie Volta ausprobieren! Dies ist eine Testversion für Partner, Schulen und Verlage. Bitte
@@ -46,18 +54,15 @@ geben Sie sie nicht weiter und veröffentlichen Sie keine Bildschirmfotos ohne R
 
 Inhalt
 ------
-  Volta1-{ver}-Windows-Setup.exe   Installation für Windows 10/11 (64 Bit)
-  Volta1-{ver}-Android.apk         Testversion für Android-Tablets (ab Android 8, empfohlen ab 10 Zoll)
-  Volta1-Kurzanleitung-de.pdf      zwei Seiten zum Einstieg
-  Volta1-Anleitung-de.pdf          ausführliche Anleitung
-  Volta1-Produktflyer-*.pdf        Produktinformation
-
+  {pre}-{ver}-Windows-Setup.exe   Installation für Windows 10/11 (64 Bit)
+  {pre}-{ver}-Android.apk         Testversion für Android-Tablets (ab Android 8, empfohlen ab 10 Zoll)
+{docs}
 Windows
 -------
-1. Volta1-{ver}-Windows-Setup.exe starten. Es werden keine Administratorrechte gebraucht.
+1. {pre}-{ver}-Windows-Setup.exe starten. Es werden keine Administratorrechte gebraucht.
 2. Die Testversion ist nicht signiert. Windows zeigt deshalb beim ersten Start »Der Computer wurde durch
    Windows geschützt«: auf »Weitere Informationen« und dann »Trotzdem ausführen« klicken.
-3. Volta liegt danach im Startmenü (auf Wunsch auch auf dem Desktop). Entfernen über Einstellungen → Apps.
+3. {app} liegt danach im Startmenü (auf Wunsch auch auf dem Desktop). Entfernen über Einstellungen → Apps.
 
 Android-Tablet
 --------------
@@ -84,13 +89,13 @@ DC Software Engineering · Daniel Zeimentz · Aufm Rothenhügel 26 · 54666 Irre
 info@dc-software-engineering.com · https://dc-software-engineering.com
 """
 
-README = """Volta 1 – The Electronics Lab · test version {ver}
+README = """{app} – The Electronics Lab · test version {ver}
 ==================================================
 
 Thank you for trying Volta! This is a test version for partners, schools and publishers. Please do not pass
 it on or publish screenshots without asking us first.
 
-Windows 10/11 (64-bit): run Volta1-{ver}-Windows-Setup.exe (no administrator rights needed). The test version
+Windows 10/11 (64-bit): run {pre}-{ver}-Windows-Setup.exe (no administrator rights needed). The test version
 is not signed, so Windows SmartScreen asks on first start: click »More info«, then »Run anyway«.
 
 Android tablet (Android 8 or later, 10 inches or more recommended): copy the APK to the tablet, tap it and allow
@@ -112,10 +117,10 @@ def main() -> int:
     if not makensis:
         print("NSIS (makensis) nicht gefunden")
         return 1
-    if not (RELEASE / "volta1.exe").exists():
-        print("Release fehlt: zuerst python tools/deploy_release.py")
+    if not (RELEASE / EXE).exists():
+        print("Release fehlt: zuerst python tools/deploy_release.py" + (" --volta2" if VOLTA2 else ""))
         return 1
-    name = f"Volta1-{ver}-Testpaket"
+    name = f"{PRE}-{ver}-Testpaket"
     pkg = OUT / name
     if pkg.exists():
         shutil.rmtree(pkg)
@@ -135,9 +140,9 @@ def main() -> int:
     # NSIS-Skript als UTF-8 mit BOM uebergeben (sonst liest makensis die ANSI-Codepage)
     nsi = OUT / "_volta1.nsi"
     nsi.write_text(NSI.read_text(encoding="utf-8"), encoding="utf-8-sig")
-    setup = pkg / f"Volta1-{ver}-Windows-Setup.exe"
+    setup = pkg / f"{PRE}-{ver}-Windows-Setup.exe"
     res = subprocess.run([str(makensis), "/V2", f"/DVERSION={ver}", f"/DSRC={stage}", f"/DOUT={setup}",
-                          f"/DICON={ICON}", str(nsi)], capture_output=True, text=True, encoding="utf-8",
+                          f"/DICON={ICON}", f"/DAPPNAME={APP}", f"/DEXE={EXE}", f"/DKEY={PRE}", str(nsi)], capture_output=True, text=True, encoding="utf-8",
                          errors="replace")
     if res.returncode != 0 or not setup.exists():
         print(res.stdout[-3000:], res.stderr[-2000:])
@@ -145,17 +150,21 @@ def main() -> int:
     shutil.rmtree(stage)
     nsi.unlink()
 
-    apk = RELEASE / "android" / f"Volta1-{ver}-arm64-debug.apk"
+    apk = RELEASE / "android" / f"{PRE}-{ver}-arm64-debug.apk"
     if apk.exists():
-        shutil.copy2(apk, pkg / f"Volta1-{ver}-Android.apk")
+        shutil.copy2(apk, pkg / f"{PRE}-{ver}-Android.apk")
     else:
-        print("Hinweis: keine Test-APK gefunden (tools/build_android.py)")
-    for pdf in [RELEASE / "Anleitung" / "Volta1-Kurzanleitung-de.pdf", RELEASE / "Anleitung" / "Volta1-Anleitung-de.pdf",
-                *sorted((RELEASE / "Flyer").glob("Volta1-Produktflyer-*.pdf"))]:
+        print("Hinweis: keine Test-APK gefunden (tools/build_android.py" + (" --volta2)" if VOLTA2 else ")"))
+    docs = ""
+    for pdf, what in [(RELEASE / "Anleitung" / f"{PRE}-Kurzanleitung-de.pdf", "zwei Seiten zum Einstieg"),
+                      (RELEASE / "Anleitung" / f"{PRE}-Anleitung-de.pdf", "ausführliche Anleitung"),
+                      *[(f, "Produktinformation") for f in sorted((RELEASE / "Flyer").glob(f"{PRE}-Produktflyer-*.pdf"))]]:
         if pdf.exists():
             shutil.copy2(pdf, pkg / pdf.name)
-    (pkg / "LIESMICH.txt").write_text(LIESMICH.format(ver=ver), encoding="utf-8-sig")
-    (pkg / "README.txt").write_text(README.format(ver=ver), encoding="utf-8-sig")
+            docs += f"  {pdf.name:32s} {what}\n"
+    fields = dict(ver=ver, app=APP, pre=PRE, docs=docs)
+    (pkg / "LIESMICH.txt").write_text(LIESMICH.format(**fields), encoding="utf-8-sig")
+    (pkg / "README.txt").write_text(README.format(**fields), encoding="utf-8-sig")
 
     archive = OUT / f"{name}.zip"
     with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:

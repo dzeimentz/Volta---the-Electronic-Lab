@@ -12,7 +12,11 @@ namespace volta::services {
 //  - Profildatei (*.volta1profil): Symbol, Spitzname, Fortschritt, Forscherheft und letzter Aufbau als JSON.
 namespace transfer {
 
-inline constexpr const char* kScheme = "volta1";
+// Link-Schema der Ausgabe (volta1://, volta2://): jede App oeffnet nur ihre eigenen Links (app/CMakeLists.txt)
+#ifndef VOLTA_URL_SCHEME
+#define VOLTA_URL_SCHEME "volta1"
+#endif
+inline constexpr const char* kScheme = VOLTA_URL_SCHEME;
 inline constexpr const char* kFileSuffix = "volta1profil";
 
 // Link mit den erledigten Experimenten (IDs ohne Bandpraefix, sortiert)

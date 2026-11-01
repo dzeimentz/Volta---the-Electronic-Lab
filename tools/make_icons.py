@@ -59,7 +59,7 @@ def main() -> int:
            f"-L{qt_root / 'lib'}", "-lQt6Svg", "-lQt6Gui", "-lQt6Core"]
     if subprocess.run(cmd, env=env).returncode != 0:
         return 1
-    for icons, name, android in ((ICONS, "volta", "android"), (ICONS / "volta2", "volta", None),
+    for icons, name, android in ((ICONS, "volta", "android"), (ICONS / "volta2", "volta", "android-volta2"),
                                  (ROOT / "zuse" / "resources" / "icons", "zuse1", "android-zuse")):
         if subprocess.run([str(exe), str(icons / f"{name}.svg"), str(icons)] + [str(s) for s in SIZES],
                           env=env).returncode != 0:

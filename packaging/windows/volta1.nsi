@@ -1,5 +1,6 @@
 ; Windows-Installer fuer die Testversion von Volta 1 (NSIS 3, Unicode). Aufruf ueber tools/build_testpaket.py:
 ;   makensis /DVERSION=0.9.0 /DSRC=<Programmordner> /DOUT=<Setup.exe> /DICON=<volta.ico> volta1.nsi
+; Volta 2 mit demselben Skript: zusaetzlich /DAPPNAME="Volta 2" /DEXE=volta2.exe /DKEY=Volta2
 ; Installation nur fuer den angemeldeten Benutzer (ohne Administratorrechte) nach %LOCALAPPDATA%\Programs\Volta 1,
 ; Verknuepfung im Startmenue und optional auf dem Desktop, Deinstallation ueber »Apps« in den Windows-Einstellungen.
 ; Fortschritt und Einstellungen liegen im privaten App-Speicher und bleiben bei der Deinstallation erhalten.
@@ -8,9 +9,17 @@
 Unicode true
 !include "MUI2.nsh"
 
-!define APPNAME "Volta 1"
+!ifndef APPNAME
+  !define APPNAME "Volta 1"
+!endif
+!ifndef EXE
+  !define EXE "volta1.exe"
+!endif
+!ifndef KEY
+  !define KEY "Volta1"
+!endif
 !define PUBLISHER "DC Software Engineering"
-!define UNINSTKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\Volta1"
+!define UNINSTKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEY}"
 
 Name "${APPNAME} – Das Elektronik-Labor"
 OutFile "${OUT}"
@@ -30,7 +39,7 @@ VIAddVersionKey "LegalCopyright" "© 2026 ${PUBLISHER}"
 !define MUI_ICON "${ICON}"
 !define MUI_UNICON "${ICON}"
 !define MUI_ABORTWARNING
-!define MUI_FINISHPAGE_RUN "$INSTDIR\volta1.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\${EXE}"
 
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
@@ -64,7 +73,7 @@ Section "!$(SecProgram)" SecMain
   File /r "${SRC}\*.*"
   File "/oname=volta.ico" "${ICON}"
   WriteUninstaller "$INSTDIR\Deinstallieren.exe"
-  CreateShortcut "$SMPROGRAMS\${APPNAME}.lnk" "$INSTDIR\volta1.exe" "" "$INSTDIR\volta.ico"
+  CreateShortcut "$SMPROGRAMS\${APPNAME}.lnk" "$INSTDIR\${EXE}" "" "$INSTDIR\volta.ico"
   WriteRegStr HKCU "${UNINSTKEY}" "DisplayName" "${APPNAME} – Das Elektronik-Labor (Testversion)"
   WriteRegStr HKCU "${UNINSTKEY}" "DisplayVersion" "${VERSION}"
   WriteRegStr HKCU "${UNINSTKEY}" "Publisher" "${PUBLISHER}"
@@ -77,7 +86,7 @@ Section "!$(SecProgram)" SecMain
 SectionEnd
 
 Section "$(SecDesktop)" SecDesktopLink
-  CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\volta1.exe" "" "$INSTDIR\volta.ico"
+  CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\${EXE}" "" "$INSTDIR\volta.ico"
 SectionEnd
 
 Section "Uninstall"

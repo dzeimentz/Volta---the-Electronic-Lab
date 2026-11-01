@@ -52,6 +52,8 @@ target_include_directories(qrcodegen PUBLIC ${PROJECT_SOURCE_DIR}/third_party/qr
 target_link_libraries(volta_model PRIVATE qrcodegen)
 find_package(Threads REQUIRED)
 target_link_libraries(volta_model PUBLIC volta::core Qt6::Core Qt6::Gui Threads::Threads)
+# Link-Schema fuer Fortschritts- und Aufgaben-Links: der Name der Ausgabe (volta1://, volta2://)
+target_compile_definitions(volta_model PUBLIC VOLTA_URL_SCHEME="${VOLTA_EDITION}")
 
 qt_add_executable(volta_app
     src/main.cpp
@@ -71,16 +73,30 @@ if(WIN32)
     target_sources(volta_app PRIVATE $<TARGET_OBJECTS:volta_app_rc>)
 endif()
 
+# Version der Ausgabe: Volta 1 folgt der Projektversion; Volta 2 zaehlt eigen (Testversion 0.9, Konzept Volta 2, 12)
+set(VOLTA_APP_VERSION "${PROJECT_VERSION}")
+if(VOLTA_EDITION STREQUAL "volta2")
+    set(VOLTA_APP_VERSION "0.9.0")
+endif()
+string(REPLACE "." ";" _volta_version_parts "${VOLTA_APP_VERSION}")
+list(GET _volta_version_parts 0 _volta_major)
+list(GET _volta_version_parts 1 _volta_minor)
+list(GET _volta_version_parts 2 _volta_patch)
 # Android-versionCode aus der Version: Haupt * 10000 + Neben * 100 + Korrektur (0.9.0 -> 900, 1.0.0 -> 10000);
 # steigt mit jeder Version, wie Google Play es verlangt
-math(EXPR VOLTA_VERSION_CODE "${PROJECT_VERSION_MAJOR} * 10000 + ${PROJECT_VERSION_MINOR} * 100 + ${PROJECT_VERSION_PATCH}")
+math(EXPR VOLTA_VERSION_CODE "${_volta_major} * 10000 + ${_volta_minor} * 100 + ${_volta_patch}")
+# eigenes Android-Paket je Ausgabe (Paketname, Name unter dem Symbol, Link-Schema), sonst das von Volta 1
+set(VOLTA_ANDROID_DIR "${PROJECT_SOURCE_DIR}/packaging/android")
+if(EXISTS "${PROJECT_SOURCE_DIR}/packaging/android-${VOLTA_EDITION}")
+    set(VOLTA_ANDROID_DIR "${PROJECT_SOURCE_DIR}/packaging/android-${VOLTA_EDITION}")
+endif()
 set_target_properties(volta_app PROPERTIES
     OUTPUT_NAME "${VOLTA_EDITION}"
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
-    QT_ANDROID_PACKAGE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/packaging/android" # eigenes Manifest: keine Berechtigungen
+    QT_ANDROID_PACKAGE_SOURCE_DIR "${VOLTA_ANDROID_DIR}" # eigenes Manifest: keine Berechtigungen
     QT_ANDROID_PACKAGE_NAME "${VOLTA_APP_ID}"
-    QT_ANDROID_VERSION_NAME "${PROJECT_VERSION}"
+    QT_ANDROID_VERSION_NAME "${VOLTA_APP_VERSION}"
     QT_ANDROID_VERSION_CODE ${VOLTA_VERSION_CODE}
     QT_ANDROID_MIN_SDK_VERSION 26
     QT_ANDROID_TARGET_SDK_VERSION 36)
@@ -116,8 +132,8 @@ if(IOS)
         MACOSX_BUNDLE_INFO_PLIST "${_ios}/Info.plist.in"
         MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
         MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
-        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${VOLTA_APP_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${VOLTA_APP_VERSION}"
         QT_IOS_LAUNCH_SCREEN "${_ios}/LaunchScreen.storyboard"
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${VOLTA_APP_ID}"
         XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "2" # nur iPad
@@ -134,14 +150,14 @@ if(APPLE AND NOT IOS)
         MACOSX_BUNDLE_GUI_IDENTIFIER "${VOLTA_APP_ID}"
         MACOSX_BUNDLE_BUNDLE_NAME "${VOLTA_APP_SHORT_NAME}"
         MACOSX_BUNDLE_ICON_FILE "volta.icns"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
-        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}")
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${VOLTA_APP_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${VOLTA_APP_VERSION}")
 endif()
 
 target_compile_definitions(volta_app PRIVATE
     VOLTA_EDITION="${VOLTA_EDITION}"
     VOLTA_APP_NAME="${VOLTA_APP_NAME}"
-    VOLTA_VERSION="${PROJECT_VERSION}")
+    VOLTA_VERSION="${VOLTA_APP_VERSION}")
 
 # Pfad zu content/ als erzeugter Header statt als Compiler-Definition: CMake verwirft Definitionen, deren Wert ein
 # '#' enthaelt (z. B. Klon unter "DC LEARNING#"), stillschweigend
