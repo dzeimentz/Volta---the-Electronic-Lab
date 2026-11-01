@@ -1,0 +1,174 @@
+{
+  "id": "volta2.5.4",
+  "band": "volta2",
+  "stufe": 5,
+  "titel_key": "exp2_5_4_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp2_5_4_frage",
+  "vermutungen": [
+    "exp2_5_4_v1",
+    "exp2_5_4_v2",
+    "exp2_5_4_v3"
+  ],
+  "beobachtungen": [
+    "exp2_5_4_b1",
+    "exp2_5_4_b2",
+    "exp2_5_4_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "batterie2_V": 9,
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 1000,
+        "spitze_V": 0.5
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.0005,
+        "volt_je_teilung": [
+          0.5,
+          2
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A3",
+          "A4"
+        ],
+        "wert": 47000
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A1"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A4"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "OP1",
+        "typ": "opmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "A3",
+        "farbe": "blau"
+      },
+      {
+        "von": "A2",
+        "nach": "OP1.inv",
+        "farbe": "gelb"
+      },
+      {
+        "von": "OP1.aus",
+        "nach": "A4",
+        "farbe": "blau"
+      },
+      {
+        "von": "OP1.nichtinv",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "OP1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "OP1.minus",
+        "nach": "P:-B2",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:+B2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_5_4_s1",
+    "exp2_5_4_s2",
+    "exp2_5_4_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "A4",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.2,
+        "zwischen": [
+          4.2,
+          5.2
+        ]
+      },
+      {
+        "feld": "A4",
+        "groesse": "spannung_V",
+        "auswertung": "mittel",
+        "fenster_s": 0.2,
+        "zwischen": [
+          -0.5,
+          0.5
+        ]
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_5_4_h1",
+    "exp2_5_4_h2",
+    "exp2_5_4_loesung"
+  ],
+  "erklaerung_key": "exp2_5_4_erklaerung",
+  "mehr_wissen_key": "exp2_5_4_mehr",
+  "weiterforschen": [
+    "exp2_5_4_w1",
+    "exp2_5_4_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_5_4_echt"
+}
