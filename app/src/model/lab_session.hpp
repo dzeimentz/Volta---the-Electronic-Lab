@@ -105,6 +105,7 @@ public:
     void setPartClosed(const std::string& id, bool closed); // Schalter, Taster, Reedkontakt, Wechselschalter
     void setDeskSwitch(bool closed);
     void setPot(int which, double position); // Pult-Drehregler 1/2
+    void setPartPosition(const std::string& id, double position); // Trimmer auf der Grundplatte (Bedienhandlung)
     void setMotorBlocked(const std::string& id, bool blocked);
     // Umgebung (model/environment.hpp): Raumlicht 0 dunkel / 1 Daemmerung / 2 hell; Taschenlampe und Foehn legen,
     // verschieben, ein-/ausschalten, wegraeumen (je Werkzeug hoechstens eines). Bedienhandlungen.

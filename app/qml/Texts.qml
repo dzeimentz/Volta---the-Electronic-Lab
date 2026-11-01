@@ -42,6 +42,8 @@ QtObject {
         case "zdiode_5v6": return qsTr("Z-Diode 5,6 V")
         case "spule_100mh": return qsTr("Spule 100 mH")
         case "spule_1h": return qsTr("Spule 1 H")
+        case "trimmer_10k": return qsTr("Trimmer 10 kΩ")
+        case "trimmer_100k": return qsTr("Trimmer 100 kΩ")
         case "heissleiter": return qsTr("Heißleiter")
         case "elektromagnet": return qsTr("Elektromagnet")
         case "relais": return qsTr("Relais")
@@ -99,6 +101,7 @@ QtObject {
             ["zdiode_4v7", qsTr("Z-Diode", "Wortanfaenge im Aufbautext")],
             ["diode_si", qsTr("Diode", "Wortanfaenge im Aufbautext")],
             ["spule_100mh", qsTr("Spule", "Wortanfaenge im Aufbautext")],
+            ["trimmer_10k", qsTr("Trimmer", "Wortanfaenge im Aufbautext")],
             ["blinkmodul", qsTr("Blinkmodul", "Wortanfaenge im Aufbautext")],
             ["tonmodul", qsTr("Tonmodul", "Wortanfaenge im Aufbautext")],
             ["lautsprecher", qsTr("Lautsprecher", "Wortanfaenge im Aufbautext")],
@@ -246,4 +249,14 @@ QtObject {
     readonly property var wireColors: ["rot", "schwarz", "blau", "gelb", "gruen", "weiss"]
     // E12-Auswahl fuer Volta 1 (Werkzeugkasten zeigt spaeter alle Werte)
     readonly property var resistorValues: [100, 220, 330, 470, 680, 1000, 2200, 4700, 10000, 47000, 100000]
+    // Folienkondensatoren ab Volta 2 (1 nF bis 1 µF)
+    readonly property var capacitorValues: [1e-9, 2.2e-9, 4.7e-9, 10e-9, 22e-9, 47e-9, 100e-9, 220e-9, 470e-9, 1e-6]
+
+    // Kondensatorcode: zwei Ziffern und die Zahl der Nullen in pF (100 nF -> 104, 4,7 nF -> 472)
+    function capacitorCode(v) {
+        const pf = Math.round(v * 1e12)
+        if (pf < 100) return String(pf)
+        const zeros = Math.floor(Math.log10(pf)) - 1
+        return String(Math.round(pf / Math.pow(10, zeros))) + zeros
+    }
 }

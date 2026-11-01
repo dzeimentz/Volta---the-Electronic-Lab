@@ -1380,7 +1380,10 @@ int LabController::voltageBars(const QString& anchor) { return m_session->voltag
 
 QVariantMap LabController::partState(const QString& id) const {
     QVariantMap m;
-    if (const model::PartPlacement* p = m_session->board().findPart(ss(id))) m.insert(QStringLiteral("closed"), p->closed);
+    if (const model::PartPlacement* p = m_session->board().findPart(ss(id))) {
+        m.insert(QStringLiteral("closed"), p->closed);
+        m.insert(QStringLiteral("position"), p->position);
+    }
     const core::ComponentReading* r = m_session->reading(ss(id));
     if (!r) return m;
     m.insert(QStringLiteral("currentmA"), r->currentA * 1e3);
@@ -1862,6 +1865,10 @@ void LabController::setPartClosed(const QString& id, bool closed) {
     // Bedienhandlung: kein boardChanged (die Bauteile wuerden neu aufgebaut, ein gedrueckter Taster verloere den
     // Griff); die Stellung erscheint ueber partState()
     m_session->setPartClosed(ss(id), closed);
+    emit stateChanged();
+}
+void LabController::setPartPosition(const QString& id, double position) {
+    m_session->setPartPosition(ss(id), position); // Bedienhandlung wie setPartClosed
     emit stateChanged();
 }
 void LabController::setDeskSwitch(bool closed) {

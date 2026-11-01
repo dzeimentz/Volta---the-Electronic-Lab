@@ -54,7 +54,11 @@
     {"typ": "spule_100mh", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "inductor",
      "parameter": {"l_H": 0.1}, "ab_band": "volta2", "ab_stufe": 2, "lexikon_key": "lex_spule"},
     {"typ": "spule_1h", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "inductor",
-     "parameter": {"l_H": 1.0}, "ab_band": "volta2", "ab_stufe": 2, "lexikon_key": "lex_spule"}
+     "parameter": {"l_H": 1.0}, "ab_band": "volta2", "ab_stufe": 2, "lexikon_key": "lex_spule"},
+    {"typ": "trimmer_10k", "thema": "widerstaende", "anschluesse": ["a", "s", "b"], "spannweite": ["traeger"], "lage": ["a", "s", "b"], "modell": "potentiometer",
+     "parameter": {"r_ohm": 10000}, "ab_band": "volta2", "ab_stufe": 1, "lexikon_key": "lex_trimmer"},
+    {"typ": "trimmer_100k", "thema": "widerstaende", "anschluesse": ["a", "s", "b"], "spannweite": ["traeger"], "lage": ["a", "s", "b"], "modell": "potentiometer",
+     "parameter": {"r_ohm": 100000}, "ab_band": "volta2", "ab_stufe": 1, "lexikon_key": "lex_trimmer"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",

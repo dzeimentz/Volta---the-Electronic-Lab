@@ -457,6 +457,7 @@ public:
 
     // Bedienhandlungen
     Q_INVOKABLE void setPartClosed(const QString& id, bool closed);
+    Q_INVOKABLE void setPartPosition(const QString& id, double position); // Trimmer (ab Volta 2)
     Q_INVOKABLE void setDeskSwitch(bool closed);
     Q_INVOKABLE void setPot(int which, double position);
     Q_INVOKABLE void setMotorBlocked(const QString& id, bool blocked);

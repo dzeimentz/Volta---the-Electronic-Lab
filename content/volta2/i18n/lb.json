@@ -19,5 +19,6 @@
   "stufe_8_frage": "Wéi funktionéiert eng Liichtschrank?",
   "lex_zdiode": "Eng Z-Diod leet an Duerchlassrichtung wéi all Diod. Falsch erëm gepoolt spaart se nëmme bis zu hirer Z-Spannung (4,7 V oder 5,6 V, drop gedréckt) – driwwer leet se an hält d’Spannung bal fest. Si brauch ëmmer e Virwidderstand.",
   "lex_transistor_pnp": "En PNP-Transistor schafft wéi den NPN-Transistor, just mat ëmgedréinte Virzeechen: Den Emitter läit um Plus, an e leet, wann e klenge Stroum aus der Basis eraus fléisst. Selwecht Platine mat B, C an zweemol E; um Gehäus steet »P«.",
-  "lex_spule": "Eng Spull ass en opgewéckelten Drot. Si wiert sech géint all Ännerung vum Stroum: Beim Uschalten klëmmt e lues, beim Ausschalten wëll e weiderfléissen. Et gëtt se mat 100 mH a mat Eisekär als 1 H (Henry)."
+  "lex_spule": "Eng Spull ass en opgewéckelten Drot. Si wiert sech géint all Ännerung vum Stroum: Beim Uschalten klëmmt e lues, beim Ausschalten wëll e weiderfléissen. Et gëtt se mat 100 mH a mat Eisekär als 1 H (Henry).",
+  "lex_trimmer": "En Trimmer ass e klengt Potentiometer fir anzestellen: De Schleifer s deelt d’Bunn tëscht a an b. Een astellt en eemol mam Schrauwenzéier – tipp en un, da kënnt de Regler."
 }

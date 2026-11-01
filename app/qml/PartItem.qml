@@ -99,6 +99,7 @@ Item {
         feet: root.points.map(pt => Qt.point(pt.x - x, pt.y - y))
         value: root.value
         level: root.partState.level || 0
+        position: root.partState.position !== undefined ? root.partState.position : 0.5
         closed: root.closed
         destroyed: root.destroyed
         overloaded: root.overloaded

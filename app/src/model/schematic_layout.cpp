@@ -82,7 +82,7 @@ int signalRank(const SchematicElement& e) {
     if (t == "batterie") return 0;
     if (t == "pultschalter" || t == "taster" || t == "schalter" || t == "reedkontakt" || t == "wechselschalter")
         return 1;
-    if (t == "potentiometer") return 2;
+    if (t == "potentiometer" || t.rfind("trimmer", 0) == 0) return 2;
     if (t == "widerstand" || t == "fotowiderstand" || t == "kondensator" || t == "elko" || t.rfind("diode", 0) == 0 ||
         t.rfind("zdiode", 0) == 0 || t.rfind("spule", 0) == 0)
         return 3;
@@ -181,7 +181,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
             g.pins = {{0.0, -1.0, Exit::Up}, {0.25, 1.0, Exit::Down}, {-0.25, 1.0, Exit::Down}};
         return g;
     }
-    if (t == "potentiometer" && e.nodes.size() == 3) {
+    if ((t == "potentiometer" || t.rfind("trimmer", 0) == 0) && e.nodes.size() == 3) {
         // senkrecht, Schleifer (Pfeil) von der Seite
         // a oben; fehlt a oder b, entscheidet die Lage gegenueber dem Schleifer
         const bool flip = has(0) && has(2) ? below(0, 2) : has(0) ? below(0, 1) : has(2) ? below(1, 2) : false;

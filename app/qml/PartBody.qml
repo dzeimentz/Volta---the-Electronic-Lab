@@ -19,6 +19,7 @@ Item {
     property real value: 0
     property real level: 0
     property bool closed: false
+    property real position: 0.5 // Trimmer: Stellung des Schleifers 0..1
     property bool destroyed: false
     property bool overloaded: false
     property bool selected: false
@@ -90,6 +91,7 @@ Item {
             case "diode_si": case "diode_ge": case "zdiode_4v7": case "zdiode_5v6": return diode
             case "transistor_npn": case "transistor_pnp": return transistor
             case "spule_100mh": case "spule_1h": return coil
+            case "trimmer_10k": case "trimmer_100k": return trimmer
             case "fotowiderstand": return photo
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
@@ -385,6 +387,48 @@ Item {
             anchors.centerIn: parent
             width: parent.height * 0.9; height: parent.height * 0.9; radius: 4
             color: "#E2A33B"; border.color: "#8A5A10"
+            // ab Volta 2: Kondensatorcode wie auf dem echten Bauteil (104 = 10 · 10^4 pF = 100 nF)
+            Text {
+                anchors.centerIn: parent
+                visible: Texts.band !== "" && Texts.band !== "volta1" && root.value > 0
+                text: Texts.capacitorCode(root.value)
+                color: "#3A2A08"
+                font.pixelSize: Math.round(10 * Theme.fontScale); font.bold: true
+            }
+        }
+    }
+
+    // Trimmer (ab Volta 2) auf Traegerplatine: blaues Gehaeuse, Drehscheibe mit Schlitz zeigt die Stellung
+    // (links Anschlag a, rechts Anschlag b); a, s, b aufgedruckt
+    Component {
+        id: trimmer
+        Rectangle {
+            anchors.fill: parent; radius: 6
+            color: "#E9D7B0"; border.color: Theme.navy
+            Text { x: 6; anchors.verticalCenter: parent.verticalCenter; text: "a"; font.pixelSize: Math.round(11 * Theme.fontScale); color: Theme.navy }
+            Text { anchors.right: parent.right; anchors.rightMargin: 6; anchors.verticalCenter: parent.verticalCenter; text: "b"; font.pixelSize: Math.round(11 * Theme.fontScale); color: Theme.navy }
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.height * 0.92; height: width; radius: 4
+                color: "#2C62C9"; border.color: "#173A80"
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: parent.width * 0.72; height: width; radius: width / 2
+                    color: "#F2F2F2"; border.color: "#7A7A7A"
+                    Rectangle { // Schlitz: -135 Grad (a) bis +135 Grad (b)
+                        anchors.centerIn: parent
+                        width: parent.width * 0.85; height: 3; radius: 1.5
+                        color: "#303030"
+                        rotation: 90 + (root.position - 0.5) * 270
+                    }
+                }
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom; anchors.bottomMargin: -1
+                text: root.type === "trimmer_100k" ? "100k" : "10k"
+                font.pixelSize: Math.round(8 * Theme.fontScale); font.bold: true; color: Theme.navy
+            }
         }
     }
 

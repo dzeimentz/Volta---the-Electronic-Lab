@@ -19,5 +19,6 @@
   "stufe_8_frage": "How does a light barrier work?",
   "lex_zdiode": "A Zener diode conducts in the forward direction like any diode. Connected the other way round it only blocks up to its Zener voltage (4.7 V or 5.6 V, printed on it) – above that it conducts and holds the voltage almost fixed. It always needs a series resistor.",
   "lex_transistor_pnp": "A PNP transistor works like the NPN transistor, only with reversed signs: the emitter is at plus, and it conducts when a small current flows out of the base. Same board with B, C and E twice; the case is marked »P«.",
-  "lex_spule": "A coil is a wound-up wire. It resists every change of current: when switched on the current rises slowly, when switched off it wants to keep flowing. There is one with 100 mH and one with an iron core with 1 H (henry)."
+  "lex_spule": "A coil is a wound-up wire. It resists every change of current: when switched on the current rises slowly, when switched off it wants to keep flowing. There is one with 100 mH and one with an iron core with 1 H (henry).",
+  "lex_trimmer": "A trimmer is a small potentiometer for adjusting: the wiper s divides the track between a and b. It is set once with a screwdriver – tap it and the slider appears."
 }

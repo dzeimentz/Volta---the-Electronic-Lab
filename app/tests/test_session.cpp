@@ -470,6 +470,37 @@ private slots:
         QVERIFY2(std::fabs(s->voltage("C3") - late * 100.0) < 0.05, qPrintable(QString::number(s->voltage("C3"))));
     }
 
+    // Trimmer 10 kOhm als Spannungsteiler an 9 V: die Stellung ist eine Bedienhandlung und wird gespeichert
+    void trimmerDividesVoltage() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("trimmer_10k", "A1", Orientation::Horizontal, Span::Short)); // a A1, s A2, b A3
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A3", "P:0V", "schwarz"));
+        const int count = s->undoStack().count();
+        s->setPartPosition("TR1", 0.25);
+        run(*s, 0.01);
+        const double v9 = s->voltage("A1");
+        QVERIFY2(std::fabs(s->voltage("A2") - 0.75 * v9) < 0.02, qPrintable(QString::number(s->voltage("A2"))));
+        s->setPartPosition("TR1", 1.0);
+        run(*s, 0.01);
+        QVERIFY(s->voltage("A2") < 0.01);
+        QCOMPARE(s->undoStack().count(), count); // kein Befehl
+        model::Board back;
+        QVERIFY(model::boardFromJson(model::boardToJson(s->board()), back));
+        QCOMPARE(back.findPart("TR1")->position, 1.0);
+        // 100 kOhm: Katalogwert
+        auto t = session();
+        t->setMainSwitch(true);
+        QVERIFY(t->addPart("trimmer_100k", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(t->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(t->addWire("A3", "P:0V", "schwarz"));
+        run(*t, 0.01);
+        const core::ComponentReading* r = t->reading("TR1");
+        QVERIFY(r);
+        QVERIFY2(std::fabs(std::fabs(r->currentA) - t->voltage("A1") / 100e3) < 1e-6, qPrintable(QString::number(r->currentA)));
+    }
+
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage
     void successMatchesPartsByType() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));

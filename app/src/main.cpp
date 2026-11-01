@@ -202,12 +202,15 @@ int main(int argc, char* argv[]) {
                                {"zdiode_5v6", "E1", false, false, 0.0},    {"transistor_pnp", "C6", false, false, 0.0},
                                {"widerstand", "B5", true, false, 10e3},     {"led_rot", "A8", true, false, 0.0},
                                {"widerstand", "D8", false, false, 470.0},   {"spule_100mh", "A3", false, true, 0.0},
-                               {"spule_1h", "E4", false, true, 0.0}};
+                               {"spule_1h", "E4", false, true, 0.0},       {"trimmer_10k", "B1", false, false, 0.0},
+                               {"kondensator", "E8", false, false, 0.0}};
             for (const auto& p : parts)
                 lab.addPart(QString::fromLatin1(p.type), QString::fromLatin1(p.field), p.vertical, p.longSpan);
             lab.setPartValue(QStringLiteral("R1"), 1000.0);
             lab.setPartValue(QStringLiteral("R2"), 10e3);
             lab.setPartValue(QStringLiteral("R3"), 470.0);
+            lab.setPartValue(QStringLiteral("C1"), 100e-9);
+            lab.setPartPosition(QStringLiteral("TR1"), 0.8);
             const char* wires[][2] = {{"P:+9V", "A1"}, {"A2", "D3"}, {"C3", "P:0V"},
                                       {"C5", "C6"},    {"B5", "P:0V"}, {"P:+9V", "D7"},
                                       {"C7", "A8"},    {"B8", "D8"},   {"D9", "P:0V"}};

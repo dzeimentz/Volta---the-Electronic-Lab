@@ -290,7 +290,7 @@ private:
             c.add<core::Relay>(p.id, n[0], n[1], n[2], n[3], rp);
         } else if (m == "potentiometer" && n.size() == 3) {
             core::PotentiometerParams pp;
-            pp.ohm = p.value > 0.0 ? p.value : pp.ohm;
+            pp.ohm = p.value > 0.0 ? p.value : e->param("r_ohm", pp.ohm); // Trimmer: Katalogwert
             c.add<core::Potentiometer>(p.id, n[0], n[1], n[2], pp, p.position);
         } else {
             m_net.errors.push_back("Bauteil " + p.id + ": Modell '" + m + "' noch nicht im Simulationskern");

@@ -83,6 +83,8 @@ Item {
             return {s: "M0 16 H22 M42 16 H64 M22 16 L44 8", f: ""}
         case "potentiometer": // Widerstand mit Schleifer (Pfeil von unten)
             return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z " + arrowLine(32, 32, 32, 23), f: arrowHead(32, 32, 32, 23)}
+        case "trimmer_10k": case "trimmer_100k": // Widerstand mit Einstellstrich (Schraegstrich mit Querstrich)
+            return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z M20 28 L44 4 M40 0 L48 8", f: ""}
         case "messgeraet":
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
         case "blinkmodul": case "tonmodul": case "zeitmodul": case "verstaerkermodul":

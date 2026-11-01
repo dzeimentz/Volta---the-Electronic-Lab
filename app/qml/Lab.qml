@@ -1306,6 +1306,10 @@ Item {
                         // Reedkontakt und Wechselschalter: Tippen schaltet um (Bedienhandlung)
                         if (part.modelData.type === "reedkontakt" || part.modelData.type === "wechselschalter")
                             lab.controller.setPartClosed(part.modelData.id, part.partState.closed !== true)
+                        // Trimmer: Tippen oeffnet das Stellfenster (Bedienhandlung)
+                        if (part.modelData.type.startsWith("trimmer"))
+                            trimmerPanel.openFor(part.modelData.id, part.modelData.type,
+                                                 part.partState.position !== undefined ? part.partState.position : 0.5)
                     }
                     onPushed: (down) => {
                         if (part.modelData.type === "taster") lab.controller.setPartClosed(part.modelData.id, down)
@@ -1667,13 +1671,15 @@ Item {
             id: valueMenu
             margins: 8 // immer ganz im Fenster
             title: qsTr("Wert")
-            enabled: partMenu.part.type === "widerstand"
+            // Kondensator: Werte ab Volta 2 (Folienkondensatoren)
+            readonly property bool cap: partMenu.part.type === "kondensator" && Texts.band !== "" && Texts.band !== "volta1"
+            enabled: partMenu.part.type === "widerstand" || cap
             Instantiator {
-                model: Texts.resistorValues
+                model: valueMenu.cap ? Texts.capacitorValues : Texts.resistorValues
                 delegate: MenuItem {
                     height: Theme.control
                     required property var modelData
-                    text: Texts.ohm(modelData)
+                    text: valueMenu.cap ? Texts.farad(modelData) + " (" + Texts.capacitorCode(modelData) + ")" : Texts.ohm(modelData)
                     checkable: true
                     checked: partMenu.part.value === modelData
                     onTriggered: { lab.beginEdit(); lab.controller.setPartValue(partMenu.part.id, modelData) }
@@ -1736,6 +1742,12 @@ Item {
     DeskPartInfo {
         id: deskPartInfo
         objectName: "deskPartInfo"
+        controller: lab.controller
+    }
+
+    TrimmerPanel {
+        id: trimmerPanel
+        objectName: "trimmerPanel"
         controller: lab.controller
     }
 

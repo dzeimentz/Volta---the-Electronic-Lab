@@ -620,6 +620,13 @@ void LabSession::setPot(int which, double position) {
     m_bridge.post({which == 2 ? desk_id::kPot2 : desk_id::kPot1, sim::Action::Type::SetPotPosition, pos});
 }
 
+void LabSession::setPartPosition(const std::string& id, double position) {
+    const double pos = std::clamp(position, 0.0, 1.0);
+    for (auto& p : m_board.parts)
+        if (p.id == id) p.position = pos; // gehoert zum Aufbau-Zustand, aber nicht zum Verlauf
+    m_bridge.post({id, sim::Action::Type::SetPotPosition, pos});
+}
+
 void LabSession::postEnvironment() {
     for (const auto& p : m_board.parts) {
         const CatalogEntry* e = m_catalog.part(p.type);
