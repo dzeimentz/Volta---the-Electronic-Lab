@@ -24,6 +24,8 @@ Flow {
     // Bindewoerter zwischen den zwei Feldern eines Bauteils bzw. davor (DE, EN, FR, LU)
     readonly property var joinWords: ["und", "and", "et", "an", "a", "nach", "to", "à", "op", "bis", "mit", "with"]
     readonly property var fromWords: ["von", "from", "de", "vu", "vun"]
+    // »mit A1 und A2 mit KS-«: folgt auf das zweite Feld ein solches Wort und wieder ein Feld, sind es zwei Leitungen
+    readonly property var wireWords: ["mit", "to", "à", "mat"]
 
     function pinsOf(type) {
         for (let i = 0; i < catalog.length; ++i) if (catalog[i].type === type) return catalog[i].pins
@@ -110,7 +112,10 @@ Flow {
                 out.push({pieces: [{kind: "text", value: a.raw}], field: "", raw: a.raw})
                 continue
             }
-            if (a.field !== "" && a.trail === "" && j && b && b.field !== "" && b.lead === ""
+            const c = list[i + 3], d = list[i + 4]
+            const twoWires = b && b.trail === "" && c && d && d.pieces.some(p => p.kind === "field")
+                    && step.wireWords.indexOf(c.raw.toLowerCase()) >= 0
+            if (a.field !== "" && a.trail === "" && j && b && b.field !== "" && b.lead === "" && !twoWires
                     && step.joinWords.indexOf(j.raw.toLowerCase()) >= 0 && step.samePart(a.field, b.field)) {
                 const prev = out.length > 0 ? out[out.length - 1] : null
                 if (prev && prev.field === "" && step.fromWords.indexOf(prev.raw.toLowerCase()) >= 0) out.pop()

@@ -1,0 +1,99 @@
+{
+  "id": "volta2.1.5",
+  "band": "volta2",
+  "stufe": 1,
+  "titel_key": "exp2_1_5_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "led_rot",
+    "led_gruen",
+    "led_gelb",
+    "led_blau",
+    "diode_si",
+    "leitung"
+  ],
+  "frage_key": "exp2_1_5_frage",
+  "vermutungen": [
+    "exp2_1_5_v1",
+    "exp2_1_5_v2",
+    "exp2_1_5_v3"
+  ],
+  "beobachtungen": [
+    "exp2_1_5_b1",
+    "exp2_1_5_b2",
+    "exp2_1_5_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "kennlinienschreiber": {
+        "spannung_V": 5,
+        "beide_richtungen": true,
+        "strom_mA": 20
+      }
+    },
+    "bauteile": [
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A1",
+          "kathode": "A2"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:KS+",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "P:KS-",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_1_5_s1",
+    "exp2_1_5_s2",
+    "exp2_1_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "strom_mA",
+        "auswertung": "spitze",
+        "fenster_s": 2,
+        "min": 3.0
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_1_5_h1",
+    "exp2_1_5_h2",
+    "exp2_1_5_loesung"
+  ],
+  "erklaerung_key": "exp2_1_5_erklaerung",
+  "mehr_wissen_key": "exp2_1_5_mehr",
+  "weiterforschen": [
+    "exp2_1_5_w1",
+    "exp2_1_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_1_5_echt"
+}

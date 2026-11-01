@@ -1,0 +1,148 @@
+{
+  "id": "volta2.1.1",
+  "band": "volta2",
+  "stufe": 1,
+  "titel_key": "exp2_1_1_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "messstelle_a",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp2_1_1_frage",
+  "vermutungen": [
+    "exp2_1_1_v1",
+    "exp2_1_1_v2",
+    "exp2_1_1_v3"
+  ],
+  "beobachtungen": [
+    "exp2_1_1_b1",
+    "exp2_1_1_b2",
+    "exp2_1_1_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "doppelt": true
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A3"
+        ]
+      },
+      {
+        "id": "IM2",
+        "typ": "messstelle_a",
+        "felder": [
+          "A3",
+          "B3"
+        ]
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B5"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "IM3",
+        "typ": "messstelle_a",
+        "felder": [
+          "A3",
+          "A5"
+        ]
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A7"
+        ],
+        "wert": 2200
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_1_1_s1",
+    "exp2_1_1_s2",
+    "exp2_1_1_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "IM1",
+        "groesse": "anzeige",
+        "min": 0.002,
+        "dauer_s": 2
+      },
+      {
+        "bauteil": "IM2",
+        "groesse": "anzeige",
+        "min": 0.001
+      },
+      {
+        "bauteil": "IM3",
+        "groesse": "anzeige",
+        "min": 0.001
+      },
+      {
+        "bauteil": "R1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "R2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_1_1_h1",
+    "exp2_1_1_h2",
+    "exp2_1_1_loesung"
+  ],
+  "erklaerung_key": "exp2_1_1_erklaerung",
+  "mehr_wissen_key": "exp2_1_1_mehr",
+  "weiterforschen": [
+    "exp2_1_1_w1",
+    "exp2_1_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_1_1_echt"
+}

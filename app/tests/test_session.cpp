@@ -466,6 +466,38 @@ private slots:
 
     // Kennlinienschreiber: Widerstand 1 kOhm ergibt eine Gerade I = U / R; nur positiv bleibt U >= 0;
     // potentialfrei (der Hauptschalter bleibt aus, der Schreiber hat ein eigenes Netzteil)
+    // Fehlersuche an eigenen Quellen (ab Volta 2): eine LED am Kennlinienschreiber braucht weder V+ noch die
+    // richtige Polung (er zeichnet beide Richtungen); dieselbe LED falsch herum an der Batterie bleibt ein Befund
+    void circuitCheckOwnSource() {
+        using K = model::CircuitFinding::Kind;
+        auto kinds = [](const std::vector<model::CircuitFinding>& f) {
+            std::vector<K> k;
+            for (const auto& x : f) k.push_back(x.kind);
+            return k;
+        };
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(s->addDeskPart("kennlinienschreiber"));
+        QVERIFY(s->addPart("led_rot", "A1", Orientation::Horizontal, Span::Short)); // Anode A1, Kathode A2
+        QVERIFY(s->addWire("P:KS+", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "P:KS-", "schwarz"));
+        run(*s, 1.6); // Sperrrichtung im Dreieck (ab 1 s negativ)
+        auto f = s->checkCircuit();
+        QVERIFY2(f.empty(), f.empty() ? "" : f.front().message.text().c_str());
+        // Batterie, LED falsch herum (Kathode an V+), mit Vorwiderstand
+        QVERIFY(s->addPart("led_rot", "C1", Orientation::Horizontal, Span::Short)); // D2: Anode C1, Kathode C2
+        QVERIFY(s->addPart("widerstand", "C3", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addWire("P:+9V", "C2", "rot"));
+        QVERIFY(s->addWire("C1", "C4", "gelb"));
+        QVERIFY(s->addWire("C3", "P:0V", "schwarz"));
+        s->setMainSwitch(true);
+        run(*s, 0.2);
+        const auto k = kinds(s->checkCircuit());
+        QVERIFY(std::find(k.begin(), k.end(), K::Reversed) != k.end());
+    }
+
     void tracerDrawsResistorLine() {
         auto s = session();
         model::Board b;

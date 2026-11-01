@@ -1,0 +1,97 @@
+{
+  "id": "volta2.1.4",
+  "band": "volta2",
+  "stufe": 1,
+  "titel_key": "exp2_1_4_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "gluehlampe",
+    "widerstand",
+    "leitung"
+  ],
+  "frage_key": "exp2_1_4_frage",
+  "vermutungen": [
+    "exp2_1_4_v1",
+    "exp2_1_4_v2",
+    "exp2_1_4_v3"
+  ],
+  "beobachtungen": [
+    "exp2_1_4_b1",
+    "exp2_1_4_b2",
+    "exp2_1_4_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "kennlinienschreiber": {
+        "spannung_V": 10,
+        "beide_richtungen": true,
+        "strom_mA": 50
+      }
+    },
+    "bauteile": [
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 6
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:KS+",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "P:KS-",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_1_4_s1",
+    "exp2_1_4_s2",
+    "exp2_1_4_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "strom_mA",
+        "auswertung": "spitze",
+        "fenster_s": 2,
+        "min": 10.0
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_1_4_h1",
+    "exp2_1_4_h2",
+    "exp2_1_4_loesung"
+  ],
+  "erklaerung_key": "exp2_1_4_erklaerung",
+  "mehr_wissen_key": "exp2_1_4_mehr",
+  "weiterforschen": [
+    "exp2_1_4_w1",
+    "exp2_1_4_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_1_4_echt"
+}

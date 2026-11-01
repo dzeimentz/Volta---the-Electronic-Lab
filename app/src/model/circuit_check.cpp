@@ -146,6 +146,28 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
     const std::string plus = nodes.find(kPlus), minus = nodes.find(kMinus);
     const bool anyPart = !board.parts.empty() || !board.modules.empty();
 
+    // Eigene Quellen ab Volta 2 (Kennlinienschreiber, Wechselquelle, Generator): Knoten, die sie ueber Bauteile
+    // erreichen. Dort gelten die Batterie-Hinweise nicht (Polung wechselt, V+ wird nicht gebraucht).
+    std::set<std::string> ownSource;
+    {
+        std::deque<std::string> todo;
+        for (const char* a : {"P:KS+", "P:KS-", "P:W~a", "P:W~b", "P:G"})
+            if (std::find(extraDesk.begin(), extraDesk.end(), a) != extraDesk.end() &&
+                terminals[nodes.find(a)].size() > 1 && ownSource.insert(nodes.find(a)).second)
+                todo.push_back(nodes.find(a));
+        while (!todo.empty()) {
+            const std::string n = todo.front();
+            todo.pop_front();
+            for (const auto& ed : edges[n])
+                if (ed.to != minus && ownSource.insert(ed.to).second) todo.push_back(ed.to);
+        }
+    }
+    auto onOwnSource = [&](const PartPlacement& p) {
+        for (const auto& [pin, field] : p.pins)
+            if (ownSource.count(nodes.find(field))) return true;
+        return false;
+    };
+
     // ---- Kurzschluss ueber Leitungen
     if (plus == minus)
         shorts.push_back({CircuitFinding::Kind::Short, "", {kPlus, kMinus},
@@ -226,13 +248,15 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
             // Widerstandsmessung: das Messgeraet ist selbst die Quelle, die Batterie wird nicht gebraucht
             const bool ohmOnly = plusFree && minusFree && board.desk.meterVisible &&
                                  board.desk.meterMode == core::MeterMode::Ohm;
-            if (plusFree && !ohmOnly)
+            // Aufbau an einer eigenen Quelle (z. B. Kennlinienschreiber): die Batterie wird nicht gebraucht
+            const bool ownOnly = plusFree && !ownSource.empty();
+            if (plusFree && !ohmOnly && !ownOnly)
                 noSupply.push_back({CircuitFinding::Kind::NoSupply, "", {kPlus},
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Ist dein Aufbau mit dem Pluspol V+ verbunden?"))});
-            if (minusFree && !ohmOnly)
+            if (minusFree && !ohmOnly && !ownOnly)
                 noSupply.push_back({CircuitFinding::Kind::NoSupply, "", {kMinus},
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Ist dein Aufbau mit dem Minuspol 0V verbunden?"))});
-            if (!ohmOnly && !plusFree && !minusFree) {
+            if (!ohmOnly && !ownOnly && !plusFree && !minusFree) {
                 // Wuerde ein offener Schalter den Kreis schliessen?
                 for (const auto& p : board.parts) {
                     const CatalogEntry* e = catalog.part(p.type);
@@ -305,12 +329,12 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
                                     : msg(QT_TRANSLATE_NOOP("Meldung", "%1 ist kaputt gegangen. Was hat %1 zu viel "
                                                                       "Strom oder Spannung gegeben?"),
                                           {p.id})});
-            } else if (model == "led" && r->voltV < -1.0) {
+            } else if (model == "led" && r->voltV < -1.0 && !onOwnSource(p)) {
                 reversed.push_back({CircuitFinding::Kind::Reversed, p.id, where,
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Steckt das lange Bein (Anode) von %1 auf der "
                                                                      "Seite zum Pluspol?"),
                                         {p.id})});
-            } else if (model == "capacitor_polar" && r->voltV < -0.5) {
+            } else if (model == "capacitor_polar" && r->voltV < -0.5 && !onOwnSource(p)) {
                 reversed.push_back({CircuitFinding::Kind::Reversed, p.id, where,
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Zeigt das Plus-Bein von %1 zum Pluspol?"), {p.id})});
             } else if (model == "led" && (r->overloaded || std::fabs(r->currentA) > 0.03)) {
