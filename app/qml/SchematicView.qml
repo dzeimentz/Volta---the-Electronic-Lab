@@ -13,6 +13,10 @@ Rectangle {
     property string selectedPart: ""
     property var highlightedNode: -1
     property bool showFieldNames: true
+    // ab Volta 2: der Plan passt ganz in die Spalte und laesst sich mit +/- in Schritten von 10 % vergroessern
+    // oder verkleinern (100 % = passend); Volta 1 behaelt seine feste Untergrenze 0,75
+    readonly property bool zoomable: controller.band !== "" && controller.band !== "volta1"
+    property int zoomPercent: 100
     signal partSelected(string id)
     signal nodeSelected(var anchors)
 
@@ -29,9 +33,16 @@ Rectangle {
             case "PULT.P1": return "P1"
             case "PULT.P2": return "P2"
             case "PULT.LS": return "LS"
+            case "PULT.B2": return "B2\n" + qsTr("%1 V").arg(Number(view.controller.cells2 * 1.5).toLocaleString(Qt.locale(), "f", view.controller.cells2 % 2 === 0 ? 0 : 1))
+            case "PULT.W": return "W\n" + qsTr("%1 V").arg(view.controller.acRms) + "~"
+            case "PULT.G": return "G"
+            case "PULT.KS": return "KS"
             }
             return ""
         }
+        // Messstellen und Tastkoepfe heissen wie im Messgeraet: V1, A2, Ω3, K1 (intern UM1, IM2, RM3, TK1)
+        const m = /^(UM|IM|RM|TK)(\d+)$/.exec(e.id)
+        if (m) return ({UM: "V", IM: "A", RM: "Ω", TK: "K"})[m[1]] + m[2]
         if (e.type === "widerstand" && e.value > 0) return e.id + "\n" + Texts.ohm(e.value)
         if (e.type === "gluehlampe" && e.value > 0)
             return e.id + "\n" + qsTr("%1 V").arg(Number(e.value).toLocaleString(Qt.locale(), "f", e.value % 1 === 0 ? 0 : 1))
@@ -48,6 +59,7 @@ Rectangle {
     }
     // Feldnamen an den Knoten ein/aus (aufgeraeumter Plan)
     ToolButton {
+        id: fieldNamesButton
         objectName: "schematicFieldNames"
         anchors.right: parent.right
         anchors.rightMargin: 4
@@ -59,6 +71,48 @@ Rectangle {
         text: qsTr("Feldnamen")
         font.pixelSize: Math.round(12 * Theme.fontScale)
         Accessible.name: view.showFieldNames ? qsTr("Feldnamen ausblenden") : qsTr("Feldnamen zeigen")
+    }
+    // Groesse des Plans: - und + in Schritten von 10 %, dazwischen die Stufe (Antippen: wieder passend)
+    Row {
+        visible: view.zoomable
+        anchors.right: fieldNamesButton.left
+        anchors.rightMargin: 4
+        y: 0
+        ToolButton {
+            objectName: "schematicZoomOut"
+            width: Theme.control; height: Theme.control
+            text: "−"
+            font.pixelSize: Math.round(18 * Theme.fontScale)
+            font.bold: true
+            enabled: view.zoomPercent > 50
+            onClicked: view.zoomPercent -= 10
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Schaltplan verkleinern")
+            Accessible.name: ToolTip.text
+        }
+        ToolButton {
+            objectName: "schematicZoomFit"
+            height: Theme.control
+            width: Math.max(Theme.control, implicitWidth)
+            text: qsTr("%1 %").arg(view.zoomPercent)
+            font.pixelSize: Math.round(11 * Theme.fontScale)
+            onClicked: view.zoomPercent = 100
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Schaltplan einpassen")
+            Accessible.name: ToolTip.text
+        }
+        ToolButton {
+            objectName: "schematicZoomIn"
+            width: Theme.control; height: Theme.control
+            text: "+"
+            font.pixelSize: Math.round(18 * Theme.fontScale)
+            font.bold: true
+            enabled: view.zoomPercent < 300
+            onClicked: view.zoomPercent += 10
+            ToolTip.visible: hovered
+            ToolTip.text: qsTr("Schaltplan vergrößern")
+            Accessible.name: ToolTip.text
+        }
     }
     Label {
         anchors.centerIn: parent
@@ -85,8 +139,10 @@ Rectangle {
             width: view.plan.width || 0
             height: view.plan.height || 0
             transformOrigin: Item.TopLeft
-            // mindestens 0,75-fach (lesbar); passt der Plan dann nicht, laesst er sich verschieben
-            scale: width > 0 ? Math.max(0.75, Math.min(1.3, flick.width / width, flick.height / height)) : 1
+            // passend, hoechstens 1,3-fach; Volta 1 mindestens 0,75-fach (lesbar), ab Volta 2 ganz sichtbar und mit
+            // +/- einstellbar; passt der Plan nicht, laesst er sich verschieben
+            readonly property real fit: width > 0 ? Math.min(1.3, flick.width / width, flick.height / height) : 1
+            scale: view.zoomable ? fit * view.zoomPercent / 100 : Math.max(0.75, fit)
 
             // Knotenleitungen (je Knoten ein Pfad; hervorgehoben beim Antippen)
             Repeater {

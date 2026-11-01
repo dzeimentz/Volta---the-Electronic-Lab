@@ -60,6 +60,9 @@ int anchorOrder(const std::string& a) {
     const auto& desk = deskFields();
     const auto d = std::find(desk.begin(), desk.end(), a);
     if (d != desk.end()) return static_cast<int>(d - desk.begin());
+    const auto& extra = extraDeskFields(); // Pultteile ab Volta 2 nach dem Pult von Volta 1
+    const auto x = std::find(extra.begin(), extra.end(), a);
+    if (x != extra.end()) return 50 + static_cast<int>(x - extra.begin());
     if (classifyAnchor(a) == AnchorKind::Field) {
         const int col = std::stoi(a.substr(1));
         return 100 + (a[0] - 'A') * 100 + col;
@@ -79,7 +82,7 @@ std::string displayName(const std::string& a) {
 // aktive Bauteile und Module, Verbraucher, Lautsprecher, Messgeraet
 int signalRank(const SchematicElement& e) {
     const std::string& t = e.type;
-    if (t == "batterie") return 0;
+    if (t == "batterie" || t == "wechselquelle" || t == "generator") return 0;
     if (t == "pultschalter" || t == "taster" || t == "schalter" || t == "reedkontakt" || t == "wechselschalter")
         return 1;
     if (t == "potentiometer" || t.rfind("trimmer", 0) == 0) return 2;
@@ -88,7 +91,7 @@ int signalRank(const SchematicElement& e) {
         return 3;
     if (t == "transistor_npn" || t == "transistor_pnp" || e.module) return 4;
     if (t == "lautsprecher") return 6;
-    if (t == "messgeraet") return 7;
+    if (t == "messgeraet" || t == "kennlinienschreiber") return 7;
     return 5; // LED, Gluehlampe, Motor, Summer
 }
 
@@ -285,6 +288,11 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
     deskElement("PULT.P1", "potentiometer", {"P:P1a", "P:P1s", "P:P1b"}, {"a", "s", "b"});
     deskElement("PULT.P2", "potentiometer", {"P:P2a", "P:P2s", "P:P2b"}, {"a", "s", "b"});
     deskElement("PULT.LS", "lautsprecher", {"P:LS1", "P:LS2"}, {"a", "b"});
+    // Pultteile ab Volta 2 (Pult nach Bedarf, Konzept 5.1)
+    deskElement("PULT.B2", "batterie", {"P:+B2", "P:-B2"}, {"plus", "minus"});
+    deskElement("PULT.W", "wechselquelle", {"P:W~a", "P:W~b"}, {"a", "b"});
+    deskElement("PULT.G", "generator", {"P:G", "P:G0"}, {"g", "g0"});
+    deskElement("PULT.KS", "kennlinienschreiber", {"P:KS+", "P:KS-"}, {"plus", "minus"});
     if (board.desk.meterVisible)
         deskElement("PULT.MESS", "messgeraet", {"MESS:COM", "MESS:VOHM", "MESS:A"}, {"COM", "VOHM", "A"});
 

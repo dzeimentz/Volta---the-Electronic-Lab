@@ -103,6 +103,12 @@ Item {
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
         case "messstelle_a":
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "A", tx: 32, ty: 16}
+        case "wechselquelle": // Wechselspannungsquelle: Kreis mit Sinus (DIN EN 60617)
+            return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12) + " M25 16 Q28.5 8 32 16 Q35.5 24 39 16", f: ""}
+        case "generator": // Funktionsgenerator: Kreis mit G und Sinus
+            return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "G~", tx: 32, ty: 16}
+        case "kennlinienschreiber": // Kennlinienschreiber: Kasten mit Kennlinie
+            return {s: "M0 16 H18 M46 16 H64 M18 4 H46 V28 H18 Z M22 24 H30 Q36 24 42 8", f: "", t: "+", tx: 12, ty: 6}
         case "tastkopf": // Tastkopf: Messspitze mit Kanalkreis, Bezug 0V
             return {s: "M0 16 H22 " + circle(34, 16, 12) + " M34 28 V31 M28 31 H40", f: "", t: "K", tx: 34, ty: 16}
         case "messstelle_ohm":
@@ -155,6 +161,7 @@ Item {
             text: sym.shape.t || ""
             x: (sym.shape.tx || 0) - width / 2
             y: (sym.shape.ty || 0) - height / 2
+            rotation: -sym.rotation // Schrift bleibt aufrecht, auch wenn das Zeichen senkrecht steht
             color: sym.stroke
             font.pixelSize: sym.shape.t === "+" ? 10 : 13
             font.bold: true

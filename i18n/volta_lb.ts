@@ -1725,10 +1725,6 @@
         <translation>»V A Ω« hëlt de Miessapparat erbäi: Spannung a Volt, Stroum an Ampère, Widderstand an Ohm.</translation>
     </message>
     <message>
-        <source>Im Menü eines Feldes (langer Druck) schaltest du dort eine Spannungsanzeige ein.</source>
-        <translation type="vanished">Am Menü vun engem Feld (laangen Drock) schalts du do eng Spannungsanzeig un.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/HelpDialog.qml" line="59"/>
         <location filename="../app/qml/HelpDialog.qml" line="119"/>
         <source>Der Knopf mit den grünen Balken zeigt auf allen belegten Feldern, wie viel Spannung dort anliegt. Für ein einzelnes Feld geht das auch im Menü des Feldes (langer Druck).</source>
@@ -1963,10 +1959,6 @@
         <translation>»V A Ω« hëlt de Moossapparat. E weist deng Moossstellen, bis zu dräi op eemol. »V~« oder »A~« heescht: Wiesselgréisst, ugewisen als Effektivwäert.</translation>
     </message>
     <message>
-        <source>»V A Ω« holt das Messgerät. Es zeigt deine Messstellen an, eine oder zwei auf einmal. »V~« oder »A~« heißt: Wechselgröße, angezeigt als Effektivwert.</source>
-        <translation type="vanished">»V A Ω« hëlt de Moossapparat. E weist deng Moossstellen, eng oder zwou op eemol. »V~« oder »A~« heescht: Wiesselgréisst, ugewisen als Effektivwäert.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/HelpDialog.qml" line="120"/>
         <source>Das Schaltzeichen-Symbol zeigt deinen Aufbau als Schaltplan. Kleine Pfeile zeigen, wohin der Strom fließt.</source>
         <translation>De Schaltzeechen-Symbol weist däin Opbau als Schaltplang. Kleng Feiler weisen, wouhin de Stroum fléisst.</translation>
@@ -2082,17 +2074,9 @@
         <translation>Astellungen opmaachen</translation>
     </message>
     <message>
-        <source>Volta braucht kein Internet, legt kein Konto an und sammelt keine Daten. Datenschutz, Freigaben, Forscherprofile, Ton im Klassenzimmer, die PIN und die Erklärung, wie Volta rechnet, finden Sie im Elternbereich. Er ist durch eine PIN geschützt.</source>
-        <translation type="vanished">Volta brauch keen Internet, mécht kee Kont op a sammelt keng Donnéeën. Dateschutz, Fräigaben, Fuerscherprofiler, Toun am Klassesall, de PIN an d&apos;Erklärung, wéi Volta rechent, fann Dir am Elterenberäich. Hien ass duerch e PIN geschützt.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/HelpDialog.qml" line="350"/>
         <source>Am Computer: Strg+Z macht rückgängig, Strg+Y wiederholt, Entf entfernt die Auswahl. Mit der Maus öffnet ein Rechtsklick das Menü.</source>
         <translation>Um Computer: Ctrl+Z mécht réckgängeg, Ctrl+Y widderhëlt, Del läscht d&apos;Auswiel. Mat der Maus mécht e Rietsklick de Menü op.</translation>
-    </message>
-    <message>
-        <source>Elternbereich öffnen</source>
-        <translation type="vanished">Elterenberäich opmaachen</translation>
     </message>
 </context>
 <context>
@@ -2712,18 +2696,6 @@
         <translation>Raumliicht ëmschalten</translation>
     </message>
     <message>
-        <source>Taschenlampe</source>
-        <translation type="vanished">Täscheluucht</translation>
-    </message>
-    <message>
-        <source>Föhn</source>
-        <translation type="vanished">Fön</translation>
-    </message>
-    <message>
-        <source>Wassertropfen</source>
-        <translation type="vanished">Waasserdrëps</translation>
-    </message>
-    <message>
         <location filename="../app/qml/Lab.qml" line="1696"/>
         <source>Spannungsanzeige ein/aus</source>
         <translation>Spannungsanzeig un/aus</translation>
@@ -3021,10 +2993,6 @@
         <location filename="../app/src/model/board_edit.cpp" line="373"/>
         <source>Von dieser Messstelle sind schon drei gesteckt.</source>
         <translation>Vun dëser Moosstell stieche schonn dräi.</translation>
-    </message>
-    <message>
-        <source>Von dieser Messstelle sind schon zwei gesteckt.</source>
-        <translation type="vanished">Vun dëser Moosstell stieche schonn zwou.</translation>
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="390"/>
@@ -3583,10 +3551,6 @@
         <translation>Däitschland</translation>
     </message>
     <message>
-        <source>Elternbereich</source>
-        <translation type="vanished">Elterenberäich</translation>
-    </message>
-    <message>
         <location filename="../app/qml/ParentArea.qml" line="80"/>
         <location filename="../app/qml/ParentArea.qml" line="705"/>
         <source>Schließen</source>
@@ -3596,14 +3560,6 @@
         <location filename="../app/qml/ParentArea.qml" line="147"/>
         <source>Einige Einstellungen gibt Ihre Schule bzw. die Geräteverwaltung vor; sie lassen sich hier nicht ändern.</source>
         <translation>Verschidden Astellunge gi vun Ärer Schoul respektiv der Geräitverwaltung virgeschriwwen, si loossen sech hei net änneren.</translation>
-    </message>
-    <message>
-        <source>PIN für den Elternbereich</source>
-        <translation type="vanished">PIN fir den Elterenberäich</translation>
-    </message>
-    <message>
-        <source>Die PIN schützt den Elternbereich und Links aus der App heraus. Sie hat 4 bis 8 Ziffern und bleibt nur auf diesem Gerät.</source>
-        <translation type="vanished">De PIN schützt den Elterenberäich a Linken aus der App eraus. Hien huet 4 bis 8 Zifferen a bleift nëmmen op dësem Apparat.</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="204"/>
@@ -3780,10 +3736,6 @@
         <location filename="../app/qml/ParentArea.qml" line="116"/>
         <source>gewählt</source>
         <translation>gewielt</translation>
-    </message>
-    <message>
-        <source>Noch gilt die Start-PIN 1234, die Kinder leicht erraten. Bitte legen Sie unter »Einstellungen« eine eigene PIN fest.</source>
-        <translation type="vanished">Nach gëllt d&apos;Start-PIN 1234, déi Kanner liicht erroden. Leet w.e.g. ënner »Astellungen« eng eege PIN fest.</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="306"/>
@@ -4143,10 +4095,6 @@
         <translation>Fir Erwuessener</translation>
     </message>
     <message>
-        <source>Bitte geben Sie die PIN für den Elternbereich ein.</source>
-        <translation type="vanished">Gitt w.e.g. de PIN fir den Elterenberäich an.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/ParentGate.qml" line="96"/>
         <source>Bitte geben Sie die PIN für Erwachsene ein.</source>
         <translation>Gitt w.e.g. d&apos;PIN fir Erwuessener an.</translation>
@@ -4385,10 +4333,6 @@
 <context>
     <name>ProfileChooser</name>
     <message>
-        <source>Elternbereich</source>
-        <translation type="vanished">Elterenberäich</translation>
-    </message>
-    <message>
         <location filename="../app/qml/ProfileChooser.qml" line="45"/>
         <source>Einstellungen</source>
         <translation>Astellungen</translation>
@@ -4458,49 +4402,9 @@
         <translation>Deel huelen</translation>
     </message>
     <message>
-        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
-        <translation type="vanished">Zéi en Deel aus dem Deelerfach op d&apos;Grondplack. Alles am selwechte Kontaktfeld ass matenee verbonnen.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/QuickGuide.qml" line="31"/>
         <source>Leitungen ziehen</source>
         <translation>Leitungen zéien</translation>
-    </message>
-    <message>
-        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
-        <translation type="vanished">Zéi mam Fanger vu Feld zu Feld. Leitungen u Plus gi rout, u Minus schwaarz.</translation>
-    </message>
-    <message>
-        <source>Schritt für Schritt</source>
-        <translation type="vanished">Schrëtt fir Schrëtt</translation>
-    </message>
-    <message>
-        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
-        <translation type="vanished">Liess d&apos;Fro, wiel deng Vermutung an tipp op »Schrëtt fir Schrëtt bauen«. D&apos;Zilfelder blénke blo.</translation>
-    </message>
-    <message>
-        <source>Einschalten</source>
-        <translation type="vanished">Uschalten</translation>
-    </message>
-    <message>
-        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
-        <translation type="vanished">Tipp op »Stiechen«: De Knäppchen gëtt zu »Betrib«, an de Stroum fléisst. Fir ëmzebauen, tippst du nach eng Kéier drop.</translation>
-    </message>
-    <message>
-        <source>Fertig</source>
-        <translation type="vanished">Fäerdeg</translation>
-    </message>
-    <message>
-        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
-        <translation type="vanished">Funktionéiert et? Da tipp op »Fäerdeg« a wiel, wat s du beobacht hues.</translation>
-    </message>
-    <message>
-        <source>Hilfe</source>
-        <translation type="vanished">Hëllef</translation>
-    </message>
-    <message>
-        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
-        <translation type="vanished">Kënns du net weider, tipp op »Ech brauch en Tipp«. Ass eppes futti gaang, mécht »Réckgängeg« et erëm ganz.</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="25"/>
@@ -4643,14 +4547,6 @@
         <translation>An aacht Schrëtt bei däin éischt Experiment</translation>
     </message>
     <message>
-        <source>In sechs Schritten zum ersten Experiment</source>
-        <translation type="vanished">An sechs Schrëtt bei dat éischt Experiment</translation>
-    </message>
-    <message>
-        <source>Das Labor mit den Nummern der sechs Schritte</source>
-        <translation type="vanished">De Labo mat den Nummere vun de sechs Schrëtt</translation>
-    </message>
-    <message>
         <location filename="../app/qml/QuickGuide.qml" line="176"/>
         <source>Bedienung auf einen Blick</source>
         <translation>Bedienung op ee Bléck</translation>
@@ -4728,43 +4624,65 @@
 <context>
     <name>SchematicView</name>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="27"/>
+        <location filename="../app/qml/SchematicView.qml" line="31"/>
+        <location filename="../app/qml/SchematicView.qml" line="36"/>
         <location filename="../app/qml/SchematicView.qml" line="37"/>
+        <location filename="../app/qml/SchematicView.qml" line="48"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="44"/>
+        <location filename="../app/qml/SchematicView.qml" line="55"/>
         <source>Schaltplan</source>
         <translation>Schaltplang</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="59"/>
+        <location filename="../app/qml/SchematicView.qml" line="71"/>
         <source>Feldnamen</source>
         <translation>Feldnimm</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="61"/>
+        <location filename="../app/qml/SchematicView.qml" line="73"/>
         <source>Feldnamen ausblenden</source>
         <translation>Feldnimm ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="61"/>
+        <location filename="../app/qml/SchematicView.qml" line="73"/>
         <source>Feldnamen zeigen</source>
         <translation>Feldnimm weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="69"/>
+        <location filename="../app/qml/SchematicView.qml" line="90"/>
+        <source>Schaltplan verkleinern</source>
+        <translation>Schaltplang méi kleng maachen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="97"/>
+        <source>%1 %</source>
+        <translation>%1 %</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="101"/>
+        <source>Schaltplan einpassen</source>
+        <translation>Schaltplang apassen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="113"/>
+        <source>Schaltplan vergrößern</source>
+        <translation>Schaltplang méi grouss maachen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="123"/>
         <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation>Soubal wéi s du Deeler stéchs a Leitungen zitts, entsteet hei de Schaltplang.</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="127"/>
+        <location filename="../app/qml/SchematicView.qml" line="183"/>
         <source>Knoten %1 auf der Grundplatte zeigen</source>
         <translation>Knuet %1 op der Grondplack weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="181"/>
+        <location filename="../app/qml/SchematicView.qml" line="237"/>
         <source>Messgerät</source>
         <translation>Miessapparat</translation>
     </message>
@@ -6071,10 +5989,6 @@
         <location filename="../app/qml/TopBarActions.qml" line="301"/>
         <source>Weitere Einstellungen …</source>
         <translation>Weider Astellungen …</translation>
-    </message>
-    <message>
-        <source>Elternbereich …</source>
-        <translation type="vanished">Elterenberäich...</translation>
     </message>
 </context>
 <context>

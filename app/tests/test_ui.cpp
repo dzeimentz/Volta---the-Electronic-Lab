@@ -878,6 +878,8 @@ private slots:
         // Oszilloskop ab Volta 2 von Anfang an (Wechselstrom in Stufe 2), Zeitschreiber in Volta 1 erst ab Stufe 3
         QVERIFY(lab.startExperiment(QStringLiteral("volta2.2.1")));
         QVERIFY(lab.recorderAvailable());
+        QVERIFY(lab.startExperiment(QStringLiteral("volta2.0.1")));
+        QVERIFY(lab.schematicAvailable()); // Schaltplan ab Volta 2 von Anfang an
         // Breite im Experiment ab Volta 2 waehlbar (8, 10, 12), auch mit Stufenanpassung; sie bleibt beim Messgeraet
         lab.setStageLayout(true);
         QVERIFY(lab.startExperiment(QStringLiteral("volta2.1.1")));
@@ -893,6 +895,9 @@ private slots:
         LabController volta1Lab(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY(volta1Lab.startExperiment(QStringLiteral("volta1.2.4")));
         QVERIFY(!volta1Lab.recorderAvailable());
+        QVERIFY(volta1Lab.startExperiment(QStringLiteral("volta1.1.1")));
+        QVERIFY(!volta1Lab.schematicAvailable()); // Volta 1: erst ab Stufe 2
+        QVERIFY(volta1Lab.startExperiment(QStringLiteral("volta1.2.4")));
         QVERIFY(!volta1Lab.deskOnDemand());
         QCOMPARE(volta1Lab.startColumns(), 0);
         QVERIFY(volta1Lab.deskTray().isEmpty());
@@ -2184,6 +2189,7 @@ private slots:
         QQuickItem* panel = item(QStringLiteral("schematicPanel"));
         QTRY_VERIFY(panel->isVisible() && panel->width() > 100);
         QTest::qWait(50);
+        QVERIFY(!item(QStringLiteral("schematicZoomIn"))->isVisible()); // Groesse einstellbar erst ab Volta 2
         QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("schem_R1"))));
         QObject* lab = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("lab"));
         QTRY_COMPARE(lab->property("selectedPart").toString(), QStringLiteral("R1"));

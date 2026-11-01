@@ -187,6 +187,32 @@ private slots:
         QCOMPARE(rc::tolerancePercent(1), 1.0);
     }
 
+    // Schaltplan ab Volta 2: Batterie 2, Wechselquelle, Generator und Kennlinienschreiber als Pultelemente
+    void schematicDeskPartsVolta2() {
+        model::Board b;
+        b.parts.push_back({"R1", "widerstand", {{"a", "A1"}, {"b", "A2"}}, 1000.0});
+        b.parts.push_back({"R2", "widerstand", {{"a", "B1"}, {"b", "B2"}}, 1000.0});
+        b.parts.push_back({"R3", "widerstand", {{"a", "C1"}, {"b", "C2"}}, 1000.0});
+        b.parts.push_back({"R4", "widerstand", {{"a", "D1"}, {"b", "D2"}}, 1000.0});
+        b.wires.push_back({"L1", "P:+B2", "A1", "rot"});
+        b.wires.push_back({"L2", "A2", "P:-B2", "schwarz"});
+        b.wires.push_back({"L3", "P:W~a", "B1", "gelb"});
+        b.wires.push_back({"L4", "B2", "P:W~b", "gelb"});
+        b.wires.push_back({"L5", "P:G", "C1", "gelb"});
+        b.wires.push_back({"L6", "C2", "P:G0", "schwarz"});
+        b.wires.push_back({"L7", "P:KS+", "D1", "rot"});
+        b.wires.push_back({"L8", "D2", "P:KS-", "schwarz"});
+        const model::Schematic s = model::buildSchematic(b, m_catalog);
+        std::map<std::string, std::string> types;
+        for (const auto& e : s.elements)
+            if (e.desk) types[e.id] = e.type;
+        QCOMPARE(types.size(), std::size_t(4)); // Batterie 1 ist nicht angeschlossen
+        QCOMPARE(types["PULT.B2"], std::string("batterie"));
+        QCOMPARE(types["PULT.W"], std::string("wechselquelle"));
+        QCOMPARE(types["PULT.G"], std::string("generator"));
+        QCOMPARE(types["PULT.KS"], std::string("kennlinienschreiber"));
+    }
+
     // Schaltplan: LED mit Vorwiderstand; Knoten mit Feldnamen, Pluspol oben, 0 V unten
     void schematicLayout() {
         model::Board b;

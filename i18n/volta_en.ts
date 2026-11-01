@@ -1725,10 +1725,6 @@
         <translation>&quot;V A Ω&quot; brings up the meter: voltage in volts, current in amperes, resistance in ohms.</translation>
     </message>
     <message>
-        <source>Im Menü eines Feldes (langer Druck) schaltest du dort eine Spannungsanzeige ein.</source>
-        <translation type="vanished">In a field&apos;s menu (long press) you switch on a voltage display there.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/HelpDialog.qml" line="59"/>
         <location filename="../app/qml/HelpDialog.qml" line="119"/>
         <source>Der Knopf mit den grünen Balken zeigt auf allen belegten Feldern, wie viel Spannung dort anliegt. Für ein einzelnes Feld geht das auch im Menü des Feldes (langer Druck).</source>
@@ -1963,10 +1959,6 @@
         <translation>»V A Ω« brings up the meter. It shows your measuring points, up to three at a time. »V~« or »A~« means: AC quantity, shown as RMS value.</translation>
     </message>
     <message>
-        <source>»V A Ω« holt das Messgerät. Es zeigt deine Messstellen an, eine oder zwei auf einmal. »V~« oder »A~« heißt: Wechselgröße, angezeigt als Effektivwert.</source>
-        <translation type="vanished">»V A Ω« brings up the meter. It shows your measuring points, one or two at a time. »V~« or »A~« means: AC quantity, shown as RMS value.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/HelpDialog.qml" line="120"/>
         <source>Das Schaltzeichen-Symbol zeigt deinen Aufbau als Schaltplan. Kleine Pfeile zeigen, wohin der Strom fließt.</source>
         <translation>The circuit symbol shows your build as a circuit diagram. Small arrows show where the current flows.</translation>
@@ -2082,17 +2074,9 @@
         <translation>Open settings</translation>
     </message>
     <message>
-        <source>Volta braucht kein Internet, legt kein Konto an und sammelt keine Daten. Datenschutz, Freigaben, Forscherprofile, Ton im Klassenzimmer, die PIN und die Erklärung, wie Volta rechnet, finden Sie im Elternbereich. Er ist durch eine PIN geschützt.</source>
-        <translation type="vanished">Volta needs no internet, creates no account and collects no data. Privacy, unlocks, researcher profiles, classroom sound, the PIN and how Volta calculates are in the parents&apos; area. It is protected by a PIN.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/HelpDialog.qml" line="350"/>
         <source>Am Computer: Strg+Z macht rückgängig, Strg+Y wiederholt, Entf entfernt die Auswahl. Mit der Maus öffnet ein Rechtsklick das Menü.</source>
         <translation>On a computer: Ctrl+Z undoes, Ctrl+Y redoes, Del removes the selection. With a mouse, a right-click opens the menu.</translation>
-    </message>
-    <message>
-        <source>Elternbereich öffnen</source>
-        <translation type="vanished">Open parents&apos; area</translation>
     </message>
 </context>
 <context>
@@ -2712,18 +2696,6 @@
         <translation>Change room light</translation>
     </message>
     <message>
-        <source>Taschenlampe</source>
-        <translation type="vanished">Torch</translation>
-    </message>
-    <message>
-        <source>Föhn</source>
-        <translation type="vanished">Hair dryer</translation>
-    </message>
-    <message>
-        <source>Wassertropfen</source>
-        <translation type="vanished">Water drop</translation>
-    </message>
-    <message>
         <location filename="../app/qml/Lab.qml" line="1696"/>
         <source>Spannungsanzeige ein/aus</source>
         <translation>Voltage display on/off</translation>
@@ -3021,10 +2993,6 @@
         <location filename="../app/src/model/board_edit.cpp" line="373"/>
         <source>Von dieser Messstelle sind schon drei gesteckt.</source>
         <translation>Three of this measuring point are already plugged in.</translation>
-    </message>
-    <message>
-        <source>Von dieser Messstelle sind schon zwei gesteckt.</source>
-        <translation type="vanished">Two of this measuring point are already plugged in.</translation>
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="390"/>
@@ -3583,10 +3551,6 @@
         <translation>Germany</translation>
     </message>
     <message>
-        <source>Elternbereich</source>
-        <translation type="vanished">Parents&apos; area</translation>
-    </message>
-    <message>
         <location filename="../app/qml/ParentArea.qml" line="80"/>
         <location filename="../app/qml/ParentArea.qml" line="705"/>
         <source>Schließen</source>
@@ -3596,14 +3560,6 @@
         <location filename="../app/qml/ParentArea.qml" line="147"/>
         <source>Einige Einstellungen gibt Ihre Schule bzw. die Geräteverwaltung vor; sie lassen sich hier nicht ändern.</source>
         <translation>Some settings are set by your school or device management; they cannot be changed here.</translation>
-    </message>
-    <message>
-        <source>PIN für den Elternbereich</source>
-        <translation type="vanished">PIN for the parents&apos; area</translation>
-    </message>
-    <message>
-        <source>Die PIN schützt den Elternbereich und Links aus der App heraus. Sie hat 4 bis 8 Ziffern und bleibt nur auf diesem Gerät.</source>
-        <translation type="vanished">The PIN protects the parents&apos; area and links leaving the app. It has 4 to 8 digits and stays only on this device.</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="204"/>
@@ -3780,10 +3736,6 @@
         <location filename="../app/qml/ParentArea.qml" line="116"/>
         <source>gewählt</source>
         <translation>selected</translation>
-    </message>
-    <message>
-        <source>Noch gilt die Start-PIN 1234, die Kinder leicht erraten. Bitte legen Sie unter »Einstellungen« eine eigene PIN fest.</source>
-        <translation type="vanished">The starting PIN 1234 is still active, and children guess it easily. Please set your own PIN under “Settings”.</translation>
     </message>
     <message>
         <location filename="../app/qml/ParentArea.qml" line="306"/>
@@ -4143,10 +4095,6 @@
         <translation>For adults</translation>
     </message>
     <message>
-        <source>Bitte geben Sie die PIN für den Elternbereich ein.</source>
-        <translation type="vanished">Please enter the PIN for the parents&apos; area.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/ParentGate.qml" line="96"/>
         <source>Bitte geben Sie die PIN für Erwachsene ein.</source>
         <translation>Please enter the PIN for adults.</translation>
@@ -4385,10 +4333,6 @@
 <context>
     <name>ProfileChooser</name>
     <message>
-        <source>Elternbereich</source>
-        <translation type="vanished">Parents&apos; area</translation>
-    </message>
-    <message>
         <location filename="../app/qml/ProfileChooser.qml" line="45"/>
         <source>Einstellungen</source>
         <translation>Settings</translation>
@@ -4458,49 +4402,9 @@
         <translation>Get a part</translation>
     </message>
     <message>
-        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
-        <translation type="vanished">Drag a part from the parts tray onto the base board. Everything in the same contact field is connected.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/QuickGuide.qml" line="31"/>
         <source>Leitungen ziehen</source>
         <translation>Draw wires</translation>
-    </message>
-    <message>
-        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
-        <translation type="vanished">Drag your finger from field to field. Wires to plus turn red, wires to minus black.</translation>
-    </message>
-    <message>
-        <source>Schritt für Schritt</source>
-        <translation type="vanished">Step by step</translation>
-    </message>
-    <message>
-        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
-        <translation type="vanished">Read the question, choose your guess and tap “Build step by step”. The target fields blink blue.</translation>
-    </message>
-    <message>
-        <source>Einschalten</source>
-        <translation type="vanished">Switch on</translation>
-    </message>
-    <message>
-        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
-        <translation type="vanished">Tap “Build”: the button changes to “Running” and current flows. To change your circuit, tap it again.</translation>
-    </message>
-    <message>
-        <source>Fertig</source>
-        <translation type="vanished">Done</translation>
-    </message>
-    <message>
-        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
-        <translation type="vanished">Does it work? Then tap “Done” and choose what you observed.</translation>
-    </message>
-    <message>
-        <source>Hilfe</source>
-        <translation type="vanished">Help</translation>
-    </message>
-    <message>
-        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
-        <translation type="vanished">Stuck? Tap “I need a hint”. If something broke, “Undo” makes it whole again.</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="25"/>
@@ -4643,14 +4547,6 @@
         <translation>Your first experiment in eight steps</translation>
     </message>
     <message>
-        <source>In sechs Schritten zum ersten Experiment</source>
-        <translation type="vanished">Your first experiment in six steps</translation>
-    </message>
-    <message>
-        <source>Das Labor mit den Nummern der sechs Schritte</source>
-        <translation type="vanished">The lab with the numbers of the six steps</translation>
-    </message>
-    <message>
         <location filename="../app/qml/QuickGuide.qml" line="176"/>
         <source>Bedienung auf einen Blick</source>
         <translation>Controls at a glance</translation>
@@ -4728,43 +4624,65 @@
 <context>
     <name>SchematicView</name>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="27"/>
+        <location filename="../app/qml/SchematicView.qml" line="31"/>
+        <location filename="../app/qml/SchematicView.qml" line="36"/>
         <location filename="../app/qml/SchematicView.qml" line="37"/>
+        <location filename="../app/qml/SchematicView.qml" line="48"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="44"/>
+        <location filename="../app/qml/SchematicView.qml" line="55"/>
         <source>Schaltplan</source>
         <translation>Circuit diagram</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="59"/>
+        <location filename="../app/qml/SchematicView.qml" line="71"/>
         <source>Feldnamen</source>
         <translation>Field names</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="61"/>
+        <location filename="../app/qml/SchematicView.qml" line="73"/>
         <source>Feldnamen ausblenden</source>
         <translation>Hide field names</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="61"/>
+        <location filename="../app/qml/SchematicView.qml" line="73"/>
         <source>Feldnamen zeigen</source>
         <translation>Show field names</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="69"/>
+        <location filename="../app/qml/SchematicView.qml" line="90"/>
+        <source>Schaltplan verkleinern</source>
+        <translation>Make circuit diagram smaller</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="97"/>
+        <source>%1 %</source>
+        <translation>%1 %</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="101"/>
+        <source>Schaltplan einpassen</source>
+        <translation>Fit circuit diagram</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="113"/>
+        <source>Schaltplan vergrößern</source>
+        <translation>Make circuit diagram larger</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="123"/>
         <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation>As soon as you place parts and draw wires, the circuit diagram appears here.</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="127"/>
+        <location filename="../app/qml/SchematicView.qml" line="183"/>
         <source>Knoten %1 auf der Grundplatte zeigen</source>
         <translation>Show node %1 on the base board</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="181"/>
+        <location filename="../app/qml/SchematicView.qml" line="237"/>
         <source>Messgerät</source>
         <translation>Meter</translation>
     </message>
@@ -6071,10 +5989,6 @@
         <location filename="../app/qml/TopBarActions.qml" line="301"/>
         <source>Weitere Einstellungen …</source>
         <translation>More settings …</translation>
-    </message>
-    <message>
-        <source>Elternbereich …</source>
-        <translation type="vanished">Parents&apos; area …</translation>
     </message>
 </context>
 <context>

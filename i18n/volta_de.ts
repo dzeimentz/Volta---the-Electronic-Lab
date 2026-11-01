@@ -4402,49 +4402,9 @@
         <translation>Bauteil holen</translation>
     </message>
     <message>
-        <source>Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</source>
-        <translation type="vanished">Ziehe ein Bauteil aus dem Bauteilfach auf die Grundplatte. Alles im selben Kontaktfeld ist miteinander verbunden.</translation>
-    </message>
-    <message>
         <location filename="../app/qml/QuickGuide.qml" line="31"/>
         <source>Leitungen ziehen</source>
         <translation>Leitungen ziehen</translation>
-    </message>
-    <message>
-        <source>Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</source>
-        <translation type="vanished">Ziehe mit dem Finger von Feld zu Feld. Leitungen an Plus werden rot, an Minus schwarz.</translation>
-    </message>
-    <message>
-        <source>Schritt für Schritt</source>
-        <translation type="vanished">Schritt für Schritt</translation>
-    </message>
-    <message>
-        <source>Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</source>
-        <translation type="vanished">Lies die Frage, wähle deine Vermutung und tippe auf »Schritt für Schritt bauen«. Die Zielfelder blinken blau.</translation>
-    </message>
-    <message>
-        <source>Einschalten</source>
-        <translation type="vanished">Einschalten</translation>
-    </message>
-    <message>
-        <source>Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</source>
-        <translation type="vanished">Tippe auf »Stecken«: Die Taste wird zu »Betrieb«, und Strom fließt. Zum Umbauen tippst du wieder darauf.</translation>
-    </message>
-    <message>
-        <source>Fertig</source>
-        <translation type="vanished">Fertig</translation>
-    </message>
-    <message>
-        <source>Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</source>
-        <translation type="vanished">Funktioniert es? Dann tippe auf »Fertig« und wähle, was du beobachtet hast.</translation>
-    </message>
-    <message>
-        <source>Hilfe</source>
-        <translation type="vanished">Hilfe</translation>
-    </message>
-    <message>
-        <source>Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</source>
-        <translation type="vanished">Kommst du nicht weiter, tippe auf »Ich brauche einen Tipp«. Ist etwas kaputtgegangen, macht »Rückgängig« es wieder heil.</translation>
     </message>
     <message>
         <location filename="../app/qml/QuickGuide.qml" line="25"/>
@@ -4587,14 +4547,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>In sechs Schritten zum ersten Experiment</source>
-        <translation type="vanished">In sechs Schritten zum ersten Experiment</translation>
-    </message>
-    <message>
-        <source>Das Labor mit den Nummern der sechs Schritte</source>
-        <translation type="vanished">Das Labor mit den Nummern der sechs Schritte</translation>
-    </message>
-    <message>
         <location filename="../app/qml/QuickGuide.qml" line="176"/>
         <source>Bedienung auf einen Blick</source>
         <translation>Bedienung auf einen Blick</translation>
@@ -4672,43 +4624,65 @@
 <context>
     <name>SchematicView</name>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="27"/>
+        <location filename="../app/qml/SchematicView.qml" line="31"/>
+        <location filename="../app/qml/SchematicView.qml" line="36"/>
         <location filename="../app/qml/SchematicView.qml" line="37"/>
+        <location filename="../app/qml/SchematicView.qml" line="48"/>
         <source>%1 V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="44"/>
+        <location filename="../app/qml/SchematicView.qml" line="55"/>
         <source>Schaltplan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="59"/>
+        <location filename="../app/qml/SchematicView.qml" line="71"/>
         <source>Feldnamen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="61"/>
+        <location filename="../app/qml/SchematicView.qml" line="73"/>
         <source>Feldnamen ausblenden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="61"/>
+        <location filename="../app/qml/SchematicView.qml" line="73"/>
         <source>Feldnamen zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="69"/>
+        <location filename="../app/qml/SchematicView.qml" line="90"/>
+        <source>Schaltplan verkleinern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="97"/>
+        <source>%1 %</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="101"/>
+        <source>Schaltplan einpassen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="113"/>
+        <source>Schaltplan vergrößern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/SchematicView.qml" line="123"/>
         <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="127"/>
+        <location filename="../app/qml/SchematicView.qml" line="183"/>
         <source>Knoten %1 auf der Grundplatte zeigen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="181"/>
+        <location filename="../app/qml/SchematicView.qml" line="237"/>
         <source>Messgerät</source>
         <translation type="unfinished"></translation>
     </message>

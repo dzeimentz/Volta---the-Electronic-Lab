@@ -269,7 +269,7 @@ public:
     // {width, height, nodes: [{label, anchors, drawn, x, x2, y, path}], dots: [{x, y, node}],
     //  elements: [{id, type, nodes, desk, module, value, x, y, rotation, block, w, h, labelX, labelY, pinLabels}]}
     Q_PROPERTY(QVariantMap schematic READ schematic NOTIFY boardChanged)
-    // Schaltplanansicht verfuegbar: freies Labor, ab Stufe 2 oder alles freigegeben (Konzept 5.7)
+    // Schaltplanansicht verfuegbar: freies Labor, ab Stufe 2 oder alles freigegeben (Konzept 5.7), ab Volta 2 immer
     Q_PROPERTY(bool schematicAvailable READ schematicAvailable NOTIFY progressChanged)
     // Zeitschreiber (model::Recorder): ab Stufe 3, im freien Labor oder alles freigegeben; Kanaele ["B4", "MESS", ""]
     Q_PROPERTY(bool recorderAvailable READ recorderAvailable NOTIFY progressChanged)
@@ -278,7 +278,10 @@ public:
     Q_PROPERTY(bool recorderPaused READ recorderPaused WRITE setRecorderPaused NOTIFY recorderChanged)
     QVariantList lexicon() const;
     QVariantMap schematic() const;
-    bool schematicAvailable() const { return m_unlockAll || m_freeLab || m_experiment.stage >= 2; }
+    // Volta 1 ab Stufe 2; ab Volta 2 von Anfang an (die Kinder kennen ihn aus Volta 1)
+    bool schematicAvailable() const {
+        return m_unlockAll || m_freeLab || m_experiment.stage >= 2 || (!m_band.isEmpty() && m_band != QLatin1String("volta1"));
+    }
     // Volta 1: Zeitschreiber ab Stufe 3; ab Volta 2 das Oszilloskop von Anfang an (Tastkoepfe ab Stufe 0)
     bool recorderAvailable() const {
         return m_unlockAll || m_freeLab || m_experiment.stage >= 3 || (!m_band.isEmpty() && m_band != QLatin1String("volta1"));
