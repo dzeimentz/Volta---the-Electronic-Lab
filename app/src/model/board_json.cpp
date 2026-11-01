@@ -75,6 +75,18 @@ QJsonObject boardToJson(const Board& board) {
             meters.append(QJsonObject{{QStringLiteral("messstelle"), qs(s.source)},
                                      {QStringLiteral("bereich"), s.range},
                                      {QStringLiteral("wechsel"), s.ac}});
+        QJsonArray scopeChannels;
+        for (const auto& ch : d.scope.channels)
+            scopeChannels.append(QJsonObject{{QStringLiteral("volt_index"), ch.voltsIndex},
+                                             {QStringLiteral("lage"), ch.position}});
+        desk.insert(QStringLiteral("oszilloskop"),
+                    QJsonObject{{QStringLiteral("zeitbasis"), d.scope.timebaseIndex},
+                                {QStringLiteral("rollen"), d.scope.roll},
+                                {QStringLiteral("xy"), d.scope.xy},
+                                {QStringLiteral("trigger_kanal"), d.scope.triggerChannel},
+                                {QStringLiteral("trigger_steigend"), d.scope.triggerRising},
+                                {QStringLiteral("trigger_v"), d.scope.triggerLevelV},
+                                {QStringLiteral("kanaele"), scopeChannels}});
         desk.insert(QStringLiteral("anzeigegeraet"), QJsonObject{{QStringLiteral("doppelt"), d.display.twin},
                                                                  {QStringLiteral("leistung"), d.display.power},
                                                                  {QStringLiteral("anzeigen"), meters}});
@@ -134,6 +146,21 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     d.genFrequencyHz = std::clamp(gen.value(QStringLiteral("frequenz_hz")).toDouble(100.0), 1.0, 10000.0);
     d.genAmplitudeV = std::clamp(gen.value(QStringLiteral("amplitude_v")).toDouble(1.0), 0.0, 4.0);
     d.genOffsetV = std::clamp(gen.value(QStringLiteral("gleichanteil_v")).toDouble(0.0), -4.0, 4.0);
+    const QJsonObject osc = desk.value(QStringLiteral("oszilloskop")).toObject();
+    const int lastTimebase = static_cast<int>(scopeTimebases().size()) - 1;
+    const int lastVolts = static_cast<int>(scopeVoltsPerDiv().size()) - 1;
+    d.scope.timebaseIndex = std::clamp(osc.value(QStringLiteral("zeitbasis")).toInt(d.scope.timebaseIndex), 0, lastTimebase);
+    d.scope.roll = osc.value(QStringLiteral("rollen")).toBool(false);
+    d.scope.xy = osc.value(QStringLiteral("xy")).toBool(false);
+    d.scope.triggerChannel = std::clamp(osc.value(QStringLiteral("trigger_kanal")).toInt(0), 0, 1);
+    d.scope.triggerRising = osc.value(QStringLiteral("trigger_steigend")).toBool(true);
+    d.scope.triggerLevelV = std::clamp(osc.value(QStringLiteral("trigger_v")).toDouble(0.0), -20.0, 20.0);
+    const QJsonArray oscChannels = osc.value(QStringLiteral("kanaele")).toArray();
+    for (int i = 0; i < 2 && i < oscChannels.size(); ++i) {
+        const QJsonObject o = oscChannels.at(i).toObject();
+        d.scope.channels[i].voltsIndex = std::clamp(o.value(QStringLiteral("volt_index")).toInt(7), 0, lastVolts);
+        d.scope.channels[i].position = std::clamp(o.value(QStringLiteral("lage")).toInt(0), -4, 4);
+    }
     const QJsonObject disp = desk.value(QStringLiteral("anzeigegeraet")).toObject();
     d.display.twin = disp.value(QStringLiteral("doppelt")).toBool(false);
     d.display.power = disp.value(QStringLiteral("leistung")).toBool(false);

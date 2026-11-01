@@ -251,6 +251,17 @@ Batterie ist ein Kurzschluss, den die Fehlersuche meldet), Ohm mit Messquelle 3 
 »Spannung abschalten!«, offen »OL«). Wechselgroessen zeigen den Effektivwert aus der Signalstatistik des Bauteils
 mit »~«. Hoechstens zwei je Art (Kennungen UM, IM, RM; angezeigt V1/V2, A1/A2, Ω1/Ω2).
 
+**Oszilloskop** (ab Volta 2, `model/oscilloscope.hpp`): Die Tastkoepfe K1/K2 (Katalog `tastkopf`, ein Bein, Kennung
+TK1/TK2) sind im Kern Widerstaende von 10 MOhm gegen 0V wie ein echter Tastkopf. Ist das Oszilloskop eingeblendet,
+tastet die Simulationsbruecke nach jedem Schritt die Spannung beider Tastkoepfe in einen Ringpuffer ab (1000 Punkte
+je Bildbreite, zwei Bilder; Speicher nur beim Umstellen) und gibt ihn mit dem Schnappschuss heraus. Die Schrittweite
+folgt der Zeitbasis: Zeitbasis/25, mindestens 20 µs, hoechstens 1 ms (Standard); ohne Oszilloskop wieder 1 ms.
+Reicht die Rechenleistung bei feinen Schritten nicht, laeuft die Simulation langsamer als Echtzeit (realtimeRatio)
+statt ungenau. Das Bild entsteht im Modell: Trigger (Kanal, Flanke, Pegel, juengster Durchgang mit einem ganzen
+Bild danach, eine Teilung Vorlauf; ohne Durchgang frei laufend), Rollbetrieb (das Neueste am rechten Rand, Zeitbasis
+100 ms ... 1 min je Teilung), XY-Betrieb, Kennwerte je Kanal (Spitze-Spitze, Mittel, Frequenz aus steigenden
+Durchgaengen durch die Mitte mit 10 % Hysterese).
+
 ## Erweiterungen (Vorleistungen in Phase 0)
 
 1. Variable Schrittweite im Integrator (Schnittstelle schon in Volta 1).

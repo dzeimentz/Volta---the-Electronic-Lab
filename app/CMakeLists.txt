@@ -28,6 +28,7 @@ add_library(volta_model STATIC
     src/model/tone_synth.cpp
     src/model/environment.cpp
     src/model/recorder.cpp
+    src/model/oscilloscope.cpp
     src/model/formula.cpp
     src/model/schematic_layout.cpp
     src/model/wire_router.cpp
@@ -179,6 +180,7 @@ qt_add_qml_module(volta_ui
         qml/Splash.qml
         qml/MeterPanel.qml
         qml/DisplayMeter.qml
+        qml/ScopePanel.qml
         qml/SpeakerRing.qml
         qml/SchematicSymbol.qml
         qml/ModuleIcon.qml

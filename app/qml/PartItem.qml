@@ -58,6 +58,7 @@ Item {
     readonly property bool destroyed: partState.destroyed === true
     readonly property bool overloaded: partState.overloaded === true
     readonly property bool measure: partType.startsWith("messstelle_")
+    readonly property bool single: points.length === 1 // ein Bein (Tastkopf): Koerper ueber dem Feld
     // Anzeige einer Messstelle: Messwert mit Einheit, »OL« (offen bzw. zu gross), Hinweis bei Fremdspannung (Ohm)
     readonly property string meterReading: !measure || partState.meterText === undefined ? ""
         : partState.meterForeignVoltage ? qsTr("Spannung abschalten!")
@@ -94,11 +95,11 @@ Item {
         id: body
         readonly property real span: Math.sqrt(Math.pow(root.b.x - root.a.x, 2) + Math.pow(root.b.y - root.a.y, 2))
         // zweipolig: hoechstens 72, sonst zwischen die Loecher (kurz waagrecht: Loch 3 -> Loch 1 des Nachbarfelds)
-        width: root.square ? root.spanX + 26 : root.points.length > 2 ? span + 40 : Math.max(44, Math.min(72, span - 6))
-        height: root.square ? root.spanY + 22 : 34
+        width: root.single ? 40 : root.square ? root.spanX + 26 : root.points.length > 2 ? span + 40 : Math.max(44, Math.min(72, span - 6))
+        height: root.single ? 30 : root.square ? root.spanY + 22 : 34
         x: root.cx - width / 2
-        y: root.cy - height / 2
-        rotation: root.square ? 0 : Math.atan2(root.b.y - root.a.y, root.b.x - root.a.x) * 180 / Math.PI
+        y: root.single ? root.cy - height - 14 : root.cy - height / 2
+        rotation: root.square || root.single ? 0 : Math.atan2(root.b.y - root.a.y, root.b.x - root.a.x) * 180 / Math.PI
         type: root.partType
         // Fusspunkte relativ zum Koerper (Platine: Beschriftung an den Fuessen)
         feet: root.points.map(pt => Qt.point(pt.x - x, pt.y - y))
@@ -109,7 +110,14 @@ Item {
         destroyed: root.destroyed
         overloaded: root.overloaded
         selected: root.selected
-        tag: root.measure ? parseInt(root.partId.replace(/^[A-Z]+/, "")) || 0 : 0
+        tag: root.measure || root.single ? parseInt(root.partId.replace(/^[A-Z]+/, "")) || 0 : 0
+    }
+    // Spitze des Tastkopfs vom Griff ins Feld
+    Rectangle {
+        visible: root.single
+        x: root.cx - 1.5; y: body.y + body.height
+        width: 3; height: Math.max(0, root.cy - y)
+        color: "#8A8A8A"
     }
 
     // Eingesteckte Beinenden
@@ -128,18 +136,19 @@ Item {
 
     Text {
         anchors.horizontalCenter: body.horizontalCenter
-        y: body.y + body.height + 4
+        y: root.single ? body.y - height - 2 : body.y + body.height + 4
         // Beschriftung unter dem Bauteil (bei senkrechter Lage daneben): Name und Kennung, z. B. »Widerstand R1«
         readonly property string fullName: Texts.partName(root.partType) + " " + Texts.partLabel(root.partId)
         text: root.destroyed ? qsTr("%1 kaputt").arg(fullName)
                              : root.measure ? Texts.partLabel(root.partId) + (root.meterReading !== "" ? "  " + root.meterReading : "")
+                             : root.single ? (root.partState.probeText || "")
                              : fullName +(root.partType === "widerstand" ? "\n" + Texts.ohm(root.value)
                                             : root.partType === "heissleiter" && root.partState.tempC !== undefined
                                               ? "\n" + qsTr("%1 °C").arg(Math.round(root.partState.tempC))
                                             : root.partType === "gluehlampe" && root.value > 0
                                               ? "\n" + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
                                               : "")
-        font.pixelSize: Math.round((root.measure ? 14 : 12) * Theme.fontScale)
+        font.pixelSize: Math.round((root.measure ? 14 : root.single ? 11 : 12) * Theme.fontScale)
         font.bold: root.measure
         horizontalAlignment: Text.AlignHCenter
         color: Theme.navy
@@ -149,7 +158,7 @@ Item {
     // Bedienung auf dem Koerper (Fangbereich mindestens 48 dp), ausserhalb der mitwandernden Darstellung
     Item {
         x: root.cx - width / 2
-        y: root.cy - height / 2
+        y: root.single ? body.y + body.height / 2 - height / 2 : root.cy - height / 2
         // nicht drehen (Verschiebung in Szenen-Richtung messen), sondern bei senkrechter Lage Masse tauschen
         readonly property bool upright: Math.abs(Math.abs(body.rotation) - 90) < 45
         width: Math.max(upright ? body.height : body.width, Theme.control)
@@ -192,6 +201,7 @@ Item {
     Accessible.role: Accessible.Button
     Accessible.name: Texts.partName(root.partType) + " " + Texts.partLabel(root.partId)
                      + (root.meterReading !== "" ? ", " + root.meterReading : "")
+                     + (root.single && root.partState.probeText ? ", " + root.partState.probeText : "")
                      + (Texts.partValue(root.partType, root.value) !== "" ? ", " + Texts.partValue(root.partType, root.value) : "")
                      + (root.destroyed ? ", " + qsTr("kaputt") : root.overloaded ? ", " + qsTr("überlastet") : "")
                      + (root.selected ? ", " + qsTr("ausgewählt") : "")

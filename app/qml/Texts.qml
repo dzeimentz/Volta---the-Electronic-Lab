@@ -57,15 +57,17 @@ QtObject {
         case "messstelle_v": return qsTr("Spannungsmessstelle")
         case "messstelle_a": return qsTr("Strommessstelle")
         case "messstelle_ohm": return qsTr("Widerstandsmessstelle")
+        case "tastkopf": return qsTr("Tastkopf")
         }
         return type
     }
 
-    // Sichtbare Kennung eines Bauteils: Messstellen heissen V1, A1, Ω1 (intern UM1, IM1, RM1)
+    // Sichtbare Kennung eines Bauteils: Messstellen heissen V1, A1, Ω1 (intern UM1, IM1, RM1), Tastkoepfe K1, K2
+    // (intern TK1, TK2)
     function partLabel(id) {
-        const m = /^(UM|IM|RM)([0-9]+)$/.exec(id)
+        const m = /^(UM|IM|RM|TK)([0-9]+)$/.exec(id)
         if (!m) return id
-        return (m[1] === "UM" ? "V" : m[1] === "IM" ? "A" : "Ω") + m[2]
+        return (m[1] === "UM" ? "V" : m[1] === "IM" ? "A" : m[1] === "TK" ? "K" : "Ω") + m[2]
     }
 
     // Aufbauschritt in Stichpunkte zerlegen (ein Handgriff je Zeile): getrennt wird an Satzende, Strichpunkt,

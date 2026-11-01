@@ -29,5 +29,6 @@
   "lex_timer555": "Le timer 555 est un composant à huit pattes. Il compare la tension d’un condensateur avec un tiers et deux tiers de l’alimentation et commute sa sortie en conséquence. Avec deux résistances et un condensateur, il devient un générateur d’impulsions, avec une seule une minuterie.",
   "lex_messstelle_v": "Le point de mesure de tension V affiche la tension entre ses deux pattes directement sur le composant. Branche-le en parallèle, à côté du composant dont tu veux connaître la tension. Il ne charge presque pas le circuit (10 MΩ).",
   "lex_messstelle_a": "Le point de mesure de courant A affiche le courant qui le traverse. Branche-le en série : le courant doit passer par lui. En parallèle sur une pile, ce serait un court-circuit.",
-  "lex_messstelle_ohm": "Le point de mesure de résistance Ω envoie un petit courant de mesure à travers le composant entre ses pattes et affiche la résistance. Ne mesure que sans tension extérieure, donc circuit éteint."
+  "lex_messstelle_ohm": "Le point de mesure de résistance Ω envoie un petit courant de mesure à travers le composant entre ses pattes et affiche la résistance. Ne mesure que sans tension extérieure, donc circuit éteint.",
+  "lex_tastkopf": "La sonde K1 ou K2 relie un champ à l’oscilloscope. Elle n’a qu’une patte : elle mesure toujours par rapport à 0V. Comme une vraie sonde, elle charge à peine le circuit (10 MΩ). La valeur de crête et la fréquence sont affichées à côté de la sonde."
 }

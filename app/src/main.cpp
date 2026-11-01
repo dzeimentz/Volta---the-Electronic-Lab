@@ -288,6 +288,33 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // VOLTA_DEMO_GALLERY=6 (mit VOLTA_DEMO_FREELAB=1): Oszilloskop - Einweggleichrichter an der Wechselquelle,
+    // K1 am Eingang, K2 am geglaetteten Ausgang
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 6) {
+        QTimer::singleShot(400, &lab, [&lab, &engine] {
+            lab.addDeskPart(QStringLiteral("wechselquelle"));
+            lab.addPart(QStringLiteral("diode_si"), QStringLiteral("A1"), false, false);
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B1"), false, false);
+            lab.setPartValue(QStringLiteral("R1"), 1000.0);
+            lab.addPart(QStringLiteral("elko"), QStringLiteral("C1"), false, false);
+            lab.setPartValue(QStringLiteral("C1"), 100e-6);
+            lab.addPart(QStringLiteral("tastkopf"), QStringLiteral("A4"), false, false);
+            lab.addPart(QStringLiteral("tastkopf"), QStringLiteral("A6"), false, false);
+            const char* wires[][2] = {{"P:W~a", "A1"}, {"P:W~b", "P:0V"}, {"A2", "B1"}, {"B2", "P:0V"}, {"A2", "C1"},
+                                      {"C2", "P:0V"},  {"A1", "A4"},     {"A2", "A6"}};
+            for (const auto& w : wires)
+                lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
+            lab.setScope(QStringLiteral("timebase"), 6); // 10 ms je Teilung
+            lab.setScope(QStringLiteral("volts0"), 8);   // 5 V je Teilung
+            lab.setScope(QStringLiteral("volts1"), 8);
+            lab.setScope(QStringLiteral("position1"), -2);
+            lab.setMainSwitch(true);
+            const auto roots = engine.rootObjects();
+            if (QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab")))
+                l->setProperty("recorderVisible", true);
+        });
+    }
+
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {

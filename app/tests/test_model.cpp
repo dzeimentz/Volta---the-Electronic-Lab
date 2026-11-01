@@ -358,6 +358,61 @@ private slots:
         QCOMPARE(p(0.0), std::string("0.00 \u00B5W"));
     }
 
+    // Oszilloskop: Trigger auf steigender Flanke, Kennwerte, Rollbetrieb, XY
+    void scopeFrameTriggersAndMeasures() {
+        std::vector<model::ScopeSample> s;
+        const double pi = 3.14159265358979323846;
+        for (int k = 0; k < 2000; ++k) { // 50 Hz, Spitze 5 V an K1; K2 konstant 2 V; 40 ms in 20-µs-Schritten
+            const double t = 0.013 + k * 20e-6;
+            s.push_back({t, {5.0 * std::sin(2.0 * pi * 50.0 * t), 2.0}});
+        }
+        model::ScopeSettings set;
+        set.timebaseIndex = 4; // 2 ms je Teilung: 20 ms Bild
+        const model::ScopeFrame f = model::scopeFrame(s, set, {true, true});
+        QVERIFY(f.triggered);
+        QVERIFY(!f.traces[0].empty());
+        // Triggerpunkt eine Teilung vom linken Rand: dort geht K1 steigend durch 0 V
+        double vAt1 = 99.0;
+        for (std::size_t i = 1; i < f.traces[0].size(); ++i)
+            if (f.traces[0][i - 1].first < 1.0 && f.traces[0][i].first >= 1.0) vAt1 = f.traces[0][i].second;
+        QVERIFY2(std::fabs(vAt1) < 0.05, qPrintable(QString::number(vAt1)));
+        QVERIFY(std::fabs(std::fmod(f.startS + 0.002, 0.02)) < 1e-4 || std::fabs(std::fmod(f.startS + 0.002, 0.02) - 0.02) < 1e-4);
+        QVERIFY(std::fabs(f.measure[0].max - 5.0) < 0.01);
+        QVERIFY(std::fabs(f.measure[0].min + 5.0) < 0.01);
+        QVERIFY(f.measure[0].frequencyHz == 0.0 || std::fabs(f.measure[0].frequencyHz - 50.0) < 1.0); // 1 Periode
+        QCOMPARE(f.measure[1].frequencyHz, 0.0); // Gleichspannung
+        QVERIFY(std::fabs(f.measure[1].mean - 2.0) < 1e-9);
+        // laengere Zeitbasis: mehrere Perioden, Frequenz genau
+        set.timebaseIndex = 3; // 1 ms: 10 ms Bild, eine halbe Periode -> keine Frequenz
+        set.timebaseIndex = 5; // 5 ms: 50 ms Bild > Puffer -> frei laufend, Frequenz aus 2 Perioden
+        const model::ScopeFrame g = model::scopeFrame(s, set, {true, true});
+        QVERIFY(!g.triggered);
+        QVERIFY2(std::fabs(g.measure[0].frequencyHz - 50.0) < 0.5, qPrintable(QString::number(g.measure[0].frequencyHz)));
+        // fallende Flanke bei 2,5 V
+        set.timebaseIndex = 3;
+        set.triggerRising = false;
+        set.triggerLevelV = 2.5;
+        const model::ScopeFrame h = model::scopeFrame(s, set, {true, true});
+        QVERIFY(h.triggered);
+        // Rollbetrieb: kein Trigger, das Neueste am rechten Rand
+        set.roll = true;
+        const model::ScopeFrame r = model::scopeFrame(s, set, {true, true});
+        QVERIFY(!r.triggered);
+        QVERIFY(std::fabs(r.traces[0].back().first - 10.0) < 1e-9);
+        // XY: Punkte (K1, K2)
+        set.roll = false;
+        set.xy = true;
+        const model::ScopeFrame x = model::scopeFrame(s, set, {true, true});
+        QVERIFY(!x.xy.empty());
+        QCOMPARE(x.xy.front().second, 2.0);
+        QVERIFY(x.traces[0].empty());
+        // Schrittweite: fein bei kurzer Zeitbasis, hoechstens 1 ms
+        set.timebaseIndex = 0;
+        QCOMPARE(set.simStepS(), 20e-6);
+        set.timebaseIndex = 12;
+        QCOMPARE(set.simStepS(), 1e-3);
+    }
+
     void initTestCase() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY2(repo.loadCatalog(m_catalog), qPrintable(repo.lastError()));

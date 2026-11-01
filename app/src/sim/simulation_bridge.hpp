@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <atomic>
 #include <condition_variable>
 #include <cstdint>
@@ -13,6 +14,7 @@
 #include "volta/core/circuit.hpp"
 #include "volta/core/signal_stats.hpp"
 #include "volta/core/simulator.hpp"
+#include "model/oscilloscope.hpp"
 
 namespace volta::sim {
 
@@ -54,6 +56,15 @@ public:
     virtual void afterStep(const core::Simulator& sim) = 0;
 };
 
+// Oszilloskop (ab Volta 2): Tastkoepfe (Bauteilkennungen, leer = Kanal aus), Abtastabstand, Groesse des
+// Ringpuffers (0 = aus) und Schrittweite der Simulation (feiner bei kurzer Zeitbasis)
+struct ScopeConfig {
+    std::array<std::string, model::kScopeChannels> probeIds;
+    double intervalS = 0.0;
+    std::size_t capacity = 0;
+    double stepS = core::kDefaultStepS;
+};
+
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.
 struct Snapshot {
     std::uint64_t topology = 0;
@@ -67,6 +78,9 @@ struct Snapshot {
     // Spannung (2 i) und Strom (2 i + 1) wie in readings (Spannungsanzeige, Wechselgroessen der Messgeraete)
     std::vector<core::SignalSummary> nodeStats;
     std::vector<core::SignalSummary> readingStats;
+    // Oszilloskop: Abtastwerte zeitlich geordnet (aelteste zuerst), je Kanal angeschlossen
+    std::vector<model::ScopeSample> scope;
+    std::array<bool, model::kScopeChannels> scopeHas{};
     core::Status lastStatus = core::Status::Ok;
     double realtimeRatio = 1.0;               // erreichte Simulationszeit je Wanduhrzeit (1 = Echtzeit)
 };
@@ -97,6 +111,8 @@ public:
     void post(Action action);
     void setTimeScale(double scale); // Zeitraffer 1, 10, 100
     void setPaused(bool paused);
+    void setScope(const ScopeConfig& config); // Oszilloskop ein-/umstellen (auch Schrittweite)
+    double stepS() const { return m_stepS; }   // aktuelle Schrittweite (nur im Simulations-Thread bzw. synchron)
 
     // Neuesten Schnappschuss holen (Kapazitaet von out wird wiederverwendet). false, wenn nichts Neues vorliegt.
     bool latest(Snapshot& out);
@@ -110,6 +126,7 @@ private:
     void apply(const Action& a);
     void publish(double realtimeRatio);
     void step();                // ein Simulationsschritt samt Beobachter
+    void resolveScope();        // Tastkoepfe in Bauteilindizes uebersetzen, Puffer leeren
 
     core::Simulator m_sim; // nur im Simulations-Thread (bzw. synchron im Aufrufer)
     core::SignalWindow m_nodeStats;    // nur im Simulations-Thread
@@ -118,6 +135,13 @@ private:
     std::unordered_map<std::string, std::size_t> m_index;
     std::uint64_t m_activeTopology = 0;
     std::shared_ptr<StepObserver> m_observer; // nur im Simulations-Thread
+    // Oszilloskop (nur im Simulations-Thread): Ringpuffer, Kanalindizes in readings, letzter Abtastzeitpunkt
+    ScopeConfig m_scope;
+    std::vector<model::ScopeSample> m_scopeRing;
+    std::size_t m_scopeHead = 0, m_scopeCount = 0;
+    std::array<long, model::kScopeChannels> m_scopeIndex{-1, -1};
+    double m_scopeLastT = -1.0;
+    double m_stepS = core::kDefaultStepS;
 
     std::mutex m_inMutex; // Eingaenge
     std::unique_ptr<core::Circuit> m_pendingCircuit;
@@ -127,6 +151,8 @@ private:
     std::uint64_t m_nextTopology = 0;
     std::vector<Action> m_actions;
     std::vector<Action> m_actionsWork;
+    bool m_scopePending = false;
+    ScopeConfig m_pendingScope;
 
     std::mutex m_outMutex; // Ausgang (Doppelpuffer)
     Snapshot m_front;

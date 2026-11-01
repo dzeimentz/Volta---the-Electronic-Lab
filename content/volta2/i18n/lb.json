@@ -29,5 +29,6 @@
   "lex_timer555": "Den Timer 555 ass e Baustee mat aacht Been. Hie vergläicht d’Spannung un engem Kondensator mat engem Drëttel an zwee Drëttel vun der Versuergung a schalt säin Ausgang dono. Mat zwee Widderstänn an engem Kondensator gëtt e Taktgeber, mat engem e Kuerzzäitwecker.",
   "lex_messstelle_v": "D’Spannungs-Moosstell V weist d’Spannung tëscht hiren zwee Been direkt um Bauelement. Si gëtt parallel ugeschloss, also nieft d’Bauelement, vun deem s du d’Spannung wësse wëlls. Si belaascht d’Schaltung kaum (10 MΩ).",
   "lex_messstelle_a": "D’Stroum-Moosstell A weist de Stroum, deen duerch si fléisst. Si gëtt a Rei geschalt: De Stroum muss duerch si duerch. Parallel zu enger Batterie wier si e Kuerzschluss.",
-  "lex_messstelle_ohm": "D’Widderstands-Moosstell Ω schéckt e klenge Moossstroum duerch d’Bauelement tëscht hire Been a weist de Widderstand. Moos nëmmen ouni friem Spannung, also bei ausgeschalter Schaltung."
+  "lex_messstelle_ohm": "D’Widderstands-Moosstell Ω schéckt e klenge Moossstroum duerch d’Bauelement tëscht hire Been a weist de Widderstand. Moos nëmmen ouni friem Spannung, also bei ausgeschalter Schaltung.",
+  "lex_tastkopf": "Den Taschtkapp K1 oder K2 verbënnt e Feld mam Oszilloskop. En huet nëmmen ee Been: Gemooss gëtt ëmmer géint 0V. Wéi en echten Taschtkapp belaascht e d’Schaltung mat 10 MΩ kaum. Um Taschtkapp stinn Spëtzt a Frequenz."
 }

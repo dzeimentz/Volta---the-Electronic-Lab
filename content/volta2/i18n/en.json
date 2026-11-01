@@ -29,5 +29,6 @@
   "lex_timer555": "The 555 timer is a chip with eight legs. It compares the voltage on a capacitor with one third and two thirds of the supply and switches its output accordingly. With two resistors and a capacitor it becomes a clock, with one resistor a short-time timer.",
   "lex_messstelle_v": "The voltage measuring point V shows the voltage between its two legs right at the part. Connect it in parallel, next to the part whose voltage you want to know. It hardly loads the circuit (10 MΩ).",
   "lex_messstelle_a": "The current measuring point A shows the current flowing through it. Connect it in series: the current has to pass through it. In parallel with a battery it would be a short circuit.",
-  "lex_messstelle_ohm": "The resistance measuring point Ω sends a small test current through the part between its legs and shows the resistance. Only measure without any other voltage, so with the circuit switched off."
+  "lex_messstelle_ohm": "The resistance measuring point Ω sends a small test current through the part between its legs and shows the resistance. Only measure without any other voltage, so with the circuit switched off.",
+  "lex_tastkopf": "The probe K1 or K2 connects a field to the oscilloscope. It has only one leg: it always measures against 0V. Like a real probe, it hardly loads the circuit (10 MΩ). The peak value and frequency are shown at the probe."
 }

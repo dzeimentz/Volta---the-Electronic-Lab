@@ -19,6 +19,9 @@ QtObject {
     ]
     // Nummer einer Messstelle (V1/V2 ...): 1 blau, 2 orange - zusaetzlich zur Ziffer
     readonly property var measureTagColors: ["#2F5FA8", "#C8541A"]
+    // Oszilloskop: K1 gelb, K2 tuerkis (Konzept 9.3); auf dem Bauteil bzw. hell, auf dem dunklen Schirm leuchtend
+    readonly property var probeColors: ["#E6B400", "#139C95"]
+    readonly property var scopeTraceColors: ["#FFD43B", "#3BE0D4"]
     function partTheme(key) {
         for (let i = 0; i < partThemes.length; ++i) if (partThemes[i].key === key) return partThemes[i]
         return {key: "", color: "#8E9AA8", tint: "#E9D7B0", symbol: ""}

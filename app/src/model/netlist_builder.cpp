@@ -310,6 +310,12 @@ private:
             core::PotentiometerParams pp;
             pp.ohm = p.value > 0.0 ? p.value : e->param("r_ohm", pp.ohm); // Trimmer: Katalogwert
             c.add<core::Potentiometer>(p.id, n[0], n[1], n[2], pp, p.position);
+        } else if (m == "scope_probe" && n.size() == 1) {
+            // Tastkopf des Oszilloskops (ab Volta 2): Eingangswiderstand 10 MOhm gegen 0V wie ein echter
+            // Tastkopf; der Strom dahin ist der Messwert der Spannung am Feld
+            core::ResistorParams rp;
+            rp.ohm = e->param("r_ein_ohm", 10e6);
+            c.add<core::Resistor>(p.id, n[0], core::kGround, rp);
         } else if ((m == "measure_volt" || m == "measure_ampere" || m == "measure_ohm") && n.size() == 2) {
             // Messstelle (ab Volta 2): das Messgeraet des Kerns mit fester Messart zwischen plus (n[0]) und minus
             // (n[1]); der jeweils unbenutzte Eingang liegt auf minus und ist damit wirkungslos. Ohne Sicherung:

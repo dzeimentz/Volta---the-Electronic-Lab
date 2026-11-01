@@ -10,6 +10,7 @@
 #include "model/environment.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
+#include "model/schematic_layout.hpp"
 #include "services/content_repository.hpp"
 #include "services/journal_store.hpp"
 #include "services/progress_store.hpp"
@@ -364,6 +365,53 @@ private slots:
         QVERIFY(s->addPart("messstelle_v", "D1", Orientation::Horizontal, Span::Short, &id));
         QCOMPARE(id, std::string("UM2"));
         QVERIFY(!s->addPart("messstelle_v", "E1", Orientation::Horizontal, Span::Short));
+    }
+
+    // Oszilloskop: Tastkopf K1 am Pol der Wechselquelle (anderer Pol an 0V); Abtastung erst mit eingeblendetem
+    // Geraet, feinere Schrittweite bei kurzer Zeitbasis, Trigger und Kennwerte (Spitze 9 V * Wurzel 2, 50 Hz)
+    void scopeShowsAcSource() {
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(s->addDeskPart("wechselquelle"));
+        std::string id;
+        QVERIFY(s->addPart("tastkopf", "A1", Orientation::Horizontal, Span::Short, &id));
+        QCOMPARE(id, std::string("TK1"));
+        QCOMPARE(s->board().findPart("TK1")->pins.size(), std::size_t(1));
+        QVERIFY(s->addWire("P:W~a", "A1", "gelb"));
+        QVERIFY(s->addWire("P:W~b", "P:0V", "schwarz"));
+        QVERIFY(s->netlist().ok());
+        s->setMainSwitch(true);
+        run(*s, 0.05);
+        QVERIFY(s->snapshot().scope.empty()); // Oszilloskop aus: keine Abtastung
+        model::ScopeSettings set;
+        set.timebaseIndex = 5; // 5 ms je Teilung
+        s->setScopeSettings(set);
+        s->setScopeActive(true);
+        run(*s, 0.25);
+        QCOMPARE(s->bridge().stepS(), set.simStepS()); // 200 µs
+        const auto& snap = s->snapshot();
+        QVERIFY(snap.scopeHas[0] && !snap.scopeHas[1]);
+        QVERIFY(snap.scope.size() > model::kScopePointsPerScreen);
+        const model::ScopeFrame f = model::scopeFrame(snap.scope, set, snap.scopeHas);
+        QVERIFY(f.triggered);
+        const double peak = s->board().desk.acRmsV * std::sqrt(2.0);
+        QVERIFY2(std::fabs(f.measure[0].max - peak) < 0.02 * peak, qPrintable(QString::number(f.measure[0].max)));
+        QVERIFY2(std::fabs(f.measure[0].frequencyHz - 50.0) < 1.0, qPrintable(QString::number(f.measure[0].frequencyHz)));
+        // zweiter Tastkopf, dritter abgelehnt
+        QVERIFY(s->addPart("tastkopf", "B1", Orientation::Horizontal, Span::Short, &id));
+        QCOMPARE(id, std::string("TK2"));
+        QVERIFY(!s->addPart("tastkopf", "C1", Orientation::Horizontal, Span::Short));
+        // ein Bein: Schaltplan und Fehlersuche kommen damit zurecht
+        const model::Schematic sch = model::buildSchematic(s->board(), s->catalog());
+        Q_UNUSED(sch);
+        Q_UNUSED(s->checkCircuit());
+        QVERIFY(s->movePart("TK2", "C3", Orientation::Horizontal, Span::Short));
+        QCOMPARE(s->board().findPart("TK2")->pins.front().second, std::string("C3"));
+        s->setScopeActive(false);
+        run(*s, 0.01);
+        QCOMPARE(s->bridge().stepS(), 1e-3);
     }
 
     // Strommessstelle an Wechselspannung: Effektivwert aus der Signalstatistik des Bauteils

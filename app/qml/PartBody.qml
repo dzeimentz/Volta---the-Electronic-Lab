@@ -104,6 +104,7 @@ Item {
             case "piezo": return piezo
             case "feuchtesonde": return probe
             case "messstelle_v": case "messstelle_a": case "messstelle_ohm": return measurePoint
+            case "tastkopf": return scopeProbe
             }
             return root.isLed ? led : generic
         }
@@ -798,6 +799,31 @@ Item {
         }
     }
 
+    // Tastkopf (ab Volta 2): Griff in der Kanalfarbe (K1 gelb, K2 tuerkis) mit Fahne »K1«/»K2«, Massezeichen fuer den
+    // Bezug 0V; die Spitze (das eine Bein) zeigt nach unten ins Feld
+    Component {
+        id: scopeProbe
+        Item {
+            readonly property color tint: root.tag > 0 ? Theme.probeColors[(root.tag - 1) % Theme.probeColors.length] : "#8E9AA8"
+            Rectangle {
+                anchors.fill: parent
+                radius: 8
+                color: parent.tint
+                border.color: "#1E2B38"; border.width: 2
+            }
+            Text {
+                anchors.centerIn: parent
+                text: "K" + (root.tag > 0 ? root.tag : "")
+                color: "#1E2B38"
+                font.pixelSize: Math.round(14 * Theme.fontScale); font.bold: true
+            }
+            Text { // Bezug 0V
+                anchors.right: parent.right; anchors.rightMargin: 3; anchors.bottom: parent.bottom
+                text: "⏚"; color: "#1E2B38"; font.pixelSize: 11
+            }
+        }
+    }
+
     // Messstelle (ab Volta 2): graues Gehaeuse mit Messgroesse im Kreis (V, A, Ω) und Nummer (Ziffer und Farbe);
     // Pluszeichen am ersten Anschluss. Den Messwert schreibt PartItem unter das Bauteil.
     Component {
@@ -824,7 +850,7 @@ Item {
                 visible: root.tag > 0
                 x: dial.x + dial.width - 6; y: 1
                 width: 14; height: 14; radius: 7
-                color: Theme.measureTagColors[(root.tag - 1) % Theme.measureTagColors.length]
+                color: root.tag > 0 ? Theme.measureTagColors[(root.tag - 1) % Theme.measureTagColors.length] : "transparent"
                 border.color: "white"; border.width: 1
                 Text { anchors.centerIn: parent; text: root.tag; color: "white"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true }
             }

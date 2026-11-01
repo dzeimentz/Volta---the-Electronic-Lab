@@ -72,7 +72,9 @@
     {"typ": "messstelle_a", "thema": "messen", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "measure_ampere",
      "parameter": {"r_shunt_ohm": 0.1}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_a"},
     {"typ": "messstelle_ohm", "thema": "messen", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "measure_ohm",
-     "parameter": {}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_ohm"}
+     "parameter": {}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_ohm"},
+    {"typ": "tastkopf", "thema": "messen", "anschluesse": ["spitze"], "spannweite": ["kurz", "lang"], "modell": "scope_probe",
+     "parameter": {"r_ein_ohm": 10000000}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_tastkopf"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",

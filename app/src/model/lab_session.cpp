@@ -171,7 +171,45 @@ void LabSession::rebuild(const std::vector<sim::StateOverride>& states) {
     m_idHistory.emplace_back(m_topology, m_net.componentIds);
     while (m_idHistory.size() > 32) m_idHistory.pop_front();
     if (!states.empty()) m_pendingStates.emplace_back(m_topology, states);
+    updateScope();
     if (onBoardChanged) onBoardChanged();
+}
+
+std::array<std::string, kScopeChannels> LabSession::scopeProbes() const {
+    std::array<std::string, kScopeChannels> out;
+    for (const auto& p : m_board.parts) {
+        if (p.type != "tastkopf" || p.id.size() < 3) continue;
+        const int n = std::atoi(p.id.c_str() + 2); // TK1 -> Kanal 1
+        if (n >= 1 && n <= static_cast<int>(kScopeChannels)) out[static_cast<std::size_t>(n - 1)] = p.id;
+    }
+    return out;
+}
+
+void LabSession::setScopeActive(bool active) {
+    m_scopeActive = active;
+    updateScope();
+}
+
+void LabSession::setScopeSettings(const ScopeSettings& s) {
+    m_board.desk.scope = s;
+    updateScope();
+}
+
+// Abtastung der Bruecke nach Tastkoepfen und Zeitbasis; ohne Oszilloskop aus (Schrittweite wieder 1 ms)
+void LabSession::updateScope() {
+    sim::ScopeConfig c;
+    if (m_scopeActive) {
+        const ScopeSettings& s = m_board.desk.scope;
+        c.probeIds = scopeProbes();
+        c.intervalS = s.sampleIntervalS();
+        c.capacity = 2 * kScopePointsPerScreen + 200; // zwei Bilder: Trigger mit Vorlauf findet immer ein ganzes
+        c.stepS = s.simStepS();
+    }
+    if (c.probeIds == m_scopeConfig.probeIds && c.intervalS == m_scopeConfig.intervalS &&
+        c.capacity == m_scopeConfig.capacity && c.stepS == m_scopeConfig.stepS)
+        return;
+    m_scopeConfig = c;
+    m_bridge.setScope(c);
 }
 
 bool LabSession::poll() {

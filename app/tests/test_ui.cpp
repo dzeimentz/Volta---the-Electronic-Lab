@@ -816,7 +816,7 @@ private slots:
         model::Catalog v1, v2;
         QVERIFY(repo.loadCatalog(v1, QStringLiteral("volta1")));
         QVERIFY(repo.loadCatalog(v2, QStringLiteral("volta2")));
-        QCOMPARE(v2.parts.size(), v1.parts.size() + 14); // Z-Dioden, PNP, Spulen, Trimmer, IR, Regler, Messstellen ab Volta 2
+        QCOMPARE(v2.parts.size(), v1.parts.size() + 15); // Z-Dioden, PNP, Spulen, Trimmer, IR, Regler, Messstellen, Tastkopf ab Volta 2
         QCOMPARE(v2.parts.at("zdiode_4v7").fromStage, 3); // eigene Teile folgen ab_stufe
         QVERIFY(v1.parts.at("widerstand").fromStage > 0);
         QCOMPARE(v2.parts.at("widerstand").fromStage, 0); // aus dem Grundband: sofort frei

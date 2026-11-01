@@ -132,6 +132,12 @@ public:
     void setMeterAnalog(bool analog);
     // Anzeigegeraet ab Volta 2 (Bedienhandlung, nur Anzeige: die Messstellen messen unabhaengig davon)
     void setDisplaySettings(const DisplaySettings& s) { m_board.desk.display = s; }
+    // Oszilloskop ab Volta 2: eingeblendet (nur dann tastet die Simulation ab) und Einstellungen (Bedienhandlungen)
+    void setScopeActive(bool active);
+    bool scopeActive() const { return m_scopeActive; }
+    void setScopeSettings(const ScopeSettings& s);
+    // Tastkoepfe K1/K2: Bauteilkennung je Kanal (leer = nicht gesteckt)
+    std::array<std::string, kScopeChannels> scopeProbes() const;
     bool setMeterVisible(bool visible);
     bool replaceMeterFuse();
     // Lautsprecher des Pults reparieren (Befehl, wie Reparieren eines Bauteils)
@@ -181,6 +187,9 @@ private:
     Board m_board;
     Netlist m_net;
     sim::SimulationBridge m_bridge;
+    bool m_scopeActive = false;
+    sim::ScopeConfig m_scopeConfig; // zuletzt an die Bruecke gegeben (nur bei Aenderung neu)
+    void updateScope();
     sim::Snapshot m_snap;
     std::uint64_t m_topology = 0;
     QUndoStack m_undo;

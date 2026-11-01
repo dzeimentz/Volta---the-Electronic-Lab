@@ -668,7 +668,8 @@ Item {
                 text: "📈"
                 font.pixelSize: 18
                 ToolTip.visible: hovered
-                ToolTip.text: lab.recorderVisible ? qsTr("Zeitschreiber ausblenden") : qsTr("Zeitschreiber zeigen")
+                ToolTip.text: !lab.classicMeter ? (lab.recorderVisible ? qsTr("Oszilloskop ausblenden") : qsTr("Oszilloskop zeigen"))
+                            : lab.recorderVisible ? qsTr("Zeitschreiber ausblenden") : qsTr("Zeitschreiber zeigen")
                 Accessible.name: ToolTip.text
                 background: Rectangle {
                     radius: 6
@@ -803,7 +804,7 @@ Item {
         id: schematicPanel
         objectName: "schematicPanel"
         controller: lab.controller
-        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: recorderPanel.top }
+        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: scopePanel.top }
         readonly property bool shown: lab.schematicVisible && lab.controller.schematicAvailable
         visible: shown
         width: shown ? Math.round((lab.width - tray.width - experimentPanel.width) * 0.5) : 0
@@ -866,21 +867,35 @@ Item {
         }
     }
 
+    // Volta 1: Zeitschreiber; ab Volta 2 an derselben Stelle das Oszilloskop (der Zeitschreiber ist dort sein
+    // Rollbetrieb). Nur eingeblendet tastet die Simulation fuer das Oszilloskop ab.
     RecorderPanel {
         id: recorderPanel
         objectName: "recorderPanel"
         controller: lab.controller
-        readonly property bool shown: lab.recorderVisible && lab.controller.recorderAvailable
+        readonly property bool shown: lab.recorderVisible && lab.controller.recorderAvailable && lab.classicMeter
         visible: shown
         anchors { left: tray.right; right: experimentPanel.left; bottom: parent.bottom }
         height: shown ? Math.max(170, Math.min(240, lab.height * 0.28)) : 0
+        onCloseRequested: lab.recorderVisible = false
+    }
+    ScopePanel {
+        id: scopePanel
+        objectName: "scopePanel"
+        controller: lab.controller
+        readonly property bool shown: lab.recorderVisible && lab.controller.recorderAvailable && !lab.classicMeter
+        visible: shown
+        onShownChanged: lab.controller.scopeActive = shown
+        Component.onCompleted: lab.controller.scopeActive = shown
+        anchors { left: tray.right; right: experimentPanel.left; bottom: recorderPanel.top }
+        height: shown ? Math.max(190, Math.min(260, lab.height * 0.3)) : 0
         onCloseRequested: lab.recorderVisible = false
     }
 
     Rectangle {
         id: boardArea
         objectName: "boardArea"
-        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: recorderPanel.top }
+        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: scopePanel.top }
         color: Theme.board
         clip: true
 
@@ -1645,7 +1660,7 @@ Item {
         }
         // Zeitschreiber: Feld (Spannung gegen 0 V) bzw. Messgeraet (seine Anzeige) auf Kanal 1 oder 2
         Repeater {
-            model: lab.controller.recorderAvailable ? 2 : 0
+            model: lab.controller.recorderAvailable && lab.classicMeter ? 2 : 0 // ab Volta 2: Tastkoepfe
             MenuItem {
                 height: Theme.control
                 required property int index

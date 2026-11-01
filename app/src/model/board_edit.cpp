@@ -48,7 +48,8 @@ std::string prefixFor(const std::string& type) {
         {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
         {"spannungsregler_5v", "IC"},
         // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
-        {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"}};
+        {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"},
+        {"tastkopf", "TK"}}; // Tastkopf K1/K2 (»K« ist das Relais)
     const auto it = prefixes.find(type);
     if (it != prefixes.end()) return it->second;
     if (type.rfind("led_", 0) == 0) return "D";
@@ -62,6 +63,7 @@ std::vector<std::string> footprint(const CatalogEntry& entry, const std::string&
     int col = 0;
     if (!parseField(startField, row, col)) return {};
     const BoardLayout& layout = BoardLayout::volta1();
+    if (entry.pins.size() == 1) return {startField}; // ein Bein (Tastkopf): nur das Startfeld
     if (isSquareCarrier(entry)) { // Lage fest: Startfeld oben links; Richtung und Spannweite ohne Bedeutung
         if (row + 1 > layout.lastRow || col + 1 > layout.columns) return {};
         return {fieldName(row, col), fieldName(row, col + 1), fieldName(static_cast<char>(row + 1), col),
@@ -342,7 +344,9 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
         for (const auto& p : board.parts)
             if (p.type == part.type && p.id != part.id && p.id != ignoreId) ++same;
         if (same >= kMaxMeasurePointsPerType) {
-            error = msg(QT_TRANSLATE_NOOP("Meldung", "Von dieser Messstelle sind schon zwei gesteckt."));
+            error = e->model == "scope_probe"
+                        ? msg(QT_TRANSLATE_NOOP("Meldung", "Das Oszilloskop hat nur die Tastköpfe K1 und K2."))
+                        : msg(QT_TRANSLATE_NOOP("Meldung", "Von dieser Messstelle sind schon zwei gesteckt."));
             return false;
         }
     }

@@ -1383,6 +1383,28 @@ QVariantMap LabController::voltageDisplay(const QString& anchor) {
     return {{QStringLiteral("bars"), d.bars}, {QStringLiteral("negative"), d.negative}, {QStringLiteral("ac"), d.ac}};
 }
 
+namespace {
+QString localNumber(double v, int decimals) {
+    return QLocale().toString(v, 'f', decimals);
+}
+// Zahl mit drei gueltigen Stellen und Vorsatz (Zeit je Teilung, Spannung, Frequenz)
+QString siText(double v, const char* unit) {
+    const double a = std::fabs(v);
+    struct P { double f; const char* p; };
+    static const P prefixes[] = {{1e-6, "µ"}, {1e-3, "m"}, {1.0, ""}, {1e3, "k"}};
+    const P* best = &prefixes[2];
+    for (const P& p : prefixes)
+        if (a >= p.f * 0.9995) best = &p;
+    const double s = v / best->f;
+    const double as = std::fabs(s);
+    const int decimals = as == 0.0 || as >= 99.95 ? 0 : as >= 9.995 ? 1 : 2;
+    QString text = localNumber(s, decimals);
+    // 1-2-5-Stufen ohne Nachkommastellen (»5 ms«, nicht »5,00 ms«)
+    if (std::fabs(s - std::round(s)) < 1e-9) text = localNumber(s, 0);
+    return text + QStringLiteral(" ") + QString::fromUtf8(best->p) + QString::fromUtf8(unit);
+}
+} // namespace
+
 QVariantMap LabController::partState(const QString& id) const {
     QVariantMap m;
     if (const model::PartPlacement* p = m_session->board().findPart(ss(id))) {
@@ -1401,7 +1423,17 @@ QVariantMap LabController::partState(const QString& id) const {
     // Messstelle: Anzeige am Bauteil; Wechselgroesse als Effektivwert mit »~« (Statistik des Messfensters)
     const model::PartPlacement* p = m_session->board().findPart(ss(id));
     const model::CatalogEntry* e = p ? m_session->catalog().part(p->type) : nullptr;
-    if (e && e->theme == "messen") {
+    if (e && e->model == "scope_probe") {
+        const core::SignalSummary* st = m_session->readingStats(ss(id), false);
+        // Spannung am Feld gegen 0V; die Statistik laeuft ueber dieselbe Groesse (Widerstand Feld -> 0V)
+        QString text;
+        if (st && st->valid && st->frequencyHz > 0.0 && st->max - st->min > 0.05)
+            text = tr("%1 Spitze · %2").arg(siText(std::max(std::fabs(st->max), std::fabs(st->min)), "V"),
+                                            siText(st->frequencyHz, "Hz"));
+        else
+            text = siText(r->voltV, "V");
+        m.insert(QStringLiteral("probeText"), text);
+    } else if (e && e->theme == "messen") {
         const auto mode = e->model == "measure_ampere" ? core::MeterMode::Ampere
                         : e->model == "measure_ohm" ? core::MeterMode::Ohm : core::MeterMode::Volt;
         double value = r->displayValue;
@@ -2129,7 +2161,7 @@ QVariantMap LabController::meterState() {
 namespace {
 // Messart einer Messstelle: 0 V, 1 A, 2 Ohm; -1 = keine Messstelle
 int measureKind(const model::CatalogEntry* e) {
-    if (!e || e->theme != "messen") return -1;
+    if (!e || e->theme != "messen" || e->model == "scope_probe") return -1; // Tastkoepfe gehoeren zum Oszilloskop
     return e->model == "measure_ampere" ? 1 : e->model == "measure_ohm" ? 2 : 0;
 }
 // Sichtbare Kennung: UM1 -> V1, IM1 -> A1, RM1 -> Ohm1
@@ -2278,6 +2310,120 @@ void LabController::setDisplayAc(int slot, bool ac) {
     s.meters[slot].ac = ac;
     m_session->setDisplaySettings(s);
     emit deskChanged();
+}
+
+
+bool LabController::scopeActive() const { return m_session->scopeActive(); }
+void LabController::setScopeActive(bool active) {
+    if (active == m_session->scopeActive()) return;
+    m_session->setScopeActive(active);
+    emit deskChanged();
+}
+
+void LabController::setScope(const QString& key, const QVariant& value) {
+    model::ScopeSettings s = m_session->board().desk.scope;
+    const int lastTb = static_cast<int>(model::scopeTimebases().size()) - 1;
+    const int lastV = static_cast<int>(model::scopeVoltsPerDiv().size()) - 1;
+    if (key == QLatin1String("timebase")) {
+        // Normalbetrieb bis 1 s je Teilung, Rollbetrieb ab 100 ms
+        s.timebaseIndex = std::clamp(value.toInt(), s.roll ? model::kScopeFirstRollTimebase : 0,
+                                     s.roll ? lastTb : model::kScopeLastNormalTimebase);
+    } else if (key == QLatin1String("roll")) {
+        s.roll = value.toBool();
+        if (s.roll) s.xy = false;
+        s.timebaseIndex = s.roll ? std::max(s.timebaseIndex, model::kScopeFirstRollTimebase)
+                                 : std::min(s.timebaseIndex, model::kScopeLastNormalTimebase);
+    } else if (key == QLatin1String("xy")) {
+        s.xy = value.toBool();
+        if (s.xy) s.roll = false;
+        s.timebaseIndex = std::min(s.timebaseIndex, model::kScopeLastNormalTimebase);
+    } else if (key == QLatin1String("triggerChannel")) {
+        s.triggerChannel = std::clamp(value.toInt(), 0, 1);
+    } else if (key == QLatin1String("triggerRising")) {
+        s.triggerRising = value.toBool();
+    } else if (key == QLatin1String("triggerLevel")) {
+        s.triggerLevelV = std::clamp(value.toDouble(), -20.0, 20.0);
+    } else if (key.startsWith(QLatin1String("volts")) || key.startsWith(QLatin1String("position"))) {
+        const int ch = std::clamp(key.right(1).toInt(), 0, 1);
+        if (key.startsWith(QLatin1String("volts"))) s.channels[ch].voltsIndex = std::clamp(value.toInt(), 0, lastV);
+        else s.channels[ch].position = std::clamp(value.toInt(), -4, 4);
+    } else {
+        return;
+    }
+    m_session->setScopeSettings(s);
+    emit deskChanged();
+}
+
+QVariantMap LabController::scopeState() const {
+    const model::ScopeSettings& s = m_session->board().desk.scope;
+    QVariantMap m;
+    m.insert(QStringLiteral("timebase"), s.timebaseIndex);
+    m.insert(QStringLiteral("timebaseText"), siText(s.timebaseS(), "s"));
+    m.insert(QStringLiteral("roll"), s.roll);
+    m.insert(QStringLiteral("xy"), s.xy);
+    m.insert(QStringLiteral("triggerChannel"), s.triggerChannel);
+    m.insert(QStringLiteral("triggerRising"), s.triggerRising);
+    m.insert(QStringLiteral("triggerLevel"), s.triggerLevelV);
+    m.insert(QStringLiteral("triggerText"), localNumber(s.triggerLevelV, 1) + QStringLiteral(" V"));
+    const auto& tch = s.channels[static_cast<std::size_t>(std::clamp(s.triggerChannel, 0, 1))];
+    m.insert(QStringLiteral("triggerDiv"), std::clamp(s.triggerLevelV / model::scopeVoltsPerDiv()[static_cast<std::size_t>(tch.voltsIndex)]
+                                                      + tch.position, -4.2, 4.2));
+    m.insert(QStringLiteral("canSlower"), s.timebaseIndex < (s.roll ? static_cast<int>(model::scopeTimebases().size()) - 1
+                                                                       : model::kScopeLastNormalTimebase));
+    m.insert(QStringLiteral("canFaster"), s.timebaseIndex > (s.roll ? model::kScopeFirstRollTimebase : 0));
+    const auto probes = m_session->scopeProbes();
+    std::array<bool, model::kScopeChannels> has{};
+    for (std::size_t c = 0; c < model::kScopeChannels; ++c) has[c] = !probes[c].empty();
+    model::ScopeFrame f;
+    if (m_session->snapshotCurrent()) {
+        const auto& snap = m_session->snapshot();
+        std::array<bool, model::kScopeChannels> live{};
+        for (std::size_t c = 0; c < model::kScopeChannels; ++c) live[c] = has[c] && snap.scopeHas[c];
+        f = model::scopeFrame(snap.scope, s, live);
+    }
+    m.insert(QStringLiteral("triggered"), f.triggered);
+    QVariantList channels;
+    for (std::size_t c = 0; c < model::kScopeChannels; ++c) {
+        const double vpd = model::scopeVoltsPerDiv()[static_cast<std::size_t>(s.channels[c].voltsIndex)];
+        const double pos = s.channels[c].position;
+        // Punkte in Teilungen: x 0 ... 10, y -4 ... 4 (Nulllinie bei pos), knapp ausserhalb abgeschnitten
+        auto yDiv = [&](double v) { return std::clamp(v / vpd + pos, -4.4, 4.4); };
+        QVariantList pts;
+        pts.reserve(static_cast<int>(f.traces[c].size()) * 2);
+        for (const auto& [x, v] : f.traces[c]) pts << x << yDiv(v);
+        const model::ScopeMeasure& me = f.measure[c];
+        QVariantMap ch{{QStringLiteral("has"), has[c]},
+                       {QStringLiteral("label"), QStringLiteral("K%1").arg(c + 1)},
+                       {QStringLiteral("volts"), s.channels[c].voltsIndex},
+                       {QStringLiteral("voltsText"), siText(vpd, "V")},
+                       {QStringLiteral("position"), s.channels[c].position},
+                       {QStringLiteral("points"), pts},
+                       {QStringLiteral("any"), me.any}};
+        if (me.any) {
+            ch.insert(QStringLiteral("ppText"), siText(me.max - me.min, "V"));
+            ch.insert(QStringLiteral("maxText"), siText(me.max, "V"));
+            ch.insert(QStringLiteral("meanText"), siText(me.mean, "V"));
+            ch.insert(QStringLiteral("frequency"), me.frequencyHz);
+            if (me.frequencyHz > 0.0) {
+                ch.insert(QStringLiteral("frequencyText"), siText(me.frequencyHz, "Hz"));
+                ch.insert(QStringLiteral("periodText"), siText(1.0 / me.frequencyHz, "s"));
+            }
+        }
+        channels << ch;
+    }
+    m.insert(QStringLiteral("channels"), channels);
+    if (s.xy) {
+        const double vx = model::scopeVoltsPerDiv()[static_cast<std::size_t>(s.channels[0].voltsIndex)];
+        const double vy = model::scopeVoltsPerDiv()[static_cast<std::size_t>(s.channels[1].voltsIndex)];
+        QVariantList pts;
+        pts.reserve(static_cast<int>(f.xy.size()) * 2);
+        // XY: K1 waagrecht (Mitte = 0 V, 5 Teilungen je Seite), K2 senkrecht
+        for (const auto& [x, y] : f.xy)
+            pts << std::clamp(5.0 + x / vx + s.channels[0].position, -0.4, 10.4)
+                << std::clamp(y / vy + s.channels[1].position, -4.4, 4.4);
+        m.insert(QStringLiteral("xyPoints"), pts);
+    }
+    return m;
 }
 
 bool LabController::displayTwin() const { return m_session->board().desk.display.twin; }

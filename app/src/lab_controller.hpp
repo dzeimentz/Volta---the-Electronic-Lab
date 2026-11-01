@@ -482,6 +482,13 @@ public:
     Q_INVOKABLE void setDisplaySource(int slot, const QString& id);
     Q_INVOKABLE void setDisplayRange(int slot, int range);
     Q_INVOKABLE void setDisplayAc(int slot, bool ac);
+    // Oszilloskop ab Volta 2: Bild samt Einstellungen und Kennwerten; Einstellung je Schluessel (timebase, roll, xy,
+    // triggerChannel, triggerRising, triggerLevel, volts0/1, position0/1); scopeActive = eingeblendet
+    Q_INVOKABLE QVariantMap scopeState() const;
+    Q_INVOKABLE void setScope(const QString& key, const QVariant& value);
+    Q_PROPERTY(bool scopeActive READ scopeActive WRITE setScopeActive NOTIFY deskChanged)
+    bool scopeActive() const;
+    void setScopeActive(bool active);
     bool displayTwin() const;
     void setDisplayTwin(bool twin);
     bool displayPower() const;

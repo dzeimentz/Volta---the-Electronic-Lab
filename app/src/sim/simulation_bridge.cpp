@@ -79,8 +79,14 @@ void SimulationBridge::applyPending() {
     std::vector<StateOverride> overrides;
     std::uint64_t topology = 0;
     std::shared_ptr<StepObserver> observer;
+    bool scopeChanged = false;
     {
         std::lock_guard<std::mutex> lock(m_inMutex);
+        if (m_scopePending) {
+            m_scope = m_pendingScope;
+            m_scopePending = false;
+            scopeChanged = true;
+        }
         if (m_pendingCircuit) {
             circuit = std::move(m_pendingCircuit);
             overrides = std::move(m_pendingOverrides);
@@ -112,6 +118,12 @@ void SimulationBridge::applyPending() {
         m_readingStats.reset(2 * n, kStatsWindowS);
         m_readingValues.assign(2 * n, 0.0);
     }
+    if (scopeChanged) { // Speicher nur hier (zwischen zwei Schritten)
+        m_scopeRing.assign(m_scope.capacity, model::ScopeSample{});
+        m_back.scope.reserve(m_scope.capacity);
+        m_stepS = m_scope.stepS > 0.0 ? m_scope.stepS : core::kDefaultStepS;
+    }
+    if (circuit || scopeChanged) resolveScope();
     for (const auto& a : m_actionsWork) apply(a);
 }
 
@@ -187,6 +199,10 @@ void SimulationBridge::publish(double realtimeRatio) {
     m_back.states.resize(c.componentCount());
     for (std::size_t i = 0; i < c.componentCount(); ++i) m_back.states[i] = c.component(i).saveState();
     m_back.realtimeRatio = realtimeRatio;
+    m_back.scope.resize(m_scopeCount);
+    for (std::size_t k = 0; k < m_scopeCount; ++k)
+        m_back.scope[k] = m_scopeRing[(m_scopeHead + m_scopeRing.size() - m_scopeCount + k) % m_scopeRing.size()];
+    for (std::size_t c = 0; c < model::kScopeChannels; ++c) m_back.scopeHas[c] = m_scopeIndex[c] >= 0;
     core::SimEvent e;
     std::lock_guard<std::mutex> lock(m_outMutex);
     while (m_sim.events().pop(e))
@@ -201,6 +217,8 @@ void SimulationBridge::publish(double realtimeRatio) {
     std::swap(m_front.states, m_back.states);
     std::swap(m_front.lastStatus, m_back.lastStatus);
     std::swap(m_front.realtimeRatio, m_back.realtimeRatio);
+    std::swap(m_front.scope, m_back.scope);
+    std::swap(m_front.scopeHas, m_back.scopeHas);
     m_back.lastStatus = m_front.lastStatus;
     m_fresh = true;
 }
@@ -221,6 +239,8 @@ bool SimulationBridge::latest(Snapshot& out) {
     out.states.assign(m_front.states.begin(), m_front.states.end());
     out.lastStatus = m_front.lastStatus;
     out.realtimeRatio = m_front.realtimeRatio;
+    out.scope.assign(m_front.scope.begin(), m_front.scope.end());
+    out.scopeHas = m_front.scopeHas;
     m_fresh = false;
     return true;
 }
@@ -240,13 +260,39 @@ void SimulationBridge::step() {
         }
         m_readingStats.add(m_readingValues.data(), 2 * n, dt);
     }
+    if (dt > 0.0 && p.valid && !m_scopeRing.empty() && m_sim.timeS() - m_scopeLastT >= m_scope.intervalS * 0.999) {
+        m_scopeLastT = m_sim.timeS();
+        model::ScopeSample& s = m_scopeRing[m_scopeHead];
+        s.t = m_scopeLastT;
+        for (std::size_t c = 0; c < model::kScopeChannels; ++c) {
+            const long i = m_scopeIndex[c];
+            s.v[c] = i >= 0 && static_cast<std::size_t>(i) < p.readings.size() ? p.readings[i].voltV : 0.0;
+        }
+        m_scopeHead = (m_scopeHead + 1) % m_scopeRing.size();
+        m_scopeCount = std::min(m_scopeCount + 1, m_scopeRing.size());
+    }
     if (m_observer) m_observer->afterStep(m_sim);
+}
+
+void SimulationBridge::setScope(const ScopeConfig& config) {
+    std::lock_guard<std::mutex> lock(m_inMutex);
+    m_pendingScope = config;
+    m_scopePending = true;
+}
+
+void SimulationBridge::resolveScope() {
+    for (std::size_t c = 0; c < model::kScopeChannels; ++c) {
+        const auto it = m_scope.probeIds[c].empty() ? m_index.end() : m_index.find(m_scope.probeIds[c]);
+        m_scopeIndex[c] = it == m_index.end() ? -1 : static_cast<long>(it->second);
+    }
+    m_scopeHead = m_scopeCount = 0;
+    m_scopeLastT = -1.0;
 }
 
 void SimulationBridge::runFor(double seconds) {
     if (m_thread.joinable()) return;
     applyPending();
-    const int steps = static_cast<int>(std::lround(seconds / core::kDefaultStepS));
+    const int steps = static_cast<int>(std::lround(seconds / m_stepS));
     for (int i = 0; i < steps; ++i) {
         step();
     }
@@ -270,9 +316,9 @@ void SimulationBridge::loop() {
             owedS = std::min(owedS + std::min(wall, kMaxCatchUpS) * scale, kMaxCatchUpS * scale);
             const double t0 = m_sim.timeS();
             const auto budgetEnd = now + std::chrono::duration<double>(kMaxCatchUpS);
-            while (owedS >= core::kDefaultStepS && Clock::now() < budgetEnd) {
+            while (owedS >= m_stepS && Clock::now() < budgetEnd) {
                 step();
-                owedS -= core::kDefaultStepS;
+                owedS -= m_stepS;
             }
             simWindow += m_sim.timeS() - t0;
         } else {

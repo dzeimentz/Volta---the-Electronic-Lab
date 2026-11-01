@@ -103,6 +103,8 @@ Item {
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
         case "messstelle_a":
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "A", tx: 32, ty: 16}
+        case "tastkopf": // Tastkopf: Messspitze mit Kanalkreis, Bezug 0V
+            return {s: "M0 16 H22 " + circle(34, 16, 12) + " M34 28 V31 M28 31 H40", f: "", t: "K", tx: 34, ty: 16}
         case "messstelle_ohm":
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "Ω", tx: 32, ty: 16}
         case "opmodul": // Dreieck mit IN+ oben, IN- unten (DIN EN 60617 vereinfacht)
