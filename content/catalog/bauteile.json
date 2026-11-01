@@ -78,6 +78,8 @@
     {"typ": "verstaerkermodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "teilschaltung",
      "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_verstaerkermodul"},
     {"typ": "opmodul", "anschluesse": ["plus", "minus", "nichtinv", "inv", "aus"], "breite": 5, "art": "verhaltensmodell",
-     "ab_band": "volta2", "ab_stufe": 5, "lexikon_key": "lex_opmodul"}
+     "ab_band": "volta2", "ab_stufe": 5, "lexikon_key": "lex_opmodul"},
+    {"typ": "timer555", "anschluesse": ["minus", "tr", "aus", "reset", "cv", "thr", "dis", "plus"], "breite": 8, "art": "verhaltensmodell",
+     "ab_band": "volta2", "ab_stufe": 6, "lexikon_key": "lex_timer555"}
   ]
 }

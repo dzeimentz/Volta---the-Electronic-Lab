@@ -359,6 +359,8 @@ Rectangle {
                     Rectangle {
                         visible: !tray.symbols
                         readonly property int count: Math.max(1, modEntry.modelData.pins.length)
+                        // Felder schmaler, wenn viele Anschluesse (Timer 555: 8) nicht auf die Kachel passen
+                        readonly property real pad: Math.min(14, (width - 8) / count - 4)
                         anchors.horizontalCenter: parent.horizontalCenter
                         y: 3
                         width: Math.min(parent.width - 16, count * 18 + 8)
@@ -373,7 +375,7 @@ Rectangle {
                             Repeater {
                                 model: parent.parent.count
                                 Rectangle {
-                                    width: 14; height: 12; radius: 2
+                                    width: parent.parent.pad; height: 12; radius: 2
                                     color: "#C9CED4"
                                     border.color: "#2E2E2E"
                                 }

@@ -1541,8 +1541,8 @@ QVariantMap LabController::moduleState(const QString& id) const {
         m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
         m.insert(QStringLiteral("level"), r->level);
         m.insert(QStringLiteral("note"), static_cast<int>(r->displayValue));
-    } else if (type == "opmodul") {
-        // Ausgang ueber der Mitte der Versorgung
+    } else if (type == "opmodul" || type == "timer555") {
+        // OP: Ausgang ueber der Mitte der Versorgung; 555: Flipflop gesetzt (Ausgang hoch)
         m.insert(QStringLiteral("active"), r->level > 0.5);
     } else {
         // Blinkmodul: Ausgangstransistor leitet (Kollektorstrom ueber 1 mA)
@@ -1587,6 +1587,25 @@ QVariantMap LabController::moduleInside(const QString& id) const {
             m.insert(QStringLiteral("outV"), r->displayValue);
             m.insert(QStringLiteral("outmA"), -r->terminalCurrentA[4] * 1e3);
             m.insert(QStringLiteral("high"), r->level > 0.5);
+        }
+        return m;
+    }
+    if (type == "timer555") {
+        // Verhaltensmodell: Spannungen gegen GND an Komparatoren, Flipflop und Ausgang
+        if (const core::ComponentReading* r = m_session->moduleReading(mid)) {
+            const double vg = m_session->voltage(mid + ".minus");
+            const double cv = m_session->voltage(mid + ".cv") - vg;
+            const double tr = m_session->voltage(mid + ".tr") - vg, thr = m_session->voltage(mid + ".thr") - vg;
+            m.insert(QStringLiteral("supplyV"), r->voltV);
+            m.insert(QStringLiteral("cvV"), cv);
+            m.insert(QStringLiteral("trV"), tr);
+            m.insert(QStringLiteral("thrV"), thr);
+            m.insert(QStringLiteral("trLow"), tr < 0.5 * cv);
+            m.insert(QStringLiteral("thrHigh"), thr > cv);
+            m.insert(QStringLiteral("resetLow"), m_session->voltage(mid + ".reset") - vg < 0.7);
+            m.insert(QStringLiteral("high"), r->level > 0.5);
+            m.insert(QStringLiteral("outV"), r->displayValue);
+            m.insert(QStringLiteral("powered"), r->voltV >= 4.5);
         }
         return m;
     }

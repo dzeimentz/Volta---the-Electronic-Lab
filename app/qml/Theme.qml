@@ -29,7 +29,7 @@ QtObject {
     // Traegerplatte je Modul (Modulleiste und Modulfach), Kachel im Fach in der aufgehellten Farbe
     function modulePlate(type) {
         return type === "tonmodul" ? "#6A4C8C" : type === "zeitmodul" ? "#7A5A1E"
-             : type === "verstaerkermodul" ? "#2E6B4A" : type === "opmodul" ? "#7A1F2B" : "#2F6F8F"
+             : type === "verstaerkermodul" ? "#2E6B4A" : type === "opmodul" ? "#7A1F2B" : type === "timer555" ? "#3A3F46" : "#2F6F8F"
     }
     readonly property color accent: "#2873B0" // Weiss darauf 5:1 (WCAG AA)
     readonly property color signalOrange: "#FF6B1A"

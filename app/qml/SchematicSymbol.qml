@@ -103,6 +103,8 @@ Item {
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
         case "opmodul": // Dreieck mit IN+ oben, IN- unten (DIN EN 60617 vereinfacht)
             return {s: "M0 8 H16 M0 24 H16 M48 16 H64 M16 2 L48 16 L16 30 Z M19 8 H25 M22 5 V11 M19 24 H25", f: ""}
+        case "timer555": // Kasten mit Aufschrift
+            return {s: "M0 16 H14 M50 16 H64 M14 2 H50 V30 H14 Z", f: "", t: "555", tx: 32, ty: 16}
         case "blinkmodul": case "tonmodul": case "zeitmodul": case "verstaerkermodul":
             return {s: "M0 16 H14 M50 16 H64 M14 6 H50 V26 H14 Z", f: "",
                     t: type === "blinkmodul" ? "BL" : type === "tonmodul" ? "TON" : type === "zeitmodul" ? "ZEIT" : "VST", tx: 32, ty: 16}

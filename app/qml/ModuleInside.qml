@@ -1,6 +1,8 @@
 // »Blick hinein« (Konzept 5.4, Module): Module sind keine undurchschaubaren Zauberkaesten.
 // - Teilschaltung (Blinkmodul): die innere Schaltung als Schaltplan mit laufender Simulation - welcher Transistor
 //   leitet, wie weit die Kondensatoren geladen sind, ob der Ausgang schaltet.
+// - Verhaltensmodell (Timer 555): Teiler, zwei Komparatoren, Flipflop und Endstufe als Blockbild mit den
+//   aktuellen Spannungen.
 // - Makromodell (OP-Modul): Eingaenge, Differenzverstaerker und Endstufe als Blockbild mit den aktuellen Spannungen.
 // - Verhaltensmodell (Tonmodul): der Aufbau als Blockbild mit den Werten an den Anschluessen und einer Erklaerung,
 //   warum hier nicht jede Schwingung einzeln gerechnet wird.
@@ -91,6 +93,8 @@ Popup {
                       ? qsTr("Ein Ton schwingt Hunderte Male in jeder Sekunde – zu schnell, um jede Schwingung einzeln nachzurechnen. Darum arbeitet das Tonmodul in Volta mit einem Verhaltensmodell: An seinen Anschlüssen verhält es sich wie der echte Baustein, und den Ton spielt es direkt ab.")
                       : inside.moduleType === "zeitmodul"
                       ? qsTr("Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.")
+                      : inside.moduleType === "timer555"
+                      ? qsTr("Im Timer 555 teilen drei gleiche Widerstände die Versorgung: CV liegt bei zwei Dritteln, darunter ein Drittel. Zwei Vergleicher beobachten THR und TR. Fällt TR unter ein Drittel, setzt das Flipflop den Ausgang hoch; steigt THR über zwei Drittel, setzt es ihn zurück, und DIS entlädt nach GND. R auf GND hält den Ausgang aus. Volta rechnet den 555 mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Vergleicher kippt.")
                       : inside.moduleType === "opmodul"
                       ? qsTr("Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.")
                       : inside.moduleType === "verstaerkermodul"
@@ -279,6 +283,47 @@ Popup {
                             }
                         }
                     }
+                }
+            }
+
+            // ---------------------------------------------------------- Verhaltensmodell: 555 als Blockbild
+            Column {
+                visible: inside.moduleType === "timer555"
+                width: parent.width
+                spacing: 10
+                Row {
+                    spacing: 6
+                    Block {
+                        title: qsTr("Vergleicher TR")
+                        value: qsTr("%1 V").arg(inside.num(inside.info.trV, 2)) + (inside.info.trLow === true ? "\n" + qsTr("unter ⅓: setzen") : "")
+                        lit: inside.info.trLow === true
+                    }
+                    Block {
+                        title: qsTr("Vergleicher THR")
+                        value: qsTr("%1 V").arg(inside.num(inside.info.thrV, 2)) + (inside.info.thrHigh === true ? "\n" + qsTr("über ⅔: zurück") : "")
+                        lit: inside.info.thrHigh === true
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        title: qsTr("Flipflop")
+                        value: inside.info.resetLow === true ? qsTr("Reset: aus") : inside.info.high === true ? qsTr("gesetzt") : qsTr("zurückgesetzt")
+                        lit: inside.info.high === true
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        title: qsTr("Endstufe „aus“")
+                        value: qsTr("%1 V").arg(inside.num(inside.info.outV, 2)) + "\n" + (inside.info.high === true ? qsTr("DIS offen") : qsTr("DIS entlädt"))
+                        lit: inside.info.high === true
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    color: "#4A5866"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    text: (inside.info.powered === false ? qsTr("Unter 4,5 V arbeitet der 555 nicht. ") : "")
+                          + qsTr("Versorgung: %1 V, CV: %2 V (zwei Drittel), Schwelle für TR: %3 V (ein Drittel). Alle Spannungen sind gegen GND gemessen.")
+                            .arg(inside.num(inside.info.supplyV, 1)).arg(inside.num(inside.info.cvV, 2)).arg(inside.num((inside.info.cvV || 0) / 2, 2))
                 }
             }
 

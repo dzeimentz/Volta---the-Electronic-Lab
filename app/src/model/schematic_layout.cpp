@@ -122,7 +122,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
-        g.h = 2.0;
+        g.h = t == "timer555" ? 4.0 : 2.0; // 555: fuenf Anschluesse links
         std::vector<std::size_t> left, right;
         g.pins.resize(e.nodes.size());
         for (std::size_t k = 0; k < e.nodes.size(); ++k) {
@@ -133,6 +133,8 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
             const bool relayRight = (t == "relais" && n == "no") || (t == "optokoppler" && (n == "c" || n == "e"));
             if (t == "optokoppler") p.label = n == "anode" ? "A" : n == "kathode" ? "K" : n == "c" ? "C" : "E";
             if (t == "opmodul" && (n == "nichtinv" || n == "inv")) p.label = n == "nichtinv" ? "IN+" : "IN−";
+            if (t == "timer555" && n != "plus" && n != "minus" && n != "aus")
+                p.label = n == "tr" ? "TR" : n == "reset" ? "R" : n == "cv" ? "CV" : n == "thr" ? "THR" : "DIS";
             if (t == "spannungsregler_5v") { // Ein links, Aus rechts, Masse unten (wie im Datenblatt)
                 p.label = n == "ein" ? "IN" : n == "aus" ? "OUT" : "GND";
                 if (n == "masse") {

@@ -124,7 +124,8 @@ QtObject {
             ["piezo", qsTr("Piezo", "Wortanfaenge im Aufbautext")],
             ["zeitmodul", qsTr("Zeitmodul", "Wortanfaenge im Aufbautext")],
             ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")],
-            ["opmodul", qsTr("OP-Modul", "Wortanfaenge im Aufbautext")]
+            ["opmodul", qsTr("OP-Modul", "Wortanfaenge im Aufbautext")],
+            ["timer555", qsTr("Timer 555", "Wortanfaenge im Aufbautext")]
         ]
     }
 
@@ -135,6 +136,7 @@ QtObject {
         case "zeitmodul": return qsTr("Zeitmodul")
         case "verstaerkermodul": return qsTr("Verstärkermodul")
         case "opmodul": return qsTr("OP-Modul")
+        case "timer555": return qsTr("Timer 555")
         }
         return type
     }
@@ -150,6 +152,11 @@ QtObject {
         case "start": return qsTr("Start")
         case "nichtinv": return "IN+"
         case "inv": return "IN−"
+        case "tr": return "TR"
+        case "reset": return "R"
+        case "cv": return "CV"
+        case "thr": return "THR"
+        case "dis": return "DIS"
         }
         return pin
     }

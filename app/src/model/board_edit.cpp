@@ -512,7 +512,7 @@ bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlac
 
 std::string nextModuleId(const Board& board, const std::string& type) {
     const std::string prefix = type == "blinkmodul" ? "BL" : type == "tonmodul" ? "TM" : type == "zeitmodul" ? "ZM"
-                             : type == "verstaerkermodul" ? "VM" : type == "opmodul" ? "OP" : "MOD";
+                             : type == "verstaerkermodul" ? "VM" : type == "opmodul" ? "OP" : type == "timer555" ? "TIM" : "MOD";
     std::set<int> used;
     for (const auto& m : board.modules) {
         if (m.id.size() > prefix.size() && m.id.compare(0, prefix.size(), prefix) == 0) {

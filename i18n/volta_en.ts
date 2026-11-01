@@ -2780,139 +2780,208 @@
 <context>
     <name>ModuleInside</name>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="58" />
+        <location filename="../app/qml/ModuleInside.qml" line="60" />
         <source>Blick hinein: %1 %2</source>
         <translation>Look inside: %1 %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="71" />
+        <location filename="../app/qml/ModuleInside.qml" line="73" />
         <source>Schließen</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="91" />
+        <location filename="../app/qml/ModuleInside.qml" line="93" />
         <source>Ein Ton schwingt Hunderte Male in jeder Sekunde – zu schnell, um jede Schwingung einzeln nachzurechnen. Darum arbeitet das Tonmodul in Volta mit einem Verhaltensmodell: An seinen Anschlüssen verhält es sich wie der echte Baustein, und den Ton spielt es direkt ab.</source>
         <translation>A sound vibrates hundreds of times every second – too fast to calculate every vibration one by one. That&apos;s why the tone module in Volta works with a behaviour model: at its pins it behaves like the real chip, and it plays the sound directly.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="93" />
+        <location filename="../app/qml/ModuleInside.qml" line="95" />
         <source>Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.</source>
         <translation>In the timer module transistor T1 conducts at rest. A press on &quot;start&quot; switches T2 on; its jump pushes the base of T1 into the minus through capacitor C, and T1 blocks. Only when C has recharged through R_zeit – about 3 seconds – does T1 conduct again. As long as T1 blocks, T3 switches the output. What you see here is being calculated right now.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="95" />
+        <location filename="../app/qml/ModuleInside.qml" line="97" />
+        <source>Im Timer 555 teilen drei gleiche Widerstände die Versorgung: CV liegt bei zwei Dritteln, darunter ein Drittel. Zwei Vergleicher beobachten THR und TR. Fällt TR unter ein Drittel, setzt das Flipflop den Ausgang hoch; steigt THR über zwei Drittel, setzt es ihn zurück, und DIS entlädt nach GND. R auf GND hält den Ausgang aus. Volta rechnet den 555 mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Vergleicher kippt.</source>
+        <translation>In the 555 timer, three equal resistors divide the supply: CV sits at two thirds, below it one third. Two comparators watch THR and TR. If TR falls below one third, the flip-flop sets the output high; if THR rises above two thirds, it resets it, and DIS discharges to GND. R at GND keeps the output off. Volta calculates the 555 with a behavioural model and finds the exact moment a comparator flips.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="99" />
         <source>Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.</source>
         <translation>An operational amplifier compares its two inputs: it amplifies the difference between IN+ and IN− about 200,000 times. Even one millivolt of difference would drive the output to its limit – just below plus or just above minus. With feedback from the output to IN−, it regulates itself so that both inputs are almost equal. Volta calculates it with an equivalent model that behaves at its terminals like the real chip.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="97" />
+        <location filename="../app/qml/ModuleInside.qml" line="101" />
         <source>Im Verstärkermodul arbeiten zwei Transistoren hintereinander: Der winzige Eingangsstrom steuert T1, und der rund 200-mal größere Strom von T1 steuert T2. Zusammen verstärken sie etwa 40 000-fach. Was du hier siehst, wird gerade gerechnet.</source>
         <translation>In the amplifier module two transistors work one after the other: the tiny input current controls T1, and the roughly 200 times bigger current of T1 controls T2. Together they amplify about 40,000 times. What you see here is being calculated right now.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="98" />
+        <location filename="../app/qml/ModuleInside.qml" line="102" />
         <source>Im Blinkmodul arbeiten zwei Transistoren gegeneinander: Immer leitet einer, der andere sperrt. Die Kondensatoren laden sich langsam um und kippen die Schaltung hin und her. Ein dritter Transistor schaltet den Ausgang. Was du hier siehst, wird gerade gerechnet.</source>
         <translation>In the blinker module two transistors work against each other: one always conducts, the other blocks. The capacitors slowly recharge and flip the circuit back and forth. A third transistor switches the output. What you see here is being calculated right now.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="203" />
-        <location filename="../app/qml/ModuleInside.qml" line="275" />
-        <location filename="../app/qml/ModuleInside.qml" line="294" />
-        <location filename="../app/qml/ModuleInside.qml" line="294" />
-        <location filename="../app/qml/ModuleInside.qml" line="305" />
-        <location filename="../app/qml/ModuleInside.qml" line="344" />
+        <location filename="../app/qml/ModuleInside.qml" line="207" />
+        <location filename="../app/qml/ModuleInside.qml" line="279" />
+        <location filename="../app/qml/ModuleInside.qml" line="298" />
+        <location filename="../app/qml/ModuleInside.qml" line="303" />
+        <location filename="../app/qml/ModuleInside.qml" line="315" />
+        <location filename="../app/qml/ModuleInside.qml" line="339" />
+        <location filename="../app/qml/ModuleInside.qml" line="339" />
+        <location filename="../app/qml/ModuleInside.qml" line="350" />
+        <location filename="../app/qml/ModuleInside.qml" line="389" />
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="236" />
-        <location filename="../app/qml/ModuleInside.qml" line="274" />
+        <location filename="../app/qml/ModuleInside.qml" line="240" />
+        <location filename="../app/qml/ModuleInside.qml" line="278" />
         <source>leitet</source>
         <translation>conducts</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="236" />
-        <location filename="../app/qml/ModuleInside.qml" line="274" />
+        <location filename="../app/qml/ModuleInside.qml" line="240" />
+        <location filename="../app/qml/ModuleInside.qml" line="278" />
         <source>sperrt</source>
         <translation>blocks</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="237" />
-        <location filename="../app/qml/ModuleInside.qml" line="274" />
-        <location filename="../app/qml/ModuleInside.qml" line="276" />
-        <location filename="../app/qml/ModuleInside.qml" line="305" />
-        <location filename="../app/qml/ModuleInside.qml" line="364" />
+        <location filename="../app/qml/ModuleInside.qml" line="241" />
+        <location filename="../app/qml/ModuleInside.qml" line="278" />
+        <location filename="../app/qml/ModuleInside.qml" line="280" />
+        <location filename="../app/qml/ModuleInside.qml" line="350" />
+        <location filename="../app/qml/ModuleInside.qml" line="409" />
         <source>%1 mA</source>
         <translation>%1 mA</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="293" />
+        <location filename="../app/qml/ModuleInside.qml" line="297" />
+        <source>Vergleicher TR</source>
+        <translation>Comparator TR</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="298" />
+        <source>unter ⅓: setzen</source>
+        <translation>below ⅓: set</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="302" />
+        <source>Vergleicher THR</source>
+        <translation>Comparator THR</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="303" />
+        <source>über ⅔: zurück</source>
+        <translation>above ⅔: reset</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="308" />
+        <source>Flipflop</source>
+        <translation>Flip-flop</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="309" />
+        <source>Reset: aus</source>
+        <translation>Reset: off</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="309" />
+        <source>gesetzt</source>
+        <translation>set</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="309" />
+        <source>zurückgesetzt</source>
+        <translation>reset</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="315" />
+        <source>DIS offen</source>
+        <translation>DIS open</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="315" />
+        <source>DIS entlädt</source>
+        <translation>DIS discharges</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="324" />
+        <source>Unter 4,5 V arbeitet der 555 nicht. </source>
+        <translation>Below 4.5 V the 555 does not work. </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="325" />
+        <source>Versorgung: %1 V, CV: %2 V (zwei Drittel), Schwelle für TR: %3 V (ein Drittel). Alle Spannungen sind gegen GND gemessen.</source>
+        <translation>Supply: %1 V, CV: %2 V (two thirds), threshold for TR: %3 V (one third). All voltages are measured against GND.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="338" />
         <source>Eingänge</source>
         <translation>Inputs</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="298" />
+        <location filename="../app/qml/ModuleInside.qml" line="343" />
         <source>Unterschied × 200 000</source>
         <translation>Difference × 200,000</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="299" />
+        <location filename="../app/qml/ModuleInside.qml" line="344" />
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="314" />
+        <location filename="../app/qml/ModuleInside.qml" line="359" />
         <source>Versorgung: %1 V. Der Ausgang reicht bis etwa 1,5 V unter Plus und 1,5 V über Minus; alle Spannungen sind gegen Minus gemessen. Mehr als etwa 25 mA liefert die Endstufe nicht.</source>
         <translation>Supply: %1 V. The output reaches up to about 1.5 V below plus and 1.5 V above minus; all voltages are measured against minus. The output stage delivers no more than about 25 mA.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="343" />
+        <location filename="../app/qml/ModuleInside.qml" line="388" />
         <source>Eingang „ein“</source>
         <translation>Input &quot;in&quot;</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="349" />
+        <location filename="../app/qml/ModuleInside.qml" line="394" />
         <source>Schaltschwelle</source>
         <translation>Switching threshold</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="350" />
+        <location filename="../app/qml/ModuleInside.qml" line="395" />
         <source>ab 1,5 V: an</source>
         <translation>from 1.5 V: on</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="355" />
+        <location filename="../app/qml/ModuleInside.qml" line="400" />
         <source>Melodie und Tongeber</source>
         <translation>Melody and tone generator</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="357" />
+        <location filename="../app/qml/ModuleInside.qml" line="402" />
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="357" />
+        <location filename="../app/qml/ModuleInside.qml" line="402" />
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="358" />
+        <location filename="../app/qml/ModuleInside.qml" line="403" />
         <source>still</source>
         <translation>quiet</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="304" />
-        <location filename="../app/qml/ModuleInside.qml" line="363" />
+        <location filename="../app/qml/ModuleInside.qml" line="314" />
+        <location filename="../app/qml/ModuleInside.qml" line="349" />
+        <location filename="../app/qml/ModuleInside.qml" line="408" />
         <source>Endstufe „aus“</source>
         <translation>Output stage &quot;out&quot;</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="372" />
+        <location filename="../app/qml/ModuleInside.qml" line="417" />
         <source>Melodie:</source>
         <translation>Melody:</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="392" />
+        <location filename="../app/qml/ModuleInside.qml" line="437" />
         <source>Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.</source>
         <translation>Supply: %1 V. The output stage switches on and off in time with the sound; Volta calculates with the average current. A loudspeaker between plus and &quot;out&quot; plays the melody along.</translation>
     </message>
@@ -4711,204 +4780,215 @@
         <translation>Op-amp module</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="133" />
+        <location filename="../app/qml/Texts.qml" line="128" />
+        <source>Timer 555</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>555 timer,timer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="134" />
         <source>Blinkmodul</source>
         <translation>Blinker module</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="134" />
+        <location filename="../app/qml/Texts.qml" line="135" />
         <source>Tonmodul</source>
         <translation>Tone module</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="135" />
+        <location filename="../app/qml/Texts.qml" line="136" />
         <source>Zeitmodul</source>
         <translation>Timer module</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="136" />
+        <location filename="../app/qml/Texts.qml" line="137" />
         <source>Verstärkermodul</source>
         <translation>Amplifier module</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="137" />
+        <location filename="../app/qml/Texts.qml" line="138" />
         <source>OP-Modul</source>
         <translation>Op-amp module</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="147" />
+        <location filename="../app/qml/Texts.qml" line="139" />
+        <source>Timer 555</source>
+        <translation>555 timer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="149" />
         <source>aus</source>
         <translation>out</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="148" />
+        <location filename="../app/qml/Texts.qml" line="150" />
         <source>ein</source>
         <translation>in</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="149" />
+        <location filename="../app/qml/Texts.qml" line="151" />
         <source>Takt</source>
         <translation>rate</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="150" />
+        <location filename="../app/qml/Texts.qml" line="152" />
         <source>Start</source>
         <translation>start</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="159" />
+        <location filename="../app/qml/Texts.qml" line="166" />
         <source>Rot</source>
         <translation>Red</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="160" />
+        <location filename="../app/qml/Texts.qml" line="167" />
         <source>Schwarz</source>
         <translation>Black</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="161" />
+        <location filename="../app/qml/Texts.qml" line="168" />
         <source>Blau</source>
         <translation>Blue</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="162" />
+        <location filename="../app/qml/Texts.qml" line="169" />
         <source>Gelb</source>
         <translation>Yellow</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="163" />
+        <location filename="../app/qml/Texts.qml" line="170" />
         <source>Grün</source>
         <translation>Green</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="164" />
+        <location filename="../app/qml/Texts.qml" line="171" />
         <source>Weiß</source>
         <translation>White</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="188" />
+        <location filename="../app/qml/Texts.qml" line="195" />
         <source>Jetzt ist alles an seinem Platz. Probiere aus, was passiert!</source>
         <translation>Now everything is in its place. Try it out and see what happens!</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="190" />
+        <location filename="../app/qml/Texts.qml" line="197" />
         <source>Schalte den Hauptschalter der Batterie ein.</source>
         <translation>Switch on the battery&apos;s main switch.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="192" />
+        <location filename="../app/qml/Texts.qml" line="199" />
         <source>Setze das %1 ab Feld %2 in die Modulleiste.</source>
         <translation>Put the %1 into the module bar starting at field %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="194" />
+        <location filename="../app/qml/Texts.qml" line="201" />
         <source>Ziehe eine Leitung von %1 nach %2.</source>
         <translation>Draw a wire from %1 to %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="198" />
+        <location filename="../app/qml/Texts.qml" line="205" />
         <source>eine Leuchtdiode (Farbe egal)</source>
         <translation>an LED (any colour)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="200" />
+        <location filename="../app/qml/Texts.qml" line="207" />
         <source>Stecke %1 auf %2, %3 und %4.</source>
         <translation>Put %1 on %2, %3 and %4.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="202" />
+        <location filename="../app/qml/Texts.qml" line="209" />
         <source>Stecke %1 auf %2, %3, %4 und %5.</source>
         <translation>Put %1 on %2, %3, %4 and %5.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="203" />
+        <location filename="../app/qml/Texts.qml" line="210" />
         <source>Stecke %1 auf %2 und %3.</source>
         <translation>Put %1 on %2 and %3.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="204" />
+        <location filename="../app/qml/Texts.qml" line="211" />
         <source>Das lange Bein kommt an %1.</source>
         <translation>The long leg goes to %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="205" />
+        <location filename="../app/qml/Texts.qml" line="212" />
         <source>Der Strich auf der Diode zeigt nach %1.</source>
         <translation>The line on the diode points to %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="206" />
+        <location filename="../app/qml/Texts.qml" line="213" />
         <source>Plus kommt an %1.</source>
         <translation>Plus goes to %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="207" />
+        <location filename="../app/qml/Texts.qml" line="214" />
         <source>IN kommt an %1, OUT an %2.</source>
         <translation>IN goes to %1, OUT to %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="208" />
+        <location filename="../app/qml/Texts.qml" line="215" />
         <source>C kommt an %1.</source>
         <translation>C goes to %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="209" />
+        <location filename="../app/qml/Texts.qml" line="216" />
         <source>A kommt an %1, C an %2.</source>
         <translation>A goes to %1, C to %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="210" />
+        <location filename="../app/qml/Texts.qml" line="217" />
         <source>B kommt an %1, C an %2.</source>
         <translation>B goes to %1, C to %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="211" />
+        <location filename="../app/qml/Texts.qml" line="218" />
         <source>Die Mitte kommt an %1.</source>
         <translation>The middle goes to %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="213" />
+        <location filename="../app/qml/Texts.qml" line="220" />
         <source>Wert: %1.</source>
         <translation>Value: %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="215" />
+        <location filename="../app/qml/Texts.qml" line="222" />
         <source>Nennspannung: %1 V.</source>
         <translation>Rated voltage: %1 V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="241" />
+        <location filename="../app/qml/Texts.qml" line="248" />
         <source>Taschenlampe</source>
         <translation>Torch</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="242" />
+        <location filename="../app/qml/Texts.qml" line="249" />
         <source>Föhn</source>
         <translation>Hair dryer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="243" />
+        <location filename="../app/qml/Texts.qml" line="250" />
         <source>Wassertropfen</source>
         <translation>Water drop</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="244" />
+        <location filename="../app/qml/Texts.qml" line="251" />
         <source>Abdeckkarte</source>
         <translation>Cover card</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="253" />
-        <location filename="../app/qml/Texts.qml" line="256" />
-        <location filename="../app/qml/Texts.qml" line="259" />
+        <location filename="../app/qml/Texts.qml" line="260" />
+        <location filename="../app/qml/Texts.qml" line="263" />
+        <location filename="../app/qml/Texts.qml" line="266" />
         <source>%1 × %2</source>
         <translation>%1 × %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="258" />
+        <location filename="../app/qml/Texts.qml" line="265" />
         <source>%1 × Leitung %2</source>
         <translation>%1 × wire %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="260" />
+        <location filename="../app/qml/Texts.qml" line="267" />
         <source>Batterie %1 V</source>
         <translation>Battery %1 V</translation>
     </message>
@@ -5355,12 +5435,12 @@
         <translation>Show sample build</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1762" />
+        <location filename="../app/src/lab_controller.cpp" line="1781" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>This part will be unlocked at level %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1823" />
+        <location filename="../app/src/lab_controller.cpp" line="1842" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>This module will be unlocked at level %1.</translation>
     </message>

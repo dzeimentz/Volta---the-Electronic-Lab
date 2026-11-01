@@ -25,5 +25,6 @@
   "lex_fototransistor": "Ein Fototransistor ist ein Transistor, den Licht steuert: Je mehr Licht oder IR-Strahlung auf ihn fällt, desto mehr Strom lässt er von C nach E durch. Mit der Abdeckkarte kannst du ihn abschatten.",
   "lex_optokoppler": "Ein Optokoppler enthält eine IR-LED und einen Fototransistor in einem dunklen Gehäuse. Leuchtet die LED (A und K), leitet der Transistor (C und E) – ohne dass die beiden Stromkreise verbunden sind.",
   "lex_spannungsregler": "Ein Spannungsregler macht aus einer höheren, schwankenden Gleichspannung genau 5 V. Der Eingang (IN) braucht mindestens etwa 1,7 V mehr als der Ausgang (OUT). Bei Kurzschluss oder zu viel Wärme schützt er sich selbst und liefert weniger Strom.",
-  "lex_opmodul": "Das OP-Modul (Operationsverstärker) vergleicht seine Eingänge IN+ und IN−. Ist IN+ höher, geht der Ausgang nach oben, sonst nach unten. Mit Widerständen vom Ausgang zurück auf IN− wird daraus ein Verstärker mit genau einstellbarer Verstärkung."
+  "lex_opmodul": "Das OP-Modul (Operationsverstärker) vergleicht seine Eingänge IN+ und IN−. Ist IN+ höher, geht der Ausgang nach oben, sonst nach unten. Mit Widerständen vom Ausgang zurück auf IN− wird daraus ein Verstärker mit genau einstellbarer Verstärkung.",
+  "lex_timer555": "Der Timer 555 ist ein Baustein mit acht Beinen. Er vergleicht die Spannung an einem Kondensator mit einem Drittel und zwei Dritteln der Versorgung und schaltet seinen Ausgang danach. Mit zwei Widerständen und einem Kondensator wird er zum Taktgeber, mit einem zum Kurzzeitwecker."
 }

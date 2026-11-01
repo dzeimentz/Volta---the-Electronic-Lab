@@ -129,6 +129,13 @@ public:
     // Strom, der am Anschluss t in das Bauteil hineinfliesst (Kirchhoff, Stromflussdarstellung).
     virtual double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept = 0;
 
+    // Ereignisortung: nach konvergiertem Zeitschritt (accepted -> next ueber dtS) der Bruchteil des Schritts in
+    // (0, 1], an dem das Modell seinen festgeschriebenen Zustand wechseln wuerde (z. B. Komparator des 555). Unter 1
+    // teilt der Simulator den Schritt dort; 1 = kein Ereignis im Schritt.
+    virtual double eventFraction(const SolutionView& /*accepted*/, const SolutionView& /*next*/,
+                                 double /*dtS*/) const noexcept {
+        return 1.0;
+    }
     // Nach angenommenem Zeitschritt: innere Zustaende (Ladung, Drehzahl) fortschreiben. Nach einem Arbeitspunkt
     // wird updateState mit dtS = 0 aufgerufen: Zustaende an den Arbeitspunkt angleichen, ohne Zeitfortschritt.
     virtual void updateState(const SolutionView& /*x*/, double /*dtS*/) noexcept {}

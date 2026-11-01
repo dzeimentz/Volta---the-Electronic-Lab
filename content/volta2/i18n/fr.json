@@ -25,5 +25,6 @@
   "lex_fototransistor": "Un phototransistor est un transistor commandé par la lumière : plus il reçoit de lumière ou de rayonnement IR, plus il laisse passer de courant de C vers E. Tu peux le masquer avec la carte.",
   "lex_optokoppler": "Un optocoupleur contient une LED IR et un phototransistor dans un boîtier sombre. Quand la LED brille (A et K), le transistor conduit (C et E) – sans que les deux circuits soient reliés.",
   "lex_spannungsregler": "Un régulateur de tension transforme une tension continue plus élevée et variable en exactement 5 V. L’entrée (IN) a besoin d’au moins 1,7 V de plus que la sortie (OUT). En cas de court-circuit ou de surchauffe, il se protège et fournit moins de courant.",
-  "lex_opmodul": "Le module AOP (amplificateur opérationnel) compare ses entrées IN+ et IN−. Si IN+ est plus haute, la sortie monte, sinon elle descend. Avec des résistances de la sortie vers IN−, il devient un amplificateur dont le gain se règle exactement."
+  "lex_opmodul": "Le module AOP (amplificateur opérationnel) compare ses entrées IN+ et IN−. Si IN+ est plus haute, la sortie monte, sinon elle descend. Avec des résistances de la sortie vers IN−, il devient un amplificateur dont le gain se règle exactement.",
+  "lex_timer555": "Le timer 555 est un composant à huit pattes. Il compare la tension d’un condensateur avec un tiers et deux tiers de l’alimentation et commute sa sortie en conséquence. Avec deux résistances et un condensateur, il devient un générateur d’impulsions, avec une seule une minuterie."
 }

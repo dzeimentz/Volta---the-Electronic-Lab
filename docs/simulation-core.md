@@ -69,6 +69,12 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
   bleibt die Ladung zweier verbundener Kondensatoren exakt erhalten.
 - Begleitmodelle beziehen ihren Vorzustand nur aus dem eigenen Bauteilzustand (`updateState`), nicht aus dem
   letzten Loesungsvektor; so stellt `restoreState` (Undo) den Zustand vollstaendig her.
+- **Ereignisortung** (ab Volta 2): Nach einem konvergierten Schritt meldet jedes Modell mit
+  `eventFraction(angenommen, neu, dt)` den Bruchteil des Schritts, an dem es seinen festgeschriebenen Zustand wechseln
+  wuerde (lineare Interpolation der Kippgroesse, Standard 1 = kein Ereignis). Liegt der kleinste Wert unter 1, wird
+  der Schritt verworfen und in zwei Teilschritte bis zum Ereignis und danach geteilt (Tiefe wie beim Halbieren,
+  kuerzester Teilschritt 1 ns). Das Modell zielt 0,1 us hinter den Kipppunkt, damit der Komparator im ersten
+  Teilschritt sicher kippt. Nutzer: Timer 555 (Kippzeiten unabhaengig vom Schrittraster).
 
 ### Robustheit
 - Ideale Schleifen aus Quellen und Leitungen vermeiden: Innenwiderstand der Batterie, Leitungswiderstand
@@ -197,6 +203,15 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
   Gegenkopplung fuehrt die Begrenzung in den linearen Bereich zurueck (nachgewiesen fuer 64 Schritte), bei Mitkopplung
   (Schmitt-Trigger, Rechteckgenerator) bleibt der OP an der Grenze. Ohne Anstoss hielte das implizite Verfahren den
   Ausgang im instabilen Gleichgewicht der Mitte fest, das real in Mikrosekunden zerfaellt.
+- **Timer 555** (`Timer555`, `addTimer555`, `timer555`, ab Volta 2, Stufe 6, Verhaltensmodell, ein Bauteil mit
+  8 Anschluessen in Pin-Reihenfolge minus/GND, tr, aus, reset, cv, thr, dis, plus): Teiler 3 x 5 kOhm (innerer Knoten),
+  Ruhestrom ueber 1,5 kOhm, Flipflop je Loesungsvorgang festgeschrieben (Bauteil damit linear) und nach jedem
+  angenommenen Schritt fortgeschrieben: Reset unter 0,7 V hat Vorrang, TR unter CV/2 setzt, THR ueber CV setzt
+  zurueck. Ausgang hoch +U - 1,7 V hinter 15 Ohm, niedrig 0,1 V hinter 10 Ohm, DIS 10 Ohm nach GND solange niedrig;
+  unter 4,5 V Versorgung kein Ausgang. Ueberlastet ueber 200 mA. Vereinfachung: offener Reset gilt als hoch (100 kOhm
+  nach +U). Kippzeiten mit Ereignisortung. Astabil R1 1 kOhm, R2 10 kOhm, 10 uF: Modell 147,4 ms gegen 145,6 ms nach
+  der Datenblattformel (DIS entlaedt nur bis ca. 0,09 V, wie real); bei 5 ms Schrittweite ca. 2,3 % laenger
+  (Rueckwaerts-Euler), ohne Ereignisortung waeren es weitere ca. 3,4 %.
 - **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
   Abstimmung und Antenne. Im Elternbereich als solches offengelegt.
 - **Logikmodell** (Volta 3, Zuse 1): ereignisgesteuerte Gatter mit Kopplung an analoge Pegel.

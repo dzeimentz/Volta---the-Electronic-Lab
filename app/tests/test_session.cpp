@@ -1132,6 +1132,40 @@ private slots:
         QVERIFY2(high > 7.0 && high < 7.8, qPrintable(QString::number(high)));
     }
 
+    // Timer 555 (ab Volta 2) astabil: R1 = R2 = 10 kOhm, Elko 100 uF -> ca. 0,48 Hz; Reset offen gilt als hoch
+    void timer555Blinks() {
+        auto s = session();
+        std::string id;
+        QVERIFY(s->addModule("timer555", 1, &id));
+        QCOMPARE(id, std::string("TIM1"));
+        QVERIFY(s->addWire("P:+9V", "TIM1.plus", "rot"));
+        QVERIFY(s->addWire("TIM1.minus", "P:0V", "schwarz"));
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short, nullptr, 10e3)); // R1 A1-A2
+        QVERIFY(s->addPart("widerstand", "B1", Orientation::Horizontal, Span::Short, nullptr, 10e3)); // R2 B1-B2
+        QVERIFY(s->addPart("elko", "C1", Orientation::Vertical, Span::Short, nullptr, 100e-6));      // plus C1, minus D1
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "B1", "gelb"));
+        QVERIFY(s->addWire("B1", "TIM1.dis", "gelb"));
+        QVERIFY(s->addWire("B2", "C1", "gelb"));
+        QVERIFY(s->addWire("C1", "TIM1.thr", "blau"));
+        QVERIFY(s->addWire("C1", "TIM1.tr", "blau"));
+        QVERIFY(s->addWire("D1", "P:0V", "schwarz"));
+        s->setMainSwitch(true);
+        int edges = 0;
+        bool high = false;
+        for (int k = 0; k < 100; ++k) { // 5 s in 50-ms-Schritten
+            run(*s, 0.05);
+            const bool now = s->voltage("TIM1.aus") > 4.0;
+            if (now != high) ++edges;
+            high = now;
+        }
+        // 1/(ln2 * 30 kOhm * 100 uF) = 0,48 Hz: in 5 s zwei bis drei Perioden (erster Zyklus laenger)
+        QVERIFY2(edges >= 4 && edges <= 6, qPrintable(QString::number(edges)));
+        const core::ComponentReading* r = s->moduleReading("TIM1");
+        QVERIFY(r);
+        QVERIFY(std::fabs(r->voltV - s->voltage("TIM1.plus")) < 0.01);
+    }
+
     // Tonmodul: Taster an ein startet die Melodie; der Lautsprecher am Ausgang zeigt den Ton (Klanganzeige)
     void toneModuleDrivesSpeaker() {
         auto s = session();

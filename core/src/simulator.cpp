@@ -198,6 +198,18 @@ Status Simulator::advance(double dtS, int depth, bool warmStart) noexcept {
     // Auf der tiefsten Ebene kann nicht mehr halbiert werden: dort die Iterationen ausschoepfen.
     const Status s = newton(ctx, warmStart, depth < kMaxStepHalvings);
     if (s == Status::Ok) {
+        // Ereignisortung: kippt ein Modell innerhalb des Schritts, zuerst bis dorthin, dann den Rest rechnen
+        if (depth < kMaxStepHalvings) {
+            double theta = 1.0;
+            const SolutionView next = view(m_iter);
+            for (std::size_t i = 0; i < m_circuit.componentCount(); ++i)
+                theta = std::min(theta, m_circuit.component(i).eventFraction(ctx.accepted, next, dtS));
+            if (theta < 1.0 - kEventFractionTol && theta * dtS > kMinEventStepS) {
+                const Status first = advance(theta * dtS, depth + 1, false);
+                if (first != Status::Ok) return first;
+                return advance((1.0 - theta) * dtS, depth + 1, false);
+            }
+        }
         accept(dtS);
         return Status::Ok;
     }

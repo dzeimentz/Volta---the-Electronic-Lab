@@ -25,6 +25,7 @@
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/regulator.hpp"
 #include "volta/core/modules/opamp_module.hpp"
+#include "volta/core/modules/timer555_module.hpp"
 #include "volta/core/components/wire.hpp"
 
 namespace volta::model {
@@ -378,6 +379,12 @@ private:
         } else if (m.type == "opmodul" && n.size() == 5) {
             // Katalog: plus, minus, nichtinv, inv, aus (Makromodell, ein Bauteil)
             const core::SubcircuitRange r = core::addOpAmpModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4]});
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
+        } else if (m.type == "timer555" && n.size() == 8) {
+            // Katalog: minus, tr, aus, reset, cv, thr, dis, plus (Pins 1 bis 8, Verhaltensmodell mit Ereignisortung)
+            const core::SubcircuitRange r =
+                core::addTimer555(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4], n[5], n[6], n[7]});
             m_net.modules[m.id] = r;
             m_net.moduleMain[m.id] = r.first;
         } else if (m.type == "tonmodul" && n.size() == 4) {
