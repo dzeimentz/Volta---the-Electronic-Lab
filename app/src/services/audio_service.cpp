@@ -13,7 +13,8 @@ namespace volta::services {
 // Liefert dem QAudioSink die Abtastwerte des Klangerzeugers (Ziehbetrieb, unendlicher Strom)
 class AudioService::Source : public QIODevice {
 public:
-    Source(std::mutex& mutex, model::ToneSynth& synth) : m_mutex(mutex), m_synth(synth) {}
+    Source(std::mutex& mutex, model::ToneSynth& synth, model::AudioStream& stream, std::atomic<bool>& streaming)
+        : m_mutex(mutex), m_synth(synth), m_stream(stream), m_streaming(streaming) {}
     bool isSequential() const override { return true; }
     qint64 bytesAvailable() const override { return 4096 + QIODevice::bytesAvailable(); }
 
@@ -21,8 +22,14 @@ protected:
     qint64 readData(char* data, qint64 maxSize) override {
         const auto frames = static_cast<std::size_t>(maxSize / 2);
         if (frames == 0) return 0;
-        std::lock_guard<std::mutex> lock(m_mutex);
-        m_synth.render(reinterpret_cast<std::int16_t*>(data), frames);
+        auto* out = reinterpret_cast<std::int16_t*>(data);
+        {
+            std::lock_guard<std::mutex> lock(m_mutex);
+            m_synth.render(out, frames);
+        }
+        // hoerbare Simulation dazu; sonst den Tonstrom verwerfen (kein veralteter Ton beim Umschalten)
+        if (m_streaming.load()) m_stream.mixInto(out, frames);
+        else m_stream.drain();
         return static_cast<qint64>(frames * 2);
     }
     qint64 writeData(const char*, qint64) override { return -1; }
@@ -30,6 +37,8 @@ protected:
 private:
     std::mutex& m_mutex;
     model::ToneSynth& m_synth;
+    model::AudioStream& m_stream;
+    std::atomic<bool>& m_streaming;
 };
 
 AudioService::AudioService(QObject* parent) : QObject(parent) {
@@ -42,8 +51,9 @@ AudioService::AudioService(QObject* parent) : QObject(parent) {
     if (m_available && !device.isFormatSupported(format))
         format.setSampleRate(std::max(8000, device.preferredFormat().sampleRate()));
     m_synth = std::make_unique<model::ToneSynth>(format.sampleRate());
+    m_stream = std::make_shared<model::AudioStream>(format.sampleRate());
     if (!m_available) return;
-    m_source = std::make_unique<Source>(m_mutex, *m_synth);
+    m_source = std::make_unique<Source>(m_mutex, *m_synth, *m_stream, m_streaming);
     m_source->open(QIODevice::ReadOnly);
     m_sink = new QAudioSink(device, format, this);
     m_sink->setBufferSize(format.bytesForDuration(60000)); // ca. 60 ms Puffer: kurze Verzoegerung

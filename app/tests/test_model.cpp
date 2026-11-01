@@ -16,6 +16,7 @@
 #include "services/profile_transfer.hpp"
 #include "services/task_code.hpp"
 #include "model/tone_synth.hpp"
+#include "model/audio_stream.hpp"
 #include "model/meter_display.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
@@ -675,6 +676,45 @@ private slots:
         // Rueckschritt: Bauteil entfernt -> dieser Schritt ist wieder dran
         b.parts.erase(b.parts.begin());
         QCOMPARE(model::currentStep(steps, b, m_catalog), std::size_t(1));
+    }
+
+    // Tonstrom der hoerbaren Simulation: Vorlauf, Gleichanteil heraus, Begrenzer, Leerlauf
+    void audioStream() {
+        model::AudioStream a(48000);
+        std::vector<std::int16_t> buf(480, 0);
+        for (int i = 0; i < 1000; ++i) a.push(0.05f); // 21 ms: noch kein Vorlauf
+        a.mixInto(buf.data(), buf.size());
+        QVERIFY(!a.playing());
+        QVERIFY(std::all_of(buf.begin(), buf.end(), [](std::int16_t v) { return v == 0; }));
+        // 1 kHz mit 50 mA Spitze (halbe Aussteuerung) auf 50 mA Gleichstrom
+        a.drain();
+        const double pi = 3.14159265358979;
+        for (int i = 0; i < 9600; ++i) a.push(static_cast<float>(0.05 + 0.05 * std::sin(2 * pi * 1000.0 * i / 48000.0)));
+        std::vector<std::int16_t> out(7200, 0);
+        a.mixInto(out.data(), out.size());
+        QVERIFY(a.playing());
+        int rising = 0, peak = 0;
+        double sum = 0.0;
+        for (std::size_t i = 2400; i < out.size(); ++i) {
+            if (out[i - 1] < 0 && out[i] >= 0) ++rising;
+            peak = std::max(peak, std::abs(static_cast<int>(out[i])));
+            sum += out[i];
+        }
+        QVERIFY2(std::abs(rising - 100) <= 1, qPrintable(QString::number(rising))); // 1 kHz in 0,1 s
+        QVERIFY(std::fabs(sum / 4800.0) < 300.0); // Gleichanteil herausgefiltert
+        QVERIFY(peak > 3000);
+        // Begrenzer: 20-fach uebersteuert bleibt unter dem Kopfraum
+        a.drain();
+        for (int i = 0; i < 9600; ++i) a.push(static_cast<float>(2.0 * std::sin(2 * pi * 500.0 * i / 48000.0)));
+        std::fill(out.begin(), out.end(), 0);
+        a.mixInto(out.data(), out.size());
+        for (std::int16_t v : out) QVERIFY(std::abs(static_cast<int>(v)) <= model::AudioStream::kHeadroom * 32767 + 1);
+        // Leerlauf: Unterlauf gezaehlt, danach wieder Vorlauf
+        const auto before = a.underruns();
+        std::vector<std::int16_t> more(4800, 0);
+        a.mixInto(more.data(), more.size());
+        QVERIFY(a.underruns() > before);
+        QVERIFY(!a.playing());
     }
 
     // Klangerzeuger: Tonhoehe aus den Nulldurchgaengen, Aussteuerung begrenzt, Stille ohne Stimmen, kein Knacken

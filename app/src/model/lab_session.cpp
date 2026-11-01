@@ -211,10 +211,18 @@ void LabSession::updateScope() {
         c.capacity = 2 * kScopePointsPerScreen + 200; // zwei Bilder: Trigger mit Vorlauf findet immer ein ganzes
         c.stepS = s.simStepS();
     }
+    if (m_audible && m_audio && m_timeScale == 1.0) {
+        c.audio = m_audio;
+        c.audioId = desk_id::kSpeaker;
+        c.stepS = std::min(c.stepS, kAudioStepS);
+    }
+    if (m_timeScale < 1.0) // Zeitlupe: etwa gleich viele Schritte je Sekunde wie in Echtzeit, hoechstens 20 us fein
+        c.stepS = std::min(c.stepS, std::clamp(core::kDefaultStepS * m_timeScale, kAudioStepS, core::kDefaultStepS));
     if (c.probeIds == m_scopeConfig.probeIds && c.intervalS == m_scopeConfig.intervalS &&
         c.capacity == m_scopeConfig.capacity && c.stepS == m_scopeConfig.stepS &&
         c.tracerId == m_scopeConfig.tracerId && c.tracerCapacity == m_scopeConfig.tracerCapacity &&
-        c.tracerEpoch == m_scopeConfig.tracerEpoch)
+        c.tracerEpoch == m_scopeConfig.tracerEpoch && c.audio == m_scopeConfig.audio &&
+        c.audioId == m_scopeConfig.audioId)
         return;
     m_scopeConfig = c;
     m_bridge.setScope(c);
@@ -661,6 +669,23 @@ void LabSession::setGenOffset(double volt) {
     m_board.desk.genOffsetV = std::isfinite(volt) ? std::clamp(volt, -4.0, 4.0) : 0.0;
     m_bars.clear();
     m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenOffset, m_board.desk.genOffsetV});
+}
+
+void LabSession::setAudioStream(std::shared_ptr<AudioStream> stream) {
+    m_audio = std::move(stream);
+    updateScope();
+}
+
+void LabSession::setAudible(bool audible) {
+    if (audible == m_audible) return;
+    m_audible = audible;
+    updateScope();
+}
+
+void LabSession::setTimeScale(double scale) {
+    m_timeScale = std::isfinite(scale) && scale > 0.0 ? scale : 1.0;
+    m_bridge.setTimeScale(m_timeScale);
+    updateScope();
 }
 
 void LabSession::setTracerSettings(const TracerSettings& s) {

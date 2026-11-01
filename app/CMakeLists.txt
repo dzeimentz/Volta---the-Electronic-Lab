@@ -26,6 +26,7 @@ add_library(volta_model STATIC
     src/model/build_guide.cpp
     src/model/parts_list.cpp
     src/model/tone_synth.cpp
+    src/model/audio_stream.cpp
     src/model/environment.cpp
     src/model/recorder.cpp
     src/model/oscilloscope.cpp

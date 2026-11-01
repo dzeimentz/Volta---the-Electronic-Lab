@@ -14,6 +14,7 @@
 #include "volta/core/circuit.hpp"
 #include "volta/core/signal_stats.hpp"
 #include "volta/core/simulator.hpp"
+#include "model/audio_stream.hpp"
 #include "model/oscilloscope.hpp"
 
 namespace volta::sim {
@@ -71,6 +72,9 @@ struct ScopeConfig {
     double tracerIntervalS = 0.0;
     std::size_t tracerCapacity = 0;
     int tracerEpoch = 0; // neue Einstellungen: Puffer leeren
+    // Hoerbare Simulation: Strom des Bauteils audioId (Pult-Lautsprecher) in der Abtastrate des Tonstroms
+    std::shared_ptr<model::AudioStream> audio;
+    std::string audioId;
 };
 
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.
@@ -155,6 +159,8 @@ private:
     std::size_t m_tracerHead = 0, m_tracerCount = 0;
     long m_tracerIndex = -1;
     double m_tracerLastT = -1.0;
+    long m_audioIndex = -1; // hoerbare Simulation: Lautsprecher, naechster Abtastzeitpunkt, letzter Schritt
+    double m_audioNextT = -1.0, m_audioPrevT = 0.0, m_audioPrevA = 0.0;
     double m_stepS = core::kDefaultStepS;
 
     std::mutex m_inMutex; // Eingaenge

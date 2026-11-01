@@ -387,6 +387,11 @@ Item {
     Connections {
         target: lab.controller
         function onEditFailed() { toast.show(lab.controller.lastEditError) }
+        // Ersatzton offen ansagen (Konzept 5.3)
+        function onToneModeChanged() {
+            if (lab.controller.toneMode === "ersatz")
+                toast.show(qsTr("Diese Schaltung ist zu aufwendig, um sie Schritt für Schritt hörbar zu rechnen. Du hörst einen Ton mit der Frequenz, die die Simulation ergibt."))
+        }
     }
 
     // ------------------------------------------------------------------ Werkzeugleiste
@@ -671,6 +676,29 @@ Item {
                 ToolTip.visible: hovered
                 ToolTip.text: !lab.classicMeter ? (lab.recorderVisible ? qsTr("Oszilloskop ausblenden") : qsTr("Oszilloskop zeigen"))
                             : lab.recorderVisible ? qsTr("Zeitschreiber ausblenden") : qsTr("Zeitschreiber zeigen")
+                Accessible.name: ToolTip.text
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
+            // Zeitlupe (ab Volta 2, Konzept 5.3): 1, 1/10, 1/100, 1/1000 der Echtzeit; Ton ist dann stumm. Die Stufe
+            // steht als Text auf dem Knopf (Farbe nie allein)
+            ToolButton {
+                objectName: "slowMotionButton"
+                visible: !lab.classicMeter
+                readonly property var scales: [1, 0.1, 0.01, 0.001]
+                readonly property int level: Math.max(0, scales.indexOf(lab.controller.timeScale))
+                width: Math.max(Theme.control, implicitWidth); height: Theme.control
+                checkable: true
+                checked: level > 0
+                onClicked: lab.controller.timeScale = scales[(level + 1) % scales.length]
+                text: level === 0 ? "🐢" : "🐢 1/" + Math.round(1 / scales[level])
+                font.pixelSize: 16
+                ToolTip.visible: hovered
+                ToolTip.text: level === 0 ? qsTr("Zeitlupe: aus (Echtzeit). Antippen: 1/10")
+                              : qsTr("Zeitlupe: 1/%1, Ton stumm. Antippen: langsamer bzw. aus").arg(Math.round(1 / scales[level]))
                 Accessible.name: ToolTip.text
                 background: Rectangle {
                     radius: 6

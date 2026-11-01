@@ -116,6 +116,14 @@ public:
     void setGenAmplitude(double peakV);
     void setGenOffset(double volt);
     void setTracerSettings(const TracerSettings& s); // Kennlinienschreiber (Bedienhandlung)
+    // Hoerbare Simulation (ab Volta 2, Konzept 5.3): Tonstrom des Audiodienstes; audible = Lautsprecher hoerbar
+    // rechnen (Schrittweite 20 us, nur bei Echtzeit). Zeitlupe/Zeitraffer: timeScale (< 1 Zeitlupe, dann feinere
+    // Schritte, damit Flanken sichtbar werden).
+    void setAudioStream(std::shared_ptr<AudioStream> stream);
+    void setAudible(bool audible);
+    bool audible() const { return m_audible; }
+    void setTimeScale(double scale);
+    double timeScale() const { return m_timeScale; }
     // Letzter Durchlauf des Kennlinienschreibers (leer ohne ihn): v[0] = U zwischen KS+ und KS-, v[1] = I aus KS+
     const std::vector<ScopeSample>& tracerSamples() const { return m_snap.tracer; }
     void setPartClosed(const std::string& id, bool closed); // Schalter, Taster, Reedkontakt, Wechselschalter
@@ -191,6 +199,9 @@ private:
     Netlist m_net;
     sim::SimulationBridge m_bridge;
     int m_tracerEpoch = 0;
+    std::shared_ptr<AudioStream> m_audio;
+    bool m_audible = false;
+    double m_timeScale = 1.0;
     bool m_scopeActive = false;
     sim::ScopeConfig m_scopeConfig; // zuletzt an die Bruecke gegeben (nur bei Aenderung neu)
     void updateScope();

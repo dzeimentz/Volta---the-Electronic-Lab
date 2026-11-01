@@ -119,6 +119,9 @@ class LabController : public QObject {
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
     Q_PROPERTY(bool showSimTime READ showSimTime CONSTANT) // Entwicklerhilfe VOLTA_SHOW_TIME=1
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
+    // Tonanzeige (ab Volta 2, Konzept 5.3): "" kein Ton am Pult-Lautsprecher, "echt" hoerbar gerechnet,
+    // "ersatz" Ton aus der simulierten Frequenz (Simulation langsamer als Echtzeit), "zeitlupe" stumm
+    Q_PROPERTY(QString toneMode READ toneMode NOTIFY toneModeChanged)
     Q_PROPERTY(double realtimeRatio READ realtimeRatio NOTIFY stateChanged)
     Q_PROPERTY(double batteryVolt READ batteryVolt NOTIFY deskChanged)
     // Umgebung: Raumlicht 0 dunkel / 1 Daemmerung / 2 hell; Werkzeuge [{type, col, row, on}] auf der Grundplatte
@@ -514,9 +517,11 @@ public:
 
     model::LabSession& session() { return *m_session; }
     // Tonausgabe (main.cpp); ohne Dienst (Tests) bleibt es still
-    void setAudio(services::AudioService* audio) { m_audio = audio; }
+    void setAudio(services::AudioService* audio);
+    QString toneMode() const { return m_toneMode; }
 
 signals:
+    void toneModeChanged();
     void experimentChanged();
     void boardChanged();
     void deskChanged();
@@ -602,7 +607,12 @@ private:
     bool m_meterDocked = false;
     services::AudioService* m_audio = nullptr;
     double m_lastPulses = -1.0; // Impulszaehler des Pult-Lautsprechers (Knacken bei neuem Impuls)
-    void updateAudio();
+    void updateAudio(double elapsedS);
+    bool speakerWired() const;
+    QString m_toneMode;
+    bool m_toneFallback = false; // Ersatzton statt hoerbarer Rechnung
+    double m_slowS = 0.0;        // so lange schon langsamer als Echtzeit
+    double m_fastS = 0.0;        // so lange schon wieder in Echtzeit
     int m_preferredColumns = 12;
     bool m_preferMeter = false;
     int highestUnlockedStage() const;

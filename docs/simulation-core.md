@@ -263,6 +263,17 @@ Bild danach, eine Teilung Vorlauf; ohne Durchgang frei laufend), Rollbetrieb (da
 100 ms ... 1 min je Teilung), XY-Betrieb, Kennwerte je Kanal (Spitze-Spitze, Mittel, Frequenz aus steigenden
 Durchgaengen durch die Mitte mit 10 % Hysterese).
 
+**Hoerbare Simulation** (ab Volta 2, Konzept 5.3, `model/audio_stream.hpp`): Haengt der Pult-Lautsprecher in der
+Schaltung und laeuft der Ton, rechnet die Bruecke mit 20 µs und rechnet den Lautsprecherstrom nach jedem Schritt
+linear auf die Abtastzeitpunkte der Soundkarte (48 kHz) um. Die Werte gehen ohne Sperren (ein Erzeuger, ein
+Verbraucher) an den Audiodienst; der gibt sie mit rund 50 ms Vorlauf aus, filtert den Gleichanteil heraus (ca.
+20 Hz) und begrenzt Spitzen auf 30 % Aussteuerung (Kinderohren). Faellt die Rechnung laenger als 0,6 s unter 90 %
+der Echtzeit, klingt ein Ersatzton in der simulierten Frequenz (core::Speaker, Nulldurchgaenge in Simulationszeit;
+die Simulation rechnet weiter fein, nur langsamer); nach 3 s wieder in Echtzeit klingt wieder die Rechnung.
+Zeitlupe (1/10, 1/100, 1/1000) ist stumm und verfeinert die Schritte auf 1 ms x Massstab, mindestens 20 µs.
+Die Bruecke uebergibt die Schrittweite dem Kern (`Simulator::step(m_stepS)`); bis Inkrement 6 rechnete der Kern trotz
+feinerer Vorgabe des Oszilloskops mit 1 ms.
+
 **Kennlinienschreiber** (ab Volta 2): Steht er im Pult, tastet die Bruecke nach jedem Schritt alle 2 ms Spannung und
 Strom an seinen Klemmen ab (1000 Punkte = ein Durchlauf hin und zurueck) und gibt sie mit dem Schnappschuss heraus.
 Neue Einstellungen leeren den Puffer. Weil der Durchlauf in der laufenden Simulation stattfindet, zeigen Bauteile mit

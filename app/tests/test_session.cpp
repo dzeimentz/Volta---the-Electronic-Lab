@@ -414,6 +414,48 @@ private slots:
         QCOMPARE(s->bridge().stepS(), 1e-3);
     }
 
+    // Hoerbare Simulation: Generator 1 kHz am Pult-Lautsprecher; mit Tonstrom 20 us Schrittweite und 48000 Werte je
+    // Simulationssekunde mit der Tonhoehe des Generators; Zeitlupe verfeinert die Schritte
+    void audibleSpeakerStream() {
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(s->addDeskParts({"generator", "lautsprecher"}));
+        QVERIFY(s->addWire("P:G", "P:LS1", "gelb"));
+        QVERIFY(s->addWire("P:LS2", "P:G0", "schwarz"));
+        s->setGenFrequency(1000.0);
+        s->setGenAmplitude(1.0);
+        auto stream = std::make_shared<model::AudioStream>(48000, 1u << 16);
+        s->setAudioStream(stream);
+        run(*s, 0.01);
+        QCOMPARE(stream->buffered(), std::size_t(0)); // nicht hoerbar geschaltet: kein Tonstrom
+        s->setAudible(true);
+        run(*s, 0.1);
+        QCOMPARE(s->bridge().stepS(), model::kAudioStepS);
+        QVERIFY2(std::abs(static_cast<long>(stream->buffered()) - 4800) <= 2, qPrintable(QString::number(stream->buffered())));
+        std::vector<std::int16_t> out(4800, 0);
+        stream->mixInto(out.data(), out.size());
+        int rising = 0;
+        for (std::size_t i = 2400; i < out.size(); ++i)
+            if (out[i - 1] < 0 && out[i] >= 0) ++rising;
+        QVERIFY2(std::abs(rising - 50) <= 1, qPrintable(QString::number(rising)));
+        core::ComponentReading ls;
+        QVERIFY(s->speakerReading(ls));
+        QVERIFY2(std::fabs(ls.frequencyHz - 1000.0) < 20.0, qPrintable(QString::number(ls.frequencyHz)));
+        // Zeitlupe: kein Tonstrom, Schritte 1 ms * Massstab, hoechstens 20 us fein
+        s->setTimeScale(0.1);
+        run(*s, 0.01);
+        QCOMPARE(s->bridge().stepS(), 1e-4);
+        s->setTimeScale(0.001);
+        run(*s, 0.001);
+        QCOMPARE(s->bridge().stepS(), model::kAudioStepS);
+        s->setTimeScale(1.0);
+        s->setAudible(false);
+        run(*s, 0.01);
+        QCOMPARE(s->bridge().stepS(), 1e-3);
+    }
+
     // Kennlinienschreiber: Widerstand 1 kOhm ergibt eine Gerade I = U / R; nur positiv bleibt U >= 0;
     // potentialfrei (der Hauptschalter bleibt aus, der Schreiber hat ein eigenes Netzteil)
     void tracerDrawsResistorLine() {

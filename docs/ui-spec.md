@@ -118,6 +118,11 @@ das iPad).
     1 ms sind Tonhoehen nur bis ca. 250 Hz aufloesbar; hoehere Toene liefern Verhaltensmodelle (Summer, Tonmodul).
     Hz bei langem Druck im freien Labor und ab Stufe 3. Durchgebrannter Lautsprecher: antippen = reparieren (Befehl).
     Tonausgabe ueber die Soundkarte folgt mit dem Audiodienst.
+  - Ab Volta 2 (Tonanzeige, Konzept 5.3): unter dem Ring steht statt »Lautsprecher«, woher der Ton kommt:
+    »♪ gerechnet« (hoerbare Simulation), »♪ Ersatzton« (fett, bernsteinfarben; beim Umschalten erklaert ein Hinweis
+    offen, warum) oder »Zeitlupe: stumm«. Ton aus: Name wie bisher.
+- Zeitlupe (ab Volta 2): Knopf mit Schildkroete in der Werkzeugleiste neben dem Oszilloskop; Antippen schaltet
+  1/10 -> 1/100 -> 1/1000 -> aus, die Stufe steht als »1/10« usw. auf dem Knopf. Ton ist in der Zeitlupe stumm.
 - **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
   Zwei Plaetze, umschaltbar mit dem kleinen Knopf oben links im Geraet (gespeichert, `labor/messgeraet_im_pult`):
   neben der Grundplatte (hoch, Drehschalter, Buchsen unten im Geraet) oder oben im Pult rechts neben dem

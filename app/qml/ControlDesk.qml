@@ -459,6 +459,16 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             controller: desk.controller
         }
-        Label { text: qsTr("Lautsprecher"); color: "white"; font.pixelSize: Math.round((12) * Theme.fontScale); anchors.horizontalCenter: parent.horizontalCenter }
+        // Name; ab Volta 2 steht dort, woher der Ton kommt (Tonanzeige, Konzept 5.3) - als Text, Farbe nie allein
+        Label {
+            objectName: "toneModeLabel"
+            anchors.horizontalCenter: parent.horizontalCenter
+            readonly property string mode: desk.controller.toneMode
+            text: mode === "echt" ? qsTr("♪ gerechnet") : mode === "ersatz" ? qsTr("♪ Ersatzton")
+                  : mode === "zeitlupe" ? qsTr("Zeitlupe: stumm") : qsTr("Lautsprecher")
+            color: mode === "ersatz" ? "#FFD27A" : "white"
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+            font.bold: mode === "ersatz"
+        }
     }
 }

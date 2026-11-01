@@ -264,7 +264,7 @@ bool SimulationBridge::latest(Snapshot& out) {
 
 void SimulationBridge::step() {
     const double t0 = m_sim.timeS();
-    const core::Status s = m_sim.step();
+    const core::Status s = m_sim.step(m_stepS);
     if (s != core::Status::Ok) m_back.lastStatus = s;
     const double dt = m_sim.timeS() - t0;
     const core::Probe& p = m_sim.probe();
@@ -287,6 +287,24 @@ void SimulationBridge::step() {
         }
         m_scopeHead = (m_scopeHead + 1) % m_scopeRing.size();
         m_scopeCount = std::min(m_scopeCount + 1, m_scopeRing.size());
+    }
+    if (dt > 0.0 && p.valid && m_audioIndex >= 0 && static_cast<std::size_t>(m_audioIndex) < p.readings.size()) {
+        // Tonstrom: zwischen zwei Schritten linear auf die Abtastzeitpunkte der Soundkarte umrechnen
+        const double t1 = m_sim.timeS();
+        const double a1 = p.readings[static_cast<std::size_t>(m_audioIndex)].currentA;
+        const double dtA = 1.0 / m_scope.audio->sampleRate();
+        if (m_audioNextT < 0.0 || t1 - m_audioPrevT > 0.01) { // Beginn oder Sprung
+            m_audioNextT = t1;
+            m_audioPrevT = t1;
+            m_audioPrevA = a1;
+        }
+        while (m_audioNextT <= t1) {
+            const double u = t1 > m_audioPrevT ? (m_audioNextT - m_audioPrevT) / (t1 - m_audioPrevT) : 1.0;
+            m_scope.audio->push(static_cast<float>(m_audioPrevA + (a1 - m_audioPrevA) * u));
+            m_audioNextT += dtA;
+        }
+        m_audioPrevT = t1;
+        m_audioPrevA = a1;
     }
     if (dt > 0.0 && p.valid && m_tracerIndex >= 0 && !m_tracerRing.empty() &&
         static_cast<std::size_t>(m_tracerIndex) < p.readings.size() &&
@@ -317,6 +335,9 @@ void SimulationBridge::resolveScope() {
     m_tracerIndex = t == m_index.end() ? -1 : static_cast<long>(t->second);
     m_tracerHead = m_tracerCount = 0;
     m_tracerLastT = -1.0;
+    const auto a = !m_scope.audio || m_scope.audioId.empty() ? m_index.end() : m_index.find(m_scope.audioId);
+    m_audioIndex = a == m_index.end() ? -1 : static_cast<long>(a->second);
+    m_audioNextT = -1.0;
 }
 
 void SimulationBridge::runFor(double seconds) {

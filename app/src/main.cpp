@@ -329,6 +329,25 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // VOLTA_DEMO_GALLERY=8 (mit VOLTA_DEMO_FREELAB=1): Generator 2 Hz Rechteck an LED und Lautsprecher, Zeitlupe 1/10
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 8) {
+        QTimer::singleShot(400, &lab, [&lab] {
+            lab.setUnlockAll(true); // der Lautsprecher kommt sonst erst mit einem Experiment
+            lab.addDeskPart(QStringLiteral("generator"));
+            lab.addDeskPart(QStringLiteral("lautsprecher"));
+            lab.setGenWaveform(2);
+            lab.setGenFrequency(2.0);
+            lab.setGenAmplitude(4.0);
+            lab.addPart(QStringLiteral("led_rot"), QStringLiteral("A1"), false, false);
+            lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B1"), false, false);
+            lab.setPartValue(QStringLiteral("R1"), 100.0);
+            const char* wires[][2] = {{"P:G", "A1"}, {"A2", "B1"}, {"B2", "P:G0"}, {"P:G", "P:LS1"}, {"P:LS2", "P:G0"}};
+            for (const auto& w : wires)
+                lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
+            lab.setTimeScale(0.1);
+        });
+    }
+
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {

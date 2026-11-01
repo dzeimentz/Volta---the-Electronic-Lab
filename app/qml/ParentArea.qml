@@ -603,6 +603,11 @@ Popup {
                 Point { body: qsTr("Bauteile erwärmen sich und kühlen schneller ab als in echt, damit man es beobachten kann.") }
                 Point { body: qsTr("Die Batterie hat einen Innenwiderstand, Leitungen einen sehr kleinen Widerstand; gerechnet wird in Schritten von einer Millisekunde.") }
                 Point { body: qsTr("Im Blinkmodul wird der Durchbruch der Basis-Emitter-Strecke nicht nachgebildet; in echt wird jede Hälfte des Takts dadurch etwas kürzer.") }
+                // ab Volta 2: hoerbare Simulation mit Rueckfall (Konzept 5.3)
+                Point {
+                    visible: area.controller.band !== "" && area.controller.band !== "volta1"
+                    body: qsTr("Hängt der Lautsprecher in der Schaltung, rechnet Volta in Schritten von 20 Mikrosekunden und gibt den berechneten Strom als Ton aus, mit etwa 50 ms Verzögerung und einem Begrenzer gegen plötzlich laute Töne. Schafft das Gerät diese Rechnung nicht in Echtzeit, erklingt stattdessen ein Ton mit der Frequenz, die die Simulation ergibt; am Lautsprecher steht dann »Ersatzton«. In der Zeitlupe ist der Ton stumm.")
+                }
 
                 // ---- Kontakt
                 Heading { text: qsTr("Kontakt und Hilfe") }

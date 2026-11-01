@@ -1109,7 +1109,7 @@ void LabController::onFrame() {
     const double elapsed = m_clock.restart() / 1000.0;
     m_session->poll();
     updateFinish();
-    updateAudio();
+    updateAudio(elapsed);
     sampleRecorder();
     m_sinceNotifyS += elapsed;
     if (m_sinceNotifyS >= kNotifyS) {
@@ -1236,11 +1236,60 @@ std::vector<model::SynthVoice> LabController::buzzerVoices() const {
 
 int LabController::soundingParts() const { return static_cast<int>(buzzerVoices().size()); }
 
-void LabController::updateAudio() {
+void LabController::setAudio(services::AudioService* audio) {
+    m_audio = audio;
+    if (m_session) m_session->setAudioStream(audio ? audio->stream() : nullptr);
+}
+
+bool LabController::speakerWired() const {
+    for (const auto& w : m_session->board().wires)
+        if (model::deskGroupOf(w.from) == "lautsprecher" || model::deskGroupOf(w.to) == "lautsprecher") return true;
+    return false;
+}
+
+// Tonausgabe. Ab Volta 2 hoerbare Simulation (Konzept 5.3): Haengt der Pult-Lautsprecher in der Schaltung, rechnet
+// die Simulation mit 20 us und der Lautsprecherstrom selbst klingt. Faellt sie laenger als 0,6 s unter 90 % der
+// Echtzeit, erklingt offen angesagt ein Ton in der simulierten Frequenz (die Simulation rechnet weiter fein, nur
+// langsamer); nach 3 s wieder in Echtzeit klingt wieder die Rechnung. Zeitlupe ist stumm.
+void LabController::updateAudio(double elapsedS) {
     if (!m_audio) return;
+    const bool modern = !m_band.isEmpty() && m_band != QLatin1String("volta1");
+    const bool slowMotion = m_timeScale < 1.0;
+    const bool wired = modern && speakerWired();
+    m_session->setAudible(wired && !slowMotion && m_audio->playing());
+    QString mode;
+    if (wired && (slowMotion || m_audio->playing())) { // Ton aus: keine Tonanzeige (der Leuchtring bleibt)
+        const double ratio = m_session->snapshot().realtimeRatio;
+        if (!slowMotion && m_session->audible() && ratio > 0.0) { // 0: angehalten
+            if (!m_toneFallback) {
+                m_slowS = ratio < 0.9 ? m_slowS + elapsedS : 0.0;
+                if (m_slowS > 0.6) {
+                    m_toneFallback = true;
+                    m_fastS = 0.0;
+                }
+            } else {
+                m_fastS = ratio > 0.97 ? m_fastS + elapsedS : 0.0;
+                if (m_fastS > 3.0) {
+                    m_toneFallback = false;
+                    m_slowS = 0.0;
+                }
+            }
+        }
+        mode = slowMotion ? QStringLiteral("zeitlupe") : m_toneFallback ? QStringLiteral("ersatz") : QStringLiteral("echt");
+    }
+    if (mode != m_toneMode) {
+        m_toneMode = mode;
+        emit toneModeChanged();
+    }
+    const bool stream = mode == QLatin1String("echt");
+    m_audio->setStreaming(stream);
     std::vector<model::SynthVoice> voices;
+    if (slowMotion) { // Zeitlupe: stumm
+        m_audio->setVoices(voices);
+        return;
+    }
     core::ComponentReading ls;
-    if (m_session->speakerReading(ls) && !ls.destroyed) {
+    if (!stream && m_session->speakerReading(ls) && !ls.destroyed) {
         if (ls.frequencyHz >= 20.0 && ls.level > 0.02)
             voices.push_back({ls.frequencyHz, ls.level});
         else if (m_lastPulses >= 0.0 && ls.displayValue > m_lastPulses)
@@ -1958,7 +2007,7 @@ void LabController::setCells(int cells) {
 void LabController::setTimeScale(double scale) {
     if (scale == m_timeScale) return;
     m_timeScale = scale;
-    m_session->bridge().setTimeScale(scale);
+    m_session->setTimeScale(scale);
     emit deskChanged();
 }
 void LabController::setPartClosed(const QString& id, bool closed) {

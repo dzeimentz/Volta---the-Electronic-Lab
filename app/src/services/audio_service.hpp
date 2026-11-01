@@ -3,10 +3,12 @@
 #include <QIODevice>
 #include <QObject>
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <vector>
 
+#include "model/audio_stream.hpp"
 #include "model/tone_synth.hpp"
 
 class QAudioSink;
@@ -42,6 +44,10 @@ public:
     // Aus dem LabController (GUI-Thread), etwa 60-mal je Sekunde
     void setVoices(const std::vector<model::SynthVoice>& voices);
     void click(double strength);
+    // Hoerbare Simulation (ab Volta 2): Tonstrom aus der Simulation; streaming = er wird ausgegeben (sonst verworfen)
+    std::shared_ptr<model::AudioStream> stream() const { return m_stream; }
+    void setStreaming(bool on) { m_streaming = on; }
+    bool playing() const { return m_available && m_enabled && m_active && !m_suppressed; } // Ausgabe laeuft
 
 signals:
     void changed();
@@ -56,6 +62,8 @@ private:
     bool m_suppressed = false;
     std::mutex m_mutex;
     std::unique_ptr<model::ToneSynth> m_synth;
+    std::shared_ptr<model::AudioStream> m_stream;
+    std::atomic<bool> m_streaming{false};
     std::unique_ptr<Source> m_source;
     QAudioSink* m_sink = nullptr;
 };
