@@ -362,15 +362,15 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
             error = msg(QT_TRANSLATE_NOOP("Meldung", "Die Kennung %1 ist schon vergeben."), {part.id});
             return false;
         }
-    // Messstellen: hoechstens zwei je Art (Konzept Volta 2, 5.4), damit die Anzeigen lesbar bleiben
+    // Messstellen: hoechstens drei je Art wie das Anzeigegeraet Anzeigen hat (Konzept Volta 2, 5.4), Tastkoepfe zwei
     if (e->theme == "messen") {
         int same = 0;
         for (const auto& p : board.parts)
             if (p.type == part.type && p.id != part.id && p.id != ignoreId) ++same;
-        if (same >= kMaxMeasurePointsPerType) {
+        if (same >= (e->model == "scope_probe" ? kMaxScopeProbes : kMaxMeasurePointsPerType)) {
             error = e->model == "scope_probe"
                         ? msg(QT_TRANSLATE_NOOP("Meldung", "Das Oszilloskop hat nur die Tastköpfe K1 und K2."))
-                        : msg(QT_TRANSLATE_NOOP("Meldung", "Von dieser Messstelle sind schon zwei gesteckt."));
+                        : msg(QT_TRANSLATE_NOOP("Meldung", "Von dieser Messstelle sind schon drei gesteckt."));
             return false;
         }
     }

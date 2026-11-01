@@ -18,7 +18,7 @@ QtObject {
         {key: "messen", color: "#4A5A6E", tint: "#D5DCE6", symbol: "messstelle_v"} // ab Volta 2: Messstellen
     ]
     // Nummer einer Messstelle (V1/V2 ...): 1 blau, 2 orange - zusaetzlich zur Ziffer
-    readonly property var measureTagColors: ["#2F5FA8", "#C8541A"]
+    readonly property var measureTagColors: ["#2F5FA8", "#C8541A", "#7A3E9D"] // Nummer 1 blau, 2 orange, 3 violett
     // Oszilloskop: K1 gelb, K2 tuerkis (Konzept 9.3); auf dem Bauteil bzw. hell, auf dem dunklen Schirm leuchtend
     readonly property var probeColors: ["#E6B400", "#139C95"]
     readonly property var scopeTraceColors: ["#FFD43B", "#3BE0D4"]

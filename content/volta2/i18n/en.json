@@ -104,7 +104,7 @@
   "exp2_1_1_s2": "Plug a second current measuring point into A3 and B3. After it comes the 1 kΩ resistor on B3 and B5. Connect B5 to 0V.",
   "exp2_1_1_s3": "Plug a third current measuring point into A3 and A5. After it comes the 2.2 kΩ resistor on A5 and A7. Connect A7 to 0V and switch on the main switch.",
   "exp2_1_1_h1": "Every current measuring point has to sit in the path of the current, not next to it.",
-  "exp2_1_1_h2": "Show all three currents one after the other on the twin meter and add up the last two.",
+  "exp2_1_1_h2": "The triple meter shows all three currents. Add up the currents of A2 and A3.",
   "exp2_1_1_loesung": "Before the junction about 13.1 mA flow. About 9.0 mA flow through 1 kΩ and about 4.1 mA through 2.2 kΩ. Together that is 13.1 mA again.",
   "exp2_1_1_erklaerung": "At a junction no current gets lost and none is added. What flows in flows out again. This is the junction rule. The larger part flows through the smaller resistor.",
   "exp2_1_1_mehr": "Gustav Robert Kirchhoff wrote this rule down in 1845. It is also called Kirchhoff's first law. It holds at every point of every circuit, even inside a computer chip.",

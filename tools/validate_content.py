@@ -267,6 +267,17 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
     if set(exp.get("vermutung_passt", []) or []) & set(exp.get("vermutung_offen", []) or []):
         rep.error(where, "eine Vermutung kann nicht zugleich passen und offen sein")
     measure_ids = {p.get("id") for p in tpl.get("bauteile", []) if str(p.get("typ", "")).startswith("messstelle_")}
+    # wie beim Stecken (board_edit.cpp): hoechstens drei Messstellen je Art, zwei Tastkoepfe; die Vorlage umgeht die
+    # Pruefung beim Laden, darum hier
+    per_type: dict[str, int] = {}
+    for p in tpl.get("bauteile", []):
+        typ = str(p.get("typ", ""))
+        if typ.startswith("messstelle_") or typ == "tastkopf":
+            per_type[typ] = per_type.get(typ, 0) + 1
+    for typ, n in per_type.items():
+        limit = 2 if typ == "tastkopf" else 3
+        if n > limit:
+            rep.error(where, f"{n} Bauteile '{typ}' in der Vorlage, erlaubt sind {limit}")
     check_condition(exp.get("erfolg"), f"{where}:erfolg", part_ids, rep, measure_ids)
 
     keys = collect_keys(exp)

@@ -104,7 +104,7 @@
   "exp2_1_1_s2": "Place un deuxième point de mesure de courant sur A3 et B3. Après lui vient la résistance de 1 kΩ sur B3 et B5. Relie B5 à 0V.",
   "exp2_1_1_s3": "Place un troisième point de mesure de courant sur A3 et A5. Après lui vient la résistance de 2,2 kΩ sur A5 et A7. Relie A7 à 0V et allume l'interrupteur principal.",
   "exp2_1_1_h1": "Chaque point de mesure de courant doit être sur le chemin du courant, pas à côté.",
-  "exp2_1_1_h2": "Affiche les trois courants l'un après l'autre sur le double multimètre et additionne les deux derniers.",
+  "exp2_1_1_h2": "Le triple multimètre affiche les trois courants. Additionne les courants de A2 et A3.",
   "exp2_1_1_loesung": "Avant l'embranchement passent environ 13,1 mA. Environ 9,0 mA traversent 1 kΩ et environ 4,1 mA traversent 2,2 kΩ. Ensemble, cela fait de nouveau 13,1 mA.",
   "exp2_1_1_erklaerung": "À un embranchement, aucun courant ne se perd et aucun ne s'ajoute. Ce qui entre ressort. C'est la loi des nœuds. La plus grande partie passe par la plus petite résistance.",
   "exp2_1_1_mehr": "Gustav Robert Kirchhoff a écrit cette loi en 1845. On l'appelle aussi la première loi de Kirchhoff. Elle est vraie en chaque point de chaque circuit, même dans une puce d'ordinateur.",

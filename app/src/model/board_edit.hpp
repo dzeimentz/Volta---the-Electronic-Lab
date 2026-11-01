@@ -16,7 +16,8 @@ enum class Orientation { Horizontal, Vertical };
 enum class Span { Short = 1, Long = 2 }; // ein bzw. zwei Feldabstaende
 
 inline constexpr int kSocketsPerField = 5;
-inline constexpr int kMaxMeasurePointsPerType = 2; // Messstellen V, A, Ohm je Art
+inline constexpr int kMaxMeasurePointsPerType = 3; // Messstellen V, A, Ohm je Art (drei Anzeigen)
+inline constexpr int kMaxScopeProbes = 2;          // Tastkoepfe K1, K2 des Oszilloskops
 // Einstellbare Breite der Grundplatte (Spalten je Reihe), Schritt 2
 inline constexpr int kMinColumns = 8;
 inline constexpr int kMaxColumns = 12;

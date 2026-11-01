@@ -285,7 +285,8 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
     }
     if (pult.contains(QStringLiteral("anzeigegeraet"))) {
         const QJsonObject a = pult.value(QStringLiteral("anzeigegeraet")).toObject();
-        out.desk.display.twin = a.value(QStringLiteral("doppelt")).toBool(false);
+        out.desk.display.count = std::clamp(a.value(QStringLiteral("anzahl")).toInt(a.value(QStringLiteral("doppelt")).toBool(false) ? 2 : 1),
+                                            1, model::kDisplaySlots);
         out.desk.display.power = a.value(QStringLiteral("leistung")).toBool(false);
     }
     // Messstellen in der Vorlage: Anzeigegeraet eingeblendet (Volta 2)

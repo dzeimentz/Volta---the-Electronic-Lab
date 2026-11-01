@@ -91,7 +91,7 @@ QJsonObject boardToJson(const Board& board) {
                                 {QStringLiteral("trigger_steigend"), d.scope.triggerRising},
                                 {QStringLiteral("trigger_v"), d.scope.triggerLevelV},
                                 {QStringLiteral("kanaele"), scopeChannels}});
-        desk.insert(QStringLiteral("anzeigegeraet"), QJsonObject{{QStringLiteral("doppelt"), d.display.twin},
+        desk.insert(QStringLiteral("anzeigegeraet"), QJsonObject{{QStringLiteral("anzahl"), d.display.count},
                                                                  {QStringLiteral("leistung"), d.display.power},
                                                                  {QStringLiteral("anzeigen"), meters}});
         out.insert(QStringLiteral("pult"), desk);
@@ -172,10 +172,12 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     d.tracer.limitIndex = std::clamp(ks.value(QStringLiteral("strom_index")).toInt(1), 0,
                                      static_cast<int>(tracerLimitsA().size()) - 1);
     const QJsonObject disp = desk.value(QStringLiteral("anzeigegeraet")).toObject();
-    d.display.twin = disp.value(QStringLiteral("doppelt")).toBool(false);
+    // »anzahl« 1 ... 3; aeltere Sicherungen kennen nur »doppelt«
+    d.display.count = std::clamp(disp.value(QStringLiteral("anzahl")).toInt(disp.value(QStringLiteral("doppelt")).toBool(false) ? 2 : 1),
+                                 1, kDisplaySlots);
     d.display.power = disp.value(QStringLiteral("leistung")).toBool(false);
     const QJsonArray meters = disp.value(QStringLiteral("anzeigen")).toArray();
-    for (int i = 0; i < 2 && i < meters.size(); ++i) {
+    for (int i = 0; i < kDisplaySlots && i < meters.size(); ++i) {
         const QJsonObject o = meters.at(i).toObject();
         d.display.meters[i] = {ss(o.value(QStringLiteral("messstelle"))),
                               std::clamp(o.value(QStringLiteral("bereich")).toInt(-1), -1, 4),

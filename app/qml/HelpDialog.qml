@@ -115,7 +115,7 @@ Popup {
             say: qsTr("Wie viel Strom fließt da eigentlich? In Volta 2 steckst du die Messstelle direkt in die Schaltung."),
             points: [qsTr("Die Messstellen V, A und Ω liegen in der Gruppe »Messen«. Du steckst sie wie einen Widerstand auf die Grundplatte."),
                      qsTr("Das Voltmeter V kommt neben das Bauteil, das Amperemeter A in den Stromkreis. Das Ohmmeter Ω misst nur bei ausgeschaltetem Strom."),
-                     qsTr("»V A Ω« holt das Messgerät. Es zeigt deine Messstellen an, eine oder zwei auf einmal. »V~« oder »A~« heißt: Wechselgröße, angezeigt als Effektivwert."),
+                     qsTr("»V A Ω« holt das Messgerät. Es zeigt deine Messstellen an, bis zu drei auf einmal. »V~« oder »A~« heißt: Wechselgröße, angezeigt als Effektivwert."),
                      qsTr("Der Knopf mit den grünen Balken zeigt auf allen belegten Feldern, wie viel Spannung dort anliegt. Für ein einzelnes Feld geht das auch im Menü des Feldes (langer Druck)."),
                      qsTr("Das Schaltzeichen-Symbol zeigt deinen Aufbau als Schaltplan. Kleine Pfeile zeigen, wohin der Strom fließt.")] },
         werkzeug: {

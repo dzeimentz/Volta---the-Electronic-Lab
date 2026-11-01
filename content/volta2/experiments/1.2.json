@@ -33,7 +33,7 @@
     "pult_stellung": {
       "batterie_V": 9,
       "anzeigegeraet": {
-        "doppelt": true
+        "anzahl": 3
       }
     },
     "bauteile": [

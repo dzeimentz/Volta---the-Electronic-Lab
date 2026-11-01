@@ -1,7 +1,7 @@
-// Anzeigegeraet ab Volta 2 (Konzept 5.2, 9.3): zeigt Messstellen der Grundplatte ohne Messleitungen, einfach oder
-// doppelt. Je Anzeige: Wahl der Messstelle (nur gesteckte), Handbereichswahl mit Ueberlauf »1« oder selbsttaetig,
-// Gleich-/Wechselgroesse (Effektivwert, »V~« / »A~«). Doppelt rechnet es auf Wunsch die Leistung aus V und A.
-// Rahmen und Kennung jeder Anzeige in der Farbe ihrer Messstelle (1 blau, 2 orange), Kennung immer dabei.
+// Anzeigegeraet ab Volta 2 (Konzept 5.2, 9.3): zeigt Messstellen der Grundplatte ohne Messleitungen, einfach,
+// doppelt oder dreifach. Je Anzeige: Wahl der Messstelle (nur gesteckte), Handbereichswahl mit Ueberlauf »1« oder selbsttaetig,
+// Gleich-/Wechselgroesse (Effektivwert, »V~« / »A~«). Ab zwei Anzeigen rechnet es auf Wunsch die Leistung aus V und A.
+// Rahmen und Kennung jeder Anzeige in der Farbe ihrer Messstelle (1 blau, 2 orange, 3 violett), Kennung immer dabei.
 // Zwei Plaetze wie das Messgeraet von Volta 1: neben der Grundplatte (Anzeigen untereinander) oder oben im Pult
 // (nebeneinander). Alles Bedienhandlungen; die Werte rechnet der LabController.
 import QtQuick
@@ -13,8 +13,8 @@ Rectangle {
     property bool docked: false
     signal dockToggled()
 
-    readonly property bool twin: controller.displayTwin
-    property var states: [({}), ({})]
+    readonly property int count: controller.displayCount
+    property var states: [({}), ({}), ({})]
     property var power: ({})
 
     radius: 12
@@ -23,7 +23,7 @@ Rectangle {
     border.width: 2
 
     function refresh() {
-        meter.states = [meter.controller.displayState(0), meter.controller.displayState(1)]
+        meter.states = [meter.controller.displayState(0), meter.controller.displayState(1), meter.controller.displayState(2)]
         meter.power = meter.controller.displayPowerState()
     }
     // Ziffern mit 3 Hz wie ein echtes Geraet; Aenderungen der Einstellung sofort
@@ -64,20 +64,21 @@ Rectangle {
         }
     }
 
-    // Einfach / doppelt (Ziffer 1 bzw. 2 im Knopf)
+    // Zahl der Anzeigen 1 -> 2 -> 3 -> 1 (Ziffer im Knopf)
     ToolButton {
         id: twinButton
-        objectName: "displayTwinButton"
+        objectName: "displayCountButton"
         x: meter.docked ? 0 : parent.width - width
         y: meter.docked ? Theme.control : 0
         width: Theme.control; height: Theme.control
-        onClicked: meter.controller.displayTwin = !meter.twin
+        onClicked: meter.controller.displayCount = meter.count % 3 + 1
         ToolTip.visible: hovered
-        ToolTip.text: meter.twin ? qsTr("Einfachmessgerät") : qsTr("Doppelmessgerät")
+        ToolTip.text: meter.count === 1 ? qsTr("Doppelmessgerät") : meter.count === 2 ? qsTr("Dreifachmessgerät")
+                                        : qsTr("Einfachmessgerät")
         Accessible.name: ToolTip.text
         background: Rectangle { anchors.fill: parent; anchors.margins: 6; radius: 6; color: twinButton.down ? "#4A5868" : (twinButton.hovered ? "#3A4655" : "transparent"); border.color: "#C9D3DD" }
         contentItem: Label {
-            text: meter.twin ? "2" : "1"
+            text: meter.count
             horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
             color: "white"; font.bold: true; font.pixelSize: Math.round(15 * Theme.fontScale)
         }
@@ -93,7 +94,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         fontSizeMode: Text.HorizontalFit
         minimumPixelSize: 9
-        text: meter.twin ? qsTr("Doppelmessgerät") : qsTr("Messgerät")
+        text: meter.count === 3 ? qsTr("Dreifachmessgerät") : meter.count === 2 ? qsTr("Doppelmessgerät") : qsTr("Messgerät")
         color: "white"
         font.pixelSize: Math.round(14 * Theme.fontScale)
         font.bold: true
@@ -104,12 +105,12 @@ Rectangle {
         id: units
         x: meter.docked ? Theme.control + 2 : 10
         y: meter.docked ? 6 : Theme.control + 4
-        columns: meter.docked ? 2 : 1
-        spacing: 8
-        readonly property real unitWidth: meter.docked ? (meter.width - x - 8 - (meter.twin ? spacing : 0)) / (meter.twin ? 2 : 1)
+        columns: meter.docked ? 3 : 1
+        spacing: meter.docked || meter.count < 3 ? 8 : 6
+        readonly property real unitWidth: meter.docked ? (meter.width - x - 8 - (meter.count - 1) * spacing) / meter.count
                                                        : meter.width - 20
         Repeater {
-            model: meter.twin ? 2 : 1
+            model: meter.count
             // Eine Anzeige mit Wahl der Messstelle, Bereich und Gleich-/Wechselgroesse
             Column {
                 id: unit
@@ -125,7 +126,7 @@ Rectangle {
                     id: lcd
                     objectName: "displayLcd" + unit.slot
                     width: unit.width
-                    height: meter.docked ? 56 : 70
+                    height: meter.docked || meter.count === 3 ? 56 : 70
                     radius: 6
                     color: "#B9CBA4"
                     border.color: unit.valid ? unit.tint : "#10151B"
@@ -153,7 +154,7 @@ Rectangle {
                             objectName: "displayDigits" + unit.slot
                             text: unit.st.text || ""
                             font.family: "Consolas"
-                            font.pixelSize: Math.round((meter.docked ? 24 : 30) * Theme.fontScale)
+                            font.pixelSize: Math.round((meter.docked || meter.count === 3 ? 24 : 30) * Theme.fontScale)
                             font.bold: true
                             color: "#18221A"
                         }
@@ -256,11 +257,11 @@ Rectangle {
         }
     }
 
-    // Leistung aus V und A (nur doppelt); Knopf »P« schaltet sie zu
+    // Leistung aus V und A (ab zwei Anzeigen); Knopf »P« schaltet sie zu
     ToolButton {
         id: powerButton
         objectName: "displayPowerButton"
-        visible: meter.twin
+        visible: meter.count > 1
         x: units.x
         y: units.y + units.height + 4
         width: Theme.control; height: Theme.control
@@ -279,7 +280,7 @@ Rectangle {
     }
     Label {
         objectName: "displayPowerText"
-        visible: meter.twin && meter.power.shown === true
+        visible: meter.count > 1 && meter.power.shown === true
         x: powerButton.x + powerButton.width + 4
         y: powerButton.y
         width: meter.width - x - 10

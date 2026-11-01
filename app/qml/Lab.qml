@@ -96,6 +96,10 @@ Item {
     // Volta 1: Dreifach-Messgeraet mit Buchsen; ab Volta 2 das Anzeigegeraet fuer die Messstellen (Konzept 5.2)
     readonly property bool classicMeter: controller.band === "" || controller.band === "volta1"
     readonly property int meterDockX: deskStripWidth + Theme.fieldGap
+    // Anzeigegeraet mit drei Anzeigen: im Pult breiter (Knoepfe >= 48 dp), neben der Grundplatte eine Reihe hoeher
+    readonly property bool tripleDisplay: !classicMeter && controller.displayCount >= 3
+    readonly property int meterDockWidthNow: Theme.meterDockWidth + (tripleDisplay ? 160 : 0)
+    readonly property int meterRows: tripleDisplay ? 6 : 5
     readonly property int meterJacksWidth: 3 * Theme.deskFieldWidth + 2 * Theme.deskFieldGap
     readonly property var rows: ["A", "B", "C", "D", "E"].slice(0, controller.boardRows) // Stufenanpassung: ab 2 Reihen
     readonly property int columns: controller.boardColumns // 5, 6 (Stufenanpassung), 8, 10 oder 12 (+/-)
@@ -111,7 +115,7 @@ Item {
     readonly property int boardY: deskBottom + Theme.fieldGap + 4
     readonly property int boardWidth: columns * Theme.fieldWidth + (columns - 1) * Theme.fieldGap
     // Messgeraet neben der Grundplatte ist 5 Reihen hoch: die Modulleiste rutscht bei kleinem Steckbrett darunter
-    readonly property int moduleY: boardY + Math.max(rows.length, controller.meterVisible && !meterDocked ? 5 : 0)
+    readonly property int moduleY: boardY + Math.max(rows.length, controller.meterVisible && !meterDocked ? meterRows : 0)
                                    * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
     readonly property var allAnchors: {
         let a = controller.meterVisible && classicMeter ? deskNames.concat(meterNames) : deskNames.slice()
@@ -1036,7 +1040,7 @@ Item {
             id: canvas
             objectName: "canvas"
             width: Math.max(lab.trashX + Theme.control, lab.meterX, !lab.controller.meterVisible ? lab.boardWidth
-                            : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + Theme.meterDockWidth + 12) // mit Rahmen
+                            : lab.meterDocked ? Math.max(lab.boardWidth, lab.meterDockX + lab.meterDockWidthNow + 12) // mit Rahmen
                             : lab.meterX + Theme.meterAreaWidth,
                             lab.deskStripWidth)
             height: lab.showModules ? lab.moduleY + Theme.fieldHeight + Theme.control + 8 // Modulleiste mit Namensschildern
@@ -1060,7 +1064,7 @@ Item {
                 fieldsTop: lab.deskY
                 meterFrame: lab.controller.meterVisible && lab.meterDocked
                 meterLeft: lab.meterDockX
-                meterWidth: Theme.meterDockWidth
+                meterWidth: lab.meterDockWidthNow
                 highlightGroup: lab.highlightGroup
                 onGroupTapped: (name) => lab.highlightGroup = lab.highlightGroup === name ? "" : name
                 onInfoRequested: (name) => deskPartInfo.show(name)
@@ -1107,9 +1111,10 @@ Item {
                 onDockToggled: if (lab.settings) lab.settings.meterDocked = !lab.settings.meterDocked
                 x: docked ? lab.meterDockX : lab.meterX
                 y: docked ? 14 : lab.boardY - 6
-                width: docked ? Theme.meterDockWidth : Theme.meterAreaWidth
+                width: docked ? lab.meterDockWidthNow : Theme.meterAreaWidth
                 // im Pult bis in die Feldreihe (ohne Buchsen frei): Platz fuer die Leistung unter den Anzeigen
-                height: docked ? lab.deskBottom - 34 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
+                height: docked ? lab.deskBottom - 34
+                               : lab.meterRows * Theme.fieldHeight + (lab.meterRows - 1) * Theme.fieldGap + 12
             }
 
             // Module in der Modulleiste (unter den Feldern, die sie belegen)

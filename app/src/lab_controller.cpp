@@ -2273,11 +2273,11 @@ QVariantList LabController::measurePoints() const {
     return out;
 }
 
-// Gezeigte Messstelle einer Anzeige: die gewaehlte, falls gesteckt; sonst selbsttaetig die erste, die die andere
-// Anzeige nicht schon zeigt
+// Gezeigte Messstelle einer Anzeige: die gewaehlte, falls gesteckt; sonst selbsttaetig die erste, die keine andere
+// Anzeige schon zeigt (davor liegende wie gezeigt, dahinter liegende nur mit fester Wahl)
 QVariantMap LabController::displayState(int slot) const {
     QVariantMap m;
-    if (slot < 0 || slot > 1) return m;
+    if (slot < 0 || slot >= model::kDisplaySlots) return m;
     const auto& d = m_session->board().desk.display;
     const QVariantList points = measurePoints();
     const auto has = [&points](const QString& id) {
@@ -2288,12 +2288,14 @@ QVariantMap LabController::displayState(int slot) const {
     QString source = qs(d.meters[slot].source);
     if (!has(source)) {
         source.clear();
-        const QString other = d.twin ? (slot == 1 ? displayState(0).value(QStringLiteral("id")).toString()
-                                                  : (has(qs(d.meters[1].source)) ? qs(d.meters[1].source) : QString()))
-                                     : QString();
+        QStringList others;
+        for (int j = 0; j < d.count; ++j) {
+            if (j < slot) others << displayState(j).value(QStringLiteral("id")).toString();
+            else if (j > slot && has(qs(d.meters[j].source))) others << qs(d.meters[j].source);
+        }
         for (const QVariant& v : points) {
             const QString id = v.toMap().value(QStringLiteral("id")).toString();
-            if (id != other) {
+            if (!others.contains(id)) {
                 source = id;
                 break;
             }
@@ -2346,15 +2348,20 @@ QVariantMap LabController::displayState(int slot) const {
     return m;
 }
 
-// Leistung P = U * I aus einer V- und einer A-Anzeige (beide Gleichgroessen, kein Ueberlauf)
+// Leistung P = U * I aus der ersten V- und der ersten A-Anzeige (beide Gleichgroessen, kein Ueberlauf)
 QVariantMap LabController::displayPowerState() const {
     QVariantMap m;
     const auto& d = m_session->board().desk.display;
-    m.insert(QStringLiteral("shown"), d.twin && d.power);
-    if (!d.twin || !d.power) return m;
-    const QVariantMap a = displayState(0), b = displayState(1);
-    const int ka = a.value(QStringLiteral("kind"), -1).toInt(), kb = b.value(QStringLiteral("kind"), -1).toInt();
-    const bool pair = (ka == 0 && kb == 1) || (ka == 1 && kb == 0);
+    m.insert(QStringLiteral("shown"), d.count > 1 && d.power);
+    if (d.count < 2 || !d.power) return m;
+    QVariantMap a, b; // V- bzw. A-Anzeige
+    for (int i = 0; i < d.count; ++i) {
+        const QVariantMap s = displayState(i);
+        const int k = s.value(QStringLiteral("kind"), -1).toInt();
+        if (k == 0 && a.isEmpty()) a = s;
+        else if (k == 1 && b.isEmpty()) b = s;
+    }
+    const bool pair = !a.isEmpty() && !b.isEmpty();
     const bool dc = !a.value(QStringLiteral("ac")).toBool() && !b.value(QStringLiteral("ac")).toBool();
     const bool ok = pair && dc && a.contains(QStringLiteral("value")) && b.contains(QStringLiteral("value")) &&
                     !a.value(QStringLiteral("overrange")).toBool() && !b.value(QStringLiteral("overrange")).toBool();
@@ -2373,7 +2380,7 @@ QVariantMap LabController::displayPowerState() const {
 }
 
 void LabController::setDisplaySource(int slot, const QString& id) {
-    if (slot < 0 || slot > 1) return;
+    if (slot < 0 || slot >= model::kDisplaySlots) return;
     model::DisplaySettings s = m_session->board().desk.display;
     if (s.meters[slot].source != ss(id)) s.meters[slot].range = -1; // andere Messgroesse: wieder selbsttaetig
     s.meters[slot].source = ss(id);
@@ -2382,7 +2389,7 @@ void LabController::setDisplaySource(int slot, const QString& id) {
 }
 
 void LabController::setDisplayRange(int slot, int range) {
-    if (slot < 0 || slot > 1) return;
+    if (slot < 0 || slot >= model::kDisplaySlots) return;
     model::DisplaySettings s = m_session->board().desk.display;
     s.meters[slot].source = ss(displayState(slot).value(QStringLiteral("id")).toString()); // Wahl festhalten
     s.meters[slot].range = std::clamp(range, -1, 4);
@@ -2391,7 +2398,7 @@ void LabController::setDisplayRange(int slot, int range) {
 }
 
 void LabController::setDisplayAc(int slot, bool ac) {
-    if (slot < 0 || slot > 1) return;
+    if (slot < 0 || slot >= model::kDisplaySlots) return;
     model::DisplaySettings s = m_session->board().desk.display;
     s.meters[slot].source = ss(displayState(slot).value(QStringLiteral("id")).toString());
     s.meters[slot].ac = ac;
@@ -2565,10 +2572,10 @@ void LabController::setTracer(const QString& key, const QVariant& value) {
     emit deskChanged();
 }
 
-bool LabController::displayTwin() const { return m_session->board().desk.display.twin; }
-void LabController::setDisplayTwin(bool twin) {
+int LabController::displayCount() const { return m_session->board().desk.display.count; }
+void LabController::setDisplayCount(int count) {
     model::DisplaySettings s = m_session->board().desk.display;
-    s.twin = twin;
+    s.count = std::clamp(count, 1, model::kDisplaySlots);
     m_session->setDisplaySettings(s);
     emit deskChanged();
 }

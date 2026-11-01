@@ -18,6 +18,7 @@
 #include <QtTest>
 
 #include "lab_controller.hpp"
+#include "model/board_json.hpp"
 #include "services/audio_route.hpp"
 #include "services/content_repository.hpp"
 #include "services/managed_config.hpp"
@@ -912,7 +913,7 @@ private slots:
         QVERIFY(lab.addWire(QStringLiteral("A2"), QStringLiteral("B2"), QStringLiteral("schwarz")));
         QCOMPARE(lab.measurePoints().size(), 2);
         QCOMPARE(lab.measurePoints().at(0).toMap().value(QStringLiteral("label")).toString(), QStringLiteral("V1"));
-        lab.setDisplayTwin(true);
+        lab.setDisplayCount(2);
         lab.setDisplayPower(true);
         // selbsttaetige Wahl: Anzeige 1 V1, Anzeige 2 die naechste (A1)
         QCOMPARE(lab.displayState(0).value(QStringLiteral("label")).toString(), QStringLiteral("V1"));
@@ -942,6 +943,34 @@ private slots:
         QCOMPARE(lab.displayState(0).value(QStringLiteral("label")).toString(), QStringLiteral("A1"));
         QCOMPARE(lab.displayState(0).value(QStringLiteral("range")).toInt(), -1);
         lab.setMainSwitch(false);
+    }
+
+    // Dreifachmessgeraet: drei Anzeigen waehlen selbsttaetig verschiedene Messstellen, Leistung aus der ersten V- und
+    // A-Anzeige; die Zahl der Anzeigen bleibt beim Sichern erhalten (aeltere Sicherungen: »doppelt«)
+    void displayMeterThreeDisplays() {
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta2"));
+        lab.startFreeLab();
+        QVERIFY(lab.addPart(QStringLiteral("messstelle_a"), QStringLiteral("A1"), false, false)); // A1
+        QVERIFY(lab.addPart(QStringLiteral("messstelle_a"), QStringLiteral("B1"), false, false)); // A2
+        QVERIFY(lab.addPart(QStringLiteral("messstelle_a"), QStringLiteral("C1"), false, false)); // A3
+        QVERIFY(!lab.addPart(QStringLiteral("messstelle_a"), QStringLiteral("D1"), false, false)); // vierte nicht
+        QVERIFY(lab.addPart(QStringLiteral("messstelle_v"), QStringLiteral("D1"), false, false)); // V1
+        lab.setDisplayCount(5);
+        QCOMPARE(lab.displayCount(), 3);
+        QStringList shown;
+        for (int k = 0; k < 3; ++k) shown << lab.displayState(k).value(QStringLiteral("label")).toString();
+        QCOMPARE(shown, (QStringList{QStringLiteral("V1"), QStringLiteral("A1"), QStringLiteral("A2")}));
+        // feste Wahl der dritten Anzeige: die zweite weicht ihr aus
+        lab.setDisplaySource(2, lab.measurePoints().at(1).toMap().value(QStringLiteral("id")).toString()); // A1
+        QCOMPARE(lab.displayState(1).value(QStringLiteral("label")).toString(), QStringLiteral("A2"));
+        QCOMPARE(lab.displayState(2).value(QStringLiteral("label")).toString(), QStringLiteral("A1"));
+        lab.setDisplayPower(true);
+        QVERIFY(!lab.displayPowerState().value(QStringLiteral("needsPair")).toBool()); // V1 und A2
+        const QJsonObject saved = model::boardToJson(lab.session().board());
+        QCOMPARE(saved.value(QStringLiteral("pult")).toObject().value(QStringLiteral("anzeigegeraet")).toObject()
+                     .value(QStringLiteral("anzahl")).toInt(), 3);
+        lab.setDisplayCount(0);
+        QCOMPARE(lab.displayCount(), 1);
     }
 
     // Forscherprofile: getrennte Daten je Profil (Fortschritt, Laborstand), Loeschen entfernt den Ordner

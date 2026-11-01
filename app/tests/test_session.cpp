@@ -328,7 +328,7 @@ private slots:
         QVERIFY2(std::fabs(st.frequencyHz - 50.0) < 1.0, qPrintable(QString::number(st.frequencyHz)));
     }
 
-    // Messstellen (ab Volta 2): V parallel, A in Reihe, Ohm nur ohne Fremdspannung; hoechstens zwei je Art
+    // Messstellen (ab Volta 2): V parallel, A in Reihe, Ohm nur ohne Fremdspannung; hoechstens drei je Art
     void measurePointsRead() {
         auto s = session();
         std::string id;
@@ -361,10 +361,12 @@ private slots:
         r = s->reading("RM1");
         QVERIFY(r && !(r->displayFlags & (core::kDisplayForeignVoltage | core::kDisplayOverrange)));
         QVERIFY2(std::fabs(r->displayValue - 2000.0) < 40.0, qPrintable(QString::number(r->displayValue)));
-        // dritte Spannungsmessstelle: abgelehnt
+        // dritte Spannungsmessstelle noch erlaubt, vierte abgelehnt
         QVERIFY(s->addPart("messstelle_v", "D1", Orientation::Horizontal, Span::Short, &id));
         QCOMPARE(id, std::string("UM2"));
-        QVERIFY(!s->addPart("messstelle_v", "E1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addPart("messstelle_v", "E1", Orientation::Horizontal, Span::Short, &id));
+        QCOMPARE(id, std::string("UM3"));
+        QVERIFY(!s->addPart("messstelle_v", "D4", Orientation::Horizontal, Span::Short));
     }
 
     // Oszilloskop: Tastkopf K1 am Pol der Wechselquelle (anderer Pol an 0V); Abtastung erst mit eingeblendetem

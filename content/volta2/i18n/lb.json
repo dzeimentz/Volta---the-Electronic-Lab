@@ -104,7 +104,7 @@
   "exp2_1_1_s2": "Steck eng zweet Stroum-Moossstell op A3 a B3. Dohannert kënnt de Widderstand mat 1 kΩ op B3 a B5. Verbann B5 mat 0V.",
   "exp2_1_1_s3": "Steck eng drëtt Stroum-Moossstell op A3 an A5. Dohannert kënnt de Widderstand mat 2,2 kΩ op A5 an A7. Verbann A7 mat 0V a schalt den Haaptschalter un.",
   "exp2_1_1_h1": "All Stroum-Moossstell muss am Wee vum Stroum stiechen, net dernieft.",
-  "exp2_1_1_h2": "Looss der am duebele Moossgerät no an no all dräi Stréim weisen a rechen déi zwee hënnescht zesummen.",
+  "exp2_1_1_h2": "Den Dräifachmoossapparat weist all dräi Stréim. Rechen d'Stréim vun A2 an A3 zesummen.",
   "exp2_1_1_loesung": "Virun der Verzweigung fléissen ongeféier 13,1 mA. Duerch 1 kΩ fléissen ongeféier 9,0 mA, duerch 2,2 kΩ ongeféier 4,1 mA. Zesummen sinn dat erëm 13,1 mA.",
   "exp2_1_1_erklaerung": "Un enger Verzweigung geet kee Stroum verluer, an et kënnt och keen derbäi. Wat erafléisst, fléisst erëm eraus. Dat ass d'Kniet-Regel. Duerch de méi klenge Widderstand fléisst dee gréissten Deel.",
   "exp2_1_1_mehr": "D'Regel huet de Gustav Robert Kirchhoff 1845 opgeschriwwen. Ee seet och dat éischt Kirchhoffscht Gesetz dozou. Si gëllt op all Plaz vun all Schaltung, och an engem Computer-Chip.",

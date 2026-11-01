@@ -104,7 +104,7 @@
   "exp2_1_1_s2": "Stecke eine zweite Strom-Messstelle auf A3 und B3. Dahinter kommt der Widerstand mit 1 kΩ auf B3 und B5. Verbinde B5 mit 0V.",
   "exp2_1_1_s3": "Stecke eine dritte Strom-Messstelle auf A3 und A5. Dahinter kommt der Widerstand mit 2,2 kΩ auf A5 und A7. Verbinde A7 mit 0V und schalte den Hauptschalter ein.",
   "exp2_1_1_h1": "Jede Strom-Messstelle muss im Weg des Stroms stecken, nicht daneben.",
-  "exp2_1_1_h2": "Lass dir im Doppelmessgerät nacheinander alle drei Ströme zeigen und zähle die zwei hinteren zusammen.",
+  "exp2_1_1_h2": "Das Dreifachmessgerät zeigt alle drei Ströme. Zähle die Ströme von A2 und A3 zusammen.",
   "exp2_1_1_loesung": "Vor der Verzweigung fließen etwa 13,1 mA. Durch 1 kΩ fließen etwa 9,0 mA, durch 2,2 kΩ etwa 4,1 mA. Zusammen sind das wieder 13,1 mA.",
   "exp2_1_1_erklaerung": "An einer Verzweigung geht kein Strom verloren, und es kommt auch keiner dazu. Was hineinfließt, fließt wieder hinaus. Das ist die Knotenregel. Durch den kleineren Widerstand fließt der größere Teil.",
   "exp2_1_1_mehr": "Die Regel hat Gustav Robert Kirchhoff 1845 aufgeschrieben. Man nennt sie auch das erste kirchhoffsche Gesetz. Sie gilt an jeder Stelle jeder Schaltung, auch in einem Computer-Chip.",

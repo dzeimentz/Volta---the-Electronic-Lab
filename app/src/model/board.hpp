@@ -56,11 +56,12 @@ struct DisplaySlot {
     bool ac = false;
 };
 
-// Anzeigegeraet (ab Volta 2, Konzept 5.2): einfach oder doppelt, auf Wunsch Leistung aus V und A
+// Anzeigegeraet (ab Volta 2, Konzept 5.2): eine, zwei oder drei Anzeigen, auf Wunsch Leistung aus V und A
+inline constexpr int kDisplaySlots = 3;
 struct DisplaySettings {
-    bool twin = false;
+    int count = 1; // gezeigte Anzeigen 1 ... kDisplaySlots
     bool power = false;
-    std::array<DisplaySlot, 2> meters;
+    std::array<DisplaySlot, kDisplaySlots> meters;
 };
 
 // Zustand des Bedienpults (Bedienhandlungen, nicht Teil des Undo-Verlaufs).

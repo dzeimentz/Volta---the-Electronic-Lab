@@ -116,7 +116,7 @@ class LabController : public QObject {
     Q_PROPERTY(int meterMode READ meterMode WRITE setMeterMode NOTIFY deskChanged)
     Q_PROPERTY(bool meterAnalog READ meterAnalog WRITE setMeterAnalog NOTIFY deskChanged)
     // Anzeigegeraet ab Volta 2 (Konzept 5.2): doppelt (zwei Anzeigen), Leistung aus V und A
-    Q_PROPERTY(bool displayTwin READ displayTwin WRITE setDisplayTwin NOTIFY deskChanged)
+    Q_PROPERTY(int displayCount READ displayCount WRITE setDisplayCount NOTIFY deskChanged) // Anzeigen 1 ... 3
     Q_PROPERTY(bool displayPower READ displayPower WRITE setDisplayPower NOTIFY deskChanged)
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
     Q_PROPERTY(bool showSimTime READ showSimTime CONSTANT) // Entwicklerhilfe VOLTA_SHOW_TIME=1
@@ -506,8 +506,8 @@ public:
     Q_PROPERTY(bool scopeActive READ scopeActive WRITE setScopeActive NOTIFY deskChanged)
     bool scopeActive() const;
     void setScopeActive(bool active);
-    bool displayTwin() const;
-    void setDisplayTwin(bool twin);
+    int displayCount() const;
+    void setDisplayCount(int count);
     bool displayPower() const;
     void setDisplayPower(bool on);
     Q_INVOKABLE bool replaceMeterFuse(); // Befehl

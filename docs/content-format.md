@@ -123,7 +123,8 @@ Experiment erscheinen, ergibt sich aus diesen Leitungen (Pult nach Bedarf). `pul
 `batterie2_V` (4.5 | 9), `wechsel_V` (6 | 9, Effektivwert), `generator` (`form` sinus | dreieck | rechteck,
 `frequenz_Hz` 1 ... 10000, `spitze_V` 0 ... 4, `gleichanteil_V` -4 ... 4), `kennlinienschreiber` (`spannung_V`
 2 | 5 | 10 | 20, `beide_richtungen`, `strom_mA` 5 | 20 | 50 | 200), `oszilloskop` (`zeitbasis_s` je Teilung,
-`volt_je_teilung` je Kanal; jeweils die naechste Stufe; das Oszilloskop ist dann beim Start eingeblendet) und `anzeigegeraet` (`doppelt`, `leistung`). Messstellen
+`volt_je_teilung` je Kanal; jeweils die naechste Stufe; das Oszilloskop ist dann beim Start eingeblendet) und `anzeigegeraet` (`anzahl` 1 ... 3 Anzeigen, aelter `doppelt` = 2; `leistung`). Hoechstens drei Messstellen je
+Art (UM, IM, RM) und zwei Tastkoepfe (K1, K2). Messstellen
 in der Vorlage blenden das Anzeigegeraet ein; ihre Anzeige prueft `{"bauteil": "UM1", "groesse": "anzeige", ...}`
 (Betrag in V bzw. A).
 
