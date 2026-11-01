@@ -70,6 +70,10 @@ QJsonObject boardToJson(const Board& board) {
                                                              {QStringLiteral("frequenz_hz"), d.genFrequencyHz},
                                                              {QStringLiteral("amplitude_v"), d.genAmplitudeV},
                                                              {QStringLiteral("gleichanteil_v"), d.genOffsetV}});
+        desk.insert(QStringLiteral("kennlinienschreiber"),
+                    QJsonObject{{QStringLiteral("volt_index"), d.tracer.voltsIndex},
+                                {QStringLiteral("beide_richtungen"), d.tracer.bipolar},
+                                {QStringLiteral("strom_index"), d.tracer.limitIndex}});
         QJsonArray meters;
         for (const auto& s : d.display.meters)
             meters.append(QJsonObject{{QStringLiteral("messstelle"), qs(s.source)},
@@ -161,6 +165,12 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
         d.scope.channels[i].voltsIndex = std::clamp(o.value(QStringLiteral("volt_index")).toInt(7), 0, lastVolts);
         d.scope.channels[i].position = std::clamp(o.value(QStringLiteral("lage")).toInt(0), -4, 4);
     }
+    const QJsonObject ks = desk.value(QStringLiteral("kennlinienschreiber")).toObject();
+    d.tracer.voltsIndex = std::clamp(ks.value(QStringLiteral("volt_index")).toInt(2), 0,
+                                     static_cast<int>(tracerVolts().size()) - 1);
+    d.tracer.bipolar = ks.value(QStringLiteral("beide_richtungen")).toBool(true);
+    d.tracer.limitIndex = std::clamp(ks.value(QStringLiteral("strom_index")).toInt(1), 0,
+                                     static_cast<int>(tracerLimitsA().size()) - 1);
     const QJsonObject disp = desk.value(QStringLiteral("anzeigegeraet")).toObject();
     d.display.twin = disp.value(QStringLiteral("doppelt")).toBool(false);
     d.display.power = disp.value(QStringLiteral("leistung")).toBool(false);

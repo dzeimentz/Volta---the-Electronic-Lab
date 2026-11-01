@@ -187,6 +187,23 @@ private:
             c.add<core::FunctionGenerator>(desk_id::kGenerator, g, g0, gp);
             c.add<core::Wire>(desk_id::kGeneratorGround, g0, core::kGround);
         }
+        if (hasDeskPart(m_board, "kennlinienschreiber")) {
+            // Laborgeraet mit eigenem Netzteil, potentialfrei wie ein echter Kennlinienschreiber: das Bauteil darf
+            // irgendwo in der Schaltung haengen. Der Ableitwiderstand von KS- nach 0V haelt ihn rechenbar.
+            NodeId ksPlus = 0, ksMinus = 0;
+            node("P:KS+", ksPlus, "Pult");
+            node("P:KS-", ksMinus, "Pult");
+            core::TracerParams tp;
+            tp.minV = d.tracer.minV();
+            tp.maxV = d.tracer.maxV();
+            tp.seriesOhm = d.tracer.seriesOhm();
+            tp.periodS = kTracerPeriodS;
+            m_net.desk[desk_id::kTracer] = c.componentCount();
+            c.add<core::CurveTracer>(desk_id::kTracer, ksPlus, ksMinus, tp);
+            core::ResistorParams leak;
+            leak.ohm = kFloatingLeakOhm;
+            c.add<core::Resistor>(desk_id::kTracerLeak, ksMinus, core::kGround, leak);
+        }
     }
 
     // Anschlusspunkt eines Bauteilanschlusses nach Katalogname

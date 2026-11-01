@@ -135,4 +135,44 @@ ComponentReading FunctionGenerator::read(const SolutionView& x) const noexcept {
     return r;
 }
 
+// ---------------------------------------------------------------- Kennlinienschreiber
+
+CurveTracer::CurveTracer(std::string id, NodeId plus, NodeId minus, TracerParams params)
+    : ComponentModel(std::move(id), {plus, minus}), m_params(params) {
+    setRange(m_params.minV, m_params.maxV);
+    setSeriesOhm(m_params.seriesOhm);
+    if (!(m_params.periodS > 0.0) || !std::isfinite(m_params.periodS)) m_params.periodS = 2.0;
+}
+
+void CurveTracer::setRange(double minV, double maxV) noexcept {
+    const double lo = std::clamp(finiteOr(minV, 0.0), -TracerParams::kMaxV, TracerParams::kMaxV);
+    const double hi = std::clamp(finiteOr(maxV, 0.0), -TracerParams::kMaxV, TracerParams::kMaxV);
+    m_params.minV = std::min(lo, hi);
+    m_params.maxV = std::max(lo, hi);
+}
+
+void CurveTracer::setSeriesOhm(double ohm) noexcept {
+    m_params.seriesOhm = std::clamp(finiteOr(ohm, 500.0), TracerParams::kMinSeriesOhm, TracerParams::kMaxSeriesOhm);
+}
+
+double CurveTracer::emfAt(double phase) const noexcept {
+    const double p = wrapPhase(phase);
+    const double up = p < 0.5 ? 2.0 * p : 2.0 - 2.0 * p; // 0 -> 1 -> 0
+    return m_params.minV + (m_params.maxV - m_params.minV) * up;
+}
+
+void CurveTracer::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
+    const double p = ctx.isDc() ? m_phase : m_phase + ctx.dtS / m_params.periodS;
+    sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emfAt(p) * ctx.sourceScale, m_params.seriesOhm);
+}
+
+double CurveTracer::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
+    const double i = x.branchCurrent(firstBranch());
+    return t == 0 ? i : -i;
+}
+
+void CurveTracer::updateState(const SolutionView& /*x*/, double dtS) noexcept {
+    if (dtS > 0.0) m_phase = wrapPhase(m_phase + dtS / m_params.periodS);
+}
+
 } // namespace volta::core

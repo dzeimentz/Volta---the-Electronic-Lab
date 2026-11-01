@@ -486,6 +486,11 @@ public:
     // triggerChannel, triggerRising, triggerLevel, volts0/1, position0/1); scopeActive = eingeblendet
     Q_INVOKABLE QVariantMap scopeState() const;
     Q_INVOKABLE void setScope(const QString& key, const QVariant& value);
+    // Kennlinienschreiber (ab Volta 2): Einstellungen (voltsIndex, bipolar, limitIndex, Texte), Achsen in V und A,
+    // Kurve des letzten Durchlaufs als flache Liste (x, y je 0 ... 1 im Schirm) und der aktuelle Punkt.
+    // setTracer: Schluessel volts, bipolar, limit (Bedienhandlung)
+    Q_INVOKABLE QVariantMap tracerState() const;
+    Q_INVOKABLE void setTracer(const QString& key, const QVariant& value);
     Q_PROPERTY(bool scopeActive READ scopeActive WRITE setScopeActive NOTIFY deskChanged)
     bool scopeActive() const;
     void setScopeActive(bool active);

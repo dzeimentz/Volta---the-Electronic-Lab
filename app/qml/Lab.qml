@@ -28,6 +28,7 @@ Item {
         {name: "batterie2", fields: ["P:+B2", "P:-B2"], minWidth: 128}, // ab Volta 2 (Pult nach Bedarf)
         {name: "wechselquelle", fields: ["P:W~a", "P:W~b"], minWidth: 128}, // ab Volta 2
         {name: "generator", fields: ["P:G", "P:G0"], minWidth: 128},        // ab Volta 2
+        {name: "kennlinienschreiber", fields: ["P:KS+", "P:KS-"], minWidth: 128}, // ab Volta 2
         {name: "p1", fields: ["P:P1a", "P:P1s", "P:P1b"], minWidth: 120},
         {name: "p2", fields: ["P:P2a", "P:P2s", "P:P2b"], minWidth: 120},
         {name: "schalter", fields: ["P:S1", "P:S2"], minWidth: 96},
@@ -1034,6 +1035,7 @@ Item {
                 trayX: lab.deskTrayX
                 onTrayRequested: deskTray.open()
                 onGeneratorRequested: generatorPanel.open()
+                onTracerRequested: tracerPanel.open()
             }
 
             // Farbiger Hintergrund des Steckbretts: eine Kachel je Feld (Reihenfarbe, nach rechts dunkler)
@@ -1787,6 +1789,12 @@ Item {
     GeneratorPanel {
         id: generatorPanel
         objectName: "generatorPanel"
+        controller: lab.controller
+    }
+
+    TracerPanel {
+        id: tracerPanel
+        objectName: "tracerPanel"
         controller: lab.controller
     }
 

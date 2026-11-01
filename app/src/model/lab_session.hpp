@@ -115,6 +115,9 @@ public:
     void setGenFrequency(double hz);
     void setGenAmplitude(double peakV);
     void setGenOffset(double volt);
+    void setTracerSettings(const TracerSettings& s); // Kennlinienschreiber (Bedienhandlung)
+    // Letzter Durchlauf des Kennlinienschreibers (leer ohne ihn): v[0] = U zwischen KS+ und KS-, v[1] = I aus KS+
+    const std::vector<ScopeSample>& tracerSamples() const { return m_snap.tracer; }
     void setPartClosed(const std::string& id, bool closed); // Schalter, Taster, Reedkontakt, Wechselschalter
     void setDeskSwitch(bool closed);
     void setPot(int which, double position); // Pult-Drehregler 1/2
@@ -187,6 +190,7 @@ private:
     Board m_board;
     Netlist m_net;
     sim::SimulationBridge m_bridge;
+    int m_tracerEpoch = 0;
     bool m_scopeActive = false;
     sim::ScopeConfig m_scopeConfig; // zuletzt an die Bruecke gegeben (nur bei Aenderung neu)
     void updateScope();

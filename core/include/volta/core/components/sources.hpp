@@ -98,4 +98,42 @@ private:
     double m_phase = 0.0;
 };
 
+// Kennwerte des Kennlinienschreibers (ab Volta 2, Konzept 5.2): Pruefspannung -20 ... +20 V, Vorwiderstand zur
+// Strombegrenzung 10 Ohm ... 100 kOhm, ein Durchlauf (hin und zurueck) in periodS.
+struct TracerParams {
+    double minV = -10.0;
+    double maxV = 10.0;
+    double seriesOhm = 500.0;
+    double periodS = 2.0;
+
+    static constexpr double kMaxV = 20.0;
+    static constexpr double kMinSeriesOhm = 10.0;
+    static constexpr double kMaxSeriesOhm = 100e3;
+};
+
+// Kennlinienschreiber (Pultfelder KS+, KS-): Anschluss 0 = KS+, Anschluss 1 = KS-. Die Leerlaufspannung faehrt als
+// Dreieck von minV nach maxV und zurueck; der Vorwiderstand liegt im Zweig (Quelle mit Innenwiderstand) und begrenzt
+// den Strom wie bei einem echten Kennlinienschreiber. Was der Schreiber zeichnet, ist die Messung an den Klemmen:
+// read().voltV = Spannung zwischen KS+ und KS-, -read().currentA = Strom aus KS+ durch das Bauteil.
+class CurveTracer final : public ComponentModel {
+public:
+    CurveTracer(std::string id, NodeId plus, NodeId minus, TracerParams params = {});
+
+    const TracerParams& params() const noexcept { return m_params; }
+    // Bedienhandlungen; Werte werden auf die Grenzen des Geraets begrenzt (min <= max)
+    void setRange(double minV, double maxV) noexcept;
+    void setSeriesOhm(double ohm) noexcept;
+    double phase() const noexcept { return m_phase; }
+    double emfAt(double phase) const noexcept; // Leerlaufspannung; Phase 0 = minV, 0,5 = maxV
+
+    std::size_t branchCount() const noexcept override { return 1; }
+    void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
+    double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
+    void updateState(const SolutionView& x, double dtS) noexcept override;
+
+private:
+    TracerParams m_params;
+    double m_phase = 0.0;
+};
+
 } // namespace volta::core

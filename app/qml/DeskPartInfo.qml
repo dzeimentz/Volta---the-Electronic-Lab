@@ -71,6 +71,15 @@ Popup {
             tips: [qsTr("Weil G0 schon an 0V liegt, misst das Oszilloskop das Signal an G direkt."),
                    qsTr("Am Lautsprecher hörst du die Frequenz als Tonhöhe.")]
         }
+        case "kennlinienschreiber": return {
+            title: qsTr("Kennlinienschreiber"),
+            intro: qsTr("Der Kennlinienschreiber zeigt, wie viel Strom durch ein Bauteil fließt, wenn die Spannung daran steigt. Er fährt die Spannung selbst durch und zeichnet den Strom darüber. Tippe auf seinen Knopf, um die Kennlinie zu sehen."),
+            fields: [["KS+", qsTr("Prüfspannung: hier fließt der Strom aus dem Schreiber in das Bauteil.")],
+                     ["KS−", qsTr("Rückleitung des Schreibers. Er hat ein eigenes Netzteil und braucht den Hauptschalter nicht.")]],
+            tips: [qsTr("Ein Widerstand ergibt eine Gerade: doppelte Spannung, doppelter Strom."),
+                   qsTr("Bei einer Diode oder LED bleibt der Strom erst fast null und steigt dann steil an."),
+                   qsTr("Ein Vorwiderstand im Schreiber begrenzt den Strom. So gehen die Bauteile nicht kaputt, solange du die Strombegrenzung klein lässt.")]
+        }
         case "p1": return pot(1)
         case "p2": return pot(2)
         case "schalter": return {

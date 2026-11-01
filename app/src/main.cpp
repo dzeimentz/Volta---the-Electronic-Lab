@@ -315,6 +315,20 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // VOLTA_DEMO_GALLERY=7 (mit VOLTA_DEMO_FREELAB=1): Kennlinienschreiber an einer Z-Diode 4,7 V (Durchlass und
+    // Durchbruch), Fenster offen
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 7) {
+        QTimer::singleShot(400, &lab, [&lab, &engine] {
+            lab.addDeskPart(QStringLiteral("kennlinienschreiber"));
+            lab.addPart(QStringLiteral("zdiode_4v7"), QStringLiteral("A1"), false, false);
+            lab.addWire(QStringLiteral("P:KS+"), QStringLiteral("A1"), QStringLiteral("rot"));
+            lab.addWire(QStringLiteral("A2"), QStringLiteral("P:KS-"), QStringLiteral("schwarz"));
+            const auto roots = engine.rootObjects();
+            if (QObject* p = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("tracerPanel")))
+                QMetaObject::invokeMethod(p, "open");
+        });
+    }
+
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {

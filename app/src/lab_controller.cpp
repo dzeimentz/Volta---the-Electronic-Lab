@@ -2426,6 +2426,58 @@ QVariantMap LabController::scopeState() const {
     return m;
 }
 
+QVariantMap LabController::tracerState() const {
+    const model::TracerSettings& t = m_session->board().desk.tracer;
+    QVariantMap m;
+    m.insert(QStringLiteral("voltsIndex"), t.voltsIndex);
+    m.insert(QStringLiteral("voltsCount"), static_cast<int>(model::tracerVolts().size()));
+    m.insert(QStringLiteral("bipolar"), t.bipolar);
+    m.insert(QStringLiteral("limitIndex"), t.limitIndex);
+    m.insert(QStringLiteral("limitCount"), static_cast<int>(model::tracerLimitsA().size()));
+    m.insert(QStringLiteral("rangeText"), (t.bipolar ? QStringLiteral("±") : QStringLiteral("0 … ")) + siText(t.maxV(), "V"));
+    m.insert(QStringLiteral("limitText"), siText(t.limitA(), "A"));
+    m.insert(QStringLiteral("ohmText"), siText(t.seriesOhm(), "Ω"));
+    // Schirm: waagrecht die Spannung von minV bis maxV, senkrecht der Strom; nur positiv mit etwas Platz unter 0
+    const double xMin = t.minV(), xMax = t.maxV();
+    const double yMax = t.limitA(), yMin = t.bipolar ? -t.limitA() : -0.25 * t.limitA();
+    m.insert(QStringLiteral("xZero"), (0.0 - xMin) / (xMax - xMin));
+    m.insert(QStringLiteral("yZero"), (0.0 - yMin) / (yMax - yMin));
+    m.insert(QStringLiteral("xMinText"), siText(xMin, "V"));
+    m.insert(QStringLiteral("xMaxText"), siText(xMax, "V"));
+    m.insert(QStringLiteral("yMinText"), siText(yMin, "A"));
+    m.insert(QStringLiteral("yMaxText"), siText(yMax, "A"));
+    QVariantList pts;
+    bool has = false;
+    if (m_session->snapshotCurrent()) {
+        const auto& samples = m_session->tracerSamples();
+        has = !samples.empty();
+        pts.reserve(static_cast<int>(samples.size()));
+        for (std::size_t k = 0; k < samples.size(); k += 2) // 500 Punkte genuegen fuer den Schirm
+            pts << std::clamp((samples[k].v[0] - xMin) / (xMax - xMin), -0.02, 1.02)
+                << std::clamp((samples[k].v[1] - yMin) / (yMax - yMin), -0.02, 1.02);
+        if (has) {
+            const auto& last = samples.back();
+            m.insert(QStringLiteral("uText"), siText(last.v[0], "V"));
+            m.insert(QStringLiteral("iText"), siText(last.v[1], "A"));
+            m.insert(QStringLiteral("dotX"), std::clamp((last.v[0] - xMin) / (xMax - xMin), -0.02, 1.02));
+            m.insert(QStringLiteral("dotY"), std::clamp((last.v[1] - yMin) / (yMax - yMin), -0.02, 1.02));
+        }
+    }
+    m.insert(QStringLiteral("has"), has);
+    m.insert(QStringLiteral("points"), pts);
+    return m;
+}
+
+void LabController::setTracer(const QString& key, const QVariant& value) {
+    model::TracerSettings t = m_session->board().desk.tracer;
+    if (key == QLatin1String("volts")) t.voltsIndex = value.toInt();
+    else if (key == QLatin1String("bipolar")) t.bipolar = value.toBool();
+    else if (key == QLatin1String("limit")) t.limitIndex = value.toInt();
+    else return;
+    m_session->setTracerSettings(t);
+    emit deskChanged();
+}
+
 bool LabController::displayTwin() const { return m_session->board().desk.display.twin; }
 void LabController::setDisplayTwin(bool twin) {
     model::DisplaySettings s = m_session->board().desk.display;

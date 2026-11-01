@@ -35,7 +35,10 @@ struct Action {
         SetGenWaveform,  // Funktionsgenerator: value = 0 Sinus, 1 Dreieck, 2 Rechteck
         SetGenFrequency, // Funktionsgenerator: value = Frequenz in Hz
         SetGenAmplitude, // Funktionsgenerator: value = Spitze in V
-        SetGenOffset     // Funktionsgenerator: value = Gleichanteil in V
+        SetGenOffset,    // Funktionsgenerator: value = Gleichanteil in V
+        SetTracerMin,    // Kennlinienschreiber: value = kleinste Pruefspannung in V
+        SetTracerMax,    // Kennlinienschreiber: value = hoechste Pruefspannung in V
+        SetTracerOhm     // Kennlinienschreiber: value = Vorwiderstand in Ohm
     };
     std::string componentId;
     Type type = Type::SetSwitch;
@@ -63,6 +66,11 @@ struct ScopeConfig {
     double intervalS = 0.0;
     std::size_t capacity = 0;
     double stepS = core::kDefaultStepS;
+    // Kennlinienschreiber: Bauteilkennung (leer = aus); je Abtastung Spannung und Strom an seinen Klemmen
+    std::string tracerId;
+    double tracerIntervalS = 0.0;
+    std::size_t tracerCapacity = 0;
+    int tracerEpoch = 0; // neue Einstellungen: Puffer leeren
 };
 
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.
@@ -81,6 +89,8 @@ struct Snapshot {
     // Oszilloskop: Abtastwerte zeitlich geordnet (aelteste zuerst), je Kanal angeschlossen
     std::vector<model::ScopeSample> scope;
     std::array<bool, model::kScopeChannels> scopeHas{};
+    // Kennlinienschreiber: v[0] = Spannung KS+ gegen KS-, v[1] = Strom aus KS+ (aelteste zuerst)
+    std::vector<model::ScopeSample> tracer;
     core::Status lastStatus = core::Status::Ok;
     double realtimeRatio = 1.0;               // erreichte Simulationszeit je Wanduhrzeit (1 = Echtzeit)
 };
@@ -141,6 +151,10 @@ private:
     std::size_t m_scopeHead = 0, m_scopeCount = 0;
     std::array<long, model::kScopeChannels> m_scopeIndex{-1, -1};
     double m_scopeLastT = -1.0;
+    std::vector<model::ScopeSample> m_tracerRing; // Kennlinienschreiber
+    std::size_t m_tracerHead = 0, m_tracerCount = 0;
+    long m_tracerIndex = -1;
+    double m_tracerLastT = -1.0;
     double m_stepS = core::kDefaultStepS;
 
     std::mutex m_inMutex; // Eingaenge

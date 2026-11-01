@@ -82,6 +82,7 @@ struct DeskState {
     bool meterVisible = false;  // Messgeraet eingeblendet (Bedienhandlung; Buchsen nur dann steckbar)
     DisplaySettings display;    // Anzeigegeraet ab Volta 2 (eingeblendet ueber meterVisible)
     ScopeSettings scope;        // Oszilloskop ab Volta 2
+    TracerSettings tracer;      // Kennlinienschreiber ab Volta 2
     int roomLight = 2;          // Raumlicht: 0 dunkel, 1 Daemmerung, 2 hell
     std::vector<ToolPlacement> tools;
 };

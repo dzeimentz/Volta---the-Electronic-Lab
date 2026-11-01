@@ -23,6 +23,30 @@ struct ScopeSample {
     std::array<double, kScopeChannels> v{};
 };
 
+// Kennlinienschreiber (ab Volta 2, Konzept 5.2): hoechste Pruefspannung, nur positiv oder beide Richtungen, Strom-
+// begrenzung (daraus der Vorwiderstand). Ein Durchlauf hin und zurueck dauert kTracerPeriodS; die Bruecke tastet
+// ihn mit kTracerPoints Punkten ab (v[0] = Spannung zwischen KS+ und KS-, v[1] = Strom aus KS+ durch das Bauteil).
+inline constexpr double kTracerPeriodS = 2.0;
+inline constexpr std::size_t kTracerPoints = 1000;
+inline const std::array<double, 4>& tracerVolts() {
+    static const std::array<double, 4> v{2.0, 5.0, 10.0, 20.0};
+    return v;
+}
+inline const std::array<double, 4>& tracerLimitsA() {
+    static const std::array<double, 4> a{0.005, 0.02, 0.05, 0.2};
+    return a;
+}
+struct TracerSettings {
+    int voltsIndex = 2;   // 10 V
+    bool bipolar = true;  // -U ... +U (Sperrrichtung sichtbar), sonst 0 ... +U
+    int limitIndex = 1;   // 20 mA
+
+    double maxV() const { return tracerVolts()[static_cast<std::size_t>(voltsIndex)]; }
+    double minV() const { return bipolar ? -maxV() : 0.0; }
+    double limitA() const { return tracerLimitsA()[static_cast<std::size_t>(limitIndex)]; }
+    double seriesOhm() const { return maxV() / limitA(); } // Kurzschluss bei hoechster Spannung = Begrenzung
+};
+
 // Zeitbasis je Teilung (1-2-5); Normalbetrieb 100 µs ... 1 s, Rollbetrieb 100 ms ... 1 min
 const std::vector<double>& scopeTimebases();
 const std::vector<double>& scopeVoltsPerDiv(); // 10 mV ... 5 V je Teilung

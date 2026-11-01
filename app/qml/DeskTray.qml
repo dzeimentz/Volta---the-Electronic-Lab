@@ -14,6 +14,7 @@ Popup {
         case "batterie2": return qsTr("Batterie 2")
         case "wechselquelle": return qsTr("Wechselquelle")
         case "generator": return qsTr("Funktionsgenerator")
+        case "kennlinienschreiber": return qsTr("Kennlinienschreiber")
         case "p1": return qsTr("Potentiometer 1")
         case "p2": return qsTr("Potentiometer 2")
         case "schalter": return qsTr("Schalter")
@@ -28,11 +29,13 @@ Popup {
     }
     function groupOf(part) {
         return part.startsWith("batterie") || part === "wechselquelle" || part === "generator" ? "quellen"
+               : part === "kennlinienschreiber" ? "messen"
                : part === "lautsprecher" ? "hoeren" : "bedienen"
     }
     readonly property var groups: [
         {key: "quellen", name: qsTr("Quellen"), sign: "+", color: "#C62828"},
         {key: "bedienen", name: qsTr("Bedienen"), sign: "\u21BB", color: "#2873B0"},
+        {key: "messen", name: qsTr("Messen"), sign: "\u2197", color: "#2E7D4F"},
         {key: "hoeren", name: qsTr("Hören"), sign: "\u266A", color: "#6A3FA0"}
     ]
 

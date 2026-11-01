@@ -414,6 +414,50 @@ private slots:
         QCOMPARE(s->bridge().stepS(), 1e-3);
     }
 
+    // Kennlinienschreiber: Widerstand 1 kOhm ergibt eine Gerade I = U / R; nur positiv bleibt U >= 0;
+    // potentialfrei (der Hauptschalter bleibt aus, der Schreiber hat ein eigenes Netzteil)
+    void tracerDrawsResistorLine() {
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(!s->addWire("P:KS+", "A1", "rot")); // erst im Pult steckbar
+        QVERIFY(s->addDeskPart("kennlinienschreiber"));
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->setPartValue("R1", 1000.0));
+        QVERIFY(s->addWire("P:KS+", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "P:KS-", "schwarz"));
+        QVERIFY(s->netlist().ok());
+        run(*s, 2.1); // ein ganzer Durchlauf
+        const auto& pts = s->tracerSamples();
+        QCOMPARE(pts.size(), model::kTracerPoints);
+        double lo = 1e9, hi = -1e9;
+        for (const auto& p : pts) {
+            QVERIFY2(std::fabs(p.v[1] - p.v[0] / 1000.0) < 1e-6, qPrintable(QString::number(p.v[0])));
+            lo = std::min(lo, p.v[0]);
+            hi = std::max(hi, p.v[0]);
+        }
+        // Handrechnung: +-10 V ueber 500 Ohm Vorwiderstand an 1 kOhm -> +-6,67 V
+        const double expect = 10.0 * 1000.0 / 1500.0;
+        QVERIFY2(std::fabs(hi - expect) < 0.02 * expect, qPrintable(QString::number(hi)));
+        QVERIFY2(std::fabs(lo + expect) < 0.02 * expect, qPrintable(QString::number(lo)));
+        model::TracerSettings t;
+        t.bipolar = false;
+        t.voltsIndex = 1; // 5 V
+        s->setTracerSettings(t);
+        run(*s, 2.1);
+        QVERIFY(!s->tracerSamples().empty());
+        for (const auto& p : s->tracerSamples()) QVERIFY(p.v[0] > -1e-6 && p.v[0] < 5.0);
+        // gespeichert
+        model::Board again;
+        QVERIFY(model::boardFromJson(model::boardToJson(s->board()), again));
+        QCOMPARE(again.desk.tracer.voltsIndex, 1);
+        QCOMPARE(again.desk.tracer.bipolar, false);
+        QVERIFY(s->removeDeskPart("kennlinienschreiber"));
+        run(*s, 0.05);
+        QVERIFY(s->tracerSamples().empty());
+    }
+
     // Strommessstelle an Wechselspannung: Effektivwert aus der Signalstatistik des Bauteils
     void measurePointAcCurrent() {
         auto s = session();

@@ -29,6 +29,10 @@
       "ab_stufe": 2
     },
     {
+      "teil": "kennlinienschreiber",
+      "ab_stufe": 1
+    },
+    {
       "teil": "schalter",
       "bei_nutzung": true
     },

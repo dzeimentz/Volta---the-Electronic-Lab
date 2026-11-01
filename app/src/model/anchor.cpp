@@ -17,13 +17,14 @@ const std::vector<std::string>& deskFields() {
 }
 
 const std::vector<std::string>& extraDeskFields() {
-    static const std::vector<std::string> fields = {"P:+B2", "P:-B2", "P:W~a", "P:W~b", "P:G", "P:G0"};
+    static const std::vector<std::string> fields = {"P:+B2", "P:-B2", "P:W~a", "P:W~b", "P:G", "P:G0",
+                                                    "P:KS+", "P:KS-"};
     return fields;
 }
 
 const std::vector<std::string>& deskGroupNames() {
     static const std::vector<std::string> names = {"batterie", "batterie2", "wechselquelle", "generator",
-                                                   "p1",       "p2",        "schalter",      "lautsprecher"};
+                                                   "kennlinienschreiber", "p1", "p2", "schalter", "lautsprecher"};
     return names;
 }
 
@@ -32,6 +33,7 @@ std::vector<std::string> deskGroupFields(const std::string& group) {
     if (group == "batterie2") return {"P:+B2", "P:-B2"};
     if (group == "wechselquelle") return {"P:W~a", "P:W~b"};
     if (group == "generator") return {"P:G", "P:G0"};
+    if (group == "kennlinienschreiber") return {"P:KS+", "P:KS-"};
     if (group == "p1") return {"P:P1a", "P:P1s", "P:P1b"};
     if (group == "p2") return {"P:P2a", "P:P2s", "P:P2b"};
     if (group == "schalter") return {"P:S1", "P:S2"};

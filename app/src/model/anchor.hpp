@@ -32,11 +32,11 @@ std::vector<std::string> boardFields(const BoardLayout& layout = BoardLayout::vo
 // Pultfelder in Anzeigereihenfolge (P:+9V, P:0V, P:P1a, ...).
 const std::vector<std::string>& deskFields();
 // Pultfelder, die es erst ab Volta 2 gibt (Batterie 2: P:+B2, P:-B2; Wechselquelle: P:W~a, P:W~b; Generator: P:G,
-// P:G0); nur steckbar, wenn das Pultteil im Pult
+// P:G0; Kennlinienschreiber: P:KS+, P:KS-); nur steckbar, wenn das Pultteil im Pult
 // steht (Board::deskParts, Pult nach Bedarf).
 const std::vector<std::string>& extraDeskFields();
-// Pultteile (Gruppen der Pultleiste) in Anzeigereihenfolge: batterie, batterie2, wechselquelle, generator, p1, p2,
-// schalter, lautsprecher
+// Pultteile (Gruppen der Pultleiste) in Anzeigereihenfolge: batterie, batterie2, wechselquelle, generator,
+// kennlinienschreiber, p1, p2, schalter, lautsprecher
 const std::vector<std::string>& deskGroupNames();
 // Pultfelder eines Pultteils (leer bei unbekanntem Namen)
 std::vector<std::string> deskGroupFields(const std::string& group);

@@ -121,6 +121,8 @@ void SimulationBridge::applyPending() {
     if (scopeChanged) { // Speicher nur hier (zwischen zwei Schritten)
         m_scopeRing.assign(m_scope.capacity, model::ScopeSample{});
         m_back.scope.reserve(m_scope.capacity);
+        m_tracerRing.assign(m_scope.tracerCapacity, model::ScopeSample{});
+        m_back.tracer.reserve(m_scope.tracerCapacity);
         m_stepS = m_scope.stepS > 0.0 ? m_scope.stepS : core::kDefaultStepS;
     }
     if (circuit || scopeChanged) resolveScope();
@@ -183,6 +185,15 @@ void SimulationBridge::apply(const Action& a) {
     case Action::Type::SetGenOffset:
         if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setOffset(a.value);
         break;
+    case Action::Type::SetTracerMin:
+        if (auto* t = dynamic_cast<core::CurveTracer*>(&c)) t->setRange(a.value, t->params().maxV);
+        break;
+    case Action::Type::SetTracerMax:
+        if (auto* t = dynamic_cast<core::CurveTracer*>(&c)) t->setRange(t->params().minV, a.value);
+        break;
+    case Action::Type::SetTracerOhm:
+        if (auto* t = dynamic_cast<core::CurveTracer*>(&c)) t->setSeriesOhm(a.value);
+        break;
     }
 }
 
@@ -203,6 +214,10 @@ void SimulationBridge::publish(double realtimeRatio) {
     for (std::size_t k = 0; k < m_scopeCount; ++k)
         m_back.scope[k] = m_scopeRing[(m_scopeHead + m_scopeRing.size() - m_scopeCount + k) % m_scopeRing.size()];
     for (std::size_t c = 0; c < model::kScopeChannels; ++c) m_back.scopeHas[c] = m_scopeIndex[c] >= 0;
+    m_back.tracer.resize(m_tracerCount);
+    for (std::size_t k = 0; k < m_tracerCount; ++k)
+        m_back.tracer[k] =
+            m_tracerRing[(m_tracerHead + m_tracerRing.size() - m_tracerCount + k) % m_tracerRing.size()];
     core::SimEvent e;
     std::lock_guard<std::mutex> lock(m_outMutex);
     while (m_sim.events().pop(e))
@@ -219,6 +234,7 @@ void SimulationBridge::publish(double realtimeRatio) {
     std::swap(m_front.realtimeRatio, m_back.realtimeRatio);
     std::swap(m_front.scope, m_back.scope);
     std::swap(m_front.scopeHas, m_back.scopeHas);
+    std::swap(m_front.tracer, m_back.tracer);
     m_back.lastStatus = m_front.lastStatus;
     m_fresh = true;
 }
@@ -241,6 +257,7 @@ bool SimulationBridge::latest(Snapshot& out) {
     out.realtimeRatio = m_front.realtimeRatio;
     out.scope.assign(m_front.scope.begin(), m_front.scope.end());
     out.scopeHas = m_front.scopeHas;
+    out.tracer.assign(m_front.tracer.begin(), m_front.tracer.end());
     m_fresh = false;
     return true;
 }
@@ -271,6 +288,15 @@ void SimulationBridge::step() {
         m_scopeHead = (m_scopeHead + 1) % m_scopeRing.size();
         m_scopeCount = std::min(m_scopeCount + 1, m_scopeRing.size());
     }
+    if (dt > 0.0 && p.valid && m_tracerIndex >= 0 && !m_tracerRing.empty() &&
+        static_cast<std::size_t>(m_tracerIndex) < p.readings.size() &&
+        m_sim.timeS() - m_tracerLastT >= m_scope.tracerIntervalS * 0.999) {
+        m_tracerLastT = m_sim.timeS();
+        const core::ComponentReading& r = p.readings[static_cast<std::size_t>(m_tracerIndex)];
+        m_tracerRing[m_tracerHead] = {m_tracerLastT, {r.voltV, -r.currentA}};
+        m_tracerHead = (m_tracerHead + 1) % m_tracerRing.size();
+        m_tracerCount = std::min(m_tracerCount + 1, m_tracerRing.size());
+    }
     if (m_observer) m_observer->afterStep(m_sim);
 }
 
@@ -287,6 +313,10 @@ void SimulationBridge::resolveScope() {
     }
     m_scopeHead = m_scopeCount = 0;
     m_scopeLastT = -1.0;
+    const auto t = m_scope.tracerId.empty() ? m_index.end() : m_index.find(m_scope.tracerId);
+    m_tracerIndex = t == m_index.end() ? -1 : static_cast<long>(t->second);
+    m_tracerHead = m_tracerCount = 0;
+    m_tracerLastT = -1.0;
 }
 
 void SimulationBridge::runFor(double seconds) {

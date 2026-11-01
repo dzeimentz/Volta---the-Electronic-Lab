@@ -198,6 +198,12 @@ void LabSession::setScopeSettings(const ScopeSettings& s) {
 // Abtastung der Bruecke nach Tastkoepfen und Zeitbasis; ohne Oszilloskop aus (Schrittweite wieder 1 ms)
 void LabSession::updateScope() {
     sim::ScopeConfig c;
+    if (hasDeskPart(m_board, "kennlinienschreiber")) {
+        c.tracerId = desk_id::kTracer;
+        c.tracerIntervalS = kTracerPeriodS / static_cast<double>(kTracerPoints);
+        c.tracerCapacity = kTracerPoints;
+        c.tracerEpoch = m_tracerEpoch;
+    }
     if (m_scopeActive) {
         const ScopeSettings& s = m_board.desk.scope;
         c.probeIds = scopeProbes();
@@ -206,7 +212,9 @@ void LabSession::updateScope() {
         c.stepS = s.simStepS();
     }
     if (c.probeIds == m_scopeConfig.probeIds && c.intervalS == m_scopeConfig.intervalS &&
-        c.capacity == m_scopeConfig.capacity && c.stepS == m_scopeConfig.stepS)
+        c.capacity == m_scopeConfig.capacity && c.stepS == m_scopeConfig.stepS &&
+        c.tracerId == m_scopeConfig.tracerId && c.tracerCapacity == m_scopeConfig.tracerCapacity &&
+        c.tracerEpoch == m_scopeConfig.tracerEpoch)
         return;
     m_scopeConfig = c;
     m_bridge.setScope(c);
@@ -246,6 +254,7 @@ double LabSession::voltageScale() const {
     if (hasDeskPart(m_board, "wechselquelle")) ref = std::max(ref, std::sqrt(2.0) * m_board.desk.acRmsV);
     if (hasDeskPart(m_board, "generator"))
         ref = std::max(ref, std::fabs(m_board.desk.genOffsetV) + m_board.desk.genAmplitudeV);
+    if (hasDeskPart(m_board, "kennlinienschreiber")) ref = std::max(ref, m_board.desk.tracer.maxV());
     return ref;
 }
 
@@ -652,6 +661,20 @@ void LabSession::setGenOffset(double volt) {
     m_board.desk.genOffsetV = std::isfinite(volt) ? std::clamp(volt, -4.0, 4.0) : 0.0;
     m_bars.clear();
     m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenOffset, m_board.desk.genOffsetV});
+}
+
+void LabSession::setTracerSettings(const TracerSettings& s) {
+    TracerSettings t = s;
+    t.voltsIndex = std::clamp(t.voltsIndex, 0, static_cast<int>(tracerVolts().size()) - 1);
+    t.limitIndex = std::clamp(t.limitIndex, 0, static_cast<int>(tracerLimitsA().size()) - 1);
+    m_board.desk.tracer = t;
+    m_bars.clear();
+    // erst die Obergrenze, dann die Untergrenze: min <= max bleibt in jedem Zwischenschritt erhalten
+    m_bridge.post({desk_id::kTracer, sim::Action::Type::SetTracerMax, t.maxV()});
+    m_bridge.post({desk_id::kTracer, sim::Action::Type::SetTracerMin, t.minV()});
+    m_bridge.post({desk_id::kTracer, sim::Action::Type::SetTracerOhm, t.seriesOhm()});
+    ++m_tracerEpoch;
+    updateScope();
 }
 
 void LabSession::setCells2(int cells) {

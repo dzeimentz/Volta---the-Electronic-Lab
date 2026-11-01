@@ -259,6 +259,14 @@ das iPad).
   Tastkopf auf der Grundplatte: Griff in der Kanalfarbe mit »K1«/»K2« und Massezeichen ueber dem Feld, Spitze ins
   Feld; darueber klein Spitze und Frequenz (bzw. die Spannung). Einstellungen gespeichert (`pult.oszilloskop`).
   Volta 1 behaelt den Zeitschreiber; das Feldmenue »Zeitschreiber Kanal« gibt es ab Volta 2 nicht (Tastkoepfe).
+- Kennlinienschreiber (ab Volta 2, Pultteil »kennlinienschreiber« mit den Feldern KS+ und KS−, im Geraetefach unter
+  »Messen«, frei ab Stufe 1): im Pult Knopf »Zeichnen« mit Bereich (»±10 V«) und darunter die Strombegrenzung; er
+  oeffnet `TracerPanel.qml` (nicht modal, unten rechts, die Grundplatte bleibt bedienbar). Schirm 10 x 8 Teilungen:
+  waagrecht U, senkrecht I, Achsen durch 0 kraeftiger und mit »U«/»I« beschriftet, Endwerte als Zahl; die Kurve des
+  letzten Durchlaufs gruen, ein weisser Punkt zeigt, wo der Schreiber gerade steht; darunter »U = … I = …«.
+  Bedienung: Pruefspannung 2/5/10/20 V −/+, »beide Richtungen« (sonst nur positiv), Strom hoechstens 5/20/50/200 mA
+  −/+, »Merken« (Kurve grau gestrichelt zum Vergleich behalten), »Standbild«. Einstellungen gespeichert
+  (`pult.kennlinienschreiber`).
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
 - Wassermodell als zuschaltbare Erklaerebene.

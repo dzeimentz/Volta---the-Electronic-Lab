@@ -103,6 +103,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `zdiode_4v7`, `zdiode_5v6` (ab Volta 2) | Diode mit Durchbruch: −Ibv·(e^(−(Ud+Ubv)/(nbv·Vt)) − e^(−Ubv/(nbv·Vt))), Begrenzung gespiegelt wie SPICE3; nach BZX55: Uz bei 5 mA, rz 60 bzw. 20 Ω, Durchlass wie Si (0,75 V, Rs 1 Ω) | Izmax 85 bzw. 70 mA, Si-Thermik | `Destroyed` |
 | `transistor_pnp` (ab Volta 2) | wie `transistor_npn` mit umgekehrten Vorzeichen (BC557B, Kennwerte gespiegelt) | wie NPN | `Destroyed` |
 | Wechselquelle (`AcSource`, Pultfelder W~a, W~b, ab Volta 2) | Sinus 6 / 9 V~ eff., **fest 50 Hz** (entschieden 01.11.2026), Ri 2 Ω; Phase als eigener Zustand; potentialfrei (Ableitwiderstand legt die Netzliste an) | gleitender Effektivwert (τ 0,2 s) > 0,33 A ueberlastet, keine Zerstoerung | – |
+| Kennlinienschreiber (`CurveTracer`, Pultfelder KS+, KS−, ab Volta 2) | Dreieck von minV nach maxV und zurueck in 2 s, ±20 V hoechstens; Vorwiderstand 10 Ω … 100 kΩ im Zweig (Strombegrenzung = U_max / R); potentialfrei mit Ableitwiderstand von KS− nach 0V; gezeichnet wird die Klemmenmessung (U zwischen KS+ und KS−, I aus KS+) | – | – |
 | Funktionsgenerator (`FunctionGenerator`, Pultfelder G, G0, ab Volta 2) | Sinus, Dreieck, Rechteck; 1 Hz … 10 kHz, 0 … 4 V Spitze, Gleichanteil ±4 V; Ausgang 50 Ω; Phase als Zustand (Frequenzwechsel ohne Sprung), Rechteckwechsel auf der Schrittgrenze | – | – |
 | `motor` | Ra 8 Ω + Gegenspannung k·ω (k = 0,013 V·s), Traegheit J, viskose Reibung und Haftreibung; implizit als Spannungszweig; Leerlauf 3 V ca. 2080 U/min | blockiert (Bedienhandlung) erwaermt: Wicklung 30 K/W, τ 20 s, 130 °C | `Destroyed` |
 | `summer`, `piezo` | gepolte Last (Diode + 330 Ω, ca. 25 mA bei 9 V); Ton als Verhaltensanteil: Lautstaerke aus der Spannung (1,5–9 V), 2,4 kHz | wie Diode | Audio |
@@ -261,6 +262,11 @@ statt ungenau. Das Bild entsteht im Modell: Trigger (Kanal, Flanke, Pegel, jueng
 Bild danach, eine Teilung Vorlauf; ohne Durchgang frei laufend), Rollbetrieb (das Neueste am rechten Rand, Zeitbasis
 100 ms ... 1 min je Teilung), XY-Betrieb, Kennwerte je Kanal (Spitze-Spitze, Mittel, Frequenz aus steigenden
 Durchgaengen durch die Mitte mit 10 % Hysterese).
+
+**Kennlinienschreiber** (ab Volta 2): Steht er im Pult, tastet die Bruecke nach jedem Schritt alle 2 ms Spannung und
+Strom an seinen Klemmen ab (1000 Punkte = ein Durchlauf hin und zurueck) und gibt sie mit dem Schnappschuss heraus.
+Neue Einstellungen leeren den Puffer. Weil der Durchlauf in der laufenden Simulation stattfindet, zeigen Bauteile mit
+Gedaechtnis ihr echtes Verhalten (Gluehlampe: Waermetraegheit, Kondensator: Schleife statt Linie).
 
 ## Erweiterungen (Vorleistungen in Phase 0)
 

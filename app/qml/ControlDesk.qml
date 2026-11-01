@@ -21,6 +21,7 @@ Rectangle {
     signal groupTapped(string name)
     signal infoRequested(string name)
     signal generatorRequested() // Generatorfenster oeffnen
+    signal tracerRequested()    // Kennlinienschreiber oeffnen
     signal trayRequested()          // Pult nach Bedarf: Geraetefach oeffnen
     property real trayX: 0          // Lage des Knopfs »+« (Arbeitsflaeche)
     // Zustand der Drehregler (durchgebrannt, ueberlastet) aus der laufenden Simulation
@@ -108,8 +109,8 @@ Rectangle {
     // Pluspol ueber V+, kurzer dicker Minuspol ueber 0V), Potentiometer (Schleifer als Pfeil zum mittleren Feld),
     // Schalter (zeigt die Stellung), Lautsprecher
     Repeater {
-        model: desk.groups.filter(g => ["batterie", "batterie2", "wechselquelle", "generator", "p1", "p2", "schalter",
-                                        "lautsprecher"].indexOf(g.name) >= 0)
+        model: desk.groups.filter(g => ["batterie", "batterie2", "wechselquelle", "generator", "kennlinienschreiber",
+                                        "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
         Shape {
             id: deskSymbol
             required property var modelData
@@ -137,6 +138,12 @@ Rectangle {
                         : ""
                     return {s: `M${a} ${t} V${y} H${m - r} M${m + r} ${y} H${b} V${t} M${m - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0` + wave,
                             f: "", mark: modelData.name === "wechselquelle" ? "~" : undefined, mx: m}
+                }
+                case "kennlinienschreiber": { // Kreis mit Kennlinie (Knick wie bei der Diode)
+                    const a = cx(0), b = cx(1), m = (a + b) / 2, r = 9
+                    return {s: `M${a} ${t} V${y} H${m - r} M${m + r} ${y} H${b} V${t} M${m - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0`
+                               + ` M${m - 6} ${y + 4} H${m + 1} C${m + 3} ${y + 4} ${m + 4} ${y} ${m + 5} ${y - 6}`,
+                            f: "", plus: a + 12}
                 }
                 case "p1": case "p2": { // a, s, b: Widerstand zwischen a und b, Schleifer von s
                     const a = cx(0), s = cx(1), b = cx(2)
@@ -301,6 +308,32 @@ Rectangle {
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("%1 V Spitze").arg(Number(desk.controller.genAmplitude).toLocaleString(Qt.locale(), "f", 1))
+            color: "white"
+            font.pixelSize: Math.round((12) * Theme.fontScale)
+        }
+    }
+
+    // Kennlinienschreiber (ab Volta 2): Knopf mit Bereich und Strombegrenzung oeffnet das Fenster mit der Kennlinie
+    Column {
+        visible: desk.group("kennlinienschreiber") !== null
+        x: desk.centerOf("kennlinienschreiber") - width / 2
+        y: 12
+        spacing: 4
+        // Texte haengen an den Pulteinstellungen (deskChanged, hier ueber acRms)
+        readonly property var st: { desk.controller.acRms; return visible ? desk.controller.tracerState() : ({}) }
+        Label { text: qsTr("Kennlinie"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        Button {
+            objectName: "tracerButton"
+            width: 112
+            height: Theme.control
+            text: qsTr("Zeichnen") + "\n" + (parent.st.rangeText || "")
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+            onClicked: desk.tracerRequested()
+            Accessible.name: qsTr("Kennlinienschreiber öffnen")
+        }
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("bis %1").arg(parent.st.limitText || "")
             color: "white"
             font.pixelSize: Math.round((12) * Theme.fontScale)
         }

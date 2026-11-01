@@ -107,6 +107,41 @@ TEST_CASE("Funktionsgenerator 1 kHz an 10 kOhm: Spitzen und Mittelwert", "[refer
     CHECK(gen.emfAt(gen.phase()) == Approx(before));
 }
 
+TEST_CASE("Kennlinienschreiber: Dreieck, Grenzen", "[quelle]") {
+    CurveTracer t("KS", 1, 0, {-10.0, 10.0, 500.0, 2.0});
+    CHECK(t.emfAt(0.0) == Approx(-10.0));
+    CHECK(t.emfAt(0.25) == Approx(0.0).margin(1e-12));
+    CHECK(t.emfAt(0.5) == Approx(10.0));
+    CHECK(t.emfAt(0.75) == Approx(0.0).margin(1e-12));
+    t.setRange(30.0, -1.0); // vertauscht und zu gross
+    CHECK(t.params().minV == -1.0);
+    CHECK(t.params().maxV == 20.0);
+    t.setSeriesOhm(0.0);
+    CHECK(t.params().seriesOhm == 10.0);
+}
+
+TEST_CASE("Kennlinienschreiber an 1 kOhm: Gerade durch 0 mit Steigung 1/R", "[referenz][transient][quelle]") {
+    Circuit c;
+    const NodeId plus = c.addNode();
+    c.add<CurveTracer>("KS", plus, kGround, TracerParams{-10.0, 10.0, 500.0, 2.0});
+    c.add<Resistor>("R1", plus, kGround, ResistorParams{1000.0});
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    double lo = 1e9, hi = -1e9;
+    for (int i = 0; i < 2000; ++i) { // 1 ms: ein ganzer Durchlauf
+        REQUIRE(sim.step(1e-3) == Status::Ok);
+        const auto& r = sim.probe().readings[0];
+        const double u = r.voltV, current = -r.currentA;
+        CHECK(current == Approx(u / 1000.0).margin(1e-9)); // Klemmenmessung: I = U / R
+        lo = std::min(lo, u);
+        hi = std::max(hi, u);
+    }
+    // Handrechnung: Teiler 1000 / 1500 Ohm -> +-6,667 V am Widerstand
+    CHECK(hi == Approx(10.0 * 1000.0 / 1500.0).epsilon(2e-3));
+    CHECK(lo == Approx(-10.0 * 1000.0 / 1500.0).epsilon(2e-3));
+    requireKirchhoff(sim);
+}
+
 TEST_CASE("Funktionsgenerator: Rechteck schaltet auf die Schrittgrenze", "[transient][quelle]") {
     Circuit c;
     const NodeId out = c.addNode();

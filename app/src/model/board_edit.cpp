@@ -156,7 +156,8 @@ bool withinBoard(const Board& board, const std::string& anchor) {
 bool hasDeskPart(const Board& board, const std::string& group) {
     if (group == "batterie") return true;
     if (!board.deskParts) // Volta 1: festes Pult ohne die Pultteile ab Volta 2
-        return group != "batterie2" && group != "wechselquelle" && group != "generator";
+        return group != "batterie2" && group != "wechselquelle" && group != "generator" &&
+               group != "kennlinienschreiber";
     return std::find(board.deskParts->begin(), board.deskParts->end(), group) != board.deskParts->end();
 }
 
