@@ -14,8 +14,11 @@ QtObject {
         {key: "widerstaende", color: "#2E8B47", tint: "#CBE7C7", symbol: "widerstand"},
         {key: "halbleiter", color: "#7B52BF", tint: "#DDD0F0", symbol: "transistor_npn"},
         {key: "speicher", color: "#1F8F8F", tint: "#C2E6E4", symbol: "kondensator"},
-        {key: "bewegung", color: "#D9692B", tint: "#F7CFB6", symbol: "motor"}
+        {key: "bewegung", color: "#D9692B", tint: "#F7CFB6", symbol: "motor"},
+        {key: "messen", color: "#4A5A6E", tint: "#D5DCE6", symbol: "messstelle_v"} // ab Volta 2: Messstellen
     ]
+    // Nummer einer Messstelle (V1/V2 ...): 1 blau, 2 orange - zusaetzlich zur Ziffer
+    readonly property var measureTagColors: ["#2F5FA8", "#C8541A"]
     function partTheme(key) {
         for (let i = 0; i < partThemes.length; ++i) if (partThemes[i].key === key) return partThemes[i]
         return {key: "", color: "#8E9AA8", tint: "#E9D7B0", symbol: ""}

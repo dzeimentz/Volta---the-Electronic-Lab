@@ -46,7 +46,9 @@ std::string prefixFor(const std::string& type) {
         {"zdiode_4v7", "D"},    {"zdiode_5v6", "D"},     {"transistor_pnp", "T"}, // ab Volta 2
         {"spule_100mh", "SP"},  {"spule_1h", "SP"},      {"trimmer_10k", "TR"},   {"trimmer_100k", "TR"},
         {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
-        {"spannungsregler_5v", "IC"}};
+        {"spannungsregler_5v", "IC"},
+        // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
+        {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"}};
     const auto it = prefixes.find(type);
     if (it != prefixes.end()) return it->second;
     if (type.rfind("led_", 0) == 0) return "D";
@@ -334,6 +336,16 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
             error = msg(QT_TRANSLATE_NOOP("Meldung", "Die Kennung %1 ist schon vergeben."), {part.id});
             return false;
         }
+    // Messstellen: hoechstens zwei je Art (Konzept Volta 2, 5.4), damit die Anzeigen lesbar bleiben
+    if (e->theme == "messen") {
+        int same = 0;
+        for (const auto& p : board.parts)
+            if (p.type == part.type && p.id != part.id && p.id != ignoreId) ++same;
+        if (same >= kMaxMeasurePointsPerType) {
+            error = msg(QT_TRANSLATE_NOOP("Meldung", "Von dieser Messstelle sind schon zwei gesteckt."));
+            return false;
+        }
+    }
     return true;
 }
 

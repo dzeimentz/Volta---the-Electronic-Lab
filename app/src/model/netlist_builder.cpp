@@ -310,6 +310,17 @@ private:
             core::PotentiometerParams pp;
             pp.ohm = p.value > 0.0 ? p.value : e->param("r_ohm", pp.ohm); // Trimmer: Katalogwert
             c.add<core::Potentiometer>(p.id, n[0], n[1], n[2], pp, p.position);
+        } else if ((m == "measure_volt" || m == "measure_ampere" || m == "measure_ohm") && n.size() == 2) {
+            // Messstelle (ab Volta 2): das Messgeraet des Kerns mit fester Messart zwischen plus (n[0]) und minus
+            // (n[1]); der jeweils unbenutzte Eingang liegt auf minus und ist damit wirkungslos. Ohne Sicherung:
+            // ein Strommesser parallel zur Batterie ist ein Kurzschluss (Fehlersuche), kein durchgebranntes Teil.
+            core::MeterParams mp;
+            mp.digitalInputOhm = e->param("r_ein_ohm", mp.digitalInputOhm);
+            mp.shuntOhm = e->param("r_shunt_ohm", mp.shuntOhm);
+            mp.fuseA = 1e9;
+            const bool amp = m == "measure_ampere";
+            auto& meter = c.add<core::Meter>(p.id, n[1], amp ? n[1] : n[0], amp ? n[0] : n[1], mp);
+            meter.setMode(amp ? core::MeterMode::Ampere : m == "measure_ohm" ? core::MeterMode::Ohm : core::MeterMode::Volt);
         } else {
             m_net.errors.push_back("Bauteil " + p.id + ": Modell '" + m + "' noch nicht im Simulationskern");
             return;

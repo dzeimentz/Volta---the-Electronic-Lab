@@ -57,6 +57,11 @@ Item {
     }
     readonly property bool destroyed: partState.destroyed === true
     readonly property bool overloaded: partState.overloaded === true
+    readonly property bool measure: partType.startsWith("messstelle_")
+    // Anzeige einer Messstelle: Messwert mit Einheit, »OL« (offen bzw. zu gross), Hinweis bei Fremdspannung (Ohm)
+    readonly property string meterReading: !measure || partState.meterText === undefined ? ""
+        : partState.meterForeignVoltage ? qsTr("Spannung abschalten!")
+        : partState.meterText + (partState.meterUnit !== "" ? " " + partState.meterUnit : "")
 
     // Darstellung (wandert beim Ziehen mit; der Griffbereich darunter bleibt stehen)
     Item {
@@ -104,6 +109,7 @@ Item {
         destroyed: root.destroyed
         overloaded: root.overloaded
         selected: root.selected
+        tag: root.measure ? parseInt(root.partId.replace(/^[A-Z]+/, "")) || 0 : 0
     }
 
     // Eingesteckte Beinenden
@@ -124,15 +130,17 @@ Item {
         anchors.horizontalCenter: body.horizontalCenter
         y: body.y + body.height + 4
         // Beschriftung unter dem Bauteil (bei senkrechter Lage daneben): Name und Kennung, z. B. »Widerstand R1«
-        readonly property string fullName: Texts.partName(root.partType) + " " + root.partId
+        readonly property string fullName: Texts.partName(root.partType) + " " + Texts.partLabel(root.partId)
         text: root.destroyed ? qsTr("%1 kaputt").arg(fullName)
-                             : fullName + (root.partType === "widerstand" ? "\n" + Texts.ohm(root.value)
+                             : root.measure ? Texts.partLabel(root.partId) + (root.meterReading !== "" ? "  " + root.meterReading : "")
+                             : fullName +(root.partType === "widerstand" ? "\n" + Texts.ohm(root.value)
                                             : root.partType === "heissleiter" && root.partState.tempC !== undefined
                                               ? "\n" + qsTr("%1 °C").arg(Math.round(root.partState.tempC))
                                             : root.partType === "gluehlampe" && root.value > 0
                                               ? "\n" + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
                                               : "")
-        font.pixelSize: Math.round((12) * Theme.fontScale)
+        font.pixelSize: Math.round((root.measure ? 14 : 12) * Theme.fontScale)
+        font.bold: root.measure
         horizontalAlignment: Text.AlignHCenter
         color: Theme.navy
     }
@@ -182,7 +190,8 @@ Item {
 
     // Bildschirmleser: Bauteil, Kennung, Wert und Zustand (Farbe nie allein)
     Accessible.role: Accessible.Button
-    Accessible.name: Texts.partName(root.partType) + " " + root.partId
+    Accessible.name: Texts.partName(root.partType) + " " + Texts.partLabel(root.partId)
+                     + (root.meterReading !== "" ? ", " + root.meterReading : "")
                      + (Texts.partValue(root.partType, root.value) !== "" ? ", " + Texts.partValue(root.partType, root.value) : "")
                      + (root.destroyed ? ", " + qsTr("kaputt") : root.overloaded ? ", " + qsTr("überlastet") : "")
                      + (root.selected ? ", " + qsTr("ausgewählt") : "")

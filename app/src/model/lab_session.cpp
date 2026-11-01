@@ -195,6 +195,13 @@ const core::ComponentReading* LabSession::reading(const std::string& partId) con
     return &m_snap.readings[it->second];
 }
 
+const core::SignalSummary* LabSession::readingStats(const std::string& partId, bool current) const {
+    const auto it = m_net.parts.find(partId);
+    if (!snapshotCurrent() || it == m_net.parts.end()) return nullptr;
+    const std::size_t k = 2 * it->second + (current ? 1 : 0);
+    return k < m_snap.readingStats.size() ? &m_snap.readingStats[k] : nullptr;
+}
+
 double LabSession::voltageScale() const {
     double ref = 1.5 * m_board.desk.cells;
     if (hasDeskPart(m_board, "batterie2")) ref = std::max(ref, 1.5 * m_board.desk.cells2);

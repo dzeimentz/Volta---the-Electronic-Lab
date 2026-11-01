@@ -1398,6 +1398,32 @@ QVariantMap LabController::partState(const QString& id) const {
     m.insert(QStringLiteral("overloaded"), r->overloaded);
     m.insert(QStringLiteral("destroyed"), r->destroyed);
     m.insert(QStringLiteral("tempC"), r->tempK - 273.15);
+    // Messstelle: Anzeige am Bauteil; Wechselgroesse als Effektivwert mit »~« (Statistik des Messfensters)
+    const model::PartPlacement* p = m_session->board().findPart(ss(id));
+    const model::CatalogEntry* e = p ? m_session->catalog().part(p->type) : nullptr;
+    if (e && e->theme == "messen") {
+        const auto mode = e->model == "measure_ampere" ? core::MeterMode::Ampere
+                        : e->model == "measure_ohm" ? core::MeterMode::Ohm : core::MeterMode::Volt;
+        double value = r->displayValue;
+        bool ac = false;
+        if (mode != core::MeterMode::Ohm)
+            if (const core::SignalSummary* s = m_session->readingStats(ss(id), mode == core::MeterMode::Ampere);
+                s && s->isAc()) {
+                ac = true;
+                value = s->acRms;
+            }
+        const model::MeterText t = model::formatMeter(mode, value);
+        QString text = QString::fromStdString(t.value);
+        text.replace(QLatin1Char('.'), QLocale().decimalPoint());
+        const bool open = (r->displayFlags & core::kDisplayOverrange) != 0;
+        const bool foreign = (r->displayFlags & core::kDisplayForeignVoltage) != 0;
+        m.insert(QStringLiteral("meterText"), open ? QStringLiteral("OL") : foreign ? QStringLiteral("!") : text);
+        m.insert(QStringLiteral("meterUnit"), open || foreign ? QString() : QString::fromStdString(t.unit) + (ac ? QStringLiteral("~") : QString()));
+        m.insert(QStringLiteral("meterAc"), ac);
+        m.insert(QStringLiteral("meterOverrange"), open);
+        m.insert(QStringLiteral("meterForeignVoltage"), foreign);
+        m.insert(QStringLiteral("meterValue"), value);
+    }
     return m;
 }
 

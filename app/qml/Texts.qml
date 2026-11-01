@@ -14,6 +14,7 @@ QtObject {
         case "halbleiter": return qsTr("Dioden und Transistoren")
         case "speicher": return band !== "" && band !== "volta1" ? qsTr("Kondensatoren und Spulen") : qsTr("Kondensatoren")
         case "bewegung": return qsTr("Bewegung und Ton")
+        case "messen": return qsTr("Messen")
         case "": return qsTr("Alle Bauteile")
         }
         return key
@@ -53,8 +54,18 @@ QtObject {
         case "relais": return qsTr("Relais")
         case "feuchtesonde": return qsTr("Feuchtesonde")
         case "piezo": return qsTr("Piezo-Schallgeber")
+        case "messstelle_v": return qsTr("Spannungsmessstelle")
+        case "messstelle_a": return qsTr("Strommessstelle")
+        case "messstelle_ohm": return qsTr("Widerstandsmessstelle")
         }
         return type
+    }
+
+    // Sichtbare Kennung eines Bauteils: Messstellen heissen V1, A1, Ω1 (intern UM1, IM1, RM1)
+    function partLabel(id) {
+        const m = /^(UM|IM|RM)([0-9]+)$/.exec(id)
+        if (!m) return id
+        return (m[1] === "UM" ? "V" : m[1] === "IM" ? "A" : "Ω") + m[2]
     }
 
     // Aufbauschritt in Stichpunkte zerlegen (ein Handgriff je Zeile): getrennt wird an Satzende, Strichpunkt,

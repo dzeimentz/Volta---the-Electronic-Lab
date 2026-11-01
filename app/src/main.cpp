@@ -261,6 +261,29 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // VOLTA_DEMO_GALLERY=5 (mit VOLTA_DEMO_FREELAB=1): Messstellen - V ueber R2 und am Pluspol, A in Reihe (Gleich- und
+    // Wechselstrom), Ohm an einem freien Widerstand
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 5) {
+        QTimer::singleShot(400, &lab, [&lab] {
+            lab.addDeskPart(QStringLiteral("wechselquelle"));
+            struct P { const char* type; const char* field; double value; };
+            const P parts[] = {{"widerstand", "A1", 2000.0}, {"messstelle_a", "B1", 0.0}, {"widerstand", "C1", 1000.0},
+                               {"messstelle_v", "D1", 0.0},  {"messstelle_v", "E1", 0.0}, {"widerstand", "E5", 1000.0},
+                               {"messstelle_ohm", "C5", 0.0}, {"messstelle_a", "A8", 0.0}, {"widerstand", "C8", 1000.0}};
+            for (const auto& p : parts) lab.addPart(QString::fromLatin1(p.type), QString::fromLatin1(p.field), false, false);
+            lab.setPartValue(QStringLiteral("R1"), 2000.0);
+            lab.setPartValue(QStringLiteral("R2"), 1000.0);
+            lab.setPartValue(QStringLiteral("R3"), 1000.0);
+            lab.setPartValue(QStringLiteral("R4"), 1000.0);
+            const char* wires[][2] = {{"P:+9V", "A1"}, {"A2", "B1"}, {"B2", "C1"}, {"C2", "P:0V"}, {"C1", "D1"},
+                                      {"C2", "D2"},    {"P:+9V", "E1"}, {"E2", "P:0V"}, {"C5", "E5"}, {"C6", "E6"},
+                                      {"P:W~a", "A8"}, {"A9", "C8"}, {"C9", "P:W~b"}};
+            for (const auto& w : wires)
+                lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
+            lab.setMainSwitch(true);
+        });
+    }
+
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {

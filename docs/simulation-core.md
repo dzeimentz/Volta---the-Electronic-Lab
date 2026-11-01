@@ -244,6 +244,13 @@ vorigen Fensters mit 5 % Hysterese, zwischen zwei Schritten interpoliert). Eine 
 ihr Wechselanteil den Gleichanteil ueberwiegt. Grundlage fuer die erweiterte Spannungsanzeige, die Wechselgroessen der
 Messgeraete und die Werte an den Tastkoepfen. Allokationsfrei im Schritt (Speicher nur beim Topologiewechsel).
 
+**Messstellen** (ab Volta 2, Katalog `messstelle_v`, `messstelle_a`, `messstelle_ohm`, Thema »messen«): zweibeinige
+Bauteile (plus, minus) mit fester Messart, im Kern das Messgeraet `Meter` (unbenutzter Eingang auf minus, damit
+wirkungslos): V mit 10 MOhm Eingangswiderstand, A mit Shunt 0,1 Ohm ohne Sicherung (ein Strommesser parallel zur
+Batterie ist ein Kurzschluss, den die Fehlersuche meldet), Ohm mit Messquelle 3 V ueber 3 kOhm (unter Fremdspannung
+»Spannung abschalten!«, offen »OL«). Wechselgroessen zeigen den Effektivwert aus der Signalstatistik des Bauteils
+mit »~«. Hoechstens zwei je Art (Kennungen UM, IM, RM; angezeigt V1/V2, A1/A2, Ω1/Ω2).
+
 ## Erweiterungen (Vorleistungen in Phase 0)
 
 1. Variable Schrittweite im Integrator (Schnittstelle schon in Volta 1).

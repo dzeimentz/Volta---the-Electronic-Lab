@@ -52,6 +52,8 @@ public:
     bool snapshotCurrent() const { return m_snap.valid && m_snap.topology == m_topology; }
     double voltage(const std::string& anchor) const;
     const core::ComponentReading* reading(const std::string& partId) const;
+    // Signalstatistik eines Bauteils ueber das letzte Messfenster: Spannung (current = false) bzw. Strom
+    const core::SignalSummary* readingStats(const std::string& partId, bool current) const;
     // Spannungsanzeige 0-4 Balken mit Hysterese (docs/domain-model.md). Ab Volta 2 (Konzept 5.4) auch negativ
     // (Balken nach unten, blau, Minuszeichen) und Wechselspannung (Effektivwert, »~«): Ein Feld gilt als
     // Wechselspannung, wenn im letzten Messfenster der Wechselanteil den Gleichanteil ueberwiegt. Ein Balken steht

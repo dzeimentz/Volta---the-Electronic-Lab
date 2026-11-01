@@ -240,6 +240,9 @@ das iPad).
   Messfenster von 100 ms). Ein Balken = ein Viertel der groessten Quellenspannung im Pult (Batterie 1 und 2, Spitze der
   Wechselquelle, Spitze des Generators mit Gleichanteil). Volta 1 kennt weder negative noch Wechselspannung und sieht
   unveraendert aus. Vorlesetext »Wechselspannung n von 4« bzw. »Spannungsanzeige minus n von 4«.
+- Messstellen (ab Volta 2, Bauteilfach Thema »Messen«): graues Gehaeuse mit V, A oder Ω im Kreis, Nummer 1 blau bzw.
+  2 orange (Ziffer zusaetzlich zur Farbe), Pluszeichen am Plusbein. Unter dem Bauteil fett Kennung und Messwert,
+  z. B. »V1  3,00 V«, »A2  8,98 mA~«, »Ω1  1,00 kΩ«, »OL«. Hoechstens zwei je Art.
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
 - Wassermodell als zuschaltbare Erklaerebene.

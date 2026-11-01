@@ -24,6 +24,7 @@ Item {
     property bool overloaded: false
     property bool selected: false
     property var feet: [] // Fusspunkte relativ zum Koerper (quadratische Platine)
+    property int tag: 0 // Messstelle: Nummer 1 oder 2
 
     implicitWidth: 72
     implicitHeight: 34
@@ -102,6 +103,7 @@ Item {
             case "relais": return relay
             case "piezo": return piezo
             case "feuchtesonde": return probe
+            case "messstelle_v": case "messstelle_a": case "messstelle_ohm": return measurePoint
             }
             return root.isLed ? led : generic
         }
@@ -792,6 +794,37 @@ Item {
                     color: "transparent"; border.color: "#E8A33B"; border.width: 2
                     opacity: 0.7 - 0.25 * index
                 }
+            }
+        }
+    }
+
+    // Messstelle (ab Volta 2): graues Gehaeuse mit Messgroesse im Kreis (V, A, Ω) und Nummer (Ziffer und Farbe);
+    // Pluszeichen am ersten Anschluss. Den Messwert schreibt PartItem unter das Bauteil.
+    Component {
+        id: measurePoint
+        Rectangle {
+            radius: 6
+            color: "#4A5A6E"; border.color: "#25303D"; border.width: 1
+            PlusMark { x: 1; y: parent.height - height }
+            Rectangle {
+                id: dial
+                anchors.centerIn: parent
+                width: parent.height - 6; height: width; radius: width / 2
+                color: "white"; border.color: "#25303D"; border.width: 2
+                Text {
+                    anchors.centerIn: parent
+                    text: root.type === "messstelle_a" ? "A" : root.type === "messstelle_ohm" ? "Ω" : "V"
+                    color: "#1E2B38"
+                    font.pixelSize: Math.round(15 * Theme.fontScale); font.bold: true
+                }
+            }
+            Rectangle {
+                visible: root.tag > 0
+                x: dial.x + dial.width - 6; y: 1
+                width: 14; height: 14; radius: 7
+                color: Theme.measureTagColors[(root.tag - 1) % Theme.measureTagColors.length]
+                border.color: "white"; border.width: 1
+                Text { anchors.centerIn: parent; text: root.tag; color: "white"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true }
             }
         }
     }

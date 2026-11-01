@@ -99,8 +99,12 @@ Item {
             return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z " + arrowLine(32, 32, 32, 23), f: arrowHead(32, 32, 32, 23)}
         case "trimmer_10k": case "trimmer_100k": // Widerstand mit Einstellstrich (Schraegstrich mit Querstrich)
             return {s: "M0 16 H18 M46 16 H64 M18 10 H46 V22 H18 Z M20 28 L44 4 M40 0 L48 8", f: ""}
-        case "messgeraet":
+        case "messgeraet": case "messstelle_v": // Kreis mit Messgroesse (DIN EN 60617)
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "V", tx: 32, ty: 16}
+        case "messstelle_a":
+            return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "A", tx: 32, ty: 16}
+        case "messstelle_ohm":
+            return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "Ω", tx: 32, ty: 16}
         case "opmodul": // Dreieck mit IN+ oben, IN- unten (DIN EN 60617 vereinfacht)
             return {s: "M0 8 H16 M0 24 H16 M48 16 H64 M16 2 L48 16 L16 30 Z M19 8 H25 M22 5 V11 M19 24 H25", f: ""}
         case "timer555": // Kasten mit Aufschrift

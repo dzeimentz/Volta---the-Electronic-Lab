@@ -66,7 +66,13 @@
     {"typ": "optokoppler", "thema": "halbleiter", "anschluesse": ["anode", "kathode", "c", "e"], "spannweite": ["platine_2x2"], "lage": ["anode", "c", "kathode", "e"], "modell": "optocoupler",
      "parameter": {"ctr": 1.0}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_optokoppler"},
     {"typ": "spannungsregler_5v", "thema": "halbleiter", "anschluesse": ["ein", "masse", "aus"], "spannweite": ["traeger"], "lage": ["ein", "masse", "aus"], "modell": "regulator",
-     "parameter": {"u_aus_V": 5.0}, "ab_band": "volta2", "ab_stufe": 3, "lexikon_key": "lex_spannungsregler"}
+     "parameter": {"u_aus_V": 5.0}, "ab_band": "volta2", "ab_stufe": 3, "lexikon_key": "lex_spannungsregler"},
+    {"typ": "messstelle_v", "thema": "messen", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "measure_volt",
+     "parameter": {"r_ein_ohm": 10000000}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_v"},
+    {"typ": "messstelle_a", "thema": "messen", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "measure_ampere",
+     "parameter": {"r_shunt_ohm": 0.1}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_a"},
+    {"typ": "messstelle_ohm", "thema": "messen", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "measure_ohm",
+     "parameter": {}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_ohm"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",

@@ -327,6 +327,65 @@ private slots:
         QVERIFY2(std::fabs(st.frequencyHz - 50.0) < 1.0, qPrintable(QString::number(st.frequencyHz)));
     }
 
+    // Messstellen (ab Volta 2): V parallel, A in Reihe, Ohm nur ohne Fremdspannung; hoechstens zwei je Art
+    void measurePointsRead() {
+        auto s = session();
+        std::string id;
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short, nullptr, 2000.0)); // R1 A1-A2
+        QVERIFY(s->addPart("messstelle_a", "B1", Orientation::Horizontal, Span::Short, &id));          // plus B1
+        QCOMPARE(id, std::string("IM1"));
+        QVERIFY(s->addPart("widerstand", "C1", Orientation::Horizontal, Span::Short, nullptr, 1000.0)); // R2 C1-C2
+        QVERIFY(s->addPart("messstelle_v", "C1", Orientation::Horizontal, Span::Short, &id));          // ueber R2
+        QCOMPARE(id, std::string("UM1"));
+        QVERIFY(s->addPart("messstelle_ohm", "A1", Orientation::Horizontal, Span::Short, &id));        // ueber R1
+        QCOMPARE(id, std::string("RM1"));
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "B1", "gelb"));
+        QVERIFY(s->addWire("B2", "C1", "gelb"));
+        QVERIFY(s->addWire("C2", "P:0V", "schwarz"));
+        QVERIFY(s->netlist().ok());
+        s->setMainSwitch(true);
+        run(*s, 0.2);
+        const core::ComponentReading* u = s->reading("UM1");
+        const core::ComponentReading* i = s->reading("IM1");
+        const core::ComponentReading* r = s->reading("RM1");
+        QVERIFY(u && i && r);
+        const double ur2 = s->voltage("C1") - s->voltage("C2");
+        QVERIFY2(std::fabs(u->displayValue - ur2) < 1e-3, qPrintable(QString::number(u->displayValue)));
+        QVERIFY2(std::fabs(i->displayValue - ur2 / 1000.0) < 0.02 * ur2 / 1000.0, qPrintable(QString::number(i->displayValue)));
+        QVERIFY(ur2 > 2.5 && ur2 < 4.5); // Teiler 1 : 3 an rund 9 V (die Ohm-Messquelle an R1 verschiebt ihn)
+        QVERIFY(r->displayFlags & core::kDisplayForeignVoltage); // an R1 liegen rund 6 V
+        s->setMainSwitch(false);
+        run(*s, 0.2);
+        r = s->reading("RM1");
+        QVERIFY(r && !(r->displayFlags & (core::kDisplayForeignVoltage | core::kDisplayOverrange)));
+        QVERIFY2(std::fabs(r->displayValue - 2000.0) < 40.0, qPrintable(QString::number(r->displayValue)));
+        // dritte Spannungsmessstelle: abgelehnt
+        QVERIFY(s->addPart("messstelle_v", "D1", Orientation::Horizontal, Span::Short, &id));
+        QCOMPARE(id, std::string("UM2"));
+        QVERIFY(!s->addPart("messstelle_v", "E1", Orientation::Horizontal, Span::Short));
+    }
+
+    // Strommessstelle an Wechselspannung: Effektivwert aus der Signalstatistik des Bauteils
+    void measurePointAcCurrent() {
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(s->addDeskPart("wechselquelle"));
+        QVERIFY(s->addPart("messstelle_a", "A1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->addPart("widerstand", "B1", Orientation::Horizontal, Span::Short, nullptr, 1000.0));
+        QVERIFY(s->addWire("P:W~a", "A1", "gelb"));
+        QVERIFY(s->addWire("A2", "B1", "gelb"));
+        QVERIFY(s->addWire("B2", "P:W~b", "schwarz"));
+        s->setMainSwitch(true);
+        for (int k = 0; k < 250; ++k) run(*s, 0.001);
+        const core::SignalSummary* st = s->readingStats("IM1", true);
+        QVERIFY(st && st->isAc());
+        const double expect = s->board().desk.acRmsV / 1000.0; // Shunt 0,1 Ohm vernachlaessigbar
+        QVERIFY2(std::fabs(st->acRms - expect) < 0.02 * expect, qPrintable(QString::number(st->acRms)));
+    }
+
     // Pult nach Bedarf (ab Volta 2): Pultteile als Befehl, Batterie 2 potentialfrei, symmetrische Versorgung
     void deskOnDemandAndSecondBattery() {
         auto s = session();
