@@ -1,0 +1,160 @@
+{
+  "id": "volta2.4.1",
+  "band": "volta2",
+  "stufe": 4,
+  "titel_key": "exp2_4_1_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "transistor_npn",
+    "widerstand",
+    "led_rot",
+    "messstelle_a",
+    "leitung"
+  ],
+  "frage_key": "exp2_4_1_frage",
+  "vermutungen": [
+    "exp2_4_1_v1",
+    "exp2_4_1_v2",
+    "exp2_4_1_v3"
+  ],
+  "beobachtungen": [
+    "exp2_4_1_b1",
+    "exp2_4_1_b2",
+    "exp2_4_1_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "doppelt": true
+      }
+    },
+    "bauteile": [
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B3",
+          "c": "B4",
+          "e": "C3",
+          "e2": "C4"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "B2"
+        ],
+        "wert": 100000
+      },
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "B2",
+          "B3"
+        ]
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A6",
+          "A5"
+        ],
+        "wert": 220
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A5",
+          "kathode": "A4"
+        }
+      },
+      {
+        "id": "IM2",
+        "typ": "messstelle_a",
+        "felder": [
+          "A4",
+          "B4"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A2",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A6",
+        "farbe": "rot"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_4_1_s1",
+    "exp2_4_1_s2",
+    "exp2_4_1_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "R1",
+        "groesse": "strom_mA",
+        "auswertung": "mittel",
+        "fenster_s": 0.2,
+        "zwischen": [
+          0.07,
+          0.1
+        ]
+      },
+      {
+        "bauteil": "R2",
+        "groesse": "strom_mA",
+        "auswertung": "mittel",
+        "fenster_s": 0.2,
+        "min": 12
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_4_1_h1",
+    "exp2_4_1_h2",
+    "exp2_4_1_loesung"
+  ],
+  "erklaerung_key": "exp2_4_1_erklaerung",
+  "mehr_wissen_key": "exp2_4_1_mehr",
+  "weiterforschen": [
+    "exp2_4_1_w1",
+    "exp2_4_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_4_1_echt"
+}
