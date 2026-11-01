@@ -137,6 +137,7 @@ bool ContentRepository::loadCatalog(model::Catalog& out, const QString& band) {
         model::ModuleEntry e;
         e.type = str(o.value(QStringLiteral("typ")));
         e.kind = str(o.value(QStringLiteral("art")));
+        e.lexiconKey = str(o.value(QStringLiteral("lexikon_key")));
         e.fromStage = base ? 0 : o.value(QStringLiteral("ab_stufe")).toInt();
         for (const QJsonValue& p : o.value(QStringLiteral("anschluesse")).toArray()) e.pins.push_back(str(p));
         out.modules[e.type] = e;

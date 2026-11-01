@@ -47,4 +47,28 @@ double chargeAt(double tauS, double t);                 // Anteil 0..1: 1 - e^(-
 // Blinkfrequenz einer symmetrischen astabilen Kippstufe: je Halbperiode ln(2) * R * C -> f = 1 / (2 ln2 R C)
 double astableHz(double ohm, double farad);
 
+// ---- Rechenblaetter ab Volta 2 (Konzept Volta 2, Kap. 7)
+double cutoffHz(double ohm, double farad); // Grenzfrequenz eines RC-Glieds: f = 1 / (2 pi R C)
+
+// Timer 555 astabil: Laden ueber R1 + R2, Entladen ueber R2 zwischen 1/3 und 2/3 der Versorgung
+// tH = ln2 (R1 + R2) C, tL = ln2 R2 C, f = 1 / (tH + tL) ~ 1,44 / ((R1 + 2 R2) C)
+struct Timer555 {
+    double hz = 0.0;
+    double highS = 0.0;
+    double lowS = 0.0;
+    double duty = 0.0; // Anteil, in dem der Ausgang oben ist (0..1)
+    bool ok = false;
+};
+Timer555 timer555Astable(double r1Ohm, double r2Ohm, double farad);
+double timer555MonoS(double ohm, double farad); // monostabil: t = ln3 R C ~ 1,1 R C
+
+// Verstaerkung (Spannungsverhaeltnis Ua / Ue); 0 bei unsinnigen Werten
+double gainTransistor(double rcOhm, double reOhm);  // Emitterschaltung mit RE: v ~ -RC / RE (Naeherung)
+double gainInverting(double rfOhm, double rinOhm);  // OP invertierend: v = -Rf / Rin
+double gainNonInverting(double rfOhm, double rgOhm); // OP nichtinvertierend: v = 1 + Rf / Rg
+
+double rmsFromPeak(double peakV); // Sinus: Ueff = Us / Wurzel 2
+// Brummspannung am Ladeelko (Naeherung): dU = I / (n f C), n = 1 Einweg-, 2 Brueckengleichrichter
+double rippleV(double ampere, double farad, double hz, bool bridge);
+
 } // namespace volta::model::formula

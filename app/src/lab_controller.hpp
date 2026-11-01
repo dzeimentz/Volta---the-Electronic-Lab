@@ -260,7 +260,8 @@ public:
     // hoechste freigeschaltete Stufe (alles freigegeben: 99) - z. B. fuer die Rechenblaetter ab Stufe 3/4
     Q_PROPERTY(int unlockedStage READ unlockedStage NOTIFY progressChanged)
     int unlockedStage() const { return highestUnlockedStage(); }
-    // Lexikon: [{type, text}] aller Bauteile mit Lexikontext, in der Reihenfolge des Bauteilfachs
+    // Lexikon: [{type, text}] aller Bauteile mit Lexikontext, in der Reihenfolge des Bauteilfachs; ab Volta 2 dahinter
+    // die Module
     Q_PROPERTY(QVariantList lexicon READ lexicon NOTIFY experimentChanged)
     // Schaltplan des Aufbaus nach DIN EN 61082-1 (model/schematic_layout), in Bildpunkten der Zeichnung:
     // {width, height, nodes: [{label, anchors, drawn, x, x2, y, path}], dots: [{x, y, node}],

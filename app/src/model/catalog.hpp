@@ -42,6 +42,7 @@ struct ModuleEntry {
     std::string type;              // "blinkmodul"
     std::vector<std::string> pins; // Anschlussnamen in Leistenreihenfolge
     std::string kind;              // "teilschaltung", spaeter "makromodell", "verhaltensmodell"
+    std::string lexiconKey;        // "lexikon_key": Text im Bauteillexikon (ab Volta 2 dort aufgefuehrt)
     int fromStage = 0;
 };
 

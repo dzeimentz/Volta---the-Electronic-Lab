@@ -841,6 +841,26 @@ private slots:
         QVERIFY(std::fabs(f::chargeAt(1.0, 1.0) - 0.632) < 0.001);
         // Blinkmodul-Kippstufe: RB 22 kOhm, C 22 uF -> ca. 1,49 Hz (ideal, ohne Basis-Emitter-Spannung)
         QVERIFY(std::fabs(f::astableHz(22000.0, 22e-6) - 1.0 / (2.0 * std::log(2.0) * 0.484)) < 1e-6);
+        // ab Volta 2: Grenzfrequenz (Wien-Bruecke 7.5: 10 kOhm, 10 nF -> 1,59 kHz)
+        QVERIFY(std::fabs(f::cutoffHz(10000.0, 10e-9) - 1591.55) < 0.01);
+        QCOMPARE(f::cutoffHz(0.0, 10e-9), 0.0);
+        // 555 astabil (6.1: 1 kOhm, 4,7 kOhm, 100 uF -> 1,39 Hz, oben 53 %), monostabil (6.4: 47 kOhm -> 5,16 s)
+        const auto t = f::timer555Astable(1000.0, 4700.0, 100e-6);
+        QVERIFY(t.ok && std::fabs(t.hz - 1.0 / (std::log(2.0) * 10400.0 * 100e-6)) < 1e-9);
+        QVERIFY(std::fabs(t.duty - 5700.0 / 10400.0) < 1e-9);
+        QVERIFY(std::fabs(t.hz - 1.44 / (10400.0 * 100e-6)) / t.hz < 0.01); // Faustformel 1,44 auf 1 % genau
+        QVERIFY(!f::timer555Astable(1000.0, 0.0, 100e-6).ok);
+        QVERIFY(std::fabs(f::timer555MonoS(47000.0, 100e-6) - std::log(3.0) * 4.7) < 1e-9);
+        // Verstaerkung: Transistor 2,2 kOhm / 470 Ohm, OP invertierend 47k/10k, nichtinvertierend 1 + 47k/10k
+        QVERIFY(approx(f::gainTransistor(2200.0, 470.0), -2200.0 / 470.0));
+        QVERIFY(approx(f::gainInverting(47000.0, 10000.0), -4.7));
+        QVERIFY(approx(f::gainNonInverting(47000.0, 10000.0), 5.7));
+        QCOMPARE(f::gainInverting(47000.0, 0.0), 0.0);
+        // Effektivwert und Brummspannung (20 mA, 100 uF, 50 Hz: Einweg 4 V, Bruecke 2 V)
+        QVERIFY(std::fabs(f::rmsFromPeak(4.2426) - 3.0) < 0.001);
+        QVERIFY(approx(f::rippleV(0.02, 100e-6, 50.0, false), 4.0));
+        QVERIFY(approx(f::rippleV(0.02, 100e-6, 50.0, true), 2.0));
+        QCOMPARE(f::rippleV(0.0, 100e-6, 50.0, true), 0.0);
     }
 
     void errorsAreReported() {

@@ -237,4 +237,33 @@ double astableHz(double ohmR, double farad) {
     return tau > 0.0 ? 1.0 / (2.0 * std::log(2.0) * tau) : 0.0;
 }
 
+double cutoffHz(double ohmR, double farad) {
+    const double tau = timeConstant(ohmR, farad);
+    return tau > 0.0 ? 1.0 / (2.0 * std::acos(-1.0) * tau) : 0.0;
+}
+
+Timer555 timer555Astable(double r1Ohm, double r2Ohm, double farad) {
+    Timer555 t;
+    if (!(r1Ohm >= 0.0) || !(r2Ohm > 0.0) || !(farad > 0.0)) return t;
+    t.highS = std::log(2.0) * (r1Ohm + r2Ohm) * farad;
+    t.lowS = std::log(2.0) * r2Ohm * farad;
+    t.hz = 1.0 / (t.highS + t.lowS);
+    t.duty = t.highS / (t.highS + t.lowS);
+    t.ok = true;
+    return t;
+}
+
+double timer555MonoS(double ohmR, double farad) { return std::log(3.0) * timeConstant(ohmR, farad); }
+
+double gainTransistor(double rcOhm, double reOhm) { return rcOhm > 0.0 && reOhm > 0.0 ? -rcOhm / reOhm : 0.0; }
+double gainInverting(double rfOhm, double rinOhm) { return rfOhm > 0.0 && rinOhm > 0.0 ? -rfOhm / rinOhm : 0.0; }
+double gainNonInverting(double rfOhm, double rgOhm) { return rfOhm >= 0.0 && rgOhm > 0.0 ? 1.0 + rfOhm / rgOhm : 0.0; }
+
+double rmsFromPeak(double peakV) { return peakV > 0.0 ? peakV / std::sqrt(2.0) : 0.0; }
+
+double rippleV(double ampere, double farad, double hz, bool bridge) {
+    if (!(ampere > 0.0) || !(farad > 0.0) || !(hz > 0.0)) return 0.0;
+    return ampere / ((bridge ? 2.0 : 1.0) * hz * farad);
+}
+
 } // namespace volta::model::formula

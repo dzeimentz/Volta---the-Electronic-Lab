@@ -791,6 +791,29 @@ QVariantMap LabController::formulaSheet(const QString& sheet, const QVariantMap&
         const double hz = f::astableHz(num("R"), num("C"));
         out = {{QStringLiteral("ok"), hz > 0.0}, {QStringLiteral("f"), hz}, {QStringLiteral("T"), hz > 0.0 ? 1.0 / hz : 0.0},
                {QStringLiteral("half"), std::log(2.0) * num("R") * num("C")}};
+    } else if (sheet == QLatin1String("cutoff")) {
+        const double hz = f::cutoffHz(num("R"), num("C"));
+        out = {{QStringLiteral("ok"), hz > 0.0}, {QStringLiteral("f"), hz}};
+    } else if (sheet == QLatin1String("t555")) {
+        const f::Timer555 t = f::timer555Astable(num("R1"), num("R2"), num("C"));
+        const double mono = f::timer555MonoS(num("R"), num("C"));
+        out = {{QStringLiteral("ok"), t.ok},          {QStringLiteral("f"), t.hz},
+               {QStringLiteral("high"), t.highS},     {QStringLiteral("low"), t.lowS},
+               {QStringLiteral("duty"), t.duty},      {QStringLiteral("monoOk"), mono > 0.0},
+               {QStringLiteral("mono"), mono}};
+    } else if (sheet == QLatin1String("gain")) {
+        const QString mode = in.value(QStringLiteral("mode")).toString();
+        const double v = mode == QLatin1String("inv")      ? f::gainInverting(num("Rf"), num("Rin"))
+                         : mode == QLatin1String("noninv") ? f::gainNonInverting(num("Rf"), num("Rin"))
+                                                           : f::gainTransistor(num("Rf"), num("Rin"));
+        out = {{QStringLiteral("ok"), v != 0.0}, {QStringLiteral("v"), v}, {QStringLiteral("Ua"), v * num("Ue")}};
+    } else if (sheet == QLatin1String("rms")) {
+        const double eff = f::rmsFromPeak(num("Us"));
+        out = {{QStringLiteral("ok"), eff > 0.0}, {QStringLiteral("eff"), eff}, {QStringLiteral("pp"), 2.0 * num("Us")}};
+    } else if (sheet == QLatin1String("ripple")) {
+        const bool bridge = in.value(QStringLiteral("bridge")).toBool();
+        const double du = f::rippleV(num("I"), num("C"), num("f"), bridge);
+        out = {{QStringLiteral("ok"), du > 0.0}, {QStringLiteral("dU"), du}, {QStringLiteral("n"), bridge ? 2 : 1}};
     }
     return out;
 }
@@ -895,6 +918,13 @@ QVariantList LabController::lexicon() const {
             out << QVariantMap{{QStringLiteral("type"), qs(type)},
                                {QStringLiteral("text"), m_repo.text(qs(e.lexiconKey))},
                                {QStringLiteral("stage"), e.fromStage}};
+    // ab Volta 2 auch die Module (Volta 1 bleibt unveraendert)
+    if (m_band != QLatin1String("volta1"))
+        for (const auto& [type, e] : m_session->catalog().modules)
+            if (!e.lexiconKey.empty())
+                out << QVariantMap{{QStringLiteral("type"), qs(type)},
+                                   {QStringLiteral("text"), m_repo.text(qs(e.lexiconKey))},
+                                   {QStringLiteral("stage"), e.fromStage}};
     return out;
 }
 

@@ -2,6 +2,8 @@
 // gesuchte erhaelt - mit Rechenweg in einer Zeile, damit das Ergebnis kein Orakel ist. Eingaben mit Vorsatz
 // (4,7k, 470m, 100µ). Dazu ein gewoehnlicher Rechenmodus mit Tastenfeld. Gerechnet wird im Modell (model/formula).
 // Rechenblaetter der Stufe 4 (Spannungsteiler, Zeitkonstante, Kippstufe) sind bis dahin mit Schloss sichtbar.
+// Ab Volta 2 sind die Blaetter aus Volta 1 sofort offen; dazu kommen Grenzfrequenz, Effektivwert, Brummspannung,
+// Verstaerkung und Timer 555, jeweils ab der Stufe, in der sie gebraucht werden (stage2; -1 = nur Volta 1).
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Shapes
@@ -13,21 +15,55 @@ Flickable {
     property string selectedPartId: ""
     property string sheet: "ohm"
     readonly property int stage: controller.unlockedStage
+    readonly property bool v2: controller.band !== "volta1" // Baende ab Volta 2
+    readonly property int firstStage: v2 ? 0 : 3
+    function sheetStage(s) { return v2 ? s.stage2 : s.stage }
 
     contentHeight: col.implicitHeight + 20
     clip: true
 
     readonly property var sheets: [
-        {id: "ohm", name: qsTr("Ohmsches Gesetz"), stage: 3},
-        {id: "led", name: qsTr("Vorwiderstand LED"), stage: 3},
-        {id: "network", name: qsTr("Reihe und parallel"), stage: 3},
-        {id: "power", name: qsTr("Leistung"), stage: 3},
-        {id: "divider", name: qsTr("Spannungsteiler"), stage: 4},
-        {id: "tau", name: qsTr("Zeitkonstante"), stage: 4},
-        {id: "astable", name: qsTr("Kippstufe"), stage: 4},
-        {id: "plain", name: qsTr("Rechner"), stage: 3}
+        {id: "ohm", name: qsTr("Ohmsches Gesetz"), stage: 3, stage2: 0},
+        {id: "led", name: qsTr("Vorwiderstand LED"), stage: 3, stage2: 0},
+        {id: "network", name: qsTr("Reihe und parallel"), stage: 3, stage2: 0},
+        {id: "power", name: qsTr("Leistung"), stage: 3, stage2: 0},
+        {id: "divider", name: qsTr("Spannungsteiler"), stage: 4, stage2: 0},
+        {id: "tau", name: qsTr("Zeitkonstante"), stage: 4, stage2: 0},
+        {id: "astable", name: qsTr("Kippstufe"), stage: 4, stage2: 0},
+        {id: "cutoff", name: qsTr("Grenzfrequenz"), stage: -1, stage2: 2},
+        {id: "rms", name: qsTr("Effektivwert"), stage: -1, stage2: 2},
+        {id: "ripple", name: qsTr("Brummspannung"), stage: -1, stage2: 3},
+        {id: "gainT", name: qsTr("Verstärkung Transistor"), stage: -1, stage2: 4},
+        {id: "gainOp", name: qsTr("Verstärkung OP"), stage: -1, stage2: 5},
+        {id: "t555", name: qsTr("Timer 555"), stage: -1, stage2: 6},
+        {id: "plain", name: qsTr("Rechner"), stage: 3, stage2: 0}
     ]
+    // Auswahlknoepfe (Einweg/Bruecke, invertierend/nichtinvertierend, astabil/monostabil)
+    component Choice: Row {
+        id: choice
+        property var options: []   // [{id, name}]
+        property string current: ""
+        spacing: 6
+        Repeater {
+            model: choice.options
+            Button {
+                required property var modelData
+                height: Theme.control
+                text: modelData.name
+                font.pixelSize: Math.round(13 * Theme.fontScale)
+                font.bold: choice.current === modelData.id
+                onClicked: choice.current = modelData.id
+                background: Rectangle {
+                    radius: 6
+                    color: choice.current === modelData.id ? Theme.accent : "#EEF4FA"
+                    border.color: Theme.accent
+                }
+                palette.buttonText: choice.current === modelData.id ? "white" : Theme.navy
+            }
+        }
+    }
     function fmt(v, unit) { return calc.controller.formulaFormat(v, unit) }
+    function plain(v) { return String(Number(v.toPrecision(3))).replace("-", "−") } // Verhaeltnis ohne Vorsatz
     function val(field) { const p = calc.controller.formulaParse(field.text); return p.ok ? p.value : 0 }
     function okOrEmpty(field) { return field.text.trim() === "" || calc.controller.formulaParse(field.text).ok }
 
@@ -90,7 +126,7 @@ Flickable {
         spacing: 10
 
         Body {
-            visible: calc.stage < 3
+            visible: calc.stage < calc.firstStage
             text: "🔒 " + qsTr("Der Formelrechner wird mit Stufe 3 freigeschaltet.")
         }
 
@@ -98,13 +134,13 @@ Flickable {
         Flow {
             width: parent.width
             spacing: 6
-            visible: calc.stage >= 3
+            visible: calc.stage >= calc.firstStage
             Repeater {
-                model: calc.sheets
+                model: calc.sheets.filter(s => calc.sheetStage(s) >= 0)
                 Button {
                     required property var modelData
                     objectName: "sheet_" + modelData.id
-                    readonly property bool locked: calc.stage < modelData.stage
+                    readonly property bool locked: calc.stage < calc.sheetStage(modelData)
                     enabled: !locked
                     height: Theme.control
                     text: (locked ? "🔒 " : "") + modelData.name
@@ -123,7 +159,7 @@ Flickable {
 
         // ---------------------------------------------------------- Ohmsches Gesetz
         Column {
-            visible: calc.stage >= 3 && calc.sheet === "ohm"
+            visible: calc.stage >= calc.firstStage && calc.sheet === "ohm"
             width: parent.width
             spacing: 8
             Body { text: qsTr("Trage zwei Größen ein, lass die gesuchte leer.") }
@@ -168,7 +204,7 @@ Flickable {
 
         // ---------------------------------------------------------- Vorwiderstand fuer Leuchtdioden
         Column {
-            visible: calc.stage >= 3 && calc.sheet === "led"
+            visible: calc.stage >= calc.firstStage && calc.sheet === "led"
             width: parent.width
             spacing: 8
             Quantity { id: lub; symbol: "Ub"; unit: "V"; text: "9" }
@@ -209,7 +245,7 @@ Flickable {
 
         // ---------------------------------------------------------- Reihe und parallel
         Column {
-            visible: calc.stage >= 3 && calc.sheet === "network"
+            visible: calc.stage >= calc.firstStage && calc.sheet === "network"
             width: parent.width
             spacing: 8
             Body { text: qsTr("Zwei oder drei Widerstände: hintereinander (Reihe) und nebeneinander (parallel).") }
@@ -225,7 +261,7 @@ Flickable {
 
         // ---------------------------------------------------------- Leistung
         Column {
-            visible: calc.stage >= 3 && calc.sheet === "power"
+            visible: calc.stage >= calc.firstStage && calc.sheet === "power"
             width: parent.width
             spacing: 8
             Body { text: qsTr("Zwei der drei Größen genügen.") }
@@ -244,7 +280,7 @@ Flickable {
 
         // ---------------------------------------------------------- Spannungsteiler (Stufe 4)
         Column {
-            visible: calc.stage >= 4 && calc.sheet === "divider"
+            visible: calc.stage >= (calc.v2 ? 0 : 4) && calc.sheet === "divider"
             width: parent.width
             spacing: 8
             Quantity { id: due; symbol: "Ue"; unit: "V"; text: "9" }
@@ -260,7 +296,7 @@ Flickable {
 
         // ---------------------------------------------------------- Zeitkonstante (Stufe 4)
         Column {
-            visible: calc.stage >= 4 && calc.sheet === "tau"
+            visible: calc.stage >= (calc.v2 ? 0 : 4) && calc.sheet === "tau"
             width: parent.width
             spacing: 8
             Quantity { id: tr; symbol: "R"; unit: "Ω"; text: "10k" }
@@ -303,7 +339,7 @@ Flickable {
 
         // ---------------------------------------------------------- Kippstufe (Stufe 4)
         Column {
-            visible: calc.stage >= 4 && calc.sheet === "astable"
+            visible: calc.stage >= (calc.v2 ? 0 : 4) && calc.sheet === "astable"
             width: parent.width
             spacing: 8
             Body { text: qsTr("Symmetrische Kippstufe: beide Hälften mit gleichem R und C.") }
@@ -316,9 +352,129 @@ Flickable {
             }
         }
 
+        // ---------------------------------------------------------- Grenzfrequenz (ab Volta 2, Stufe 2)
+        Column {
+            visible: calc.v2 && calc.stage >= 2 && calc.sheet === "cutoff"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("RC-Glied (Tiefpass oder Hochpass) und Wien-Brücke: Bei dieser Frequenz wirken Widerstand und Kondensator gleich stark.") }
+            Quantity { id: cr; symbol: "R"; unit: "Ω"; text: "10k" }
+            Quantity { id: cc; symbol: "C"; unit: "F"; text: "10n" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("cutoff", {R: calc.val(cr), C: calc.val(cc)})
+                value: !r.ok ? "" : "f = " + calc.fmt(r.f, "Hz")
+                way: !r.ok ? "" : qsTr("f = 1 ÷ (2π · R · C) = 1 ÷ (6,28 · %1 · %2)").arg(calc.fmt(calc.val(cr), "Ω")).arg(calc.fmt(calc.val(cc), "F"))
+            }
+        }
+
+        // ---------------------------------------------------------- Effektivwert (ab Volta 2, Stufe 2)
+        Column {
+            visible: calc.v2 && calc.stage >= 2 && calc.sheet === "rms"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Für eine Sinusspannung: Der Effektivwert macht in einem Widerstand so viel Wärme wie eine gleich große Gleichspannung.") }
+            Quantity { id: rus; symbol: "Us"; unit: "V"; text: "4,2" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("rms", {Us: calc.val(rus)})
+                value: !r.ok ? "" : qsTr("Ueff = %1 · Uss = %2").arg(calc.fmt(r.eff, "V")).arg(calc.fmt(r.pp, "V"))
+                way: !r.ok ? "" : qsTr("Ueff = Us ÷ 1,41 = %1 ÷ 1,41. Von Spitze zu Spitze ist es doppelt so viel wie Us.").arg(calc.fmt(calc.val(rus), "V"))
+            }
+        }
+
+        // ---------------------------------------------------------- Brummspannung (ab Volta 2, Stufe 3)
+        Column {
+            visible: calc.v2 && calc.stage >= 3 && calc.sheet === "ripple"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Wie weit sinkt die Spannung am Ladeelko zwischen zwei Nachladungen? Eine Näherung für kleine Brummspannungen.") }
+            Choice {
+                id: rmode
+                current: "half"
+                options: [{id: "half", name: qsTr("Einweg")}, {id: "bridge", name: qsTr("Brücke")}]
+            }
+            Quantity { id: ri; symbol: "I"; unit: "A"; text: "20m" }
+            Quantity { id: rc; symbol: "C"; unit: "F"; text: "100µ" }
+            Quantity { id: rf; symbol: "f"; unit: "Hz"; text: "50" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("ripple", {I: calc.val(ri), C: calc.val(rc), f: calc.val(rf), bridge: rmode.current === "bridge"})
+                value: !r.ok ? "" : "ΔU ≈ " + calc.fmt(r.dU, "V")
+                way: !r.ok ? "" : (rmode.current === "bridge"
+                                   ? qsTr("ΔU ≈ I ÷ (2 · f · C) = %1 ÷ (2 · %2 · %3). Die Brücke lädt zweimal je Schwingung nach.")
+                                   : qsTr("ΔU ≈ I ÷ (f · C) = %1 ÷ (%2 · %3). Einweg lädt einmal je Schwingung nach."))
+                                  .arg(calc.fmt(calc.val(ri), "A")).arg(calc.fmt(calc.val(rf), "Hz")).arg(calc.fmt(calc.val(rc), "F"))
+            }
+        }
+
+        // ---------------------------------------------------------- Verstaerkung Transistor (ab Volta 2, Stufe 4)
+        Column {
+            visible: calc.v2 && calc.stage >= 4 && calc.sheet === "gainT"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Emitterschaltung mit Emitterwiderstand: Die Verstärkung hängt fast nur von RC und RE ab.") }
+            Quantity { id: grc; symbol: "RC"; unit: "Ω"; text: "2,2k" }
+            Quantity { id: gre; symbol: "RE"; unit: "Ω"; text: "470" }
+            Quantity { id: gue; symbol: "Ue"; unit: "V"; hint: qsTr("leer") }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("gain", {mode: "transistor", Rf: calc.val(grc), Rin: calc.val(gre), Ue: calc.val(gue)})
+                value: !r.ok ? "" : "v ≈ " + calc.plain(r.v) + (calc.val(gue) > 0 ? " · Ua ≈ " + calc.fmt(Math.abs(r.Ua), "V") : "")
+                way: !r.ok ? "" : qsTr("v ≈ −RC ÷ RE = −%1 ÷ %2. Das Minus heißt: Der Ausgang bewegt sich gegen den Eingang.").arg(calc.fmt(calc.val(grc), "Ω")).arg(calc.fmt(calc.val(gre), "Ω"))
+            }
+        }
+
+        // ---------------------------------------------------------- Verstaerkung OP (ab Volta 2, Stufe 5)
+        Column {
+            visible: calc.v2 && calc.stage >= 5 && calc.sheet === "gainOp"
+            width: parent.width
+            spacing: 8
+            Choice {
+                id: gmode
+                current: "inv"
+                options: [{id: "inv", name: qsTr("invertierend")}, {id: "noninv", name: qsTr("nichtinvertierend")}]
+            }
+            Body {
+                text: gmode.current === "inv" ? qsTr("Eingang über Rin an IN−, Rf vom Ausgang zurück an IN−, IN+ an 0V.")
+                                              : qsTr("Eingang an IN+, Rf vom Ausgang an IN−, Rg von IN− an 0V.")
+            }
+            Quantity { id: grf; symbol: "Rf"; unit: "Ω"; text: "47k" }
+            Quantity { id: grin; symbol: gmode.current === "inv" ? "Rin" : "Rg"; unit: "Ω"; text: "10k" }
+            Quantity { id: gue2; symbol: "Ue"; unit: "V"; hint: qsTr("leer") }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("gain", {mode: gmode.current, Rf: calc.val(grf), Rin: calc.val(grin), Ue: calc.val(gue2)})
+                value: !r.ok ? "" : "v = " + calc.plain(r.v) + (calc.val(gue2) > 0 ? " · Ua = " + calc.fmt(r.Ua, "V") : "")
+                way: !r.ok ? "" : (gmode.current === "inv" ? qsTr("v = −Rf ÷ Rin = −%1 ÷ %2") : qsTr("v = 1 + Rf ÷ Rg = 1 + %1 ÷ %2"))
+                                  .arg(calc.fmt(calc.val(grf), "Ω")).arg(calc.fmt(calc.val(grin), "Ω"))
+                                  + ". " + qsTr("Näher als etwa 1,5 V an die Versorgung kommt der Ausgang nicht.")
+            }
+        }
+
+        // ---------------------------------------------------------- Timer 555 (ab Volta 2, Stufe 6)
+        Column {
+            visible: calc.v2 && calc.stage >= 6 && calc.sheet === "t555"
+            width: parent.width
+            spacing: 8
+            Choice {
+                id: tmode
+                current: "astable"
+                options: [{id: "astable", name: qsTr("astabil (Blinker)")}, {id: "mono", name: qsTr("monostabil (Zeitschalter)")}]
+            }
+            Quantity { id: t1; visible: tmode.current === "astable"; symbol: "R1"; unit: "Ω"; text: "1k" }
+            Quantity { id: t2; visible: tmode.current === "astable"; symbol: "R2"; unit: "Ω"; text: "4,7k" }
+            Quantity { id: tr1; visible: tmode.current === "mono"; symbol: "R"; unit: "Ω"; text: "47k" }
+            Quantity { id: t3; symbol: "C"; unit: "F"; text: "100µ" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("t555", {R1: calc.val(t1), R2: calc.val(t2), R: calc.val(tr1), C: calc.val(t3)})
+                value: tmode.current === "astable"
+                       ? (!r.ok ? "" : qsTr("f = %1 · oben %2, unten %3").arg(calc.fmt(r.f, "Hz")).arg(calc.fmt(r.high, "s")).arg(calc.fmt(r.low, "s")))
+                       : (!r.monoOk ? "" : "t = " + calc.fmt(r.mono, "s"))
+                way: tmode.current === "astable"
+                     ? (!r.ok ? "" : qsTr("f ≈ 1,44 ÷ ((R1 + 2 · R2) · C). Oben: 0,69 · (R1 + R2) · C, unten: 0,69 · R2 · C. Der Ausgang ist %1 % der Zeit oben.").arg(Math.round(r.duty * 100)))
+                     : (!r.monoOk ? "" : qsTr("t ≈ 1,1 · R · C = 1,1 · %1 · %2").arg(calc.fmt(calc.val(tr1), "Ω")).arg(calc.fmt(calc.val(t3), "F")))
+            }
+        }
+
         // ---------------------------------------------------------- Rechenmodus mit Tastenfeld
         Column {
-            visible: calc.stage >= 3 && calc.sheet === "plain"
+            visible: calc.stage >= calc.firstStage && calc.sheet === "plain"
             width: parent.width
             spacing: 8
             TextField {
