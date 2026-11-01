@@ -1,0 +1,294 @@
+{
+  "id": "volta2.7.4",
+  "band": "volta2",
+  "stufe": 7,
+  "titel_key": "exp2_7_4_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "elko",
+    "kondensator",
+    "leitung"
+  ],
+  "frage_key": "exp2_7_4_frage",
+  "vermutungen": [
+    "exp2_7_4_v1",
+    "exp2_7_4_v2",
+    "exp2_7_4_v3"
+  ],
+  "beobachtungen": [
+    "exp2_7_4_b1",
+    "exp2_7_4_b2",
+    "exp2_7_4_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "B1"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "B1",
+          "C1"
+        ],
+        "wert": 22000
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "C1",
+          "minus": "D1"
+        }
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "A3",
+          "B3"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "C3"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "C3",
+        "typ": "kondensator",
+        "felder": [
+          "C3",
+          "D3"
+        ],
+        "wert": 1e-07
+      },
+      {
+        "id": "R9",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 220
+      },
+      {
+        "id": "R5",
+        "typ": "widerstand",
+        "felder": [
+          "A8",
+          "B8"
+        ],
+        "wert": 22000
+      },
+      {
+        "id": "C5",
+        "typ": "elko",
+        "felder": {
+          "plus": "B8",
+          "minus": "C8"
+        }
+      },
+      {
+        "id": "R6",
+        "typ": "widerstand",
+        "felder": [
+          "B9",
+          "B10"
+        ],
+        "wert": 4700
+      }
+    ],
+    "module": [
+      {
+        "id": "TI1",
+        "typ": "timer555",
+        "feld": 1
+      },
+      {
+        "id": "TI2",
+        "typ": "timer555",
+        "feld": 9
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B1",
+        "nach": "TI1.dis",
+        "farbe": "blau"
+      },
+      {
+        "von": "C1",
+        "nach": "TI1.thr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C1",
+        "nach": "TI1.tr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D1",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A3",
+        "farbe": "rot"
+      },
+      {
+        "von": "B3",
+        "nach": "TI2.dis",
+        "farbe": "blau"
+      },
+      {
+        "von": "C3",
+        "nach": "TI2.thr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C3",
+        "nach": "TI2.tr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "TI2.aus",
+        "nach": "A5",
+        "farbe": "blau"
+      },
+      {
+        "von": "A6",
+        "nach": "P:LS1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI1.reset",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI2.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI2.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI2.reset",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.aus",
+        "nach": "A8",
+        "farbe": "blau"
+      },
+      {
+        "von": "C8",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B8",
+        "nach": "B9",
+        "farbe": "gelb"
+      },
+      {
+        "von": "B10",
+        "nach": "TI2.cv",
+        "farbe": "gelb"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_7_4_s1",
+    "exp2_7_4_s2",
+    "exp2_7_4_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "B8",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 2.4,
+        "min": 0.8
+      },
+      {
+        "bauteil": "LS",
+        "groesse": "frequenz_Hz",
+        "zwischen": [
+          400,
+          2000
+        ],
+        "dauer_s": 1
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_7_4_h1",
+    "exp2_7_4_h2",
+    "exp2_7_4_loesung"
+  ],
+  "erklaerung_key": "exp2_7_4_erklaerung",
+  "mehr_wissen_key": "exp2_7_4_mehr",
+  "weiterforschen": [
+    "exp2_7_4_w1",
+    "exp2_7_4_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_7_4_echt"
+}

@@ -1,0 +1,256 @@
+{
+  "id": "volta2.7.6",
+  "band": "volta2",
+  "stufe": 7,
+  "titel_key": "exp2_7_6_titel",
+  "dauer_min": 25,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "kondensator",
+    "taster",
+    "leitung"
+  ],
+  "frage_key": "exp2_7_6_frage",
+  "vermutungen": [
+    "exp2_7_6_v1",
+    "exp2_7_6_v2",
+    "exp2_7_6_v3"
+  ],
+  "beobachtungen": [
+    "exp2_7_6_b1",
+    "exp2_7_6_b2",
+    "exp2_7_6_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "p1": 0.2,
+      "p2": 0.0
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "B1"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "B2",
+          "C2"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "C3",
+          "D3"
+        ],
+        "wert": 1e-07
+      },
+      {
+        "id": "C2",
+        "typ": "kondensator",
+        "felder": [
+          "C4",
+          "D4"
+        ],
+        "wert": 1e-07
+      },
+      {
+        "id": "S2",
+        "typ": "taster",
+        "felder": [
+          "D4",
+          "E4"
+        ]
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "A8",
+          "B8"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "B8",
+          "C8"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "R9",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 220
+      },
+      {
+        "id": "C3",
+        "typ": "kondensator",
+        "felder": [
+          "A6",
+          "A7"
+        ],
+        "wert": 1e-06
+      }
+    ],
+    "module": [
+      {
+        "id": "TI1",
+        "typ": "timer555",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B1",
+        "nach": "TI1.dis",
+        "farbe": "blau"
+      },
+      {
+        "von": "B1",
+        "nach": "P:P1a",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:P1s",
+        "nach": "B2",
+        "farbe": "blau"
+      },
+      {
+        "von": "C2",
+        "nach": "TI1.thr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C2",
+        "nach": "TI1.tr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C2",
+        "nach": "C3",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C3",
+        "nach": "C4",
+        "farbe": "gelb"
+      },
+      {
+        "von": "E4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A8",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B8",
+        "nach": "TI1.reset",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "C8",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.aus",
+        "nach": "A5",
+        "farbe": "blau"
+      },
+      {
+        "von": "A7",
+        "nach": "P:P2a",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:P2s",
+        "nach": "P:LS1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_7_6_s1",
+    "exp2_7_6_s2",
+    "exp2_7_6_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "LS",
+        "groesse": "frequenz_Hz",
+        "zwischen": [
+          800,
+          1200
+        ],
+        "dauer_s": 1
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_7_6_h1",
+    "exp2_7_6_h2",
+    "exp2_7_6_loesung"
+  ],
+  "erklaerung_key": "exp2_7_6_erklaerung",
+  "mehr_wissen_key": "exp2_7_6_mehr",
+  "weiterforschen": [
+    "exp2_7_6_w1",
+    "exp2_7_6_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_7_6_echt"
+}

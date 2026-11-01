@@ -1,0 +1,224 @@
+{
+  "id": "volta2.7.2",
+  "band": "volta2",
+  "stufe": 7,
+  "titel_key": "exp2_7_2_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "transistor_npn",
+    "widerstand",
+    "kondensator",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp2_7_2_frage",
+  "vermutungen": [
+    "exp2_7_2_v1",
+    "exp2_7_2_v2",
+    "exp2_7_2_v3"
+  ],
+  "beobachtungen": [
+    "exp2_7_2_b1",
+    "exp2_7_2_b2",
+    "exp2_7_2_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "D3",
+          "c": "D4",
+          "e": "E3",
+          "e2": "E4"
+        }
+      },
+      {
+        "id": "T2",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "D7",
+          "c": "D8",
+          "e": "E7",
+          "e2": "E8"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "D3"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "B7",
+          "D7"
+        ],
+        "wert": 12000
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "A4",
+          "B4"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B4",
+          "kathode": "D4"
+        }
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "D5",
+          "D6"
+        ],
+        "wert": 1e-07
+      },
+      {
+        "id": "C2",
+        "typ": "kondensator",
+        "felder": [
+          "C6",
+          "C5"
+        ],
+        "wert": 1e-07
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "A8",
+          "B8"
+        ],
+        "wert": 470
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "B3",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B7",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A4",
+        "farbe": "rot"
+      },
+      {
+        "von": "E4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E8",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "D4",
+        "nach": "D5",
+        "farbe": "blau"
+      },
+      {
+        "von": "D6",
+        "nach": "D7",
+        "farbe": "blau"
+      },
+      {
+        "von": "D8",
+        "nach": "C6",
+        "farbe": "blau"
+      },
+      {
+        "von": "C5",
+        "nach": "D3",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "P:LS1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "A8",
+        "farbe": "gelb"
+      },
+      {
+        "von": "B8",
+        "nach": "D8",
+        "farbe": "blau"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_7_2_s1",
+    "exp2_7_2_s2",
+    "exp2_7_2_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "LS",
+        "groesse": "frequenz_Hz",
+        "zwischen": [
+          500,
+          1000
+        ],
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "T2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_7_2_h1",
+    "exp2_7_2_h2",
+    "exp2_7_2_loesung"
+  ],
+  "erklaerung_key": "exp2_7_2_erklaerung",
+  "mehr_wissen_key": "exp2_7_2_mehr",
+  "weiterforschen": [
+    "exp2_7_2_w1",
+    "exp2_7_2_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_7_2_echt"
+}
