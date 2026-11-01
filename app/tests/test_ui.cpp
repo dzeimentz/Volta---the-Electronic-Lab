@@ -871,6 +871,17 @@ private slots:
         // Oszilloskop ab Volta 2 von Anfang an (Wechselstrom in Stufe 2), Zeitschreiber in Volta 1 erst ab Stufe 3
         QVERIFY(lab.startExperiment(QStringLiteral("volta2.2.1")));
         QVERIFY(lab.recorderAvailable());
+        // Breite im Experiment ab Volta 2 waehlbar (8, 10, 12), auch mit Stufenanpassung; sie bleibt beim Messgeraet
+        lab.setStageLayout(true);
+        QVERIFY(lab.startExperiment(QStringLiteral("volta2.1.1")));
+        QCOMPARE(lab.boardColumns(), 10);
+        QCOMPARE(lab.minBoardColumns(), 8);
+        QVERIFY(lab.setBoardColumns(12));
+        lab.setMeterVisible(!lab.meterVisible());
+        QCOMPARE(lab.boardColumns(), 12);
+        QVERIFY(lab.setBoardColumns(8));
+        lab.setMeterVisible(!lab.meterVisible());
+        QCOMPARE(lab.boardColumns(), 8);
         // Volta 1 behaelt sein festes Pult
         LabController volta1Lab(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY(volta1Lab.startExperiment(QStringLiteral("volta1.2.4")));
@@ -1294,16 +1305,18 @@ private slots:
         QTRY_VERIFY(gate->property("opened").toBool()); // erst die PIN
         QMetaObject::invokeMethod(gate, "close");
         QTRY_VERIFY(!gate->property("opened").toBool());
-        // ab Volta 2: eigene Kapitel (Oszilloskop, Ton und Zeitlupe), Pult und Messen ohne Teilbild aus Volta 1
+        // ab Volta 2: eigene Kapitel (Oszilloskop, Ton und Zeitlupe); Pult, Messen und die neuen Kapitel mit Bildern
+        // aus Volta 2 (die liegen nur in der Ausgabe volta2, hier wird nur die Quelle geprueft)
         const QVariant band = help->property("band");
         help->setProperty("band", QStringLiteral("volta2"));
         QMetaObject::invokeMethod(help, "open");
         QTRY_VERIFY(help->property("opened").toBool());
         QTRY_VERIFY(item(QStringLiteral("helpSection_oszilloskop")));
         QVERIFY(item(QStringLiteral("helpSection_ton")));
-        QVERIFY(!item(QStringLiteral("helpImage_pult"))->isVisible());
-        QVERIFY(!item(QStringLiteral("helpImage_messen"))->isVisible());
-        QVERIFY(item(QStringLiteral("helpImage_stecken"))->isVisible());
+        for (const char* key : {"willkommen", "stecken", "pult", "messen", "oszilloskop", "ton"})
+            QVERIFY2(item(QStringLiteral("helpImage_") + QLatin1String(key))->property("source").toString()
+                         .startsWith(QStringLiteral("qrc:/help2/")), key);
+        QVERIFY(item(QStringLiteral("helpImage_fehler"))->property("source").toString().startsWith(QStringLiteral("qrc:/help/")));
         help->setProperty("band", band);
         QTRY_VERIFY(!findItem(m_window->contentItem(), QStringLiteral("helpSection_oszilloskop")));
         QMetaObject::invokeMethod(help, "close");

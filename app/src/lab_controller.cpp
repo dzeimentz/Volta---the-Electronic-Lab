@@ -1776,6 +1776,15 @@ double LabController::wireCurrent(const QString& id) const {
 
 bool LabController::rotatePart(const QString& id) { return result(m_session->rotatePart(ss(id))); }
 
+int LabController::minBoardColumns() const {
+    int used = model::highestUsedColumn(m_session->board());
+    if (!m_freeLab && !m_experiment.id.isEmpty())
+        used = std::max(used, model::highestUsedColumn(m_experiment.templateBoard));
+    for (int c : {8, 10, 12})
+        if (c >= used) return c;
+    return model::kMaxColumns;
+}
+
 bool LabController::setBoardColumns(int columns) {
     if (!result(m_session->setColumns(columns))) return false;
     emit columnsChosen(columns);
@@ -2092,7 +2101,10 @@ void LabController::applyAutoColumns() {
         model::Board both = b; // eigener Aufbau und Musteraufbau muessen Platz haben
         for (const auto& p : m_experiment.templateBoard.parts) both.parts.push_back(p);
         for (const auto& w : m_experiment.templateBoard.wires) both.wires.push_back(w);
-        const auto [rows, cols] = stageBoardSize(m_experiment.stage, both);
+        auto [rows, cols] = stageBoardSize(m_experiment.stage, both);
+        // ab Volta 2 bleibt die gewaehlte Breite (8, 10, 12), solange alles hineinpasst
+        if (m_startColumns > 0 && b.columns >= model::kMinColumns && b.columns >= model::highestUsedColumn(both))
+            cols = b.columns;
         if ((rows != b.rows || cols != b.columns) && result(m_session->setBoardSize(rows, cols))) emit boardChanged();
         return;
     }

@@ -45,6 +45,8 @@ class LabController : public QObject {
     // Felder der Grundplatte (ohne Pult), an denen ein Bauteil oder eine Leitung steckt (Spannungsanzeige automatisch)
     Q_PROPERTY(QStringList occupiedFields READ occupiedFields NOTIFY boardChanged)
     Q_PROPERTY(int boardColumns READ boardColumns NOTIFY boardChanged) // 5, 6, 8, 10 oder 12 Felder je Reihe
+    // kleinste waehlbare Breite (8, 10 oder 12): Aufbau und Musteraufbau muessen hineinpassen
+    Q_PROPERTY(int minBoardColumns READ minBoardColumns NOTIFY boardChanged)
     Q_PROPERTY(int boardRows READ boardRows NOTIFY boardChanged)       // 2 ... 5 Reihen ab A
     // Stufenanpassung (Elternbereich, Vorgabe an): im gefuehrten Experiment Steckbrett und Pult nach der Stufe -
     // Stufe 0-2: 2 x 5 Felder, Stufe 3: 3 x 6, ab Stufe 4: 5 x 10; das Pult zeigt nur die Bauteile der Stufe (und alles,
@@ -465,6 +467,7 @@ public:
     // Muelleimer ohne Auswahl: alle Bauteile, Leitungen und Module abbauen (ein Befehl, rueckgaengig machbar)
     Q_INVOKABLE bool clearBoard();
     int boardColumns() const { return m_session->board().columns; }
+    int minBoardColumns() const;
     int boardRows() const { return m_session->board().rows; }
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();

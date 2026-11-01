@@ -100,7 +100,8 @@ Item {
     readonly property var rows: ["A", "B", "C", "D", "E"].slice(0, controller.boardRows) // Stufenanpassung: ab 2 Reihen
     readonly property int columns: controller.boardColumns // 5, 6 (Stufenanpassung), 8, 10 oder 12 (+/-)
     // +/- fuer die Breite: im freien Labor; im gefuehrten Experiment nur ohne Stufenanpassung
-    readonly property bool boardResizable: controller.freeLab || !controller.stageLayout
+    // Volta 1: im Experiment waechst die Grundplatte mit der Stufe; ab Volta 2 bleiben 8, 10 und 12 waehlbar
+    readonly property bool boardResizable: controller.freeLab || !controller.stageLayout || controller.startColumns > 0
     readonly property int slots: 16
     // Pult (Bedienelemente), Gruppenlinien, Pultleiste, Grundplatte, Modulleiste von oben nach unten
     readonly property int deskPanelHeight: 140 // Bedienelemente und Schaltzeichen; darunter im selben Pult die Felder
@@ -1239,7 +1240,7 @@ Item {
                 SizeButton {
                     objectName: "columnsMinus"
                     plus: false
-                    enabled: lab.columns > 8
+                    enabled: lab.columns > (lab.controller.startColumns > 0 ? lab.controller.minBoardColumns : 8)
                     onClicked: { lab.beginEdit(); lab.controller.setBoardColumns(lab.columns - 2) }
                     ToolTip.text: qsTr("Weniger Felder je Reihe")
                 }
