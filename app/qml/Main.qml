@@ -275,6 +275,7 @@ ApplicationWindow {
     }
     HelpDialog {
         id: helpDialog
+        band: labController.band
         onParentAreaRequested: parentGate.askSettings(() => parentArea.open())
     }
 

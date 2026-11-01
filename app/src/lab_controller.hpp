@@ -277,7 +277,10 @@ public:
     QVariantList lexicon() const;
     QVariantMap schematic() const;
     bool schematicAvailable() const { return m_unlockAll || m_freeLab || m_experiment.stage >= 2; }
-    bool recorderAvailable() const { return m_unlockAll || m_freeLab || m_experiment.stage >= 3; }
+    // Volta 1: Zeitschreiber ab Stufe 3; ab Volta 2 das Oszilloskop von Anfang an (Tastkoepfe ab Stufe 0)
+    bool recorderAvailable() const {
+        return m_unlockAll || m_freeLab || m_experiment.stage >= 3 || (!m_band.isEmpty() && m_band != QLatin1String("volta1"));
+    }
     QStringList recorderChannels() const;
     double recorderWindow() const { return m_recorder.window(); }
     void setRecorderWindow(double seconds);

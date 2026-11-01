@@ -7,7 +7,7 @@ import QtQuick.Controls.Basic
 Flickable {
     id: finder
     required property var controller
-    readonly property bool unlocked: controller.unlockedStage >= 2
+    readonly property bool unlocked: controller.unlockedStage >= (controller.band === "" || controller.band === "volta1" ? 2 : 0) // ab Volta 2 sofort
     property var findings: []
     property bool checked: false // mindestens einmal geprueft (seit der letzten Aenderung)
     signal findingSelected(var anchors, string partId)

@@ -1,6 +1,8 @@
 // Hilfe mit Tick (docs/ui-spec.md, Interaktives Readme; docs/maskottchen-tick.md): Kapitel fuer Kinder, jedes mit
 // Tick in passender Stimmung und kurzen Punkten. Oben Kapitelknoepfe zum Springen. Der Teil fuer Erwachsene verweist
 // in die Einstellungen (hinter der PIN), statt Inhalte doppelt zu fuehren.
+// Ab Volta 2 ersetzen eigene Fassungen einzelne Kapitel (Pult II, Messstellen, Rechner) und neue Kapitel kommen dazu
+// (Oszilloskop, Ton und Zeitlupe). Diese Kapitel haben kein Teilbild aus Volta 1. Volta 1 bleibt unveraendert.
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -18,8 +20,12 @@ Popup {
     closePolicy: Popup.CloseOnEscape
     background: Rectangle { radius: 12; color: "#FFFDF7"; border.color: Theme.navy; border.width: 2 }
 
+    property string band: "" // Band der Edition; leer oder »volta1«: Hilfe von Volta 1
+    readonly property bool v2: band !== "" && band !== "volta1"
+    readonly property var chapters: v2 ? v2Chapters() : baseChapters
+
     // Kapitel: Titel, Stimmung von Tick, was Tick sagt, Punkte
-    readonly property var chapters: [
+    readonly property var baseChapters: [
         { key: "willkommen", title: qsTr("Willkommen"), mood: "freundlich",
           say: qsTr("Hallo, ich bin Tick! In Volta baust du Schaltungen auf dem Bildschirm. Was passiert, rechnet Volta wirklich aus: Lämpchen leuchten, Motoren drehen sich – und manchmal brennt auch etwas durch."),
           points: [qsTr("Im Lernpfad warten Experimente mit einer Forscherfrage. Stufe für Stufe kommen neue Bauteile dazu."),
@@ -84,6 +90,65 @@ Popup {
                    qsTr("Das Fragezeichen öffnet diese Hilfe. Im Labor findest du sie im Menü mit den drei Strichen. Das i zeigt Infos über Volta."),
                    qsTr("Das Menü mit den drei Strichen enthält Einstellungen wie Ton, Stromfluss und Animationen.")] }
     ]
+
+    // ab Volta 2: geaenderte Teile einzelner Kapitel (image: false = kein Teilbild aus Volta 1)
+    readonly property var v2Changes: ({
+        willkommen: {
+            say: qsTr("Hallo, ich bin Tick! Willkommen in Volta 2. Hier geht es um Wechselstrom, Transistoren, Verstärker und den Timer 555. Was passiert, rechnet Volta wirklich aus – sogar Töne, die du hören kannst.") },
+        stecken: {
+            points: [qsTr("Alles, was im selben Feld steckt, ist miteinander verbunden."),
+                     qsTr("Module wie das OP-Modul und der Timer 555 liegen im Modulfach. Sie gehören in die Modulleiste unten."),
+                     qsTr("Ein Bauteil verschiebst du, indem du es ziehst. Tippst du zweimal schnell darauf, dreht es sich."),
+                     qsTr("Halte ein Bauteil lange gedrückt (am Computer: Rechtsklick). Im Menü kannst du es drehen, einen Wert wählen oder entfernen.")] },
+        pult: { image: false,
+            say: qsTr("Oben liegt das Bedienpult. Es zeigt nur, was du gerade brauchst."),
+            points: [qsTr("Im Experiment stellt Volta das Pult für dich zusammen. Im freien Labor holst du dir Teile aus dem Gerätefach im Pult."),
+                     qsTr("Batterie 1 hat die Felder V+ (rot) und 0V (schwarz). Batterie 2 hat eigene Felder +B2 und −B2. Steckst du beide hintereinander, bekommst du Plus, Minus und eine Mitte."),
+                     qsTr("Die Wechselquelle (W~a, W~b) liefert Wechselspannung mit 50 Hz. Der Funktionsgenerator (G, G0) macht Sinus, Dreieck oder Rechteck. Tippe auf seinen Knopf, dann stellst du Frequenz und Spannung ein."),
+                     qsTr("Der Kennlinienschreiber (KS+, KS−) zeichnet, wie viel Strom bei welcher Spannung durch ein Bauteil fließt."),
+                     qsTr("Das »?« an einem Pultteil erklärt das Teil und seine Felder."),
+                     qsTr("Oben links wechselst du zwischen »Stecken« und »Betrieb«. »Betrieb« schaltet den Hauptschalter ein: Jetzt fließt Strom und du kannst Taster und Schalter bedienen. Zum Umbauen geht es zurück auf »Stecken«.")] },
+        messen: { image: false,
+            say: qsTr("Wie viel Strom fließt da eigentlich? In Volta 2 steckst du die Messstelle direkt in die Schaltung."),
+            points: [qsTr("Die Messstellen V, A und Ω liegen in der Gruppe »Messen«. Du steckst sie wie einen Widerstand auf die Grundplatte."),
+                     qsTr("Das Voltmeter V kommt neben das Bauteil, das Amperemeter A in den Stromkreis. Das Ohmmeter Ω misst nur bei ausgeschaltetem Strom."),
+                     qsTr("»V A Ω« holt das Messgerät. Es zeigt deine Messstellen an, eine oder zwei auf einmal. »V~« oder »A~« heißt: Wechselgröße, angezeigt als Effektivwert."),
+                     qsTr("Der Knopf mit den grünen Balken zeigt auf allen belegten Feldern, wie viel Spannung dort anliegt. Für ein einzelnes Feld geht das auch im Menü des Feldes (langer Druck)."),
+                     qsTr("Das Schaltzeichen-Symbol zeigt deinen Aufbau als Schaltplan. Kleine Pfeile zeigen, wohin der Strom fließt.")] },
+        werkzeug: {
+            points: [qsTr("Farbcode: Was bedeuten die Ringe auf einem Widerstand?"),
+                     qsTr("E-Reihen: Welche Widerstandswerte gibt es zu kaufen?"),
+                     qsTr("Lexikon: Was macht welches Bauteil und welches Modul?"),
+                     qsTr("Rechner: Formeln mit Rechenweg. Mit den Stufen kommen neue Rechenblätter dazu, zum Beispiel für den Timer 555."),
+                     qsTr("Fehlersuche: Ich prüfe deinen Aufbau."),
+                     qsTr("Teileliste: Was du brauchst – auch als Aufbaukarte zum Ausdrucken.")] }
+    })
+    // ab Volta 2: neue Kapitel, hinter »Messen und Anzeigen«
+    readonly property var v2Extra: [
+        { key: "oszilloskop", title: qsTr("Oszilloskop"), mood: "neugierig", image: false,
+          say: qsTr("Das Oszilloskop zeigt dir, wie sich eine Spannung mit der Zeit verändert – auch wenn es ganz schnell geht."),
+          points: [qsTr("Stecke den Tastkopf K1 aus der Gruppe »Messen« in ein Feld. Gemessen wird immer gegen 0V. Mit K2 siehst du eine zweite Spannung."),
+                   qsTr("Der Knopf mit der Kurve in der Werkzeugleiste zeigt das Oszilloskop unter der Grundplatte."),
+                   qsTr("K1 ist gelb und durchgezogen, K2 türkis und gestrichelt. Daneben stehen Spitze-Spitze und Frequenz als Zahl."),
+                   qsTr("Mit den Pfeilen stellst du die Zeit je Kästchen und die Volt je Kästchen ein. Der Trigger hält das Bild still."),
+                   qsTr("»Rollen« schreibt die Spannung langsam von rechts nach links mit. »Standbild« hält das Bild an.")] },
+        { key: "ton", title: qsTr("Ton und Zeitlupe"), mood: "erklaerend", image: false,
+          say: qsTr("Schwingt deine Schaltung schnell genug, hörst du sie aus dem Lautsprecher. Ist sie zu schnell zum Zuschauen, hilft die Zeitlupe."),
+          points: [qsTr("Am Lautsprecher steht, woher der Ton kommt. »♪ gerechnet« heißt: Volta rechnet den Ton Stück für Stück aus."),
+                   qsTr("»♪ Ersatzton« heißt: Dein Gerät ist zu langsam dafür. Dann spielt Volta einen Ton mit der gerechneten Frequenz."),
+                   qsTr("Die Schildkröte in der Werkzeugleiste schaltet die Zeitlupe: 1/10, 1/100 oder 1/1000 so schnell wie echt. Dann ist der Ton stumm."),
+                   qsTr("Auf der Schildkröte steht, wie langsam es gerade läuft. Tippst du weiter, geht es zurück zur Echtzeit.")] }
+    ]
+    function v2Chapters() {
+        const out = []
+        for (const c of baseChapters) {
+            const change = v2Changes[c.key]
+            out.push(change ? Object.assign({}, c, change) : c)
+            if (c.key === "messen")
+                for (const e of v2Extra) out.push(e)
+        }
+        return out
+    }
 
     property string pendingKey: ""
     readonly property string language: typeof volta_languageService !== "undefined" && volta_languageService
@@ -219,7 +284,7 @@ Popup {
                         // Teilbild der Oberflaeche mit markierten Knoepfen (nicht bei »Sicher experimentieren«)
                         Image {
                             objectName: "helpImage_" + section.modelData.key
-                            visible: section.modelData.key !== "sicher"
+                            visible: section.modelData.key !== "sicher" && section.modelData.image !== false
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: Math.min(parent.width, 560)
                             height: visible ? width * 300 / 760 : 0
