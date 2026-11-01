@@ -8,8 +8,8 @@ namespace volta::core {
 using NodeId = std::size_t;
 inline constexpr NodeId kGround = 0;
 
-// Hoechstzahl der Anschluesse eines Bauteilmodells (Relais: Spule + Kontakt).
-inline constexpr std::size_t kMaxTerminals = 4;
+// Hoechstzahl der Anschluesse eines Bauteilmodells (Relais: Spule + Kontakt; OP-Modul 5, Timer 555: 8).
+inline constexpr std::size_t kMaxTerminals = 8;
 
 // Ergebnis von Kernoperationen. Der Kern wirft keine Ausnahmen; Fehler werden als Status gemeldet.
 enum class Status {

@@ -24,6 +24,7 @@
 #include "volta/core/components/inductor.hpp"
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/regulator.hpp"
+#include "volta/core/modules/opamp_module.hpp"
 #include "volta/core/components/wire.hpp"
 
 namespace volta::model {
@@ -374,6 +375,11 @@ private:
             m_net.modules[m.id] = r;
             for (std::size_t i = r.first; i < r.first + r.count; ++i)
                 if (m_net.circuit.component(i).id() == m.id + ".T2") m_net.moduleMain[m.id] = i;
+        } else if (m.type == "opmodul" && n.size() == 5) {
+            // Katalog: plus, minus, nichtinv, inv, aus (Makromodell, ein Bauteil)
+            const core::SubcircuitRange r = core::addOpAmpModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4]});
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
         } else if (m.type == "tonmodul" && n.size() == 4) {
             // Katalog: plus, minus, ein, aus
             const core::SubcircuitRange r = core::addToneModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});

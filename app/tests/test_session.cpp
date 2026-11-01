@@ -1102,6 +1102,36 @@ private slots:
         QVERIFY2(s->reading("R2")->currentA > 7e-3, qPrintable(QString::number(s->reading("R2")->currentA)));
     }
 
+    // OP-Modul (ab Volta 2) als Komparator: IN- auf halber Versorgung, IN+ an 0 V bzw. +9 V
+    void opModuleCompares() {
+        auto s = session();
+        std::string id;
+        QVERIFY(s->addModule("opmodul", 1, &id));
+        QCOMPARE(id, std::string("OP1"));
+        QVERIFY(s->addWire("P:+9V", "OP1.plus", "rot"));
+        QVERIFY(s->addWire("OP1.minus", "P:0V", "schwarz"));
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short)); // Teiler 10k/10k
+        QVERIFY(s->setPartValue("R1", 10e3));
+        QVERIFY(s->addPart("widerstand", "B1", Orientation::Horizontal, Span::Short));
+        QVERIFY(s->setPartValue("R2", 10e3));
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "B1", "gelb"));
+        QVERIFY(s->addWire("B2", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("B1", "OP1.inv", "blau"));
+        std::string in;
+        QVERIFY(s->addWire("OP1.nichtinv", "P:0V", "schwarz", &in));
+        s->setMainSwitch(true);
+        run(*s, 0.05);
+        const double low = s->voltage("OP1.aus");
+        QVERIFY2(low > 1.2 && low < 1.8, qPrintable(QString::number(low)));
+        QVERIFY(s->removeWire(in));
+        QVERIFY(s->addWire("OP1.nichtinv", "P:+9V", "rot"));
+        s->setMainSwitch(true);
+        run(*s, 0.05);
+        const double high = s->voltage("OP1.aus");
+        QVERIFY2(high > 7.0 && high < 7.8, qPrintable(QString::number(high)));
+    }
+
     // Tonmodul: Taster an ein startet die Melodie; der Lautsprecher am Ausgang zeigt den Ton (Klanganzeige)
     void toneModuleDrivesSpeaker() {
         auto s = session();

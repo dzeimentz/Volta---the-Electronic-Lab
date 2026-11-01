@@ -24,5 +24,6 @@
   "lex_ir_led": "An IR LED glows in the infrared – our eyes cannot see this light. Like every LED it needs a series resistor. The camera of many phones shows its glow.",
   "lex_fototransistor": "A phototransistor is a transistor controlled by light: the more light or IR radiation falls on it, the more current it lets through from C to E. You can shade it with the cover card.",
   "lex_optokoppler": "An optocoupler contains an IR LED and a phototransistor in a dark case. When the LED glows (A and K), the transistor conducts (C and E) – without the two circuits being connected.",
-  "lex_spannungsregler": "A voltage regulator turns a higher, fluctuating DC voltage into exactly 5 V. The input (IN) needs at least about 1.7 V more than the output (OUT). On a short circuit or overheating it protects itself and delivers less current."
+  "lex_spannungsregler": "A voltage regulator turns a higher, fluctuating DC voltage into exactly 5 V. The input (IN) needs at least about 1.7 V more than the output (OUT). On a short circuit or overheating it protects itself and delivers less current.",
+  "lex_opmodul": "The op-amp module (operational amplifier) compares its inputs IN+ and IN−. If IN+ is higher, the output goes up, otherwise down. With resistors from the output back to IN−, it becomes an amplifier with an exactly adjustable gain."
 }

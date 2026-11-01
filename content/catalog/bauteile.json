@@ -76,6 +76,8 @@
     {"typ": "zeitmodul", "anschluesse": ["plus", "minus", "start", "aus"], "breite": 4, "art": "teilschaltung",
      "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_zeitmodul"},
     {"typ": "verstaerkermodul", "anschluesse": ["plus", "minus", "ein", "aus"], "breite": 4, "art": "teilschaltung",
-     "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_verstaerkermodul"}
+     "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_verstaerkermodul"},
+    {"typ": "opmodul", "anschluesse": ["plus", "minus", "nichtinv", "inv", "aus"], "breite": 5, "art": "verhaltensmodell",
+     "ab_band": "volta2", "ab_stufe": 5, "lexikon_key": "lex_opmodul"}
   ]
 }

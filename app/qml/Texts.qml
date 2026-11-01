@@ -123,7 +123,8 @@ QtObject {
             ["feuchtesonde", qsTr("Feuchtesonde", "Wortanfaenge im Aufbautext")],
             ["piezo", qsTr("Piezo", "Wortanfaenge im Aufbautext")],
             ["zeitmodul", qsTr("Zeitmodul", "Wortanfaenge im Aufbautext")],
-            ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")]
+            ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")],
+            ["opmodul", qsTr("OP-Modul", "Wortanfaenge im Aufbautext")]
         ]
     }
 
@@ -133,6 +134,7 @@ QtObject {
         case "tonmodul": return qsTr("Tonmodul")
         case "zeitmodul": return qsTr("Zeitmodul")
         case "verstaerkermodul": return qsTr("Verstärkermodul")
+        case "opmodul": return qsTr("OP-Modul")
         }
         return type
     }
@@ -146,6 +148,8 @@ QtObject {
         case "ein": return qsTr("ein")
         case "takt": return qsTr("Takt")
         case "start": return qsTr("Start")
+        case "nichtinv": return "IN+"
+        case "inv": return "IN−"
         }
         return pin
     }

@@ -185,7 +185,18 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
     ein Impuls an `start` schaltet den Ausgang (offener Kollektor `aus`) fuer ca. ln2 * R * C = 3,2 s ein.
   - Verstaerkermodul (`addAmplifierModule`, Stufe 4): Darlington-Stufe (Treiber aus `plus`, Endstufe an `aus`),
     Eingang 10 kOhm; ca. 7 uA am Eingang schalten 15 mA am Ausgang.
-- **Makromodell** (ab Volta 2): Operationsverstaerker mit Aussteuergrenzen, Anstiegsrate, GBW.
+- **Makromodell** (ab Volta 2): OP-Modul (`OpAmpModule`, `addOpAmpModule`, `opmodul`, Stufe 5, Anschluesse plus,
+  minus, nichtinv, inv, aus; ein Bauteil mit 5 Anschluessen, `kMaxTerminals` = 8). Innerer Zustand y mit einem Pol:
+  tau dy/dt = A0 (U+ - U-) - y, A0 = 2 * 10^5, tau = A0 / (2 pi GBW), GBW 1 MHz, im Schritt implizit; Anstiegsrate
+  0,5 V/us als weiche Begrenzung der Aenderung je Schritt. Aussteuergrenzen weich (tanh) bei Mitte +- (U_Versorgung / 2
+  - 1,5 V); Endstufe I = 25 mA * tanh((U_Ziel - U_aus) / (25 mA * 75 Ohm)) aus +U bzw. -U (Aufteilung geglaettet);
+  Eingang 10 MOhm, Ruhestrom 1,5 mA, unter 4 V Versorgung kein Ausgangsstrom. Gegen Aufwickeln bleibt y hoechstens
+  1 V ueber der Grenze. Newton: das tanh-Argument der Aussteuerung springt aus der Begrenzung heraus hoechstens bis
+  zur Mitte, im Uebergang um 2 (sonst pendelt es zwischen den Grenzen); Ausgang je Iteration hoechstens 1 V.
+  **Anstoss:** Im linearen Bereich beginnt Newton probeweise an der Aussteuergrenze auf der Seite des Ausgangs. Bei
+  Gegenkopplung fuehrt die Begrenzung in den linearen Bereich zurueck (nachgewiesen fuer 64 Schritte), bei Mitkopplung
+  (Schmitt-Trigger, Rechteckgenerator) bleibt der OP an der Grenze. Ohne Anstoss hielte das implizite Verfahren den
+  Ausgang im instabilen Gleichgewicht der Mitte fest, das real in Mikrosekunden zerfaellt.
 - **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
   Abstimmung und Antenne. Im Elternbereich als solches offengelegt.
 - **Logikmodell** (Volta 3, Zuse 1): ereignisgesteuerte Gatter mit Kopplung an analoge Pegel.

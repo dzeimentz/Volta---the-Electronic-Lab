@@ -132,6 +132,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
             const bool relayTop = t == "relais" && n == "a", relayBottom = t == "relais" && n == "b";
             const bool relayRight = (t == "relais" && n == "no") || (t == "optokoppler" && (n == "c" || n == "e"));
             if (t == "optokoppler") p.label = n == "anode" ? "A" : n == "kathode" ? "K" : n == "c" ? "C" : "E";
+            if (t == "opmodul" && (n == "nichtinv" || n == "inv")) p.label = n == "nichtinv" ? "IN+" : "IN−";
             if (t == "spannungsregler_5v") { // Ein links, Aus rechts, Masse unten (wie im Datenblatt)
                 p.label = n == "ein" ? "IN" : n == "aus" ? "OUT" : "GND";
                 if (n == "masse") {

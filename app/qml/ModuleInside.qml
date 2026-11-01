@@ -1,6 +1,7 @@
 // »Blick hinein« (Konzept 5.4, Module): Module sind keine undurchschaubaren Zauberkaesten.
 // - Teilschaltung (Blinkmodul): die innere Schaltung als Schaltplan mit laufender Simulation - welcher Transistor
 //   leitet, wie weit die Kondensatoren geladen sind, ob der Ausgang schaltet.
+// - Makromodell (OP-Modul): Eingaenge, Differenzverstaerker und Endstufe als Blockbild mit den aktuellen Spannungen.
 // - Verhaltensmodell (Tonmodul): der Aufbau als Blockbild mit den Werten an den Anschluessen und einer Erklaerung,
 //   warum hier nicht jede Schwingung einzeln gerechnet wird.
 import QtQuick
@@ -90,6 +91,8 @@ Popup {
                       ? qsTr("Ein Ton schwingt Hunderte Male in jeder Sekunde – zu schnell, um jede Schwingung einzeln nachzurechnen. Darum arbeitet das Tonmodul in Volta mit einem Verhaltensmodell: An seinen Anschlüssen verhält es sich wie der echte Baustein, und den Ton spielt es direkt ab.")
                       : inside.moduleType === "zeitmodul"
                       ? qsTr("Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.")
+                      : inside.moduleType === "opmodul"
+                      ? qsTr("Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.")
                       : inside.moduleType === "verstaerkermodul"
                       ? qsTr("Im Verstärkermodul arbeiten zwei Transistoren hintereinander: Der winzige Eingangsstrom steuert T1, und der rund 200-mal größere Strom von T1 steuert T2. Zusammen verstärken sie etwa 40 000-fach. Was du hier siehst, wird gerade gerechnet.")
                       : qsTr("Im Blinkmodul arbeiten zwei Transistoren gegeneinander: Immer leitet einer, der andere sperrt. Die Kondensatoren laden sich langsam um und kippen die Schaltung hin und her. Ein dritter Transistor schaltet den Ausgang. Was du hier siehst, wird gerade gerechnet.")
@@ -276,6 +279,39 @@ Popup {
                             }
                         }
                     }
+                }
+            }
+
+            // ---------------------------------------------------------- Makromodell: OP als Blockbild
+            Column {
+                visible: inside.moduleType === "opmodul"
+                width: parent.width
+                spacing: 10
+                Row {
+                    spacing: 6
+                    Block {
+                        title: qsTr("Eingänge")
+                        value: "IN+ " + qsTr("%1 V").arg(inside.num(inside.info.inPV, 2)) + "\nIN− " + qsTr("%1 V").arg(inside.num(inside.info.inNV, 2))
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        title: qsTr("Unterschied × 200 000")
+                        value: qsTr("%1 mV").arg(inside.num(inside.info.diffmV, 3))
+                        lit: Math.abs(inside.info.diffmV || 0) > 1
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        title: qsTr("Endstufe „aus“")
+                        value: qsTr("%1 V").arg(inside.num(inside.info.outV, 2)) + "\n" + qsTr("%1 mA").arg(inside.num(inside.info.outmA, 1))
+                        lit: inside.info.high === true
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    color: "#4A5866"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    text: qsTr("Versorgung: %1 V. Der Ausgang reicht bis etwa 1,5 V unter Plus und 1,5 V über Minus; alle Spannungen sind gegen Minus gemessen. Mehr als etwa 25 mA liefert die Endstufe nicht.").arg(inside.num(inside.info.supplyV, 1))
                 }
             }
 

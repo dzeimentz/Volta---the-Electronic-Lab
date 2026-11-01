@@ -1541,6 +1541,9 @@ QVariantMap LabController::moduleState(const QString& id) const {
         m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
         m.insert(QStringLiteral("level"), r->level);
         m.insert(QStringLiteral("note"), static_cast<int>(r->displayValue));
+    } else if (type == "opmodul") {
+        // Ausgang ueber der Mitte der Versorgung
+        m.insert(QStringLiteral("active"), r->level > 0.5);
     } else {
         // Blinkmodul: Ausgangstransistor leitet (Kollektorstrom ueber 1 mA)
         m.insert(QStringLiteral("active"), std::fabs(r->terminalCurrentA[1]) > 1e-3);
@@ -1569,6 +1572,21 @@ QVariantMap LabController::moduleInside(const QString& id) const {
             m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
             m.insert(QStringLiteral("playing"), r->displayValue >= 0.0);
             m.insert(QStringLiteral("inV"), m_session->voltage(mid + ".ein") - m_session->voltage(mid + ".minus"));
+        }
+        return m;
+    }
+    if (type == "opmodul") {
+        // Makromodell: Spannungen an den Anschluessen gegen minus, Differenz und Ausgangsstrom
+        if (const core::ComponentReading* r = m_session->moduleReading(mid)) {
+            const double vm = m_session->voltage(mid + ".minus");
+            const double vp = m_session->voltage(mid + ".nichtinv"), vn = m_session->voltage(mid + ".inv");
+            m.insert(QStringLiteral("supplyV"), m_session->voltage(mid + ".plus") - vm);
+            m.insert(QStringLiteral("inPV"), vp - vm);
+            m.insert(QStringLiteral("inNV"), vn - vm);
+            m.insert(QStringLiteral("diffmV"), (vp - vn) * 1e3);
+            m.insert(QStringLiteral("outV"), r->displayValue);
+            m.insert(QStringLiteral("outmA"), -r->terminalCurrentA[4] * 1e3);
+            m.insert(QStringLiteral("high"), r->level > 0.5);
         }
         return m;
     }
