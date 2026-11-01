@@ -118,7 +118,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
     // a liegt unter b (nur wenn beide gezeichnet)
     auto below = [&](std::size_t a, std::size_t b) { return has(a) && has(b) && row(a) > row(b) + kEps; };
     const std::string& t = e.type;
-    if (e.module || t == "messgeraet" || t == "relais") {
+    if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler") {
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
@@ -130,7 +130,8 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
             PinGeo& p = g.pins[k];
             p.label = n == "plus" ? "+" : n == "minus" ? "−" : n == "VOHM" ? "V/Ω" : t == "relais" ? (n == "com" ? "COM" : n == "no" ? "NO" : n == "a" ? "A" : "B") : n;
             const bool relayTop = t == "relais" && n == "a", relayBottom = t == "relais" && n == "b";
-            const bool relayRight = t == "relais" && n == "no";
+            const bool relayRight = (t == "relais" && n == "no") || (t == "optokoppler" && (n == "c" || n == "e"));
+            if (t == "optokoppler") p.label = n == "anode" ? "A" : n == "kathode" ? "K" : n == "c" ? "C" : "E";
             if (n == "plus" || n == "VOHM" || relayTop) {
                 p.y = -g.h / 2;
                 p.exit = Exit::Up;

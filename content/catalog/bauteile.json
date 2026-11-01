@@ -58,7 +58,13 @@
     {"typ": "trimmer_10k", "thema": "widerstaende", "anschluesse": ["a", "s", "b"], "spannweite": ["traeger"], "lage": ["a", "s", "b"], "modell": "potentiometer",
      "parameter": {"r_ohm": 10000}, "ab_band": "volta2", "ab_stufe": 1, "lexikon_key": "lex_trimmer"},
     {"typ": "trimmer_100k", "thema": "widerstaende", "anschluesse": ["a", "s", "b"], "spannweite": ["traeger"], "lage": ["a", "s", "b"], "modell": "potentiometer",
-     "parameter": {"r_ohm": 100000}, "ab_band": "volta2", "ab_stufe": 1, "lexikon_key": "lex_trimmer"}
+     "parameter": {"r_ohm": 100000}, "ab_band": "volta2", "ab_stufe": 1, "lexikon_key": "lex_trimmer"},
+    {"typ": "ir_led", "thema": "licht", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"], "modell": "led",
+     "parameter": {"uf_V": 1.3, "imax_mA": 50}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_ir_led"},
+    {"typ": "fototransistor", "thema": "widerstaende", "anschluesse": ["c", "e"], "spannweite": ["kurz", "lang"], "modell": "phototransistor",
+     "parameter": {"s_uA_lx": 0.5}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_fototransistor"},
+    {"typ": "optokoppler", "thema": "halbleiter", "anschluesse": ["anode", "kathode", "c", "e"], "spannweite": ["platine_2x2"], "lage": ["anode", "c", "kathode", "e"], "modell": "optocoupler",
+     "parameter": {"ctr": 1.0}, "ab_band": "volta2", "ab_stufe": 8, "lexikon_key": "lex_optokoppler"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",

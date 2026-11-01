@@ -501,6 +501,61 @@ private slots:
         QVERIFY2(std::fabs(std::fabs(r->currentA) - t->voltage("A1") / 100e3) < 1e-6, qPrintable(QString::number(r->currentA)));
     }
 
+    // Lichtschranke: IR-LED strahlt auf den Fototransistor zwei Felder weiter; die Abdeckkarte unterbricht
+    void lightBarrierWithCard() {
+        auto s = session();
+        s->setRoomLight(0); // dunkel: nur die IR-LED
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("widerstand", "B1", Orientation::Horizontal, Span::Short, nullptr, 470.0)); // B1-B2
+        QVERIFY(s->addPart("ir_led", "A1", Orientation::Horizontal, Span::Short));                  // A1-A2
+        QVERIFY(s->addPart("widerstand", "C3", Orientation::Horizontal, Span::Short, nullptr, 47e3)); // C3-C4
+        QVERIFY(s->addPart("fototransistor", "A3", Orientation::Horizontal, Span::Short));          // C A3, E A4
+        QVERIFY(s->addWire("P:+9V", "B1", "rot"));
+        QVERIFY(s->addWire("B2", "A1", "gelb"));
+        QVERIFY(s->addWire("A2", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:+9V", "C4", "rot"));
+        QVERIFY(s->addWire("C3", "A3", "gelb"));
+        QVERIFY(s->addWire("A4", "P:0V", "schwarz"));
+        run(*s, 0.05);
+        const core::ComponentReading* led = s->reading("D1");
+        QVERIFY(led);
+        QVERIFY2(led->currentA > 10e-3, qPrintable(QString::number(led->currentA)));
+        const double lit = s->voltage("A3");
+        QVERIFY2(lit < 1.0, qPrintable(QString::number(lit))); // Strahl trifft: Fototransistor leitet
+        s->placeTool("karte", 3.5, 0.0); // Karte auf den Fototransistor
+        run(*s, 0.05);
+        const double blocked = s->voltage("A3");
+        QVERIFY2(blocked > s->voltage("P:+9V") - 0.5, qPrintable(QString::number(blocked)));
+        s->setToolOn("karte", false); // weggelegt
+        run(*s, 0.05);
+        QVERIFY(s->voltage("A3") < 1.0);
+    }
+
+    // Optokoppler: der Ausgang schaltet, ohne dass Eingang und Ausgang verbunden sind
+    void optocouplerSwitches() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("optokoppler", "C3", Orientation::Horizontal, Span::Short)); // A C3, C C4, K D3, E D4
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short, nullptr, 1000.0)); // A1-A2
+        QVERIFY(s->addPart("widerstand", "A5", Orientation::Horizontal, Span::Short, nullptr, 4700.0)); // A5-A6
+        QVERIFY(s->addPart("taster", "B1", Orientation::Horizontal, Span::Short));                      // B1-B2
+        QVERIFY(s->addWire("P:+9V", "B1", "rot"));
+        QVERIFY(s->addWire("B2", "A1", "gelb"));
+        QVERIFY(s->addWire("A2", "C3", "gelb"));
+        QVERIFY(s->addWire("D3", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:+9V", "A6", "rot"));
+        QVERIFY(s->addWire("A5", "C4", "gelb"));
+        QVERIFY(s->addWire("D4", "P:0V", "schwarz"));
+        run(*s, 0.05);
+        QVERIFY(s->voltage("C4") > s->voltage("P:+9V") - 0.05); // LED aus: Ausgang sperrt
+        s->setPartClosed("S1", true);
+        run(*s, 0.05);
+        QVERIFY2(s->voltage("C4") < 0.3, qPrintable(QString::number(s->voltage("C4")))); // gesaettigt
+        const core::ComponentReading* r = s->reading("OK1");
+        QVERIFY(r);
+        QVERIFY(r->terminalCurrentA[0] > 5e-3); // LED-Strom rund 7 mA
+    }
+
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage
     void successMatchesPartsByType() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));

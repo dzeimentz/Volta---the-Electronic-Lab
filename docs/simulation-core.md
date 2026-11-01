@@ -141,6 +141,17 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
   8 ms, faellt ab unter 12 mA nach 4 ms (Hysterese).
 - **Feuchtesonde** (`MoistureProbe`, Stufe 4): trocken 20 MOhm, nass 20 kOhm (Leitungswasser), logarithmisch
   dazwischen; Naesse als Bedienhandlung (Wassertropfen), nass werden tau 0,2 s, trocknen tau 4 s.
+- **IR-LED** (`ir_led`, ab Volta 2): Diode mit `DiodeParams::irLed` (1,3 V bei 20 mA, Rs 1 Ohm, Dauerstrom 50 mA),
+  strahlt unsichtbar (Darstellung: gestrichelte Strahlen).
+- **Fototransistor** (`Phototransistor`, ab Volta 2, C und E ohne Basis): Lichtstrom IL = Dunkelstrom 10 nA
+  + 0,5 uA/lx * Beleuchtung + Abschattung * Summe(k * I_IR-LED); Ic = IL * tanh(Uce / 0,15 V) * (1 + Uce / 50 V),
+  verkehrt herum 2 % (gleiche Steigung bei Uce = 0, sonst pendelt Newton). Die IR-LEDs wirken mit ihrem Strom des
+  letzten angenommenen Schritts (in beginSolve festgeschrieben). Kopplung nach Abstand der Bauteilmitten
+  k = 0,2 / (1 + d^2) (d in Feldern), ohne Abstrahlrichtung; Abdeckkarte (Werkzeug `karte`) laesst direkt darunter
+  0,5 % von Licht und IR-Strahlung durch. Imax 20 mA, Rth 450 K/W.
+- **Optokoppler** (`Optocoupler`, ab Volta 2, 2-x-2-Platine A, K, C, E): IR-LED (1,2 V bei 20 mA) und
+  Fototransistor in einem Bauteil, Uebertragungsfaktor 100 % (PC817-artig), Ausgang bis 50 mA; zerstoert, sobald
+  ein Teil zerstoert ist.
 - Vereinfachung: Spulen ohne Induktivitaet (L/R von wenigen ms ist bei 1 ms Schrittweite kaum sichtbar); die
   Abschaltspannung und die Freilaufdiode behandelt Volta 2. Im Elternbereich offengelegt.
 

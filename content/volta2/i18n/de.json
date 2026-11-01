@@ -20,5 +20,8 @@
   "lex_zdiode": "Eine Z-Diode leitet in Durchlassrichtung wie jede Diode. Falsch herum gepolt sperrt sie nur bis zu ihrer Z-Spannung (4,7 V oder 5,6 V, aufgedruckt) – darüber leitet sie und hält die Spannung fast fest. Sie braucht immer einen Vorwiderstand.",
   "lex_transistor_pnp": "Ein PNP-Transistor arbeitet wie der NPN-Transistor, nur mit umgekehrten Vorzeichen: Der Emitter liegt am Plus, und er leitet, wenn ein kleiner Strom aus der Basis heraus fließt. Gleiche Platine mit B, C und zweimal E, auf dem Gehäuse steht »P«.",
   "lex_spule": "Eine Spule ist ein aufgewickelter Draht. Sie wehrt sich gegen jede Änderung des Stroms: Beim Einschalten steigt er langsam an, beim Ausschalten will er weiterfließen. Es gibt sie mit 100 mH und mit Eisenkern als 1 H (Henry).",
-  "lex_trimmer": "Ein Trimmer ist ein kleines Potentiometer zum Einstellen: Der Schleifer s teilt die Bahn zwischen a und b. Man stellt ihn einmal mit dem Schraubendreher ein – tippe ihn an, dann erscheint der Regler."
+  "lex_trimmer": "Ein Trimmer ist ein kleines Potentiometer zum Einstellen: Der Schleifer s teilt die Bahn zwischen a und b. Man stellt ihn einmal mit dem Schraubendreher ein – tippe ihn an, dann erscheint der Regler.",
+  "lex_ir_led": "Eine IR-LED leuchtet im Infrarot – dieses Licht sehen unsere Augen nicht. Sie braucht wie jede LED einen Vorwiderstand. Die Kamera vieler Handys zeigt ihr Leuchten.",
+  "lex_fototransistor": "Ein Fototransistor ist ein Transistor, den Licht steuert: Je mehr Licht oder IR-Strahlung auf ihn fällt, desto mehr Strom lässt er von C nach E durch. Mit der Abdeckkarte kannst du ihn abschatten.",
+  "lex_optokoppler": "Ein Optokoppler enthält eine IR-LED und einen Fototransistor in einem dunklen Gehäuse. Leuchtet die LED (A und K), leitet der Transistor (C und E) – ohne dass die beiden Stromkreise verbunden sind."
 }

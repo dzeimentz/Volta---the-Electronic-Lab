@@ -24,7 +24,8 @@ struct Action {
         SetMotorBlocked, // Motor: value != 0 blockiert
         SetMeterMode,    // Messgeraet: value = 0 V, 1 A, 2 Ohm
         SetMeterAnalog,  // Messgeraet: value != 0 analog
-        SetIlluminance,  // Fotowiderstand: value = Beleuchtungsstaerke in lx
+        SetIlluminance,  // Fotowiderstand, Fototransistor: value = Beleuchtungsstaerke in lx
+        SetShade,        // Fototransistor: value = Anteil der IR-Strahlung, der ankommt (Abdeckkarte), 0..1
         SetAmbient,      // Heissleiter: value = Lufttemperatur am Bauteil in K
         SetWetness,      // Feuchtesonde: value = Naesse 0..1
         SetAcRms,        // Wechselquelle: value = Effektivwert in V

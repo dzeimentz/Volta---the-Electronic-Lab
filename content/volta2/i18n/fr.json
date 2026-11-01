@@ -20,5 +20,8 @@
   "lex_zdiode": "Une diode Zener conduit dans le sens direct comme toute diode. Branchée à l’envers, elle ne bloque que jusqu’à sa tension Zener (4,7 V ou 5,6 V, inscrite dessus) – au-delà elle conduit et maintient la tension presque fixe. Elle a toujours besoin d’une résistance en série.",
   "lex_transistor_pnp": "Un transistor PNP fonctionne comme le transistor NPN, mais avec les signes inversés : l’émetteur est au plus, et il conduit quand un petit courant sort de la base. Même carte avec B, C et deux fois E ; le boîtier porte un « P ».",
   "lex_spule": "Une bobine est un fil enroulé. Elle s’oppose à tout changement du courant : à la mise en marche il monte lentement, à l’arrêt il veut continuer à circuler. Il y en a une de 100 mH et une avec noyau de fer de 1 H (henry).",
-  "lex_trimmer": "Un trimmer est un petit potentiomètre de réglage : le curseur s partage la piste entre a et b. On le règle une fois avec un tournevis – touche-le et le curseur apparaît."
+  "lex_trimmer": "Un trimmer est un petit potentiomètre de réglage : le curseur s partage la piste entre a et b. On le règle une fois avec un tournevis – touche-le et le curseur apparaît.",
+  "lex_ir_led": "Une LED IR brille dans l’infrarouge – nos yeux ne voient pas cette lumière. Comme toute LED, elle a besoin d’une résistance en série. L’appareil photo de nombreux téléphones montre sa lueur.",
+  "lex_fototransistor": "Un phototransistor est un transistor commandé par la lumière : plus il reçoit de lumière ou de rayonnement IR, plus il laisse passer de courant de C vers E. Tu peux le masquer avec la carte.",
+  "lex_optokoppler": "Un optocoupleur contient une LED IR et un phototransistor dans un boîtier sombre. Quand la LED brille (A et K), le transistor conduit (C et E) – sans que les deux circuits soient reliés."
 }

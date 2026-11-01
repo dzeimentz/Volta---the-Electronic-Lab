@@ -632,6 +632,10 @@ void LabSession::postEnvironment() {
         const CatalogEntry* e = m_catalog.part(p.type);
         if (!e) continue;
         if (e->model == "ldr") m_bridge.post({p.id, sim::Action::Type::SetIlluminance, illuminanceAt(m_board, p)});
+        if (e->model == "phototransistor") {
+            m_bridge.post({p.id, sim::Action::Type::SetIlluminance, illuminanceAt(m_board, p)});
+            m_bridge.post({p.id, sim::Action::Type::SetShade, shadeAt(m_board, p)});
+        }
         if (e->model == "ntc") m_bridge.post({p.id, sim::Action::Type::SetAmbient, airTemperatureAt(m_board, p)});
         if (e->model == "moisture") m_bridge.post({p.id, sim::Action::Type::SetWetness, wetnessAt(m_board, p)});
     }
@@ -643,7 +647,7 @@ void LabSession::setRoomLight(int level) {
 }
 
 void LabSession::placeTool(const std::string& type, double col, double row) {
-    if (type != kToolFlashlight && type != kToolDryer && type != kToolWater) return;
+    if (type != kToolFlashlight && type != kToolDryer && type != kToolWater && type != kToolCard) return;
     col = std::clamp(col, 0.0, 13.0);
     row = std::clamp(row, -1.5, 5.5);
     auto& tools = m_board.desk.tools;

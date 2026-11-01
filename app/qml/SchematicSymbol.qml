@@ -65,6 +65,18 @@ Item {
         case "led_rot": case "led_gruen": case "led_gelb": case "led_blau": // Diode mit zwei Pfeilen nach aussen
             return {s: diode + " " + arrowLine(29, 7, 36, 0) + " " + arrowLine(35, 9, 42, 2),
                     f: arrowHead(29, 7, 36, 0) + " " + arrowHead(35, 9, 42, 2)}
+        case "ir_led": // LED-Zeichen mit »IR«
+            return {s: diode + " " + arrowLine(29, 7, 36, 0) + " " + arrowLine(35, 9, 42, 2),
+                    f: arrowHead(29, 7, 36, 0) + " " + arrowHead(35, 9, 42, 2), t: "IR", tx: 53, ty: 26}
+        case "fototransistor": // ohne Basisanschluss, Kollektor links, Emitter rechts, Licht faellt ein
+            return {s: circle(32, 19, 13) + " M0 16 H14 L26 23 M24 25 H40 M36 23 L50 16 H64 "
+                       + arrowLine(18, 0, 26, 12) + " " + arrowLine(27, 0, 35, 12),
+                    f: arrowHead(18, 0, 26, 12) + " " + arrowHead(27, 0, 35, 12) + " " + arrowHead(36, 23, 46, 18)}
+        case "optokoppler": // IR-LED und Fototransistor in einem Gehaeuse
+            return {s: "M6 2 H58 V30 H6 Z M18 2 V10 M13 10 H23 L18 18 Z M13 18 H23 M18 18 V30 "
+                       + arrowLine(25, 12, 33, 12) + " " + arrowLine(25, 19, 33, 19)
+                       + " M38 9 V23 M38 12 L46 6 V2 M38 20 L46 26 V30",
+                    f: arrowHead(25, 12, 33, 12) + " " + arrowHead(25, 19, 33, 19) + " " + arrowHead(38, 20, 46, 26)}
         case "kondensator":
             return {s: "M0 16 H29 M35 16 H64 M29 6 V26 M35 6 V26", f: ""}
         case "elko": // gepolt: Plusbelag hohl, Minusbelag gefuellt

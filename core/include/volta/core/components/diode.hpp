@@ -50,6 +50,9 @@ struct DiodeParams {
         p.nbv = (rzOhm - p.rsOhm) * p.ibvA / 0.02526;
         return p;
     }
+    // IR-LED (ab Volta 2), 940 nm, angelehnt an Datenblattwerte 5-mm-GaAs-IR-LEDs: Uf ca. 1,2 bis 1,3 V bei 20 mA,
+    // Bahnwiderstand 1 Ohm, Dauerstrom hier 50 mA (Datenblaetter 100 mA; didaktisch vorsichtiger)
+    static DiodeParams irLed(double ufV = 1.3) noexcept { return {ufV, 0.02, 1.6, 1.0, 0.05, kLedThermal, 2.5, 3.0}; }
     static DiodeParams zener4V7() noexcept { return zener(4.7, 60.0, 0.085); }
     static DiodeParams zener5V6() noexcept { return zener(5.6, 20.0, 0.070); }
 };
@@ -68,6 +71,8 @@ public:
     double saturationCurrentA() const noexcept { return m_isA; }
     double thermalVoltageV() const noexcept { return m_nVt / m_params.n; }
     double criticalVoltageV() const noexcept { return m_vcrit; }
+    // Betrag des Stroms im letzten angenommenen Zeitschritt (IR-LED als Lichtquelle des Fototransistors)
+    double currentA() const noexcept { return m_lastCurrentA; }
 
     // Strom des pn-Uebergangs nach Shockley, oberhalb der Leitwertgrenze linear fortgesetzt (Tests, Erklaerungen).
     double junctionCurrentA(double vdV) const noexcept;

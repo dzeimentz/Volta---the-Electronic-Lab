@@ -44,6 +44,9 @@ QtObject {
         case "spule_1h": return qsTr("Spule 1 H")
         case "trimmer_10k": return qsTr("Trimmer 10 kΩ")
         case "trimmer_100k": return qsTr("Trimmer 100 kΩ")
+        case "ir_led": return qsTr("IR-LED")
+        case "fototransistor": return qsTr("Fototransistor")
+        case "optokoppler": return qsTr("Optokoppler")
         case "heissleiter": return qsTr("Heißleiter")
         case "elektromagnet": return qsTr("Elektromagnet")
         case "relais": return qsTr("Relais")
@@ -95,6 +98,7 @@ QtObject {
             ["summer", qsTr("Summer", "Wortanfaenge im Aufbautext")],
             ["motor", qsTr("Motor", "Wortanfaenge im Aufbautext")],
             ["widerstand", qsTr("Widerstand,Widerstände", "Wortanfaenge im Aufbautext")],
+            ["ir_led", qsTr("IR-LED,Infrarot-LED", "Wortanfaenge im Aufbautext")],
             ["led_rot", qsTr("Leuchtdiode,LED", "Wortanfaenge im Aufbautext")],
             ["wechselschalter", qsTr("Wechselschalter", "Wortanfaenge im Aufbautext")],
             ["reedkontakt", qsTr("Reedkontakt", "Wortanfaenge im Aufbautext")],
@@ -106,6 +110,8 @@ QtObject {
             ["tonmodul", qsTr("Tonmodul", "Wortanfaenge im Aufbautext")],
             ["lautsprecher", qsTr("Lautsprecher", "Wortanfaenge im Aufbautext")],
             ["fotowiderstand", qsTr("Fotowiderstand", "Wortanfaenge im Aufbautext")],
+            ["fototransistor", qsTr("Fototransistor", "Wortanfaenge im Aufbautext")],
+            ["optokoppler", qsTr("Optokoppler", "Wortanfaenge im Aufbautext")],
             ["heissleiter", qsTr("Heißleiter", "Wortanfaenge im Aufbautext")],
             ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
             ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
@@ -189,9 +195,11 @@ QtObject {
                 : fields.length === 4
                 ? qsTr("Stecke %1 auf %2, %3, %4 und %5.").arg(name).arg(fields[0]).arg(fields[1]).arg(fields[2]).arg(fields[3])
                 : qsTr("Stecke %1 auf %2 und %3.").arg(name).arg(fields[0]).arg(fields[fields.length - 1])
-            if (s.type.startsWith("led_")) t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
+            if (s.type.startsWith("led_") || s.type === "ir_led") t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
             else if (s.type.startsWith("diode") || s.type.startsWith("zdiode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
             else if (s.type === "summer" || s.type === "elko" || s.type === "piezo") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))
+            else if (s.type === "fototransistor") t += " " + qsTr("C kommt an %1.").arg(pinField("c"))
+            else if (s.type === "optokoppler") t += " " + qsTr("A kommt an %1, C an %2.").arg(pinField("anode")).arg(pinField("c"))
             else if (s.type.startsWith("transistor")) t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
             else if (s.type === "wechselschalter") t += " " + qsTr("Die Mitte kommt an %1.").arg(pinField("mitte"))
             if ((s.type === "widerstand" || s.type === "kondensator" || s.type === "elko") && s.value > 0)
@@ -226,6 +234,7 @@ QtObject {
         case "taschenlampe": return qsTr("Taschenlampe")
         case "foehn": return qsTr("Föhn")
         case "wasser": return qsTr("Wassertropfen")
+        case "karte": return qsTr("Abdeckkarte")
         }
         return type
     }

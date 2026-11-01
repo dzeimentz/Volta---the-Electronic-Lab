@@ -18,6 +18,7 @@ Item {
     height: Theme.control + 8
     readonly property bool flash: toolType === "taschenlampe"
     readonly property bool water: toolType === "wasser"
+    readonly property bool card: toolType === "karte" // Abdeckkarte (ab Volta 2)
 
     transform: Translate {
         x: drag.active ? drag.activeTranslation.x : 0
@@ -31,7 +32,7 @@ Item {
             required property real modelData
             anchors.centerIn: parent
             width: tool.reach * 2 * modelData; height: width; radius: width / 2
-            color: tool.flash ? "#FFF3A0" : tool.water ? "#5AA9E6" : "#FF8C3A"
+            color: tool.flash ? "#FFF3A0" : tool.water ? "#5AA9E6" : tool.card ? "#4A5560" : "#FF8C3A"
             opacity: 0.15
         }
     }
@@ -39,13 +40,13 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: width / 2
-        color: tool.on ? (tool.flash ? "#FFE58A" : tool.water ? "#BFE0F7" : "#FFB27A") : "#C9CED4"
+        color: tool.on ? (tool.flash ? "#FFE58A" : tool.water ? "#BFE0F7" : tool.card ? "#F4F6F8" : "#FFB27A") : "#C9CED4"
         border.color: Theme.navy
         border.width: 2
         Text {
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -5
-            text: tool.flash ? "🔦" : tool.water ? "💧" : "♨"
+            text: tool.flash ? "🔦" : tool.water ? "💧" : tool.card ? "▮" : "♨"
             font.pixelSize: 24
             color: tool.flash ? "#2E3B4A" : "#B23A10"
         }
@@ -62,7 +63,7 @@ Item {
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.bottom
-        text: tool.flash ? qsTr("Taschenlampe") : tool.water ? qsTr("Wassertropfen") : qsTr("Föhn")
+        text: Texts.toolName(tool.toolType)
         font.pixelSize: Math.round(11 * Theme.fontScale)
         font.bold: true
         color: Theme.navy

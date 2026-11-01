@@ -41,7 +41,18 @@ double toolEffect(const Board& board, const PartPlacement& part, const std::stri
 
 double illuminanceAt(const Board& board, const PartPlacement& part) {
     const int room = std::clamp(board.desk.roomLight, 0, 2);
-    return kRoomLux[room] + toolEffect(board, part, kToolFlashlight, kFlashLux, kFlashReach);
+    return (kRoomLux[room] + toolEffect(board, part, kToolFlashlight, kFlashLux, kFlashReach)) * shadeAt(board, part);
+}
+
+double shadeAt(const Board& board, const PartPlacement& part) {
+    return std::max(0.0, 1.0 - std::min(kCardBlock, toolEffect(board, part, kToolCard, kCardBlock, kCardReach)));
+}
+
+double irCoupling(const PartPlacement& led, const PartPlacement& receiver) {
+    double c1 = 0.0, r1 = 0.0, c2 = 0.0, r2 = 0.0;
+    if (!partCenter(led, c1, r1) || !partCenter(receiver, c2, r2)) return 0.0;
+    const double d = std::hypot(c1 - c2, r1 - r2) / kIrReach;
+    return kIrCoupling / (1.0 + d * d);
 }
 
 double wetnessAt(const Board& board, const PartPlacement& part) {

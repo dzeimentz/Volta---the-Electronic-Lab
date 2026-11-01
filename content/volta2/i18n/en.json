@@ -20,5 +20,8 @@
   "lex_zdiode": "A Zener diode conducts in the forward direction like any diode. Connected the other way round it only blocks up to its Zener voltage (4.7 V or 5.6 V, printed on it) – above that it conducts and holds the voltage almost fixed. It always needs a series resistor.",
   "lex_transistor_pnp": "A PNP transistor works like the NPN transistor, only with reversed signs: the emitter is at plus, and it conducts when a small current flows out of the base. Same board with B, C and E twice; the case is marked »P«.",
   "lex_spule": "A coil is a wound-up wire. It resists every change of current: when switched on the current rises slowly, when switched off it wants to keep flowing. There is one with 100 mH and one with an iron core with 1 H (henry).",
-  "lex_trimmer": "A trimmer is a small potentiometer for adjusting: the wiper s divides the track between a and b. It is set once with a screwdriver – tap it and the slider appears."
+  "lex_trimmer": "A trimmer is a small potentiometer for adjusting: the wiper s divides the track between a and b. It is set once with a screwdriver – tap it and the slider appears.",
+  "lex_ir_led": "An IR LED glows in the infrared – our eyes cannot see this light. Like every LED it needs a series resistor. The camera of many phones shows its glow.",
+  "lex_fototransistor": "A phototransistor is a transistor controlled by light: the more light or IR radiation falls on it, the more current it lets through from C to E. You can shade it with the cover card.",
+  "lex_optokoppler": "An optocoupler contains an IR LED and a phototransistor in a dark case. When the LED glows (A and K), the transistor conducts (C and E) – without the two circuits being connected."
 }

@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "model/netlist_builder.hpp"
+#include "volta/core/components/optics.hpp"
 #include "volta/core/components/sensors.hpp"
 #include "volta/core/components/sources.hpp"
 #include "volta/core/components/battery.hpp"
@@ -139,6 +140,10 @@ void SimulationBridge::apply(const Action& a) {
         break;
     case Action::Type::SetIlluminance:
         if (auto* l = dynamic_cast<core::Photoresistor*>(&c)) l->setIlluminance(a.value);
+        else if (auto* q = dynamic_cast<core::Phototransistor*>(&c)) q->setIlluminance(a.value);
+        break;
+    case Action::Type::SetShade:
+        if (auto* q = dynamic_cast<core::Phototransistor*>(&c)) q->setShade(a.value);
         break;
     case Action::Type::SetAmbient:
         if (auto* t = dynamic_cast<core::Thermistor*>(&c)) t->setAmbient(a.value);

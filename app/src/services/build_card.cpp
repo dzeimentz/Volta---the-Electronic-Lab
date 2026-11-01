@@ -49,6 +49,7 @@ QString pinMark(const std::string& type, const std::string& pin) {
     if (pin == "kathode" || pin == "minus") return QStringLiteral("−");
     if (type == "transistor_npn" || type == "transistor_pnp") return pin == "b" ? QStringLiteral("B") : pin == "c" ? QStringLiteral("C") : QStringLiteral("E");
     if (type == "wechselschalter" && pin == "mitte") return QStringLiteral("M");
+    if (type == "fototransistor" || type == "optokoppler") return pin == "c" ? QStringLiteral("C") : QStringLiteral("E");
     if (type == "relais" && (pin == "com" || pin == "no")) return QString::fromStdString(pin).toUpper();
     return {};
 }

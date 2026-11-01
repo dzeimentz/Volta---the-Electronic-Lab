@@ -22,6 +22,7 @@
 #include "volta/core/components/switch.hpp"
 #include "volta/core/components/transistor.hpp"
 #include "volta/core/components/inductor.hpp"
+#include "volta/core/components/optics.hpp"
 #include "volta/core/components/wire.hpp"
 
 namespace volta::model {
@@ -52,6 +53,7 @@ public:
         mapModulePins();
         buildDesk();
         for (const auto& p : m_board.parts) buildPart(p);
+        coupleInfrared();
         for (const auto& w : m_board.wires) buildWire(w);
         for (const auto& m : m_board.modules) buildModule(m);
     }
@@ -221,7 +223,8 @@ private:
             rp.pmaxW = e->param("pmax_W", rp.pmaxW);
             c.add<core::Resistor>(p.id, n[0], n[1], rp);
         } else if ((m == "led" || m == "diode") && n.size() == 2) {
-            c.add<core::Diode>(p.id, n[0], n[1], diodeParams(*e));
+            auto& d = c.add<core::Diode>(p.id, n[0], n[1], diodeParams(*e));
+            if (p.type == "ir_led") m_irLeds.push_back({&d, &p});
         } else if (m == "lamp" && n.size() == 2) {
             // Variante ueber die Nennspannung (Wert des Bauteils); ohne Wert: Katalogvorgabe
             core::LampParams lp;
@@ -259,6 +262,16 @@ private:
             bp.betaF = e->param("beta", bp.betaF);
             c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
             if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
+        } else if (m == "phototransistor" && n.size() == 2) {
+            core::PhototransistorParams tp;
+            tp.luxSensitivityA = e->param("s_uA_lx", tp.luxSensitivityA * 1e6) * 1e-6;
+            auto& q = c.add<core::Phototransistor>(p.id, n[0], n[1], tp, illuminanceAt(m_board, p));
+            q.setShade(shadeAt(m_board, p));
+            m_receivers.push_back({&q, &p});
+        } else if (m == "optocoupler" && n.size() == 4) {
+            core::OptocouplerParams op;
+            op.ctr = e->param("ctr", op.ctr);
+            c.add<core::Optocoupler>(p.id, n[0], n[1], n[2], n[3], op);
         } else if (m == "inductor" && n.size() == 2) {
             // 100 mH oder 1 H (Katalog l_H); Wicklungswiderstand und Grenzstrom wie die Vorgaben des Kerns
             const double l = e->param("l_H", 0.1);
@@ -305,12 +318,19 @@ private:
         else if (e.type == "led_gruen") d = core::DiodeParams::ledGreen();
         else if (e.type == "led_gelb") d = core::DiodeParams::ledYellow();
         else if (e.type == "led_blau") d = core::DiodeParams::ledBlue();
+        else if (e.type == "ir_led") d = core::DiodeParams::irLed();
         else if (e.model == "led") d = core::DiodeParams::ledRed();
         else if (e.type == "zdiode_4v7") d = core::DiodeParams::zener4V7();
         else if (e.type == "zdiode_5v6") d = core::DiodeParams::zener5V6();
         d.ufV = e.param("uf_V", d.ufV); // Katalogwert bestimmt die Kennlinie
         d.imaxA = e.param("imax_mA", d.imaxA * 1e3) * 1e-3;
         return d;
+    }
+
+    // IR-Strahlung: jeder Fototransistor empfaengt die IR-LEDs nach Abstand (Abschattung ueber setShade)
+    void coupleInfrared() {
+        for (const auto& [q, rp] : m_receivers)
+            for (const auto& [d, lp] : m_irLeds) q->addEmitter(d, irCoupling(*lp, *rp));
     }
 
     void buildWire(const WirePlacement& w) {
@@ -365,6 +385,8 @@ private:
     const Catalog& m_catalog;
     Netlist& m_net;
     std::unordered_map<std::string, std::string> m_pinToSlot;
+    std::vector<std::pair<const core::Diode*, const PartPlacement*>> m_irLeds;
+    std::vector<std::pair<core::Phototransistor*, const PartPlacement*>> m_receivers;
 };
 
 } // namespace

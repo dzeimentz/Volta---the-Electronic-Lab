@@ -400,6 +400,8 @@ das iPad).
   Wegraeumen. Ein Schein zeigt die Reichweite; die Wirkung nimmt mit dem Abstand ab (`model/environment.hpp`):
   Taschenlampe bis 5000 lx direkt darueber, Foehn bis 80 Grad C, Wassertropfen macht die Feuchtesonde direkt darunter
   nass (ein Feld weiter kaum). Bedienhandlungen (kein Verlauf), auch im Betrieb.
+- Ab Volta 2, sobald es den Fototransistor gibt: **Abdeckkarte** (fuenftes Werkzeug), schattet Licht und
+  IR-Strahlung direkt darunter ab (Lichtschranke unterbrechen).
 - Neue Bauteile der Stufe 3: Fotowiderstand (Lichtschein je nach Helligkeit), Heissleiter (Perle, die bei Waerme rot
   wird; Temperatur an der Beschriftung), Elektromagnet (Bueroklammer wird angezogen, Feldlinien), Relais auf
   2-x-2-Platine (A | B Spule oben, COM | NO Schliesser unten; Kontaktzunge zeigt die Stellung).

@@ -22,11 +22,25 @@ inline constexpr const char* kToolFlashlight = "taschenlampe";
 inline constexpr const char* kToolDryer = "foehn";
 inline constexpr const char* kToolWater = "wasser";
 inline constexpr double kWaterReach = 0.6; // Wassertropfen: nass direkt darunter, ein Feld weiter kaum
+// Abdeckkarte (ab Volta 2): schattet ab, was direkt darunter liegt (Licht und IR-Strahlung); d0 = 0,45: direkt
+// darunter kommen 0,5 % an, ein Feld weiter 84 %
+inline constexpr const char* kToolCard = "karte";
+inline constexpr double kCardBlock = 0.995;
+inline constexpr double kCardReach = 0.45;
+// IR-Strahlung einer IR-LED am Fototransistor (ab Volta 2): Lichtstrom = k * I_LED mit k = kIrCoupling / (1 + (d /
+// kIrReach)^2), d = Abstand der Bauteilmitten in Feldern (zwei Felder: 4 %); die Abstrahlrichtung bleibt
+// unberuecksichtigt (Vereinfachung). Ausgangswert fuer die Kalibrierung.
+inline constexpr double kIrCoupling = 0.2;
+inline constexpr double kIrReach = 1.0;
 
 // Mitte eines Bauteils in Feldeinheiten; false, wenn es nicht auf Feldern der Grundplatte steckt
 bool partCenter(const PartPlacement& part, double& col, double& row);
 // Beleuchtungsstaerke am Bauteil in lx
 double illuminanceAt(const Board& board, const PartPlacement& part);
+// Anteil von Licht und IR-Strahlung, der am Bauteil ankommt (Abdeckkarte), 0..1
+double shadeAt(const Board& board, const PartPlacement& part);
+// Kopplungsfaktor IR-LED -> Fototransistor (Lichtstrom je A LED-Strom), ohne Abschattung
+double irCoupling(const PartPlacement& led, const PartPlacement& receiver);
 // Lufttemperatur am Bauteil in K
 double airTemperatureAt(const Board& board, const PartPlacement& part);
 // Naesse am Bauteil 0..1 (Wassertropfen; d0 = 0,6: direkt darunter nass, ein Feld weiter ca. 0,26)

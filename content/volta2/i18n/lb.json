@@ -20,5 +20,8 @@
   "lex_zdiode": "Eng Z-Diod leet an Duerchlassrichtung wéi all Diod. Falsch erëm gepoolt spaart se nëmme bis zu hirer Z-Spannung (4,7 V oder 5,6 V, drop gedréckt) – driwwer leet se an hält d’Spannung bal fest. Si brauch ëmmer e Virwidderstand.",
   "lex_transistor_pnp": "En PNP-Transistor schafft wéi den NPN-Transistor, just mat ëmgedréinte Virzeechen: Den Emitter läit um Plus, an e leet, wann e klenge Stroum aus der Basis eraus fléisst. Selwecht Platine mat B, C an zweemol E; um Gehäus steet »P«.",
   "lex_spule": "Eng Spull ass en opgewéckelten Drot. Si wiert sech géint all Ännerung vum Stroum: Beim Uschalten klëmmt e lues, beim Ausschalten wëll e weiderfléissen. Et gëtt se mat 100 mH a mat Eisekär als 1 H (Henry).",
-  "lex_trimmer": "En Trimmer ass e klengt Potentiometer fir anzestellen: De Schleifer s deelt d’Bunn tëscht a an b. Een astellt en eemol mam Schrauwenzéier – tipp en un, da kënnt de Regler."
+  "lex_trimmer": "En Trimmer ass e klengt Potentiometer fir anzestellen: De Schleifer s deelt d’Bunn tëscht a an b. Een astellt en eemol mam Schrauwenzéier – tipp en un, da kënnt de Regler.",
+  "lex_ir_led": "Eng IR-LED liicht am Infrarout – dat Liicht gesinn eis Aen net. Wéi all LED brauch se e Virwidderstand. D’Kamera vu villen Handyen weist hiert Liichten.",
+  "lex_fototransistor": "E Fototransistor ass en Transistor, deen d’Liicht steiert: Wat méi Liicht oder IR-Stralung op en fält, wat méi Stroum léisst e vu C op E duerch. Mat der Ofdeckkaart kanns du en ofschiedegen.",
+  "lex_optokoppler": "En Optokoppler huet eng IR-LED an e Fototransistor an engem donkele Gehäus. Liicht d’LED (A a K), da leet den Transistor (C an E) – ouni datt déi zwee Stroumkreeser verbonne sinn."
 }

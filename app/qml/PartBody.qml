@@ -92,6 +92,9 @@ Item {
             case "transistor_npn": case "transistor_pnp": return transistor
             case "spule_100mh": case "spule_1h": return coil
             case "trimmer_10k": case "trimmer_100k": return trimmer
+            case "ir_led": return irLed
+            case "fototransistor": return phototransistor
+            case "optokoppler": return optocoupler
             case "fotowiderstand": return photo
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
@@ -394,6 +397,95 @@ Item {
                 text: Texts.capacitorCode(root.value)
                 color: "#3A2A08"
                 font.pixelSize: Math.round(10 * Theme.fontScale); font.bold: true
+            }
+        }
+    }
+
+    // IR-LED (ab Volta 2): dunkle Kuppel, leuchtet nicht sichtbar; im Betrieb gestrichelte Strahlen und »IR«
+    Component {
+        id: irLed
+        Item {
+            Repeater { // Strahlen nach Strom (level = I / 20 mA), gestrichelt: unsichtbares Licht
+                model: root.level > 0.05 && !root.destroyed ? [-35, 0, 35] : []
+                Row {
+                    required property int modelData
+                    x: irDome.x + irDome.width / 2
+                    y: irDome.y + irDome.height / 2 - 1
+                    spacing: 3
+                    transformOrigin: Item.Left
+                    rotation: -90 + modelData
+                    Item { width: irDome.width / 2 + 1; height: 1 } // Strahlen beginnen am Kuppelrand
+                    Repeater {
+                        model: 3
+                        Rectangle { width: 6; height: 3; radius: 1; color: "#8E5CE6"; opacity: Math.min(1, 0.5 + root.level * 0.4) }
+                    }
+                }
+            }
+            Rectangle {
+                id: irDome
+                anchors.centerIn: parent
+                width: parent.height * 0.95; height: width; radius: width / 2
+                color: "#4A4458"; border.color: "#1E1A28"; border.width: 2
+                Text { anchors.centerIn: parent; text: "IR"; color: "#E6E0F2"; font.pixelSize: Math.round(10 * Theme.fontScale); font.bold: true }
+            }
+            Rectangle { // Kathode rechts: abgeflachte Seite und Strich
+                x: irDome.x + irDome.width - 5; y: irDome.y + 3
+                width: 4; height: irDome.height - 6
+                color: Theme.navy
+            }
+            PlusMark { x: irDome.x - 19; y: parent.height / 2 + 1 }
+        }
+    }
+
+    // Fototransistor (ab Volta 2): klare Kuppel mit Chip; C (Kollektor, erster Anschluss) links, E rechts aufgedruckt
+    Component {
+        id: phototransistor
+        Item {
+            Rectangle {
+                id: ptDome
+                anchors.centerIn: parent
+                width: parent.height * 0.95; height: width; radius: width / 2
+                color: "#DCE8F2"; border.color: "#6F8396"; border.width: 2
+                Rectangle { anchors.centerIn: parent; width: 8; height: 8; color: "#2E3B4A" }
+                Rectangle { // leuchtet auf, wenn Strom fliesst (level = I / 1 mA)
+                    anchors.fill: parent; radius: width / 2
+                    color: "#FFE58A"
+                    opacity: root.destroyed ? 0 : Math.min(0.5, root.level * 0.25)
+                }
+            }
+            Text { anchors.right: ptDome.left; anchors.rightMargin: 2; anchors.verticalCenter: parent.verticalCenter; text: "C"; font.pixelSize: Math.round(11 * Theme.fontScale); font.bold: true; color: Theme.navy }
+            Text { anchors.left: ptDome.right; anchors.leftMargin: 2; anchors.verticalCenter: parent.verticalCenter; text: "E"; font.pixelSize: Math.round(11 * Theme.fontScale); font.bold: true; color: Theme.navy }
+        }
+    }
+
+    // Optokoppler (ab Volta 2) auf 2-x-2-Platine: schwarzes Gehaeuse mit Punkt bei Anschluss 1 (Anode);
+    // Fussbezeichnung A, K (IR-LED) und C, E (Fototransistor)
+    Component {
+        id: optocoupler
+        Rectangle {
+            id: okPcb
+            anchors.fill: parent; radius: 6
+            color: "#2F6B3A"; border.color: "#173D1E"; border.width: 2
+            readonly property var f: root.feet.length === 4 ? root.feet
+                                   : [Qt.point(16, 14), Qt.point(16, height - 14),
+                                      Qt.point(width - 16, 14), Qt.point(width - 16, height - 14)]
+            Rectangle {
+                anchors.centerIn: parent
+                width: 28; height: 24; radius: 3
+                color: "#1E1E1E"; border.color: "#000000"
+                Rectangle { x: 4; y: 4; width: 5; height: 5; radius: 2.5; color: "#BDBDBD" } // Punkt: Anschluss 1
+                Text { anchors.centerIn: parent; anchors.verticalCenterOffset: 3; text: "OK"; color: "#E0E0E0"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true }
+            }
+            Repeater {
+                model: ["A", "K", "C", "E"]
+                Text {
+                    required property int index
+                    required property string modelData
+                    text: modelData
+                    font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true; color: "white"
+                    x: okPcb.f[index].x + (okPcb.f[index].x < okPcb.width / 2 ? 7 : -7 - width)
+                    y: okPcb.f[index].y + (okPcb.f[index].y < okPcb.height / 2 ? 4 : -4 - height)
+                }
             }
         }
     }
