@@ -22,6 +22,7 @@ using Clock = std::chrono::steady_clock;
 constexpr double kPublishS = 1.0 / 120.0;    // Schnappschuesse mit ca. 120 Hz
 constexpr double kMaxCatchUpS = 0.05;        // je Durchlauf hoechstens 50 ms Wanduhrzeit aufholen
 constexpr std::size_t kEventBacklog = 512;   // Ereignisse, bis die Oberflaeche sie abholt
+constexpr double kStatsWindowS = 0.1;        // Messfenster der Signalstatistik (5 Perioden bei 50 Hz)
 } // namespace
 
 SimulationBridge::SimulationBridge() {
@@ -107,6 +108,9 @@ void SimulationBridge::applyPending() {
         m_back.readings.reserve(n);
         m_back.states.reserve(n);
         m_back.nodeVolt.reserve(m_sim.circuit().nodeCount());
+        m_nodeStats.reset(m_sim.circuit().nodeCount(), kStatsWindowS);
+        m_readingStats.reset(2 * n, kStatsWindowS);
+        m_readingValues.assign(2 * n, 0.0);
     }
     for (const auto& a : m_actionsWork) apply(a);
 }
@@ -177,6 +181,8 @@ void SimulationBridge::publish(double realtimeRatio) {
     m_back.valid = p.valid;
     m_back.nodeVolt.assign(p.nodeVolt.begin(), p.nodeVolt.end());
     m_back.readings.assign(p.readings.begin(), p.readings.end());
+    m_back.nodeStats.assign(m_nodeStats.latest().begin(), m_nodeStats.latest().end());
+    m_back.readingStats.assign(m_readingStats.latest().begin(), m_readingStats.latest().end());
     const core::Circuit& c = m_sim.circuit();
     m_back.states.resize(c.componentCount());
     for (std::size_t i = 0; i < c.componentCount(); ++i) m_back.states[i] = c.component(i).saveState();
@@ -190,6 +196,8 @@ void SimulationBridge::publish(double realtimeRatio) {
     std::swap(m_front.valid, m_back.valid);
     std::swap(m_front.nodeVolt, m_back.nodeVolt);
     std::swap(m_front.readings, m_back.readings);
+    std::swap(m_front.nodeStats, m_back.nodeStats);
+    std::swap(m_front.readingStats, m_back.readingStats);
     std::swap(m_front.states, m_back.states);
     std::swap(m_front.lastStatus, m_back.lastStatus);
     std::swap(m_front.realtimeRatio, m_back.realtimeRatio);
@@ -208,6 +216,8 @@ bool SimulationBridge::latest(Snapshot& out) {
     out.valid = m_front.valid;
     out.nodeVolt.assign(m_front.nodeVolt.begin(), m_front.nodeVolt.end());
     out.readings.assign(m_front.readings.begin(), m_front.readings.end());
+    out.nodeStats.assign(m_front.nodeStats.begin(), m_front.nodeStats.end());
+    out.readingStats.assign(m_front.readingStats.begin(), m_front.readingStats.end());
     out.states.assign(m_front.states.begin(), m_front.states.end());
     out.lastStatus = m_front.lastStatus;
     out.realtimeRatio = m_front.realtimeRatio;
@@ -216,8 +226,20 @@ bool SimulationBridge::latest(Snapshot& out) {
 }
 
 void SimulationBridge::step() {
+    const double t0 = m_sim.timeS();
     const core::Status s = m_sim.step();
     if (s != core::Status::Ok) m_back.lastStatus = s;
+    const double dt = m_sim.timeS() - t0;
+    const core::Probe& p = m_sim.probe();
+    if (dt > 0.0 && p.valid) {
+        m_nodeStats.add(p.nodeVolt.data(), p.nodeVolt.size(), dt);
+        const std::size_t n = std::min(p.readings.size(), m_readingValues.size() / 2);
+        for (std::size_t i = 0; i < n; ++i) {
+            m_readingValues[2 * i] = p.readings[i].voltV;
+            m_readingValues[2 * i + 1] = p.readings[i].currentA;
+        }
+        m_readingStats.add(m_readingValues.data(), 2 * n, dt);
+    }
     if (m_observer) m_observer->afterStep(m_sim);
 }
 

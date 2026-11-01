@@ -1378,6 +1378,11 @@ int LabController::deskPartWires(const QString& part) const {
 double LabController::voltage(const QString& anchor) const { return m_session->voltage(ss(anchor)); }
 int LabController::voltageBars(const QString& anchor) { return m_session->voltageBars(ss(anchor)); }
 
+QVariantMap LabController::voltageDisplay(const QString& anchor) {
+    const model::LabSession::VoltageDisplay d = m_session->voltageDisplay(ss(anchor));
+    return {{QStringLiteral("bars"), d.bars}, {QStringLiteral("negative"), d.negative}, {QStringLiteral("ac"), d.ac}};
+}
+
 QVariantMap LabController::partState(const QString& id) const {
     QVariantMap m;
     if (const model::PartPlacement* p = m_session->board().findPart(ss(id))) {

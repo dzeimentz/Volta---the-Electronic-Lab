@@ -246,6 +246,21 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // VOLTA_DEMO_GALLERY=4 (mit VOLTA_DEMO_FREELAB=1): erweiterte Spannungsanzeige - symmetrische Versorgung (minus,
+    // blau), Wechselquelle (~, Effektivwert) und Batterie 1 (plus)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 4) {
+        QTimer::singleShot(400, &lab, [&lab] {
+            lab.addDeskPart(QStringLiteral("batterie2"));
+            lab.addDeskPart(QStringLiteral("wechselquelle"));
+            const char* wires[][2] = {{"P:+B2", "P:0V"}, {"P:-B2", "A1"}, {"P:W~b", "P:0V"}, {"P:W~a", "B1"},
+                                      {"P:+9V", "C1"}};
+            for (const auto& w : wires)
+                lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("gelb"));
+            for (const char* f : {"A1", "B1", "C1"}) lab.toggleVoltageDisplay(QString::fromLatin1(f));
+            lab.setMainSwitch(true);
+        });
+    }
+
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {

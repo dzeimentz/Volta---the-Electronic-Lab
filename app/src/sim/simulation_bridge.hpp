@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "volta/core/circuit.hpp"
+#include "volta/core/signal_stats.hpp"
 #include "volta/core/simulator.hpp"
 
 namespace volta::sim {
@@ -62,6 +63,10 @@ struct Snapshot {
     std::vector<core::ComponentReading> readings;
     std::vector<core::ComponentState> states; // fuer Befehle (Zustandsschnappschuss vor der Ausfuehrung)
     std::vector<core::SimEvent> events;       // seit dem letzten Abholen
+    // Statistik des letzten abgeschlossenen Messfensters (kStatsWindowS): je Knoten die Spannung, je Bauteil
+    // Spannung (2 i) und Strom (2 i + 1) wie in readings (Spannungsanzeige, Wechselgroessen der Messgeraete)
+    std::vector<core::SignalSummary> nodeStats;
+    std::vector<core::SignalSummary> readingStats;
     core::Status lastStatus = core::Status::Ok;
     double realtimeRatio = 1.0;               // erreichte Simulationszeit je Wanduhrzeit (1 = Echtzeit)
 };
@@ -107,6 +112,9 @@ private:
     void step();                // ein Simulationsschritt samt Beobachter
 
     core::Simulator m_sim; // nur im Simulations-Thread (bzw. synchron im Aufrufer)
+    core::SignalWindow m_nodeStats;    // nur im Simulations-Thread
+    core::SignalWindow m_readingStats;
+    std::vector<double> m_readingValues; // Arbeitsspeicher fuer m_readingStats
     std::unordered_map<std::string, std::size_t> m_index;
     std::uint64_t m_activeTopology = 0;
     std::shared_ptr<StepObserver> m_observer; // nur im Simulations-Thread

@@ -36,6 +36,9 @@ QtObject {
     readonly property color solderAmber: "#FFB07A"
     readonly property color voltageBar: "#8EE68A"
     readonly property color voltageBarOutline: "#3E8E3A"
+    // negative Spannung (ab Volta 2): blau wie die Leitung der negativen Versorgung, Balken wachsen nach unten
+    readonly property color voltageBarNegative: "#8CB8F0"
+    readonly property color voltageBarNegativeOutline: "#2F5FA8"
     readonly property color board: "#F7F3EA"
     readonly property color field: "#CFC5AE"
     readonly property color fieldOutline: "#9C9079"

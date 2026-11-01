@@ -294,6 +294,39 @@ private slots:
         QVERIFY(std::fabs(s->voltage("A1") - 3.0) < 0.01);
     }
 
+    // Spannungsanzeige ab Volta 2: negativ (symmetrische Versorgung) und Wechselspannung (Effektivwert, ~);
+    // ein Balken = ein Viertel der groessten Quellenspannung (hier Spitze der Wechselquelle 12,7 V)
+    void voltageDisplayNegativeAndAc() {
+        auto s = session();
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie"};
+        s->loadBoard(b);
+        QVERIFY(s->addDeskParts({"batterie2", "wechselquelle"}));
+        QVERIFY(s->addWire("P:+B2", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:-B2", "A1", "blau"));
+        QVERIFY(s->addWire("P:W~b", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:W~a", "B1", "gelb"));
+        QVERIFY(s->addWire("P:+9V", "C1", "rot"));
+        s->setMainSwitch(true);
+        for (int k = 0; k < 250; ++k) run(*s, 0.001); // mehr als zwei Messfenster
+        QVERIFY(std::fabs(s->voltageScale() - 9.0 * std::sqrt(2.0)) < 1e-6);
+        const auto neg = s->voltageDisplay("A1"); // -9 V
+        QCOMPARE(neg.bars, 3);
+        QVERIFY(neg.negative && !neg.ac);
+        const auto ac = s->voltageDisplay("B1"); // 9 V~
+        QCOMPARE(ac.bars, 3);
+        QVERIFY(ac.ac && !ac.negative);
+        const auto pos = s->voltageDisplay("C1"); // +9 V
+        QCOMPARE(pos.bars, 3);
+        QVERIFY(!pos.ac && !pos.negative);
+        const core::SignalSummary& st = s->snapshot().nodeStats.at([&] {
+            core::NodeId n = 0;
+            s->netlist().nodeOf("B1", n);
+            return n;
+        }());
+        QVERIFY2(std::fabs(st.frequencyHz - 50.0) < 1.0, qPrintable(QString::number(st.frequencyHz)));
+    }
+
     // Pult nach Bedarf (ab Volta 2): Pultteile als Befehl, Batterie 2 potentialfrei, symmetrische Versorgung
     void deskOnDemandAndSecondBattery() {
         auto s = session();

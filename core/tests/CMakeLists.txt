@@ -24,6 +24,7 @@ add_executable(volta_core_tests
     test_timer_amplifier.cpp
     test_opamp_module.cpp
     test_timer555.cpp
+    test_signal_stats.cpp
     test_fuzz.cpp
     components/test_transistor.cpp
     components/test_lamp_motor.cpp

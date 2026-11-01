@@ -235,6 +235,11 @@ das iPad).
   Spannungsanzeige automatisch (Knopf in der Werkzeugleiste, auch im Einstellungsmenue ganz rechts; Vorgabe aus, wird
   gespeichert): zeigt die Balken auf allen belegten Feldern der Grundplatte (Bauteilbein oder Leitungsende;
   nicht am Pult und an den Batterien), ohne den Aufbau zu aendern; gilt fuer die ganze Reihe (Volta 1–3).
+  Ab Volta 2 (Konzept 5.4): negative Gleichspannung als umgedrehtes blaues Balkendiagramm (Balken haengen nach unten)
+  mit Minuszeichen, Wechselspannung mit »~« und Balken nach dem Effektivwert (Wechselanteil ueberwiegt im letzten
+  Messfenster von 100 ms). Ein Balken = ein Viertel der groessten Quellenspannung im Pult (Batterie 1 und 2, Spitze der
+  Wechselquelle, Spitze des Generators mit Gleichanteil). Volta 1 kennt weder negative noch Wechselspannung und sieht
+  unveraendert aus. Vorlesetext »Wechselspannung n von 4« bzw. »Spannungsanzeige minus n von 4«.
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
 - Wassermodell als zuschaltbare Erklaerebene.

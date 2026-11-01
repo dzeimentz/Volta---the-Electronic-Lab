@@ -52,8 +52,19 @@ public:
     bool snapshotCurrent() const { return m_snap.valid && m_snap.topology == m_topology; }
     double voltage(const std::string& anchor) const;
     const core::ComponentReading* reading(const std::string& partId) const;
-    // Spannungsanzeige 0-4 Balken mit Hysterese (docs/domain-model.md)
-    int voltageBars(const std::string& anchor);
+    // Spannungsanzeige 0-4 Balken mit Hysterese (docs/domain-model.md). Ab Volta 2 (Konzept 5.4) auch negativ
+    // (Balken nach unten, blau, Minuszeichen) und Wechselspannung (Effektivwert, »~«): Ein Feld gilt als
+    // Wechselspannung, wenn im letzten Messfenster der Wechselanteil den Gleichanteil ueberwiegt. Ein Balken steht
+    // fuer ein Viertel der groessten Quellenspannung im Aufbau (Batterie 1 und 2, Spitze der Wechselquelle, Spitze
+    // des Generators mit Gleichanteil).
+    struct VoltageDisplay {
+        int bars = 0;
+        bool negative = false;
+        bool ac = false;
+    };
+    VoltageDisplay voltageDisplay(const std::string& anchor);
+    int voltageBars(const std::string& anchor) { return voltageDisplay(anchor).bars; }
+    double voltageScale() const; // groesste Quellenspannung (Bezug der Balken)
 
     // ---- Aufbauaenderungen (Befehle). false und lastError() bei ungueltiger Aenderung.
     bool addPart(const std::string& type, const std::string& startField, Orientation o, Span span,
@@ -170,7 +181,7 @@ private:
     std::uint64_t m_topology = 0;
     QUndoStack m_undo;
     Message m_error;
-    std::unordered_map<std::string, int> m_bars;
+    std::unordered_map<std::string, VoltageDisplay> m_bars;
     struct SuccessTracker;
     std::shared_ptr<SuccessTracker> m_success;
     Board m_successTemplate;

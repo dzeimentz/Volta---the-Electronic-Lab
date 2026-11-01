@@ -4,103 +4,103 @@
 <context>
     <name>Befehl</name>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="272" />
+        <location filename="../app/src/model/lab_session.cpp" line="291" />
         <source>Grundplatte 1–%1</source>
         <translation>Plaque de base 1–%1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="306" />
+        <location filename="../app/src/model/lab_session.cpp" line="325" />
         <source>Pultteil einsetzen</source>
         <translation>Placer un élément du pupitre</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="323" />
+        <location filename="../app/src/model/lab_session.cpp" line="342" />
         <source>Pultteil herausnehmen</source>
         <translation>Retirer un élément du pupitre</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="352" />
+        <location filename="../app/src/model/lab_session.cpp" line="371" />
         <source>%1 setzen</source>
         <translation>Placer %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="388" />
-        <location filename="../app/src/model/lab_session.cpp" line="476" />
+        <location filename="../app/src/model/lab_session.cpp" line="407" />
+        <location filename="../app/src/model/lab_session.cpp" line="495" />
         <source>%1 verschieben</source>
         <translation>Déplacer %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="398" />
+        <location filename="../app/src/model/lab_session.cpp" line="417" />
         <source>%1 umdrehen</source>
         <translation>Retourner %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="408" />
+        <location filename="../app/src/model/lab_session.cpp" line="427" />
         <source>%1 drehen</source>
         <translation>Tourner %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="416" />
+        <location filename="../app/src/model/lab_session.cpp" line="435" />
         <source>%1 entfernen</source>
         <translation>Retirer %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="432" />
+        <location filename="../app/src/model/lab_session.cpp" line="451" />
         <source>Wert von %1 ändern</source>
         <translation>Changer la valeur de %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="439" />
+        <location filename="../app/src/model/lab_session.cpp" line="458" />
         <source>%1 reparieren</source>
         <translation>Réparer %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="452" />
+        <location filename="../app/src/model/lab_session.cpp" line="471" />
         <source>%1 einsetzen</source>
         <translation>Insérer %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="492" />
+        <location filename="../app/src/model/lab_session.cpp" line="511" />
         <source>%1 herausnehmen</source>
         <translation>Retirer %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="503" />
+        <location filename="../app/src/model/lab_session.cpp" line="522" />
         <source>Leitung %1 ziehen</source>
         <translation>Tirer le fil %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="519" />
+        <location filename="../app/src/model/lab_session.cpp" line="538" />
         <source>Leitung %1 umsetzen</source>
         <translation>Déplacer le fil %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="528" />
+        <location filename="../app/src/model/lab_session.cpp" line="547" />
         <source>Leitung %1 löschen</source>
         <translation>Supprimer le fil %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="538" />
+        <location filename="../app/src/model/lab_session.cpp" line="557" />
         <source>Leitung %1 umfärben</source>
         <translation>Changer la couleur du fil %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="550" />
+        <location filename="../app/src/model/lab_session.cpp" line="569" />
         <source>Spannungsanzeige %1</source>
         <translation>Affichage de tension %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="702" />
+        <location filename="../app/src/model/lab_session.cpp" line="721" />
         <source>Sicherung tauschen</source>
         <translation>Changer le fusible</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="707" />
+        <location filename="../app/src/model/lab_session.cpp" line="726" />
         <source>Drehregler P%1 reparieren</source>
         <translation>Réparer le bouton de réglage P%1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="712" />
+        <location filename="../app/src/model/lab_session.cpp" line="731" />
         <source>Lautsprecher reparieren</source>
         <translation>Réparer le haut-parleur</translation>
     </message>
@@ -108,12 +108,22 @@
 <context>
     <name>ContactField</name>
     <message>
-        <location filename="../app/qml/ContactField.qml" line="156" />
+        <location filename="../app/qml/ContactField.qml" line="160" />
         <source>Feld %1</source>
         <translation>Case %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ContactField.qml" line="156" />
+        <location filename="../app/qml/ContactField.qml" line="160" />
+        <source>Wechselspannung %1 von 4</source>
+        <translation>Tension alternative %1 sur 4</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ContactField.qml" line="161" />
+        <source>Spannungsanzeige minus %1 von 4</source>
+        <translation>Affichage de tension moins %1 sur 4</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ContactField.qml" line="162" />
         <source>Spannungsanzeige %1 von 4</source>
         <translation>Indicateur de tension %1 sur 4</translation>
     </message>
@@ -2430,7 +2440,7 @@
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="92" />
-        <location filename="../app/src/model/lab_session.cpp" line="378" />
+        <location filename="../app/src/model/lab_session.cpp" line="397" />
         <source>Das Bauteil passt dort nicht auf die Grundplatte.</source>
         <translation>Le composant ne tient pas à cet endroit sur la plaque.</translation>
     </message>
@@ -2446,9 +2456,9 @@
     </message>
     <message>
         <location filename="../app/src/model/board_edit.cpp" line="303" />
-        <location filename="../app/src/model/lab_session.cpp" line="339" />
-        <location filename="../app/src/model/lab_session.cpp" line="373" />
-        <location filename="../app/src/model/lab_session.cpp" line="396" />
+        <location filename="../app/src/model/lab_session.cpp" line="358" />
+        <location filename="../app/src/model/lab_session.cpp" line="392" />
+        <location filename="../app/src/model/lab_session.cpp" line="415" />
         <source>Unbekanntes Bauteil „%1“.</source>
         <translation>Composant inconnu « %1 ».</translation>
     </message>
@@ -2508,75 +2518,75 @@
         <translation>Il y a déjà un module à cet endroit.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="253" />
+        <location filename="../app/src/model/lab_session.cpp" line="272" />
         <source>Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.</source>
         <translation>La plaque a 8, 10 ou 12 cases par rangée.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="256" />
+        <location filename="../app/src/model/lab_session.cpp" line="275" />
         <source>In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
         <translation>Il y a encore quelque chose dans les cases %1–%2. Retire d&apos;abord les composants et les fils.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="261" />
+        <location filename="../app/src/model/lab_session.cpp" line="280" />
         <source>Diese Größe hat die Grundplatte nicht.</source>
         <translation>La plaque n’existe pas dans cette taille.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="264" />
+        <location filename="../app/src/model/lab_session.cpp" line="283" />
         <source>Auf den wegfallenden Feldern steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
         <translation>Il reste quelque chose sur les plots qui disparaîtraient. Retire d’abord les composants et les fils.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="371" />
-        <location filename="../app/src/model/lab_session.cpp" line="394" />
-        <location filename="../app/src/model/lab_session.cpp" line="404" />
-        <location filename="../app/src/model/lab_session.cpp" line="414" />
+        <location filename="../app/src/model/lab_session.cpp" line="390" />
+        <location filename="../app/src/model/lab_session.cpp" line="413" />
         <location filename="../app/src/model/lab_session.cpp" line="423" />
-        <location filename="../app/src/model/lab_session.cpp" line="437" />
+        <location filename="../app/src/model/lab_session.cpp" line="433" />
+        <location filename="../app/src/model/lab_session.cpp" line="442" />
+        <location filename="../app/src/model/lab_session.cpp" line="456" />
         <source>Bauteil %1 nicht gefunden.</source>
         <translation>Composant %1 introuvable.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="406" />
+        <location filename="../app/src/model/lab_session.cpp" line="425" />
         <source>Nur Platinen lassen sich so drehen.</source>
         <translation>Seules les petites cartes peuvent être tournées ainsi.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="420" />
+        <location filename="../app/src/model/lab_session.cpp" line="439" />
         <source>Dieser Wert geht nicht.</source>
         <translation>Cette valeur n&apos;est pas possible.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="428" />
+        <location filename="../app/src/model/lab_session.cpp" line="447" />
         <source>Diese Nennspannung gibt es nicht.</source>
         <translation>Cette tension nominale n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="458" />
-        <location filename="../app/src/model/lab_session.cpp" line="483" />
+        <location filename="../app/src/model/lab_session.cpp" line="477" />
+        <location filename="../app/src/model/lab_session.cpp" line="502" />
         <source>Modul %1 nicht gefunden.</source>
         <translation>Module %1 introuvable.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="509" />
-        <location filename="../app/src/model/lab_session.cpp" line="526" />
-        <location filename="../app/src/model/lab_session.cpp" line="534" />
+        <location filename="../app/src/model/lab_session.cpp" line="528" />
+        <location filename="../app/src/model/lab_session.cpp" line="545" />
+        <location filename="../app/src/model/lab_session.cpp" line="553" />
         <source>Leitung %1 nicht gefunden.</source>
         <translation>Fil %1 introuvable.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="543" />
+        <location filename="../app/src/model/lab_session.cpp" line="562" />
         <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
         <translation>L&apos;affichage de tension n&apos;existe que sur les cases.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="544" />
+        <location filename="../app/src/model/lab_session.cpp" line="563" />
         <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
         <translation>Cette case est en dehors de la plaque.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="694" />
+        <location filename="../app/src/model/lab_session.cpp" line="713" />
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation>Débranche d&apos;abord les fils du multimètre.</translation>
     </message>
@@ -3735,7 +3745,7 @@
     </message>
     <message>
         <location filename="../app/qml/PartTray.qml" line="305" />
-        <location filename="../app/qml/PartTray.qml" line="425" />
+        <location filename="../app/qml/PartTray.qml" line="427" />
         <source>gesperrt bis Stufe %1</source>
         <translation>verrouillé jusqu&apos;au niveau %1</translation>
     </message>
@@ -5435,12 +5445,12 @@
         <translation>Afficher le montage modèle</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1781" />
+        <location filename="../app/src/lab_controller.cpp" line="1786" />
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce composant sera débloqué au niveau %1.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1842" />
+        <location filename="../app/src/lab_controller.cpp" line="1847" />
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Ce module sera débloqué au niveau %1.</translation>
     </message>

@@ -7,7 +7,9 @@ Rectangle {
     property string anchorName: ""
     property string label: anchorName
     property bool showVoltage: false
-    property int bars: 0
+    // Spannungsanzeige {bars 0..4, negative, ac} (LabController::voltageDisplay)
+    property var voltage: ({bars: 0, negative: false, ac: false})
+    readonly property int bars: voltage.bars || 0
     property int sockets: 5 // Steckplaetze (Modulleiste: schmale Felder mit einem Steckplatz)
     property int pitch: Theme.socketPitch // Lochabstand (Lab.socketPoint rechnet mit demselben Wert)
     property bool highlighted: false
@@ -128,6 +130,8 @@ Rectangle {
     VoltageBars {
         visible: root.showVoltage
         bars: root.bars
+        negative: root.voltage.negative === true
+        ac: root.voltage.ac === true
         anchors.right: parent.right
         anchors.rightMargin: 4
         anchors.bottom: parent.bottom
@@ -153,5 +157,7 @@ Rectangle {
 
     // Bildschirmleser: Feldname, bei eingeschalteter Anzeige auch die Spannungsstufe
     Accessible.role: Accessible.Button
-    Accessible.name: qsTr("Feld %1").arg(root.label) + (root.showVoltage ? ", " + qsTr("Spannungsanzeige %1 von 4").arg(root.bars) : "")
+    Accessible.name: qsTr("Feld %1").arg(root.label) + (root.showVoltage ? ", " + (root.voltage.ac === true ? qsTr("Wechselspannung %1 von 4").arg(root.bars)
+                                               : root.voltage.negative === true ? qsTr("Spannungsanzeige minus %1 von 4").arg(root.bars)
+                                               : qsTr("Spannungsanzeige %1 von 4").arg(root.bars)) : "")
 }

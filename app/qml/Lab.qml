@@ -1252,7 +1252,7 @@ Item {
                     showVoltage: lab.controller.voltageFields.indexOf(modelData) >= 0
                                  || (lab.settings !== null && lab.settings.autoVoltageBars
                                      && lab.controller.occupiedFields.indexOf(modelData) >= 0)
-                    onShowVoltageChanged: if (showVoltage) bars = lab.controller.voltageBars(anchorName)
+                    onShowVoltageChanged: if (showVoltage) voltage = lab.controller.voltageDisplay(anchorName)
                     recorderChannel: lab.controller.recorderChannels.indexOf(modelData.startsWith("MESS:") ? "MESS" : modelData)
                     target: lab.guideVisible && (lab.controller.guideStep.targets || []).indexOf(modelData) >= 0
 
@@ -1280,7 +1280,7 @@ Item {
                     Connections {
                         target: lab.controller
                         function onStateChanged() {
-                            if (field.showVoltage) field.bars = lab.controller.voltageBars(field.anchorName)
+                            if (field.showVoltage) field.voltage = lab.controller.voltageDisplay(field.anchorName)
                         }
                     }
                 }

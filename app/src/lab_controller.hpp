@@ -399,6 +399,8 @@ public:
     bool showNumbers() const { return m_experiment.id.isEmpty() || m_experiment.stage >= 3; }
     Q_INVOKABLE double voltage(const QString& anchor) const;
     Q_INVOKABLE int voltageBars(const QString& anchor);
+    // {bars, negative, ac}: Spannungsanzeige mit Vorzeichen und Wechselspannung (ab Volta 2)
+    Q_INVOKABLE QVariantMap voltageDisplay(const QString& anchor);
     // Zustand eines Bauteils: currentmA, level, overloaded, destroyed, tempC
     Q_INVOKABLE QVariantMap partState(const QString& id) const;
     // Zustand eines Moduls fuer die Darstellung: active (Ausgang ein bzw. spielt), frequencyHz, level, note

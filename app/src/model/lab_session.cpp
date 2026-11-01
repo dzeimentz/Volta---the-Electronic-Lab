@@ -195,9 +195,26 @@ const core::ComponentReading* LabSession::reading(const std::string& partId) con
     return &m_snap.readings[it->second];
 }
 
-int LabSession::voltageBars(const std::string& anchor) {
-    const double ref = 1.5 * m_board.desk.cells;
-    const double ratio = ref > 0.0 ? voltage(anchor) / ref : 0.0;
+double LabSession::voltageScale() const {
+    double ref = 1.5 * m_board.desk.cells;
+    if (hasDeskPart(m_board, "batterie2")) ref = std::max(ref, 1.5 * m_board.desk.cells2);
+    if (hasDeskPart(m_board, "wechselquelle")) ref = std::max(ref, std::sqrt(2.0) * m_board.desk.acRmsV);
+    if (hasDeskPart(m_board, "generator"))
+        ref = std::max(ref, std::fabs(m_board.desk.genOffsetV) + m_board.desk.genAmplitudeV);
+    return ref;
+}
+
+LabSession::VoltageDisplay LabSession::voltageDisplay(const std::string& anchor) {
+    const double ref = voltageScale();
+    // Wechselspannung: Effektivwert des Wechselanteils aus dem letzten Messfenster; sonst der Augenblickswert
+    // (wie Volta 1, damit ladende Kondensatoren fluessig angezeigt werden)
+    core::NodeId n = 0;
+    const core::SignalSummary* stats = nullptr;
+    if (snapshotCurrent() && m_net.nodeOf(anchor, n) && n < m_snap.nodeStats.size()) stats = &m_snap.nodeStats[n];
+    const bool ac = stats && stats->isAc();
+    const double v = ac ? stats->acRms : voltage(anchor);
+    const bool negative = !ac && v < 0.0;
+    const double ratio = ref > 0.0 ? std::fabs(v) / ref : 0.0;
     auto barsFor = [](double r) {
         if (r < 1.0 / 8) return 0;
         if (r < 3.0 / 8) return 1;
@@ -207,16 +224,18 @@ int LabSession::voltageBars(const std::string& anchor) {
     };
     const int candidate = barsFor(ratio);
     const auto it = m_bars.find(anchor);
-    if (it == m_bars.end()) {
-        m_bars[anchor] = candidate;
-        return candidate;
+    if (it == m_bars.end() || it->second.negative != negative || it->second.ac != ac) {
+        m_bars[anchor] = VoltageDisplay{candidate, negative, ac}; // Vorzeichen roh, Minuszeichen erst ab 1 Balken
+        return VoltageDisplay{candidate, negative && candidate > 0, ac};
     }
-    if (candidate != it->second) {
-        const int lo = std::min(candidate, it->second);
+    if (candidate != it->second.bars) {
+        const int lo = std::min(candidate, it->second.bars);
         const double threshold = (2.0 * lo + 1.0) / 8.0; // Schwelle zwischen lo und lo + 1
-        if (std::fabs(ratio - threshold) > kBarHysteresis) it->second = candidate;
+        if (std::fabs(ratio - threshold) > kBarHysteresis) it->second.bars = candidate;
     }
-    return it->second;
+    VoltageDisplay d = it->second;
+    d.negative = d.negative && d.bars > 0;
+    return d;
 }
 
 std::vector<sim::StateOverride> LabSession::captureStates() const {

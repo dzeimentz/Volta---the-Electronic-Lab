@@ -236,6 +236,14 @@ zwischen zwei Schritten; die Kopplung an den UI-Thread uebernimmt die App.
 Temperatur und Zustand. Die Spannungsanzeige (4 Balken) und das Dreifach-Messgeraet lesen ausschliesslich ueber
 `Probe`. Das Messgeraet selbst ist ein Bauteil im Gleichungssystem und belastet die Schaltung realistisch.
 
+**Signalstatistik** (ab Volta 2, `SignalWindow`, `signal_stats.hpp`): Die Simulationsbruecke fuehrt nach jedem
+Schritt eine Fensterstatistik ueber alle Knotenspannungen und je Bauteil ueber Spannung und Strom (Messfenster
+100 ms = 5 Perioden bei 50 Hz, nach Ablauf veroeffentlicht, darum kein Flackern): Gleichanteil, Effektivwert,
+Effektivwert des Wechselanteils, Minimum, Maximum und Frequenz (steigende Durchgaenge durch den Mittelwert des
+vorigen Fensters mit 5 % Hysterese, zwischen zwei Schritten interpoliert). Eine Groesse gilt als Wechselgroesse, wenn
+ihr Wechselanteil den Gleichanteil ueberwiegt. Grundlage fuer die erweiterte Spannungsanzeige, die Wechselgroessen der
+Messgeraete und die Werte an den Tastkoepfen. Allokationsfrei im Schritt (Speicher nur beim Topologiewechsel).
+
 ## Erweiterungen (Vorleistungen in Phase 0)
 
 1. Variable Schrittweite im Integrator (Schnittstelle schon in Volta 1).
