@@ -1,0 +1,254 @@
+{
+  "id": "volta2.8.5",
+  "band": "volta2",
+  "stufe": 8,
+  "titel_key": "exp2_8_5_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "ir_led",
+    "fototransistor",
+    "widerstand",
+    "kondensator",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp2_8_5_frage",
+  "vermutungen": [
+    "exp2_8_5_v1",
+    "exp2_8_5_v2",
+    "exp2_8_5_v3"
+  ],
+  "beobachtungen": [
+    "exp2_8_5_b1",
+    "exp2_8_5_b2",
+    "exp2_8_5_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "batterie2_V": 9,
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 440,
+        "spitze_V": 1.0,
+        "gleichanteil_V": 2.5
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.001,
+        "volt_je_teilung": [
+          1,
+          1
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A4"
+        ],
+        "wert": 220
+      },
+      {
+        "id": "D1",
+        "typ": "ir_led",
+        "felder": {
+          "anode": "A4",
+          "kathode": "A2"
+        }
+      },
+      {
+        "id": "FT1",
+        "typ": "fototransistor",
+        "felder": {
+          "c": "B4",
+          "e": "B2"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "B4",
+          "C4"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "B5",
+          "B6"
+        ],
+        "wert": 1e-06
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "B6",
+          "C6"
+        ],
+        "wert": 100000
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "A8",
+          "A9"
+        ],
+        "wert": 100
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A5"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "B4"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "OP1",
+        "typ": "opmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A5",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "C4",
+        "farbe": "rot"
+      },
+      {
+        "von": "B4",
+        "nach": "B5",
+        "farbe": "blau"
+      },
+      {
+        "von": "C6",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B6",
+        "nach": "OP1.nichtinv",
+        "farbe": "gelb"
+      },
+      {
+        "von": "OP1.aus",
+        "nach": "OP1.inv",
+        "farbe": "blau"
+      },
+      {
+        "von": "OP1.aus",
+        "nach": "A8",
+        "farbe": "blau"
+      },
+      {
+        "von": "A9",
+        "nach": "P:LS1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "OP1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "OP1.minus",
+        "nach": "P:-B2",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+B2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_8_5_s1",
+    "exp2_8_5_s2",
+    "exp2_8_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "B4",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.2,
+        "zwischen": [
+          1.0,
+          8.0
+        ]
+      },
+      {
+        "bauteil": "LS",
+        "groesse": "frequenz_Hz",
+        "zwischen": [
+          400,
+          480
+        ],
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_8_5_h1",
+    "exp2_8_5_h2",
+    "exp2_8_5_loesung"
+  ],
+  "erklaerung_key": "exp2_8_5_erklaerung",
+  "mehr_wissen_key": "exp2_8_5_mehr",
+  "weiterforschen": [
+    "exp2_8_5_w1",
+    "exp2_8_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_8_5_echt"
+}

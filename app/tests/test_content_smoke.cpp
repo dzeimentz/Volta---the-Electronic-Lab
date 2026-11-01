@@ -311,7 +311,9 @@ private slots:
         deskAsInApp(repo, id, board);
         bool hasSensor = false;
         for (const auto& p : board.parts)
-            if (p.type == "fotowiderstand" || p.type == "heissleiter" || p.type == "feuchtesonde") hasSensor = true;
+            if (p.type == "fotowiderstand" || p.type == "heissleiter" || p.type == "feuchtesonde" ||
+                p.type == "fototransistor")
+                hasSensor = true;
         if (!hasSensor) QSKIP("kein Sensor");
         if (!board.desk.tools.empty()) board.desk.tools.clear();
         else if (board.desk.roomLight < 2) board.desk.roomLight = 2;

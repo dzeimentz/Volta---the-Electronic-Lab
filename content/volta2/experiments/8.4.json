@@ -1,0 +1,151 @@
+{
+  "id": "volta2.8.4",
+  "band": "volta2",
+  "stufe": 8,
+  "titel_key": "exp2_8_4_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "optokoppler",
+    "taster",
+    "widerstand",
+    "led_gruen",
+    "leitung"
+  ],
+  "frage_key": "exp2_8_4_frage",
+  "vermutungen": [
+    "exp2_8_4_v1",
+    "exp2_8_4_v2",
+    "exp2_8_4_v3"
+  ],
+  "beobachtungen": [
+    "exp2_8_4_b1",
+    "exp2_8_4_b2",
+    "exp2_8_4_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "batterie2_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "B2"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "OK1",
+        "typ": "optokoppler",
+        "felder": {
+          "anode": "B2",
+          "c": "B3",
+          "kathode": "C2",
+          "e": "C3"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A4"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "D2",
+        "typ": "led_gruen",
+        "felder": {
+          "anode": "A4",
+          "kathode": "A3"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "C2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+B2",
+        "nach": "A5",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "B3",
+        "farbe": "blau"
+      },
+      {
+        "von": "C3",
+        "nach": "P:-B2",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_8_4_s1",
+    "exp2_8_4_s2",
+    "exp2_8_4_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D2",
+        "groesse": "strom_mA",
+        "auswertung": "mittel",
+        "fenster_s": 0.2,
+        "min": 3
+      },
+      {
+        "bauteil": "OK1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "D2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_8_4_h1",
+    "exp2_8_4_h2",
+    "exp2_8_4_loesung"
+  ],
+  "erklaerung_key": "exp2_8_4_erklaerung",
+  "mehr_wissen_key": "exp2_8_4_mehr",
+  "weiterforschen": [
+    "exp2_8_4_w1",
+    "exp2_8_4_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_8_4_echt"
+}
