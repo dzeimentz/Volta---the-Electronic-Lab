@@ -98,6 +98,7 @@ python3 tools/check_all.py
 # Lokales Release (lauffaehiges Programm mit Qt-Laufzeit und Inhalten in Release/, nicht im Repository)
 python3 tools/deploy_release.py
 python3 tools/deploy_release.py --zuse    # Zuse 1 (Prototyp) nach ../ZUSE/Release (Projektordner der Zuse-Linie)
+python3 tools/deploy_release.py --volta2  # Volta 2 (Worktree volta-volta2) nach Release/ dieses Worktrees (volta2.exe)
 
 # Anleitungen als PDF (ausfuehrlich und Kurzanleitung, mit Bildschirmfotos) nach Release/Anleitung/
 python3 tools/manual_pdfs.py            # --bilder nimmt die Bildschirmfotos neu auf

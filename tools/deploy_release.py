@@ -4,6 +4,7 @@
 Aufruf (aus dem Repository-Wurzelverzeichnis):
     python3 tools/deploy_release.py           # Volta 1 -> Release/
     python3 tools/deploy_release.py --zuse    # Zuse 1 (Prototyp) -> ../ZUSE/Release/ (Projektordner der Zuse-Linie)
+    python3 tools/deploy_release.py --volta2  # Volta 2 (Worktree volta-volta2) -> Release/ dieses Worktrees
 
 Ablauf: Preset desktop-release konfigurieren (beim ersten Mal) und bauen, volta1(.exe) nach Release/ kopieren,
 Qt-Laufzeit mit windeployqt daneben legen (nur Windows) und die Inhaltspakete nach Release/content kopieren
@@ -20,10 +21,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_all import IS_WINDOWS, ROOT, environment, tail  # noqa: E402
 
-PRESET = "desktop-release"
 ZUSE = "--zuse" in sys.argv
+VOLTA2 = "--volta2" in sys.argv
+# Volta 2: eigener Build-Ordner mit Edition volta2 (wie build/volta2-debug, CLAUDE.md), kein Preset
+PRESET = "volta2-release" if VOLTA2 else "desktop-release"
 TARGET = ROOT.parent / "ZUSE" / "Release" if ZUSE else ROOT / "Release"
-APP_DIR, APP_NAME, QML_DIR = ("zuse", "zuse1", "zuse/qml") if ZUSE else ("app", "volta1", "app/qml")
+APP_DIR, APP_NAME, QML_DIR = (("zuse", "zuse1", "zuse/qml") if ZUSE else ("app", "volta2", "app/qml") if VOLTA2
+                              else ("app", "volta1", "app/qml"))
 
 
 def run(cmd: list[str], env: dict[str, str]) -> None:
@@ -105,11 +109,16 @@ def main() -> int:
     if qt_root is None:
         print("Qt nicht gefunden (QT_ROOT_DESKTOP setzen).")
         return 1
-    configure = ["cmake", "--preset", PRESET]
-    if use_mingw and not (ROOT / "build" / PRESET / "CMakeCache.txt").exists():
+    build_dir = ROOT / "build" / PRESET
+    if VOLTA2:
+        configure = ["cmake", "-S", ".", "-B", str(build_dir), "-G", "Ninja", "-DVOLTA_EDITION=volta2",
+                     "-DCMAKE_BUILD_TYPE=Release", "-DVOLTA_BUILD_TESTS=OFF", f"-DCMAKE_PREFIX_PATH={qt_root}"]
+    else:
+        configure = ["cmake", "--preset", PRESET]
+    if use_mingw and not (build_dir / "CMakeCache.txt").exists():
         configure.append("-DCMAKE_CXX_COMPILER=g++")
     run(configure, env)
-    run(["cmake", "--build", "--preset", PRESET], env)
+    run(["cmake", "--build", str(build_dir)] if VOLTA2 else ["cmake", "--build", "--preset", PRESET], env)
 
     if sys.platform == "darwin":
         return deploy_macos(env)

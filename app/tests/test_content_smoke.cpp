@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <cmath>
 
+#include "model/audio_stream.hpp"
+#include "model/board_edit.hpp"
 #include "model/circuit_check.hpp"
 #include "model/netlist_builder.hpp"
 #include "model/success.hpp"
@@ -46,6 +48,13 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
                      std::vector<std::string>* buildErrors = nullptr,
                      std::vector<model::CircuitFinding>* findings = nullptr) {
     model::Board start = board;
+    // Pultteile ab Volta 2 in der Vorlage: Pult nach Bedarf wie in der App (LabController::startExperiment)
+    if (!start.deskParts) {
+        const auto used = model::deskPartsUsed(start);
+        if (std::any_of(used.begin(), used.end(), [&](const std::string& g) { return !model::hasDeskPart(start, g); }))
+            start.deskParts = used;
+    }
+    const double stepS = model::needsAudioStep(start) ? model::kAudioStepS : core::kDefaultStepS;
     std::vector<std::string> pressed;
     for (auto& p : start.parts)
         if (p.type == "taster" && p.closed) {
@@ -56,14 +65,14 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
     if (buildErrors) *buildErrors = net.errors;
     core::Simulator sim;
     if (sim.setCircuit(std::move(net.circuit)) != core::Status::Ok) return -1.0;
-    const int steps = static_cast<int>(std::lround(maxS / core::kDefaultStepS));
-    const int pressStep = static_cast<int>(std::lround(kPressAfterS / core::kDefaultStepS));
+    const int steps = static_cast<int>(std::lround(maxS / stepS));
+    const int pressStep = static_cast<int>(std::lround(kPressAfterS / stepS));
     for (int i = 0; i < steps; ++i) {
         if (i == pressStep)
             for (const auto& id : pressed)
                 if (auto* sw = dynamic_cast<core::Switch*>(&sim.circuit().component(net.parts.at(id))))
                     sw->setClosed(true);
-        sim.step();
+        sim.step(stepS);
         eval.update(sim, net);
         if (eval.reached()) {
             // Fehlersuche am erreichten Ziel: mit dem Aufbau der Vorlage (Taster gedrueckt) und den Messwerten
@@ -76,7 +85,9 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
                     }
                     return it->second < sim.probe().readings.size() ? &sim.probe().readings[it->second] : nullptr;
                 };
-                *findings = model::checkCircuit({board, cat, lookup});
+                model::Board checked = board; // Taster gedrueckt, Pultteile wie in der App
+                checked.deskParts = start.deskParts;
+                *findings = model::checkCircuit({checked, cat, lookup});
             }
             return sim.timeS();
         }
@@ -156,6 +167,44 @@ private slots:
         QVERIFY(timeToSuccess(ledBoard(470.0), m_catalog, eval, 0.1) > 0.0);
         model::SuccessEvaluator never(parse(R"({"nicht":{"bauteil":"D1","zustand":"intakt"}})"));
         QCOMPARE(timeToSuccess(ledBoard(470.0), m_catalog, never, 0.5), -1.0);
+    }
+
+    // Auswertung ueber ein Zeitfenster (ab Volta 2): Generator 50 Hz, Sinus 2 V Spitze auf 1 V Gleichanteil an 10 kOhm (Generator: 50 Ohm innen, also 0,5 % weniger)
+    void windowedStatistics() {
+        model::Board b;
+        b.desk.mainSwitch = true;
+        b.deskParts = std::vector<std::string>{"batterie", "generator"};
+        b.desk.genFrequencyHz = 50.0;
+        b.desk.genAmplitudeV = 2.0;
+        b.desk.genOffsetV = 1.0;
+        b.parts.push_back({"R1", "widerstand", {{"a", "B3"}, {"b", "B4"}}, 10000.0});
+        b.wires.push_back({"L1", "P:G", "B3", "gelb"});
+        b.wires.push_back({"L2", "B4", "P:G0", "schwarz"});
+        struct Case {
+            const char* json;
+            bool reached;
+        };
+        const Case cases[] = {
+            {R"({"feld":"B3","groesse":"spannung_V","auswertung":"spitze","min":0})", true},
+            {R"({"feld":"B3","groesse":"spannung_V","auswertung":"spitze","zwischen":[2.9,3.1]})", true},
+            {R"({"feld":"B3","groesse":"spannung_V","auswertung":"spitze_spitze","zwischen":[3.9,4.1]})", true},
+            {R"({"feld":"B3","groesse":"spannung_V","auswertung":"mittel","zwischen":[0.98,1.01]})", true},
+            {R"({"feld":"B3","groesse":"spannung_V","auswertung":"effektiv","zwischen":[1.395,1.42]})", true},
+            {R"({"feld":"B3","groesse":"frequenz_Hz","zwischen":[49,51]})", true},
+            {R"({"bauteil":"R1","groesse":"strom_mA","auswertung":"effektiv","zwischen":[0.1395,0.142]})", true},
+            {R"({"feld":"B3","groesse":"spannung_V","auswertung":"effektiv","min":1.6})", false},
+            {R"({"feld":"B3","groesse":"frequenz_Hz","zwischen":[95,105]})", false},
+        };
+        for (const Case& k : cases) {
+            model::SuccessEvaluator eval(parse(k.json));
+            const double t = timeToSuccess(b, m_catalog, eval, 2.5);
+            QVERIFY2((t > 0.0) == k.reached, k.json);
+            if (k.reached) QVERIFY2(t >= 0.19, k.json); // erst nach einem vollen Fenster
+        }
+        // ohne Wechselanteil (Gleichspannung) zaehlt kein Durchgang
+        b.desk.genAmplitudeV = 0.0;
+        model::SuccessEvaluator dc(parse(R"({"feld":"B3","groesse":"frequenz_Hz","min":0.5})"));
+        QCOMPARE(timeToSuccess(b, m_catalog, dc, 2.5), -1.0);
     }
 
     void unknownReferencesAreReported() {

@@ -264,8 +264,9 @@ Bild danach, eine Teilung Vorlauf; ohne Durchgang frei laufend), Rollbetrieb (da
 Durchgaengen durch die Mitte mit 10 % Hysterese).
 
 **Hoerbare Simulation** (ab Volta 2, Konzept 5.3, `model/audio_stream.hpp`): Haengt der Pult-Lautsprecher in der
-Schaltung und laeuft der Ton, rechnet die Bruecke mit 20 µs und rechnet den Lautsprecherstrom nach jedem Schritt
-linear auf die Abtastzeitpunkte der Soundkarte (48 kHz) um. Die Werte gehen ohne Sperren (ein Erzeuger, ein
+Schaltung, rechnet die Bruecke mit 20 µs - auch bei ausgeschaltetem Ton, damit Messwerte und Erfolgsbedingungen
+nie an der Tonausgabe haengen (`needsAudioStep`). Laeuft der Ton, rechnet sie den Lautsprecherstrom nach jedem
+Schritt linear auf die Abtastzeitpunkte der Soundkarte (48 kHz) um. Die Werte gehen ohne Sperren (ein Erzeuger, ein
 Verbraucher) an den Audiodienst; der gibt sie mit rund 50 ms Vorlauf aus, filtert den Gleichanteil heraus (ca.
 20 Hz) und begrenzt Spitzen auf 30 % Aussteuerung (Kinderohren). Faellt die Rechnung laenger als 0,6 s unter 90 %
 der Echtzeit, klingt ein Ersatzton in der simulierten Frequenz (core::Speaker, Nulldurchgaenge in Simulationszeit;

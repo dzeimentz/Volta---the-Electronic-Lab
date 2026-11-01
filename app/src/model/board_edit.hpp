@@ -34,6 +34,12 @@ bool withinBoard(const Board& board, const std::string& anchor);
 bool hasDeskPart(const Board& board, const std::string& group);
 // Pultteile, die ein Aufbau benutzt (Leitungen an Pultfeldern), immer mit der Batterie, in Anzeigereihenfolge
 std::vector<std::string> deskPartsUsed(const Board& board);
+// Haengt der Pult-Lautsprecher in der Schaltung (eine Leitung an LS1/LS2)?
+bool speakerWired(const Board& board);
+// Rechnet der Aufbau mit 20 us (hoerbare Simulation, Konzept 5.3)? Ab Volta 2 (Pult nach Bedarf), sobald der
+// Lautsprecher verdrahtet ist - unabhaengig davon, ob der Ton laeuft: so haengt das Ergebnis (auch die
+// Erfolgsbedingung) nie an der Tonausgabe.
+bool needsAudioStep(const Board& board);
 // Groesste von Bauteilen oder Leitungen belegte Spalte bzw. Reihe (1 = A; 0: keine)
 int highestUsedColumn(const Board& board);
 int highestUsedRow(const Board& board);

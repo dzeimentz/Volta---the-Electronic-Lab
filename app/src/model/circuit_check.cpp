@@ -76,6 +76,11 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
 
     // ---- Knoten: Leitungen verbinden ihre Enden
     for (const auto& d : deskFields()) nodes.find(d);
+    // Pultteile ab Volta 2 (nur, wenn sie im Pult stehen); G0 liegt im Generator fest an 0V
+    std::vector<std::string> extraDesk;
+    for (const auto& d : extraDeskFields())
+        if (hasDeskPart(board, deskGroupOf(d))) extraDesk.push_back(d);
+    if (hasDeskPart(board, "generator")) nodes.join("P:G0", kMinus);
     for (const auto& w : board.wires) nodes.join(canon(w.from), canon(w.to));
 
     // ---- Anschluesse je Knoten
@@ -90,6 +95,7 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
             for (std::size_t i = 0; i < e->pins.size(); ++i)
                 addTerminal(moduleSlot(m.slot + static_cast<int>(i)), m.id, e->pins[i]);
     for (const auto& d : deskFields()) addTerminal(d, "PULT", d);
+    for (const auto& d : extraDesk) addTerminal(d, "PULT", d);
     if (board.desk.meterVisible)
         for (const auto& j : meterJacks()) addTerminal(j, "MESS", j);
 
@@ -126,6 +132,10 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
     connect("P:P2s", "P:P2b", "PULT.P2");
     if (board.desk.switchClosed) connect("P:S1", "P:S2", "PULT.S");
     connect("P:LS1", "P:LS2", "PULT.LS");
+    // weitere Quellen ab Volta 2 leiten fuer die Suche nach offenen Kreisen (Batterie 2 in Reihe, Generator, ...)
+    if (hasDeskPart(board, "batterie2")) connect("P:+B2", "P:-B2", "PULT.B2");
+    if (hasDeskPart(board, "wechselquelle")) connect("P:W~a", "P:W~b", "PULT.W");
+    if (hasDeskPart(board, "kennlinienschreiber")) connect("P:KS+", "P:KS-", "PULT.KS");
     if (board.desk.meterVisible) {
         connect("MESS:COM", "MESS:VOHM", "MESS");
         connect("MESS:COM", "MESS:A", "MESS");

@@ -117,6 +117,24 @@ des Dreifach-Messgeraets (Betrag, in V, A bzw. Ohm je nach Messart) - so laesst 
 wird. Vorlage: `pult_stellung` kennt zusaetzlich `messart` ("V", "A", "Ohm") und `raumlicht` ("hell", "daemmerung",
 "dunkel"); `werkzeuge` legt Taschenlampe bzw. Foehn bereit: `[{"typ": "taschenlampe", "feld": "B3", "an": true}]`.
 
+Ab Volta 2 (Bedienpult II, Konzept 5.1/5.2): Leitungen duerfen an `P:+B2`/`P:-B2` (Batterie 2), `P:W~a`/`P:W~b`
+(Wechselquelle), `P:G`/`P:G0` (Generator) und `P:KS+`/`P:KS-` (Kennlinienschreiber) enden; welche Pultteile im
+Experiment erscheinen, ergibt sich aus diesen Leitungen (Pult nach Bedarf). `pult_stellung` kennt dazu
+`batterie2_V` (4.5 | 9), `wechsel_V` (6 | 9, Effektivwert), `generator` (`form` sinus | dreieck | rechteck,
+`frequenz_Hz` 1 ... 10000, `spitze_V` 0 ... 4, `gleichanteil_V` -4 ... 4), `kennlinienschreiber` (`spannung_V`
+2 | 5 | 10 | 20, `beide_richtungen`, `strom_mA` 5 | 20 | 50 | 200), `oszilloskop` (`zeitbasis_s` je Teilung,
+`volt_je_teilung` je Kanal; jeweils die naechste Stufe) und `anzeigegeraet` (`doppelt`, `leistung`). Messstellen
+in der Vorlage blenden das Anzeigegeraet ein; ihre Anzeige prueft `{"bauteil": "UM1", "groesse": "anzeige", ...}`
+(Betrag in V bzw. A).
+
+Auswertung ueber ein Zeitfenster (ab Volta 2, fuer Wechselgroessen): `"auswertung"` mit `spitze` (groesster Betrag),
+`spitze_spitze`, `mittel` (mit Vorzeichen), `effektiv` (Effektivwert des Wechselanteils) oder `frequenz`
+(Durchgaenge durch die Mitte, 10 % Hysterese); `"fenster_s"` 0,02 ... 10 s (Vorgabe 0,2 s, Frequenz mindestens
+1 s). Ausgewertet wird je abgeschlossenem Fenster, das Ergebnis gilt bis zum Ende des naechsten. Am Feld ist
+ausser `spannung_V` auch `frequenz_Hz` erlaubt: `{"feld": "B3", "groesse": "frequenz_Hz", "zwischen": [49, 51]}`.
+Haengt der Pult-Lautsprecher in der Schaltung, rechnet die Simulation mit 20 µs - auch bei ausgeschaltetem Ton,
+damit das Ergebnis nie an der Tonausgabe haengt.
+
 Module in Bedingungen: `bauteil` darf auch eine Modulkennung der Vorlage sein (z. B. `TM1`); gemessen werden die
 Werte des Moduls (Tonmodul: `frequenz_Hz` = aktueller Ton, `strom_mA` = Strom in den Ausgang `aus`; Blinkmodul:
 Ausgangstransistor). Zuordnung wie bei Bauteilen ueber Kennung und Typ.

@@ -224,6 +224,72 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
     // Raumlicht: "hell" (Vorgabe), "daemmerung", "dunkel"
     const QString light = pult.value(QStringLiteral("raumlicht")).toString();
     out.desk.roomLight = light == QStringLiteral("dunkel") ? 0 : light == QStringLiteral("daemmerung") ? 1 : 2;
+    // Ab Volta 2: Pultteile und Geraete
+    if (pult.contains(QStringLiteral("batterie2_V"))) {
+        const double u = pult.value(QStringLiteral("batterie2_V")).toDouble();
+        if (std::abs(u - 4.5) < 1e-6) out.desk.cells2 = 3;
+        else if (std::abs(u - 9.0) < 1e-6) out.desk.cells2 = 6;
+        else {
+            error = QStringLiteral("Vorlage: batterie2_V muss 4.5 oder 9 sein");
+            return false;
+        }
+    }
+    if (pult.contains(QStringLiteral("wechsel_V"))) {
+        const int u = pult.value(QStringLiteral("wechsel_V")).toInt();
+        if (u != 6 && u != 9) {
+            error = QStringLiteral("Vorlage: wechsel_V muss 6 oder 9 sein");
+            return false;
+        }
+        out.desk.acRmsV = u;
+    }
+    if (pult.contains(QStringLiteral("generator"))) {
+        const QJsonObject g = pult.value(QStringLiteral("generator")).toObject();
+        const QString form = g.value(QStringLiteral("form")).toString(QStringLiteral("sinus"));
+        out.desk.genWaveform = form == QStringLiteral("dreieck") ? 1 : form == QStringLiteral("rechteck") ? 2 : 0;
+        out.desk.genFrequencyHz = std::clamp(g.value(QStringLiteral("frequenz_Hz")).toDouble(100.0), 1.0, 10000.0);
+        out.desk.genAmplitudeV = std::clamp(g.value(QStringLiteral("spitze_V")).toDouble(1.0), 0.0, 4.0);
+        out.desk.genOffsetV = std::clamp(g.value(QStringLiteral("gleichanteil_V")).toDouble(0.0), -4.0, 4.0);
+    }
+    if (pult.contains(QStringLiteral("kennlinienschreiber"))) {
+        const QJsonObject k = pult.value(QStringLiteral("kennlinienschreiber")).toObject();
+        const auto indexOf = [](const auto& table, double v, int fallback) {
+            for (std::size_t i = 0; i < table.size(); ++i)
+                if (std::abs(table[i] - v) < 1e-9) return static_cast<int>(i);
+            return fallback;
+        };
+        out.desk.tracer.voltsIndex = indexOf(model::tracerVolts(), k.value(QStringLiteral("spannung_V")).toDouble(10.0), 2);
+        out.desk.tracer.limitIndex =
+            indexOf(model::tracerLimitsA(), k.value(QStringLiteral("strom_mA")).toDouble(20.0) * 1e-3, 1);
+        out.desk.tracer.bipolar = k.value(QStringLiteral("beide_richtungen")).toBool(true);
+    }
+    if (pult.contains(QStringLiteral("oszilloskop"))) {
+        const QJsonObject o = pult.value(QStringLiteral("oszilloskop")).toObject();
+        // naechstliegende Stufe der Zeitbasis bzw. der Volt je Teilung
+        const auto nearest = [](const auto& table, double v, int last) {
+            int best = 0;
+            for (int i = 0; i <= last; ++i)
+                if (std::abs(std::log(table[static_cast<std::size_t>(i)] / v)) <
+                    std::abs(std::log(table[static_cast<std::size_t>(best)] / v)))
+                    best = i;
+            return best;
+        };
+        if (o.contains(QStringLiteral("zeitbasis_s")))
+            out.desk.scope.timebaseIndex = nearest(model::scopeTimebases(), o.value(QStringLiteral("zeitbasis_s")).toDouble(),
+                                                   model::kScopeLastNormalTimebase);
+        const QJsonArray vpd = o.value(QStringLiteral("volt_je_teilung")).toArray();
+        for (int c = 0; c < vpd.size() && c < 2; ++c)
+            out.desk.scope.channels[static_cast<std::size_t>(c)].voltsIndex =
+                nearest(model::scopeVoltsPerDiv(), vpd.at(c).toDouble(),
+                        static_cast<int>(model::scopeVoltsPerDiv().size()) - 1);
+    }
+    if (pult.contains(QStringLiteral("anzeigegeraet"))) {
+        const QJsonObject a = pult.value(QStringLiteral("anzeigegeraet")).toObject();
+        out.desk.display.twin = a.value(QStringLiteral("doppelt")).toBool(false);
+        out.desk.display.power = a.value(QStringLiteral("leistung")).toBool(false);
+    }
+    // Messstellen in der Vorlage: Anzeigegeraet eingeblendet (Volta 2)
+    for (const auto& p : out.parts)
+        if (p.type.rfind("messstelle_", 0) == 0) out.desk.meterVisible = true;
     // Werkzeuge, die bereitliegen: [{"typ": "taschenlampe"|"foehn", "feld": "B3", "an": true}]
     for (const QJsonValue& v : vorlage.value(QStringLiteral("werkzeuge")).toArray()) {
         const QJsonObject o = v.toObject();
@@ -306,8 +372,26 @@ bool ContentRepository::parseSuccess(const QJsonObject& o, model::SuccessConditi
         error = QStringLiteral("Erfolg: unbekannte Groesse '%1'").arg(g);
         return false;
     }
+    // Auswertung ueber ein Zeitfenster (ab Volta 2): spitze, spitze_spitze, mittel, effektiv, frequenz
+    const QString stat = o.value(QStringLiteral("auswertung")).toString();
+    if (stat.isEmpty()) out.statistic = C::Statistic::Instant;
+    else if (stat == QStringLiteral("spitze")) out.statistic = C::Statistic::Peak;
+    else if (stat == QStringLiteral("spitze_spitze")) out.statistic = C::Statistic::PeakToPeak;
+    else if (stat == QStringLiteral("mittel")) out.statistic = C::Statistic::Mean;
+    else if (stat == QStringLiteral("effektiv")) out.statistic = C::Statistic::Rms;
+    else if (stat == QStringLiteral("frequenz")) out.statistic = C::Statistic::Frequency;
+    else {
+        error = QStringLiteral("Erfolg: unbekannte Auswertung '%1'").arg(stat);
+        return false;
+    }
+    out.windowS = std::clamp(o.value(QStringLiteral("fenster_s")).toDouble(0.2), 0.02, 10.0);
+    // Frequenz am Feld: Durchgaenge der Spannung
+    if (!out.field.empty() && out.quantity == C::Quantity::FrequencyHz) {
+        out.quantity = C::Quantity::VoltageV;
+        out.statistic = C::Statistic::Frequency;
+    }
     if (!out.field.empty() && out.quantity != C::Quantity::VoltageV) {
-        error = QStringLiteral("Erfolg: am Feld ist nur spannung_V moeglich");
+        error = QStringLiteral("Erfolg: am Feld ist nur spannung_V oder frequenz_Hz moeglich");
         return false;
     }
     const QJsonArray range = o.value(QStringLiteral("zwischen")).toArray();

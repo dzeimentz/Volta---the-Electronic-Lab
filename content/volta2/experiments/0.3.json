@@ -1,0 +1,122 @@
+{
+  "id": "volta2.0.3",
+  "band": "volta2",
+  "stufe": 0,
+  "titel_key": "exp2_0_3_titel",
+  "dauer_min": 10,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "gluehlampe",
+    "leitung"
+  ],
+  "frage_key": "exp2_0_3_frage",
+  "vermutungen": [
+    "exp2_0_3_v1",
+    "exp2_0_3_v2",
+    "exp2_0_3_v3"
+  ],
+  "beobachtungen": [
+    "exp2_0_3_b1",
+    "exp2_0_3_b2",
+    "exp2_0_3_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 4.5,
+      "batterie2_V": 4.5
+    },
+    "bauteile": [
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "P:-B2",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:+B2",
+        "nach": "C5",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:0V",
+        "nach": "C5",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": [
+      "A1",
+      "C5",
+      "A2"
+    ]
+  },
+  "schritte": [
+    "exp2_0_3_s1",
+    "exp2_0_3_s2",
+    "exp2_0_3_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 2
+      },
+      {
+        "feld": "A2",
+        "groesse": "spannung_V",
+        "zwischen": [
+          -4.8,
+          -4.0
+        ]
+      },
+      {
+        "feld": "A1",
+        "groesse": "spannung_V",
+        "zwischen": [
+          4.0,
+          4.8
+        ]
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_0_3_h1",
+    "exp2_0_3_h2",
+    "exp2_0_3_loesung"
+  ],
+  "erklaerung_key": "exp2_0_3_erklaerung",
+  "mehr_wissen_key": "exp2_0_3_mehr",
+  "weiterforschen": [
+    "exp2_0_3_w1",
+    "exp2_0_3_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_0_3_echt"
+}

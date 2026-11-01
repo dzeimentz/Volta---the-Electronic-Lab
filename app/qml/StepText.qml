@@ -17,8 +17,10 @@ Flow {
     spacing: 5
 
     readonly property int lineHeight: 36
-    // Feld auf der Grundplatte, am Pult (V+, 0V, S1, P1a, LS1 ...) oder in der Modulleiste (M1 ...)
-    readonly property var fieldPattern: /^([A-E](1[0-2]|[1-9])|V\+|0V|S[12]|P[12][asb]|LS[12]|M(1[0-6]|[1-9]))$/
+    // Feld auf der Grundplatte, am Pult (V+, 0V, S1, P1a, LS1 ...; ab Volta 2 +B2, −B2, W~a, G0, KS+ ...) oder in
+    // der Modulleiste (M1 ...)
+    readonly property var fieldPattern:
+        /^([A-E](1[0-2]|[1-9])|V\+|0V|S[12]|P[12][asb]|LS[12]|\+B2|−B2|W~[ab]|G0?|KS[+−]|M(1[0-6]|[1-9]))$/
     // Bindewoerter zwischen den zwei Feldern eines Bauteils bzw. davor (DE, EN, FR, LU)
     readonly property var joinWords: ["und", "and", "et", "an", "a", "nach", "to", "à", "op", "bis", "mit", "with"]
     readonly property var fromWords: ["von", "from", "de", "vu", "vun"]

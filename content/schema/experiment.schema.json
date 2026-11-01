@@ -42,7 +42,22 @@
             "p1": {"type": "number", "minimum": 0, "maximum": 1},
             "p2": {"type": "number", "minimum": 0, "maximum": 1},
             "messart": {"enum": ["V", "A", "Ohm"]},
-            "raumlicht": {"enum": ["hell", "daemmerung", "dunkel"]}
+            "raumlicht": {"enum": ["hell", "daemmerung", "dunkel"]},
+            "batterie2_V": {"enum": [4.5, 9]},
+            "wechsel_V": {"enum": [6, 9]},
+            "generator": {"type": "object", "additionalProperties": false, "properties": {
+              "form": {"enum": ["sinus", "dreieck", "rechteck"]},
+              "frequenz_Hz": {"type": "number", "minimum": 1, "maximum": 10000},
+              "spitze_V": {"type": "number", "minimum": 0, "maximum": 4},
+              "gleichanteil_V": {"type": "number", "minimum": -4, "maximum": 4}}},
+            "kennlinienschreiber": {"type": "object", "additionalProperties": false, "properties": {
+              "spannung_V": {"enum": [2, 5, 10, 20]}, "beide_richtungen": {"type": "boolean"},
+              "strom_mA": {"enum": [5, 20, 50, 200]}}},
+            "oszilloskop": {"type": "object", "additionalProperties": false, "properties": {
+              "zeitbasis_s": {"type": "number", "exclusiveMinimum": 0},
+              "volt_je_teilung": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}, "maxItems": 2}}},
+            "anzeigegeraet": {"type": "object", "additionalProperties": false, "properties": {
+              "doppelt": {"type": "boolean"}, "leistung": {"type": "boolean"}}}
           }
         }
       }
@@ -59,7 +74,7 @@
     "key": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
     "field": {"type": "string", "pattern": "^[A-E](1[0-2]|[1-9])$"},
     "anchor": {"type": "string",
-      "pattern": "^([A-E](1[0-2]|[1-9])|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z]+)$"},
+      "pattern": "^([A-E](1[0-2]|[1-9])|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2|\\+B2|-B2|W~a|W~b|G|G0|KS\\+|KS-)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z0-9]+)$"},
     "placement": {
       "type": "object",
       "required": ["id", "typ", "felder"],
@@ -105,7 +120,9 @@
           "bauteil": {"type": "string"}, "rolle": {"type": "string"}, "feld": {"$ref": "#/$defs/anchor"},
           "groesse": {"enum": ["strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C", "anzeige"]},
           "zwischen": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
-          "min": {"type": "number"}, "max": {"type": "number"}, "dauer_s": {"type": "number", "minimum": 0}}},
+          "min": {"type": "number"}, "max": {"type": "number"}, "dauer_s": {"type": "number", "minimum": 0},
+          "auswertung": {"enum": ["spitze", "spitze_spitze", "mittel", "effektiv", "frequenz"]},
+          "fenster_s": {"type": "number", "minimum": 0.02, "maximum": 10}}},
         {"required": ["zustand"], "properties": {
           "bauteil": {"type": "string"}, "rolle": {"type": "string"},
           "zustand": {"enum": ["intakt", "ueberlastet", "zerstoert"]}}}

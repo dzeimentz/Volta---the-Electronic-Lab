@@ -430,6 +430,7 @@ private slots:
         s->setAudioStream(stream);
         run(*s, 0.01);
         QCOMPARE(stream->buffered(), std::size_t(0)); // nicht hoerbar geschaltet: kein Tonstrom
+        QCOMPARE(s->bridge().stepS(), model::kAudioStepS); // aber 20 us, sobald der Lautsprecher verdrahtet ist
         s->setAudible(true);
         run(*s, 0.1);
         QCOMPARE(s->bridge().stepS(), model::kAudioStepS);
@@ -452,6 +453,13 @@ private slots:
         QCOMPARE(s->bridge().stepS(), model::kAudioStepS);
         s->setTimeScale(1.0);
         s->setAudible(false);
+        run(*s, 0.01);
+        QCOMPARE(s->bridge().stepS(), model::kAudioStepS); // Ergebnis haengt nicht am Ton
+        stream->drain();
+        run(*s, 0.01);
+        QCOMPARE(stream->buffered(), std::size_t(0));
+        // Lautsprecher abgeklemmt: wieder 1 ms
+        s->loadBoard(b);
         run(*s, 0.01);
         QCOMPARE(s->bridge().stepS(), 1e-3);
     }

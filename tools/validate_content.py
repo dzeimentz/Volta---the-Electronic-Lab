@@ -20,13 +20,16 @@ CONTENT = ROOT / "content"
 
 FIELD = re.compile(r"^[A-E](1[0-2]|[1-9])$")
 ANCHOR = re.compile(
-    r"^([A-E](1[0-2]|[1-9])|P:(\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\.[a-z]+)$"
+    r"^([A-E](1[0-2]|[1-9])|P:(\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2|\+B2|-B2|W~a|W~b|G|G0|KS\+|KS-)"
+    r"|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\.[a-z0-9]+)$"
 )
 KEY = re.compile(r"^[a-z][a-z0-9_]*$")
 EXP_ID = re.compile(r"^(volta1|volta2|volta3|zuse1)\.[0-9]+\.[0-9]+$")
 COLORS = {"rot", "schwarz", "blau", "gelb", "gruen", "weiss"}
 QUANTITIES = {"strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl", "frequenz_Hz", "temperatur_C", "anzeige"}
 STATES = {"intakt", "ueberlastet", "zerstoert"}
+STATISTICS = {"spitze", "spitze_spitze", "mittel", "effektiv", "frequenz"}
+VOLTA2_ANCHORS = re.compile(r"^P:(\+B2|-B2|W~a|W~b|G|G0|KS\+|KS-)$")
 REQUIRED = ["id", "band", "stufe", "titel_key", "zerstoerend", "bauteile_frei", "frage_key",
             "vermutungen", "vorlage", "erfolg", "hilfen", "erklaerung_key", "jetzt_in_echt_key"]
 LANGS = ["de", "fr", "en", "lb"]
@@ -65,7 +68,8 @@ def collect_keys(exp: dict) -> set[str]:
     return keys
 
 
-def check_condition(cond, where: str, part_ids: set[str], rep: Report) -> None:
+def check_condition(cond, where: str, part_ids: set[str], rep: Report, measure_ids: set[str] | None = None) -> None:
+    measure_ids = measure_ids or set()
     if not isinstance(cond, dict) or not cond:
         rep.error(where, "Erfolgsbedingung muss ein nicht leeres Objekt sein")
         return
@@ -75,17 +79,23 @@ def check_condition(cond, where: str, part_ids: set[str], rep: Report) -> None:
             rep.error(where, "'alle'/'eine' braucht eine nicht leere Liste")
             return
         for i, c in enumerate(items):
-            check_condition(c, f"{where}[{i}]", part_ids, rep)
+            check_condition(c, f"{where}[{i}]", part_ids, rep, measure_ids)
         return
     if "nicht" in cond:
-        check_condition(cond["nicht"], f"{where}.nicht", part_ids, rep)
+        check_condition(cond["nicht"], f"{where}.nicht", part_ids, rep, measure_ids)
         return
     ref = cond.get("bauteil")
     if ref == "MESS":  # Dreifach-Messgeraet des Pults: nur seine Anzeige
         if cond.get("groesse") not in (None, "anzeige"):
             rep.error(where, "Messgeraet (MESS): nur 'anzeige' pruefbar")
-    elif cond.get("groesse") == "anzeige":
-        rep.error(where, "'anzeige' gibt es nur am Messgeraet (bauteil 'MESS')")
+    elif cond.get("groesse") == "anzeige" and ref not in measure_ids:
+        rep.error(where, "'anzeige' gibt es nur am Messgeraet (bauteil 'MESS') und an Messstellen")
+    if "auswertung" in cond and cond["auswertung"] not in STATISTICS:
+        rep.error(where, f"unbekannte Auswertung '{cond['auswertung']}'")
+    if "fenster_s" in cond and not (isinstance(cond["fenster_s"], (int, float)) and 0.02 <= cond["fenster_s"] <= 10):
+        rep.error(where, "fenster_s muss zwischen 0,02 und 10 s liegen")
+    if "feld" in cond and cond.get("groesse") not in ("spannung_V", "frequenz_Hz"):
+        rep.error(where, "am Feld nur spannung_V oder frequenz_Hz")
     if ref is not None and ref != "MESS" and ref not in part_ids:
         rep.error(where, f"Bauteil '{ref}' ist nicht in der Vorlage")
     if "feld" in cond and not ANCHOR.match(str(cond["feld"])):
@@ -205,9 +215,31 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
         if "farbe" in w and w["farbe"] not in COLORS:
             rep.error(where, f"Leitung {i}: unbekannte Farbe '{w['farbe']}'")
     pult = tpl.get("pult_stellung", {}) or {}
+    volta2_keys = ("batterie2_V", "wechsel_V", "generator", "kennlinienschreiber", "oszilloskop", "anzeigegeraet")
     for k in pult:
-        if k not in ("batterie_V", "schalter", "p1", "p2", "messart", "raumlicht"):
+        if k not in ("batterie_V", "schalter", "p1", "p2", "messart", "raumlicht") + volta2_keys:
             rep.error(where, f"pult_stellung: unbekannter Schluessel '{k}'")
+        elif k in volta2_keys and band == "volta1":
+            rep.error(where, f"pult_stellung: '{k}' gibt es erst ab Volta 2")
+    if "batterie2_V" in pult and pult["batterie2_V"] not in (4.5, 9):
+        rep.error(where, "pult_stellung: batterie2_V muss 4.5 oder 9 sein")
+    if "wechsel_V" in pult and pult["wechsel_V"] not in (6, 9):
+        rep.error(where, "pult_stellung: wechsel_V muss 6 oder 9 sein")
+    gen = pult.get("generator")
+    if gen is not None:
+        if gen.get("form", "sinus") not in ("sinus", "dreieck", "rechteck"):
+            rep.error(where, "pult_stellung.generator: form muss sinus, dreieck oder rechteck sein")
+        if not 1 <= gen.get("frequenz_Hz", 100) <= 10000 or not 0 <= gen.get("spitze_V", 1) <= 4 \
+                or not -4 <= gen.get("gleichanteil_V", 0) <= 4:
+            rep.error(where, "pult_stellung.generator: 1 Hz ... 10 kHz, Spitze 0 ... 4 V, Gleichanteil -4 ... 4 V")
+    ks = pult.get("kennlinienschreiber")
+    if ks is not None and (ks.get("spannung_V", 10) not in (2, 5, 10, 20) or ks.get("strom_mA", 20) not in (5, 20, 50, 200)):
+        rep.error(where, "pult_stellung.kennlinienschreiber: spannung_V 2/5/10/20, strom_mA 5/20/50/200")
+    if band == "volta1":
+        for i, w in enumerate(tpl.get("leitungen", [])):
+            for end in ("von", "nach"):
+                if VOLTA2_ANCHORS.match(str(w.get(end, ""))):
+                    rep.error(where, f"Leitung {i}: Anschluss '{w.get(end)}' gibt es erst ab Volta 2")
     if "batterie_V" in pult and pult["batterie_V"] not in (3, 4.5, 9):
         rep.error(where, "pult_stellung: batterie_V muss 3, 4.5 oder 9 sein")
     for k in ("p1", "p2"):
@@ -231,7 +263,8 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
                 rep.error(where, f"{k}: Index {i} ausserhalb der Vermutungen")
     if set(exp.get("vermutung_passt", []) or []) & set(exp.get("vermutung_offen", []) or []):
         rep.error(where, "eine Vermutung kann nicht zugleich passen und offen sein")
-    check_condition(exp.get("erfolg"), f"{where}:erfolg", part_ids, rep)
+    measure_ids = {p.get("id") for p in tpl.get("bauteile", []) if str(p.get("typ", "")).startswith("messstelle_")}
+    check_condition(exp.get("erfolg"), f"{where}:erfolg", part_ids, rep, measure_ids)
 
     keys = collect_keys(exp)
     for k in keys:

@@ -1241,11 +1241,7 @@ void LabController::setAudio(services::AudioService* audio) {
     if (m_session) m_session->setAudioStream(audio ? audio->stream() : nullptr);
 }
 
-bool LabController::speakerWired() const {
-    for (const auto& w : m_session->board().wires)
-        if (model::deskGroupOf(w.from) == "lautsprecher" || model::deskGroupOf(w.to) == "lautsprecher") return true;
-    return false;
-}
+bool LabController::speakerWired() const { return model::speakerWired(m_session->board()); }
 
 // Tonausgabe. Ab Volta 2 hoerbare Simulation (Konzept 5.3): Haengt der Pult-Lautsprecher in der Schaltung, rechnet
 // die Simulation mit 20 us und der Lautsprecherstrom selbst klingt. Faellt sie laenger als 0,6 s unter 90 % der

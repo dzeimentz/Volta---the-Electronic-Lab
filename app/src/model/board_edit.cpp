@@ -161,6 +161,14 @@ bool hasDeskPart(const Board& board, const std::string& group) {
     return std::find(board.deskParts->begin(), board.deskParts->end(), group) != board.deskParts->end();
 }
 
+bool speakerWired(const Board& board) {
+    for (const auto& w : board.wires)
+        if (deskGroupOf(w.from) == "lautsprecher" || deskGroupOf(w.to) == "lautsprecher") return true;
+    return false;
+}
+
+bool needsAudioStep(const Board& board) { return board.deskParts.has_value() && speakerWired(board); }
+
 std::vector<std::string> deskPartsUsed(const Board& board) {
     std::vector<std::string> used{"batterie"};
     auto note = [&used](const std::string& anchor) {
