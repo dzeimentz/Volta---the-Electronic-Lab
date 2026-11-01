@@ -130,6 +130,8 @@ public:
     // den Buchsen stecken); Sicherung tauschen ist ein Befehl (wie Reparieren).
     void setMeterMode(core::MeterMode mode);
     void setMeterAnalog(bool analog);
+    // Anzeigegeraet ab Volta 2 (Bedienhandlung, nur Anzeige: die Messstellen messen unabhaengig davon)
+    void setDisplaySettings(const DisplaySettings& s) { m_board.desk.display = s; }
     bool setMeterVisible(bool visible);
     bool replaceMeterFuse();
     // Lautsprecher des Pults reparieren (Befehl, wie Reparieren eines Bauteils)

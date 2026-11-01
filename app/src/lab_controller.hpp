@@ -113,6 +113,9 @@ class LabController : public QObject {
     Q_PROPERTY(bool meterVisible READ meterVisible WRITE setMeterVisible NOTIFY deskChanged)
     Q_PROPERTY(int meterMode READ meterMode WRITE setMeterMode NOTIFY deskChanged)
     Q_PROPERTY(bool meterAnalog READ meterAnalog WRITE setMeterAnalog NOTIFY deskChanged)
+    // Anzeigegeraet ab Volta 2 (Konzept 5.2): doppelt (zwei Anzeigen), Leistung aus V und A
+    Q_PROPERTY(bool displayTwin READ displayTwin WRITE setDisplayTwin NOTIFY deskChanged)
+    Q_PROPERTY(bool displayPower READ displayPower WRITE setDisplayPower NOTIFY deskChanged)
     Q_PROPERTY(double simTime READ simTime NOTIFY stateChanged)
     Q_PROPERTY(bool showSimTime READ showSimTime CONSTANT) // Entwicklerhilfe VOLTA_SHOW_TIME=1
     Q_PROPERTY(double timeScale READ timeScale WRITE setTimeScale NOTIFY deskChanged)
@@ -472,6 +475,17 @@ public:
     // Anzeige des Messgeraets: text, unit (Dezimalzeichen der Sprache), level (Zeiger), range, mode,
     // overrange, foreignVoltage, fuseBlown, valid
     Q_INVOKABLE QVariantMap meterState();
+    // Anzeigegeraet: gesteckte Messstellen [{id, label, kind, tag}], Zustand einer Anzeige, Leistung
+    Q_INVOKABLE QVariantList measurePoints() const;
+    Q_INVOKABLE QVariantMap displayState(int slot) const;
+    Q_INVOKABLE QVariantMap displayPowerState() const;
+    Q_INVOKABLE void setDisplaySource(int slot, const QString& id);
+    Q_INVOKABLE void setDisplayRange(int slot, int range);
+    Q_INVOKABLE void setDisplayAc(int slot, bool ac);
+    bool displayTwin() const;
+    void setDisplayTwin(bool twin);
+    bool displayPower() const;
+    void setDisplayPower(bool on);
     Q_INVOKABLE bool replaceMeterFuse(); // Befehl
     // Klanganzeige: frequencyHz, level 0..1, pulses (Zaehler), overloaded, destroyed
     Q_INVOKABLE QVariantMap speakerState() const;

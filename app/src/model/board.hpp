@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <map>
 #include <optional>
 #include <string>
@@ -46,6 +47,21 @@ struct ToolPlacement {
     bool on = true;
 };
 
+// Eine Anzeige des Anzeigegeraets (ab Volta 2): gezeigte Messstelle (Kennung, leer = selbsttaetig die naechste),
+// Bereich (-1 = selbsttaetig, sonst Index in displayRanges), Wechselgroesse (Effektivwert) statt Gleichgroesse
+struct DisplaySlot {
+    std::string source;
+    int range = -1;
+    bool ac = false;
+};
+
+// Anzeigegeraet (ab Volta 2, Konzept 5.2): einfach oder doppelt, auf Wunsch Leistung aus V und A
+struct DisplaySettings {
+    bool twin = false;
+    bool power = false;
+    std::array<DisplaySlot, 2> meters;
+};
+
 // Zustand des Bedienpults (Bedienhandlungen, nicht Teil des Undo-Verlaufs).
 struct DeskState {
     int cells = 6;              // 2 / 3 / 6 Zellen = 3 / 4,5 / 9 V
@@ -63,6 +79,7 @@ struct DeskState {
     core::MeterMode meterMode = core::MeterMode::Volt;
     bool meterAnalog = false;
     bool meterVisible = false;  // Messgeraet eingeblendet (Bedienhandlung; Buchsen nur dann steckbar)
+    DisplaySettings display;    // Anzeigegeraet ab Volta 2 (eingeblendet ueber meterVisible)
     int roomLight = 2;          // Raumlicht: 0 dunkel, 1 Daemmerung, 2 hell
     std::vector<ToolPlacement> tools;
 };

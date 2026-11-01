@@ -2126,6 +2126,176 @@ QVariantMap LabController::meterState() {
     return m;
 }
 
+namespace {
+// Messart einer Messstelle: 0 V, 1 A, 2 Ohm; -1 = keine Messstelle
+int measureKind(const model::CatalogEntry* e) {
+    if (!e || e->theme != "messen") return -1;
+    return e->model == "measure_ampere" ? 1 : e->model == "measure_ohm" ? 2 : 0;
+}
+// Sichtbare Kennung: UM1 -> V1, IM1 -> A1, RM1 -> Ohm1
+QString measureLabel(const std::string& id) {
+    const QString s = QString::fromStdString(id);
+    if (s.startsWith(QLatin1String("UM"))) return QStringLiteral("V") + s.mid(2);
+    if (s.startsWith(QLatin1String("IM"))) return QStringLiteral("A") + s.mid(2);
+    if (s.startsWith(QLatin1String("RM"))) return QStringLiteral("\u03A9") + s.mid(2);
+    return s;
+}
+} // namespace
+
+QVariantList LabController::measurePoints() const {
+    QVariantList out;
+    for (int kind = 0; kind < 3; ++kind) // Reihenfolge V, A, Ohm wie die Knoepfe
+        for (const auto& p : m_session->board().parts)
+            if (measureKind(m_session->catalog().part(p.type)) == kind) {
+                const QString label = measureLabel(p.id);
+                out << QVariantMap{{QStringLiteral("id"), qs(p.id)}, {QStringLiteral("label"), label},
+                                   {QStringLiteral("kind"), kind}, {QStringLiteral("tag"), label.mid(1).toInt()}};
+            }
+    return out;
+}
+
+// Gezeigte Messstelle einer Anzeige: die gewaehlte, falls gesteckt; sonst selbsttaetig die erste, die die andere
+// Anzeige nicht schon zeigt
+QVariantMap LabController::displayState(int slot) const {
+    QVariantMap m;
+    if (slot < 0 || slot > 1) return m;
+    const auto& d = m_session->board().desk.display;
+    const QVariantList points = measurePoints();
+    const auto has = [&points](const QString& id) {
+        return !id.isEmpty() && std::any_of(points.begin(), points.end(), [&id](const QVariant& v) {
+                   return v.toMap().value(QStringLiteral("id")).toString() == id;
+               });
+    };
+    QString source = qs(d.meters[slot].source);
+    if (!has(source)) {
+        source.clear();
+        const QString other = d.twin ? (slot == 1 ? displayState(0).value(QStringLiteral("id")).toString()
+                                                  : (has(qs(d.meters[1].source)) ? qs(d.meters[1].source) : QString()))
+                                     : QString();
+        for (const QVariant& v : points) {
+            const QString id = v.toMap().value(QStringLiteral("id")).toString();
+            if (id != other) {
+                source = id;
+                break;
+            }
+        }
+    }
+    m.insert(QStringLiteral("valid"), !source.isEmpty());
+    if (source.isEmpty()) return m;
+    const model::PartPlacement* p = m_session->board().findPart(ss(source));
+    const int kind = p ? measureKind(m_session->catalog().part(p->type)) : -1;
+    const QString label = measureLabel(ss(source));
+    m.insert(QStringLiteral("id"), source);
+    m.insert(QStringLiteral("label"), label);
+    m.insert(QStringLiteral("kind"), kind);
+    m.insert(QStringLiteral("tag"), label.mid(1).toInt());
+    const auto mode = static_cast<core::MeterMode>(std::max(kind, 0));
+    int count = 0;
+    const model::DisplayRange* ranges = model::displayRanges(mode, count);
+    const int range = d.meters[slot].range < count ? d.meters[slot].range : -1;
+    QStringList names;
+    for (int i = 0; i < count; ++i) names << QString::fromUtf8(ranges[i].name);
+    m.insert(QStringLiteral("ranges"), names);
+    m.insert(QStringLiteral("range"), range);
+    const bool acChosen = d.meters[slot].ac && mode != core::MeterMode::Ohm;
+    m.insert(QStringLiteral("ac"), acChosen);
+    const core::ComponentReading* r = m_session->reading(ss(source));
+    if (!r) {
+        m.insert(QStringLiteral("text"), QStringLiteral("- - -"));
+        m.insert(QStringLiteral("unit"), QString());
+        return m;
+    }
+    // Gleichgroesse: Mittelwert des Messfensters, solange der Wechselanteil ueberwiegt (wie ein echtes Geraet im
+    // DC-Bereich), sonst der Augenblickswert; Wechselgroesse: Effektivwert des Wechselanteils. Die Statistik laeuft
+    // ueber Spannung bzw. Strom am ersten Anschluss des Kernmodells (minus) und hat darum das umgekehrte Vorzeichen.
+    const core::SignalSummary* st = mode == core::MeterMode::Ohm
+                                        ? nullptr
+                                        : m_session->readingStats(ss(source), mode == core::MeterMode::Ampere);
+    double value = r->displayValue;
+    if (acChosen) value = st && st->valid ? st->acRms : 0.0;
+    else if (st && st->isAc()) value = -st->mean;
+    const bool foreign = (r->displayFlags & core::kDisplayForeignVoltage) != 0;
+    const model::DisplayText t =
+        model::formatDisplay(mode, range, value, (r->displayFlags & core::kDisplayOverrange) != 0);
+    QString text = QString::fromStdString(t.value);
+    text.replace(QLatin1Char('.'), QLocale().decimalPoint());
+    m.insert(QStringLiteral("text"), foreign ? QStringLiteral("!") : text);
+    m.insert(QStringLiteral("unit"), foreign ? QString() : QString::fromStdString(t.unit) + (acChosen ? QStringLiteral("~") : QString()));
+    m.insert(QStringLiteral("overrange"), t.overrange);
+    m.insert(QStringLiteral("foreignVoltage"), foreign);
+    m.insert(QStringLiteral("value"), value);
+    return m;
+}
+
+// Leistung P = U * I aus einer V- und einer A-Anzeige (beide Gleichgroessen, kein Ueberlauf)
+QVariantMap LabController::displayPowerState() const {
+    QVariantMap m;
+    const auto& d = m_session->board().desk.display;
+    m.insert(QStringLiteral("shown"), d.twin && d.power);
+    if (!d.twin || !d.power) return m;
+    const QVariantMap a = displayState(0), b = displayState(1);
+    const int ka = a.value(QStringLiteral("kind"), -1).toInt(), kb = b.value(QStringLiteral("kind"), -1).toInt();
+    const bool pair = (ka == 0 && kb == 1) || (ka == 1 && kb == 0);
+    const bool dc = !a.value(QStringLiteral("ac")).toBool() && !b.value(QStringLiteral("ac")).toBool();
+    const bool ok = pair && dc && a.contains(QStringLiteral("value")) && b.contains(QStringLiteral("value")) &&
+                    !a.value(QStringLiteral("overrange")).toBool() && !b.value(QStringLiteral("overrange")).toBool();
+    m.insert(QStringLiteral("valid"), ok);
+    m.insert(QStringLiteral("needsPair"), !pair);
+    m.insert(QStringLiteral("needsDc"), pair && !dc);
+    if (!ok) return m;
+    const double p = a.value(QStringLiteral("value")).toDouble() * b.value(QStringLiteral("value")).toDouble();
+    const model::MeterText t = model::formatPower(p);
+    QString text = QString::fromStdString(t.value);
+    text.replace(QLatin1Char('.'), QLocale().decimalPoint());
+    m.insert(QStringLiteral("text"), text);
+    m.insert(QStringLiteral("unit"), QString::fromStdString(t.unit));
+    m.insert(QStringLiteral("watts"), p);
+    return m;
+}
+
+void LabController::setDisplaySource(int slot, const QString& id) {
+    if (slot < 0 || slot > 1) return;
+    model::DisplaySettings s = m_session->board().desk.display;
+    if (s.meters[slot].source != ss(id)) s.meters[slot].range = -1; // andere Messgroesse: wieder selbsttaetig
+    s.meters[slot].source = ss(id);
+    m_session->setDisplaySettings(s);
+    emit deskChanged();
+}
+
+void LabController::setDisplayRange(int slot, int range) {
+    if (slot < 0 || slot > 1) return;
+    model::DisplaySettings s = m_session->board().desk.display;
+    s.meters[slot].source = ss(displayState(slot).value(QStringLiteral("id")).toString()); // Wahl festhalten
+    s.meters[slot].range = std::clamp(range, -1, 4);
+    m_session->setDisplaySettings(s);
+    emit deskChanged();
+}
+
+void LabController::setDisplayAc(int slot, bool ac) {
+    if (slot < 0 || slot > 1) return;
+    model::DisplaySettings s = m_session->board().desk.display;
+    s.meters[slot].source = ss(displayState(slot).value(QStringLiteral("id")).toString());
+    s.meters[slot].ac = ac;
+    m_session->setDisplaySettings(s);
+    emit deskChanged();
+}
+
+bool LabController::displayTwin() const { return m_session->board().desk.display.twin; }
+void LabController::setDisplayTwin(bool twin) {
+    model::DisplaySettings s = m_session->board().desk.display;
+    s.twin = twin;
+    m_session->setDisplaySettings(s);
+    emit deskChanged();
+}
+
+bool LabController::displayPower() const { return m_session->board().desk.display.power; }
+void LabController::setDisplayPower(bool on) {
+    model::DisplaySettings s = m_session->board().desk.display;
+    s.power = on;
+    m_session->setDisplaySettings(s);
+    emit deskChanged();
+}
+
 void LabController::setRoomLight(int level) {
     m_session->setRoomLight(level);
     emit deskChanged();

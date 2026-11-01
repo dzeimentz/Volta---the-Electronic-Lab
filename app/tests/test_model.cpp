@@ -320,6 +320,44 @@ private slots:
         QCOMPARE(f(MeterMode::Ohm, 0.5), std::string("0.50 \u03A9"));
     }
 
+    // Anzeigegeraet ab Volta 2: Handbereich mit hoechstens 1999 Digits, Ueberlauf »1«; Leistung mit Vorsatz
+    void displayRangeFormat() {
+        using core::MeterMode;
+        auto f = [](MeterMode m, int range, double v, bool open = false) {
+            const model::DisplayText t = model::formatDisplay(m, range, v, open);
+            return t.value + " " + t.unit + (t.overrange ? " !" : "");
+        };
+        int count = 0;
+        model::displayRanges(MeterMode::Volt, count);
+        QCOMPARE(count, 3);
+        model::displayRanges(MeterMode::Ampere, count);
+        QCOMPARE(count, 4);
+        model::displayRanges(MeterMode::Ohm, count);
+        QCOMPARE(count, 5);
+        QCOMPARE(f(MeterMode::Volt, 2, 9.0), std::string("9.00 V"));
+        QCOMPARE(f(MeterMode::Volt, 1, 1.5), std::string("1.500 V"));       // kleiner Bereich: mehr Stellen
+        QCOMPARE(f(MeterMode::Volt, 1, 9.0), std::string("1 V !"));         // Ueberlauf
+        QCOMPARE(f(MeterMode::Volt, 0, 0.1234), std::string("123.4 mV"));
+        QCOMPARE(f(MeterMode::Volt, 0, -0.25), std::string("-1 mV !"));
+        QCOMPARE(f(MeterMode::Volt, 1, 1.9994), std::string("1.999 V"));
+        QCOMPARE(f(MeterMode::Volt, 1, 1.9996), std::string("1 V !"));      // 2000 Digits
+        QCOMPARE(f(MeterMode::Volt, 2, -1e-6), std::string("0.00 V"));
+        QCOMPARE(f(MeterMode::Ampere, 2, 0.003), std::string("3.0 mA"));
+        QCOMPARE(f(MeterMode::Ampere, 0, 0.003), std::string("1 mA !"));
+        QCOMPARE(f(MeterMode::Ohm, 1, 1000.0), std::string("1.000 k\u03A9"));
+        QCOMPARE(f(MeterMode::Ohm, 4, 0.0, true), std::string("1 M\u03A9 !")); // offen
+        QCOMPARE(f(MeterMode::Ohm, -1, 0.0, true), std::string("OL  !"));     // selbsttaetig: OL
+        QCOMPARE(f(MeterMode::Volt, -1, 4.5), std::string("4.50 V"));
+        auto p = [](double w) {
+            const model::MeterText t = model::formatPower(w);
+            return t.value + " " + t.unit;
+        };
+        QCOMPARE(p(0.009), std::string("9.00 mW"));
+        QCOMPARE(p(1.25), std::string("1.25 W"));
+        QCOMPARE(p(25e-6), std::string("25.0 \u00B5W"));
+        QCOMPARE(p(0.0), std::string("0.00 \u00B5W"));
+    }
+
     void initTestCase() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY2(repo.loadCatalog(m_catalog), qPrintable(repo.lastError()));

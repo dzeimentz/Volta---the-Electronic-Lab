@@ -178,6 +178,7 @@ qt_add_qml_module(volta_ui
         qml/InfoDialog.qml
         qml/Splash.qml
         qml/MeterPanel.qml
+        qml/DisplayMeter.qml
         qml/SpeakerRing.qml
         qml/SchematicSymbol.qml
         qml/ModuleIcon.qml

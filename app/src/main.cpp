@@ -280,6 +280,10 @@ int main(int argc, char* argv[]) {
                                       {"P:W~a", "A8"}, {"A9", "C8"}, {"C9", "P:W~b"}};
             for (const auto& w : wires)
                 lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
+            lab.setMeterVisible(true); // Doppelmessgeraet: V1 und A1, daraus die Leistung an R2
+            lab.setDisplayTwin(true);
+            lab.setDisplayPower(true);
+            lab.setDisplaySource(1, QStringLiteral("IM1"));
             lab.setMainSwitch(true);
         });
     }

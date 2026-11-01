@@ -875,6 +875,53 @@ private slots:
         QVERIFY(volta1Lab.deskTray().isEmpty());
     }
 
+    // Anzeigegeraet ab Volta 2: zeigt gesteckte Messstellen ohne Messleitungen, Handbereich, Wechselgroesse, Leistung
+    void displayMeterShowsMeasurePoints() {
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta2"));
+        lab.startFreeLab();
+        QVERIFY(!lab.displayState(0).value(QStringLiteral("valid")).toBool()); // noch keine Messstelle
+        QVERIFY(lab.addPart(QStringLiteral("widerstand"), QStringLiteral("A1"), false, false)); // R1 1 kOhm
+        QVERIFY(lab.addPart(QStringLiteral("messstelle_v"), QStringLiteral("B1"), false, false)); // V1
+        QVERIFY(lab.addPart(QStringLiteral("messstelle_a"), QStringLiteral("C1"), false, false)); // A1
+        QVERIFY(lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("C1"), QStringLiteral("rot")));
+        QVERIFY(lab.addWire(QStringLiteral("C2"), QStringLiteral("A1"), QStringLiteral("gelb")));
+        QVERIFY(lab.addWire(QStringLiteral("A2"), QStringLiteral("P:0V"), QStringLiteral("schwarz")));
+        QVERIFY(lab.addWire(QStringLiteral("A1"), QStringLiteral("B1"), QStringLiteral("gelb")));
+        QVERIFY(lab.addWire(QStringLiteral("A2"), QStringLiteral("B2"), QStringLiteral("schwarz")));
+        QCOMPARE(lab.measurePoints().size(), 2);
+        QCOMPARE(lab.measurePoints().at(0).toMap().value(QStringLiteral("label")).toString(), QStringLiteral("V1"));
+        lab.setDisplayTwin(true);
+        lab.setDisplayPower(true);
+        // selbsttaetige Wahl: Anzeige 1 V1, Anzeige 2 die naechste (A1)
+        QCOMPARE(lab.displayState(0).value(QStringLiteral("label")).toString(), QStringLiteral("V1"));
+        QCOMPARE(lab.displayState(1).value(QStringLiteral("label")).toString(), QStringLiteral("A1"));
+        lab.setMainSwitch(true);
+        QTRY_VERIFY(std::fabs(lab.displayState(0).value(QStringLiteral("value")).toDouble() - 9.0) < 0.2);
+        const double u = lab.displayState(0).value(QStringLiteral("value")).toDouble();
+        const double i = lab.displayState(1).value(QStringLiteral("value")).toDouble();
+        QVERIFY2(std::fabs(i - u / 1000.0) < 0.02 * u / 1000.0, qPrintable(QString::number(i)));
+        const QVariantMap p = lab.displayPowerState();
+        QVERIFY(p.value(QStringLiteral("valid")).toBool());
+        QVERIFY(std::fabs(p.value(QStringLiteral("watts")).toDouble() - u * i) < 1e-9);
+        // Handbereich 2 V: Ueberlauf »1«; 20 V: zwei Nachkommastellen
+        lab.setDisplayRange(0, 1);
+        QVERIFY(lab.displayState(0).value(QStringLiteral("overrange")).toBool());
+        QCOMPARE(lab.displayState(0).value(QStringLiteral("text")).toString(), QStringLiteral("1"));
+        QVERIFY(!lab.displayPowerState().value(QStringLiteral("valid")).toBool()); // Ueberlauf: keine Leistung
+        lab.setDisplayRange(0, 2);
+        QCOMPARE(lab.displayState(0).value(QStringLiteral("text")).toString().size(), 4); // z. B. 8,99
+        // Wechselgroesse an Gleichspannung: Effektivwert des Wechselanteils 0, Einheit V~, keine Leistung
+        lab.setDisplayAc(0, true);
+        QCOMPARE(lab.displayState(0).value(QStringLiteral("unit")).toString(), QStringLiteral("V~"));
+        QVERIFY(lab.displayState(0).value(QStringLiteral("value")).toDouble() < 0.01);
+        QVERIFY(lab.displayPowerState().value(QStringLiteral("needsDc")).toBool());
+        // Wahl haelt; andere Messstelle setzt den Bereich auf selbsttaetig zurueck
+        lab.setDisplaySource(0, lab.measurePoints().at(1).toMap().value(QStringLiteral("id")).toString());
+        QCOMPARE(lab.displayState(0).value(QStringLiteral("label")).toString(), QStringLiteral("A1"));
+        QCOMPARE(lab.displayState(0).value(QStringLiteral("range")).toInt(), -1);
+        lab.setMainSwitch(false);
+    }
+
     // Forscherprofile: getrennte Daten je Profil (Fortschritt, Laborstand), Loeschen entfernt den Ordner
     void profilesKeepDataApart() {
         QTemporaryDir dir;

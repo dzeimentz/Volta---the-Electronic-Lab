@@ -70,6 +70,14 @@ QJsonObject boardToJson(const Board& board) {
                                                              {QStringLiteral("frequenz_hz"), d.genFrequencyHz},
                                                              {QStringLiteral("amplitude_v"), d.genAmplitudeV},
                                                              {QStringLiteral("gleichanteil_v"), d.genOffsetV}});
+        QJsonArray meters;
+        for (const auto& s : d.display.meters)
+            meters.append(QJsonObject{{QStringLiteral("messstelle"), qs(s.source)},
+                                     {QStringLiteral("bereich"), s.range},
+                                     {QStringLiteral("wechsel"), s.ac}});
+        desk.insert(QStringLiteral("anzeigegeraet"), QJsonObject{{QStringLiteral("doppelt"), d.display.twin},
+                                                                 {QStringLiteral("leistung"), d.display.power},
+                                                                 {QStringLiteral("anzeigen"), meters}});
         out.insert(QStringLiteral("pult"), desk);
     }
     return out;
@@ -126,6 +134,16 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     d.genFrequencyHz = std::clamp(gen.value(QStringLiteral("frequenz_hz")).toDouble(100.0), 1.0, 10000.0);
     d.genAmplitudeV = std::clamp(gen.value(QStringLiteral("amplitude_v")).toDouble(1.0), 0.0, 4.0);
     d.genOffsetV = std::clamp(gen.value(QStringLiteral("gleichanteil_v")).toDouble(0.0), -4.0, 4.0);
+    const QJsonObject disp = desk.value(QStringLiteral("anzeigegeraet")).toObject();
+    d.display.twin = disp.value(QStringLiteral("doppelt")).toBool(false);
+    d.display.power = disp.value(QStringLiteral("leistung")).toBool(false);
+    const QJsonArray meters = disp.value(QStringLiteral("anzeigen")).toArray();
+    for (int i = 0; i < 2 && i < meters.size(); ++i) {
+        const QJsonObject o = meters.at(i).toObject();
+        d.display.meters[i] = {ss(o.value(QStringLiteral("messstelle"))),
+                              std::clamp(o.value(QStringLiteral("bereich")).toInt(-1), -1, 4),
+                              o.value(QStringLiteral("wechsel")).toBool(false)};
+    }
     if (json.contains(QStringLiteral("pultteile"))) {
         std::vector<std::string> groups;
         for (const QJsonValue& v : json.value(QStringLiteral("pultteile")).toArray()) {

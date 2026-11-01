@@ -243,6 +243,14 @@ das iPad).
 - Messstellen (ab Volta 2, Bauteilfach Thema »Messen«): graues Gehaeuse mit V, A oder Ω im Kreis, Nummer 1 blau bzw.
   2 orange (Ziffer zusaetzlich zur Farbe), Pluszeichen am Plusbein. Unter dem Bauteil fett Kennung und Messwert,
   z. B. »V1  3,00 V«, »A2  8,98 mA~«, »Ω1  1,00 kΩ«, »OL«. Hoechstens zwei je Art.
+- Anzeigegeraet (ab Volta 2, `DisplayMeter.qml`; ersetzt dort das Messgeraet mit Buchsen, Knopf »V A Ω«, gleiche zwei
+  Plaetze): Knopf »1/2« schaltet Einfach-/Doppelmessgeraet. Je Anzeige: LCD mit Rahmen und Kennung in der Farbe der
+  Messstelle, Bereich oben rechts; darunter drei Knoepfe: Messstelle (nur gesteckte; ohne Wahl selbsttaetig die
+  naechste, die die andere Anzeige nicht zeigt), Bereich (selbsttaetig oder 200 mV/2 V/20 V, 2 mA/20 mA/200 mA/2 A,
+  200 Ω … 2 MΩ, hoechstens 1999 Digits, Ueberlauf »1«) und Gleich-/Wechselgroesse (⎓ / ~, Effektivwert, »V~«/»A~«;
+  im Gleichbereich bei ueberwiegendem Wechselanteil der Mittelwert wie ein echtes Geraet). Doppelt: Knopf »P«
+  zeigt P = U · I aus einer V- und einer A-Anzeige (nur Gleichgroessen, sonst Hinweistext). Ziffern mit 3 Hz.
+  Einstellungen sind Bedienhandlungen und werden mit dem Aufbau gespeichert (`pult.anzeigegeraet`).
 - Stromfluss: wandernde Punkte, Geschwindigkeit ~ Stromstaerke, technische Stromrichtung (Elektronenfluss ab Stufe 3).
 - Waerme: Bauteile gluehen rot, Rauch bei Zerstoerung, Knopf »Reparieren«.
 - Wassermodell als zuschaltbare Erklaerebene.

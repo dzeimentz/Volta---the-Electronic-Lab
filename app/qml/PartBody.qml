@@ -810,7 +810,9 @@ Item {
                 id: dial
                 anchors.centerIn: parent
                 width: parent.height - 6; height: width; radius: width / 2
-                color: "white"; border.color: "#25303D"; border.width: 2
+                color: "white"; border.width: 3
+                // Rand in der Farbe der Nummer (Konzept 9.3: 1 blau, 2 orange)
+                border.color: root.tag > 0 ? Theme.measureTagColors[(root.tag - 1) % Theme.measureTagColors.length] : "#25303D"
                 Text {
                     anchors.centerIn: parent
                     text: root.type === "messstelle_a" ? "A" : root.type === "messstelle_ohm" ? "Ω" : "V"

@@ -92,6 +92,8 @@ Item {
     }
     // Messgeraet oben im Pult: rechts neben der Pultleiste; seine Buchsen liegen dann in der Reihe der Pultleiste
     readonly property bool meterDocked: settings ? settings.meterDocked : false
+    // Volta 1: Dreifach-Messgeraet mit Buchsen; ab Volta 2 das Anzeigegeraet fuer die Messstellen (Konzept 5.2)
+    readonly property bool classicMeter: controller.band === "" || controller.band === "volta1"
     readonly property int meterDockX: deskStripWidth + Theme.fieldGap
     readonly property int meterJacksWidth: 3 * Theme.deskFieldWidth + 2 * Theme.deskFieldGap
     readonly property var rows: ["A", "B", "C", "D", "E"].slice(0, controller.boardRows) // Stufenanpassung: ab 2 Reihen
@@ -110,7 +112,7 @@ Item {
     readonly property int moduleY: boardY + Math.max(rows.length, controller.meterVisible && !meterDocked ? 5 : 0)
                                    * (Theme.fieldHeight + Theme.fieldGap) + Theme.fieldGap
     readonly property var allAnchors: {
-        let a = controller.meterVisible ? deskNames.concat(meterNames) : deskNames.slice()
+        let a = controller.meterVisible && classicMeter ? deskNames.concat(meterNames) : deskNames.slice()
         for (let r = 0; r < rows.length; ++r)
             for (let c = 1; c <= columns; ++c) a.push(rows[r] + c)
         if (showModules) for (let m = 1; m <= slots; ++m) a.push("M:" + m)
@@ -1039,7 +1041,7 @@ Item {
             // Dreifach-Messgeraet (eingeblendet ueber die Werkzeugleiste); die Buchsen liegen unten darin
             MeterPanel {
                 objectName: "meterPanel"
-                visible: lab.controller.meterVisible
+                visible: lab.controller.meterVisible && lab.classicMeter
                 controller: lab.controller
                 docked: lab.meterDocked
                 onDockToggled: if (lab.settings) lab.settings.meterDocked = !lab.settings.meterDocked
@@ -1047,6 +1049,18 @@ Item {
                 y: docked ? 14 : lab.boardY - 6
                 width: docked ? Theme.meterDockWidth : Theme.meterAreaWidth
                 height: docked ? lab.deskPanelHeight - 22 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
+            }
+            DisplayMeter {
+                objectName: "displayMeter"
+                visible: lab.controller.meterVisible && !lab.classicMeter
+                controller: lab.controller
+                docked: lab.meterDocked
+                onDockToggled: if (lab.settings) lab.settings.meterDocked = !lab.settings.meterDocked
+                x: docked ? lab.meterDockX : lab.meterX
+                y: docked ? 14 : lab.boardY - 6
+                width: docked ? Theme.meterDockWidth : Theme.meterAreaWidth
+                // im Pult bis in die Feldreihe (ohne Buchsen frei): Platz fuer die Leistung unter den Anzeigen
+                height: docked ? lab.deskBottom - 34 : 5 * Theme.fieldHeight + 4 * Theme.fieldGap + 12
             }
 
             // Module in der Modulleiste (unter den Feldern, die sie belegen)
