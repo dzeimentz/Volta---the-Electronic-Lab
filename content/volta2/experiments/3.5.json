@@ -1,0 +1,122 @@
+{
+  "id": "volta2.3.5",
+  "band": "volta2",
+  "stufe": 3,
+  "titel_key": "exp2_3_5_titel",
+  "dauer_min": 12,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "zdiode_4v7",
+    "zdiode_5v6",
+    "widerstand",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp2_3_5_frage",
+  "vermutungen": [
+    "exp2_3_5_v1",
+    "exp2_3_5_v2",
+    "exp2_3_5_v3"
+  ],
+  "beobachtungen": [
+    "exp2_3_5_b1",
+    "exp2_3_5_b2",
+    "exp2_3_5_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A3"
+        ],
+        "wert": 470
+      },
+      {
+        "id": "D1",
+        "typ": "zdiode_4v7",
+        "felder": {
+          "anode": "A5",
+          "kathode": "A3"
+        }
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": [
+          "B3",
+          "B5"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A3",
+        "nach": "B3",
+        "farbe": "blau"
+      },
+      {
+        "von": "A5",
+        "nach": "B5",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp2_3_5_s1",
+    "exp2_3_5_s2",
+    "exp2_3_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "A3",
+        "groesse": "spannung_V",
+        "zwischen": [
+          4.5,
+          5.1
+        ]
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp2_3_5_h1",
+    "exp2_3_5_h2",
+    "exp2_3_5_loesung"
+  ],
+  "erklaerung_key": "exp2_3_5_erklaerung",
+  "mehr_wissen_key": "exp2_3_5_mehr",
+  "weiterforschen": [
+    "exp2_3_5_w1",
+    "exp2_3_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp2_3_5_echt"
+}
