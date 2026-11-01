@@ -3,6 +3,8 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    property string band: "" // Band der Edition (Lab setzt ihn), z. B. »volta2«
+
     // Themen des Bauteilfachs (Katalog »thema«)
     function themeName(key) {
         switch (key) {
@@ -10,7 +12,7 @@ QtObject {
         case "schalten": return qsTr("Schalten")
         case "widerstaende": return qsTr("Widerstände und Sensoren")
         case "halbleiter": return qsTr("Dioden und Transistoren")
-        case "speicher": return qsTr("Kondensatoren")
+        case "speicher": return band !== "" && band !== "volta1" ? qsTr("Kondensatoren und Spulen") : qsTr("Kondensatoren")
         case "bewegung": return qsTr("Bewegung und Ton")
         case "": return qsTr("Alle Bauteile")
         }
@@ -35,6 +37,11 @@ QtObject {
         case "elko": return qsTr("Elko")
         case "fotowiderstand": return qsTr("Fotowiderstand")
         case "transistor_npn": return qsTr("Transistor")
+        case "transistor_pnp": return qsTr("PNP-Transistor")
+        case "zdiode_4v7": return qsTr("Z-Diode 4,7 V")
+        case "zdiode_5v6": return qsTr("Z-Diode 5,6 V")
+        case "spule_100mh": return qsTr("Spule 100 mH")
+        case "spule_1h": return qsTr("Spule 1 H")
         case "heissleiter": return qsTr("Heißleiter")
         case "elektromagnet": return qsTr("Elektromagnet")
         case "relais": return qsTr("Relais")
@@ -89,7 +96,9 @@ QtObject {
             ["led_rot", qsTr("Leuchtdiode,LED", "Wortanfaenge im Aufbautext")],
             ["wechselschalter", qsTr("Wechselschalter", "Wortanfaenge im Aufbautext")],
             ["reedkontakt", qsTr("Reedkontakt", "Wortanfaenge im Aufbautext")],
+            ["zdiode_4v7", qsTr("Z-Diode", "Wortanfaenge im Aufbautext")],
             ["diode_si", qsTr("Diode", "Wortanfaenge im Aufbautext")],
+            ["spule_100mh", qsTr("Spule", "Wortanfaenge im Aufbautext")],
             ["blinkmodul", qsTr("Blinkmodul", "Wortanfaenge im Aufbautext")],
             ["tonmodul", qsTr("Tonmodul", "Wortanfaenge im Aufbautext")],
             ["lautsprecher", qsTr("Lautsprecher", "Wortanfaenge im Aufbautext")],
@@ -98,6 +107,7 @@ QtObject {
             ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
             ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
             ["relais", qsTr("Relais", "Wortanfaenge im Aufbautext")],
+            ["transistor_pnp", qsTr("PNP-Transistor", "Wortanfaenge im Aufbautext")],
             ["transistor_npn", qsTr("Transistor", "Wortanfaenge im Aufbautext")],
             ["feuchtesonde", qsTr("Feuchtesonde", "Wortanfaenge im Aufbautext")],
             ["piezo", qsTr("Piezo", "Wortanfaenge im Aufbautext")],
@@ -177,9 +187,9 @@ QtObject {
                 ? qsTr("Stecke %1 auf %2, %3, %4 und %5.").arg(name).arg(fields[0]).arg(fields[1]).arg(fields[2]).arg(fields[3])
                 : qsTr("Stecke %1 auf %2 und %3.").arg(name).arg(fields[0]).arg(fields[fields.length - 1])
             if (s.type.startsWith("led_")) t += " " + qsTr("Das lange Bein kommt an %1.").arg(pinField("anode"))
-            else if (s.type.startsWith("diode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
+            else if (s.type.startsWith("diode") || s.type.startsWith("zdiode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
             else if (s.type === "summer" || s.type === "elko" || s.type === "piezo") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))
-            else if (s.type === "transistor_npn") t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
+            else if (s.type.startsWith("transistor")) t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
             else if (s.type === "wechselschalter") t += " " + qsTr("Die Mitte kommt an %1.").arg(pinField("mitte"))
             if ((s.type === "widerstand" || s.type === "kondensator" || s.type === "elko") && s.value > 0)
                 t += " " + qsTr("Wert: %1.").arg(partValue(s.type, s.value))

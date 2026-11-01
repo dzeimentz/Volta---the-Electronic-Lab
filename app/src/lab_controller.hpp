@@ -104,6 +104,7 @@ class LabController : public QObject {
     Q_PROPERTY(bool deskOnDemand READ deskOnDemand CONSTANT)
     // Startbreite der Grundplatte des Bandes (0: wie Volta 1); die App setzt damit die Vorgabe der Einstellung
     Q_PROPERTY(int startColumns READ startColumns CONSTANT)
+    Q_PROPERTY(QString band READ band CONSTANT) // Band der Edition (z. B. Themennamen des Bauteilfachs)
     Q_PROPERTY(QVariantList deskTray READ deskTray NOTIFY boardChanged)
     Q_PROPERTY(double pot1 READ pot1 WRITE setPot1 NOTIFY deskChanged)
     Q_PROPERTY(double pot2 READ pot2 WRITE setPot2 NOTIFY deskChanged)

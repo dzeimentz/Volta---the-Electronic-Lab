@@ -56,6 +56,12 @@ Item {
             return {s: "M0 16 H22 M42 8 H64 M42 24 H64 M22 16 L42 8", f: ""}
         case "diode_si":
             return {s: diode, f: ""}
+        case "zdiode_4v7": case "zdiode_5v6": // Kathodenstrich mit Abwinkelung (Z-Diode)
+            return {s: "M0 16 H24 M38 16 H64 M24 8 L38 16 L24 24 Z M34 6 L38 8 V24 L42 26", f: ""}
+        case "spule_100mh": // Wicklung als Boegen
+            return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16", f: ""}
+        case "spule_1h": // Wicklung mit Eisenkern (Strich darueber)
+            return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H50", f: ""}
         case "led_rot": case "led_gruen": case "led_gelb": case "led_blau": // Diode mit zwei Pfeilen nach aussen
             return {s: diode + " " + arrowLine(29, 7, 36, 0) + " " + arrowLine(35, 9, 42, 2),
                     f: arrowHead(29, 7, 36, 0) + " " + arrowHead(35, 9, 42, 2)}
@@ -66,6 +72,9 @@ Item {
         case "transistor_npn": // Basis links, Kollektor oben, Emitter unten mit Pfeil nach aussen
             return {s: circle(34, 16, 14) + " M8 16 H28 M28 8 V24 M28 12 L40 4 V0 " + arrowLine(28, 20, 39, 27) + " M39 27 L40 32",
                     f: arrowHead(28, 20, 39, 27)}
+        case "transistor_pnp": // wie NPN, Emitterpfeil zeigt zur Basis hin
+            return {s: circle(34, 16, 14) + " M8 16 H28 M28 8 V24 M28 12 L40 4 V0 " + arrowLine(39, 27, 28, 20) + " M39 27 L40 32",
+                    f: arrowHead(39, 27, 29, 20.6)}
         case "batterie": // langer duenner Strich = Pluspol, kurzer dicker = Minuspol
             return {s: "M0 16 H28 M36 16 H64 M28 4 V28", f: "M34 10 H38 V22 H34 Z", t: "+", tx: 22, ty: 6}
         case "lautsprecher": // Magnet (Rechteck) mit beiden Spulenanschluessen, Trichter seitlich (DIN EN 60617)

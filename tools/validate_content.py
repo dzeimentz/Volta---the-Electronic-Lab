@@ -287,7 +287,10 @@ def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
         rep.error(f"content/{band}/paket.json", "pult_nach_bedarf: die Batterie fehlt")
     if pkg.get("start_spalten", 10) not in (8, 10, 12):
         rep.error(f"content/{band}/paket.json", "start_spalten muss 8, 10 oder 12 sein")
-    used: set[str] = set(catalog["keys"])
+    # Lexikontexte der Bauteile, die es in diesem Band gibt (ab_band in der Abstammung)
+    bands = lineage(band, rep)
+    used: set[str] = {e["lexikon_key"] for e in list(catalog["types"].values()) + list(catalog["modules"].values())
+                      if e.get("lexikon_key") and e.get("ab_band", "volta1") in bands}
     stages_path = band_dir / "stufen.json"
     if stages_path.exists():
         stages = load_json(stages_path, rep) or {}

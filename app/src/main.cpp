@@ -193,6 +193,30 @@ int main(int argc, char* argv[]) {
         });
     }
 
+    // VOLTA_DEMO_GALLERY=2 (mit VOLTA_DEMO_FREELAB=1): die Bauteile ab Volta 2 im Betrieb (Z-Diode haelt 4,7 V,
+    // PNP schaltet eine LED, Spulen)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 2) {
+        QTimer::singleShot(400, &lab, [&lab] {
+            struct P { const char* type; const char* field; bool vertical; bool longSpan; double value; };
+            const P parts[] = {{"widerstand", "A1", false, false, 1000.0}, {"zdiode_4v7", "C3", true, false, 0.0},
+                               {"zdiode_5v6", "E1", false, false, 0.0},    {"transistor_pnp", "C6", false, false, 0.0},
+                               {"widerstand", "B5", true, false, 10e3},     {"led_rot", "A8", true, false, 0.0},
+                               {"widerstand", "D8", false, false, 470.0},   {"spule_100mh", "A3", false, true, 0.0},
+                               {"spule_1h", "E4", false, true, 0.0}};
+            for (const auto& p : parts)
+                lab.addPart(QString::fromLatin1(p.type), QString::fromLatin1(p.field), p.vertical, p.longSpan);
+            lab.setPartValue(QStringLiteral("R1"), 1000.0);
+            lab.setPartValue(QStringLiteral("R2"), 10e3);
+            lab.setPartValue(QStringLiteral("R3"), 470.0);
+            const char* wires[][2] = {{"P:+9V", "A1"}, {"A2", "D3"}, {"C3", "P:0V"},
+                                      {"C5", "C6"},    {"B5", "P:0V"}, {"P:+9V", "D7"},
+                                      {"C7", "A8"},    {"B8", "D8"},   {"D9", "P:0V"}};
+            for (const auto& w : wires)
+                lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
+            lab.setMainSwitch(true);
+        });
+    }
+
     // Entwicklerhilfe: VOLTA_DEMO_SOLVE=1 loest das gefuehrte Experiment mit Vermutung, allen Hilfen und Musteraufbau
     // (Sichtpruefung der Phasen Aufbau und Erfolg). VOLTA_SCREENSHOT_S=<s> verschiebt das Bildschirmfoto (Standard 3 s).
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_SOLVE") == 1) {

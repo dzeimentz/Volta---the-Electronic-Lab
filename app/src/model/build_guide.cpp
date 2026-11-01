@@ -12,7 +12,7 @@ namespace {
 
 bool unpolarized(const std::string& type) {
     return type == "widerstand" || type == "gluehlampe" || type == "taster" || type == "reedkontakt" ||
-           type == "motor" || type == "kondensator";
+           type == "motor" || type == "kondensator" || type.rfind("spule", 0) == 0;
 }
 
 // Modulanschluss -> Feld der Leiste (im jeweiligen Aufbau); andere Anschlusspunkte unveraendert
@@ -44,7 +44,7 @@ bool samePart(const GuideStep& step, const PartPlacement& p) {
         return a == b;
     }
     for (const auto& [name, field] : step.pins) {
-        if (step.type == "transistor_npn" && (name == "e" || name == "e2")) {
+        if (step.type.rfind("transistor", 0) == 0 && (name == "e" || name == "e2")) {
             // beide Emitterfuesse sind auf der Platine verbunden
             const std::string e = fieldOf(p.pins, "e"), e2 = fieldOf(p.pins, "e2");
             if (field != e && field != e2) return false;

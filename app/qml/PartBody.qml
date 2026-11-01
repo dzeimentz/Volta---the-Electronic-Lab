@@ -87,8 +87,9 @@ Item {
             case "wechselschalter": return changeover
             case "kondensator": return capacitor
             case "elko": return electrolytic
-            case "diode_si": case "diode_ge": return diode
-            case "transistor_npn": return transistor
+            case "diode_si": case "diode_ge": case "zdiode_4v7": case "zdiode_5v6": return diode
+            case "transistor_npn": case "transistor_pnp": return transistor
+            case "spule_100mh": case "spule_1h": return coil
             case "fotowiderstand": return photo
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
@@ -204,9 +205,19 @@ Item {
                 anchors.centerIn: parent
                 width: parent.width * 0.7; height: parent.height * 0.5
                 radius: 4
-                color: root.type === "diode_ge" ? "#C9B07A" : "#202020"
+                readonly property bool zener: root.type.startsWith("zdiode")
+                // Z-Diode: Glasgehaeuse (orange) mit schwarzem Ring und aufgedruckter Spannung (Farbe nie allein)
+                color: zener ? "#E39A4C" : root.type === "diode_ge" ? "#C9B07A" : "#202020"
                 // Kathodenring rechts
-                Rectangle { anchors.right: parent.right; anchors.rightMargin: 4; width: 6; height: parent.height; color: "#D9D9D9" }
+                Rectangle { anchors.right: parent.right; anchors.rightMargin: 4; width: 6; height: parent.height
+                            color: parent.zener ? "#202020" : "#D9D9D9" }
+                Text {
+                    visible: parent.zener
+                    anchors.centerIn: parent; anchors.horizontalCenterOffset: -4
+                    text: root.type === "zdiode_4v7" ? "4V7" : "5V6"
+                    color: "#202020"
+                    font.pixelSize: Math.round(10 * Theme.fontScale); font.bold: true
+                }
             }
         }
     }
@@ -425,7 +436,8 @@ Item {
                 width: 26; height: 22; radius: 11
                 color: "#1E1E1E"; border.color: "#000000"
                 Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: parent.height / 2; color: "#1E1E1E" }
-                Text { anchors.centerIn: parent; text: "T"; color: "#E0E0E0"; font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true }
+                // NPN: »T«, PNP: »P« (ab Volta 2; die Bauart steht auf dem Gehaeuse, nicht nur in der Farbe)
+                Text { anchors.centerIn: parent; text: root.type === "transistor_pnp" ? "P" : "T"; color: "#E0E0E0"; font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true }
             }
             // Fussbezeichnung (Farbe nie allein: Buchstaben)
             Repeater {
@@ -438,6 +450,45 @@ Item {
                     // neben dem Fuss, zur Platinenmitte hin (folgt der Drehung)
                     x: pcb.f[index].x + (pcb.f[index].x < pcb.width / 2 ? 7 : -7 - width)
                     y: pcb.f[index].y + (pcb.f[index].y < pcb.height / 2 ? 4 : -4 - height)
+                }
+            }
+        }
+    }
+
+    // Spule (ab Volta 2): Spulenkoerper mit Kupferwicklung, 1 H mit Eisenkern (Kernenden grau); Wert aufgedruckt
+    Component {
+        id: coil
+        Item {
+            readonly property bool core: root.type === "spule_1h"
+            Rectangle { // Kern bzw. Spulenkoerper ragt seitlich heraus
+                anchors.centerIn: parent
+                width: parent.width * 0.78; height: parent.height * 0.42; radius: 3
+                color: parent.core ? "#7A7F86" : "#E8E2D0"; border.color: "#5A5A5A"
+            }
+            Rectangle {
+                id: winding
+                anchors.centerIn: parent
+                width: parent.width * 0.7; height: parent.height * 0.8; radius: 5
+                color: "#C8742F"; border.color: "#7A3E10"; border.width: 1
+                Row { // Windungen
+                    anchors.centerIn: parent
+                    spacing: 3
+                    Repeater {
+                        model: Math.max(1, Math.floor(winding.width / 5))
+                        Rectangle { width: 2; height: winding.height - 4; color: "#9A5420" }
+                    }
+                }
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: label.implicitWidth + 4; height: label.implicitHeight; radius: 3
+                    color: "#FFF4E0"
+                    Text {
+                        id: label
+                        anchors.centerIn: parent
+                        text: root.type === "spule_1h" ? "1 H" : "100 mH"
+                        color: "#3A2410"
+                        font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true
+                    }
                 }
             }
         }

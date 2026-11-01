@@ -21,6 +21,7 @@
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/components/switch.hpp"
 #include "volta/core/components/transistor.hpp"
+#include "volta/core/components/inductor.hpp"
 #include "volta/core/components/wire.hpp"
 
 namespace volta::model {
@@ -253,6 +254,16 @@ private:
             c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
             // 2-x-2-Platine: der vierte Fuss (e2) ist ueber eine Leiterbahn mit E verbunden
             if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
+        } else if (m == "bjt_pnp" && (n.size() == 3 || n.size() == 4)) {
+            core::BjtParams bp = core::BjtParams::bc557();
+            bp.betaF = e->param("beta", bp.betaF);
+            c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
+            if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
+        } else if (m == "inductor" && n.size() == 2) {
+            // 100 mH oder 1 H (Katalog l_H); Wicklungswiderstand und Grenzstrom wie die Vorgaben des Kerns
+            const double l = e->param("l_H", 0.1);
+            c.add<core::Inductor>(p.id, n[0], n[1],
+                                  l >= 0.5 ? core::InductorParams::h1() : core::InductorParams::mH100());
         } else if (m == "ldr" && n.size() == 2) {
             core::PhotoresistorParams lp;
             lp.r10Ohm = e->param("r10_ohm", lp.r10Ohm);
@@ -295,6 +306,8 @@ private:
         else if (e.type == "led_gelb") d = core::DiodeParams::ledYellow();
         else if (e.type == "led_blau") d = core::DiodeParams::ledBlue();
         else if (e.model == "led") d = core::DiodeParams::ledRed();
+        else if (e.type == "zdiode_4v7") d = core::DiodeParams::zener4V7();
+        else if (e.type == "zdiode_5v6") d = core::DiodeParams::zener5V6();
         d.ufV = e.param("uf_V", d.ufV); // Katalogwert bestimmt die Kennlinie
         d.imaxA = e.param("imax_mA", d.imaxA * 1e3) * 1e-3;
         return d;

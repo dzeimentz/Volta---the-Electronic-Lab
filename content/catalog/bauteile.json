@@ -44,7 +44,17 @@
     {"typ": "relais", "thema": "schalten", "anschluesse": ["a", "b", "com", "no"], "spannweite": ["platine_2x2"], "lage": ["a", "b", "com", "no"], "modell": "relay",
      "parameter": {"r_spule_ohm": 180}, "ab_band": "volta1", "ab_stufe": 3, "lexikon_key": "lex_relais"},
     {"typ": "transistor_npn", "thema": "halbleiter", "anschluesse": ["b", "c", "e", "e2"], "spannweite": ["platine_2x2"], "lage": ["b", "c", "e", "e2"], "modell": "bjt_npn",
-     "parameter": {"beta": 200}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_transistor"}
+     "parameter": {"beta": 200}, "ab_band": "volta1", "ab_stufe": 4, "lexikon_key": "lex_transistor"},
+    {"typ": "zdiode_4v7", "thema": "halbleiter", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"], "modell": "diode",
+     "parameter": {"uz_V": 4.7}, "ab_band": "volta2", "ab_stufe": 3, "lexikon_key": "lex_zdiode"},
+    {"typ": "zdiode_5v6", "thema": "halbleiter", "anschluesse": ["anode", "kathode"], "spannweite": ["kurz", "lang"], "modell": "diode",
+     "parameter": {"uz_V": 5.6}, "ab_band": "volta2", "ab_stufe": 3, "lexikon_key": "lex_zdiode"},
+    {"typ": "transistor_pnp", "thema": "halbleiter", "anschluesse": ["b", "c", "e", "e2"], "spannweite": ["platine_2x2"], "lage": ["b", "c", "e", "e2"], "modell": "bjt_pnp",
+     "parameter": {"beta": 250}, "ab_band": "volta2", "ab_stufe": 4, "lexikon_key": "lex_transistor_pnp"},
+    {"typ": "spule_100mh", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "inductor",
+     "parameter": {"l_H": 0.1}, "ab_band": "volta2", "ab_stufe": 2, "lexikon_key": "lex_spule"},
+    {"typ": "spule_1h", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "inductor",
+     "parameter": {"l_H": 1.0}, "ab_band": "volta2", "ab_stufe": 2, "lexikon_key": "lex_spule"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",

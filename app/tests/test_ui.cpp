@@ -816,12 +816,14 @@ private slots:
         model::Catalog v1, v2;
         QVERIFY(repo.loadCatalog(v1, QStringLiteral("volta1")));
         QVERIFY(repo.loadCatalog(v2, QStringLiteral("volta2")));
-        QCOMPARE(v2.parts.size(), v1.parts.size());
+        QCOMPARE(v2.parts.size(), v1.parts.size() + 5); // Z-Dioden, PNP, Spulen ab Volta 2
+        QCOMPARE(v2.parts.at("zdiode_4v7").fromStage, 3); // eigene Teile folgen ab_stufe
         QVERIFY(v1.parts.at("widerstand").fromStage > 0);
         QCOMPARE(v2.parts.at("widerstand").fromStage, 0); // aus dem Grundband: sofort frei
         QVERIFY(repo.loadTexts(QStringLiteral("volta2"), QStringLiteral("fr")));
         QCOMPARE(repo.text(QStringLiteral("stufe_0_frage")), QStringLiteral("Qu'y a-t-il de nouveau sur mon pupitre ?"));
         QVERIFY(repo.text(QStringLiteral("lex_widerstand")) != QStringLiteral("lex_widerstand")); // aus volta1
+        QVERIFY(repo.text(QStringLiteral("lex_spule")) != QStringLiteral("lex_spule"));
         LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta2"));
         QCOMPARE(lab.stages().size(), 9);
         QCOMPARE(lab.stages().first().toMap().value(QStringLiteral("title")).toString(), QStringLiteral("Auftakt"));

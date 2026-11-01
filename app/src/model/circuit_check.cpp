@@ -157,7 +157,7 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
             return !f.empty() && terminals[nodes.find(f)].size() <= 1;
         };
         std::vector<std::string> report;
-        if (model == "bjt_npn") {
+        if (model == "bjt_npn" || model == "bjt_pnp") {
             for (const char* pin : {"b", "c"})
                 if (isLoose(pin)) report.push_back(pin);
             if (isLoose("e") && isLoose("e2")) report.push_back("e");

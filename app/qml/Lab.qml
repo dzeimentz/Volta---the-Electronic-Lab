@@ -310,7 +310,10 @@ Item {
         function onWidthChanged() { routeTimer.restart() }
         function onHeightChanged() { routeTimer.restart() }
     }
-    Component.onCompleted: routeTimer.restart()
+    Component.onCompleted: {
+        Texts.band = lab.controller ? lab.controller.band : ""
+        routeTimer.restart()
+    }
 
     // ------------------------------------------------------------------ Bedienzustand
     property string selectedPart: ""

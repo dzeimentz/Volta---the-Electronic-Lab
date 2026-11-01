@@ -395,6 +395,81 @@ private slots:
         QCOMPARE(back.desk.genOffsetV, 1.0);
     }
 
+    // Bauteile ab Volta 2: nur im Katalog von Volta 2, und sie rechnen im Aufbau
+    void volta2PartsInCatalog() {
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        model::Catalog v1, v2;
+        QVERIFY(repo.loadCatalog(v1, QStringLiteral("volta1")));
+        QVERIFY(repo.loadCatalog(v2, QStringLiteral("volta2")));
+        for (const char* t : {"zdiode_4v7", "zdiode_5v6", "transistor_pnp", "spule_100mh", "spule_1h"}) {
+            QVERIFY2(!v1.part(t), t);
+            QVERIFY2(v2.part(t), t);
+        }
+        QVERIFY(v2.part("transistor_npn"));
+        QCOMPARE(v2.part("transistor_npn")->fromStage, 0); // Grundband sofort frei
+    }
+
+    // Z-Diode in Sperrrichtung hinter 1 kOhm: haelt an der Kathode etwa ihre Z-Spannung
+    void zenerHoldsVoltage() {
+        for (const auto& [type, uz] : {std::pair{"zdiode_4v7", 4.7}, std::pair{"zdiode_5v6", 5.6}}) {
+            auto s = session();
+            s->setMainSwitch(true);
+            QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short, nullptr, 1000.0)); // A1-A2
+            QVERIFY(s->addPart(type, "C3", Orientation::Vertical, Span::Short)); // Anode C3, Kathode D3
+            QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+            QVERIFY(s->addWire("A2", "D3", "gelb"));
+            QVERIFY(s->addWire("C3", "P:0V", "schwarz"));
+            run(*s, 0.05);
+            const double u = s->voltage("D3");
+            QVERIFY2(std::fabs(u - uz) < 0.3, qPrintable(QString::number(u)));
+            QVERIFY(!s->reading("D1")->destroyed);
+        }
+    }
+
+    // PNP: Emitter an +9V, Basis ueber 10 kOhm an 0V; der Kollektorstrom laesst die LED leuchten
+    void pnpDrivesLed() {
+        auto s = session();
+        s->setMainSwitch(true);
+        QVERIFY(s->addPart("transistor_pnp", "C3", Orientation::Horizontal, Span::Short)); // B C3, C C4, E D3, E2 D4
+        QVERIFY(s->addPart("widerstand", "B2", Orientation::Vertical, Span::Short, nullptr, 10e3)); // B2-C2
+        QVERIFY(s->addWire("C2", "C3", "gelb"));
+        QVERIFY(s->addWire("B2", "P:0V", "schwarz"));
+        QVERIFY(s->addPart("led_rot", "C5", Orientation::Vertical, Span::Short)); // Anode C5, Kathode D5
+        QVERIFY(s->addPart("widerstand", "A6", Orientation::Horizontal, Span::Short, nullptr, 470.0)); // A6-A7
+        QVERIFY(s->addWire("C4", "C5", "gelb"));
+        QVERIFY(s->addWire("D5", "A6", "gelb"));
+        QVERIFY(s->addWire("A7", "P:0V", "schwarz"));
+        QVERIFY(s->addWire("P:+9V", "D4", "rot")); // nur der zweite E-Fuss
+        run(*s, 0.2);
+        const core::ComponentReading* led = s->reading("D1");
+        QVERIFY(led);
+        QVERIFY2(led->currentA > 10e-3, qPrintable(QString::number(led->currentA)));
+        QVERIFY(s->voltage("C3") < s->voltage("D3") - 0.5); // Basis unter dem Emitter
+    }
+
+    // Spule 1 H hinter 470 Ohm: der Strom steigt mit tau = L/R (rund 1,8 ms) an, im Gleichstrom nur der
+    // Wicklungswiderstand (100 Ohm)
+    void coilCurrentRisesSlowly() {
+        auto s = session();
+        QVERIFY(s->addPart("widerstand", "A1", Orientation::Horizontal, Span::Short, nullptr, 470.0)); // A1-A2
+        QVERIFY(s->addPart("spule_1h", "C3", Orientation::Horizontal, Span::Short)); // C3-C4
+        QVERIFY(s->addWire("P:+9V", "A1", "rot"));
+        QVERIFY(s->addWire("A2", "C3", "gelb"));
+        QVERIFY(s->addWire("C4", "P:0V", "schwarz"));
+        run(*s, 0.01);
+        s->setMainSwitch(true);
+        run(*s, 0.001);
+        const core::ComponentReading* coil = s->reading("SP1");
+        QVERIFY(coil);
+        const double early = std::fabs(coil->currentA);
+        run(*s, 0.1);
+        const double late = std::fabs(s->reading("SP1")->currentA);
+        const double expected = s->voltage("A1") / 570.0;
+        QVERIFY2(early < 0.7 * late, qPrintable(QString::number(early) + " / " + QString::number(late)));
+        QVERIFY2(std::fabs(late - expected) < 0.02 * expected, qPrintable(QString::number(late)));
+        QVERIFY2(std::fabs(s->voltage("C3") - late * 100.0) < 0.05, qPrintable(QString::number(s->voltage("C3"))));
+    }
+
     // Erfolgspruefung im laufenden Aufbau: Bauteilbezug ueber den Typ, nicht ueber die Kennung der Vorlage
     void successMatchesPartsByType() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
