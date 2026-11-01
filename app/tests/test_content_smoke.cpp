@@ -95,6 +95,13 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
     return -1.0;
 }
 
+// Pult nach Bedarf wie in der App (LabController::startExperiment): Baende mit Geraetefach (ab Volta 2) fuehren
+// die Pultbelegung immer mit - davon haengt auch die Schrittweite fuer den Lautsprecher ab (model::needsAudioStep)
+void deskAsInApp(services::ContentRepository& repo, const QString& id, model::Board& board) {
+    if (!board.deskParts && !repo.deskOffers(id.section(QLatin1Char('.'), 0, 0)).isEmpty())
+        board.deskParts = model::deskPartsUsed(board);
+}
+
 } // namespace
 
 class ContentSmokeTest : public QObject {
@@ -233,6 +240,7 @@ private slots:
         services::Experiment exp;
         QVERIFY2(repo.loadExperiment(id, exp), qPrintable(repo.lastError()));
         model::Board board = exp.templateBoard;
+        deskAsInApp(repo, id, board);
         board.desk.mainSwitch = true;
         model::SuccessEvaluator eval(exp.successCondition);
         std::vector<std::string> buildErrors;
@@ -259,6 +267,7 @@ private slots:
             return;
         for (const char* colour : {"led_rot", "led_gruen", "led_gelb", "led_blau"}) {
             model::Board board = exp.templateBoard;
+            deskAsInApp(repo, id, board);
             for (auto& p : board.parts)
                 if (model::isLed(p.type)) p.type = colour;
             board.desk.mainSwitch = true;
@@ -280,6 +289,7 @@ private slots:
         QVERIFY2(repo.loadExperiment(id, exp), qPrintable(repo.lastError()));
         if (exp.destructive) QSKIP("zerstoerendes Experiment");
         model::Board board = exp.templateBoard;
+        deskAsInApp(repo, id, board);
         board.desk.mainSwitch = true;
         model::SuccessEvaluator eval(exp.successCondition);
         std::vector<model::CircuitFinding> findings;
@@ -298,6 +308,7 @@ private slots:
         services::Experiment exp;
         QVERIFY2(repo.loadExperiment(id, exp), qPrintable(repo.lastError()));
         model::Board board = exp.templateBoard;
+        deskAsInApp(repo, id, board);
         bool hasSensor = false;
         for (const auto& p : board.parts)
             if (p.type == "fotowiderstand" || p.type == "heissleiter" || p.type == "feuchtesonde") hasSensor = true;
