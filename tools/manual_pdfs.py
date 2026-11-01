@@ -4,6 +4,7 @@
     python3 tools/manual_pdfs.py            # beide PDFs nach Release/Anleitung/
     python3 tools/manual_pdfs.py --bilder   # vorher die Bildschirmfotos neu aufnehmen
     python3 tools/manual_pdfs.py --app-bilder   # nur die Schrittbilder der Kurzanleitung (App und PDF)
+    python3 tools/manual_pdfs.py --app-bilder-volta2   # Kapitelbilder der Hilfe ab Volta 2 (aus volta2.exe)
 
 - Volta1-Anleitung-de.pdf: ausfuehrliche Anleitung (alle Bereiche der App, Einstellungen, Sicherheit, Bauteile)
 - Volta1-Kurzanleitung-de.pdf: drei Seiten zum Ausdrucken (acht Schritte mit Bildern, Bedienung auf einen Blick)
@@ -945,10 +946,77 @@ def app_images():
         print(f"  App-Bilder {lang}: {size // 1024} KB")
 
 
+# Hilfe ab Volta 2 (HelpDialog.qml, Band volta2): eigene Kapitelbilder aus volta2.exe (build/volta2-debug, Worktree
+# volta-volta2) fuer die Kapitel, deren Bild aus Volta 1 nicht passt, und die neuen Kapitel
+EXE2 = ROOT / "build" / "volta2-debug" / "app" / ("volta2.exe" if os.name == "nt" else "volta2")
+APP_HELP2 = ROOT / "app" / "resources" / "help2"
+HELP2_SCENES = {
+    "start": {"VOLTA_SCREENSHOT_S": "3"},
+    "hilfe": {"VOLTA_DEMO_GUIDE": "1", "VOLTA_DEMO_EXP": "volta2.1.1", "VOLTA_SCREENSHOT_S": "4"},
+    "pult": {"VOLTA_DEMO_FREELAB": "1", "VOLTA_DEMO_DESK": "batterie2,wechselquelle,generator,kennlinienschreiber",
+             "VOLTA_SCREENSHOT_S": "4"},
+    "messen": {"VOLTA_DEMO_FREELAB": "1", "VOLTA_DEMO_GALLERY": "5", "VOLTA_SCREENSHOT_S": "5"},
+    "oszi": {"VOLTA_DEMO_FREELAB": "1", "VOLTA_DEMO_GALLERY": "6", "VOLTA_SCREENSHOT_S": "6"},
+    "ton": {"VOLTA_DEMO_FREELAB": "1", "VOLTA_DEMO_GALLERY": "8", "VOLTA_SCREENSHOT_S": "5"},
+}
+HELP2_KEYS = ["willkommen", "stecken", "pult", "messen", "oszilloskop", "ton"]
+HELP2_JOIN = {"stecken", "oszilloskop"}
+
+
+def _help2_panels(key):
+    if key == "willkommen":   # Startseite: freies Labor, Forscherheft, Lernpfad mit Stufe 0
+        return [("start", (6, 240, 1270, 710), [("box", (342, 249, 642, 353)), ("box", (24, 371, 324, 475)),
+                                                  ("box", (24, 543, 1256, 708))])]
+    if key == "stecken":      # Gruppe »Messen« im Bauteilfach -> Zielfelder auf der Grundplatte
+        return [("hilfe", (0, 180, 790, 440), [("box", (3, 289, 125, 363)), ("box", (272, 200, 420, 240)),
+                                               ("arrow", (124, 326), (300, 246))])]
+    if key == "pult":         # Batterie 2, Wechselquelle, Generator, Kennlinie; Plus fuers Geraetefach
+        return [("pult", (272, 72, 1212, 272), [("box", (403, 77, 537, 269)), ("box", (665, 77, 799, 269)),
+                                                ("box", (928, 184, 980, 236))])]
+    if key == "messen":       # V A Ohm, Messstelle V1 auf der Grundplatte, Doppelmessgeraet
+        return [("messen", (660, 0, 732, 58), [("box", (664, 2, 728, 54))]),
+                ("messen", (272, 262, 432, 590), [("box", (296, 462, 394, 530))]),
+                ("messen", (1100, 262, 1262, 582), [])]
+    if key == "oszilloskop":  # Tastkoepfe K1, K2 -> Kurven-Knopf -> Schirm
+        return [("oszi", (430, 196, 622, 252), [("box", (447, 201, 489, 239)), ("box", (559, 201, 601, 239))]),
+                ("oszi", (790, 0, 854, 58), [("box", (796, 2, 848, 54))]),
+                ("oszi", (258, 564, 548, 798), [])]
+    if key == "ton":          # Lautsprecher mit Tonanzeige, Schildkroete mit Stufe
+        return [("ton", (540, 84, 662, 266), [("box", (548, 150, 654, 180))]),
+                ("ton", (850, 0, 936, 58), [("box", (856, 2, 932, 54))])]
+    raise ValueError(key)
+
+
+def app_images_volta2():
+    """Kapitelbilder der Hilfe ab Volta 2 je Sprache (Bildschirmfotos aus volta2.exe)."""
+    APP_HELP2.mkdir(parents=True, exist_ok=True)
+    for lang in ("de", "en", "fr", "lb"):
+        folder = OUT / "bilder" / f"volta2_{lang}"
+        folder.mkdir(parents=True, exist_ok=True)
+        shots = {}
+        for name, extra in HELP2_SCENES.items():
+            target = folder / f"{name}.png"
+            env = dict(os.environ)
+            env.update({"VOLTA_NO_SPLASH": "1", "VOLTA_DEMO_LANG": lang, "VOLTA_SCREENSHOT": str(target)})
+            env.update(extra)
+            subprocess.run([str(EXE2)], env=env, timeout=60, check=False,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            shots[name] = PILImage.open(target).convert("RGB")
+        size = 0
+        for key in HELP2_KEYS:
+            dst = APP_HELP2 / f"{key}_{lang}.jpg"
+            compose(_help2_panels(key), shots, dst, HELP_SIZE, key in HELP2_JOIN)
+            size += dst.stat().st_size
+        print(f"  Hilfebilder Volta 2 {lang}: {size // 1024} KB")
+
+
 def main() -> int:
     global S
     if "--app-bilder" in sys.argv:
         app_images()
+        return 0
+    if "--app-bilder-volta2" in sys.argv:
+        app_images_volta2()
         return 0
     take_screenshots("--bilder" in sys.argv)
     missing = [n for n in SCENES if not (SHOTS / f"{n}.png").exists()]

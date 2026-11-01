@@ -156,7 +156,8 @@ int main(int argc, char* argv[]) {
     // Entwicklerhilfen, die einen Aufbau zeigen, oeffnen direkt das Labor statt der Startseite
     // VOLTA_DEMO_FREELAB=1: freies Labor (Sichtpruefung des Bauteilfachs)
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_FREELAB") == 1) lab.startFreeLab();
-    // VOLTA_DEMO_DESK=batterie2,p1: Pultteile ins Pult setzen (Pult nach Bedarf, ab Volta 2)
+    // VOLTA_DEMO_DESK=batterie2,p1: Pultteile ins Pult setzen (Pult nach Bedarf, ab Volta 2), auch noch gesperrte
+    if (!qEnvironmentVariable("VOLTA_DEMO_DESK").isEmpty()) lab.setUnlockAll(true);
     for (const QString& part : qEnvironmentVariable("VOLTA_DEMO_DESK").split(QLatin1Char(','), Qt::SkipEmptyParts))
         lab.addDeskPart(part);
     for (const char* demo : {"VOLTA_DEMO_GALLERY", "VOLTA_DEMO_SOLVE", "VOLTA_DEMO_METER", "VOLTA_DEMO_COLUMNS",
@@ -292,6 +293,7 @@ int main(int argc, char* argv[]) {
     // K1 am Eingang, K2 am geglaetteten Ausgang
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 6) {
         QTimer::singleShot(400, &lab, [&lab, &engine] {
+            lab.setUnlockAll(true); // die Wechselquelle kommt sonst erst mit Stufe 2
             lab.addDeskPart(QStringLiteral("wechselquelle"));
             lab.addPart(QStringLiteral("diode_si"), QStringLiteral("A1"), false, false);
             lab.addPart(QStringLiteral("widerstand"), QStringLiteral("B1"), false, false);

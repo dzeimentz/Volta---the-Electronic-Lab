@@ -2,7 +2,8 @@
 // Tick in passender Stimmung und kurzen Punkten. Oben Kapitelknoepfe zum Springen. Der Teil fuer Erwachsene verweist
 // in die Einstellungen (hinter der PIN), statt Inhalte doppelt zu fuehren.
 // Ab Volta 2 ersetzen eigene Fassungen einzelne Kapitel (Pult II, Messstellen, Rechner) und neue Kapitel kommen dazu
-// (Oszilloskop, Ton und Zeitlupe). Diese Kapitel haben kein Teilbild aus Volta 1. Volta 1 bleibt unveraendert.
+// (Oszilloskop, Ton und Zeitlupe). Diese Kapitel und Willkommen/Stecken zeigen eigene Teilbilder aus Volta 2
+// (qrc:/help2, nur in der Ausgabe volta2); die uebrigen die Bilder aus Volta 1. Volta 1 bleibt unveraendert.
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -91,7 +92,9 @@ Popup {
                    qsTr("Das Menü mit den drei Strichen enthält Einstellungen wie Ton, Stromfluss und Animationen.")] }
     ]
 
-    // ab Volta 2: geaenderte Teile einzelner Kapitel (image: false = kein Teilbild aus Volta 1)
+    // ab Volta 2: Kapitel mit eigenem Teilbild
+    readonly property var v2Images: ["willkommen", "stecken", "pult", "messen", "oszilloskop", "ton"]
+    // ab Volta 2: geaenderte Teile einzelner Kapitel
     readonly property var v2Changes: ({
         willkommen: {
             say: qsTr("Hallo, ich bin Tick! Willkommen in Volta 2. Hier geht es um Wechselstrom, Transistoren, Verstärker und den Timer 555. Was passiert, rechnet Volta wirklich aus – sogar Töne, die du hören kannst.") },
@@ -100,7 +103,7 @@ Popup {
                      qsTr("Module wie das OP-Modul und der Timer 555 liegen im Modulfach. Sie gehören in die Modulleiste unten."),
                      qsTr("Ein Bauteil verschiebst du, indem du es ziehst. Tippst du zweimal schnell darauf, dreht es sich."),
                      qsTr("Halte ein Bauteil lange gedrückt (am Computer: Rechtsklick). Im Menü kannst du es drehen, einen Wert wählen oder entfernen.")] },
-        pult: { image: false,
+        pult: {
             say: qsTr("Oben liegt das Bedienpult. Es zeigt nur, was du gerade brauchst."),
             points: [qsTr("Im Experiment stellt Volta das Pult für dich zusammen. Im freien Labor holst du dir Teile aus dem Gerätefach im Pult."),
                      qsTr("Batterie 1 hat die Felder V+ (rot) und 0V (schwarz). Batterie 2 hat eigene Felder +B2 und −B2. Steckst du beide hintereinander, bekommst du Plus, Minus und eine Mitte."),
@@ -108,7 +111,7 @@ Popup {
                      qsTr("Der Kennlinienschreiber (KS+, KS−) zeichnet, wie viel Strom bei welcher Spannung durch ein Bauteil fließt."),
                      qsTr("Das »?« an einem Pultteil erklärt das Teil und seine Felder."),
                      qsTr("Oben links wechselst du zwischen »Stecken« und »Betrieb«. »Betrieb« schaltet den Hauptschalter ein: Jetzt fließt Strom und du kannst Taster und Schalter bedienen. Zum Umbauen geht es zurück auf »Stecken«.")] },
-        messen: { image: false,
+        messen: {
             say: qsTr("Wie viel Strom fließt da eigentlich? In Volta 2 steckst du die Messstelle direkt in die Schaltung."),
             points: [qsTr("Die Messstellen V, A und Ω liegen in der Gruppe »Messen«. Du steckst sie wie einen Widerstand auf die Grundplatte."),
                      qsTr("Das Voltmeter V kommt neben das Bauteil, das Amperemeter A in den Stromkreis. Das Ohmmeter Ω misst nur bei ausgeschaltetem Strom."),
@@ -125,14 +128,14 @@ Popup {
     })
     // ab Volta 2: neue Kapitel, hinter »Messen und Anzeigen«
     readonly property var v2Extra: [
-        { key: "oszilloskop", title: qsTr("Oszilloskop"), mood: "neugierig", image: false,
+        { key: "oszilloskop", title: qsTr("Oszilloskop"), mood: "neugierig",
           say: qsTr("Das Oszilloskop zeigt dir, wie sich eine Spannung mit der Zeit verändert – auch wenn es ganz schnell geht."),
           points: [qsTr("Stecke den Tastkopf K1 aus der Gruppe »Messen« in ein Feld. Gemessen wird immer gegen 0V. Mit K2 siehst du eine zweite Spannung."),
                    qsTr("Der Knopf mit der Kurve in der Werkzeugleiste zeigt das Oszilloskop unter der Grundplatte."),
                    qsTr("K1 ist gelb und durchgezogen, K2 türkis und gestrichelt. Daneben stehen Spitze-Spitze und Frequenz als Zahl."),
                    qsTr("Mit den Pfeilen stellst du die Zeit je Kästchen und die Volt je Kästchen ein. Der Trigger hält das Bild still."),
                    qsTr("»Rollen« schreibt die Spannung langsam von rechts nach links mit. »Standbild« hält das Bild an.")] },
-        { key: "ton", title: qsTr("Ton und Zeitlupe"), mood: "erklaerend", image: false,
+        { key: "ton", title: qsTr("Ton und Zeitlupe"), mood: "erklaerend",
           say: qsTr("Schwingt deine Schaltung schnell genug, hörst du sie aus dem Lautsprecher. Ist sie zu schnell zum Zuschauen, hilft die Zeitlupe."),
           points: [qsTr("Am Lautsprecher steht, woher der Ton kommt. »♪ gerechnet« heißt: Volta rechnet den Ton Stück für Stück aus."),
                    qsTr("»♪ Ersatzton« heißt: Dein Gerät ist zu langsam dafür. Dann spielt Volta einen Ton mit der gerechneten Frequenz."),
@@ -284,13 +287,14 @@ Popup {
                         // Teilbild der Oberflaeche mit markierten Knoepfen (nicht bei »Sicher experimentieren«)
                         Image {
                             objectName: "helpImage_" + section.modelData.key
-                            visible: section.modelData.key !== "sicher" && section.modelData.image !== false
+                            visible: section.modelData.key !== "sicher"
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: Math.min(parent.width, 560)
                             height: visible ? width * 300 / 760 : 0
                             fillMode: Image.PreserveAspectFit
                             asynchronous: true
-                            source: visible ? "qrc:/help/" + section.modelData.key + "_" + help.language + ".jpg" : ""
+                            source: !visible ? "" : (help.v2 && help.v2Images.indexOf(section.modelData.key) >= 0 ? "qrc:/help2/" : "qrc:/help/")
+                                                    + section.modelData.key + "_" + help.language + ".jpg"
                             Accessible.role: Accessible.Graphic
                             Accessible.name: section.modelData.title
                         }
