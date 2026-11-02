@@ -2,7 +2,7 @@
 // Spannung daran. Der Schreiber faehrt die Pruefspannung in 2 s hin und zurueck; der Vorwiderstand begrenzt den Strom.
 // Bedienung: hoechste Spannung, nur positiv oder beide Richtungen, Strombegrenzung; »Merken« behaelt die Kurve
 // gestrichelt zum Vergleich. Spannung und Strom stehen zusaetzlich als Zahl da. Nicht modal: die Grundplatte bleibt
-// bedienbar. Das Bild rechnet der LabController.
+// bedienbar; an der Titelzeile laesst sich das Fenster verschieben. Das Bild rechnet der LabController.
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Shapes
@@ -32,8 +32,15 @@ Popup {
     modal: false
     focus: true
     closePolicy: Popup.CloseOnEscape
-    x: parent ? parent.width - width - 16 : 0
-    y: parent ? Math.max(16, parent.height - height - 16) : 0
+    // Lage: unten rechts, bis das Kind das Fenster an der Titelzeile verschiebt (bleibt im Fenster der App)
+    property bool moved: false
+    property point movedTo: Qt.point(0, 0)
+    readonly property real homeX: parent ? parent.width - width - 16 : 0
+    readonly property real homeY: parent ? Math.max(16, parent.height - height - 16) : 0
+    function clampX(v) { return parent ? Math.max(0, Math.min(parent.width - width, v)) : v }
+    function clampY(v) { return parent ? Math.max(0, Math.min(parent.height - Theme.control - 2 * padding, v)) : v }
+    x: clampX(moved ? movedTo.x : homeX)
+    y: clampY(moved ? movedTo.y : homeY)
     width: Math.min(parent ? parent.width - 32 : 480, 480)
     padding: 12
     background: Rectangle { radius: 12; color: "#FFFDF7"; border.color: Theme.navy; border.width: 2 }
@@ -43,12 +50,27 @@ Popup {
         Row {
             width: parent.width
             Label {
+                id: titleLabel
+                objectName: "tracerTitle"
                 width: parent.width - closeButton.width
-                anchors.verticalCenter: parent.verticalCenter
+                height: Theme.control
+                verticalAlignment: Text.AlignVCenter
                 text: qsTr("Kennlinienschreiber")
                 color: Theme.navy
                 font.pixelSize: Math.round(18 * Theme.fontScale)
                 font.bold: true
+                // Titelzeile ziehen verschiebt das Fenster (Maus, Finger und Stift)
+                HoverHandler { cursorShape: Qt.SizeAllCursor }
+                DragHandler {
+                    id: moveHandler
+                    target: null
+                    property point start
+                    onActiveChanged: if (active) { start = Qt.point(panel.x, panel.y); panel.movedTo = start; panel.moved = true }
+                    // in Fensterkoordinaten: die Titelzeile wandert mit, ihre eigenen Koordinaten taugen nicht
+                    onCentroidChanged: if (active) panel.movedTo = Qt.point(
+                        panel.clampX(start.x + centroid.scenePosition.x - centroid.scenePressPosition.x),
+                        panel.clampY(start.y + centroid.scenePosition.y - centroid.scenePressPosition.y))
+                }
             }
             ToolButton {
                 id: closeButton

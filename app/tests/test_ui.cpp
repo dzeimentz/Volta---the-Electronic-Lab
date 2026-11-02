@@ -2204,6 +2204,30 @@ private slots:
         QTRY_COMPARE(fieldCount(), 0);
     }
 
+    // Kennlinienschreiber: das Fenster laesst sich an der Titelzeile verschieben und bleibt im Fenster der App
+    void tracerPanelMoves() {
+        QObject* panel = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("tracerPanel"));
+        QVERIFY(panel);
+        QMetaObject::invokeMethod(panel, "open");
+        QTRY_VERIFY(panel->property("opened").toBool());
+        QQuickItem* title = item(QStringLiteral("tracerTitle"));
+        QVERIFY(title && title->isVisible());
+        QTest::qWait(200); // Inhalt (Schirm, Zahlen) fertig ausgelegt: Hoehe und damit Lage stehen fest
+        const double x0 = panel->property("x").toDouble(), y0 = panel->property("y").toDouble();
+        const QPoint from = centerOf(title);
+        // um hoechstens so viel, wie Platz ist (das Testfenster ist je nach Plattform klein)
+        const int dx = -static_cast<int>(std::min(200.0, x0 / 2)), dy = -static_cast<int>(std::min(150.0, y0 / 2));
+        QVERIFY(dx < -10 || dy < -10);
+        drag(from, from + QPoint(dx, dy));
+        QTRY_VERIFY(std::fabs(panel->property("x").toDouble() - (x0 + dx)) < 2.0);
+        QVERIFY(std::fabs(panel->property("y").toDouble() - (y0 + dy)) < 2.0);
+        drag(centerOf(title), centerOf(title) + QPoint(-5000, -5000)); // nicht aus dem Fenster
+        QTRY_COMPARE(panel->property("x").toDouble(), 0.0);
+        QCOMPARE(panel->property("y").toDouble(), 0.0);
+        QMetaObject::invokeMethod(panel, "close");
+        QTRY_VERIFY(!panel->property("visible").toBool());
+    }
+
     // Einstellungen bleiben ueber Neustarts erhalten (eigene Datei)
     void settingsPersist() {
         QTemporaryDir dir;
