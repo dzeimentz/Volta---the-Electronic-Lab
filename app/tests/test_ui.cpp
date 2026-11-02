@@ -2249,6 +2249,33 @@ private slots:
         QVERIFY(!demo->property("moved").toBool()); // beim naechsten Oeffnen wieder mittig
     }
 
+    // Generatorfenster: nicht modal, an der Titelzeile verschiebbar, »?« blendet die Hilfe ein; Signalform-Knoepfe
+    void generatorPanelMovesAndHelps() {
+        QObject* panel = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("generatorPanel"));
+        QVERIFY(panel);
+        QMetaObject::invokeMethod(panel, "open");
+        QTRY_VERIFY(panel->property("opened").toBool());
+        QVERIFY(!panel->property("modal").toBool());
+        QTest::qWait(200);
+        QQuickItem* help = item(QStringLiteral("generatorHelp"));
+        QVERIFY(help && !help->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("generatorHelpButton"))));
+        QTRY_VERIFY(help->isVisible());
+        QTest::mouseClick(m_window, Qt::LeftButton, {}, centerOf(item(QStringLiteral("generatorHelpButton"))));
+        QTRY_VERIFY(!help->isVisible());
+        QTest::qWait(100);
+        QQuickItem* title = item(QStringLiteral("generatorTitle"));
+        const double x0 = panel->property("x").toDouble();
+        const int dx = -static_cast<int>(std::min(150.0, x0 / 2));
+        QVERIFY(dx < -10);
+        drag(centerOf(title), centerOf(title) + QPoint(dx, 0));
+        QTRY_VERIFY(std::fabs(panel->property("x").toDouble() - (x0 + dx)) < 2.0);
+        QQuickItem* wave = item(QStringLiteral("genWave2"));
+        QVERIFY(wave && wave->height() >= 48);
+        QMetaObject::invokeMethod(panel, "close");
+        QTRY_VERIFY(!panel->property("visible").toBool());
+    }
+
     // Einstellungen bleiben ueber Neustarts erhalten (eigene Datei)
     void settingsPersist() {
         QTemporaryDir dir;

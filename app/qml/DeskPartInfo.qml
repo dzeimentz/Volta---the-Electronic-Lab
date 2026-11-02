@@ -69,6 +69,7 @@ Popup {
             fields: [["G", qsTr("Ausgang des Generators (50 Ω Innenwiderstand).")],
                      ["G0", qsTr("Masse des Generators (schwarz), fest mit 0V verbunden.")]],
             tips: [qsTr("Weil G0 schon an 0V liegt, misst das Oszilloskop das Signal an G direkt."),
+                   qsTr("Der Hauptschalter schaltet ihn zusammen mit der Batterie ein und aus. Die kleine Lampe oben links zeigt, ob er läuft."),
                    qsTr("Am Lautsprecher hörst du die Frequenz als Tonhöhe.")]
         }
         case "kennlinienschreiber": return {

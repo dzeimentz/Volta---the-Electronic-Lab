@@ -88,6 +88,28 @@ Rectangle {
                     }
                 }
             }
+            // Betriebslampe des Generators oben links: leuchtet gruen mit Schein, solange der Hauptschalter an ist;
+            // aus ist sie dunkel ohne Schein (Helligkeit und Schein, nicht nur die Farbe)
+            Rectangle {
+                objectName: "generatorLed"
+                visible: parent.modelData.name === "generator"
+                readonly property bool on: desk.controller.mainSwitch
+                x: 9; y: 9
+                width: 12; height: 12; radius: 6
+                color: on ? "#4CE36B" : "#26352C"
+                border.color: on ? "#B8FFC6" : "#5E6E66"
+                border.width: 1.5
+                Rectangle { // Schein
+                    visible: parent.on
+                    anchors.centerIn: parent
+                    width: 22; height: 22; radius: 11
+                    color: "transparent"
+                    border.color: "#804CE36B"
+                    border.width: 4
+                }
+                Accessible.role: Accessible.Indicator
+                Accessible.name: on ? qsTr("Generator läuft") : qsTr("Generator aus")
+            }
         }
     }
 

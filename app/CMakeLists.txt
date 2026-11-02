@@ -212,6 +212,8 @@ qt_add_qml_module(volta_ui
         qml/DeskPartInfo.qml
         qml/DeskTray.qml
         qml/GeneratorPanel.qml
+        qml/HelpToggle.qml
+        qml/HelpBox.qml
         qml/TrimmerPanel.qml
         qml/LicensesDialog.qml
         qml/ToolToken.qml

@@ -428,6 +428,7 @@ private slots:
         QVERIFY(s->addWire("P:LS2", "P:G0", "schwarz"));
         s->setGenFrequency(1000.0);
         s->setGenAmplitude(1.0);
+        s->setMainSwitch(true); // der Generator laeuft mit dem Hauptschalter
         auto stream = std::make_shared<model::AudioStream>(48000, 1u << 16);
         s->setAudioStream(stream);
         run(*s, 0.01);
@@ -646,11 +647,15 @@ private slots:
         s->setMainSwitch(false);
         std::tie(hi, lo) = peak("P:W~a");
         QVERIFY2(hi < 0.05 && lo > -0.05, qPrintable(QString::number(hi)));
-        // Generator: Rechteck 2 V Spitze um 1 V, im Leerlauf an G genau 3 V bzw. -1 V; unabhaengig vom Hauptschalter
+        // Generator: Rechteck 2 V Spitze um 1 V, im Leerlauf an G genau 3 V bzw. -1 V; laeuft nur mit dem
+        // Hauptschalter (aus: 0 V)
         s->setGenWaveform(2);
         s->setGenFrequency(10.0);
         s->setGenAmplitude(2.0);
         s->setGenOffset(1.0);
+        std::tie(hi, lo) = peak("P:G");
+        QVERIFY2(hi < 1e-6 && lo > -1e-6, qPrintable(QString::number(hi)));
+        s->setMainSwitch(true);
         std::tie(hi, lo) = peak("P:G");
         QVERIFY2(std::fabs(hi - 3.0) < 1e-3 && std::fabs(lo + 1.0) < 1e-3, qPrintable(QString::number(hi)));
         QVERIFY(std::fabs(s->voltage("P:G0")) < 1e-6); // ueber die Leitung an 0V

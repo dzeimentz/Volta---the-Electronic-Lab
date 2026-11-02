@@ -642,6 +642,8 @@ void LabSession::setMainSwitch(bool on) {
             m_bridge.post({id, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
     if (hasDeskPart(m_board, "wechselquelle"))
         m_bridge.post({desk_id::kAcSource, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+    if (hasDeskPart(m_board, "generator"))
+        m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
 }
 
 void LabSession::setAcRms(int volt) {

@@ -139,6 +139,7 @@ void SimulationBridge::apply(const Action& a) {
         if (auto* s = dynamic_cast<core::Switch*>(&c)) s->setClosed(on);
         else if (auto* w = dynamic_cast<core::ChangeoverSwitch*>(&c)) w->setToB(on);
         else if (auto* ac = dynamic_cast<core::AcSource*>(&c)) ac->setEnabled(on); // Hauptschalter
+        else if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setEnabled(on);
         break;
     case Action::Type::SetPotPosition:
         if (auto* p = dynamic_cast<core::Potentiometer*>(&c)) p->setPosition(a.value);

@@ -2,7 +2,8 @@
 // an den Tastkoepfen K1 (gelb, durchgezogen) und K2 (tuerkis, gestrichelt), Bezug 0V - Farbe, Linienart und
 // Beschriftung unterscheiden die Kanaele. Schirm 10 x 8 Teilungen; Zeitbasis, Volt je Teilung und Lage je Kanal,
 // Trigger (Kanal, Flanke, Pegel), Rollbetrieb (der Zeitschreiber, ohne Trigger von rechts nach links), XY-Betrieb
-// und Standbild. Spitze-Spitze, Frequenz und Periode stehen als Zahl in der Kanalfarbe daneben.
+// und Standbild. Spitze-Spitze, Frequenz und Periode stehen als Zahl in der Kanalfarbe daneben. Die Bedienung steht
+// in Gruppen mit Rahmen (Zeit, K1, K2, Trigger); »?« blendet eine kurze Hilfe ein.
 // Alles Bedienhandlungen; das Bild rechnet der LabController (model/oscilloscope).
 import QtQuick
 import QtQuick.Controls.Basic
@@ -17,6 +18,7 @@ Rectangle {
     border.color: Theme.fieldOutline
     property var sc: ({channels: []})
     property bool frozen: false // Standbild: das Bild bleibt stehen, die Simulation laeuft weiter
+    property bool showHelp: false // »?«: kurze Hilfe ueber den Bedienelementen
     readonly property var chans: sc.channels || []
 
     function refresh() { panel.sc = panel.controller.scopeState() }
@@ -43,8 +45,9 @@ Rectangle {
         id: screen
         objectName: "scopeScreen"
         x: 6; y: 6
-        height: panel.height - 12
-        width: height * 1.25
+        // 10 x 8 Teilungen; bei wenig Platz kleiner, damit neben ihm zwei Gruppen der Bedienung nebeneinander passen
+        width: Math.max(160, Math.min((panel.height - 12) * 1.25, panel.width - 440))
+        height: width / 1.25
         color: "#0E1A16"
         radius: 4
         clip: true
@@ -164,131 +167,199 @@ Rectangle {
         font.pixelSize: Math.round(12 * Theme.fontScale)
     }
 
+    // Gruppe mit Rahmen und Ueberschrift (Zeit, K1, K2, Trigger): was zusammengehoert, steht zusammen
+    component Group: Rectangle {
+        id: grp
+        property string title
+        property color tag: "transparent" // Kanalfarbe als Streifen links (Name steht in der Ueberschrift)
+        default property alias content: groupBody.data
+        width: Math.max(groupBody.implicitWidth, groupTitle.implicitWidth) + 18
+        height: groupBody.implicitHeight + groupTitle.height + 10
+        radius: 8
+        color: "#F7F9FB"
+        border.color: "#B5C2CF"
+        border.width: 1.5
+        Rectangle { visible: grp.tag.a > 0; x: 2; y: 6; width: 6; height: parent.height - 12; radius: 3; color: grp.tag }
+        Label {
+            id: groupTitle
+            x: 12; y: 3
+            text: grp.title
+            color: Theme.navy
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+            font.bold: true
+        }
+        Column { id: groupBody; x: 10; y: groupTitle.y + groupTitle.height + 2; spacing: 2 }
+    }
+
+    // Kopf: Name, »?«, Schliessen
+    Row {
+        id: head
+        anchors { left: screen.right; leftMargin: 10; right: parent.right; rightMargin: 4 }
+        y: 4
+        Label {
+            width: parent.width - helpButton.width - closeButton.width
+            height: Theme.control
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("Oszilloskop")
+            font.bold: true
+            font.pixelSize: Math.round(15 * Theme.fontScale)
+            color: Theme.navy
+        }
+        HelpToggle {
+            id: helpButton
+            objectName: "scopeHelpButton"
+            checked: panel.showHelp
+            onClicked: panel.showHelp = !panel.showHelp
+        }
+        ToolButton {
+            id: closeButton
+            width: Theme.control; height: Theme.control
+            contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 20 } }
+            onClicked: panel.closeRequested()
+            Accessible.name: qsTr("Oszilloskop schließen")
+        }
+    }
+
     Flickable {
-        anchors { left: screen.right; leftMargin: 8; right: closeButton.left; top: parent.top; bottom: parent.bottom; topMargin: 4 }
-        contentHeight: controls.implicitHeight
+        id: controlsFlick
+        anchors { left: screen.right; leftMargin: 10; right: parent.right; rightMargin: 4; top: head.bottom; bottom: parent.bottom; bottomMargin: 4 }
+        contentHeight: controlsColumn.implicitHeight
         clip: true
         boundsBehavior: Flickable.StopAtBounds
-        Flow {
-            id: controls
-            width: parent.width
-            spacing: 4
-            Label {
-                height: Theme.control
-                verticalAlignment: Text.AlignVCenter
-                text: qsTr("Oszilloskop")
-                font.bold: true
-                font.pixelSize: Math.round(14 * Theme.fontScale)
-                color: Theme.navy
+        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+        Column {
+            id: controlsColumn
+            width: controlsFlick.width - 10
+            spacing: 8
+            HelpBox {
+                objectName: "scopeHelp"
+                visible: panel.showHelp
+                width: parent.width
+                lines: [qsTr("Das Oszilloskop zeichnet die Spannung an den Tastköpfen K1 und K2 über der Zeit. Bezug ist immer 0V."),
+                        qsTr("Zeit: »−« und »+« ändern, wie lange ein Kästchen waagrecht dauert. »Rollen« schreibt langsam von rechts nach links wie ein Zeitschreiber."),
+                        qsTr("K1 und K2: »−« und »+« ändern, wie viel Volt ein Kästchen senkrecht ist. ▲ und ▼ schieben die Kurve."),
+                        qsTr("Trigger: Er hält die Kurve still. Das Bild startet, wenn der Kanal den Pegel steigend ↗ oder fallend ↘ kreuzt."),
+                        qsTr("XY zeichnet K2 über K1. ⏸ hält das Bild an.")]
             }
-            // Zeitbasis
-            Row {
-                Btn {
-                    objectName: "scopeFaster"
-                    text: "−"; enabled: panel.sc.canFaster === true && !panel.sc.xy
-                    onClicked: panel.controller.setScope("timebase", panel.sc.timebase - 1)
-                    ToolTip.text: qsTr("Zeitbasis kürzer"); Accessible.name: ToolTip.text
-                }
-                Caption { text: (panel.sc.timebaseText || "") + "/Div"; width: 76; horizontalAlignment: Text.AlignHCenter }
-                Btn {
-                    objectName: "scopeSlower"
-                    text: "+"; enabled: panel.sc.canSlower === true && !panel.sc.xy
-                    onClicked: panel.controller.setScope("timebase", panel.sc.timebase + 1)
-                    ToolTip.text: qsTr("Zeitbasis länger"); Accessible.name: ToolTip.text
-                }
-            }
-            Btn {
-                objectName: "scopeRoll"
-                text: qsTr("Rollen"); checkable: true; checked: panel.sc.roll === true
-                onClicked: panel.controller.setScope("roll", checked)
-                ToolTip.text: qsTr("Rollbetrieb: aufzeichnen wie ein Zeitschreiber"); Accessible.name: ToolTip.text
-            }
-            Btn {
-                objectName: "scopeXy"
-                text: "XY"; checkable: true; checked: panel.sc.xy === true
-                onClicked: panel.controller.setScope("xy", checked)
-                ToolTip.text: qsTr("XY-Betrieb: K1 waagrecht, K2 senkrecht"); Accessible.name: ToolTip.text
-            }
-            Btn {
-                objectName: "scopeFreeze"
-                text: panel.frozen ? "▶" : "⏸"; checkable: true; checked: panel.frozen
-                onClicked: panel.frozen = checked
-                ToolTip.text: panel.frozen ? qsTr("Weiterlaufen") : qsTr("Standbild"); Accessible.name: ToolTip.text
-            }
-            // Kanaele: Volt je Teilung und Lage
-            Repeater {
-                model: 2
-                Row {
-                    id: chRow
-                    required property int index
-                    readonly property var ch: panel.chans[index] || ({})
-                    Rectangle { // Kanalfarbe mit Namen (Farbe nie allein)
-                        width: 34; height: Theme.control - 12; y: 6; radius: 4
-                        color: Theme.probeColors[chRow.index]
-                        Label { anchors.centerIn: parent; text: "K" + (chRow.index + 1); font.bold: true; color: "#1E2B38" }
+            Flow {
+                id: controls
+                width: parent.width
+                spacing: 8
+                // Zeit: Zeitbasis, Rollbetrieb, XY, Standbild
+                Group {
+                    objectName: "scopeGroupTime"
+                    title: qsTr("Zeit")
+                    Row {
+                        Btn {
+                            objectName: "scopeFaster"
+                            text: "−"; enabled: panel.sc.canFaster === true && !panel.sc.xy
+                            onClicked: panel.controller.setScope("timebase", panel.sc.timebase - 1)
+                            ToolTip.text: qsTr("Zeitbasis kürzer"); Accessible.name: ToolTip.text
+                        }
+                        Caption { text: (panel.sc.timebaseText || "") + "/Div"; width: 76; horizontalAlignment: Text.AlignHCenter }
+                        Btn {
+                            objectName: "scopeSlower"
+                            text: "+"; enabled: panel.sc.canSlower === true && !panel.sc.xy
+                            onClicked: panel.controller.setScope("timebase", panel.sc.timebase + 1)
+                            ToolTip.text: qsTr("Zeitbasis länger"); Accessible.name: ToolTip.text
+                        }
                     }
-                    Btn {
-                        text: "−"; enabled: (chRow.ch.volts || 0) > 0
-                        onClicked: panel.controller.setScope("volts" + chRow.index, chRow.ch.volts - 1)
-                        ToolTip.text: qsTr("K%1 empfindlicher").arg(chRow.index + 1); Accessible.name: ToolTip.text
-                    }
-                    Caption { text: (chRow.ch.voltsText || "") + "/Div"; width: 70; horizontalAlignment: Text.AlignHCenter }
-                    Btn {
-                        text: "+"; enabled: (chRow.ch.volts || 0) < 8
-                        onClicked: panel.controller.setScope("volts" + chRow.index, chRow.ch.volts + 1)
-                        ToolTip.text: qsTr("K%1 unempfindlicher").arg(chRow.index + 1); Accessible.name: ToolTip.text
-                    }
-                    Btn {
-                        text: "▲"; enabled: (chRow.ch.position || 0) < 4
-                        onClicked: panel.controller.setScope("position" + chRow.index, chRow.ch.position + 1)
-                        ToolTip.text: qsTr("K%1 nach oben").arg(chRow.index + 1); Accessible.name: ToolTip.text
-                    }
-                    Btn {
-                        text: "▼"; enabled: (chRow.ch.position || 0) > -4
-                        onClicked: panel.controller.setScope("position" + chRow.index, chRow.ch.position - 1)
-                        ToolTip.text: qsTr("K%1 nach unten").arg(chRow.index + 1); Accessible.name: ToolTip.text
+                    Row {
+                        spacing: 2
+                        Btn {
+                            objectName: "scopeRoll"
+                            text: qsTr("Rollen"); checkable: true; checked: panel.sc.roll === true
+                            onClicked: panel.controller.setScope("roll", checked)
+                            ToolTip.text: qsTr("Rollbetrieb: aufzeichnen wie ein Zeitschreiber"); Accessible.name: ToolTip.text
+                        }
+                        Btn {
+                            objectName: "scopeXy"
+                            text: "XY"; checkable: true; checked: panel.sc.xy === true
+                            onClicked: panel.controller.setScope("xy", checked)
+                            ToolTip.text: qsTr("XY-Betrieb: K1 waagrecht, K2 senkrecht"); Accessible.name: ToolTip.text
+                        }
+                        Btn {
+                            objectName: "scopeFreeze"
+                            text: panel.frozen ? "▶" : "⏸"; checkable: true; checked: panel.frozen
+                            onClicked: panel.frozen = checked
+                            ToolTip.text: panel.frozen ? qsTr("Weiterlaufen") : qsTr("Standbild"); Accessible.name: ToolTip.text
+                        }
                     }
                 }
-            }
-            // Trigger: Kanal, Flanke, Pegel
-            Row {
-                visible: !panel.sc.roll && !panel.sc.xy
-                Caption { text: qsTr("Trigger"); rightPadding: 4 }
-                Btn {
-                    objectName: "scopeTriggerChannel"
-                    text: "K" + ((panel.sc.triggerChannel || 0) + 1)
-                    onClicked: panel.controller.setScope("triggerChannel", 1 - (panel.sc.triggerChannel || 0))
-                    ToolTip.text: qsTr("Triggerkanal wechseln"); Accessible.name: ToolTip.text
+                // Kanaele: Volt je Teilung und Lage; Kanalfarbe als Streifen, Name und Linienart in der Ueberschrift
+                Repeater {
+                    model: 2
+                    Group {
+                        id: chGroup
+                        required property int index
+                        readonly property var ch: panel.chans[index] || ({})
+                        objectName: "scopeGroupK" + (index + 1)
+                        title: index === 0 ? qsTr("K1 (durchgezogen)") : qsTr("K2 (gestrichelt)")
+                        tag: Theme.probeColors[index]
+                        Row {
+                            Btn {
+                                text: "−"; enabled: (chGroup.ch.volts || 0) > 0
+                                onClicked: panel.controller.setScope("volts" + chGroup.index, chGroup.ch.volts - 1)
+                                ToolTip.text: qsTr("K%1 empfindlicher").arg(chGroup.index + 1); Accessible.name: ToolTip.text
+                            }
+                            Caption { text: (chGroup.ch.voltsText || "") + "/Div"; width: 70; horizontalAlignment: Text.AlignHCenter }
+                            Btn {
+                                text: "+"; enabled: (chGroup.ch.volts || 0) < 8
+                                onClicked: panel.controller.setScope("volts" + chGroup.index, chGroup.ch.volts + 1)
+                                ToolTip.text: qsTr("K%1 unempfindlicher").arg(chGroup.index + 1); Accessible.name: ToolTip.text
+                            }
+                        }
+                        Row {
+                            Caption { text: qsTr("Lage"); width: 70 }
+                            Btn {
+                                text: "▲"; enabled: (chGroup.ch.position || 0) < 4
+                                onClicked: panel.controller.setScope("position" + chGroup.index, chGroup.ch.position + 1)
+                                ToolTip.text: qsTr("K%1 nach oben").arg(chGroup.index + 1); Accessible.name: ToolTip.text
+                            }
+                            Btn {
+                                text: "▼"; enabled: (chGroup.ch.position || 0) > -4
+                                onClicked: panel.controller.setScope("position" + chGroup.index, chGroup.ch.position - 1)
+                                ToolTip.text: qsTr("K%1 nach unten").arg(chGroup.index + 1); Accessible.name: ToolTip.text
+                            }
+                        }
+                    }
                 }
-                Btn {
-                    objectName: "scopeTriggerEdge"
-                    text: panel.sc.triggerRising ? "↗" : "↘"
-                    onClicked: panel.controller.setScope("triggerRising", !panel.sc.triggerRising)
-                    ToolTip.text: panel.sc.triggerRising ? qsTr("steigende Flanke") : qsTr("fallende Flanke")
-                    Accessible.name: ToolTip.text
-                }
-                Btn {
-                    text: "−"
-                    onClicked: panel.controller.setScope("triggerLevel", Math.round(((panel.sc.triggerLevel || 0) - 0.5) * 10) / 10)
-                    ToolTip.text: qsTr("Triggerpegel tiefer"); Accessible.name: ToolTip.text
-                }
-                Caption { text: panel.sc.triggerText || ""; width: 54; horizontalAlignment: Text.AlignHCenter }
-                Btn {
-                    text: "+"
-                    onClicked: panel.controller.setScope("triggerLevel", Math.round(((panel.sc.triggerLevel || 0) + 0.5) * 10) / 10)
-                    ToolTip.text: qsTr("Triggerpegel höher"); Accessible.name: ToolTip.text
+                // Trigger: Kanal, Flanke, Pegel
+                Group {
+                    objectName: "scopeGroupTrigger"
+                    visible: !panel.sc.roll && !panel.sc.xy
+                    title: qsTr("Trigger")
+                    Row {
+                        Btn {
+                            objectName: "scopeTriggerChannel"
+                            text: "K" + ((panel.sc.triggerChannel || 0) + 1)
+                            onClicked: panel.controller.setScope("triggerChannel", 1 - (panel.sc.triggerChannel || 0))
+                            ToolTip.text: qsTr("Triggerkanal wechseln"); Accessible.name: ToolTip.text
+                        }
+                        Btn {
+                            objectName: "scopeTriggerEdge"
+                            text: panel.sc.triggerRising ? "↗" : "↘"
+                            onClicked: panel.controller.setScope("triggerRising", !panel.sc.triggerRising)
+                            ToolTip.text: panel.sc.triggerRising ? qsTr("steigende Flanke") : qsTr("fallende Flanke")
+                            Accessible.name: ToolTip.text
+                        }
+                    }
+                    Row {
+                        Btn {
+                            text: "−"
+                            onClicked: panel.controller.setScope("triggerLevel", Math.round(((panel.sc.triggerLevel || 0) - 0.5) * 10) / 10)
+                            ToolTip.text: qsTr("Triggerpegel tiefer"); Accessible.name: ToolTip.text
+                        }
+                        Caption { text: panel.sc.triggerText || ""; width: 54; horizontalAlignment: Text.AlignHCenter }
+                        Btn {
+                            text: "+"
+                            onClicked: panel.controller.setScope("triggerLevel", Math.round(((panel.sc.triggerLevel || 0) + 0.5) * 10) / 10)
+                            ToolTip.text: qsTr("Triggerpegel höher"); Accessible.name: ToolTip.text
+                        }
+                    }
                 }
             }
         }
     }
 
-    ToolButton {
-        id: closeButton
-        anchors.right: parent.right; anchors.rightMargin: 4
-        y: 4
-        width: Theme.control; height: Theme.control
-        contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 20 } }
-        onClicked: panel.closeRequested()
-        Accessible.name: qsTr("Oszilloskop schließen")
-    }
 }

@@ -107,6 +107,25 @@ TEST_CASE("Funktionsgenerator 1 kHz an 10 kOhm: Spitzen und Mittelwert", "[refer
     CHECK(gen.emfAt(gen.phase()) == Approx(before));
 }
 
+TEST_CASE("Funktionsgenerator aus: Ausgang 0 V, Phase laeuft weiter", "[transient][quelle]") {
+    Circuit c;
+    const NodeId out = c.addNode();
+    auto& gen = c.add<FunctionGenerator>("G1", out, kGround, GeneratorParams{Waveform::Sine, 100.0, 2.0, 1.0, 50.0});
+    c.add<Resistor>("R1", out, kGround, ResistorParams{1000.0});
+    gen.setEnabled(false);
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    for (int i = 0; i < 100; ++i) {
+        REQUIRE(sim.step(1e-4) == Status::Ok);
+        CHECK(std::fabs(sim.probe().voltage(out)) < 1e-9);
+    }
+    CHECK(gen.phase() == Approx(0.0).margin(1e-6)); // 100 Schritte zu 0,1 ms = eine Periode
+    gen.setEnabled(true);
+    REQUIRE(sim.step(1e-4) == Status::Ok);
+    CHECK(std::fabs(sim.probe().voltage(out)) > 0.5); // Gleichanteil 1 V plus Sinus
+    requireKirchhoff(sim);
+}
+
 TEST_CASE("Kennlinienschreiber: Dreieck, Grenzen", "[quelle]") {
     CurveTracer t("KS", 1, 0, {-10.0, 10.0, 500.0, 2.0});
     CHECK(t.emfAt(0.0) == Approx(-10.0));

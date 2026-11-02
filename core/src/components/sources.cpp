@@ -117,7 +117,8 @@ double FunctionGenerator::emfAt(double phase) const noexcept {
 
 void FunctionGenerator::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
     const double p = ctx.isDc() ? m_phase : m_phase + m_params.frequencyHz * ctx.dtS;
-    sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emfAt(p) * ctx.sourceScale, m_params.outputOhm);
+    const double emf = m_enabled ? emfAt(p) * ctx.sourceScale : 0.0;
+    sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emf, m_params.outputOhm);
 }
 
 double FunctionGenerator::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {

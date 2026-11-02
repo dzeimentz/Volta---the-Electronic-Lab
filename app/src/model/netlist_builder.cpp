@@ -174,7 +174,7 @@ private:
             c.add<core::Resistor>(desk_id::kAcLeak, wb, core::kGround, leak);
         }
         if (hasDeskPart(m_board, "generator")) {
-            // Laborgeraet mit eigenem Netzteil: unabhaengig vom Hauptschalter; G0 fest an 0V (Konzept 5.1)
+            // laeuft mit dem Hauptschalter (entschieden 02.11.2026: ein Schalter fuer alles); G0 fest an 0V (Konzept 5.1)
             NodeId g = 0, g0 = 0;
             node("P:G", g, "Pult");
             node("P:G0", g0, "Pult");
@@ -184,7 +184,7 @@ private:
             gp.amplitudeV = d.genAmplitudeV;
             gp.offsetV = d.genOffsetV;
             m_net.desk[desk_id::kGenerator] = c.componentCount();
-            c.add<core::FunctionGenerator>(desk_id::kGenerator, g, g0, gp);
+            c.add<core::FunctionGenerator>(desk_id::kGenerator, g, g0, gp).setEnabled(d.mainSwitch);
             c.add<core::Wire>(desk_id::kGeneratorGround, g0, core::kGround);
         }
         if (hasDeskPart(m_board, "kennlinienschreiber")) {

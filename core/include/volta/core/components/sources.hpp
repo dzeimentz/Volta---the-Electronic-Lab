@@ -83,6 +83,10 @@ public:
     void setFrequency(double hz) noexcept;
     void setAmplitude(double peakV) noexcept;
     void setOffset(double volt) noexcept;
+    // Aus (Hauptschalter, Konzept Volta 2 ab 02.11.2026): Ausgang 0 V ueber den Ausgangswiderstand, die Phase
+    // laeuft weiter
+    void setEnabled(bool on) noexcept { m_enabled = on; }
+    bool isEnabled() const noexcept { return m_enabled; }
     double phase() const noexcept { return m_phase; }
     // Leerlaufspannung bei der Phase p
     double emfAt(double phase) const noexcept;
@@ -95,6 +99,7 @@ public:
 
 private:
     GeneratorParams m_params;
+    bool m_enabled = true;
     double m_phase = 0.0;
 };
 
