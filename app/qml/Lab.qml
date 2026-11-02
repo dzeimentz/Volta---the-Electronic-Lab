@@ -689,8 +689,8 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
-            // Zeitlupe (ab Volta 2, Konzept 5.3): 1, 1/10, 1/100, 1/1000 der Echtzeit; Ton ist dann stumm. Die Stufe
-            // steht als Text auf dem Knopf (Farbe nie allein)
+            // Zeitlupe (ab Volta 2, Konzept 5.3): 1, 1/10, 1/100, 1/1000 der Echtzeit; Ton ist dann stumm. Symbol: Lupe
+            // mit Uhrzeigern (gezeichnet); die Stufe steht als Text daneben (Farbe nie allein)
             ToolButton {
                 objectName: "slowMotionButton"
                 visible: !lab.classicMeter
@@ -700,8 +700,19 @@ Item {
                 checkable: true
                 checked: level > 0
                 onClicked: lab.controller.timeScale = scales[(level + 1) % scales.length]
-                text: level === 0 ? "🐢" : "🐢 1/" + Math.round(1 / scales[level])
-                font.pixelSize: 16
+                leftPadding: 10; rightPadding: 10
+                contentItem: Row {
+                    spacing: 4
+                    DrawnIcon { anchors.verticalCenter: parent.verticalCenter; kind: "slowmo"; color: "white"; size: 24 }
+                    Label {
+                        visible: parent.parent.level > 0
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "1/" + Math.round(1 / parent.parent.scales[parent.parent.level])
+                        color: "white"
+                        font.pixelSize: 15
+                        font.bold: true
+                    }
+                }
                 ToolTip.visible: hovered
                 ToolTip.text: level === 0 ? qsTr("Zeitlupe: aus (Echtzeit). Antippen: 1/10")
                               : qsTr("Zeitlupe: 1/%1, Ton stumm. Antippen: langsamer bzw. aus").arg(Math.round(1 / scales[level]))

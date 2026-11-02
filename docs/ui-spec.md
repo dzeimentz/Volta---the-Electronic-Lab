@@ -121,7 +121,7 @@ das iPad).
   - Ab Volta 2 (Tonanzeige, Konzept 5.3): unter dem Ring steht statt »Lautsprecher«, woher der Ton kommt:
     »♪ gerechnet« (hoerbare Simulation), »♪ Ersatzton« (fett, bernsteinfarben; beim Umschalten erklaert ein Hinweis
     offen, warum) oder »Zeitlupe: stumm«. Ton aus: Name wie bisher.
-- Zeitlupe (ab Volta 2): Knopf mit Schildkroete in der Werkzeugleiste neben dem Oszilloskop; Antippen schaltet
+- Zeitlupe (ab Volta 2): Knopf mit Lupe und Uhrzeigern (gezeichnet) in der Werkzeugleiste neben dem Oszilloskop; Antippen schaltet
   1/10 -> 1/100 -> 1/1000 -> aus, die Stufe steht als »1/10« usw. auf dem Knopf. Ton ist in der Zeitlupe stumm.
 - **Dreifach-Messgeraet**: Ein-/Ausblenden, Umschalter digital/analog, Drehschalter V/A/Ω, Buchsen COM, V/Ω, A.
   Zwei Plaetze, umschaltbar mit dem kleinen Knopf oben links im Geraet (gespeichert, `labor/messgeraet_im_pult`):

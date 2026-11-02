@@ -981,7 +981,7 @@ def _help2_panels(key):
         return [("oszi", (430, 196, 622, 252), [("box", (447, 201, 489, 239)), ("box", (559, 201, 601, 239))]),
                 ("oszi", (790, 0, 854, 58), [("box", (796, 2, 848, 54))]),
                 ("oszi", (258, 564, 548, 798), [])]
-    if key == "ton":          # Lautsprecher mit Tonanzeige, Schildkroete mit Stufe
+    if key == "ton":          # Lautsprecher mit Tonanzeige, Zeitlupe (Lupe mit Uhr) mit Stufe
         return [("ton", (540, 84, 662, 266), [("box", (548, 150, 654, 180))]),
                 ("ton", (850, 0, 936, 58), [("box", (856, 2, 932, 54))])]
     raise ValueError(key)

@@ -1,5 +1,5 @@
 // Gezeichnete Symbole statt Schriftzeichen: Menue, Pfeil auf/ab, Schliessen, Rueckgaengig, Wiederholen, Loeschen,
-// Stift, Stern. Diese Zeichen (U+2630, U+25BE, U+25B4, U+2715, U+21B6/7, U+232B, U+270E, U+2605/6) fehlen in den Schriften, die Qt auf
+// Stift, Stern, Zeitlupe (Lupe mit Uhrzeigern im Glas). Diese Zeichen (U+2630, U+25BE, U+25B4, U+2715, U+21B6/7, U+232B, U+270E, U+2605/6) fehlen in den Schriften, die Qt auf
 // Android nutzt (leere Kaestchen); gezeichnet sehen sie auf allen Geraeten gleich aus. Zeichenflaeche 24 x 24.
 import QtQuick
 import QtQuick.Shapes
@@ -7,7 +7,7 @@ import QtQuick.Shapes
 Item {
     id: icon
     property string kind: "menu" // menu, down, up, left, right, close, undo, redo, backspace, pencil, trash, fit,
-                                 // star (gefuellt), starOutline
+                                 // star (gefuellt), starOutline, slowmo
     property color color: "white"
     property real size: 20
 
@@ -28,6 +28,7 @@ Item {
         pencil: "M4 20 L5 15 L16 4 L20 8 L9 19 Z M14 6 L18 10",
         trash: "M4 7 H20 M9 7 V4 H15 V7 M6 7 L7 20 H17 L18 7 M10 11 V17 M14 11 V17",
         fit: "M4 9 V4 H9 M15 4 H20 V9 M20 15 V20 H15 M9 20 H4 V15 M8 8 H16 V16 H8 Z",
+        slowmo: "M16.5 10 A6.5 6.5 0 1 1 3.5 10 A6.5 6.5 0 1 1 16.5 10 M15 15 L21 21 M10 6.5 V10 L12.5 11.5",
         star: "M12.0 2.3 L14.6 9.2 L22.0 9.6 L16.2 14.2 L18.2 21.3 L12.0 17.2 L5.8 21.3 L7.8 14.2 L2.0 9.6 L9.4 9.2 Z",
         starOutline: "M12.0 2.3 L14.6 9.2 L22.0 9.6 L16.2 14.2 L18.2 21.3 L12.0 17.2 L5.8 21.3 L7.8 14.2 L2.0 9.6 L9.4 9.2 Z"
     })[kind] || ""

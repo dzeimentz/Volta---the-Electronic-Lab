@@ -139,8 +139,8 @@ Popup {
           say: qsTr("Schwingt deine Schaltung schnell genug, hörst du sie aus dem Lautsprecher. Ist sie zu schnell zum Zuschauen, hilft die Zeitlupe."),
           points: [qsTr("Am Lautsprecher steht, woher der Ton kommt. »♪ gerechnet« heißt: Volta rechnet den Ton Stück für Stück aus."),
                    qsTr("»♪ Ersatzton« heißt: Dein Gerät ist zu langsam dafür. Dann spielt Volta einen Ton mit der gerechneten Frequenz."),
-                   qsTr("Die Schildkröte in der Werkzeugleiste schaltet die Zeitlupe: 1/10, 1/100 oder 1/1000 so schnell wie echt. Dann ist der Ton stumm."),
-                   qsTr("Auf der Schildkröte steht, wie langsam es gerade läuft. Tippst du weiter, geht es zurück zur Echtzeit.")] }
+                   qsTr("Die Lupe mit der Uhr in der Werkzeugleiste schaltet die Zeitlupe: 1/10, 1/100 oder 1/1000 so schnell wie echt. Dann ist der Ton stumm."),
+                   qsTr("Neben der Lupe steht, wie langsam es gerade läuft. Tippst du weiter, geht es zurück zur Echtzeit.")] }
     ]
     function v2Chapters() {
         const out = []
