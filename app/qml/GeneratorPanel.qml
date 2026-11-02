@@ -66,7 +66,7 @@ Popup {
                 checked: panel.showHelp
                 onClicked: panel.showHelp = !panel.showHelp
             }
-            ToolButton {
+            PanelButton {
                 id: closeButton
                 width: Theme.control; height: Theme.control
                 contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 18 } }
@@ -93,7 +93,7 @@ Popup {
             spacing: 6
             Repeater {
                 model: [qsTr("Sinus"), qsTr("Dreieck"), qsTr("Rechteck")]
-                Button {
+                PanelButton {
                     id: waveButton
                     required property string modelData
                     required property int index
@@ -161,7 +161,7 @@ Popup {
                     spacing: 6
                     Repeater {
                         model: [1, 10, 100, 1000]
-                        Button {
+                        PanelButton {
                             required property int modelData
                             objectName: "genDecade" + modelData
                             height: Theme.control

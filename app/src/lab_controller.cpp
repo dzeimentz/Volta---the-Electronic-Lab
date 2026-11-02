@@ -174,6 +174,8 @@ void LabController::useSessionFile(const QString& path) {
     m_sessionStore = services::SessionStore(path);
     if (m_saveEnabled) return;
     m_saveEnabled = true;
+    m_scopeAutoTimer.setSingleShot(true);
+    connect(&m_scopeAutoTimer, &QTimer::timeout, this, &LabController::scopeAutoTimeStep);
     m_saveTimer.setSingleShot(true);
     m_saveTimer.setInterval(1500);
     connect(&m_saveTimer, &QTimer::timeout, this, &LabController::saveSession);
@@ -2437,6 +2439,27 @@ void LabController::setScope(const QString& key, const QVariant& value) {
         s.triggerRising = value.toBool();
     } else if (key == QLatin1String("triggerLevel")) {
         s.triggerLevelV = std::clamp(value.toDouble(), -20.0, 20.0);
+    } else if (key == QLatin1String("auto")) {
+        // »Auto«: k0/k1 = Kanal, time = Zeitbasis (in Schritten, siehe scopeAutoTimeStep), trigger = Trigger
+        const QString what = value.toString();
+        if (what == QLatin1String("time")) {
+            m_scopeAutoTries = 5;
+            scopeAutoTimeStep();
+            return;
+        }
+        std::array<model::ScopeMeasure, model::kScopeChannels> me{};
+        if (!scopeBufferMeasure(me)) return;
+        if (what == QLatin1String("trigger")) {
+            // Kanal mit Wechselsignal, der eingestellte zuerst
+            std::size_t c = static_cast<std::size_t>(std::clamp(s.triggerChannel, 0, 1));
+            if (!(me[c].any && me[c].max - me[c].min >= 1e-3) && me[1 - c].any && me[1 - c].max - me[1 - c].min >= 1e-3)
+                c = 1 - c;
+            model::scopeAutoTrigger(s, c, me[c]);
+        } else if (what == QLatin1String("k0") || what == QLatin1String("k1")) {
+            model::scopeAutoChannel(s, what == QLatin1String("k0") ? 0 : 1, me[what == QLatin1String("k0") ? 0 : 1]);
+        } else {
+            return;
+        }
     } else if (key.startsWith(QLatin1String("volts")) || key.startsWith(QLatin1String("position"))) {
         const int ch = std::clamp(key.right(1).toInt(), 0, 1);
         if (key.startsWith(QLatin1String("volts"))) s.channels[ch].voltsIndex = std::clamp(value.toInt(), 0, lastV);
@@ -2445,6 +2468,49 @@ void LabController::setScope(const QString& key, const QVariant& value) {
         return;
     }
     m_session->setScopeSettings(s);
+    emit deskChanged();
+}
+
+// Kennwerte je Kanal ueber den ganzen Abtastpuffer (zwei Bildbreiten); false ohne aktuelles Bild
+bool LabController::scopeBufferMeasure(std::array<model::ScopeMeasure, model::kScopeChannels>& m) const {
+    if (!m_session->snapshotCurrent()) return false;
+    const auto& snap = m_session->snapshot();
+    const auto probes = m_session->scopeProbes();
+    bool any = false;
+    for (std::size_t c = 0; c < model::kScopeChannels; ++c) {
+        if (probes[c].empty() || !snap.scopeHas[c]) continue;
+        m[c] = model::scopeMeasure(snap.scope, c, -1e300, 1e300);
+        any = any || m[c].any;
+    }
+    return any;
+}
+
+void LabController::scopeAutoTimeStep() {
+    m_scopeAutoTimer.stop();
+    if (m_scopeAutoTries <= 0 || !m_session->scopeActive()) { m_scopeAutoTries = 0; emit deskChanged(); return; }
+    --m_scopeAutoTries;
+    model::ScopeSettings s = m_session->board().desk.scope;
+    std::array<model::ScopeMeasure, model::kScopeChannels> me{};
+    if (!scopeBufferMeasure(me)) { m_scopeAutoTries = 0; emit deskChanged(); return; }
+    // Periode am Triggerkanal, sonst am anderen
+    const std::size_t tc = static_cast<std::size_t>(std::clamp(s.triggerChannel, 0, 1));
+    const double f = me[tc].frequencyHz > 0.0 ? me[tc].frequencyHz : me[1 - tc].frequencyHz;
+    const bool varies = (me[0].any && me[0].max - me[0].min >= 1e-3) || (me[1].any && me[1].max - me[1].min >= 1e-3);
+    int next = s.timebaseIndex;
+    if (f > 0.0) next = model::scopeAutoTimebase(f);
+    else if (varies) next = std::min(s.timebaseIndex + 3, model::kScopeLastNormalTimebase); // langsames Signal
+    if (s.roll || next != s.timebaseIndex) {
+        s.roll = false;
+        s.timebaseIndex = next;
+        m_session->setScopeSettings(s);
+        // neu messen, wenn der Puffer mit der neuen Zeitbasis voll ist (zwei Bilder, Zeitlupe dauert laenger)
+        if (m_scopeAutoTries > 0) {
+            const double waitS = (22.0 * s.timebaseS() + 0.3) / std::max(m_timeScale, 0.01);
+            m_scopeAutoTimer.start(static_cast<int>(std::min(waitS, 30.0) * 1000.0));
+        }
+    } else {
+        m_scopeAutoTries = 0; // gefunden und bestaetigt (oder Gleichspannung)
+    }
     emit deskChanged();
 }
 
@@ -2476,6 +2542,7 @@ QVariantMap LabController::scopeState() const {
         f = model::scopeFrame(snap.scope, s, live);
     }
     m.insert(QStringLiteral("triggered"), f.triggered);
+    m.insert(QStringLiteral("autoBusy"), m_scopeAutoTimer.isActive());
     QVariantList channels;
     for (std::size_t c = 0; c < model::kScopeChannels; ++c) {
         const double vpd = model::scopeVoltsPerDiv()[static_cast<std::size_t>(s.channels[c].voltsIndex)];

@@ -136,192 +136,192 @@
         <translation>Wat ass dat?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="111"/>
+        <location filename="../app/qml/ControlDesk.qml" line="98"/>
         <source>Generator läuft</source>
         <translation>Generator leeft</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="111"/>
+        <location filename="../app/qml/ControlDesk.qml" line="98"/>
         <source>Generator aus</source>
         <translation>Generator aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="229"/>
+        <location filename="../app/qml/ControlDesk.qml" line="216"/>
         <source>Batterie</source>
         <translation>Batterie</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="235"/>
-        <location filename="../app/qml/ControlDesk.qml" line="235"/>
-        <location filename="../app/qml/ControlDesk.qml" line="235"/>
-        <location filename="../app/qml/ControlDesk.qml" line="271"/>
-        <location filename="../app/qml/ControlDesk.qml" line="271"/>
+        <location filename="../app/qml/ControlDesk.qml" line="222"/>
+        <location filename="../app/qml/ControlDesk.qml" line="222"/>
+        <location filename="../app/qml/ControlDesk.qml" line="222"/>
+        <location filename="../app/qml/ControlDesk.qml" line="258"/>
+        <location filename="../app/qml/ControlDesk.qml" line="258"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="238"/>
+        <location filename="../app/qml/ControlDesk.qml" line="225"/>
         <source>Batteriespannung</source>
         <translation>Batteriespannung</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="247"/>
+        <location filename="../app/qml/ControlDesk.qml" line="234"/>
         <source>Hauptschalter</source>
         <translation>Haaptschalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="252"/>
-        <location filename="../app/qml/ControlDesk.qml" line="278"/>
-        <location filename="../app/qml/ControlDesk.qml" line="303"/>
+        <location filename="../app/qml/ControlDesk.qml" line="239"/>
+        <location filename="../app/qml/ControlDesk.qml" line="265"/>
+        <location filename="../app/qml/ControlDesk.qml" line="290"/>
         <source>Ein</source>
         <translation>Un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="252"/>
-        <location filename="../app/qml/ControlDesk.qml" line="278"/>
-        <location filename="../app/qml/ControlDesk.qml" line="303"/>
+        <location filename="../app/qml/ControlDesk.qml" line="239"/>
+        <location filename="../app/qml/ControlDesk.qml" line="265"/>
+        <location filename="../app/qml/ControlDesk.qml" line="290"/>
         <source>Aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="266"/>
+        <location filename="../app/qml/ControlDesk.qml" line="253"/>
         <source>Batterie 2</source>
         <translation>Batterie 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="274"/>
+        <location filename="../app/qml/ControlDesk.qml" line="261"/>
         <source>Spannung von Batterie 2</source>
         <translation>Spannung vun der Batterie 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="291"/>
+        <location filename="../app/qml/ControlDesk.qml" line="278"/>
         <source>Wechselquelle</source>
         <translation>Wiesselquell</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="296"/>
-        <location filename="../app/qml/ControlDesk.qml" line="296"/>
+        <location filename="../app/qml/ControlDesk.qml" line="283"/>
+        <location filename="../app/qml/ControlDesk.qml" line="283"/>
         <source>%1 V~</source>
         <translation>%1 V~</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="299"/>
+        <location filename="../app/qml/ControlDesk.qml" line="286"/>
         <source>Spannung der Wechselquelle</source>
         <translation>Spannung vun der Wiesselquell</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="316"/>
+        <location filename="../app/qml/ControlDesk.qml" line="303"/>
         <source>Generator</source>
         <translation>Generator</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="321"/>
+        <location filename="../app/qml/ControlDesk.qml" line="308"/>
         <source>Sinus</source>
         <translation>Sinus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="321"/>
+        <location filename="../app/qml/ControlDesk.qml" line="308"/>
         <source>Dreieck</source>
         <translation>Dräieck</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="321"/>
+        <location filename="../app/qml/ControlDesk.qml" line="308"/>
         <source>Rechteck</source>
         <translation>Rechteck</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="324"/>
+        <location filename="../app/qml/ControlDesk.qml" line="311"/>
         <source>%1 kHz</source>
         <translation>%1 kHz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="325"/>
+        <location filename="../app/qml/ControlDesk.qml" line="312"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="328"/>
+        <location filename="../app/qml/ControlDesk.qml" line="315"/>
         <source>Funktionsgenerator einstellen</source>
         <translation>Funktiounsgenerator astellen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="332"/>
+        <location filename="../app/qml/ControlDesk.qml" line="319"/>
         <source>%1 V Spitze</source>
         <translation>%1 V Spëtzt</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="346"/>
+        <location filename="../app/qml/ControlDesk.qml" line="333"/>
         <source>Kennlinie</source>
         <translation>Kennlinn</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="351"/>
+        <location filename="../app/qml/ControlDesk.qml" line="338"/>
         <source>Zeichnen</source>
         <translation>Zeechnen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="354"/>
+        <location filename="../app/qml/ControlDesk.qml" line="341"/>
         <source>Kennlinienschreiber öffnen</source>
         <translation>Kennlinneschreiwer opmaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="358"/>
+        <location filename="../app/qml/ControlDesk.qml" line="345"/>
         <source>bis %1</source>
         <translation>bis %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="373"/>
+        <location filename="../app/qml/ControlDesk.qml" line="360"/>
         <source>Gerätefach</source>
         <translation>Gerätefach</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="375"/>
+        <location filename="../app/qml/ControlDesk.qml" line="362"/>
         <source>Gerätefach: Pultteile einsetzen</source>
         <translation>Gerätefach: Pultdeeler asetzen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="397"/>
+        <location filename="../app/qml/ControlDesk.qml" line="384"/>
         <source>Potentiometer 1</source>
         <translation>Potentiometer 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="409"/>
+        <location filename="../app/qml/ControlDesk.qml" line="396"/>
         <source>Potentiometer 2</source>
         <translation>Potentiometer 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="449"/>
+        <location filename="../app/qml/ControlDesk.qml" line="436"/>
         <source>ein</source>
         <translation>un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="454"/>
+        <location filename="../app/qml/ControlDesk.qml" line="441"/>
         <source>aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="461"/>
-        <location filename="../app/qml/ControlDesk.qml" line="468"/>
+        <location filename="../app/qml/ControlDesk.qml" line="448"/>
+        <location filename="../app/qml/ControlDesk.qml" line="455"/>
         <source>Schalter</source>
         <translation>Schalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="489"/>
+        <location filename="../app/qml/ControlDesk.qml" line="476"/>
         <source>♪ gerechnet</source>
         <translation>♪ gerechent</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="489"/>
+        <location filename="../app/qml/ControlDesk.qml" line="476"/>
         <source>♪ Ersatzton</source>
         <translation>♪ Ersatztoun</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="490"/>
+        <location filename="../app/qml/ControlDesk.qml" line="477"/>
         <source>Lautsprecher</source>
         <translation>Lautsprecher</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="490"/>
+        <location filename="../app/qml/ControlDesk.qml" line="477"/>
         <source>Zeitlupe: stumm</source>
         <translation>Zäitlupp: stomm</translation>
     </message>
@@ -1577,7 +1577,7 @@
     <message>
         <location filename="../app/qml/GeneratorPanel.qml" line="84"/>
         <source>Er läuft nur, wenn der Hauptschalter an ist. Dann leuchtet die Lampe im Pult.</source>
-        <translation>E leeft nëmmen, wann den Haaptschalter un ass. Da liicht d'Luucht am Pult.</translation>
+        <translation>E leeft nëmmen, wann den Haaptschalter un ass. Da liicht d&apos;Luucht am Pult.</translation>
     </message>
     <message>
         <location filename="../app/qml/GeneratorPanel.qml" line="85"/>
@@ -1587,12 +1587,12 @@
     <message>
         <location filename="../app/qml/GeneratorPanel.qml" line="86"/>
         <source>Frequenz: Wähle zuerst den Bereich, dann stellst du mit dem Regler fein ein. Mehr Hertz heißt höherer Ton.</source>
-        <translation>Frequenz: Wiel fir d'éischt de Beräich, dann stells du mam Regler fein an. Méi Hertz heescht méi héijen Toun.</translation>
+        <translation>Frequenz: Wiel fir d&apos;éischt de Beräich, dann stells du mam Regler fein an. Méi Hertz heescht méi héijen Toun.</translation>
     </message>
     <message>
         <location filename="../app/qml/GeneratorPanel.qml" line="87"/>
         <source>Spitze: So weit schwingt die Spannung nach oben und nach unten.</source>
-        <translation>Spëtzt: Sou wäit schwéngt d'Spannung no uewen an no ënnen.</translation>
+        <translation>Spëtzt: Sou wäit schwéngt d&apos;Spannung no uewen an no ënnen.</translation>
     </message>
     <message>
         <location filename="../app/qml/GeneratorPanel.qml" line="88"/>
@@ -2182,12 +2182,12 @@
 <context>
     <name>HelpToggle</name>
     <message>
-        <location filename="../app/qml/HelpToggle.qml" line="11"/>
+        <location filename="../app/qml/HelpToggle.qml" line="12"/>
         <source>Hilfe ausblenden</source>
         <translation>Hëllef ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/HelpToggle.qml" line="11"/>
+        <location filename="../app/qml/HelpToggle.qml" line="12"/>
         <source>Kurze Hilfe</source>
         <translation>Kuerz Hëllef</translation>
     </message>
@@ -4803,179 +4803,235 @@
 <context>
     <name>ScopePanel</name>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="125"/>
+        <location filename="../app/qml/ScopePanel.qml" line="126"/>
         <source>Spitze-Spitze %1</source>
         <translation>Spëtzt-Spëtzt %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="127"/>
+        <location filename="../app/qml/ScopePanel.qml" line="128"/>
         <source>Mittel %1</source>
         <translation>Mëttel %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="133"/>
+        <location filename="../app/qml/ScopePanel.qml" line="134"/>
         <source>XY: K1 waagrecht, K2 senkrecht</source>
         <translation>XY: K1 waagrecht, K2 senkrecht</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="134"/>
+        <location filename="../app/qml/ScopePanel.qml" line="135"/>
         <source>Rollbetrieb</source>
         <translation>Rollbetrib</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="135"/>
-        <location filename="../app/qml/ScopePanel.qml" line="331"/>
+        <location filename="../app/qml/ScopePanel.qml" line="136"/>
+        <location filename="../app/qml/ScopePanel.qml" line="379"/>
         <source>Trigger</source>
         <translation>Trigger</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="135"/>
+        <location filename="../app/qml/ScopePanel.qml" line="136"/>
         <source>frei laufend</source>
         <translation>fräi lafend</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="136"/>
-        <location filename="../app/qml/ScopePanel.qml" line="285"/>
+        <location filename="../app/qml/ScopePanel.qml" line="137"/>
+        <location filename="../app/qml/ScopePanel.qml" line="324"/>
         <source>Standbild</source>
         <translation>Standbild</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="147"/>
+        <location filename="../app/qml/ScopePanel.qml" line="148"/>
         <source>Stecke den Tastkopf K1 (Messen) in ein Feld. Bezug ist immer 0V.</source>
         <translation>Steech den Taschtkapp K1 (Moossen) an e Feld. Bezuch ass ëmmer 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="152"/>
+        <location filename="../app/qml/ScopePanel.qml" line="153"/>
         <source>Oszilloskop-Schirm</source>
         <translation>Oszilloskop-Schierm</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="203"/>
+        <location filename="../app/qml/ScopePanel.qml" line="164"/>
+        <location filename="../app/qml/ScopePanel.qml" line="289"/>
+        <source>Auto</source>
+        <translation>Auto</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="212"/>
+        <source>Oszilloskop: Standbild</source>
+        <translation>Oszilloskop: Standbild</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="212"/>
+        <source>Oszilloskop zeichnet</source>
+        <translation>Oszilloskop zeechent</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="220"/>
         <source>Oszilloskop</source>
         <translation>Oszilloskop</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="238"/>
-        <source>Das Oszilloskop zeichnet die Spannung an den Tastköpfen K1 und K2 über der Zeit. Bezug ist immer 0V.</source>
-        <translation>Den Oszilloskop zeechent d'Spannung un den Tastkäpp K1 a K2 iwwer d'Zäit. Bezuch ass ëmmer 0V.</translation>
+        <location filename="../app/qml/ScopePanel.qml" line="220"/>
+        <source>Oszilloskop – Standbild</source>
+        <translation>Oszilloskop – Standbild</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="239"/>
+        <location filename="../app/qml/ScopePanel.qml" line="255"/>
+        <source>Das Oszilloskop zeichnet die Spannung an den Tastköpfen K1 und K2 über der Zeit. Bezug ist immer 0V.</source>
+        <translation>Den Oszilloskop zeechent d&apos;Spannung un den Tastkäpp K1 a K2 iwwer d&apos;Zäit. Bezuch ass ëmmer 0V.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="256"/>
+        <source>»Auto« fängt das Signal ein: bei K1 und K2 die Volt je Kästchen, bei Zeit die Dauer, beim Trigger den Pegel.</source>
+        <translation>»Auto« fänkt d'Signal an: bei K1 a K2 d'Volt pro Këschtchen, bei Zäit d'Dauer, beim Trigger de Pegel.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="257"/>
         <source>Zeit: »−« und »+« ändern, wie lange ein Kästchen waagrecht dauert. »Rollen« schreibt langsam von rechts nach links wie ein Zeitschreiber.</source>
         <translation>Zäit: »−« an »+« änneren, wéi laang e Këschtchen waagrecht dauert. »Rollen« schreift lues vu riets no lénks wéi en Zäitschreiwer.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="240"/>
+        <location filename="../app/qml/ScopePanel.qml" line="258"/>
         <source>K1 und K2: »−« und »+« ändern, wie viel Volt ein Kästchen senkrecht ist. ▲ und ▼ schieben die Kurve.</source>
-        <translation>K1 a K2: »−« an »+« änneren, wéi vill Volt e Këschtchen senkrecht ass. ▲ an ▼ schéckt d'Kurv.</translation>
+        <translation>K1 a K2: »−« an »+« änneren, wéi vill Volt e Këschtchen senkrecht ass. ▲ an ▼ schéckt d&apos;Kurv.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="241"/>
+        <location filename="../app/qml/ScopePanel.qml" line="259"/>
         <source>Trigger: Er hält die Kurve still. Das Bild startet, wenn der Kanal den Pegel steigend ↗ oder fallend ↘ kreuzt.</source>
-        <translation>Trigger: E hält d'Kurv roueg. D'Bild fänkt un, wann de Kanal de Pegel eropgoend ↗ oder erofgoend ↘ kräizt.</translation>
+        <translation>Trigger: E hält d&apos;Kurv roueg. D&apos;Bild fänkt un, wann de Kanal de Pegel eropgoend ↗ oder erofgoend ↘ kräizt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="242"/>
-        <source>XY zeichnet K2 über K1. ⏸ hält das Bild an.</source>
-        <translation>XY zeechent K2 iwwer K1. ⏸ hält d'Bild un.</translation>
+        <location filename="../app/qml/ScopePanel.qml" line="260"/>
+        <source>XY zeichnet K2 über K1. Der Knopf mit den zwei Balken hält das Bild an.</source>
+        <translation>XY zeechent K2 iwwer K1. De Knäppchen mat den zwee Balken hält d'Bild un.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="251"/>
+        <location filename="../app/qml/ScopePanel.qml" line="269"/>
         <source>Zeit</source>
         <translation>Zäit</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="257"/>
+        <location filename="../app/qml/ScopePanel.qml" line="276"/>
         <source>Zeitbasis kürzer</source>
         <translation>Zäitbasis méi kuerz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="264"/>
+        <location filename="../app/qml/ScopePanel.qml" line="283"/>
         <source>Zeitbasis länger</source>
         <translation>Zäitbasis méi laang</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="271"/>
+        <location filename="../app/qml/ScopePanel.qml" line="290"/>
+        <source>Zeit einstellen, dass zwei bis fünf Schwingungen zu sehen sind</source>
+        <translation>Zäit sou astellen, datt zwou bis fënnef Schwéngungen ze gesi sinn</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="291"/>
+        <source>Zeit automatisch</source>
+        <translation>Zäit automatesch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="298"/>
         <source>Rollen</source>
         <translation>Rollen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="273"/>
+        <location filename="../app/qml/ScopePanel.qml" line="300"/>
         <source>Rollbetrieb: aufzeichnen wie ein Zeitschreiber</source>
         <translation>Rollbetrib: ophuelen wéi en Zäitschreiwer</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="279"/>
+        <location filename="../app/qml/ScopePanel.qml" line="306"/>
         <source>XY-Betrieb: K1 waagrecht, K2 senkrecht</source>
         <translation>XY-Betrib: K1 waagrecht, K2 senkrecht</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="285"/>
+        <location filename="../app/qml/ScopePanel.qml" line="324"/>
         <source>Weiterlaufen</source>
         <translation>Weiderlafen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="297"/>
+        <location filename="../app/qml/ScopePanel.qml" line="336"/>
         <source>K1 (durchgezogen)</source>
         <translation>K1 (duerchgezunn)</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="297"/>
+        <location filename="../app/qml/ScopePanel.qml" line="336"/>
         <source>K2 (gestrichelt)</source>
         <translation>K2 (gestrichelt)</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="303"/>
+        <location filename="../app/qml/ScopePanel.qml" line="343"/>
         <source>K%1 empfindlicher</source>
         <translation>K%1 méi empfindlech</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="309"/>
+        <location filename="../app/qml/ScopePanel.qml" line="349"/>
         <source>K%1 unempfindlicher</source>
         <translation>K%1 manner empfindlech</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="313"/>
+        <location filename="../app/qml/ScopePanel.qml" line="354"/>
         <source>Lage</source>
         <translation>Lag</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="317"/>
+        <location filename="../app/qml/ScopePanel.qml" line="358"/>
         <source>K%1 nach oben</source>
         <translation>K%1 no uewen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="322"/>
+        <location filename="../app/qml/ScopePanel.qml" line="363"/>
         <source>K%1 nach unten</source>
         <translation>K%1 no ënnen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="337"/>
+        <location filename="../app/qml/ScopePanel.qml" line="369"/>
+        <source>K%1 so einstellen, dass die ganze Kurve auf den Schirm passt</source>
+        <translation>K%1 sou astellen, datt déi ganz Kurv op de Schierm passt</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="370"/>
+        <source>K%1 automatisch</source>
+        <translation>K%1 automatesch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="386"/>
         <source>Triggerkanal wechseln</source>
         <translation>Triggerkanal wiesselen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="343"/>
+        <location filename="../app/qml/ScopePanel.qml" line="392"/>
         <source>steigende Flanke</source>
         <translation>steigend Flank</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="343"/>
+        <location filename="../app/qml/ScopePanel.qml" line="392"/>
         <source>fallende Flanke</source>
         <translation>falend Flank</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="351"/>
+        <location filename="../app/qml/ScopePanel.qml" line="399"/>
+        <source>Trigger auf die Mitte des Signals stellen, steigende Flanke</source>
+        <translation>Trigger op d'Mëtt vum Signal stellen, eropgoend Flank</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="400"/>
+        <source>Trigger automatisch</source>
+        <translation>Trigger automatesch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="408"/>
         <source>Triggerpegel tiefer</source>
         <translation>Triggerpegel méi déif</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="357"/>
+        <location filename="../app/qml/ScopePanel.qml" line="414"/>
         <source>Triggerpegel höher</source>
         <translation>Triggerpegel méi héich</translation>
     </message>
     <message>
-        <location filename="../app/qml/ScopePanel.qml" line="219"/>
+        <location filename="../app/qml/ScopePanel.qml" line="236"/>
         <source>Oszilloskop schließen</source>
         <translation>Oszilloskop zoumaachen</translation>
     </message>
@@ -6301,38 +6357,38 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="528"/>
+        <location filename="../app/src/lab_controller.cpp" line="530"/>
         <source>Forscher</source>
         <translation>Fuerscher</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="938"/>
-        <location filename="../app/src/lab_controller.cpp" line="998"/>
+        <location filename="../app/src/lab_controller.cpp" line="940"/>
+        <location filename="../app/src/lab_controller.cpp" line="1000"/>
         <source>Freies Labor</source>
         <translation>Fräie Labo</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1097"/>
+        <location filename="../app/src/lab_controller.cpp" line="1099"/>
         <source>Alles abbauen</source>
         <translation>Alles ofbauen</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1102"/>
+        <location filename="../app/src/lab_controller.cpp" line="1104"/>
         <source>Musteraufbau zeigen</source>
         <translation>Musteropbau weisen</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1506"/>
+        <location filename="../app/src/lab_controller.cpp" line="1508"/>
         <source>%1 Spitze · %2</source>
         <translation>%1 Spëtzt · %2</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1928"/>
+        <location filename="../app/src/lab_controller.cpp" line="1930"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dësen Deel gëtt mat Stuf %1 fräigeschalt.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1989"/>
+        <location filename="../app/src/lab_controller.cpp" line="1991"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dëst Modul gëtt mat Stuf %1 fräigeschalt.</translation>
     </message>

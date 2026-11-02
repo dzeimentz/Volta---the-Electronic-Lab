@@ -72,6 +72,38 @@ ScopeMeasure scopeMeasure(const std::vector<ScopeSample>& samples, std::size_t c
     return m;
 }
 
+void scopeAutoChannel(ScopeSettings& s, std::size_t channel, const ScopeMeasure& m) {
+    if (!m.any || channel >= kScopeChannels) return;
+    auto& ch = s.channels[channel];
+    ch.position = m.min >= 0.0 ? -3 : m.max <= 0.0 ? 3 : 0;
+    const double up = (kScopeDivY / 2 - ch.position) * 0.9, down = (kScopeDivY / 2 + ch.position) * 0.9;
+    const auto& vpd = scopeVoltsPerDiv();
+    ch.voltsIndex = static_cast<int>(vpd.size()) - 1;
+    for (std::size_t i = 0; i < vpd.size(); ++i)
+        if (m.max <= up * vpd[i] && -m.min <= down * vpd[i]) {
+            ch.voltsIndex = static_cast<int>(i);
+            break;
+        }
+}
+
+int scopeAutoTimebase(double frequencyHz) {
+    if (frequencyHz <= 0.0) return -1;
+    const auto& tb = scopeTimebases();
+    for (int i = 0; i <= kScopeLastNormalTimebase; ++i)
+        if (tb[static_cast<std::size_t>(i)] * kScopeDivX * frequencyHz >= 2.0) return i;
+    return kScopeLastNormalTimebase;
+}
+
+void scopeAutoTrigger(ScopeSettings& s, std::size_t channel, const ScopeMeasure& m) {
+    if (!m.any || channel >= kScopeChannels) return;
+    s.triggerChannel = static_cast<int>(channel);
+    s.triggerRising = true;
+    const double mid = 0.5 * (m.min + m.max);
+    // auf 0,1 V wie die Anzeige; bei kleinen Signalen genauer, damit der Pegel zwischen Minimum und Maximum bleibt
+    s.triggerLevelV = std::clamp(m.max - m.min >= 0.5 ? std::round(mid * 10.0) / 10.0 : std::round(mid * 1000.0) / 1000.0,
+                                 -20.0, 20.0);
+}
+
 ScopeFrame scopeFrame(const std::vector<ScopeSample>& samples, const ScopeSettings& settings,
                       const std::array<bool, kScopeChannels>& has) {
     ScopeFrame f;

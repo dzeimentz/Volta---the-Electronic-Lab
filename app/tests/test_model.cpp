@@ -390,6 +390,45 @@ private slots:
         QCOMPARE(p(0.0), std::string("0.00 \u00B5W"));
     }
 
+    // Oszilloskop »Auto«: Volt je Teilung und Lage, Zeitbasis fuer 2 bis 5 Perioden, Trigger in der Mitte
+    void scopeAutoCatchesSignal() {
+        model::ScopeSettings set;
+        model::ScopeMeasure m;
+        m.any = true;
+        m.min = -5.0; m.max = 5.0; // Sinus 5 V Spitze: Nulllinie Mitte, 2 V je Teilung (3,6 Teilungen = 7,2 V)
+        model::scopeAutoChannel(set, 0, m);
+        QCOMPARE(set.channels[0].position, 0);
+        QCOMPARE(model::scopeVoltsPerDiv()[static_cast<std::size_t>(set.channels[0].voltsIndex)], 2.0);
+        m.min = 0.0; m.max = 3.0; // nur positiv: Nulllinie 3 Teilungen unter der Mitte, 0,5 V je Teilung (6,3 Teilungen)
+        model::scopeAutoChannel(set, 1, m);
+        QCOMPARE(set.channels[1].position, -3);
+        QCOMPARE(model::scopeVoltsPerDiv()[static_cast<std::size_t>(set.channels[1].voltsIndex)], 0.5);
+        m.min = -0.04; m.max = -0.01; // klein und negativ: Nulllinie oben, 10 mV je Teilung
+        model::scopeAutoChannel(set, 1, m);
+        QCOMPARE(set.channels[1].position, 3);
+        QCOMPARE(set.channels[1].voltsIndex, 0);
+        m.min = -30.0; m.max = 30.0; // zu gross: groesste Stellung
+        model::scopeAutoChannel(set, 0, m);
+        QCOMPARE(set.channels[0].voltsIndex, static_cast<int>(model::scopeVoltsPerDiv().size()) - 1);
+        // Zeit: 50 Hz -> 5 ms je Teilung (2,5 Perioden), 1 kHz -> 200 us, 1 Hz -> 200 ms, ohne Periode -1
+        auto tb = [](double f) { return model::scopeTimebases()[static_cast<std::size_t>(model::scopeAutoTimebase(f))]; };
+        QCOMPARE(tb(50.0), 5e-3);
+        QCOMPARE(tb(1000.0), 200e-6);
+        QCOMPARE(tb(1.0), 0.2);
+        QCOMPARE(tb(0.05), 1.0); // langsamer als der Normalbetrieb: laengste Zeitbasis
+        QCOMPARE(model::scopeAutoTimebase(0.0), -1);
+        // Trigger: Kanal, steigend, Pegel in der Mitte (auf 0,1 V gerundet)
+        set.triggerRising = false;
+        m.min = 1.0; m.max = 4.27;
+        model::scopeAutoTrigger(set, 1, m);
+        QCOMPARE(set.triggerChannel, 1);
+        QVERIFY(set.triggerRising);
+        QVERIFY(std::fabs(set.triggerLevelV - 2.6) < 1e-9);
+        m.min = 0.10; m.max = 0.13; // kleines Signal: genauer, Pegel bleibt zwischen Minimum und Maximum
+        model::scopeAutoTrigger(set, 0, m);
+        QVERIFY(set.triggerLevelV > m.min && set.triggerLevelV < m.max);
+    }
+
     // Oszilloskop: Trigger auf steigender Flanke, Kennwerte, Rollbetrieb, XY
     void scopeFrameTriggersAndMeasures() {
         std::vector<model::ScopeSample> s;

@@ -401,6 +401,15 @@ private slots:
         const double peak = s->board().desk.acRmsV * std::sqrt(2.0);
         QVERIFY2(std::fabs(f.measure[0].max - peak) < 0.02 * peak, qPrintable(QString::number(f.measure[0].max)));
         QVERIFY2(std::fabs(f.measure[0].frequencyHz - 50.0) < 1.0, qPrintable(QString::number(f.measure[0].frequencyHz)));
+        // »Auto« aus dem ganzen Puffer: 12,7 V Spitze -> 5 V je Teilung, Mitte; 50 Hz -> 5 ms je Teilung; Trigger 0 V
+        const model::ScopeMeasure all = model::scopeMeasure(snap.scope, 0, -1e300, 1e300);
+        model::ScopeSettings autoSet;
+        model::scopeAutoChannel(autoSet, 0, all);
+        QCOMPARE(autoSet.channels[0].position, 0);
+        QCOMPARE(model::scopeVoltsPerDiv()[static_cast<std::size_t>(autoSet.channels[0].voltsIndex)], 5.0);
+        QCOMPARE(model::scopeAutoTimebase(all.frequencyHz), 5);
+        model::scopeAutoTrigger(autoSet, 0, all);
+        QVERIFY(std::fabs(autoSet.triggerLevelV) < 0.11);
         // zweiter Tastkopf, dritter abgelehnt
         QVERIFY(s->addPart("tastkopf", "B1", Orientation::Horizontal, Span::Short, &id));
         QCOMPARE(id, std::string("TK2"));

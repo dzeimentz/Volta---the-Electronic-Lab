@@ -98,4 +98,13 @@ ScopeFrame scopeFrame(const std::vector<ScopeSample>& samples, const ScopeSettin
 // zwischen Minimum und Maximum (Hysterese 10 % der Spannweite)
 ScopeMeasure scopeMeasure(const std::vector<ScopeSample>& samples, std::size_t channel, double fromS, double toS);
 
+// Auto (Konzept 5.2): faengt das Signal ein; m sind die Kennwerte ueber den ganzen Puffer.
+// Kanal: Nulllinie in der Mitte, bei nur positiver (negativer) Spannung 3 Teilungen darunter (darueber), und die
+// empfindlichste Stellung, bei der Minimum und Maximum mit etwas Rand auf den Schirm passen
+void scopeAutoChannel(ScopeSettings& s, std::size_t channel, const ScopeMeasure& m);
+// Zeit: kuerzeste Zeitbasis im Normalbetrieb, bei der mindestens zwei Perioden auf dem Schirm stehen (2 bis 5)
+int scopeAutoTimebase(double frequencyHz);
+// Trigger: dieser Kanal, steigende Flanke, Pegel in der Mitte zwischen Minimum und Maximum
+void scopeAutoTrigger(ScopeSettings& s, std::size_t channel, const ScopeMeasure& m);
+
 } // namespace volta::model

@@ -214,6 +214,8 @@ qt_add_qml_module(volta_ui
         qml/GeneratorPanel.qml
         qml/HelpToggle.qml
         qml/HelpBox.qml
+        qml/PanelButton.qml
+        qml/PowerLed.qml
         qml/TrimmerPanel.qml
         qml/LicensesDialog.qml
         qml/ToolToken.qml

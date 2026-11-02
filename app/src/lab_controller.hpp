@@ -12,11 +12,13 @@
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
 
+#include <array>
 #include <memory>
 
 #include "model/build_guide.hpp"
 #include "model/experiment_flow.hpp"
 #include "model/lab_session.hpp"
+#include "model/oscilloscope.hpp"
 #include "model/recorder.hpp"
 #include "model/tone_synth.hpp"
 #include "services/content_repository.hpp"
@@ -638,6 +640,12 @@ private:
     double m_sinceNotifyS = 0.0;
     QSet<QString> m_destroyedSeen; // bereits gemeldete kaputte Bauteile (geheilt: wieder meldbar)
     void checkDestroyed();
+    // Oszilloskop »Auto« fuer die Zeit: sucht die Periode; ohne erkennbare Periode laengere Zeitbasis und neu messen,
+    // sobald der Puffer gefuellt ist (hoechstens kScopeAutoTries Durchgaenge)
+    QTimer m_scopeAutoTimer;
+    int m_scopeAutoTries = 0;
+    void scopeAutoTimeStep();
+    bool scopeBufferMeasure(std::array<model::ScopeMeasure, model::kScopeChannels>& m) const;
     QString m_taskLink; // aktuelle Aufgabe als Link (aufgabe.txt im Profil)
     QVariantMap taskMap(const services::task::Task& t) const;
     void loadTask();
