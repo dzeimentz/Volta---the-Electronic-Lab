@@ -2627,7 +2627,7 @@
         <translation>Laangen Drock schalt d&apos;Automatik ëm.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1045"/>
+        <location filename="../app/qml/Lab.qml" line="1048"/>
         <source>Ganze Platte zeigen</source>
         <translation>Ganz Plack weisen</translation>
     </message>
@@ -2668,12 +2668,12 @@
         <translation>Widderhuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1263"/>
+        <location filename="../app/qml/Lab.qml" line="1266"/>
         <source>Weniger Felder je Reihe</source>
         <translation>Manner Felder pro Rei</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1252"/>
+        <location filename="../app/qml/Lab.qml" line="1255"/>
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>
@@ -2711,12 +2711,12 @@
         <translation>Stiechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1256"/>
+        <location filename="../app/qml/Lab.qml" line="1259"/>
         <source>Felder je Reihe: %1</source>
         <translation>Felder pro Rei: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1245"/>
+        <location filename="../app/qml/Lab.qml" line="1248"/>
         <source>Mehr Felder je Reihe</source>
         <translation>Méi Felder pro Rei</translation>
     </message>
@@ -2812,194 +2812,194 @@
         <translation>Zäit %1 s</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="882"/>
-        <location filename="../app/qml/Lab.qml" line="902"/>
+        <location filename="../app/qml/Lab.qml" line="885"/>
+        <location filename="../app/qml/Lab.qml" line="905"/>
         <source>%1 wird mit Stufe %2 freigeschaltet.</source>
         <translation>%1 gëtt mat Stuf %2 fräigeschalt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="915"/>
+        <location filename="../app/qml/Lab.qml" line="918"/>
         <source>Module gehören in die Modulleiste unten.</source>
         <translation>Moduler gehéieren an d&apos;Modulläischt ënnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1291"/>
+        <location filename="../app/qml/Lab.qml" line="1294"/>
         <source>Löschen: Ausgewähltes antippen oder Bauteil hierher ziehen</source>
         <translation>Läschen: Dat Ausgewielt untippen oder Deel heihinner zéien</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1292"/>
-        <location filename="../app/qml/Lab.qml" line="2087"/>
+        <location filename="../app/qml/Lab.qml" line="1295"/>
+        <location filename="../app/qml/Lab.qml" line="2090"/>
         <source>Löschen</source>
         <translation>Läschen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1462"/>
+        <location filename="../app/qml/Lab.qml" line="1465"/>
         <source>Leitung %1 von %2 nach %3</source>
         <translation>Leitung %1 vu %2 op %3</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1633"/>
+        <location filename="../app/qml/Lab.qml" line="1636"/>
         <source>Licht, Wärme, Wasser</source>
         <translation>Liicht, Hëtzt, Waasser</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1640"/>
+        <location filename="../app/qml/Lab.qml" line="1643"/>
         <source>Raum hell</source>
         <translation>Raum hell</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1640"/>
+        <location filename="../app/qml/Lab.qml" line="1643"/>
         <source>Dämmerung</source>
         <translation>Dämmerung</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1640"/>
+        <location filename="../app/qml/Lab.qml" line="1643"/>
         <source>Dunkel</source>
         <translation>Däischter</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1643"/>
+        <location filename="../app/qml/Lab.qml" line="1646"/>
         <source>Raumlicht umschalten</source>
         <translation>Raumliicht ëmschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1709"/>
+        <location filename="../app/qml/Lab.qml" line="1712"/>
         <source>Spannungsanzeige ein/aus</source>
         <translation>Spannungsanzeig un/aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1721"/>
+        <location filename="../app/qml/Lab.qml" line="1724"/>
         <source>Zeitschreiber Kanal %1: Messgerät</source>
         <translation>Zäitschreiwer Kanal %1: Miessapparat</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1722"/>
+        <location filename="../app/qml/Lab.qml" line="1725"/>
         <source>Zeitschreiber Kanal %1: hier messen</source>
         <translation>Zäitschreiwer Kanal %1: hei moossen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1738"/>
+        <location filename="../app/qml/Lab.qml" line="1741"/>
         <source>Drehen</source>
         <translation>Dréien</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1743"/>
+        <location filename="../app/qml/Lab.qml" line="1746"/>
         <source>Umdrehen (Polung)</source>
         <translation>Ëmdréien (Polung)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1748"/>
+        <location filename="../app/qml/Lab.qml" line="1751"/>
         <source>Kurz stecken</source>
         <translation>Kuerz stiechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1748"/>
+        <location filename="../app/qml/Lab.qml" line="1751"/>
         <source>Lang stecken</source>
         <translation>Laang stiechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1758"/>
+        <location filename="../app/qml/Lab.qml" line="1761"/>
         <source>Wert</source>
         <translation>Wäert</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1779"/>
+        <location filename="../app/qml/Lab.qml" line="1782"/>
         <source>Nennspannung</source>
         <translation>Nennspannung</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1786"/>
+        <location filename="../app/qml/Lab.qml" line="1789"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1797"/>
+        <location filename="../app/qml/Lab.qml" line="1800"/>
         <source>Reparieren</source>
         <translation>Reparéieren</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1804"/>
+        <location filename="../app/qml/Lab.qml" line="1807"/>
         <source>Entfernen</source>
         <translation>Ewechhuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1817"/>
+        <location filename="../app/qml/Lab.qml" line="1820"/>
         <source>Blick hinein</source>
         <translation>Bléck eran</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1822"/>
+        <location filename="../app/qml/Lab.qml" line="1825"/>
         <source>Herausnehmen</source>
         <translation>Eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1871"/>
+        <location filename="../app/qml/Lab.qml" line="1874"/>
         <source>Ausschalten</source>
         <translation>Ausschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1871"/>
+        <location filename="../app/qml/Lab.qml" line="1874"/>
         <source>Einschalten</source>
         <translation>Uschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1876"/>
+        <location filename="../app/qml/Lab.qml" line="1879"/>
         <source>Wegräumen</source>
         <translation>Ewechraumen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1893"/>
+        <location filename="../app/qml/Lab.qml" line="1896"/>
         <source>Farbe: %1</source>
         <translation>Faarf: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1905"/>
+        <location filename="../app/qml/Lab.qml" line="1908"/>
         <source>Leitung löschen</source>
         <translation>Leitung läschen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2063"/>
+        <location filename="../app/qml/Lab.qml" line="2066"/>
         <source>Alles abbauen?</source>
         <translation>Alles ofbauen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2063"/>
+        <location filename="../app/qml/Lab.qml" line="2066"/>
         <source>Löschen?</source>
         <translation>Läschen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2070"/>
+        <location filename="../app/qml/Lab.qml" line="2073"/>
         <source>%1 %2 von der Grundplatte nehmen?</source>
         <translation>%1 %2 vun der Grondplack huelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2071"/>
+        <location filename="../app/qml/Lab.qml" line="2074"/>
         <source>Diese Leitung entfernen?</source>
         <translation>Dës Leitung ewechhuelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2072"/>
+        <location filename="../app/qml/Lab.qml" line="2075"/>
         <source>%1 %2 aus der Modulleiste nehmen?</source>
         <translation>%1 %2 aus der Modulläischt huelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2073"/>
+        <location filename="../app/qml/Lab.qml" line="2076"/>
         <source>Alle Bauteile, Leitungen und Module von der Grundplatte nehmen?</source>
         <translation>All Deeler, Leitungen a Moduler vun der Grondplack huelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2074"/>
+        <location filename="../app/qml/Lab.qml" line="2077"/>
         <source>Mit »Rückgängig« holst du es wieder zurück.</source>
         <translation>Mat »Réckgängeg« hëls du et erëm zréck.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2081"/>
+        <location filename="../app/qml/Lab.qml" line="2084"/>
         <source>Abbrechen</source>
         <translation>Ofbriechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2087"/>
+        <location filename="../app/qml/Lab.qml" line="2090"/>
         <source>Alles abbauen</source>
         <translation>Alles ofbauen</translation>
     </message>
@@ -4792,65 +4792,68 @@
 <context>
     <name>SchematicView</name>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="31"/>
         <location filename="../app/qml/SchematicView.qml" line="36"/>
-        <location filename="../app/qml/SchematicView.qml" line="37"/>
-        <location filename="../app/qml/SchematicView.qml" line="48"/>
+        <location filename="../app/qml/SchematicView.qml" line="41"/>
+        <location filename="../app/qml/SchematicView.qml" line="42"/>
+        <location filename="../app/qml/SchematicView.qml" line="53"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="55"/>
+        <location filename="../app/qml/SchematicView.qml" line="60"/>
         <source>Schaltplan</source>
         <translation>Schaltplang</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="71"/>
+        <location filename="../app/qml/SchematicView.qml" line="76"/>
+        <location filename="../app/qml/SchematicView.qml" line="91"/>
         <source>Feldnamen</source>
         <translation>Feldnimm</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="73"/>
+        <location filename="../app/qml/SchematicView.qml" line="77"/>
+        <location filename="../app/qml/SchematicView.qml" line="93"/>
         <source>Feldnamen ausblenden</source>
         <translation>Feldnimm ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="73"/>
+        <location filename="../app/qml/SchematicView.qml" line="77"/>
+        <location filename="../app/qml/SchematicView.qml" line="93"/>
         <source>Feldnamen zeigen</source>
         <translation>Feldnimm weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="90"/>
+        <location filename="../app/qml/SchematicView.qml" line="112"/>
         <source>Schaltplan verkleinern</source>
         <translation>Schaltplang méi kleng maachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="97"/>
+        <location filename="../app/qml/SchematicView.qml" line="119"/>
         <source>%1 %</source>
         <translation>%1 %</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="101"/>
+        <location filename="../app/qml/SchematicView.qml" line="122"/>
         <source>Schaltplan einpassen</source>
         <translation>Schaltplang apassen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="113"/>
+        <location filename="../app/qml/SchematicView.qml" line="134"/>
         <source>Schaltplan vergrößern</source>
         <translation>Schaltplang méi grouss maachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="123"/>
+        <location filename="../app/qml/SchematicView.qml" line="144"/>
         <source>Sobald du Bauteile steckst und Leitungen ziehst, entsteht hier der Schaltplan.</source>
         <translation>Soubal wéi s du Deeler stéchs a Leitungen zitts, entsteet hei de Schaltplang.</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="183"/>
+        <location filename="../app/qml/SchematicView.qml" line="205"/>
         <source>Knoten %1 auf der Grundplatte zeigen</source>
         <translation>Knuet %1 op der Grondplack weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/SchematicView.qml" line="237"/>
+        <location filename="../app/qml/SchematicView.qml" line="259"/>
         <source>Messgerät</source>
         <translation>Miessapparat</translation>
     </message>

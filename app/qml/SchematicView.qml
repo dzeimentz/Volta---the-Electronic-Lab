@@ -17,6 +17,11 @@ Rectangle {
     // oder verkleinern (100 % = passend); Volta 1 behaelt seine feste Untergrenze 0,75
     readonly property bool zoomable: controller.band !== "" && controller.band !== "volta1"
     property int zoomPercent: 100
+    // Breite der Spalte bei 100 % (Lab.qml): beim Verkleinern wird auch die Spalte schmaler, der Plan bleibt aber
+    // im selben Massstab wie bei voller Breite (sonst schrumpfte er doppelt)
+    property real fullWidth: width
+    // schmaler als Titel und Knoepfe wird die Spalte nicht
+    readonly property real headerWidth: title.width + zoomRow.width + fieldNamesButton.width + 30
     signal partSelected(string id)
     signal nodeSelected(var anchors)
 
@@ -58,9 +63,24 @@ Rectangle {
         color: Theme.navy
     }
     // Feldnamen an den Knoten ein/aus (aufgeraeumter Plan)
-    ToolButton {
+    PanelButton {
         id: fieldNamesButton
         objectName: "schematicFieldNames"
+        anchors.right: parent.right
+        anchors.rightMargin: 4
+        y: 4
+        height: Theme.control
+        checkable: true
+        checked: view.showFieldNames
+        onClicked: view.showFieldNames = !view.showFieldNames
+        text: qsTr("Feldnamen")
+        Accessible.name: view.showFieldNames ? qsTr("Feldnamen ausblenden") : qsTr("Feldnamen zeigen")
+        visible: view.zoomable
+    }
+    // Volta 1 (eingefroren): Feldnamen-Knopf ohne Rahmen wie bisher
+    ToolButton {
+        objectName: "schematicFieldNamesV1"
+        visible: !view.zoomable
         anchors.right: parent.right
         anchors.rightMargin: 4
         y: 0
@@ -74,11 +94,13 @@ Rectangle {
     }
     // Groesse des Plans: - und + in Schritten von 10 %, dazwischen die Stufe (Antippen: wieder passend)
     Row {
+        id: zoomRow
         visible: view.zoomable
         anchors.right: fieldNamesButton.left
-        anchors.rightMargin: 4
-        y: 0
-        ToolButton {
+        anchors.rightMargin: 6
+        y: 4
+        spacing: 4
+        PanelButton {
             objectName: "schematicZoomOut"
             width: Theme.control; height: Theme.control
             text: "−"
@@ -90,18 +112,17 @@ Rectangle {
             ToolTip.text: qsTr("Schaltplan verkleinern")
             Accessible.name: ToolTip.text
         }
-        ToolButton {
+        PanelButton {
             objectName: "schematicZoomFit"
             height: Theme.control
             width: Math.max(Theme.control, implicitWidth)
             text: qsTr("%1 %").arg(view.zoomPercent)
-            font.pixelSize: Math.round(11 * Theme.fontScale)
             onClicked: view.zoomPercent = 100
             ToolTip.visible: hovered
             ToolTip.text: qsTr("Schaltplan einpassen")
             Accessible.name: ToolTip.text
         }
-        ToolButton {
+        PanelButton {
             objectName: "schematicZoomIn"
             width: Theme.control; height: Theme.control
             text: "+"
@@ -141,7 +162,8 @@ Rectangle {
             transformOrigin: Item.TopLeft
             // passend, hoechstens 1,3-fach; Volta 1 mindestens 0,75-fach (lesbar), ab Volta 2 ganz sichtbar und mit
             // +/- einstellbar; passt der Plan nicht, laesst er sich verschieben
-            readonly property real fit: width > 0 ? Math.min(1.3, flick.width / width, flick.height / height) : 1
+            readonly property real fit: width > 0
+                ? Math.min(1.3, (view.zoomable ? view.fullWidth - 16 : flick.width) / width, flick.height / height) : 1
             scale: view.zoomable ? fit * view.zoomPercent / 100 : Math.max(0.75, fit)
 
             // Knotenleitungen (je Knoten ein Pfad; hervorgehoben beim Antippen)
