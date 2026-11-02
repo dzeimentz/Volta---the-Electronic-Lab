@@ -1070,7 +1070,8 @@ Item {
                 onGroupTapped: (name) => lab.highlightGroup = lab.highlightGroup === name ? "" : name
                 onInfoRequested: (name) => deskPartInfo.show(name)
                 trayX: lab.deskTrayX
-                onTrayRequested: deskTray.open()
+                onTrayRequested: deskTray.openFor(false)
+                onTrayRemoveRequested: deskTray.openFor(true)
                 onGeneratorRequested: generatorPanel.open()
                 onTracerRequested: tracerPanel.open()
             }

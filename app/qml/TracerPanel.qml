@@ -49,10 +49,22 @@ Popup {
         spacing: 8
         Row {
             width: parent.width
+            spacing: 4
+            // Betriebslampe wie im Pult: eigenes Netzteil, laeuft immer; im Standbild gelb
+            Item {
+                width: 22; height: Theme.control
+                PowerLed {
+                    objectName: "tracerLed"
+                    anchors.centerIn: parent
+                    on: true
+                    paused: panel.frozen
+                    accessibleName: panel.frozen ? qsTr("Kennlinienschreiber: Standbild") : qsTr("Kennlinienschreiber zeichnet")
+                }
+            }
             Label {
                 id: titleLabel
                 objectName: "tracerTitle"
-                width: parent.width - closeButton.width
+                width: parent.width - 22 - closeButton.width - 2 * parent.spacing
                 height: Theme.control
                 verticalAlignment: Text.AlignVCenter
                 text: qsTr("Kennlinienschreiber")
@@ -72,7 +84,7 @@ Popup {
                         panel.clampY(start.y + centroid.scenePosition.y - centroid.scenePressPosition.y))
                 }
             }
-            ToolButton {
+            PanelButton {
                 id: closeButton
                 width: Theme.control; height: Theme.control
                 contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 18 } }
@@ -166,24 +178,25 @@ Popup {
             width: parent.width
             spacing: 6
             Label { height: Theme.control; verticalAlignment: Text.AlignVCenter; text: qsTr("Spannung"); color: Theme.navy; font.bold: true }
-            Button {
+            PanelButton {
                 objectName: "tracerVoltsDown"
                 width: Theme.control; height: Theme.control; text: "−"
                 enabled: (panel.ts.voltsIndex || 0) > 0
                 onClicked: { panel.controller.setTracer("volts", panel.ts.voltsIndex - 1); panel.kept = []; panel.refresh() }
                 Accessible.name: qsTr("Prüfspannung kleiner")
             }
-            Label { width: 72; height: Theme.control; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; text: panel.ts.rangeText || ""; color: Theme.navy }
-            Button {
+            PanelValue { objectName: "tracerVoltsValue"; width: 84; text: panel.ts.rangeText || "" }
+            PanelButton {
                 objectName: "tracerVoltsUp"
                 width: Theme.control; height: Theme.control; text: "+"
                 enabled: (panel.ts.voltsIndex || 0) < (panel.ts.voltsCount || 1) - 1
                 onClicked: { panel.controller.setTracer("volts", panel.ts.voltsIndex + 1); panel.kept = []; panel.refresh() }
                 Accessible.name: qsTr("Prüfspannung größer")
             }
-            Button {
+            PanelButton {
                 objectName: "tracerBipolar"
                 height: Theme.control
+                leftPadding: 12; rightPadding: 12
                 checkable: true
                 checked: panel.ts.bipolar === true
                 text: qsTr("beide Richtungen")
@@ -191,29 +204,29 @@ Popup {
                 Accessible.name: qsTr("Prüfspannung in beide Richtungen")
             }
             Label { height: Theme.control; verticalAlignment: Text.AlignVCenter; text: qsTr("Strom höchstens"); color: Theme.navy; font.bold: true }
-            Button {
+            PanelButton {
                 objectName: "tracerLimitDown"
                 width: Theme.control; height: Theme.control; text: "−"
                 enabled: (panel.ts.limitIndex || 0) > 0
                 onClicked: { panel.controller.setTracer("limit", panel.ts.limitIndex - 1); panel.kept = []; panel.refresh() }
                 Accessible.name: qsTr("Strombegrenzung kleiner")
             }
-            Label { width: 64; height: Theme.control; horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter; text: panel.ts.limitText || ""; color: Theme.navy }
-            Button {
+            PanelValue { width: 76; text: panel.ts.limitText || "" }
+            PanelButton {
                 objectName: "tracerLimitUp"
                 width: Theme.control; height: Theme.control; text: "+"
                 enabled: (panel.ts.limitIndex || 0) < (panel.ts.limitCount || 1) - 1
                 onClicked: { panel.controller.setTracer("limit", panel.ts.limitIndex + 1); panel.kept = []; panel.refresh() }
                 Accessible.name: qsTr("Strombegrenzung größer")
             }
-            Button {
+            PanelButton {
                 objectName: "tracerKeep"
                 height: Theme.control
                 text: panel.kept.length > 0 ? qsTr("Vergessen") : qsTr("Merken")
                 onClicked: panel.kept = panel.kept.length > 0 ? [] : (panel.ts.points || []).slice()
                 Accessible.name: panel.kept.length > 0 ? qsTr("Gemerkte Kurve vergessen") : qsTr("Kurve zum Vergleich merken")
             }
-            Button {
+            PanelButton {
                 objectName: "tracerFreeze"
                 height: Theme.control
                 checkable: true

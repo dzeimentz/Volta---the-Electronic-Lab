@@ -40,9 +40,20 @@ Popup {
         spacing: 10
         Row {
             width: parent.width
+            spacing: 4
+            // Betriebslampe wie im Pult: der Generator laeuft mit dem Hauptschalter
+            Item {
+                width: 22; height: Theme.control
+                PowerLed {
+                    objectName: "generatorPanelLed"
+                    anchors.centerIn: parent
+                    on: panel.controller !== null && panel.controller.mainSwitch
+                    accessibleName: on ? qsTr("Generator läuft") : qsTr("Generator aus")
+                }
+            }
             Label {
                 objectName: "generatorTitle"
-                width: parent.width - helpButton.width - closeButton.width
+                width: parent.width - 22 - helpButton.width - closeButton.width - 3 * parent.spacing
                 height: Theme.control
                 verticalAlignment: Text.AlignVCenter
                 text: qsTr("Funktionsgenerator")

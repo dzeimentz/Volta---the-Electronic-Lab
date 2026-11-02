@@ -4,7 +4,7 @@
 // Trigger (Kanal, Flanke, Pegel), Rollbetrieb (der Zeitschreiber, ohne Trigger von rechts nach links), XY-Betrieb
 // und Standbild. Spitze-Spitze, Frequenz und Periode stehen als Zahl in der Kanalfarbe daneben. Die Bedienung steht
 // in Gruppen mit Rahmen (Zeit, K1, K2, Trigger), jede mit »Auto«, das das Signal einfaengt; »?« blendet eine kurze
-// Hilfe ein. Die Betriebslampe im Kopf leuchtet gruen, im Standbild gelb.
+// Hilfe ein. Es laeuft mit dem Hauptschalter; die Betriebslampe im Kopf leuchtet gruen, im Standbild gelb, aus dunkel.
 // Alles Bedienhandlungen; das Bild rechnet der LabController (model/oscilloscope).
 import QtQuick
 import QtQuick.Controls.Basic
@@ -21,11 +21,13 @@ Rectangle {
     property bool frozen: false // Standbild: das Bild bleibt stehen, die Simulation laeuft weiter
     property bool showHelp: false // »?«: kurze Hilfe ueber den Bedienelementen
     readonly property var chans: sc.channels || []
+    // Das Oszilloskop haengt am Hauptschalter (wie Generator und Wechselquelle): aus ist der Schirm dunkel
+    readonly property bool powered: controller !== null && controller.mainSwitch
 
     function refresh() { panel.sc = panel.controller.scopeState() }
     Timer { // ca. 15 Bilder je Sekunde
         interval: 66
-        running: panel.visible && !panel.frozen
+        running: panel.visible && panel.powered && !panel.frozen
         repeat: true
         triggeredOnStart: true
         onTriggered: panel.refresh()
@@ -154,6 +156,26 @@ Rectangle {
     }
 
     // ---------------------------------------------------------------- Bedienung
+    // Schirm aus (Hauptschalter aus): dunkel, ohne Raster und Kurven, mit Hinweis
+    Rectangle {
+        objectName: "scopeOff"
+        visible: !panel.powered
+        anchors.fill: screen
+        radius: screen.radius
+        color: "#070D0B"
+        Label {
+            anchors.fill: parent
+            anchors.margins: 12
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            text: qsTr("Aus. Schalte den Hauptschalter ein.")
+            color: "#8FA39A"
+            font.pixelSize: Math.round(14 * Theme.fontScale)
+            font.bold: true
+        }
+    }
+
     component Btn: PanelButton {
         height: Theme.control
         width: Math.max(Theme.control, implicitWidth)
@@ -164,26 +186,7 @@ Rectangle {
         text: qsTr("Auto")
         onClicked: panel.controller.setScope("auto", what)
     }
-    readonly property bool anyProbe: chans.some(c => c && c.has)
-    // eingestellter Wert (Zeit/Div, V/Div, Triggerpegel): gerahmt wie die Knoepfe, aber weiss mit fetter Schrift,
-    // damit er sich als Anzeige von den Knoepfen abhebt
-    component Value: Rectangle {
-        property alias text: valueText.text
-        height: Theme.control
-        radius: 6
-        color: "white"
-        border.color: "#7F93A8"
-        border.width: 1.5
-        Label {
-            id: valueText
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            color: Theme.navy
-            font.pixelSize: Math.round(14 * Theme.fontScale)
-            font.bold: true
-        }
-    }
+    readonly property bool anyProbe: powered && chans.some(c => c && c.has)
     component Caption: Label {
         height: Theme.control
         verticalAlignment: Text.AlignVCenter
@@ -226,9 +229,10 @@ Rectangle {
             PowerLed {
                 objectName: "scopeLed"
                 anchors.centerIn: parent
-                on: panel.visible
+                on: panel.visible && panel.powered
                 paused: panel.frozen
-                accessibleName: panel.frozen ? qsTr("Oszilloskop: Standbild") : qsTr("Oszilloskop zeichnet")
+                accessibleName: !panel.powered ? qsTr("Oszilloskop aus")
+                              : panel.frozen ? qsTr("Oszilloskop: Standbild") : qsTr("Oszilloskop zeichnet")
             }
         }
         Label {
@@ -236,7 +240,7 @@ Rectangle {
             height: Theme.control
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            text: panel.frozen ? qsTr("Oszilloskop – Standbild") : qsTr("Oszilloskop")
+            text: !panel.powered ? qsTr("Oszilloskop – aus") : panel.frozen ? qsTr("Oszilloskop – Standbild") : qsTr("Oszilloskop")
             font.bold: true
             font.pixelSize: Math.round(15 * Theme.fontScale)
             color: Theme.navy
@@ -271,7 +275,7 @@ Rectangle {
                 objectName: "scopeHelp"
                 visible: panel.showHelp
                 width: parent.width
-                lines: [qsTr("Das Oszilloskop zeichnet die Spannung an den Tastköpfen K1 und K2 über der Zeit. Bezug ist immer 0V."),
+                lines: [qsTr("Das Oszilloskop zeichnet die Spannung an den Tastköpfen K1 und K2 über der Zeit. Bezug ist immer 0V. Es läuft mit dem Hauptschalter."),
                         qsTr("»Auto« fängt das Signal ein: bei K1 und K2 die Volt je Kästchen, bei Zeit die Dauer, beim Trigger den Pegel."),
                         qsTr("Zeit: »−« und »+« ändern, wie lange ein Kästchen waagrecht dauert. »Rollen« schreibt langsam von rechts nach links wie ein Zeitschreiber."),
                         qsTr("K1 und K2: »−« und »+« ändern, wie viel Volt ein Kästchen senkrecht ist. ▲ und ▼ schieben die Kurve."),
@@ -294,7 +298,7 @@ Rectangle {
                             onClicked: panel.controller.setScope("timebase", panel.sc.timebase - 1)
                             ToolTip.text: qsTr("Zeitbasis kürzer"); Accessible.name: ToolTip.text
                         }
-                        Value { objectName: "scopeTimebaseValue"; text: (panel.sc.timebaseText || "") + "/Div"; width: 90 }
+                        PanelValue { objectName: "scopeTimebaseValue"; text: (panel.sc.timebaseText || "") + "/Div"; width: 90 }
                         Btn {
                             objectName: "scopeSlower"
                             text: "+"; enabled: panel.sc.canSlower === true && !panel.sc.xy
@@ -361,7 +365,7 @@ Rectangle {
                                 onClicked: panel.controller.setScope("volts" + chGroup.index, chGroup.ch.volts - 1)
                                 ToolTip.text: qsTr("K%1 empfindlicher").arg(chGroup.index + 1); Accessible.name: ToolTip.text
                             }
-                            Value { text: (chGroup.ch.voltsText || "") + "/Div"; width: 84 }
+                            PanelValue { text: (chGroup.ch.voltsText || "") + "/Div"; width: 84 }
                             Btn {
                                 text: "+"; enabled: (chGroup.ch.volts || 0) < 8
                                 onClicked: panel.controller.setScope("volts" + chGroup.index, chGroup.ch.volts + 1)
@@ -384,7 +388,7 @@ Rectangle {
                             AutoBtn {
                                 objectName: "scopeAutoK" + (chGroup.index + 1)
                                 what: "k" + chGroup.index
-                                enabled: chGroup.ch.has === true
+                                enabled: panel.powered && chGroup.ch.has === true
                                 ToolTip.text: qsTr("K%1 so einstellen, dass die ganze Kurve auf den Schirm passt").arg(chGroup.index + 1)
                                 Accessible.name: qsTr("K%1 automatisch").arg(chGroup.index + 1)
                             }
@@ -426,7 +430,7 @@ Rectangle {
                             onClicked: panel.controller.setScope("triggerLevel", Math.round(((panel.sc.triggerLevel || 0) - 0.5) * 10) / 10)
                             ToolTip.text: qsTr("Triggerpegel tiefer"); Accessible.name: ToolTip.text
                         }
-                        Value { text: panel.sc.triggerText || ""; width: 66 }
+                        PanelValue { text: panel.sc.triggerText || ""; width: 66 }
                         Btn {
                             text: "+"
                             onClicked: panel.controller.setScope("triggerLevel", Math.round(((panel.sc.triggerLevel || 0) + 0.5) * 10) / 10)

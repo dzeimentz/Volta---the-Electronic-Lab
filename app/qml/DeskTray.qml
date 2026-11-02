@@ -1,12 +1,19 @@
 // Geraetefach (Pult nach Bedarf, Konzept Volta 2, 5.5): alle Pultteile des Bandes, nach Gruppen mit Bildzeichen und
 // Namen (Farbe nie allein). Antippen setzt ein Teil ins Pult (Befehl); was schon im Pult steht oder erst in einer
-// spaeteren Stufe frei wird, ist gekennzeichnet. Herausnehmen geht ueber das »?« des Pultteils (DeskPartInfo).
+// spaeteren Stufe frei wird, ist gekennzeichnet. Zum Herausnehmen (»−« im Pult, ebenso ueber das »?« des Pultteils)
+// zeigt es nur die Pultteile, die im Pult stehen (ausser der Batterie); Leitungen an ihren Feldern gehen mit (Befehl,
+// rueckgaengig machbar).
 import QtQuick
 import QtQuick.Controls.Basic
 
 Popup {
     id: tray
     property var controller: null
+    property bool removing: false // Herausnehmen statt Einsetzen
+    function openFor(remove) {
+        removing = remove
+        open()
+    }
 
     function title(part) {
         switch (part) {
@@ -58,7 +65,7 @@ Popup {
             anchors.left: parent.left
             anchors.leftMargin: 16
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTr("Gerätefach")
+            text: tray.removing ? qsTr("Pultteile herausnehmen") : qsTr("Gerätefach")
             color: "white"
             font.pixelSize: Math.round(18 * Theme.fontScale)
             font.bold: true
@@ -90,7 +97,8 @@ Popup {
                     id: grp
                     required property var modelData
                     readonly property var items: tray.controller ? tray.controller.deskTray.filter(
-                                                     t => tray.groupOf(t.part) === modelData.key) : []
+                                                     t => tray.groupOf(t.part) === modelData.key
+                                                          && (!tray.removing || (t.present && t.part !== "batterie"))) : []
                     visible: items.length > 0
                     width: list.width
                     spacing: 6
@@ -113,21 +121,27 @@ Popup {
                         model: grp.items
                         Button {
                             required property var modelData
-                            objectName: "deskTray_" + modelData.part
+                            objectName: (tray.removing ? "deskTrayRemove_" : "deskTray_") + modelData.part
                             width: grp.width
                             height: Theme.control
-                            enabled: !modelData.present && !modelData.locked
+                            enabled: tray.removing || (!modelData.present && !modelData.locked)
+                            readonly property int wires: tray.removing && tray.controller
+                                                         ? tray.controller.deskPartWires(modelData.part) : 0
                             text: tray.title(modelData.part) + "  –  "
-                                  + (modelData.present ? qsTr("steht im Pult")
+                                  + (tray.removing ? (wires > 0 ? qsTr("herausnehmen, Leitungen gehen mit")
+                                                                : qsTr("herausnehmen"))
+                                     : modelData.present ? qsTr("steht im Pult")
                                      : modelData.locked ? tray.lockText(modelData)
                                      : qsTr("einsetzen"))
-                            onClicked: if (tray.controller.addDeskPart(modelData.part)) tray.close()
+                            onClicked: if (tray.removing ? tray.controller.removeDeskPart(modelData.part)
+                                                         : tray.controller.addDeskPart(modelData.part)) tray.close()
                         }
                     }
                 }
             }
             Button { // »Pult zeigen« (Konzept 5.5): alles Freigeschaltete auf einmal
                 objectName: "deskTrayAll"
+                visible: !tray.removing
                 width: list.width
                 height: Theme.control
                 readonly property bool anyMissing: tray.controller

@@ -22,7 +22,8 @@ Rectangle {
     signal infoRequested(string name)
     signal generatorRequested() // Generatorfenster oeffnen
     signal tracerRequested()    // Kennlinienschreiber oeffnen
-    signal trayRequested()          // Pult nach Bedarf: Geraetefach oeffnen
+    signal trayRequested()          // Pult nach Bedarf: Geraetefach oeffnen (Einsetzen)
+    signal trayRemoveRequested()    // ... zum Herausnehmen
     property real trayX: 0          // Lage des Knopfs »+« (Arbeitsflaeche)
     // Zustand der Drehregler (durchgebrannt, ueberlastet) aus der laufenden Simulation
     property var pot1: ({})
@@ -88,14 +89,18 @@ Rectangle {
                     }
                 }
             }
-            // Betriebslampe des Generators oben links: leuchtet gruen mit Schein, solange der Hauptschalter an ist;
-            // aus ist sie dunkel ohne Schein (Helligkeit und Schein, nicht nur die Farbe)
+            // Betriebslampe oben links: Generator und Wechselquelle laufen mit dem Hauptschalter, der
+            // Kennlinienschreiber hat ein eigenes Netzteil und laeuft immer. An gruen mit Schein, aus dunkel ohne Schein
+            // (Helligkeit und Schein, nicht nur die Farbe)
             PowerLed {
-                objectName: "generatorLed"
-                visible: parent.modelData.name === "generator"
-                on: desk.controller.mainSwitch
+                readonly property string part: parent.modelData.name
+                objectName: "deskLed_" + part
+                visible: part === "generator" || part === "wechselquelle" || part === "kennlinienschreiber"
+                on: part === "kennlinienschreiber" || desk.controller.mainSwitch
                 x: 9; y: 9
-                accessibleName: on ? qsTr("Generator läuft") : qsTr("Generator aus")
+                accessibleName: part === "generator" ? (on ? qsTr("Generator läuft") : qsTr("Generator aus"))
+                              : part === "wechselquelle" ? (on ? qsTr("Wechselquelle an") : qsTr("Wechselquelle aus"))
+                              : qsTr("Kennlinienschreiber an (eigenes Netzteil)")
             }
         }
     }
@@ -280,6 +285,8 @@ Rectangle {
             objectName: "acRmsBox"
             width: 104
             height: Theme.control - 6
+            font.bold: true
+            background: Rectangle { radius: 6; color: "#F4F7FA"; border.color: "#7F93A8"; border.width: 1.5 }
             model: [qsTr("%1 V~").arg(6), qsTr("%1 V~").arg(9)]
             currentIndex: desk.controller.acRms === 6 ? 0 : 1
             onActivated: (index) => { desk.controller.acRms = [6, 9][index] }
@@ -301,7 +308,7 @@ Rectangle {
         y: 12
         spacing: 4
         Label { text: qsTr("Generator"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
-        Button {
+        PanelButton {
             objectName: "generatorButton"
             width: 112
             height: Theme.control
@@ -331,7 +338,7 @@ Rectangle {
         // Texte haengen an den Pulteinstellungen (deskChanged, hier ueber acRms)
         readonly property var st: { desk.controller.acRms; return visible ? desk.controller.tracerState() : ({}) }
         Label { text: qsTr("Kennlinie"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
-        Button {
+        PanelButton {
             objectName: "tracerButton"
             width: 112
             height: Theme.control
@@ -348,31 +355,46 @@ Rectangle {
         }
     }
 
-    // Pult nach Bedarf: »+« oeffnet das Geraetefach
-    RoundButton {
-        objectName: "deskTrayButton"
+    // Pult nach Bedarf: »+« oeffnet das Geraetefach zum Einsetzen, »−« zum Herausnehmen. Uebereinander, Tippflaeche
+    // je 48 dp, sichtbarer Kreis so gross wie die Knoepfe der Steckbrettbreite; Zeichen als Balken gezeichnet (mittig)
+    component TrayButton: ToolButton {
+        id: trayButton
+        property bool plus: true
+        width: Theme.control; height: Theme.control
+        readonly property color ink: enabled ? Theme.navy : "#7A838C"
+        contentItem: Item {
+            Rectangle { anchors.centerIn: parent; width: 14; height: 3; radius: 1.5; color: trayButton.ink }
+            Rectangle { visible: trayButton.plus; anchors.centerIn: parent; width: 3; height: 14; radius: 1.5; color: trayButton.ink }
+        }
+        background: Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: 34; height: 34; radius: 17
+                color: !trayButton.enabled ? "#8A97A5" : (trayButton.down ? "#E6EEF6" : "#C9D6E3")
+                border.color: trayButton.enabled ? "white" : "#A9B4BF"
+                border.width: 2
+            }
+        }
+        ToolTip.visible: hovered
+        Accessible.name: ToolTip.text
+    }
+    Column {
         visible: desk.controller.deskOnDemand
         x: desk.offsetX + desk.trayX
         y: desk.fieldsTop - height / 2
-        width: Theme.control
-        height: Theme.control
-        onClicked: desk.trayRequested()
-        Accessible.name: qsTr("Gerätefach")
-        ToolTip.visible: hovered
-        ToolTip.text: qsTr("Gerätefach: Pultteile einsetzen")
-        background: Rectangle {
-            radius: width / 2
-            color: parent.down ? "#E6EEF6" : "#C9D6E3"
-            border.color: "white"
-            border.width: 2
+        spacing: 0
+        TrayButton {
+            objectName: "deskTrayButton"
+            plus: true
+            onClicked: desk.trayRequested()
+            ToolTip.text: qsTr("Gerätefach: Pultteile einsetzen")
         }
-        contentItem: Text {
-            text: "+"
-            color: Theme.navy
-            font.pixelSize: 26
-            font.bold: true
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+        TrayButton {
+            objectName: "deskTrayRemoveButton"
+            plus: false
+            enabled: desk.controller.deskTray.some(t => t.present && t.part !== "batterie")
+            onClicked: desk.trayRemoveRequested()
+            ToolTip.text: qsTr("Pultteile herausnehmen")
         }
     }
 

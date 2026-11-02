@@ -8,6 +8,7 @@ ToolButton {
     readonly property color ink: checked ? "white" : Theme.navy
     font.pixelSize: Math.round(13 * Theme.fontScale)
     font.bold: true
+    leftPadding: 10; rightPadding: 10
     ToolTip.visible: hovered && ToolTip.text !== ""
     contentItem: Text {
         text: btn.text
