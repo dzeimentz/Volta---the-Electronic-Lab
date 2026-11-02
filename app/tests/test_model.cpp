@@ -295,6 +295,138 @@ private slots:
         QVERIFY(sm.width > 0.0 && sm.height > 0.0);
     }
 
+    // Schaltplan ab Volta 2: Brueckengleichrichter als Raute (genormte Darstellung), sonst allgemeine Anordnung
+    void schematicBridgeRhombus() {
+        auto board = [](bool d4Reversed) {
+            model::Board b;
+            b.parts.push_back({"D1", "diode_si", {{"anode", "A3"}, {"kathode", "A5"}}});
+            b.parts.push_back({"D2", "diode_si", {{"anode", "C3"}, {"kathode", "C5"}}});
+            b.parts.push_back({"D3", "diode_si", {{"anode", "A1"}, {"kathode", "A3"}}});
+            b.parts.push_back(d4Reversed ? model::PartPlacement{"D4", "diode_si", {{"anode", "C3"}, {"kathode", "C1"}}}
+                                         : model::PartPlacement{"D4", "diode_si", {{"anode", "C1"}, {"kathode", "C3"}}});
+            b.parts.push_back({"R1", "widerstand", {{"a", "A5"}, {"b", "A7"}}, 1000.0});
+            b.wires.push_back({"L1", "P:W~a", "A3", "gelb"});
+            b.wires.push_back({"L2", "P:W~b", "C3", "gelb"});
+            b.wires.push_back({"L3", "C5", "A5", "blau"});
+            b.wires.push_back({"L4", "A1", "P:0V", "schwarz"});
+            b.wires.push_back({"L5", "C1", "P:0V", "schwarz"});
+            b.wires.push_back({"L6", "A7", "P:0V", "schwarz"});
+            return b;
+        };
+        auto rotations = [](const model::Schematic& s) {
+            std::map<std::string, int> r;
+            for (const auto& e : s.elements) r[e.id] = e.rotation;
+            return r;
+        };
+        const model::Schematic s = model::buildSchematic(board(false), m_catalog, true);
+        auto r = rotations(s);
+        QCOMPARE(r.size(), std::size_t(7)); // vier Dioden, R1, Wechselquelle, Batterie - keine Hilfselemente
+        QCOMPARE(r["D1"], 315); // links -> oben (Kathode am Plus-Knoten)
+        QCOMPARE(r["D2"], 225); // rechts -> oben
+        QCOMPARE(r["D3"], 225); // unten -> links
+        QCOMPARE(r["D4"], 315); // unten -> rechts
+        auto nodeY = [&](const std::string& a) {
+            for (const auto& n : s.nodes)
+                if (std::find(n.anchors.begin(), n.anchors.end(), a) != n.anchors.end()) return n.y;
+            return -1.0;
+        };
+        QVERIFY(nodeY("A5") < nodeY("A3") && nodeY("A5") < nodeY("C3")); // Plus oben
+        QVERIFY(nodeY("A3") < nodeY("P:0V") && nodeY("C3") < nodeY("P:0V")); // Minus unten
+        std::map<std::string, const model::SchematicElement*> el;
+        for (const auto& e : s.elements) el[e.id] = &e;
+        QCOMPARE(el["D1"]->y, el["D2"]->y); // oben ein Paar, unten ein Paar
+        QCOMPARE(el["D3"]->y, el["D4"]->y);
+        QVERIFY(el["D1"]->y < el["D3"]->y);
+        QVERIFY(el["D1"]->x < el["D2"]->x && el["D3"]->x < el["D4"]->x);
+        // Volta 1 und eine falsch gesteckte Diode: allgemeine Anordnung, alles senkrecht
+        for (const model::Schematic& plain :
+             {model::buildSchematic(board(false), m_catalog), model::buildSchematic(board(true), m_catalog, true)}) {
+            for (const auto& [id, rot] : rotations(plain))
+                if (id[0] == 'D') QVERIFY(rot == 90 || rot == 270);
+            for (const auto& l : plain.lines)
+                QVERIFY(std::fabs(l.x1 - l.x2) < 1e-9 || std::fabs(l.y1 - l.y2) < 1e-9);
+        }
+    }
+
+    // Schaltplan ab Volta 2: Emitterschaltung (wie Experiment 4.4) in genormter Darstellung
+    void schematicEmitterStage() {
+        model::Board b;
+        b.parts.push_back({"T1", "transistor_npn", {{"b", "B2"}, {"c", "B3"}, {"e", "C2"}, {"e2", "C3"}}});
+        b.parts.push_back({"R1", "widerstand", {{"a", "B1"}, {"b", "B2"}}, 47000.0});
+        b.parts.push_back({"R2", "widerstand", {{"a", "A3"}, {"b", "B3"}}, 1000.0});
+        b.parts.push_back({"R3", "widerstand", {{"a", "A1"}, {"b", "A2"}}, 10000.0});
+        b.parts.push_back({"C1", "kondensator", {{"a", "A2"}, {"b", "B2"}}, 1e-6});
+        b.parts.push_back({"TK1", "tastkopf", {{"spitze", "A1"}}});
+        b.parts.push_back({"TK2", "tastkopf", {{"spitze", "B3"}}});
+        b.wires.push_back({"L1", "P:+9V", "A3", "rot"});
+        b.wires.push_back({"L2", "P:P1b", "A3", "rot"});
+        b.wires.push_back({"L3", "P:P1s", "B1", "gelb"});
+        b.wires.push_back({"L4", "P:P1a", "C2", "schwarz"});
+        b.wires.push_back({"L5", "C2", "P:0V", "schwarz"});
+        b.wires.push_back({"L6", "P:G", "A1", "gelb"});
+        const model::Schematic s = model::buildSchematic(b, m_catalog, true);
+        std::map<std::string, const model::SchematicElement*> el;
+        for (const auto& e : s.elements) el[e.id] = &e;
+        QCOMPARE(el.size(), std::size_t(10)); // 7 Bauteile, Batterie, P1, Generator - keine Hilfselemente
+        const auto& t = *el["T1"];
+        QCOMPARE(t.rotation, 0);
+        QCOMPARE(el["R2"]->x, t.x + 0.25);                          // Kollektorwiderstand ueber dem Kollektor
+        QVERIFY(el["R2"]->y < t.y && (el["R2"]->rotation == 90 || el["R2"]->rotation == 270));
+        QCOMPARE(el["C1"]->y, t.y);                                 // Eingang waagrecht auf Basishoehe
+        QCOMPARE(el["R3"]->y, t.y);
+        QVERIFY(el["C1"]->rotation % 180 == 0 && el["R3"]->rotation % 180 == 0);
+        QVERIFY(el["R3"]->x < el["C1"]->x && el["C1"]->x < el["R1"]->x && el["R1"]->x < t.x);
+        QVERIFY(el["R1"]->y < t.y && el["R1"]->rotation % 180 == 90); // Basiswiderstand senkrecht vom Schleifer
+        QVERIFY(el["PULT.P1"]->x < el["R3"]->x);
+        QCOMPARE(el["TK2"]->y, t.y - 1.4);                          // Ausgang rechts am Kollektorabzweig
+        QVERIFY(el["TK2"]->x > t.x);
+        QVERIFY(el["PULT.G"]->x < el["R3"]->x);                     // Quelle links vom Eingang
+        // Basisknoten liegt auf Hoehe der Basis, Eingangsknoten ebenso
+        for (const auto& n : s.nodes) {
+            if (std::find(n.anchors.begin(), n.anchors.end(), "B2") != n.anchors.end()) QCOMPARE(n.y, t.y);
+            if (std::find(n.anchors.begin(), n.anchors.end(), "A1") != n.anchors.end()) QCOMPARE(n.y, t.y);
+        }
+        // Volta 1: allgemeine Anordnung (alle Zweipole senkrecht)
+        for (const auto& e : model::buildSchematic(b, m_catalog).elements)
+            if (e.id == "R3" || e.id == "C1") QVERIFY(e.rotation == 90 || e.rotation == 270);
+        // weiteres Bauteil am Kollektor (Messstelle): keine genormte Darstellung
+        b.parts.push_back({"UM1", "messstelle_v", {{"plus", "B4"}, {"minus", "C4"}}});
+        b.wires.push_back({"L7", "B3", "B4", "blau"});
+        b.wires.push_back({"L8", "C4", "P:0V", "schwarz"});
+        for (const auto& e : model::buildSchematic(b, m_catalog, true).elements)
+            if (e.id == "R3" || e.id == "C1") QVERIFY(e.rotation == 90 || e.rotation == 270);
+    }
+
+    // Schaltplan ab Volta 2: Darlingtonschaltung (T1 oben links, T2 unten rechts)
+    void schematicDarlington() {
+        model::Board b;
+        b.parts.push_back({"T1", "transistor_npn", {{"b", "B2"}, {"c", "B3"}, {"e", "C2"}, {"e2", "C3"}}});
+        b.parts.push_back({"T2", "transistor_npn", {{"b", "B6"}, {"c", "B7"}, {"e", "C6"}, {"e2", "C7"}}});
+        b.parts.push_back({"R1", "widerstand", {{"a", "A2"}, {"b", "B2"}}, 100000.0});
+        b.parts.push_back({"R2", "widerstand", {{"a", "A3"}, {"b", "B3"}}, 1000.0});
+        b.wires.push_back({"L1", "P:+9V", "A2", "rot"});
+        b.wires.push_back({"L2", "P:+9V", "A3", "rot"});
+        b.wires.push_back({"L3", "C2", "B6", "blau"});
+        b.wires.push_back({"L4", "B3", "B7", "blau"});
+        b.wires.push_back({"L5", "C6", "P:0V", "schwarz"});
+        const model::Schematic s = model::buildSchematic(b, m_catalog, true);
+        std::map<std::string, const model::SchematicElement*> el;
+        for (const auto& e : s.elements) el[e.id] = &e;
+        QCOMPARE(el.size(), std::size_t(5)); // T1, T2, R1, R2, Batterie
+        QCOMPARE(el["T2"]->x - el["T1"]->x, 1.2);
+        QCOMPARE(el["T2"]->y - el["T1"]->y, 1.0);
+        QCOMPARE(el["T1"]->rotation, 0);
+        QCOMPARE(el["T2"]->rotation, 0);
+        // Verbindung E1-B2 bekommt keine eigene Zeile, sie liegt zwischen den Transistoren
+        for (const auto& n : s.nodes)
+            if (std::find(n.anchors.begin(), n.anchors.end(), "B6") != n.anchors.end())
+                QVERIFY(n.y > el["T1"]->y && n.y <= el["T2"]->y);
+        // Volta 1: beide Transistoren in eigenen Spalten
+        std::map<std::string, double> y;
+        for (const auto& e : model::buildSchematic(b, m_catalog).elements) y[e.id] = e.y;
+        QVERIFY(std::fabs((y["T2"] - y["T1"]) - 1.0) > 1e-6);
+    }
+
     void parseOhmInput() {
         namespace rc = model::resistor_code;
         QCOMPARE(rc::parseOhm("470"), 470.0);

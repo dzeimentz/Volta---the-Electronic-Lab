@@ -20,6 +20,8 @@ constexpr double kColumnGap = 0.4;
 constexpr double kStub = 0.5;     // Abstand der seitlichen Anschlussleitungen
 constexpr double kLabelWidth = 1.3;
 constexpr double kEps = 1e-6;
+constexpr double kBridge = 2.0; // Brueckengleichrichter: halbe Diagonale der Raute
+constexpr double kStageBase = 5.0; // Emitterschaltung: Basisleitung unter der Plusleitung
 
 // Vereinigung von Anschlusspunkten zu Knoten
 struct Union {
@@ -86,10 +88,11 @@ int signalRank(const SchematicElement& e) {
     if (t == "pultschalter" || t == "taster" || t == "schalter" || t == "reedkontakt" || t == "wechselschalter")
         return 1;
     if (t == "potentiometer" || t.rfind("trimmer", 0) == 0) return 2;
+    if (t == "brueckengleichrichter") return 2; // gleich nach der Quelle, vor der Last
     if (t == "widerstand" || t == "fotowiderstand" || t == "kondensator" || t == "elko" || t.rfind("diode", 0) == 0 ||
         t.rfind("zdiode", 0) == 0 || t.rfind("spule", 0) == 0)
         return 3;
-    if (t == "transistor_npn" || t == "transistor_pnp" || e.module) return 4;
+    if (t == "transistor_npn" || t == "transistor_pnp" || t == "darlington" || e.module) return 4;
     if (t == "lautsprecher") return 6;
     if (t == "messgeraet" || t == "kennlinienschreiber") return 7;
     return 5; // LED, Gluehlampe, Motor, Summer
@@ -121,6 +124,20 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
     // a liegt unter b (nur wenn beide gezeichnet)
     auto below = [&](std::size_t a, std::size_t b) { return has(a) && has(b) && row(a) > row(b) + kEps; };
     const std::string& t = e.type;
+    if (t == "brueckengleichrichter") {
+        // Raute: Plus oben, Wechselspannung links und rechts, Minus unten (Anschluesse P, A, B, N)
+        g.w = g.h = 2 * kBridge;
+        g.pins = {{0.0, -kBridge, Exit::Up}, {-kBridge, 0.0, Exit::Left}, {kBridge, 0.0, Exit::Right},
+                  {0.0, kBridge, Exit::Down}};
+        return g;
+    }
+    if (t == "darlington") {
+        // zwei Transistoren schraeg versetzt: B des ersten links, gemeinsamer Kollektor oben, E des zweiten unten
+        g.w = 3.2;
+        g.h = 2.8;
+        g.pins = {{-1.35, -0.5, Exit::Left}, {0.85, -1.4, Exit::Up}, {0.85, 1.0, Exit::Down}};
+        return g;
+    }
     if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler" || t == "spannungsregler_5v") {
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
@@ -220,7 +237,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
 
 } // namespace
 
-Schematic buildSchematic(const Board& board, const Catalog& catalog) {
+Schematic buildSchematic(const Board& board, const Catalog& catalog, bool standardForms) {
     Schematic out;
     Union u;
     std::map<std::string, int> uses; // Anschlusspunkt -> Zahl der Beine/Leitungsenden
@@ -338,6 +355,78 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
     const int n = static_cast<int>(out.nodes.size());
     if (n == 0) return out;
 
+    // ---- Brueckengleichrichter (genormte Darstellung): vier Dioden, zwei Kathoden am Plus-Knoten P, zwei Anoden am
+    // Minus-Knoten N, an den Wechselspannungs-Knoten A und B je eine Anode und eine Kathode
+    struct Bridge {
+        int p = -1, a = -1, b = -1, nn = -1;
+        std::size_t ap = 0, bp = 0, na = 0, nb = 0; // Dioden A->P, B->P, N->A, N->B (Elementindex)
+    };
+    std::vector<Bridge> bridges;
+    std::vector<bool> inBridge(out.elements.size(), false);
+    if (standardForms) {
+        std::vector<std::size_t> diodes;
+        for (std::size_t i = 0; i < out.elements.size(); ++i)
+            if (out.elements[i].type == "diode_si" && out.elements[i].nodes.size() == 2 &&
+                out.elements[i].nodes[0] != out.elements[i].nodes[1])
+                diodes.push_back(i);
+        auto an = [&](std::size_t i) { return out.elements[i].nodes[0]; };
+        auto ka = [&](std::size_t i) { return out.elements[i].nodes[1]; };
+        for (std::size_t x = 0; x < diodes.size(); ++x)
+            for (std::size_t y = x + 1; y < diodes.size(); ++y) {
+                const std::size_t i = diodes[x], j = diodes[y];
+                if (inBridge[i] || inBridge[j] || ka(i) != ka(j) || an(i) == an(j)) continue;
+                const int p = ka(i);
+                for (std::size_t k : diodes)
+                    for (std::size_t l : diodes) {
+                        if (k == i || k == j || l == i || l == j || k == l || inBridge[k] || inBridge[l]) continue;
+                        if (an(k) != an(l) || ka(k) != an(i) || ka(l) != an(j) || an(k) == p) continue;
+                        if (inBridge[i] || inBridge[j]) continue;
+                        bridges.push_back({p, an(i), an(j), an(k), i, j, k, l});
+                        inBridge[i] = inBridge[j] = inBridge[k] = inBridge[l] = true;
+                    }
+            }
+    }
+
+    // Anschluesse je Knoten (Elementindex, je Anschluss einmal)
+    std::vector<std::vector<int>> at(static_cast<std::size_t>(n));
+    for (std::size_t i = 0; i < out.elements.size(); ++i)
+        for (int nd : out.elements[i].nodes) at[static_cast<std::size_t>(nd)].push_back(static_cast<int>(i));
+    std::vector<bool> internalNode(static_cast<std::size_t>(n), false); // von einer Grundschaltung selbst gezeichnet
+
+    // ---- Darlingtonschaltung: Emitter von T1 nur an der Basis von T2, Kollektoren verbunden
+    struct Darlington {
+        std::size_t t1 = 0, t2 = 0;
+        int b = -1, c = -1, e = -1, d = -1; // Basis T1, Kollektor, Emitter T2, Verbindung E1-B2
+    };
+    std::vector<Darlington> darlingtons;
+    std::vector<bool> inPair(out.elements.size(), false);
+    if (standardForms) {
+        auto npn = [&](std::size_t i) {
+            return out.elements[i].type == "transistor_npn" && out.elements[i].nodes.size() >= 3 && !inPair[i];
+        };
+        // zweiter Emitteranschluss: am selben Knoten oder offen
+        auto e2ok = [&](std::size_t i) {
+            const auto& nd = out.elements[i].nodes;
+            return nd.size() < 4 || nd[3] == nd[2] || pinCount[static_cast<std::size_t>(nd[3])] == 1;
+        };
+        for (std::size_t i = 0; i < out.elements.size(); ++i)
+            for (std::size_t j = 0; j < out.elements.size(); ++j) {
+                if (i == j || !npn(i) || !npn(j) || !e2ok(i) || !e2ok(j)) continue;
+                const auto& a = out.elements[i].nodes;
+                const auto& b = out.elements[j].nodes;
+                const int d = a[2];
+                if (b[0] != d || a[1] != b[1] || d == a[1] || d == a[0] || b[2] == d || b[2] == a[1] || a[0] == a[1])
+                    continue;
+                bool only = true; // an der Verbindung haengt nichts anderes
+                for (int el : at[static_cast<std::size_t>(d)])
+                    only = only && (el == static_cast<int>(i) || el == static_cast<int>(j));
+                if (!only) continue;
+                darlingtons.push_back({i, j, a[0], a[1], b[2], d});
+                inPair[i] = inPair[j] = true;
+                internalNode[static_cast<std::size_t>(d)] = true;
+            }
+    }
+
     // ---- Ebenen: Breitensuche ab dem Pluspol, 0 V ganz unten
     auto findAnchor = [&](const std::string& a) {
         const auto it = nodeOf.find(u.find(a));
@@ -366,8 +455,178 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
     for (int& l : layer)
         if (l < 0) l = std::max(1, maxLayer / 2); // nicht erreichbar: in die Mitte
     if (ground >= 0 && ground != start) layer[static_cast<std::size_t>(ground)] = maxLayer + 1;
+    // Bruecke: Plus-Knoten ueber den Wechselspannungs-Knoten, diese ueber dem Minus-Knoten (die Raute passt dazwischen)
+    for (const Bridge& br : bridges) {
+        auto L = [&](int nd) -> int& { return layer[static_cast<std::size_t>(nd)]; };
+        if (br.p == start || br.a == start || br.b == start || br.nn == start || br.p == ground || br.a == ground ||
+            br.b == ground)
+            continue;
+        const int mid = std::max({L(br.a), L(br.b), L(br.p) + 1});
+        L(br.a) = L(br.b) = mid;
+        if (br.nn != ground) L(br.nn) = std::max(L(br.nn), mid + 1);
+        if (ground >= 0 && ground != start) {
+            int deepest = 0;
+            for (int i = 0; i < n; ++i)
+                if (i != ground) deepest = std::max(deepest, layer[static_cast<std::size_t>(i)]);
+            L(ground) = std::max(L(ground), deepest + 1);
+        }
+    }
+    // Darlington: Kollektorleitung ueber der Basisleitung, Emitter darunter (Basis laeuft gerade hinein)
+    for (const Darlington& d : darlingtons) {
+        auto L = [&](int nd) -> int& { return layer[static_cast<std::size_t>(nd)]; };
+        if (d.b == start || d.b == ground || d.c == ground || d.c == start) continue;
+        L(d.b) = std::max(L(d.b), L(d.c) + 1);
+        if (d.e != ground && d.e != start) L(d.e) = std::max(L(d.e), L(d.b) + 1);
+        if (ground >= 0 && ground != start) {
+            int deepest = 0;
+            for (int i = 0; i < n; ++i)
+                if (i != ground) deepest = std::max(deepest, layer[static_cast<std::size_t>(i)]);
+            L(ground) = std::max(L(ground), deepest + 1);
+        }
+    }
     for (int l : layer) maxLayer = std::max(maxLayer, l);
     out.layers = maxLayer + 1;
+
+    // ---- Emitterschaltung (genormte Darstellung, nur bei genau einem Transistor)
+    struct Stage {
+        int t = -1, rc = -1, re = -1, ce = -1, up = -1, low = -1, pot = -1, cin = -1, rin = -1, cout = -1;
+        int nb = -1, nc = -1, ne = -1, nw = -1, nm = -1, nend = -1, nout = -1;
+        int probeC = -1, probeB = -1, probeM = -1;
+    };
+    Stage stage;
+    if (standardForms && plus >= 0 && ground >= 0 && plus != ground) {
+        auto E = [&](int i) -> const SchematicElement& { return out.elements[static_cast<std::size_t>(i)]; };
+        auto At = [&](int nd) -> const std::vector<int>& { return at[static_cast<std::size_t>(nd)]; };
+        int transistors = 0, candidate = -1;
+        for (std::size_t i = 0; i < out.elements.size(); ++i) {
+            const std::string& t = out.elements[i].type;
+            if (t == "transistor_npn" || t == "transistor_pnp" || t == "fototransistor") {
+                ++transistors;
+                candidate = static_cast<int>(i);
+            }
+        }
+        auto isRes = [&](int i) { return E(i).type == "widerstand" && E(i).nodes.size() == 2; };
+        auto isCap = [&](int i) { return (E(i).type == "kondensator" || E(i).type == "elko") && E(i).nodes.size() == 2; };
+        auto isProbe = [&](int i) { return E(i).type == "tastkopf" && E(i).nodes.size() == 1; };
+        auto other = [&](int i, int nd) { return E(i).nodes[0] == nd ? E(i).nodes[1] : E(i).nodes[0]; };
+        auto pinNode = [&](int i, const char* name) {
+            const auto& names = raw[static_cast<std::size_t>(i)].pinNames;
+            const auto it = std::find(names.begin(), names.end(), name);
+            return it == names.end() ? -1 : E(i).nodes[static_cast<std::size_t>(it - names.begin())];
+        };
+        auto rail = [&](int nd) { return nd == plus || nd == ground; };
+        Stage s;
+        bool ok = transistors == 1 && E(candidate).type == "transistor_npn" && E(candidate).nodes.size() >= 3;
+        if (ok) {
+            const auto& tn = E(candidate).nodes;
+            s.t = candidate;
+            s.nb = tn[0];
+            s.nc = tn[1];
+            s.ne = tn[2];
+            const int ne2 = tn.size() >= 4 ? tn[3] : s.ne;
+            ok = !rail(s.nb) && !rail(s.nc) && s.ne != plus && s.nb != s.nc && s.nb != s.ne && s.nc != s.ne &&
+                 (ne2 == s.ne || pinCount[static_cast<std::size_t>(ne2)] == 1);
+        }
+        // Kollektor: Kollektorwiderstand nach Plus; Tastkopf oder Koppelkondensator zum Ausgang
+        if (ok)
+            for (int i : At(s.nc)) {
+                if (i == s.t) continue;
+                if (isRes(i) && other(i, s.nc) == plus && s.rc < 0) {
+                    s.rc = i;
+                } else if (isProbe(i) && s.probeC < 0) {
+                    s.probeC = i;
+                } else if (isCap(i) && !rail(other(i, s.nc)) && other(i, s.nc) != s.nb && other(i, s.nc) != s.ne &&
+                           s.cout < 0) {
+                    s.cout = i;
+                    s.nout = other(i, s.nc);
+                } else {
+                    ok = false;
+                }
+            }
+        ok = ok && s.rc >= 0 && !(s.cout >= 0 && s.probeC >= 0);
+        // Emitter: direkt an 0 V oder ueber Emitterwiderstand (mit Kondensator parallel)
+        if (ok && s.ne != ground)
+            for (int i : At(s.ne)) {
+                if (i == s.t) continue;
+                if (isRes(i) && other(i, s.ne) == ground && s.re < 0)
+                    s.re = i;
+                else if (isCap(i) && other(i, s.ne) == ground && s.ce < 0)
+                    s.ce = i;
+                else
+                    ok = false;
+            }
+        ok = ok && (s.ne == ground || s.re >= 0);
+        // Basis: Widerstand nach Plus oder vom Schleifer (Potentiometer zwischen 0 V und Plus), nach 0 V,
+        // Koppelkondensator, Tastkopf
+        auto wiperPot = [&](int nd) {
+            if (rail(nd) || nd == s.nc || nd == s.ne || At(nd).size() != 2) return -1;
+            for (int i : At(nd)) {
+                const std::string& t = E(i).type;
+                if ((t == "potentiometer" || t.rfind("trimmer", 0) == 0) && E(i).nodes.size() == 3 &&
+                    pinNode(i, "s") == nd && pinNode(i, "a") == ground && pinNode(i, "b") == plus)
+                    return i;
+            }
+            return -1;
+        };
+        if (ok)
+            for (int i : At(s.nb)) {
+                if (i == s.t) continue;
+                if (isRes(i)) {
+                    const int o = other(i, s.nb);
+                    if (o == plus && s.up < 0) {
+                        s.up = i;
+                    } else if (o == ground && s.low < 0) {
+                        s.low = i;
+                    } else if (s.up < 0 && wiperPot(o) >= 0) {
+                        s.up = i;
+                        s.nw = o;
+                        s.pot = wiperPot(o);
+                    } else {
+                        ok = false;
+                    }
+                } else if (isCap(i) && !rail(other(i, s.nb)) && other(i, s.nb) != s.nc && other(i, s.nb) != s.ne &&
+                           s.cin < 0) {
+                    s.cin = i;
+                    s.nend = other(i, s.nb);
+                } else if (isProbe(i) && s.probeB < 0) {
+                    s.probeB = i;
+                } else {
+                    ok = false;
+                }
+            }
+        ok = ok && s.up >= 0;
+        // Eingang: zwischen Koppelkondensator und Vorwiderstand nichts als diese beiden (und ein Tastkopf)
+        if (ok && s.cin >= 0) {
+            const int y = s.nend;
+            int rin = -1, probe = -1;
+            bool chain = true;
+            for (int i : At(y)) {
+                if (i == s.cin) continue;
+                if (isRes(i) && rin < 0)
+                    rin = i;
+                else if (isProbe(i) && probe < 0)
+                    probe = i;
+                else
+                    chain = false;
+            }
+            if (chain && rin >= 0) {
+                const int z = other(rin, y);
+                if (!rail(z) && z != s.nb && z != s.nc && z != s.ne && z != s.nw && z != s.nout && z != y) {
+                    s.rin = rin;
+                    s.nm = y;
+                    s.nend = z;
+                    s.probeM = probe;
+                }
+            }
+            ok = s.nend != s.nout && s.nend != s.nw;
+        }
+        ok = ok && (s.nout < 0 || (s.nout != s.nw && s.nout != s.nb && s.nout != s.ne));
+        if (ok) {
+            stage = s;
+            for (int nd : {s.nb, s.nc, s.nw, s.nm, s.ne != ground ? s.ne : -1})
+                if (nd >= 0) internalNode[static_cast<std::size_t>(nd)] = true;
+        }
+    }
 
     // ---- Zeilen: jeder gezeichnete Knoten bekommt eine eigene Zeile (keine zwei Knoten auf einer Linie);
     // offene Anschluesse (nur ein Bein) bekommen keine
@@ -376,7 +635,8 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
         SchematicNode& node = out.nodes[static_cast<std::size_t>(i)];
         node.layer = layer[static_cast<std::size_t>(i)];
         node.drawn = pinCount[static_cast<std::size_t>(i)] >= 2 || i == plus || i == ground;
-        if (node.drawn) order.push_back(i);
+        const bool placed = internalNode[static_cast<std::size_t>(i)] || (stage.t >= 0 && (i == stage.nend || i == stage.nout));
+        if (node.drawn && !placed) order.push_back(i);
     }
     std::stable_sort(order.begin(), order.end(), [&](int a, int b) {
         const auto& na = out.nodes[static_cast<std::size_t>(a)];
@@ -388,10 +648,68 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
     std::vector<bool> drawnNode(static_cast<std::size_t>(n), false);
     for (int i : order) drawnNode[static_cast<std::size_t>(i)] = true;
     for (std::size_t k = 0; k < order.size(); ++k) rowOf[static_cast<std::size_t>(order[k])] = kTop + kRowGap * k;
+    // Emitterschaltung: genug Platz zwischen Plus und 0 V; Eingang auf Hoehe der Basis, Ausgang auf Hoehe des
+    // Kollektorabzweigs
+    if (stage.t >= 0) {
+        auto R = [&](int nd) -> double& { return rowOf[static_cast<std::size_t>(nd)]; };
+        // unter der Basis: Emitterwiderstand, Basisteiler, haengende Tastkoepfe, Quelle am Eingang
+        const double below = stage.re >= 0 ? 4.0 : 3.5;
+        const double delta = R(plus) + kStageBase + below - R(ground);
+        if (delta > 0) {
+            const double from = R(ground) - kEps;
+            for (int i : order)
+                if (R(i) >= from) R(i) += delta;
+        }
+        for (int nd : {stage.nend, stage.nout})
+            if (nd >= 0 && out.nodes[static_cast<std::size_t>(nd)].drawn) {
+                drawnNode[static_cast<std::size_t>(nd)] = true;
+                R(nd) = R(plus) + (nd == stage.nend ? kStageBase : kStageBase - 1.4);
+            }
+    }
+    // Raute nur, wenn Plus oben, Wechselspannung dazwischen und Minus unten liegen; sonst allgemeine Anordnung
+    bridges.erase(std::remove_if(bridges.begin(), bridges.end(), [&](const Bridge& br) {
+        auto R = [&](int nd) { return rowOf[static_cast<std::size_t>(nd)]; };
+        const bool ok = R(br.p) < std::min(R(br.a), R(br.b)) && std::max(R(br.a), R(br.b)) < R(br.nn) &&
+                        R(br.nn) - R(br.p) >= 2 * kBridge;
+        if (!ok) inBridge[br.ap] = inBridge[br.bp] = inBridge[br.na] = inBridge[br.nb] = false;
+        return !ok;
+    }), bridges.end());
 
-    // ---- Spalten in Signalrichtung
-    std::vector<std::size_t> cols(out.elements.size());
-    for (std::size_t i = 0; i < cols.size(); ++i) cols[i] = i;
+    // ---- Spalten in Signalrichtung; jede Grundschaltung als ein Element statt ihrer Bauteile
+    const std::size_t realElements = out.elements.size();
+    auto group = [&](const char* type, std::vector<int> nodes) {
+        SchematicElement e;
+        e.id = type;
+        e.type = type;
+        e.nodes = std::move(nodes);
+        out.elements.push_back(e);
+        raw.push_back({e, {}, {}});
+    };
+    for (const Bridge& br : bridges) group("brueckengleichrichter", {br.p, br.a, br.b, br.nn});
+    const std::size_t firstPair = out.elements.size();
+    for (const Darlington& d : darlingtons) group("darlington", {d.b, d.c, d.e});
+    const std::size_t stageIndex = out.elements.size();
+    std::vector<bool> inStage(realElements, false);
+    if (stage.t >= 0) {
+        group("emitterschaltung", {plus, ground});
+        for (int i : {stage.t, stage.rc, stage.re, stage.ce, stage.up, stage.low, stage.pot, stage.cin, stage.rin,
+                      stage.cout, stage.probeC, stage.probeB, stage.probeM})
+            if (i >= 0) inStage[static_cast<std::size_t>(i)] = true;
+    }
+    std::vector<std::size_t> cols;
+    for (std::size_t i = 0; i < out.elements.size(); ++i)
+        if (i >= realElements || (!inBridge[i] && !inPair[i] && !inStage[i])) cols.push_back(i);
+    // Reihenfolge: Signalrichtung; was am Eingang der Emitterschaltung haengt, links von ihr, was am Ausgang, rechts
+    std::vector<int> rank(out.elements.size());
+    for (std::size_t i = 0; i < rank.size(); ++i) rank[i] = signalRank(out.elements[i]) * 10;
+    if (stage.t >= 0) {
+        rank[stageIndex] = 45;
+        for (std::size_t i = 0; i < realElements; ++i) {
+            const auto& nd = out.elements[i].nodes;
+            if (std::find(nd.begin(), nd.end(), stage.nend) != nd.end()) rank[i] = std::min(rank[i], 44);
+            if (stage.nout >= 0 && std::find(nd.begin(), nd.end(), stage.nout) != nd.end()) rank[i] = std::max(rank[i], 46);
+        }
+    }
     auto topRow = [&](const SchematicElement& e) {
         double t = 1e9;
         for (int nd : e.nodes)
@@ -407,7 +725,7 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
     std::stable_sort(cols.begin(), cols.end(), [&](std::size_t a, std::size_t b) {
         const auto& ea = out.elements[a];
         const auto& eb = out.elements[b];
-        if (signalRank(ea) != signalRank(eb)) return signalRank(ea) < signalRank(eb);
+        if (rank[a] != rank[b]) return rank[a] < rank[b];
         if (topRow(ea) != topRow(eb)) return topRow(ea) < topRow(eb);
         return bottomRow(ea) < bottomRow(eb);
     });
@@ -420,7 +738,165 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
     };
     double cursor = kLeft;
     double maxY = kTop;
+    // Emitterschaltung an der Stelle x0 zeichnen; liefert den Beginn der naechsten Spalte
+    auto placeStage = [&](double x0) {
+        const Stage& s = stage;
+        auto Y = [&](int nd) { return rowOf[static_cast<std::size_t>(nd)]; };
+        const double y9 = Y(plus), yG = Y(ground), yb = y9 + kStageBase, yw = y9 + 2.0, yo = yb - 1.4;
+        auto el = [&](int i) -> SchematicElement& { return out.elements[static_cast<std::size_t>(i)]; };
+        auto attachTo = [&](int nd, double x) { attach[static_cast<std::size_t>(nd)].push_back(x); };
+        auto nodeAt = [&](int nd, double xa, double xb, double y) {
+            SchematicNode& node = out.nodes[static_cast<std::size_t>(nd)];
+            node.x1 = xa;
+            node.x2 = xb;
+            node.y = y;
+        };
+        // senkrechter Zweipol (Anschluss am Knoten top oben), Kennzeichnung rechts oder links
+        auto vertical = [&](int i, double x, double y, int top, bool labelLeft) {
+            SchematicElement& e = el(i);
+            e.x = x;
+            e.y = y;
+            e.rotation = e.nodes[0] == top ? 90 : 270;
+            e.labelX = labelLeft ? x - 1.4 : x + 0.6;
+            e.labelY = y;
+        };
+        // waagrechter Zweipol (Anschluss am Knoten left links), Kennzeichnung darueber
+        auto horizontal = [&](int i, double x, double y, int left) {
+            SchematicElement& e = el(i);
+            e.x = x;
+            e.y = y;
+            e.rotation = e.nodes[0] == left ? 0 : 180;
+            e.labelX = x - 0.45;
+            e.labelY = y - 0.85;
+        };
+        // Tastkopf haengt unter der Basis- bzw. Eingangsleitung
+        auto probeDown = [&](int i, double x, int nd) {
+            SchematicElement& e = el(i);
+            e.x = x;
+            e.y = yb + 1.5;
+            e.rotation = 90;
+            e.labelX = x + 0.6;
+            e.labelY = e.y;
+            line(x, yb, x, yb + 0.5, nd);
+            out.dots.push_back({x, yb, nd});
+        };
+        double xIn = x0, xP = 0.0;
+        if (s.pot >= 0) { // Potentiometer links: b oben (Plus), a unten (0 V), Schleifer rechts
+            xP = x0 + 1.4;
+            SchematicElement& p = el(s.pot);
+            p.x = xP;
+            p.y = yw;
+            p.rotation = 270;
+            p.labelX = xP - 1.3;
+            p.labelY = yw;
+            line(xP, y9, xP, yw - 1.0, plus);
+            line(xP, yw + 1.0, xP, yG, ground);
+            attachTo(plus, xP);
+            attachTo(ground, xP);
+            xIn = xP + 0.9;
+        }
+        double xJ = xIn + 0.6; // Abzweigung an der Basisleitung
+        if (s.cin >= 0) {
+            double xc = xIn + 1.4;
+            if (s.rin >= 0) {
+                const double xr = xIn + 1.4;
+                horizontal(s.rin, xr, yb, s.nend);
+                line(xIn, yb, xr - 1.0, yb, s.nend);
+                xc = xr + 2.5;
+                line(xr + 1.0, yb, xc - 1.0, yb, s.nm);
+                nodeAt(s.nm, xr + 1.0, xc - 1.0, yb);
+                if (s.probeM >= 0) probeDown(s.probeM, xr + 1.25, s.nm);
+            } else {
+                line(xIn, yb, xc - 1.0, yb, s.nend);
+            }
+            attachTo(s.nend, xIn);
+            horizontal(s.cin, xc, yb, s.rin >= 0 ? s.nm : s.nend);
+            xJ = xc + 1.6;
+            line(xc + 1.0, yb, xJ, yb, s.nb);
+        }
+        const double xT = xJ + 2.4, xC = xT + 0.25;
+        line(xJ, yb, xT - 0.75, yb, s.nb);
+        nodeAt(s.nb, xJ, xT - 0.75, yb);
+        if (s.pot >= 0) { // Schleifer waagrecht zur Abzweigung, Basiswiderstand senkrecht herab
+            line(xP + 0.5, yw, xJ, yw, s.nw);
+            nodeAt(s.nw, xP + 0.5, xJ, yw);
+            vertical(s.up, xJ, yb - 1.5, s.nw, false);
+            line(xJ, yw, xJ, yb - 2.5, s.nw);
+            line(xJ, yb - 0.5, xJ, yb, s.nb);
+        } else {
+            const double ym = (y9 + yb) / 2;
+            vertical(s.up, xJ, ym, plus, false);
+            line(xJ, y9, xJ, ym - 1.0, plus);
+            line(xJ, ym + 1.0, xJ, yb, s.nb);
+            attachTo(plus, xJ);
+        }
+        if (s.low >= 0) {
+            vertical(s.low, xJ, yb + 2.0, s.nb, true);
+            line(xJ, yb, xJ, yb + 1.0, s.nb);
+            line(xJ, yb + 3.0, xJ, yG, ground);
+            attachTo(ground, xJ);
+        }
+        if (s.cin >= 0 || s.low >= 0) out.dots.push_back({xJ, yb, s.nb});
+        if (s.probeB >= 0) probeDown(s.probeB, (xJ + xT - 0.75) / 2, s.nb);
+        // Transistor, Kollektorwiderstand darueber, Ausgang rechts am Kollektorabzweig
+        SchematicElement& t = el(s.t);
+        t.x = xT;
+        t.y = yb;
+        t.rotation = 0;
+        t.labelX = xT + 1.3;
+        t.labelY = yb;
+        vertical(s.rc, xC, y9 + 1.75, plus, false);
+        line(xC, y9, xC, y9 + 0.75, plus);
+        line(xC, y9 + 2.75, xC, yb - 0.5, s.nc);
+        attachTo(plus, xC);
+        nodeAt(s.nc, xC, xC, yo);
+        double right = xC + 1.8;
+        if (s.probeC >= 0) {
+            SchematicElement& k = el(s.probeC);
+            k.x = xC + 2.0;
+            k.y = yo;
+            k.rotation = 0;
+            k.labelX = k.x + 1.3;
+            k.labelY = yo;
+            line(xC, yo, xC + 1.0, yo, s.nc);
+            out.dots.push_back({xC, yo, s.nc});
+            right = xC + 4.0;
+        }
+        if (s.cout >= 0) {
+            horizontal(s.cout, xC + 1.6, yo, s.nc);
+            line(xC, yo, xC + 0.6, yo, s.nc);
+            line(xC + 2.6, yo, xC + 3.0, yo, s.nout);
+            out.dots.push_back({xC, yo, s.nc});
+            attachTo(s.nout, xC + 3.0);
+            right = xC + 3.0;
+        }
+        // Emitter direkt an 0 V oder ueber den Emitterwiderstand (Kondensator rechts daneben)
+        if (s.re < 0) {
+            line(xC, yb + 0.5, xC, yG, ground);
+        } else {
+            vertical(s.re, xC, yb + 2.5, s.ne, false);
+            line(xC, yb + 0.5, xC, yb + 1.5, s.ne);
+            line(xC, yb + 3.5, xC, yG, ground);
+            nodeAt(s.ne, xC, xC, yb + 1.0);
+            if (s.ce >= 0) {
+                const double xe = xC + 2.6;
+                vertical(s.ce, xe, yb + 2.5, s.ne, false);
+                line(xC, yb + 1.0, xe, yb + 1.0, s.ne);
+                line(xe, yb + 1.0, xe, yb + 1.5, s.ne);
+                line(xe, yb + 3.5, xe, yG, ground);
+                out.dots.push_back({xC, yb + 1.0, s.ne});
+                attachTo(ground, xe);
+                right = std::max(right, xe + 1.8);
+            }
+        }
+        attachTo(ground, xC);
+        return right + kColumnGap;
+    };
     for (std::size_t c : cols) {
+        if (stage.t >= 0 && c == stageIndex) {
+            cursor = placeStage(cursor);
+            continue;
+        }
         SchematicElement& e = out.elements[c];
         const ElementGeo g = geometry(e, rowOf, drawnNode, raw[c].pinNames);
         e.rotation = g.rotation;
@@ -438,6 +914,14 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
             if (g.pins[k].exit == Exit::Down) downMin = std::min(downMin, r);
         }
         e.y = upMax >= 0.0 ? upMax + kRowGap / 2 : downMin < 1e8 ? downMin - kRowGap / 2 : topRow(e) + kRowGap / 2;
+        if (e.type == "brueckengleichrichter") // Raute mitten zwischen Plus- und Minus-Knoten
+            e.y = (rowOf[static_cast<std::size_t>(e.nodes[0])] + rowOf[static_cast<std::size_t>(e.nodes[3])]) / 2;
+        if (e.type == "darlington") { // Basis auf Hoehe ihrer Leitung, wenn Kollektor darueber und Emitter darunter
+            const double rb = rowOf[static_cast<std::size_t>(e.nodes[0])];
+            const double rc = rowOf[static_cast<std::size_t>(e.nodes[1])];
+            const double re = rowOf[static_cast<std::size_t>(e.nodes[2])];
+            if (rc < rb - 0.9 - kEps && re > rb + 1.5 + kEps) e.y = rb + 0.5;
+        }
         // seitliche Anschlussleitungen: links und rechts je eigene Spur
         const double symHalfW = g.block ? g.w / 2 : (g.rotation % 180 == 0 ? g.w / 2 : g.h / 2);
         double minX = -symHalfW, maxX = symHalfW;
@@ -497,10 +981,67 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog) {
         }
     }
 
+    // ---- Rauten: die vier Dioden schraeg auf den Seiten (Anode -> Kathode zeigt zum Plus-Knoten), dazwischen kurze
+    // Leitungen zu den Ecken, Verbindungspunkte an den Ecken
+    for (std::size_t r = 0; r < bridges.size(); ++r) {
+        const Bridge& br = bridges[r];
+        const SchematicElement& d = out.elements[realElements + r];
+        const double s = kBridge;
+        struct Corner { double x, y; int node; };
+        const Corner top{d.x, d.y - s, br.p}, left{d.x - s, d.y, br.a}, right{d.x + s, d.y, br.b},
+            bottom{d.x, d.y + s, br.nn};
+        auto place = [&](std::size_t idx, const Corner& from, const Corner& to, bool leftSide) {
+            SchematicElement& e = out.elements[idx];
+            e.x = (from.x + to.x) / 2;
+            e.y = (from.y + to.y) / 2;
+            const double dx = to.x - from.x, dy = to.y - from.y, len = std::hypot(dx, dy);
+            const int deg = static_cast<int>(std::lround(std::atan2(dy, dx) * 180.0 / 3.14159265358979323846));
+            e.rotation = (deg + 360) % 360;
+            // Schaltzeichen 2 Einheiten lang: Rest der Seite als Leitung zur Ecke
+            const double ux = dx / len, uy = dy / len;
+            line(from.x, from.y, e.x - ux, e.y - uy, from.node);
+            line(e.x + ux, e.y + uy, to.x, to.y, to.node);
+            // Kennzeichnung aussen neben der Diode, abseits der Anschlussleitungen an den Ecken
+            e.labelX = leftSide ? e.x - 0.9 : e.x + 0.4;
+            e.labelY = e.y + (e.y < d.y ? -0.8 : 0.8);
+        };
+        place(br.ap, left, top, true);
+        place(br.bp, right, top, false);
+        place(br.na, bottom, left, true);
+        place(br.nb, bottom, right, false);
+        for (const Corner& c : {top, left, right, bottom}) out.dots.push_back({c.x, c.y, c.node});
+    }
+    // Darlington: T1 oben links, T2 unten rechts; Emitter T1 -> Basis T2, Kollektoren oben verbunden
+    for (std::size_t r = 0; r < darlingtons.size(); ++r) {
+        const Darlington& dl = darlingtons[r];
+        const SchematicElement& g = out.elements[firstPair + r];
+        SchematicElement& t1 = out.elements[dl.t1];
+        SchematicElement& t2 = out.elements[dl.t2];
+        t1.x = g.x - 0.6;
+        t1.y = g.y - 0.5;
+        t2.x = g.x + 0.6;
+        t2.y = g.y + 0.5;
+        t1.rotation = t2.rotation = 0;
+        t1.labelX = t1.x - 1.2;
+        t1.labelY = t1.y - 0.95;
+        t2.labelX = t2.x + 1.1;
+        t2.labelY = t2.y;
+        line(g.x - 0.35, g.y, g.x - 0.35, g.y + 0.5, dl.d);
+        line(g.x - 0.35, g.y + 0.5, g.x - 0.15, g.y + 0.5, dl.d);
+        line(g.x - 0.35, g.y - 1.0, g.x - 0.35, g.y - 1.4, dl.c);
+        line(g.x - 0.35, g.y - 1.4, g.x + 0.85, g.y - 1.4, dl.c);
+        line(g.x + 0.85, g.y, g.x + 0.85, g.y - 1.4, dl.c);
+        out.dots.push_back({g.x + 0.85, g.y - 1.4, dl.c});
+        SchematicNode& node = out.nodes[static_cast<std::size_t>(dl.d)];
+        node.x1 = node.x2 = g.x - 0.35;
+        node.y = g.y + 0.5;
+    }
+    out.elements.resize(realElements);
+
     // ---- Knotenleitungen und Verbindungspunkte (an jeder Abzweigung)
     for (int i = 0; i < n; ++i) {
         SchematicNode& node = out.nodes[static_cast<std::size_t>(i)];
-        if (!node.drawn) continue;
+        if (!node.drawn || internalNode[static_cast<std::size_t>(i)]) continue; // innere Knoten: schon gezeichnet
         node.y = rowOf[static_cast<std::size_t>(i)];
         auto& xs = attach[static_cast<std::size_t>(i)];
         if (xs.empty()) {

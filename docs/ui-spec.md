@@ -400,6 +400,13 @@ das iPad).
   schmaler (nie schmaler als Titel und Knoepfe), das Steckbrett bekommt den Platz; vergroessert bleibt sie breit und
   der Plan laesst sich verschieben. Die Knoepfe sind Rahmenknoepfe wie in den Geraetefenstern (`PanelButton`).
 - Antippen eines Bauteils waehlt es auf der Grundplatte; Antippen einer Knotenleitung hebt sie und ihre Felder hervor.
+- Ab Volta 2 Grundschaltungen in genormter Darstellung (wie in Buechern und Datenblaettern), nur wenn die Bauteile
+  genau die Grundschaltung bilden, sonst die allgemeine Anordnung (`buildSchematic(..., standardForms)`):
+  Brueckengleichrichter als Raute (Wechselspannung links/rechts, Plus oben, Minus unten); Darlingtonschaltung (T1
+  oben links, Emitter auf die Basis von T2 unten rechts, Kollektoren oben verbunden); Emitterschaltung bei genau
+  einem Transistor (Kollektorwiderstand ueber dem Kollektor, Basisteiler senkrecht an der Basis, Potentiometer links,
+  Eingang waagrecht ueber Vorwiderstand und Koppelkondensator, Ausgang waagrecht am Kollektor). Eine falsch gesteckte
+  Diode ergibt bewusst keine Raute.
 
 ## Auswaehlen, Kontextmenue, Loeschen
 - Antippen waehlt ein Bauteil bzw. eine Leitung (Ende antippen) nur aus (orange); es loest nie eine Aktion aus.

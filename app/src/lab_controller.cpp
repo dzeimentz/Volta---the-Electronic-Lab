@@ -859,7 +859,9 @@ QVariantMap LabController::nearestE(double ohm, int n) const {
 }
 
 QVariantMap LabController::schematic() const {
-    const model::Schematic s = model::buildSchematic(m_session->board(), m_session->catalog());
+    // ab Volta 2 Grundschaltungen in genormter Darstellung (Volta 1 bleibt unveraendert)
+    const bool standardForms = !m_band.isEmpty() && m_band != QLatin1String("volta1");
+    const model::Schematic s = model::buildSchematic(m_session->board(), m_session->catalog(), standardForms);
     // Rastereinheiten (model/schematic_layout) -> Bildpunkte der Zeichnung: 1 Einheit = 32 (halbe Symbolbreite)
     constexpr double k = 32.0;
     std::vector<QString> paths(s.nodes.size());

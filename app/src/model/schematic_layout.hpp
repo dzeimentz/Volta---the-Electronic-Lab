@@ -74,6 +74,17 @@ struct Schematic {
 
 // Schaltplan des Aufbaus. Pultelemente nur, wenn an ihnen etwas angeschlossen ist (die Batterie, sobald +9V oder
 // 0V benutzt wird).
-Schematic buildSchematic(const Board& board, const Catalog& catalog);
+// standardForms (ab Volta 2): bekannte Grundschaltungen in ihrer genormten Darstellung, wie in Buechern und
+// Datenblaettern. Nur wenn die Bauteile genau die Grundschaltung bilden; sonst die allgemeine Anordnung (eine falsch
+// gesteckte Diode ergibt bewusst keine Raute):
+//  - Brueckengleichrichter als Raute (vier Dioden im Quadrat auf der Spitze, Wechselspannung links und rechts, Plus
+//    oben, Minus unten);
+//  - Darlingtonschaltung: zwei NPN-Transistoren schraeg versetzt, Emitter des ersten auf die Basis des zweiten,
+//    Kollektoren oben verbunden;
+//  - Emitterschaltung (nur bei genau einem Transistor): Transistor in der Mitte, Kollektorwiderstand darueber,
+//    Emitter bzw. Emitterwiderstand nach 0 V, Basisspannungsteiler senkrecht links an der Basis (Widerstand nach Plus
+//    oder vom Schleifer eines Potentiometers, Widerstand nach 0 V), Eingang waagrecht von links ueber
+//    Koppelkondensator (und Vorwiderstand), Ausgang waagrecht rechts am Kollektor.
+Schematic buildSchematic(const Board& board, const Catalog& catalog, bool standardForms = false);
 
 } // namespace volta::model
