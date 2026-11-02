@@ -152,6 +152,9 @@ class LabController : public QObject {
     Q_PROPERTY(QStringList guesses READ guesses NOTIFY experimentChanged)
     Q_PROPERTY(int guess READ guess NOTIFY flowChanged)
     Q_PROPERTY(QStringList steps READ steps NOTIFY experimentChanged)
+    // Aufbau uebernehmen (»aufbau_von«, ab Volta 2): nur wenn das fruehere Experiment geschafft ist;
+    // {step (ab 0), title, done (alles steckt schon)}, sonst leer
+    Q_PROPERTY(QVariantMap adoptOffer READ adoptOffer NOTIFY adoptChanged)
     Q_PROPERTY(QStringList hints READ hints NOTIFY flowChanged) // bisher aufgedeckte Hilfen
     Q_PROPERTY(bool moreHints READ moreHints NOTIFY flowChanged)
     Q_PROPERTY(bool solutionShown READ solutionShown NOTIFY flowChanged)
@@ -407,6 +410,8 @@ public:
     QStringList guesses() const { return texts(m_experiment.guessKeys); }
     int guess() const { return m_flow.guess(); }
     QStringList steps() const { return texts(m_experiment.stepKeys); }
+    QVariantMap adoptOffer() const;
+    Q_INVOKABLE bool adoptSetup(); // Befehl
     QStringList hints() const { return texts(m_experiment.hintKeys.mid(0, m_flow.hintsShown())); }
     bool moreHints() const { return m_flow.hintsShown() < m_flow.hintCount(); }
     bool solutionShown() const { return m_flow.solutionShown(); }
@@ -537,6 +542,7 @@ public:
 signals:
     void toneModeChanged();
     void experimentChanged();
+    void adoptChanged();
     void boardChanged();
     void deskChanged();
     void stateChanged();
@@ -645,6 +651,11 @@ private:
     QTimer m_scopeAutoTimer;
     int m_scopeAutoTries = 0;
     void scopeAutoTimeStep();
+    // Aufbau des frueheren Experiments (nur der Teil, den die Vorlage auch hat), beim Wechsel des Experiments geladen
+    QString m_adoptFor;
+    QString m_adoptTitleKey;
+    model::Board m_adoptBoard;
+    void loadAdoptSource();
     bool scopeBufferMeasure(std::array<model::ScopeMeasure, model::kScopeChannels>& m) const;
     QString m_taskLink; // aktuelle Aufgabe als Link (aufgabe.txt im Profil)
     QVariantMap taskMap(const services::task::Task& t) const;

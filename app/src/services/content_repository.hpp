@@ -38,6 +38,10 @@ struct Experiment {
     QStringList observationKeys; // "beobachtungen": Auswahl nach dem Versuch
     QList<int> guessMatches;     // "vermutung_passt": Vermutungen, die zum Ergebnis passen
     QList<int> guessOpen;        // "vermutung_offen": Vermutungen ohne Aussage (z. B. »weiss nicht«)
+    // "aufbau_von": frueheres Experiment, auf dessen Aufbau dieses aufbaut (ab Volta 2); "aufbau_von_schritt": Schritt
+    // (ab 1), in dem der Knopf »Aufbau uebernehmen« steht, intern ab 0
+    QString buildsOn;
+    int buildsOnStep = 0;
 };
 
 // Stufe des Lernpfads (content/<band>/stufen.json)

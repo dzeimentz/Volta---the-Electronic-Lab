@@ -73,6 +73,11 @@ LabController::LabController(QString contentRoot, QString band, QObject* parent)
     connect(&m_session->undoStack(), &QUndoStack::indexChanged, this, &LabController::historyChanged);
     connect(&m_session->undoStack(), &QUndoStack::cleanChanged, this, &LabController::historyChanged);
     connect(&m_timer, &QTimer::timeout, this, &LabController::onFrame);
+    m_scopeAutoTimer.setSingleShot(true);
+    connect(&m_scopeAutoTimer, &QTimer::timeout, this, &LabController::scopeAutoTimeStep);
+    connect(this, &LabController::experimentChanged, this, &LabController::loadAdoptSource);
+    for (auto sig : {&LabController::boardChanged, &LabController::experimentChanged, &LabController::progressChanged})
+        connect(this, sig, this, &LabController::adoptChanged);
     // Aufbauhilfe folgt jeder Aenderung von Aufbau, Pult, Experiment und Ablauf
     for (auto sig : {&LabController::boardChanged, &LabController::deskChanged, &LabController::experimentChanged,
                      &LabController::flowChanged})
@@ -174,8 +179,6 @@ void LabController::useSessionFile(const QString& path) {
     m_sessionStore = services::SessionStore(path);
     if (m_saveEnabled) return;
     m_saveEnabled = true;
-    m_scopeAutoTimer.setSingleShot(true);
-    connect(&m_scopeAutoTimer, &QTimer::timeout, this, &LabController::scopeAutoTimeStep);
     m_saveTimer.setSingleShot(true);
     m_saveTimer.setInterval(1500);
     connect(&m_saveTimer, &QTimer::timeout, this, &LabController::saveSession);
@@ -1441,6 +1444,32 @@ bool LabController::showWholeDesk() {
     for (const auto& o : m_deskOffers)
         if (deskOfferOpen(o)) parts.push_back(ss(o.part));
     return result(m_session->addDeskParts(parts));
+}
+
+void LabController::loadAdoptSource() {
+    if (m_adoptFor == m_experiment.id) return;
+    m_adoptFor = m_experiment.id;
+    m_adoptBoard = {};
+    m_adoptTitleKey.clear();
+    services::Experiment from;
+    if (!m_experiment.buildsOn.isEmpty() && m_repo.loadExperiment(m_experiment.buildsOn, from)) {
+        m_adoptBoard = model::commonSetup(from.templateBoard, m_experiment.templateBoard);
+        m_adoptTitleKey = from.titleKey;
+    }
+}
+
+QVariantMap LabController::adoptOffer() const {
+    if (m_freeLab || m_adoptFor != m_experiment.id || m_adoptTitleKey.isEmpty() || !m_progress.isDone(m_experiment.buildsOn))
+        return {};
+    model::Board probe = m_session->board();
+    return {{QStringLiteral("step"), m_experiment.buildsOnStep},
+            {QStringLiteral("title"), m_repo.text(m_adoptTitleKey)},
+            {QStringLiteral("done"), model::mergeSetup(probe, m_adoptBoard, m_session->catalog()) == 0}};
+}
+
+bool LabController::adoptSetup() {
+    if (adoptOffer().isEmpty()) return false;
+    return result(m_session->adoptSetup(m_adoptBoard));
 }
 
 bool LabController::removeDeskPart(const QString& part) { return result(m_session->removeDeskPart(ss(part))); }

@@ -58,6 +58,16 @@ std::vector<std::string> footprint(const CatalogEntry& entry, const std::string&
 bool placePins(const CatalogEntry& entry, const std::string& startField, Orientation o, Span span,
                std::vector<std::pair<std::string, std::string>>& pins, Message& error);
 
+// Aufbau uebernehmen (ab Volta 2, »aufbau_von«): Ein Experiment baut auf einem frueheren auf. commonSetup liefert,
+// was aus dem Aufbau »from« auch im Aufbau »target« steckt - Bauteile mit gleichem Typ, gleichen Anschluessen und
+// gleichem Wert, Module mit Typ und Platz, Leitungen mit gleichen Enden (Modulanschluesse ueber Typ und Platz).
+// So entsteht nur, was das Folgeexperiment wirklich braucht (z. B. der Arbeitspunkt ohne seine Messstelle).
+Board commonSetup(const Board& from, const Board& target);
+// Fuegt »add« in »board« ein: was schon gleich steckt, bleibt einfach; neue Kennungen, wo eine schon vergeben ist;
+// Bauteile ohne freie Steckplaetze und Leitungen, die nicht gehen, entfallen; Pultteile fuer die Leitungen kommen
+// dazu (Pult nach Bedarf). Liefert die Anzahl neuer Bauteile, Module und Leitungen (0: alles steckt schon).
+int mergeSetup(Board& board, const Board& add, const Catalog& catalog);
+
 // Freie Kennung fuer einen neuen Bauteiltyp, z. B. "R3" (Praefix nach Typ, kleinste freie Nummer).
 std::string nextPartId(const Board& board, const std::string& type);
 std::string nextWireId(const Board& board);

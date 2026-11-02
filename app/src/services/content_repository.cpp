@@ -453,6 +453,8 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     out.questionKey = o.value(QStringLiteral("frage_key")).toString();
     out.guessKeys = keys("vermutungen");
     out.stepKeys = keys("schritte");
+    out.buildsOn = o.value(QStringLiteral("aufbau_von")).toString();
+    out.buildsOnStep = std::max(0, o.value(QStringLiteral("aufbau_von_schritt")).toInt(1) - 1);
     out.hintKeys = keys("hilfen");
     out.explanationKey = o.value(QStringLiteral("erklaerung_key")).toString();
     out.moreKey = o.value(QStringLiteral("mehr_wissen_key")).toString();

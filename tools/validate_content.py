@@ -310,6 +310,52 @@ def lineage(band: str, rep: Report) -> list[str]:
     return out
 
 
+def common_setup(src: dict, dst: dict) -> int:
+    """Anzahl der Bauteile, Module und Leitungen, die aus der Vorlage src auch in dst stecken (wie
+    model::commonSetup: Bauteile mit Typ, Anschluessen und Wert, Module mit Typ und Platz, Leitungen mit gleichen Enden)."""
+    def parts(v):
+        out = set()
+        for b in v.get("bauteile", []):
+            fe = b.get("felder")
+            fe = tuple(sorted(fe.items())) if isinstance(fe, dict) else tuple(fe or [])
+            out.add((b.get("typ"), fe, b.get("wert")))
+        return out
+    def mods(v):
+        return {m.get("id"): (m.get("typ"), m.get("feld", 1)) for m in v.get("module", [])}
+    def wires(v):
+        m = mods(v)
+        def ep(x):
+            head = str(x).split(".")[0]
+            return f"{m[head]}.{str(x).split('.', 1)[1]}" if "." in str(x) and head in m else x
+        return {frozenset((ep(w.get("von")), ep(w.get("nach")))) for w in v.get("leitungen", [])}
+    a, b = src.get("vorlage", {}), dst.get("vorlage", {})
+    return (len(parts(a) & parts(b)) + len(set(mods(a).values()) & set(mods(b).values()))
+            + len(wires(a) & wires(b)))
+
+
+def check_builds_on(loaded: dict, rep: Report) -> None:
+    """»aufbau_von«: das fruehere Experiment gibt es im Band, es kommt vorher, der Schritt gibt es, und es bleibt
+    nach dem Abgleich mit der eigenen Vorlage etwas zu uebernehmen (mindestens drei Teile)."""
+    def order(i):
+        return tuple(int(x) for x in i.split(".")[1:])
+    for eid, (path, exp) in loaded.items():
+        src_id = exp.get("aufbau_von")
+        if src_id is None:
+            continue
+        where = str(path.relative_to(ROOT))
+        if src_id not in loaded:
+            rep.error(where, f"aufbau_von: Experiment '{src_id}' gibt es nicht")
+            continue
+        if order(src_id) >= order(eid):
+            rep.error(where, f"aufbau_von: '{src_id}' kommt nicht vorher")
+        step = exp.get("aufbau_von_schritt", 1)
+        if not isinstance(step, int) or not 1 <= step <= len(exp.get("schritte", [])):
+            rep.error(where, f"aufbau_von_schritt: Schritt {step} gibt es nicht")
+        n = common_setup(loaded[src_id][1], exp)
+        if n < 3:
+            rep.error(where, f"aufbau_von: aus '{src_id}' bleibt nur {n} Teil(e) zu uebernehmen")
+
+
 def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
     band = band_dir.name
     pkg = load_json(band_dir / "paket.json", rep)
@@ -351,12 +397,15 @@ def check_band(band_dir: Path, catalog: dict, rep: Report) -> int:
                 else:
                     used.add(st[k])
     count = 0
+    loaded: dict[str, tuple[Path, dict]] = {}
     for path in sorted((band_dir / "experiments").glob("*.json")):
         exp = load_json(path, rep)
         if exp is None:
             continue
         count += 1
         used |= check_experiment(path, exp, band, catalog, rep)
+        loaded[str(exp.get("id"))] = (path, exp)
+    check_builds_on(loaded, rep)
 
     texts: dict[str, dict] = {}
     for lang in LANGS:

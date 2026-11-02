@@ -816,6 +816,39 @@ private slots:
     }
 
     // Edition volta2: eigener Band mit Grundband volta1 (Bauteile von Anfang an frei, Texte und Lexikon geerbt)
+    // »aufbau_von«: die Emitterschaltung (4.3) baut auf dem Arbeitspunkt (4.2) auf. Erst wenn der geschafft ist, steht
+    // im ersten Schritt der Knopf; er uebernimmt den Arbeitspunkt ohne seine Messstelle in einem Befehl
+    void adoptSetupVolta2() {
+        QTemporaryDir dir;
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta2"));
+        lab.useProgressFile(dir.filePath(QStringLiteral("fortschritt.json")));
+        QVERIFY(lab.startExperiment(QStringLiteral("volta2.4.3")));
+        QVERIFY(lab.adoptOffer().isEmpty()); // 4.2 noch nicht geschafft
+        QVERIFY(!lab.adoptSetup());
+        lab.importProgressLink(services::transfer::progressLink(QStringLiteral("volta2"), {QStringLiteral("volta2.4.2")}));
+        const QVariantMap offer = lab.adoptOffer();
+        QCOMPARE(offer.value(QStringLiteral("step")).toInt(), 0);
+        QCOMPARE(offer.value(QStringLiteral("title")).toString(), QStringLiteral("Der Arbeitspunkt"));
+        QVERIFY(!offer.value(QStringLiteral("done")).toBool());
+        QVERIFY(lab.adoptSetup());
+        const model::Board& b = lab.session().board();
+        QCOMPARE(b.parts.size(), std::size_t(3)); // Transistor, 47 kOhm, 1 kOhm - ohne die Messstelle UM1
+        QVERIFY(std::none_of(b.parts.begin(), b.parts.end(),
+                             [](const model::PartPlacement& p) { return p.type == "messstelle_v"; }));
+        QCOMPARE(b.wires.size(), std::size_t(5)); // Versorgung und P1; die Leitungen zur Messstelle nicht
+        QVERIFY(lab.adoptOffer().value(QStringLiteral("done")).toBool());
+        QVERIFY(!lab.adoptSetup()); // steckt schon: kein zweiter Befehl
+        // was schon steckt, bleibt; der Rest kommt dazu
+        lab.undo();
+        QVERIFY(lab.session().board().parts.empty());
+        QVERIFY(lab.addWire(QStringLiteral("P:+9V"), QStringLiteral("A3"), QStringLiteral("rot")));
+        QVERIFY(lab.adoptSetup());
+        QCOMPARE(lab.session().board().wires.size(), std::size_t(5));
+        // Experiment ohne »aufbau_von«: kein Knopf
+        QVERIFY(lab.startExperiment(QStringLiteral("volta2.4.2")));
+        QVERIFY(lab.adoptOffer().isEmpty());
+    }
+
     void editionVolta2() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         QCOMPARE(repo.lineage(QStringLiteral("volta2")), (QStringList{QStringLiteral("volta1"), QStringLiteral("volta2")}));

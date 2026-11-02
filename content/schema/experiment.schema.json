@@ -64,6 +64,8 @@
       }
     },
     "schritte": {"type": "array", "items": {"$ref": "#/$defs/key"}},
+    "aufbau_von": {"type": "string", "pattern": "^(volta1|volta2|volta3|zuse1)\\.[0-9]+\\.[0-9]+$"},
+    "aufbau_von_schritt": {"type": "integer", "minimum": 1},
     "erfolg": {"$ref": "#/$defs/condition"},
     "hilfen": {"type": "array", "items": {"$ref": "#/$defs/key"}, "minItems": 1},
     "erklaerung_key": {"$ref": "#/$defs/key"},

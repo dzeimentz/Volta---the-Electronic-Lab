@@ -405,6 +405,12 @@ bool LabSession::removeDeskPart(const std::string& group) {
     return push(QCoreApplication::translate("Befehl", "Pultteil herausnehmen"), std::move(after));
 }
 
+bool LabSession::adoptSetup(const Board& add) {
+    Board after = m_board;
+    if (mergeSetup(after, add, m_catalog) == 0) return false;
+    return push(QCoreApplication::translate("Befehl", "Aufbau übernehmen"), std::move(after));
+}
+
 bool LabSession::push(const QString& text, Board after, int mergeId, const QString& key,
                       std::vector<sim::StateOverride> statesAfter) {
     m_error = {};

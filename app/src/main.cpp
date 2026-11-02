@@ -16,6 +16,7 @@
 #include "services/audio_route.hpp"
 #include "services/audio_service.hpp"
 #include "services/managed_config.hpp"
+#include "services/profile_transfer.hpp"
 #include "services/speech_service.hpp"
 #include "lab_controller.hpp"
 #include "app_settings.hpp"
@@ -71,6 +72,10 @@ int main(int argc, char* argv[]) {
         const QString dataDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
         QDir().mkpath(dataDir);
         lab.useDataRoot(dataDir);
+    } else if (const QString done = qEnvironmentVariable("VOLTA_DEMO_DONE"); !done.isEmpty()) {
+        // Entwicklerhilfe (nur mit VOLTA_SCREENSHOT, nichts wird gespeichert): diese Experimente gelten als geschafft
+        lab.importProgressLink(volta::services::transfer::progressLink(QStringLiteral(VOLTA_EDITION),
+                                                                       done.split(QLatin1Char(','), Qt::SkipEmptyParts)));
     }
 
     // Stil Basic fest (auch fuer den Dateidialog): andere Controls-Stile werden nicht ausgeliefert

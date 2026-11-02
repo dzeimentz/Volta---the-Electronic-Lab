@@ -39,6 +39,8 @@ public:
 
     const Board& board() const { return m_board; }
     const Catalog& catalog() const { return m_catalog; }
+    // Aufbau uebernehmen (»aufbau_von«): fuegt die Teile von add ein (mergeSetup), ein Befehl; false, wenn alles steckt
+    bool adoptSetup(const Board& add);
     const Netlist& netlist() const { return m_net; }
     sim::SimulationBridge& bridge() { return m_bridge; }
     QUndoStack& undoStack() { return m_undo; }

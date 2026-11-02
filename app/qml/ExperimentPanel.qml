@@ -254,6 +254,7 @@ Rectangle {
             Repeater {
                 model: panel.phase === 2 ? panel.controller.steps : []
                 Row {
+                    id: stepRow
                     required property int index
                     required property string modelData
                     width: parent.width
@@ -261,40 +262,95 @@ Rectangle {
                     Rectangle {
                         width: 28; height: 28; radius: 14
                         color: Theme.accent
-                        Label { anchors.centerIn: parent; text: index + 1; color: "white"; font.bold: true }
+                        Label { anchors.centerIn: parent; text: stepRow.index + 1; color: "white"; font.bold: true }
                     }
-                    // Stufe 0-4: Felder als Bilder, Bauteile mit Schaltzeichen (leichter zu erfassen)
-                    Body { visible: !panel.pictureSteps; width: parent.width - 36; text: modelData }
-                    // in Stichpunkten: ein Handgriff je Zeile (Texts.stepBullets)
                     Column {
-                        id: bulletColumn
-                        objectName: "stepBullets_" + index
-                        readonly property int stepIndex: index
-                        readonly property var bullets: Texts.stepBullets(modelData)
-                        visible: panel.pictureSteps
                         width: parent.width - 36
-                        spacing: 2
-                        Repeater {
-                            model: panel.pictureSteps ? bulletColumn.bullets : []
-                            Row {
-                                required property int index
-                                required property string modelData
-                                width: bulletColumn.width
-                                spacing: 6
-                                Rectangle {
-                                    visible: bulletColumn.bullets.length > 1
-                                    y: 15
-                                    width: 7; height: 7; radius: 3.5
-                                    color: Theme.accent
+                        spacing: 6
+                        // Stufe 0-4: Felder als Bilder, Bauteile mit Schaltzeichen (leichter zu erfassen)
+                        Body { visible: !panel.pictureSteps; width: parent.width; text: stepRow.modelData }
+                        // in Stichpunkten: ein Handgriff je Zeile (Texts.stepBullets)
+                        Column {
+                            id: bulletColumn
+                            objectName: "stepBullets_" + index
+                            readonly property int stepIndex: index
+                            readonly property var bullets: Texts.stepBullets(stepRow.modelData)
+                            visible: panel.pictureSteps
+                            width: parent.width
+                            spacing: 2
+                            Repeater {
+                                model: panel.pictureSteps ? bulletColumn.bullets : []
+                                Row {
+                                    required property int index
+                                    required property string modelData
+                                    width: bulletColumn.width
+                                    spacing: 6
+                                    Rectangle {
+                                        visible: bulletColumn.bullets.length > 1
+                                        y: 15
+                                        width: 7; height: 7; radius: 3.5
+                                        color: Theme.accent
+                                    }
+                                    StepText {
+                                        objectName: "stepText_" + bulletColumn.stepIndex + "_" + index
+                                        width: parent.width - (bulletColumn.bullets.length > 1 ? 13 : 0)
+                                        text: modelData
+                                        columns: panel.controller.boardColumns
+                                        partImages: panel.partImages
+                                        templateParts: panel.controller.templateParts
+                                        catalog: panel.controller.catalogParts
+                                    }
                                 }
-                                StepText {
-                                    objectName: "stepText_" + bulletColumn.stepIndex + "_" + index
-                                    width: parent.width - (bulletColumn.bullets.length > 1 ? 13 : 0)
-                                    text: modelData
-                                    columns: panel.controller.boardColumns
-                                    partImages: panel.partImages
-                                    templateParts: panel.controller.templateParts
-                                    catalog: panel.controller.catalogParts
+                            }
+                        }
+                        // Aufbau uebernehmen (»aufbau_von«): steht in dem Schritt, der auf den frueheren Versuch verweist,
+                        // sobald dieser geschafft ist; uebernimmt dessen fertigen Aufbau, soweit dieser Versuch ihn braucht
+                        Button {
+                            id: adoptButton
+                            objectName: "adoptButton"
+                            readonly property var offer: panel.controller.adoptOffer
+                            visible: offer.step === stepRow.index
+                            width: parent.width
+                            implicitHeight: Math.max(Theme.control, adoptLabel.implicitHeight + 16)
+                            enabled: offer.done !== true
+                            onClicked: panel.controller.adoptSetup()
+                            Accessible.name: adoptLabel.text
+                            background: Rectangle {
+                                radius: 6
+                                color: !adoptButton.enabled ? "#EEF1F4" : adoptButton.down ? "#CFE2F3"
+                                       : (adoptButton.hovered ? "#E3EEF8" : "#F4F8FC")
+                                border.color: adoptButton.enabled ? Theme.accent : "#B5C2CF"
+                                border.width: 2
+                            }
+                            contentItem: Row {
+                                spacing: 8
+                                leftPadding: 4
+                                // Symbol: Pfeil (uebernehmen) bzw. Haken (steckt schon)
+                                Rectangle {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 26; height: 26; radius: 5
+                                    color: adoptButton.enabled ? Theme.accent : "#8FA0B0"
+                                    DrawnIcon { visible: adoptButton.enabled; anchors.centerIn: parent; kind: "down"; color: "white"; size: 18 }
+                                    Text {
+                                        visible: !adoptButton.enabled
+                                        anchors.centerIn: parent
+                                        text: "\u2713"
+                                        color: "white"
+                                        font.pixelSize: 15
+                                        font.bold: true
+                                    }
+                                }
+                                Label {
+                                    id: adoptLabel
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: adoptButton.width - 46
+                                    wrapMode: Text.Wrap
+                                    font.bold: true
+                                    font.pixelSize: Math.round(14 * Theme.fontScale)
+                                    color: adoptButton.enabled ? Theme.navy : "#5B6875"
+                                    text: adoptButton.enabled
+                                          ? qsTr("Aufbau aus »%1« übernehmen").arg(adoptButton.offer.title || "")
+                                          : qsTr("Aufbau aus »%1« ist übernommen").arg(adoptButton.offer.title || "")
                                 }
                             }
                         }

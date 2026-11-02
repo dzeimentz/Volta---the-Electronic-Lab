@@ -169,6 +169,8 @@
     "exp2_6_4_s2",
     "exp2_6_4_s3"
   ],
+  "aufbau_von": "volta2.6.1",
+  "aufbau_von_schritt": 3,
   "erfolg": {
     "alle": [
       {

@@ -1,6 +1,7 @@
 #include "board_edit.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <map>
 #include <set>
 
@@ -182,6 +183,123 @@ double requiredStepS(const Board& board, bool audio) {
                 break;
             }
     return step;
+}
+
+namespace {
+bool samePart(const PartPlacement& a, const PartPlacement& b) {
+    if (a.type != b.type || std::fabs(a.value - b.value) > 1e-9 * std::max(1.0, std::fabs(a.value))) return false;
+    auto pa = a.pins, pb = b.pins;
+    std::sort(pa.begin(), pa.end());
+    std::sort(pb.begin(), pb.end());
+    return pa == pb;
+}
+const ModulePlacement* moduleById(const Board& b, const std::string& id) {
+    for (const auto& m : b.modules)
+        if (m.id == id) return &m;
+    return nullptr;
+}
+const ModulePlacement* moduleAt(const Board& b, const std::string& type, int slot) {
+    for (const auto& m : b.modules)
+        if (m.type == type && m.slot == slot) return &m;
+    return nullptr;
+}
+// Modulanschluss "TI1.dis" -> "timer555@1.dis" (vergleichbar ueber Aufbauten), sonst unveraendert
+std::string neutralAnchor(const Board& b, const std::string& anchor) {
+    const auto dot = anchor.find('.');
+    if (dot == std::string::npos) return anchor;
+    const ModulePlacement* m = moduleById(b, anchor.substr(0, dot));
+    return m ? m->type + "@" + std::to_string(m->slot) + anchor.substr(dot) : anchor;
+}
+bool sameEnds(const std::string& a1, const std::string& a2, const std::string& b1, const std::string& b2) {
+    return (a1 == b1 && a2 == b2) || (a1 == b2 && a2 == b1);
+}
+} // namespace
+
+Board commonSetup(const Board& from, const Board& target) {
+    Board out;
+    for (const auto& p : from.parts)
+        if (std::any_of(target.parts.begin(), target.parts.end(), [&p](const PartPlacement& t) { return samePart(p, t); }))
+            out.parts.push_back(p);
+    for (const auto& m : from.modules)
+        if (moduleAt(target, m.type, m.slot)) out.modules.push_back(m);
+    for (const auto& w : from.wires) {
+        const std::string a = neutralAnchor(from, w.from), b = neutralAnchor(from, w.to);
+        const bool inTarget = std::any_of(target.wires.begin(), target.wires.end(), [&](const WirePlacement& t) {
+            return sameEnds(a, b, neutralAnchor(target, t.from), neutralAnchor(target, t.to));
+        });
+        // Leitung an einem Modul nur, wenn das Modul mitkommt
+        auto moduleOk = [&](const std::string& anchor) {
+            const auto dot = anchor.find('.');
+            return dot == std::string::npos || moduleById(out, anchor.substr(0, dot)) != nullptr;
+        };
+        if (inTarget && moduleOk(w.from) && moduleOk(w.to)) out.wires.push_back(w);
+    }
+    return out;
+}
+
+int mergeSetup(Board& board, const Board& add, const Catalog& catalog) {
+    int added = 0;
+    // Module: gleicher Typ am gleichen Platz steckt schon (andere Kennung moeglich) -> Kennung uebersetzen
+    std::map<std::string, std::string> moduleIds;
+    for (const auto& m : add.modules) {
+        if (const ModulePlacement* have = moduleAt(board, m.type, m.slot)) {
+            moduleIds[m.id] = have->id;
+            continue;
+        }
+        const bool slotUsed = std::any_of(board.modules.begin(), board.modules.end(),
+                                          [&m](const ModulePlacement& b) { return b.slot == m.slot; });
+        if (slotUsed) continue;
+        ModulePlacement n = m;
+        if (moduleById(board, n.id)) {
+            int k = 1;
+            const std::string prefix = n.id.substr(0, n.id.find_first_of("0123456789"));
+            while (moduleById(board, prefix + std::to_string(k))) ++k;
+            n.id = prefix + std::to_string(k);
+        }
+        moduleIds[m.id] = n.id;
+        board.modules.push_back(n);
+        ++added;
+    }
+    for (const auto& p : add.parts) {
+        if (std::any_of(board.parts.begin(), board.parts.end(), [&p](const PartPlacement& b) { return samePart(p, b); }))
+            continue;
+        PartPlacement n = p;
+        if (board.findPart(n.id)) n.id = nextPartId(board, n.type);
+        Message err;
+        if (!canPlace(board, catalog, n, err)) continue;
+        board.parts.push_back(n);
+        ++added;
+    }
+    auto mapped = [&moduleIds](const std::string& anchor) {
+        const auto dot = anchor.find('.');
+        if (dot == std::string::npos) return anchor;
+        const auto it = moduleIds.find(anchor.substr(0, dot));
+        return it == moduleIds.end() ? std::string{} : it->second + anchor.substr(dot);
+    };
+    // Pultteile der neuen Leitungen (Pult nach Bedarf) vor dem Pruefen der Leitungen
+    if (board.deskParts) {
+        Board wiresOnly;
+        wiresOnly.wires = add.wires;
+        for (const auto& g : deskPartsUsed(wiresOnly))
+            if (std::find(board.deskParts->begin(), board.deskParts->end(), g) == board.deskParts->end())
+                board.deskParts->push_back(g);
+        std::vector<std::string> ordered; // Anzeigereihenfolge des Pults
+        for (const auto& g : deskGroupNames())
+            if (std::find(board.deskParts->begin(), board.deskParts->end(), g) != board.deskParts->end()) ordered.push_back(g);
+        board.deskParts = ordered;
+    }
+    for (const auto& w : add.wires) {
+        const std::string from = mapped(w.from), to = mapped(w.to);
+        if (from.empty() || to.empty()) continue;
+        if (std::any_of(board.wires.begin(), board.wires.end(),
+                        [&](const WirePlacement& b) { return sameEnds(from, to, b.from, b.to); }))
+            continue;
+        Message err;
+        if (!canWire(board, from, to, err)) continue;
+        board.wires.push_back({nextWireId(board), from, to, w.color, w.colorFixed});
+        ++added;
+    }
+    return added;
 }
 
 std::vector<std::string> deskPartsUsed(const Board& board) {

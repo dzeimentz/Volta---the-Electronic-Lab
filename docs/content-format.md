@@ -71,6 +71,17 @@ content/
 | `vorlage` | ja | Musteraufbau; dient Anzeige und Schritt-fuer-Schritt-Hilfe, **nicht** der Erfolgspruefung |
 | `erfolg` | ja | zustandsbasierte Bedingungen (siehe unten) |
 | `jetzt_in_echt_key` | ja | darf bei `zerstoerend: true` keinen zerstoerenden Nachbau beschreiben |
+| `aufbau_von` | nein | ab Volta 2: frueheres Experiment, auf dessen Aufbau dieses aufbaut (z. B. `"volta2.4.2"`) |
+| `aufbau_von_schritt` | nein | Schritt (ab 1, Vorgabe 1), in dem der Knopf »Aufbau übernehmen« steht |
+
+**Aufbau übernehmen** (`aufbau_von`): Hat das Kind das fruehere Experiment geschafft, steht im genannten Schritt
+ein Knopf »Aufbau aus »…« übernehmen«. Er setzt in einem Befehl (rueckgaengig machbar) ein, was aus der Vorlage des
+frueheren Experiments auch in der eigenen Vorlage steckt - Bauteile mit gleichem Typ, gleichen Anschluessen und
+gleichem Wert, Module mit Typ und Platz, Leitungen mit gleichen Enden. So kommt z. B. der Arbeitspunkt ohne seine
+Messstelle. Was schon steckt, bleibt; steckt alles, zeigt der Knopf »… ist übernommen«. `validate_content.py`
+prueft: das Experiment gibt es im Band und es kommt vorher, den Schritt gibt es, und es bleiben mindestens drei
+Teile zu uebernehmen. Der Schritttext beschreibt den Aufbau weiterhin selbst (z. B. »Baue den Arbeitspunkt wie im
+letzten Versuch«), damit er auch ohne den Knopf verstaendlich bleibt.
 
 ### Vorlage: Bauteile, Module, Leitungen
 - Bauteil: `{"id", "typ", "felder", "wert"?, "geschlossen"?, "stellung"?}`. `felder` ist ein Array in der
