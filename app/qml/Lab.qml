@@ -57,6 +57,7 @@ Item {
         for (let g = 0; g < groups.length; ++g) a = a.concat(groups[g].fields)
         return a
     }
+    function openTracer() { tracerPanel.open() }
     function groupOf(name) {
         for (let g = 0; g < groups.length; ++g) if (groups[g].name === name) return groups[g]
         return null

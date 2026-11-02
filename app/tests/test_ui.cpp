@@ -2228,6 +2228,27 @@ private slots:
         QTRY_VERIFY(!panel->property("visible").toBool());
     }
 
+    // Vorfuehrung: das Fenster laesst sich an der Kopfzeile verschieben, die Kopfzeile bleibt sichtbar
+    void demoDialogMoves() {
+        QObject* demo = m_engine->rootObjects().first()->findChild<QObject*>(QStringLiteral("demoDialog"));
+        QVERIFY(demo);
+        QMetaObject::invokeMethod(demo, "open");
+        QTRY_VERIFY(demo->property("opened").toBool());
+        QTest::qWait(200);
+        QQuickItem* head = item(QStringLiteral("demoHead"));
+        QVERIFY(head && head->isVisible());
+        const double x0 = demo->property("x").toDouble();
+        const QPoint from = head->mapToScene(QPointF(80, head->height() / 2)).toPoint(); // neben dem Schliessen-Knopf
+        drag(from, from + QPoint(-120, 0));
+        QTRY_VERIFY(std::fabs(demo->property("x").toDouble() - (x0 - 120)) < 2.0);
+        drag(from + QPoint(-120, 0), from + QPoint(-5000, 5000));
+        QTRY_COMPARE(demo->property("x").toDouble(), 120.0 - demo->property("width").toDouble());
+        QVERIFY(demo->property("y").toDouble() <= m_window->height() - 64.0);
+        QMetaObject::invokeMethod(demo, "close");
+        QTRY_VERIFY(!demo->property("visible").toBool());
+        QVERIFY(!demo->property("moved").toBool()); // beim naechsten Oeffnen wieder mittig
+    }
+
     // Einstellungen bleiben ueber Neustarts erhalten (eigene Datei)
     void settingsPersist() {
         QTemporaryDir dir;

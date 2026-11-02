@@ -205,11 +205,12 @@ ApplicationWindow {
     DemoDialog {
         id: demoDialog
         controller: labController
-        onDemoStarted: (experimentId) => {
+        onDemoStarted: (experimentId, tracer) => {
             root.inJournal = false
             root.inLab = true
             // Ladekurve im Zeitschreiber; ab Volta 2 das Oszilloskop, wenn die Vorlage es einstellt
             labView.recorderVisible = experimentId === "volta1.3.12" || labController.experimentScope
+            if (tracer) labView.openTracer() // Kennlinie gleich sichtbar
         }
     }
     // Knopf in den Leisten unten links (Vorfuehrung, Praesentation): runde Pille in der Farbe der Leiste

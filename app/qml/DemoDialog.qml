@@ -1,18 +1,28 @@
 // Vorfuehrung (Startseite, abschaltbar im Elternbereich): zehn fertige Aufbauten aus allen Stufen fuer die Schule oder
 // ein Gespraech. Antippen startet das Experiment mit Musteraufbau und schaltet ein (LabController.startDemo); nichts
 // davon landet in Fortschritt, Forscherheft oder Laborstand. Titel kommen aus den Inhalten, die Kurztexte von hier.
+// Jede Ausgabe zeigt ihre eigenen Aufbauten (Volta 1 bzw. Volta 2).
 import QtQuick
 import QtQuick.Controls.Basic
 
 Popup {
     id: demo
     required property var controller
-    signal demoStarted(string experimentId)
+    signal demoStarted(string experimentId, bool tracer)
 
     objectName: "demoDialog"
     modal: true
     focus: true
-    anchors.centerIn: Overlay.overlay
+    // mittig, bis man das Fenster an der Kopfzeile verschiebt; die Kopfzeile bleibt immer im Fenster der App
+    property bool moved: false
+    property point movedTo: Qt.point(0, 0)
+    readonly property real homeX: parent ? (parent.width - width) / 2 : 0
+    readonly property real homeY: parent ? (parent.height - height) / 2 : 0
+    function clampX(v) { return parent ? Math.max(120 - width, Math.min(parent.width - 120, v)) : v }
+    function clampY(v) { return parent ? Math.max(0, Math.min(parent.height - 64, v)) : v }
+    x: moved ? clampX(movedTo.x) : homeX
+    y: moved ? clampY(movedTo.y) : homeY
+    onClosed: moved = false
     width: Math.min(900, parent ? parent.width - 32 : 900)
     height: parent ? parent.height - 32 : 700
     padding: 0
@@ -21,7 +31,21 @@ Popup {
 
     // Auswahl: je Stufe mindestens ein Aufbau; recorder = Feld fuer Kanal 1 des Zeitschreibers; burn = Leuchtdiode
     // ohne Schutzwiderstand (der Musteraufbau ist die reparierte Fassung, die Vorfuehrung zeigt das Durchbrennen)
-    readonly property var entries: [
+    readonly property var entries: controller.band === "volta2" ? entriesVolta2 : entriesVolta1
+    // Volta 2: je Stufe ein Aufbau mit den neuen Geraeten (Messstellen, Kennlinienschreiber, Oszilloskop, Ton)
+    readonly property var entriesVolta2: [
+        { id: "volta2.0.1", text: qsTr("Messstellen zeigen Spannung, Strom und Leistung am Lämpchen – ganz ohne Messleitungen.") },
+        { id: "volta2.1.1", text: qsTr("Drei Strom-Messstellen zeigen: Was in eine Verzweigung hineinfließt, fließt wieder hinaus.") },
+        { id: "volta2.1.5", tracer: true, text: qsTr("Der Kennlinienschreiber zeichnet, wie eine LED den Strom nur in eine Richtung durchlässt.") },
+        { id: "volta2.2.3", text: qsTr("Der Generator spielt einen Ton: Das Oszilloskop zeigt ihn, der Lautsprecher macht ihn hörbar.") },
+        { id: "volta2.3.4", text: qsTr("Gleichrichter und Elko machen aus Wechselspannung eine fast glatte Gleichspannung.") },
+        { id: "volta2.4.3", text: qsTr("Ein Transistor verstärkt ein kleines Signal – das Oszilloskop zeigt Eingang und Ausgang.") },
+        { id: "volta2.5.2", text: qsTr("Das OP-Modul schaltet das Licht ein, wenn es dunkel wird. Unten bei »Licht, Wärme, Wasser« das Raumlicht ändern.") },
+        { id: "volta2.6.7", text: qsTr("Der Timer 555 blinkt so schnell, dass ein Ton daraus wird. P1 ändert die Tonhöhe.") },
+        { id: "volta2.7.3", text: qsTr("Ein langsamer 555 schaltet einen schnellen um – eine Sirene mit zwei Tönen.") },
+        { id: "volta2.8.5", text: qsTr("Ein Ton reist als unsichtbares Licht von der IR-LED zum Fototransistor.") }
+    ]
+    readonly property var entriesVolta1: [
         { id: "volta1.0.1", text: qsTr("Das Blinkmodul lässt eine Leuchtdiode blinken – innen arbeiten echte Transistoren.") },
         { id: "volta1.1.9", text: qsTr("Taster drücken: Summer und Lämpchen melden sich zugleich.") },
         { id: "volta1.2.6", text: qsTr("Zwei Wechselschalter: Das Licht lässt sich von beiden Enden des Flurs schalten.") },
@@ -62,17 +86,28 @@ Popup {
             controller.setRecorderChannel(0, entry.recorder)
             controller.recorderWindow = 10
         }
-        demoStarted(entry.id)
+        demoStarted(entry.id, entry.tracer === true)
     }
 
     // Kopf mit Tick
     Rectangle {
         id: head
+        objectName: "demoHead"
         width: parent.width
         height: 64
         radius: 12
         color: Theme.navy
         Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 12; color: Theme.navy }
+        // Kopfzeile ziehen verschiebt das Fenster (Maus, Finger und Stift), in Fensterkoordinaten
+        HoverHandler { cursorShape: Qt.SizeAllCursor }
+        DragHandler {
+            target: null
+            property point start
+            onActiveChanged: if (active) { start = Qt.point(demo.x, demo.y); demo.movedTo = start; demo.moved = true }
+            onCentroidChanged: if (active) demo.movedTo = Qt.point(
+                demo.clampX(start.x + centroid.scenePosition.x - centroid.scenePressPosition.x),
+                demo.clampY(start.y + centroid.scenePosition.y - centroid.scenePressPosition.y))
+        }
         Row {
             x: 16
             anchors.verticalCenter: parent.verticalCenter
