@@ -853,10 +853,12 @@ Item {
         anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: scopePanel.top }
         readonly property bool shown: lab.schematicVisible && lab.controller.schematicAvailable
         visible: shown
-        // verkleinert wird auch die Spalte im selben Verhaeltnis schmaler (mehr Platz fuer das Steckbrett);
-        // vergroessert bleibt sie so breit und der Plan laesst sich verschieben
+        // die Spalte waechst und schrumpft mit der Stufe des Plans im selben Verhaeltnis (verkleinert mehr Platz
+        // fuer das Steckbrett); vergroessert hoechstens so weit, dass vom Steckbrett ein Streifen bleibt, darueber
+        // laesst sich der Plan verschieben
         fullWidth: shown ? Math.round((lab.width - tray.width - experimentPanel.width) * 0.5) : 0
-        width: shown ? Math.round(Math.max(headerWidth, fullWidth * Math.min(1, zoomPercent / 100))) : 0
+        width: shown ? Math.round(Math.max(headerWidth, Math.min(fullWidth * zoomPercent / 100,
+                                                                  2 * fullWidth - Theme.control * 5))) : 0
         selectedPart: lab.selectedPart
         onPartSelected: (id) => { lab.selectedPart = id; lab.selectedWire = "" }
         onNodeSelected: (anchors) => lab.highlightFields = anchors

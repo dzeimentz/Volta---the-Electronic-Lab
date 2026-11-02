@@ -396,9 +396,9 @@ das iPad).
 - Kennzeichnung rechts neben dem Symbol (Kennung, Wert bzw. Nennspannung); Feldnamen klein an der Knotenleitung,
   abschaltbar (Knopf »Feldnamen«). Mindestens 0,75-fach gezeichnet, groessere Plaene lassen sich verschieben.
 - Ab Volta 2 passt der Plan ganz in die Spalte (100 %) und laesst sich mit »−«/»+« in Schritten von 10 % zwischen
-  50 und 300 % einstellen (Antippen der Stufe: wieder 100 %). Verkleinert wird die Spalte im selben Verhaeltnis
-  schmaler (nie schmaler als Titel und Knoepfe), das Steckbrett bekommt den Platz; vergroessert bleibt sie breit und
-  der Plan laesst sich verschieben. Die Knoepfe sind Rahmenknoepfe wie in den Geraetefenstern (`PanelButton`).
+  50 und 300 % einstellen (Antippen der Stufe: wieder 100 %). Die Spalte waechst und schrumpft im selben
+  Verhaeltnis (nie schmaler als Titel und Knoepfe; vergroessert hoechstens bis auf einen Streifen von fuenf
+  Bedienbreiten fuer das Steckbrett, darueber laesst sich der Plan verschieben). Die Knoepfe sind Rahmenknoepfe wie in den Geraetefenstern (`PanelButton`).
 - Antippen eines Bauteils waehlt es auf der Grundplatte; Antippen einer Knotenleitung hebt sie und ihre Felder hervor.
 - Ab Volta 2 Grundschaltungen in genormter Darstellung (wie in Buechern und Datenblaettern), nur wenn die Bauteile
   genau die Grundschaltung bilden, sonst die allgemeine Anordnung (`buildSchematic(..., standardForms)`):
