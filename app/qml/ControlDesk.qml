@@ -381,7 +381,7 @@ Rectangle {
     Column {
         visible: desk.controller.deskOnDemand
         x: desk.offsetX + desk.trayX
-        y: desk.fieldsTop - height / 2
+        y: (6 + desk.fieldsBottom - height) / 2 // mittig in der Hoehe der Rahmen
         spacing: 0
         TrayButton {
             objectName: "deskTrayButton"
