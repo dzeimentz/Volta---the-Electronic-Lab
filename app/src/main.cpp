@@ -717,6 +717,15 @@ int main(int argc, char* argv[]) {
                 QMetaObject::invokeMethod(dlg, "open");
         });
 
+    // Entwicklerhilfe: VOLTA_DEMO_TRACER=1 oeffnet das Fenster des Kennlinienschreibers (ab Volta 2, z. B. mit
+    // VOLTA_DEMO_SOLVE und VOLTA_DEMO_EXP=volta2.1.4)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_TRACER") == 1)
+        QTimer::singleShot(1500, &engine, [&engine] {
+            const auto roots = engine.rootObjects();
+            if (QObject* dlg = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("tracerPanel")))
+                QMetaObject::invokeMethod(dlg, "open");
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_HELP=<kapitel> oeffnet die Hilfe bei einem Kapitel (z. B. werkzeug, eltern; 1: Anfang)
     if (const QString helpKey = qEnvironmentVariable("VOLTA_DEMO_HELP"); !helpKey.isEmpty())
         QTimer::singleShot(600, &engine, [&engine, helpKey] {
