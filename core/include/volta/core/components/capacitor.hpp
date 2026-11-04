@@ -38,6 +38,7 @@ public:
 
     std::size_t branchCount() const noexcept override { return 1; }
     void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
+    bool stampAc(ComplexMna& sys, const AcContext& ctx) const noexcept override;
     double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
     void updateState(const SolutionView& x, double dtS) noexcept override;
     void checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept override;

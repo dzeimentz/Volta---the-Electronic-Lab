@@ -41,6 +41,14 @@ public:
 
     Status step(double dtS = kDefaultStepS) noexcept;
 
+    // Wechselstromanalyse (Volta 3, Konzept Kap. 4): Kleinsignal-Uebertragung von der Anregungsquelle (Bauteilindex
+    // excitation; sie muss stampAc mit Anregung unterstuetzen, z. B. FunctionGenerator) zur Spannung
+    // V(outPlus) - V(outMinus), linearisiert am letzten angenommenen Zustand mit derselben Knotenmatrix wie im
+    // Zeitbereich. result[i] = komplexe Uebertragung (V/V) bei freqsHz[i]. Aendert den Zustand der Simulation nicht.
+    // Nicht fuer den Echtzeitpfad: fordert Speicher an.
+    Status acSweep(std::size_t excitation, const std::vector<double>& freqsHz, NodeId outPlus, NodeId outMinus,
+                   std::vector<Complex>& result);
+
     bool hasCircuit() const noexcept { return m_ready; }
     double timeS() const noexcept { return m_timeS; }
     const Probe& probe() const noexcept { return m_probe; }

@@ -30,6 +30,17 @@ void Inductor::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
                            m_params.windingOhm + lOverDt);
 }
 
+bool Inductor::stampAc(ComplexMna& sys, const AcContext& ctx) const noexcept {
+    sys.stampAdmittance(terminal(0), terminal(1), 1.0 / m_params.parallelOhm);
+    if (m_destroyed) {
+        sys.stampBranchOpen(firstBranch());
+        return true;
+    }
+    sys.stampImpedanceBranch(terminal(0), terminal(1), firstBranch(), 0.0,
+                             Complex(m_params.windingOhm, ctx.omegaRadS * m_params.inductanceH));
+    return true;
+}
+
 double Inductor::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
     double i = (x.voltage(terminal(0)) - x.voltage(terminal(1))) / m_params.parallelOhm;
     if (!m_destroyed) i += x.branchCurrent(firstBranch());

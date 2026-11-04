@@ -121,6 +121,11 @@ void FunctionGenerator::stamp(MnaSystem& sys, const StampContext& ctx) const noe
     sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emf, m_params.outputOhm);
 }
 
+bool FunctionGenerator::stampAc(ComplexMna& sys, const AcContext& ctx) const noexcept {
+    sys.stampImpedanceBranch(terminal(0), terminal(1), firstBranch(), ctx.excite ? 1.0 : 0.0, m_params.outputOhm);
+    return true;
+}
+
 double FunctionGenerator::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
     const double i = x.branchCurrent(firstBranch());
     return t == 0 ? i : -i;

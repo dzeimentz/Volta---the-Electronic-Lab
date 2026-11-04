@@ -36,6 +36,21 @@ void Capacitor::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
     sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), m_voltV, seriesOhm);
 }
 
+bool Capacitor::stampAc(ComplexMna& sys, const AcContext& ctx) const noexcept {
+    if (m_destroyed) {
+        sys.stampBranchOpen(firstBranch());
+        return true;
+    }
+    sys.stampAdmittance(terminal(0), terminal(1), 1.0 / m_params.leakOhm);
+    // Zweig mit Impedanz 1 / (j w C); bei w = 0 offen (I = 0)
+    if (ctx.omegaRadS > 0.0)
+        sys.stampImpedanceBranch(terminal(0), terminal(1), firstBranch(), 0.0,
+                                 Complex(0.0, -1.0 / (ctx.omegaRadS * m_params.capacitanceF)));
+    else
+        sys.stampBranchOpen(firstBranch());
+    return true;
+}
+
 double Capacitor::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
     double i = 0.0;
     if (!m_destroyed) {

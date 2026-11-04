@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <string>
 
+#include "volta/core/complex_mna.hpp"
 #include "volta/core/mna_system.hpp"
 #include "volta/core/sim_event.hpp"
 #include "volta/core/types.hpp"
@@ -125,6 +126,12 @@ public:
 
     // Beitrag in Matrix und rechte Seite.
     virtual void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept = 0;
+
+    // Wechselstromanalyse (Volta 3): Kleinsignal-Beitrag bei der Kreisfrequenz ctx.omegaRadS. Rueckgabe false
+    // (Vorgabe): das Bauteil wirkt mit der Matrix seines Gleichstrom-Stempels am Arbeitspunkt (Widerstaende,
+    // linearisierte Halbleiter; Gleichquellen werden zum Kurzschluss bzw. Innenwiderstand, weil die rechte Seite
+    // entfaellt). Speichernde Bauteile und Anregungsquellen stempeln hier selbst und geben true zurueck.
+    virtual bool stampAc(ComplexMna& /*sys*/, const AcContext& /*ctx*/) const noexcept { return false; }
 
     // Strom, der am Anschluss t in das Bauteil hineinfliesst (Kirchhoff, Stromflussdarstellung).
     virtual double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept = 0;
