@@ -2,20 +2,21 @@
 
 _Konzept des dritten Bandes: Schwingkreis, Radio, Stromversorgung, Messtechnik und digitale Grundschaltungen für 13 bis 16 Jahre_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.4.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.4 |
+| Version | 0.5 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
-| Datum | 31.10.2026 |
+| Datum | 04.11.2026 |
 | Bezug | Konzept Volta v3.0 (Kap. 4.1, 4.3, 5.4); Konzept Volta 2 v0.2; Konzept Zuse v0.3; Konzept MCU Explorer v0.1; Farb- und Leitkonzept Volta 1 (0.9.1, `docs/ui-spec.md`) |
 | Zielplattformen | Android (Tablet), Windows und Linux x86-64, iPadOS, macOS – aus derselben Codebasis wie Volta 1 und 2 |
 | Änderungen zu v0.1 | Grundsatzentscheidungen zu Frequenzgang, Radio und Schaltwandler getroffen (31.10.2026, Kapitel 4); Masse/GND bleibt schwarz; Messstellen und Tastköpfe (auch D0–D7) als Bauteile wie in Volta 2 |
 | Änderungen zu v0.2 | Abgleich mit Volta 2 v0.3 (31.10.2026): Pult nach Bedarf mit Gerätefach, erweiterte Spannungsanzeige (negativ, Wechselspannung), Start mit 10 Spalten, Bezugspunkte von Generator und Wechselquelle |
 | Änderungen zu v0.3 | Entscheidungen 31.10.2026 wie Volta 2: Bezugspunkte bestätigt; Messstellen und Tastköpfe behalten ihre Namen (V1, A1, K1, D0–D7); Zeitschreiber ist Rollbetrieb des Oszilloskops; Forscherheft bleibt vorerst in der jeweiligen App |
+| Änderungen zu v0.4 | Stufen- und Experimentliste freigegeben (04.11.2026); Machbarkeitstest auf dem Tablet durchgeführt (`docs/volta3-machbarkeit.md`) und Entscheidungen vom 04.11.2026: gemittelter Hüllkurvendetektor statt einfacher Hüllkurve, Schrittweite 5 µs bei Schaltwandlern, Empfänger mit 2-facher Echtzeit-Reserve angenommen (Kapitel 4, 10, 12, 13) |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -30,7 +31,7 @@ Der Lernpfad umfasst wie Volta 1 und 2 **neun Stufen (0–8) mit 61 Experimenten
 
 Volta 3 setzt die Technik von Volta 2 voraus (Oszilloskop, Funktionsgenerator, Wechselquelle, hörbare Simulation, OP und 555). Die größten neuen technischen Aufgaben sind die **Wechselstromanalyse** im Kern (Frequenzgang), die **ehrliche Behandlung von Hochfrequenz** (Radio) und die **Kopplung digitaler Bausteine** an den analogen Kern; die letzte teilt sich Volta 3 mit dem MCU Explorer.
 
-**Empfehlung:** Dieses Konzept als Richtung festhalten; die drei technischen Grundsatzentscheidungen sind getroffen (31.10.2026, Kapitel 4). Vor dem Start bestätigt ein Leistungs- und Machbarkeitstest Frequenzgang, Radiomodell und Schaltwandler auf dem Tablet (Schritt 1). Begonnen wird erst, wenn Volta 2 als Testversion steht.
+**Empfehlung:** Dieses Konzept als Richtung festhalten; die drei technischen Grundsatzentscheidungen sind getroffen (31.10.2026, Kapitel 4). Der Leistungs- und Machbarkeitstest auf dem Tablet (Schritt 1, 04.11.2026) hat Frequenzgang, Radiomodell und Schaltwandler bestätigt, mit zwei Anpassungen: gemittelter Detektor im Radio und feinere Schritte bei Schaltwandlern (Kapitel 4).
 
 ## 2. Einordnung in die Reihe
 
@@ -73,8 +74,8 @@ Die Simulation rechnet für hörbare Signale mit 20 µs Schrittweite (Volta 2). 
 | Frage | Entscheidung |
 |---|---|
 | Frequenzgang | **Wechselstromanalyse im Kern**: Die Schaltung wird am Arbeitspunkt linearisiert und für jede Frequenz komplex gelöst (dieselbe Knotenmatrix wie im Zeitbereich). So entstehen Resonanzkurven und Filterkennlinien von 1 Hz bis 10 MHz in Sekundenbruchteilen, exakt für lineare Schaltungen. |
-| Radio | **Abstimmen echt, Hochfrequenz als Hüllkurve:** Welche Sender der Schwingkreis auf der Grundplatte durchlässt, rechnet die Wechselstromanalyse an den echten Senderfrequenzen. Die Trägerschwingung selbst wird nicht Schritt für Schritt gerechnet, sondern als Hüllkurve (Ton mal Durchlass des Kreises); Detektor, Verstärker und Lautsprecher laufen danach normal in der Simulation und sind hörbar. Das Oszilloskop zeigt den Träger **zeitgedehnt** (z. B. 1 MHz als 1 kHz, deutlich mit Lupenzeichen und Faktor beschriftet). Die UKW-Stufe (Frequenzmodulation) ist ein erklärtes Verhaltensmodell im UKW-Modul. |
-| Schaltwandler und Klasse D | **echte Rechnung bei niedrigerer Schaltfrequenz:** Abwärts-, Aufwärtswandler und Klasse-D-Stufe schalten in Volta 3 mit 1–5 kHz und entsprechend großen Spulen und Kondensatoren. Das ist physikalisch dieselbe Schaltung, nur langsamer, und wird vollständig im Zeitbereich gerechnet; »Mehr wissen« erklärt, warum echte Wandler viel schneller schalten (kleinere Bauteile). |
+| Radio | **Abstimmen echt, Hochfrequenz als Hüllkurve:** Welche Sender der Schwingkreis auf der Grundplatte durchlässt, rechnet die Wechselstromanalyse an den echten Senderfrequenzen. Die Trägerschwingung selbst wird nicht Schritt für Schritt gerechnet, sondern als Hüllkurve (Ton mal Durchlass des Kreises). Der Detektor rechnet **gemittelt**: Sein Diodenstrom ist der Mittelwert über eine Trägerperiode (echte Diodenkennlinie, Resonanzwiderstand des Kreises), denn die Diode leitet beim echten Träger nur an den Spitzen – die Hüllkurve einfach als Spannung vor die Diode zu legen, verfälscht um über 50 % (Machbarkeitstest: gemittelt −0,1 % gegen eine Rechnung mit echtem Träger). Verstärker und Lautsprecher laufen danach normal in der Simulation und sind hörbar; ein Empfänger mit Transistorverstärker rechnet auf dem Tablet 2-fach schneller als Echtzeit (entschieden 04.11.2026: ausreichend; wird es zu knapp, greift der angesagte Ersatzton der App). Das Oszilloskop zeigt den Träger **zeitgedehnt** (z. B. 1 MHz als 1 kHz, deutlich mit Lupenzeichen und Faktor beschriftet). Die UKW-Stufe (Frequenzmodulation) ist ein erklärtes Verhaltensmodell im UKW-Modul. |
+| Schaltwandler und Klasse D | **echte Rechnung bei niedrigerer Schaltfrequenz:** Abwärts-, Aufwärtswandler und Klasse-D-Stufe schalten in Volta 3 mit 1–5 kHz und entsprechend großen Spulen und Kondensatoren. Das ist physikalisch dieselbe Schaltung, nur langsamer, und wird vollständig im Zeitbereich gerechnet; »Mehr wissen« erklärt, warum echte Wandler viel schneller schalten (kleinere Bauteile). Steckt ein Schaltwandler, rechnet die App mit **5 µs** statt 20 µs (entschieden 04.11.2026): Im Lückbetrieb (Spulenstrom endet in jeder Periode) weicht das Rückwärtsverfahren bei 20 µs um 7 % ab, bei 5 µs um 1,85 %; das Trapezverfahren bleibt eine spätere Option. |
 
 Ebenfalls entschieden: **Digitale Module** (Gatter, Zähler, Decoder) rechnen ihre Logik ereignisgesteuert (wie die Zuse-Logiksimulation) und sind an ihren Anschlüssen als Schaltschwelle (Eingang) und Spannungsquelle mit Innenwiderstand (Ausgang) an den analogen Kern gekoppelt. Das NAND aus Einzeltransistoren auf der Grundplatte bleibt vollständig analog.
 
@@ -273,8 +274,10 @@ Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen gro�
 |---|---|---|
 | Edition | `VOLTA_EDITION=volta3`, eigene App-ID, Inhaltspaket `content/volta3`, Katalog mit Bandfreigabe (`ab_band`) | wie Volta 2 |
 | Wechselstromanalyse | Linearisierung am Arbeitspunkt, komplexe Lösung je Frequenz mit derselben Knotenmatrix; Kern bleibt Qt-frei | neu |
-| Radiomodell | Senderanlage als Quellen mit Frequenz; Durchlass aus der Wechselstromanalyse; Hüllkurve als Quelle für Detektor und Verstärker im Zeitbereich | neu, Machbarkeitstest in Schritt 1 |
-| Schaltwandler, Klasse D | Zeitbereich mit 1–5 kHz Schaltfrequenz, Ereignisortung an Schaltflanken (aus dem 555 von Volta 2) | auf Grundlage Volta 2 |
+| Wechselstromanalyse | `Simulator::acSweep` mit `ComponentModel::stampAc` (Kondensator, Spule, Generator) | umgesetzt im Machbarkeitstest, Referenztests |
+| Radiomodell | Senderanlage als Quellen mit Frequenz; Durchlass aus der Wechselstromanalyse; Hüllkurve als Quelle; gemittelter Detektor im Zeitbereich, dann Verstärker und Lautsprecher | Prototyp im Machbarkeitstest bestätigt |
+| Schaltwandler, Klasse D | Zeitbereich mit 1–5 kHz Schaltfrequenz, Ereignisortung an Schaltflanken (aus dem 555 von Volta 2), Schrittweite 5 µs bei gestecktem Wandler | Prototyp im Machbarkeitstest bestätigt |
+| Rechengenauigkeit | Optionen Prädiktor und relative Toleranz im Simulator (Vorgabe wie Volta 1/2); Einsatz in Volta 3 nach Messung in Schritt 3 | umgesetzt, Vorgabe aus |
 | Thyristor, Triac | Zünd- und Haltelogik als Zustand im Bauteil, für Undo im Zustandsschnappschuss | neu |
 | Digitale Module | ereignisgesteuerte Logik (Wiederverwendung aus `logic/`), Kopplung an den Kern über Schaltschwelle und Ausgangsquelle | gemeinsam mit MCU Explorer |
 | Logikanalysator | Tastköpfe D0–D7 als Bauteile, Ringpuffer je Kanal im Kern, Schwellen im Modell, Darstellung in QML | Oszilloskop aus Volta 2 als Grundlage |
@@ -295,7 +298,7 @@ Alle Regeln von Volta 1 gelten unverändert: Kern ohne Qt, jede Aufbauänderung 
 
 | Schritt | Inhalt | PT | Ergebnis |
 |---|---|---|---|
-| 1 Machbarkeitstest | Wechselstromanalyse an Referenzschaltungen, Radiomodell (Abstimmen, Hüllkurve, hörbar), Wandler mit 1–5 kHz auf dem Tablet | 10 | Grundsatzentscheidungen (Kapitel 4) bestätigt |
+| 1 Machbarkeitstest | Wechselstromanalyse an Referenzschaltungen, Radiomodell (Abstimmen, Hüllkurve, hörbar), Wandler mit 1–5 kHz auf dem Tablet | 10 | erledigt 04.11.2026: bestätigt mit Anpassungen (`docs/volta3-machbarkeit.md`) |
 | 2 Band-Infrastruktur | Edition volta3, Inhaltspaket, Bandfreigabe, Pultleiste III, Senderanlage, App-Symbol | 12 | dritte App aus derselben Codebasis |
 | 3 Bauteilmodelle | Drehkondensator, Spulen, Antenne, Kristallhörer, Schottky/Ge, MOSFET, Thyristor, Triac/Diac, Kraft- und Hall-Sensor, Siebensegment; MW/UKW-Modul; Gatter-, Zähler-, Decoder-Modul mit Kopplung | 35 | Referenztests (< 2 %) |
 | 4 Geräte | Frequenzgang-Schreiber, Logikanalysator, zeitgedehnte Darstellung, Frequenzzähler, Wobbel- und AM-Betrieb des Generators, Umgebungsleiste (Gewichte, Magnet) | 30 | Bedienpult III |
@@ -309,7 +312,7 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 
 | Risiko | Maßnahme |
 |---|---|
-| Hochfrequenz lässt sich auf dem Tablet nicht in Echtzeit rechnen | Abstimmen über Wechselstromanalyse, Hüllkurve im Zeitbereich, Träger nur gedehnt gezeigt – offen gekennzeichnet (Kapitel 4); Machbarkeitstest vor dem Start |
+| Hochfrequenz lässt sich auf dem Tablet nicht in Echtzeit rechnen | Abstimmen über Wechselstromanalyse, Hüllkurve mit gemitteltem Detektor im Zeitbereich, Träger nur gedehnt gezeigt – offen gekennzeichnet (Kapitel 4); im Machbarkeitstest bestätigt |
 | Gedehnte oder langsamere Darstellung wirkt wie »geschummelt« | Lupenzeichen, Faktor und gestrichelter Rahmen an jeder gedehnten Anzeige; »So rechnet Volta« in den Einstellungen; »Mehr wissen« nennt die echten Frequenzen |
 | Thyristor- und Dimmerversuche verleiten zu Netzspannung | nur Kleinspannungsquelle im Pult, Warnhinweise in Stufe 4, »Jetzt in echt« ohne Netzbezug (Regel 6) |
 | Überschneidung mit Zuse 1 in der Digitaltechnik | Volta 3 elektrisch (Pegel, Schwellen, Prellen, Zähler), Zuse logisch (Rätselkisten, Rechner); Verweise in beide Richtungen |
@@ -322,6 +325,8 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 | Entscheidung | Spätestens |
 |---|---|
 | ~~Freigabe der Stufen- und Experimentliste (Kapitel 8)~~ – **freigegeben am 04.11.2026** | erledigt |
+| ~~Radiomodell, Schrittweite der Wandler, Echtzeit-Reserve des Empfängers~~ – **entschieden am 04.11.2026** nach Machbarkeitstest (Kapitel 4) | erledigt |
+| Prädiktor und Toleranz 1e-4 für Volta 3 einschalten (Messung mit echten Experimenten) | Schritt 3 |
 | Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2) | Schritt 2 |
 | Kennfarbe von Volta 3 (App-Symbol entschieden: Reihensymbol `volta3.svg`) | Schritt 2 |
 | Name der Reihe (Markenfrage Volta) | vor Schritt 6 |
@@ -330,4 +335,4 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 
 ## 15. Fazit
 
-Volta 3 schließt die Elektronik-Reihe ab: vom Schwingkreis über Radio, Stromversorgung und Messtechnik bis zum Zähler mit Anzeige, der direkt in die Zuse-Linie führt. Inhaltlich ist der Band mit 61 Experimenten in neun Stufen umrissen; gestalterisch übernimmt er das Farb- und Leitkonzept von Volta 1 und 2 vollständig. Technisch ist er anspruchsvoller als Volta 2, weil er Vorgänge zeigt, die schneller sind, als ein Tablet Schritt für Schritt rechnen kann – dafür sind ehrliche, gekennzeichnete Wege entschieden (Kapitel 4), die ein Machbarkeitstest vor dem Start bestätigt. Der Aufwand liegt bei rund 157 Personentagen nach Abschluss von Volta 2.
+Volta 3 schließt die Elektronik-Reihe ab: vom Schwingkreis über Radio, Stromversorgung und Messtechnik bis zum Zähler mit Anzeige, der direkt in die Zuse-Linie führt. Inhaltlich ist der Band mit 61 Experimenten in neun Stufen umrissen; gestalterisch übernimmt er das Farb- und Leitkonzept von Volta 1 und 2 vollständig. Technisch ist er anspruchsvoller als Volta 2, weil er Vorgänge zeigt, die schneller sind, als ein Tablet Schritt für Schritt rechnen kann – dafür sind ehrliche, gekennzeichnete Wege entschieden (Kapitel 4), die der Machbarkeitstest auf dem Tablet bestätigt hat. Der Aufwand liegt bei rund 157 Personentagen nach Abschluss von Volta 2.

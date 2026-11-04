@@ -78,8 +78,14 @@ Desktop ist erfahrungsgemäß etwa 1,35-mal so schnell wie das Tablet (Audio-Lei
    Zu entscheiden: Reserve 2-fach für Empfänger mit Transistorverstärker annehmen, oder den Verstärker im
    MW-Modul als Verhaltensmodell (wie der 555 in Volta 2) und nur Detektor und Kopfhörer echt auf der Grundplatte.
 
-## Offene Punkte nach dem Test
+## Entscheidungen (04.11.2026)
 
-- Entscheidung: Toleranz 1e-4 und Prädiktor für Volta 3 einschalten (nur Edition volta3).
-- Entscheidung: Schrittweite 5 µs bei Schaltwandlern; Trapezverfahren als spätere Option.
-- Drehkondensator als Bauteil mit Bedienparameter (der Test baut den Aufbau je Reglerschritt neu; 0,006 ms).
+- **Empfänger:** 2-fache Echtzeit auf dem Tablet genügt; der Verstärker bleibt echte Schaltung. Wird es zu knapp,
+  greift der angesagte Ersatzton der App.
+- **Schaltwandler:** Schrittweite 5 µs, solange ein Schaltwandler steckt; Trapezverfahren als spätere Option.
+- **Radiomodell:** gemittelter Hüllkurvendetektor; Konzept Volta 3 auf v0.5 angepasst (Kapitel 4).
+
+## Offene Punkte
+
+- Prädiktor und Toleranz 1e-4 für Volta 3 einschalten – nach Messung mit echten Experimenten (Schritt 3).
+- Drehkondensator als Bauteil mit Bedienparameter (der Test baut den Aufbau je Reglerschritt neu; 0,009 ms).
