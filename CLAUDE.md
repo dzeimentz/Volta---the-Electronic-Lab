@@ -187,6 +187,7 @@ Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach A
 | `docs/roadmap.md` | Phasen, Aufwaende, offene Entscheidungen |
 | `docs/Konzept_Volta2.md` | Konzept Volta 2 (v0.4): Entscheidungen, Bedienpult II, Pult nach Bedarf, erweiterte Spannungsanzeige, Bauteile, Farb- und Leitkonzept, 61 Experimente in 9 Stufen, Umsetzungsplan; PDF mit `python3 tools/konzept_pdf.py docs/Konzept_Volta2.md` |
 | `docs/Konzept_Volta3.md` | Konzept Volta 3 (v0.4): Grundsatzentscheidungen (31.10.2026) Frequenzgang/Radio/Schaltwandler, Bedienpult III, Bauteile und Module, Farb- und Leitkonzept, 61 Experimente in 9 Stufen, Umsetzungsplan; PDF mit `python3 tools/konzept_pdf.py docs/Konzept_Volta3.md` |
+| `docs/Konzept_Schaltungsbibliothek.md` | Konzept Schaltungsbibliothek (v0.1): eigene App nach Volta 3, erprobte Schaltungen mit Suche nach Name/Thema/Genre, selbst aufbauen, Aufbauhilfe oder aufbauen lassen; nur Schaltungsprinzipien aus Quellen; PDF mit `python3 tools/konzept_pdf.py docs/Konzept_Schaltungsbibliothek.md` |
 | `docs/volta2-planung.md` | Arbeitsgrundlage Volta 2: Leistungstest Audio, Timer 555, Auswertung der 555-Quellensammlung |
 | `docs/Konzept_Zuse.md` | Konzept der Zuse-Reihe (v0.3): Raetselkisten, Werkzeugkiste, Bedienfeld, Zahlensysteme, Lernpfade, Ecosystem; PDF mit `python3 tools/konzept_pdf.py docs/Konzept_Zuse.md` |
 | `docs/Konzept_MCU_Explorer.md` | Konzept MCU Explorer (v0.1): ATmega328P-Emulator, Kopplung an den Volta-Kern, Toolchain, Lernpfade, Abgrenzung zu Zuse 3 |
