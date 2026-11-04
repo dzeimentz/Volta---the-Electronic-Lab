@@ -321,7 +321,7 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 
 | Entscheidung | Spätestens |
 |---|---|
-| Freigabe der Stufen- und Experimentliste (Kapitel 8) | vor Schritt 2 |
+| ~~Freigabe der Stufen- und Experimentliste (Kapitel 8)~~ – **freigegeben am 04.11.2026** | erledigt |
 | Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2) | Schritt 2 |
 | Kennfarbe von Volta 3 (App-Symbol entschieden: Reihensymbol `volta3.svg`) | Schritt 2 |
 | Name der Reihe (Markenfrage Volta) | vor Schritt 6 |
