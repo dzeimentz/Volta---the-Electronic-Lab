@@ -141,3 +141,42 @@ TEST_CASE("Wechselstromanalyse aendert den Zustand nicht und prueft die Anregung
     }
     CHECK(sim.probe().voltage(out) == Catch::Approx(twin.probe().voltage(out)).margin(1e-12));
 }
+
+TEST_CASE("Praediktor und Toleranz (Volta 3) aendern das Ergebnis nur im Rahmen der Toleranz", "[volta3]") {
+    auto make = [] {
+        Circuit c;
+        const NodeId plus = c.addNode(), g = c.addNode(), b = c.addNode(), col = c.addNode(), e = c.addNode();
+        c.add<Battery>("B", plus, kGround);
+        auto& gen = c.add<FunctionGenerator>("G", g, kGround);
+        c.add<Capacitor>("Cin", b, g, CapacitorParams::electrolytic(10e-6));
+        c.add<Resistor>("R1", plus, b, ResistorParams{47e3});
+        c.add<Resistor>("R2", b, kGround, ResistorParams{10e3});
+        c.add<Resistor>("Rc", plus, col, ResistorParams{2.2e3});
+        c.add<Npn>("T", b, col, e);
+        c.add<Resistor>("Re", e, kGround, ResistorParams{470.0});
+        gen.setFrequency(1000.0);
+        gen.setAmplitude(0.05);
+        return c;
+    };
+    Simulator plain, fast;
+    REQUIRE(plain.setCircuit(make()) == Status::Ok);
+    REQUIRE(fast.setCircuit(make()) == Status::Ok);
+    fast.setPredictor(true);
+    fast.setRelativeTolerance(1e-4);
+    CHECK(fast.relativeTolerance() == 1e-4);
+    long itPlain = 0, itFast = 0;
+    for (int i = 0; i < 20000; ++i) {
+        REQUIRE(plain.step(20e-6) == Status::Ok);
+        REQUIRE(fast.step(20e-6) == Status::Ok);
+        itPlain += plain.lastStepIterations();
+        itFast += fast.lastStepIterations();
+        REQUIRE(std::fabs(fast.probe().voltage(4) - plain.probe().voltage(4)) < 1e-3);
+    }
+    CHECK(itFast < itPlain);
+    requireKirchhoff(fast);
+    // Grenzen
+    fast.setRelativeTolerance(1.0);
+    CHECK(fast.relativeTolerance() == 1e-2);
+    fast.setRelativeTolerance(std::nan(""));
+    CHECK(fast.relativeTolerance() == kTolRel);
+}

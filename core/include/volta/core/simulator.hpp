@@ -59,6 +59,16 @@ public:
     Circuit& circuit() noexcept { return m_circuit; }
     const Circuit& circuit() const noexcept { return m_circuit; }
 
+    // Praediktor (ab Volta 3, Vorgabe aus): Newton startet im Zeitschritt bei der linearen Fortschreibung der
+    // letzten beiden angenommenen Zustaende statt beim letzten Zustand. Das Ergebnis bleibt innerhalb der
+    // Konvergenztoleranz gleich, braucht aber weniger Iterationen. Aus: bitgleich zu Volta 1 und 2.
+    void setPredictor(bool on) noexcept { m_predictor = on; }
+    bool predictor() const noexcept { return m_predictor; }
+    // Relative Konvergenztoleranz des Newton-Verfahrens (Vorgabe kTolRel = 1e-6, bitgleich zu Volta 1 und 2;
+    // SPICE: 1e-3). Werte ausserhalb 1e-9 ... 1e-2 werden begrenzt.
+    void setRelativeTolerance(double rel) noexcept;
+    double relativeTolerance() const noexcept { return m_tolRel; }
+
     // Newton-Iterationen des letzten Loesungsvorgangs (Diagnose, Leistungsmessung).
     int lastNewtonIterations() const noexcept { return m_lastIterations; }
     // Summe der Newton-Iterationen und groesste Halbierungstiefe des letzten step() (Diagnose, Leistungsmessung).
@@ -85,6 +95,11 @@ private:
     std::vector<double> m_next;     // naechste Newton-Naeherung
     std::vector<double> m_backup;   // Sicherung waehrend der Quellenrampe
     std::vector<double> m_delta;    // letzte Newton-Korrektur (Erkennung von Pendeln)
+    std::vector<double> m_prevAccepted; // vorletzter angenommener Zustand (Praediktor)
+    double m_prevDtS = 0.0;
+    bool m_havePrev = false;
+    bool m_predictor = false;
+    double m_tolRel = kTolRel;
     std::vector<std::size_t> m_nonlinear;
     Probe m_probe;
     EventQueue m_events;

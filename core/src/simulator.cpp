@@ -42,6 +42,8 @@ Status Simulator::setCircuit(Circuit circuit) {
         m_next.assign(n, 0.0);
         m_backup.assign(n, 0.0);
         m_delta.assign(n, 0.0);
+        m_prevAccepted.assign(n, 0.0);
+        m_havePrev = false;
         m_nonlinear.clear();
         for (std::size_t i = 0; i < circuit.componentCount(); ++i)
             if (circuit.component(i).isNonlinear()) m_nonlinear.push_back(i);
@@ -58,11 +60,15 @@ Status Simulator::setCircuit(Circuit circuit) {
     return solveOperatingPoint();
 }
 
+void Simulator::setRelativeTolerance(double rel) noexcept {
+    m_tolRel = std::isfinite(rel) ? std::clamp(rel, 1e-9, 1e-2) : kTolRel;
+}
+
 bool Simulator::withinTolerance() const noexcept {
     const std::size_t nv = m_sys.nodeUnknowns();
     for (std::size_t i = 0; i < m_next.size(); ++i) {
         const double absTol = i < nv ? kVoltTolAbs : kCurrentTolAbs;
-        const double tol = absTol + kTolRel * std::max(std::fabs(m_next[i]), std::fabs(m_iter[i]));
+        const double tol = absTol + m_tolRel * std::max(std::fabs(m_next[i]), std::fabs(m_iter[i]));
         if (std::fabs(m_next[i] - m_iter[i]) > tol) return false;
     }
     return true;
@@ -78,6 +84,11 @@ Status Simulator::newton(const StampContext& ctx, bool warmStart, bool allowEarl
     }
     if (!warmStart) { // sonst: letzte Naeherung und Linearisierung des gescheiterten Versuchs weiterverwenden
         std::copy(m_accepted.begin(), m_accepted.end(), m_iter.begin());
+        if (m_predictor && m_havePrev && !ctx.isDc() && m_prevDtS > 0.0) {
+            // lineare Fortschreibung; nach sehr kurzen Teilschritten (Ereignisortung) hoechstens um einen Schritt
+            const double r = std::min(ctx.dtS / m_prevDtS, 1.0);
+            for (std::size_t i = 0; i < m_iter.size(); ++i) m_iter[i] += r * (m_accepted[i] - m_prevAccepted[i]);
+        }
         for (std::size_t idx : m_nonlinear) m_circuit.component(idx).resetLinearization(ctx.accepted);
     }
 
@@ -172,6 +183,7 @@ Status Simulator::solveOperatingPoint() noexcept {
         return s;
     }
     std::copy(m_iter.begin(), m_iter.end(), m_accepted.begin());
+    m_havePrev = false;
     // Innere Zustaende an den Arbeitspunkt angleichen (z. B. Transistor-Ladungen), ohne Zeitfortschritt
     const SolutionView x = view(m_accepted);
     for (std::size_t i = 0; i < m_circuit.componentCount(); ++i) m_circuit.component(i).updateState(x, 0.0);
@@ -227,6 +239,9 @@ Status Simulator::advance(double dtS, int depth, bool warmStart) noexcept {
 }
 
 void Simulator::accept(double dtS) noexcept {
+    std::copy(m_accepted.begin(), m_accepted.end(), m_prevAccepted.begin());
+    m_prevDtS = dtS;
+    m_havePrev = true;
     std::copy(m_iter.begin(), m_iter.end(), m_accepted.begin());
     m_timeS += dtS;
     const SolutionView x = view(m_accepted);
