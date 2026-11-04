@@ -32,24 +32,25 @@ das Ergebnis nur im Rahmen der Toleranz und sparen Iterationen.
 
 ## Ergebnisse (04.11.2026)
 
-Desktop: MinGW 13, Release. Tablet: Meswoa MES-B3 (arm64, NDK 27) – *Messung folgt*.
+Desktop: MinGW 13, Release. Tablet: Meswoa MES-B3 (arm64, NDK 27, Release), Messung 04.11.2026. Die Rechenergebnisse sind auf beiden Geräten
+ziffernweise gleich.
 Desktop ist erfahrungsgemäß etwa 1,35-mal so schnell wie das Tablet (Audio-Leistungstest Volta 2).
 
 | Prüfung | Vorgabe | Desktop | Tablet |
 |---|---|---|---|
-| Frequenzgang Schwingkreis, 200 Punkte | < 50 ms | 0,10 ms | |
-| Frequenzgang Verstärker mit Filter (20 Bauteile) | < 50 ms | 1,0 ms | |
-| Abstimmen (Aufbau, Arbeitspunkt, 3 Sender) | < 20 ms | 0,006 ms | |
-| Sendertrennung bei Kopplung 10 pF | > 10 dB | 34–40 dB | |
-| Abstimmung gegen Thomson-Formel | < 2 % | ≤ 0,3 % | |
-| Gemittelter Detektor gegen echten Träger 250 kHz (Ton) | < 2 % | −0,1 % | |
-| Einfache Hüllkurve (Spannung vor der Diode) | – | +51 … +57 % (verworfen) | |
-| Empfänger mit 2 Transistoren und Lautsprecher, 20 µs | ≥ 3-fach | 3,0-fach (3,4 Newton-Schritte) | |
-| Abwärtswandler 1/2/5 kHz, 20 µs gegen 1 µs | < 2 % | 0,04–0,12 % | |
-| Aufwärtswandler nicht lückend, 20 µs | < 2 % | 0,79 % | |
-| Aufwärtswandler lückend, 20 µs | – | 6,9 % (siehe Befund 3) | |
-| Aufwärtswandler lückend, 5 µs | < 2 %, ≥ 3-fach | 1,85 %, 5,4-fach | |
-| Klasse D 5 kHz, Ton 200 Hz | < 2 % | 0,17 % | |
+| Frequenzgang Schwingkreis, 200 Punkte | < 50 ms | 0,10 ms | 0,38 ms |
+| Frequenzgang Verstärker mit Filter (20 Bauteile) | < 50 ms | 1,0 ms | 2,3 ms |
+| Abstimmen (Aufbau, Arbeitspunkt, 3 Sender) | < 20 ms | 0,006 ms | 0,009 ms |
+| Sendertrennung bei Kopplung 10 pF | > 10 dB | 34–40 dB | gleich |
+| Abstimmung gegen Thomson-Formel | < 2 % | ≤ 0,3 % | gleich |
+| Gemittelter Detektor gegen echten Träger 250 kHz (Ton) | < 2 % | −0,1 % | gleich (1,2 ms für 10 ms) |
+| Einfache Hüllkurve (Spannung vor der Diode) | – | +51 … +57 % (verworfen) | gleich |
+| Empfänger mit 2 Transistoren und Lautsprecher, 20 µs | ≥ 3-fach | 3,0-fach (3,4 Newton-Schritte) | **2,0-fach** (ohne Optionen 2,0-fach, 3,5 Schritte) |
+| Abwärtswandler 1/2/5 kHz, 20 µs gegen 1 µs | < 2 % | 0,04–0,12 % | gleich, 8,4–14,8-fach |
+| Aufwärtswandler nicht lückend, 20 µs | < 2 % | 0,79 % | gleich, 12,3-fach |
+| Aufwärtswandler lückend, 20 µs | – | 6,9 % (siehe Befund 3) | gleich |
+| Aufwärtswandler lückend, 5 µs | < 2 %, ≥ 3-fach | 1,85 %, 5,4-fach | 1,85 %, 4,0-fach |
+| Klasse D 5 kHz, Ton 200 Hz | < 2 % | 0,17 % | gleich, 8,1-fach |
 
 ## Befunde
 
@@ -71,12 +72,14 @@ Desktop ist erfahrungsgemäß etwa 1,35-mal so schnell wie das Tablet (Audio-Lei
    ebenfalls beseitigen.
 5. **Transistorschaltungen im Hörbereich sind knapp.** Der Empfänger mit zwei Transistoren erreicht auf dem Desktop
    gerade die dreifache Echtzeit (Volta-2-Vorgabe). Hilfreich: Toleranz 1e-4 statt 1e-6 (4,0 → 3,1 Newton-Schritte,
-   SPICE rechnet mit 1e-3), Prädiktor gering. Rückfallebene der App: angesagter Ersatzton, wenn die Rechnung
-   langsamer als Echtzeit ist.
+   SPICE rechnet mit 1e-3), Prädiktor gering. **Auf dem Tablet 2,0-fach** – hörbar in Echtzeit, aber unter der
+   Reserve von Volta 2 (3-fach). Mit dem gemittelten Detektor bringen Toleranz und Prädiktor kaum noch etwas
+   (3,5 → 3,4 Schritte). Rückfallebene der App: angesagter Ersatzton, wenn die Rechnung langsamer als Echtzeit ist.
+   Zu entscheiden: Reserve 2-fach für Empfänger mit Transistorverstärker annehmen, oder den Verstärker im
+   MW-Modul als Verhaltensmodell (wie der 555 in Volta 2) und nur Detektor und Kopfhörer echt auf der Grundplatte.
 
 ## Offene Punkte nach dem Test
 
-- Messung auf dem Tablet (Spalte oben).
 - Entscheidung: Toleranz 1e-4 und Prädiktor für Volta 3 einschalten (nur Edition volta3).
 - Entscheidung: Schrittweite 5 µs bei Schaltwandlern; Trapezverfahren als spätere Option.
 - Drehkondensator als Bauteil mit Bedienparameter (der Test baut den Aufbau je Reglerschritt neu; 0,006 ms).
