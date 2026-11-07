@@ -40,7 +40,8 @@ struct Action {
         SetGenOffset,    // Funktionsgenerator: value = Gleichanteil in V
         SetTracerMin,    // Kennlinienschreiber: value = kleinste Pruefspannung in V
         SetTracerMax,    // Kennlinienschreiber: value = hoechste Pruefspannung in V
-        SetTracerOhm     // Kennlinienschreiber: value = Vorwiderstand in Ohm
+        SetTracerOhm,    // Kennlinienschreiber: value = Vorwiderstand in Ohm
+        SetCapacitance   // Drehkondensator (ab Volta 3): value = Kapazitaet in F; stimmt das Radio neu ab
     };
     std::string componentId;
     Type type = Type::SetSwitch;

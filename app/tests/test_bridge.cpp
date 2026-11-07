@@ -61,6 +61,46 @@ private slots:
         QVERIFY(!bridge.latest(s)); // nichts Neues
     }
 
+    // Radio (ab Volta 3): Detektorempfaenger an der Senderanlage; Drehen am Drehkondensator stimmt neu ab
+    void radioRetunesWithVariableCapacitor() {
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"senderanlage"};
+        b.desk.stationsOn = {true, true, true};
+        b.parts.push_back({"C1", "kondensator", {{"a", "A1"}, {"b", "A2"}}, 10e-12});
+        b.parts.push_back({"SP1", "spule_220uh", {{"a", "C1"}, {"b", "C2"}}});
+        model::PartPlacement dk{"DK1", "drehkondensator", {{"a", "D1"}, {"b", "D2"}}};
+        b.parts.push_back(dk);
+        b.parts.push_back({"D1", "diode_ge", {{"anode", "A4"}, {"kathode", "A5"}}});
+        b.parts.push_back({"R1", "widerstand", {{"a", "C6"}, {"b", "C7"}}, 47e3});
+        const char* wires[][2] = {{"P:ANT", "A1"}, {"A2", "C1"}, {"A2", "D1"}, {"C2", "P:0V"},
+                                  {"D2", "P:0V"},  {"A2", "A4"}, {"A5", "C6"}, {"C7", "P:0V"}};
+        int n = 0;
+        for (const auto& w : wires) b.wires.push_back({"L" + std::to_string(++n), w[0], w[1], "blau"});
+        const model::CatalogEntry* e = m_catalog.part("drehkondensator");
+        QVERIFY(e);
+        QVERIFY(std::fabs(model::variableCapacitanceF(*e, 0.0) - 10e-12) < 1e-15);
+        QVERIFY(std::fabs(model::variableCapacitanceF(*e, 1.0) - 500e-12) < 1e-15);
+        const auto carrier = [&](double c) {
+            model::Board bb = b;
+            bb.parts[2].position = 0.5;
+            model::Netlist net = model::buildNetlist(bb, m_catalog);
+            const std::size_t det = net.parts.at("D1");
+            sim::SimulationBridge bridge;
+            bridge.setCircuit(std::move(net.circuit));
+            bridge.setStations(model::deskStations(bb));
+            bridge.runFor(0.002);
+            bridge.post({"DK1", sim::Action::Type::SetCapacitance, c}); // wie LabSession::setPartPosition
+            bridge.runFor(0.01);
+            sim::Snapshot s;
+            if (!bridge.latest(s)) return -1.0;
+            return s.readings.at(det).displayValue;
+        };
+        // Schwingkreis 220 uH mit Drehkondensator + Koppelkondensator 10 pF: 1000 kHz bei 105 pF, 800 kHz bei 170 pF
+        const double tuned = carrier(105e-12), between = carrier(170e-12);
+        QVERIFY(tuned > 0.0);
+        QVERIFY(tuned > 3.0 * between);
+    }
+
     void topologyChangeKeepsStateAndAppliesOverrides() {
         sim::SimulationBridge bridge;
         model::Board b;

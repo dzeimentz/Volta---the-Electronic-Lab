@@ -16,5 +16,8 @@
   "stufe_7_titel": "La logique par la tension",
   "stufe_7_frage": "Comment une tension devient-elle un « 1 » ?",
   "stufe_8_titel": "Horloge et compteurs",
-  "stufe_8_frage": "Comment un circuit compte-t-il ?"
+  "stufe_8_frage": "Comment un circuit compte-t-il ?",
+  "lex_spule_hf": "Ces petites bobines ont peu de spires. Elles conviennent aux oscillations rapides. La bobine d’antenne de 220 µH (microhenry) forme avec le condensateur variable le circuit oscillant de ta radio. Il existe aussi 1 mH et 10 mH pour des sons plus graves.",
+  "lex_drehkondensator": "Un condensateur variable a des plaques qui tournent les unes dans les autres. Plus elles s’emboîtent, plus la capacité est grande : de 10 à 500 pF (picofarad). Touche-le, le bouton rotatif apparaît. Ainsi, tu accordes un circuit oscillant.",
+  "lex_diode_ge": "La diode au germanium conduit déjà à partir d’environ 0,2 volt. C’est pourquoi elle capte aussi des émetteurs très faibles. Dans la radio, elle retransforme l’oscillation rapide de l’antenne en son."
 }

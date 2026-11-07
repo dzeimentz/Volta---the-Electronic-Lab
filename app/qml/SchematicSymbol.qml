@@ -54,11 +54,11 @@ Item {
             return {s: "M0 16 H22 M42 16 H64 M22 16 L44 8", f: ""}
         case "wechselschalter": // Mitte links, Stellungen rechts oben/unten
             return {s: "M0 16 H22 M42 8 H64 M42 24 H64 M22 16 L42 8", f: ""}
-        case "diode_si":
+        case "diode_si": case "diode_ge":
             return {s: diode, f: ""}
         case "zdiode_4v7": case "zdiode_5v6": // Kathodenstrich mit Abwinkelung (Z-Diode)
             return {s: "M0 16 H24 M38 16 H64 M24 8 L38 16 L24 24 Z M34 6 L38 8 V24 L42 26", f: ""}
-        case "spule_100mh": // Wicklung als Boegen
+        case "spule_100mh": case "spule_220uh": case "spule_1mh": case "spule_10mh": // Wicklung als Boegen
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16", f: ""}
         case "spule_1h": // Wicklung mit Eisenkern (Strich darueber)
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H50", f: ""}
@@ -81,6 +81,8 @@ Item {
             return {s: "M0 16 H16 M48 16 H64 M16 5 H48 V25 H16 Z M32 25 V32", f: "", t: "5V", tx: 32, ty: 15}
         case "kondensator":
             return {s: "M0 16 H29 M35 16 H64 M29 6 V26 M35 6 V26", f: ""}
+        case "drehkondensator": // Kondensator mit Stellpfeil (DIN EN 60617)
+            return {s: "M0 16 H29 M35 16 H64 M29 6 V26 M35 6 V26 " + arrowLine(22, 28, 42, 4), f: arrowHead(22, 28, 42, 4)}
         case "elko": // gepolt: Plusbelag hohl, Minusbelag gefuellt
             return {s: "M0 16 H25 M39 16 H64 M25 6 H29 V26 H25 Z", f: "M35 6 H39 V26 H35 Z", t: "+", tx: 19, ty: 7}
         case "transistor_npn": // Basis links, Kollektor oben, Emitter unten mit Pfeil nach aussen

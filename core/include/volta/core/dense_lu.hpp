@@ -25,6 +25,7 @@ private:
     std::size_t m_n = 0;
     std::vector<double> m_lu;
     std::vector<std::size_t> m_perm;
+    std::vector<double> m_colScale; // Betragsmaximum je Spalte (Pivotgrenze)
     bool m_valid = false;
 };
 

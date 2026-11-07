@@ -1,5 +1,6 @@
 // Stellfenster des Trimmers (ab Volta 2): stufenlose Stellung des Schleifers wie beim Pult-Drehregler, dazu die
-// beiden Teilwiderstaende als Zahl. Bedienhandlung, kein Befehl.
+// beiden Teilwiderstaende als Zahl. Ab Volta 3 auch fuer den Drehkondensator (Kapazitaet 10 ... 500 pF als Zahl).
+// Bedienhandlung, kein Befehl.
 import QtQuick
 import QtQuick.Controls.Basic
 
@@ -10,6 +11,8 @@ Popup {
     property string partType: ""
     property real position: 0.5
     readonly property real ohm: partType === "trimmer_100k" ? 100000 : 10000
+    readonly property bool variableCap: partType === "drehkondensator"
+    readonly property int picofarad: Math.round(10 + position * 490) // wie der Katalog (c_min_F, c_max_F)
 
     function openFor(id, type, pos) {
         partId = id
@@ -55,20 +58,21 @@ Popup {
                 panel.position = value
                 panel.controller.setPartPosition(panel.partId, value)
             }
-            Accessible.name: qsTr("Stellung des Trimmers")
+            Accessible.name: panel.variableCap ? qsTr("Stellung des Drehkondensators") : qsTr("Stellung des Trimmers")
         }
         Label {
             width: parent.width
             wrapMode: Text.WordWrap
             color: Theme.navy
-            text: qsTr("a bis s: %1 · s bis b: %2").arg(Texts.ohm(Math.round(panel.ohm * panel.position)))
+            text: panel.variableCap ? qsTr("Kapazität: %1 pF").arg(panel.picofarad) : qsTr("a bis s: %1 · s bis b: %2").arg(Texts.ohm(Math.round(panel.ohm * panel.position)))
                                                    .arg(Texts.ohm(Math.round(panel.ohm * (1 - panel.position))))
         }
         Label {
             width: parent.width
             wrapMode: Text.WordWrap
             color: "#4A5560"
-            text: qsTr("Ein Trimmer wird einmal eingestellt und bleibt dann so – in echt mit einem kleinen Schraubendreher.")
+            text: panel.variableCap ? qsTr("Dreh die Platten weiter ineinander: Die Kapazität wird größer. Dein Schwingkreis schwingt dann langsamer.")
+                                    : qsTr("Ein Trimmer wird einmal eingestellt und bleibt dann so – in echt mit einem kleinen Schraubendreher.")
         }
     }
 }

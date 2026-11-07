@@ -50,6 +50,7 @@ std::string prefixFor(const std::string& type) {
         {"spule_100mh", "SP"},  {"spule_1h", "SP"},      {"trimmer_10k", "TR"},   {"trimmer_100k", "TR"},
         {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
         {"spannungsregler_5v", "IC"},
+        {"spule_220uh", "SP"},  {"spule_1mh", "SP"},     {"spule_10mh", "SP"},    {"drehkondensator", "DK"}, // ab Volta 3
         // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
         {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"},
         {"tastkopf", "TK"}}; // Tastkopf K1/K2 (»K« ist das Relais)

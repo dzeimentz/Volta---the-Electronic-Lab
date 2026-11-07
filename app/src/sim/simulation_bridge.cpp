@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "model/netlist_builder.hpp"
+#include "volta/core/components/capacitor.hpp"
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/sensors.hpp"
 #include "volta/core/components/sources.hpp"
@@ -133,9 +134,13 @@ void SimulationBridge::applyPending() {
         m_stepS = m_scope.stepS > 0.0 ? m_scope.stepS : core::kDefaultStepS;
     }
     if (circuit || scopeChanged) resolveScope();
-    for (const auto& a : m_actionsWork) apply(a);
+    bool retune = false;
+    for (const auto& a : m_actionsWork) {
+        apply(a);
+        retune = retune || a.type == Action::Type::SetCapacitance;
+    }
     // Radio (ab Volta 3): Abstimmen ueber die Wechselstromanalyse (Speicher nur hier, zwischen zwei Schritten)
-    if ((circuit || stationsChanged) && m_sim.hasCircuit() && (!m_stations.empty() || stationsChanged))
+    if ((circuit || stationsChanged || retune) && m_sim.hasCircuit() && (!m_stations.empty() || stationsChanged))
         core::tuneRadio(m_sim, m_stations);
 }
 
@@ -153,6 +158,9 @@ void SimulationBridge::apply(const Action& a) {
         break;
     case Action::Type::SetPotPosition:
         if (auto* p = dynamic_cast<core::Potentiometer*>(&c)) p->setPosition(a.value);
+        break;
+    case Action::Type::SetCapacitance:
+        if (auto* k = dynamic_cast<core::Capacitor*>(&c)) k->setCapacitance(a.value);
         break;
     case Action::Type::SetCells:
         if (auto* b = dynamic_cast<core::Battery*>(&c)) b->setCells(static_cast<int>(std::lround(a.value)));

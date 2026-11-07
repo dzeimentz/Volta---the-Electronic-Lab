@@ -1397,8 +1397,8 @@ Item {
                         // Reedkontakt und Wechselschalter: Tippen schaltet um (Bedienhandlung)
                         if (part.modelData.type === "reedkontakt" || part.modelData.type === "wechselschalter")
                             lab.controller.setPartClosed(part.modelData.id, part.partState.closed !== true)
-                        // Trimmer: Tippen oeffnet das Stellfenster (Bedienhandlung)
-                        if (part.modelData.type.startsWith("trimmer"))
+                        // Trimmer und Drehkondensator: Tippen oeffnet das Stellfenster (Bedienhandlung)
+                        if (part.modelData.type.startsWith("trimmer") || part.modelData.type === "drehkondensator")
                             trimmerPanel.openFor(part.modelData.id, part.modelData.type,
                                                  part.partState.position !== undefined ? part.partState.position : 0.5)
                     }

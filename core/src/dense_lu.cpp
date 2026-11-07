@@ -7,13 +7,20 @@
 namespace volta::core {
 
 namespace {
-constexpr double kPivotRel = 1e-14; // Pivot relativ zum betragsgroessten Matrixelement
+// Pivot relativ zum betragsgroessten Element seiner Spalte (urspruengliche Matrix), aber nicht unter 1e-20 des
+// groessten Matrixelements. Spaltenbezogen, weil sehr kleine Kondensatoren (Volta 3: Drehkondensator, Koppel-
+// kondensator 10 pF) Zweigkoeffizienten um 1e6 erzeugen: Relativ zum groessten Element wuerde dann ein Knoten, der
+// nur ueber GMIN haengt (unbenutztes Pultfeld), faelschlich als singulaer gelten. Die Grenze entscheidet nur ueber
+// Abbruch, nicht ueber das Ergebnis.
+constexpr double kPivotRel = 1e-14;
+constexpr double kPivotGlobalRel = 1e-20;
 } // namespace
 
 void DenseLu::resize(std::size_t n) {
     m_n = n;
     m_lu.assign(n * n, 0.0);
     m_perm.assign(n, 0);
+    m_colScale.assign(n, 0.0);
     m_valid = false;
 }
 
@@ -29,7 +36,10 @@ bool DenseLu::factor(const std::vector<double>& a) noexcept {
         if (!std::isfinite(v)) return false;
         scale = std::max(scale, std::fabs(v));
     }
-    const double pivotMin = std::max(scale * kPivotRel, 1e-300);
+    std::fill(m_colScale.begin(), m_colScale.end(), 0.0);
+    for (std::size_t r = 0; r < n; ++r)
+        for (std::size_t c = 0; c < n; ++c) m_colScale[c] = std::max(m_colScale[c], std::fabs(m_lu[r * n + c]));
+    const double pivotFloor = std::max(scale * kPivotGlobalRel, 1e-300);
 
     auto at = [&](std::size_t r, std::size_t c) -> double& { return m_lu[r * n + c]; };
     for (std::size_t col = 0; col < n; ++col) {
@@ -42,7 +52,7 @@ bool DenseLu::factor(const std::vector<double>& a) noexcept {
                 piv = r;
             }
         }
-        if (best < pivotMin) return false;
+        if (best < std::max(m_colScale[col] * kPivotRel, pivotFloor)) return false;
         if (piv != col) {
             for (std::size_t c = 0; c < n; ++c) std::swap(at(col, c), at(piv, c));
             std::swap(m_perm[col], m_perm[piv]);

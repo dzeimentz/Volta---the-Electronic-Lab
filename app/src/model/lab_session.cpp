@@ -760,7 +760,15 @@ void LabSession::setPot(int which, double position) {
 void LabSession::setPartPosition(const std::string& id, double position) {
     const double pos = std::clamp(position, 0.0, 1.0);
     for (auto& p : m_board.parts)
-        if (p.id == id) p.position = pos; // gehoert zum Aufbau-Zustand, aber nicht zum Verlauf
+        if (p.id == id) {
+            p.position = pos; // gehoert zum Aufbau-Zustand, aber nicht zum Verlauf
+            // Drehkondensator (ab Volta 3): die Stellung ergibt die Kapazitaet
+            const CatalogEntry* e = m_catalog.part(p.type);
+            if (e && e->model == "capacitor_variable") {
+                m_bridge.post({id, sim::Action::Type::SetCapacitance, variableCapacitanceF(*e, pos)});
+                return;
+            }
+        }
     m_bridge.post({id, sim::Action::Type::SetPotPosition, pos});
 }
 

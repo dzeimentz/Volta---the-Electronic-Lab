@@ -35,6 +35,10 @@ public:
     double voltageV() const noexcept { return m_voltV; }
     // Setzt die Ladespannung (z. B. Vorgabe eines Experiments). Kein Teil des Simulationsschritts.
     void setVoltage(double voltV) noexcept;
+    // Drehkondensator (ab Volta 3): neue Kapazitaet als Bedienhandlung (Stellung des Drehknopfs). Die Spannung bleibt
+    // erhalten (die Ladung folgt), wie beim zuegigen Drehen eines kaum geladenen Drehkondensators. Nur zwischen zwei
+    // Schritten; Werte <= 0 werden ignoriert.
+    void setCapacitance(double capacitanceF) noexcept;
 
     std::size_t branchCount() const noexcept override { return 1; }
     void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;

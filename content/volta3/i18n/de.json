@@ -16,5 +16,8 @@
   "stufe_7_titel": "Logik aus Spannung",
   "stufe_7_frage": "Wie wird aus einer Spannung eine Eins?",
   "stufe_8_titel": "Takt und Zähler",
-  "stufe_8_frage": "Wie zählt eine Schaltung?"
+  "stufe_8_frage": "Wie zählt eine Schaltung?",
+  "lex_spule_hf": "Diese kleinen Spulen haben wenige Windungen. Sie passen zu schnellen Schwingungen. Die Antennenspule mit 220 µH (Mikrohenry) bildet mit dem Drehkondensator den Schwingkreis deines Radios. Dazu gibt es 1 mH und 10 mH für tiefere Töne.",
+  "lex_drehkondensator": "Ein Drehkondensator hat Platten, die sich ineinander drehen. Je weiter sie ineinander stehen, desto größer ist die Kapazität: von 10 bis 500 pF (Pikofarad). Tippe ihn an, dann erscheint der Drehknopf. So stimmst du einen Schwingkreis ab.",
+  "lex_diode_ge": "Die Germaniumdiode leitet schon ab etwa 0,2 Volt. Darum hört sie auch sehr schwache Sender. Im Radio macht sie aus der schnellen Schwingung der Antenne wieder den Ton."
 }

@@ -43,6 +43,11 @@ QtObject {
         case "zdiode_5v6": return qsTr("Z-Diode 5,6 V")
         case "spule_100mh": return qsTr("Spule 100 mH")
         case "spule_1h": return qsTr("Spule 1 H")
+        case "spule_220uh": return qsTr("Antennenspule 220 µH")
+        case "spule_1mh": return qsTr("Spule 1 mH")
+        case "spule_10mh": return qsTr("Spule 10 mH")
+        case "drehkondensator": return qsTr("Drehkondensator")
+        case "diode_ge": return qsTr("Germaniumdiode")
         case "trimmer_10k": return qsTr("Trimmer 10 kΩ")
         case "trimmer_100k": return qsTr("Trimmer 100 kΩ")
         case "ir_led": return qsTr("IR-LED")
@@ -117,7 +122,9 @@ QtObject {
             ["wechselschalter", qsTr("Wechselschalter", "Wortanfaenge im Aufbautext")],
             ["reedkontakt", qsTr("Reedkontakt", "Wortanfaenge im Aufbautext")],
             ["zdiode_4v7", qsTr("Z-Diode", "Wortanfaenge im Aufbautext")],
+            ["diode_ge", qsTr("Germaniumdiode", "Wortanfaenge im Aufbautext")],
             ["diode_si", qsTr("Diode", "Wortanfaenge im Aufbautext")],
+            ["drehkondensator", qsTr("Drehkondensator", "Wortanfaenge im Aufbautext")],
             ["spule_100mh", qsTr("Spule", "Wortanfaenge im Aufbautext")],
             ["trimmer_10k", qsTr("Trimmer", "Wortanfaenge im Aufbautext")],
             ["blinkmodul", qsTr("Blinkmodul", "Wortanfaenge im Aufbautext")],

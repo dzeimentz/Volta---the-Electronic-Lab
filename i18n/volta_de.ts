@@ -6029,6 +6029,43 @@
         <source>Batterie %1 V</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Antennenspule 220 µH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Spule 1 mH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Spule 10 mH</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Drehkondensator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Germaniumdiode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Germaniumdiode</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Drehkondensator</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TitleBar</name>
@@ -6524,6 +6561,21 @@
     <message>
         <location filename="../app/qml/TrimmerPanel.qml" line="71"/>
         <source>Ein Trimmer wird einmal eingestellt und bleibt dann so – in echt mit einem kleinen Schraubendreher.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Stellung des Drehkondensators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Kapazität: %1 pF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Dreh die Platten weiter ineinander: Die Kapazität wird größer. Dein Schwingkreis schwingt dann langsamer.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

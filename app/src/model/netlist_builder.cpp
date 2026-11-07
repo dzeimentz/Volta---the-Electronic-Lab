@@ -250,6 +250,10 @@ private:
             rp.ohm = p.value > 0.0 ? p.value : 1000.0;
             rp.pmaxW = e->param("pmax_W", rp.pmaxW);
             c.add<core::Resistor>(p.id, n[0], n[1], rp);
+        } else if (m == "diode" && p.type == "diode_ge" && n.size() == 2 && antennaWired(m_board)) {
+            // Radio (ab Volta 3): mit angeschlossener Antenne rechnet die Ge-Diode als Detektordiode (ohne Traeger
+            // dieselbe Kennlinie); tuneRadio gibt ihr den Traeger
+            c.add<core::DetectorDiode>(p.id, n[0], n[1], diodeParams(*e));
         } else if ((m == "led" || m == "diode") && n.size() == 2) {
             auto& d = c.add<core::Diode>(p.id, n[0], n[1], diodeParams(*e));
             if (p.type == "ir_led") m_irLeds.push_back({&d, &p});
@@ -275,6 +279,9 @@ private:
             c.add<core::Buzzer>(p.id, n[0], n[1], bp);
         } else if (m == "capacitor" && n.size() == 2) {
             c.add<core::Capacitor>(p.id, n[0], n[1], core::CapacitorParams::film(p.value > 0.0 ? p.value : 100e-9));
+        } else if (m == "capacitor_variable" && n.size() == 2) {
+            // Drehkondensator (ab Volta 3): Kapazitaet aus der Stellung des Drehknopfs
+            c.add<core::Capacitor>(p.id, n[0], n[1], core::CapacitorParams::film(variableCapacitanceF(*e, p.position)));
         } else if (m == "capacitor_polar" && n.size() == 2) {
             c.add<core::Capacitor>(p.id, n[0], n[1],
                                    core::CapacitorParams::electrolytic(p.value > 0.0 ? p.value : 100e-6,
@@ -303,10 +310,15 @@ private:
         } else if (m == "regulator" && n.size() == 3) {
             c.add<core::VoltageRegulator>(p.id, n[0], n[1], n[2]); // 78L05-artig (Kennwerte im Kern)
         } else if (m == "inductor" && n.size() == 2) {
-            // 100 mH oder 1 H (Katalog l_H); Wicklungswiderstand und Grenzstrom wie die Vorgaben des Kerns
+            // 220 uH, 1 mH, 10 mH (ab Volta 3), 100 mH oder 1 H (Katalog l_H); Wicklungswiderstand und Grenzstrom wie
+            // die Vorgaben des Kerns
             const double l = e->param("l_H", 0.1);
             c.add<core::Inductor>(p.id, n[0], n[1],
-                                  l >= 0.5 ? core::InductorParams::h1() : core::InductorParams::mH100());
+                                  l >= 0.5    ? core::InductorParams::h1()
+                                  : l >= 0.05 ? core::InductorParams::mH100()
+                                  : l >= 5e-3 ? core::InductorParams::mH10()
+                                  : l >= 5e-4 ? core::InductorParams::mH1()
+                                              : core::InductorParams::uH220());
         } else if (m == "ldr" && n.size() == 2) {
             core::PhotoresistorParams lp;
             lp.r10Ohm = e->param("r10_ohm", lp.r10Ohm);
@@ -448,6 +460,11 @@ private:
 };
 
 } // namespace
+
+double variableCapacitanceF(const CatalogEntry& entry, double position) {
+    const double lo = entry.param("c_min_F", 10e-12), hi = entry.param("c_max_F", 500e-12);
+    return lo + std::clamp(position, 0.0, 1.0) * (hi - lo);
+}
 
 std::vector<core::RadioStation> deskStations(const Board& board) {
     std::vector<core::RadioStation> out;

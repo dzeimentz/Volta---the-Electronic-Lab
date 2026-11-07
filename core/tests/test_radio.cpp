@@ -178,6 +178,43 @@ TEST_CASE("Abstimmen: der Traeger an der Diode ist bei der Thomson-Frequenz am g
     CHECK(static_cast<const DetectorDiode&>(sim.circuit().component(b.detector)).driveCount() == 0);
 }
 
+TEST_CASE("Drehkondensator: Verstellen und neu Abstimmen wie ein neu gebauter Kreis", "[radio][volta3]") {
+    const RadioStation st{1e6, 1.0, 0.5, StationProgram::Tone, 1000.0, true};
+    Receiver r;
+    r.dkF = 150e-12;
+    Built b;
+    Simulator sim;
+    REQUIRE(sim.setCircuit(build(r, b)) == Status::Ok);
+    // Drehkondensator ist das vierte Bauteil (ANT, Ck, L, DK)
+    auto& dk = static_cast<Capacitor&>(sim.circuit().component(3));
+    REQUIRE(dk.params().capacitanceF == 150e-12);
+    dk.setCapacitance(250e-12);
+    dk.setCapacitance(-1.0); // ungueltig: bleibt
+    CHECK(dk.params().capacitanceF == 250e-12);
+    REQUIRE(tuneRadio(sim, {st}) == Status::Ok);
+    const double e0 = static_cast<const DetectorDiode&>(sim.circuit().component(b.detector)).drive(0).e0V;
+
+    Receiver r2 = r;
+    r2.dkF = 250e-12;
+    Built b2;
+    Simulator sim2;
+    REQUIRE(sim2.setCircuit(build(r2, b2)) == Status::Ok);
+    REQUIRE(tuneRadio(sim2, {st}) == Status::Ok);
+    CHECK(exact(e0, static_cast<const DetectorDiode&>(sim2.circuit().component(b2.detector)).drive(0).e0V));
+}
+
+TEST_CASE("Antennenspule 220 uH: Drehkondensator 10 ... 500 pF erreicht alle drei Sender", "[radio][volta3]") {
+    const InductorParams l = InductorParams::uH220();
+    const auto f = [&](double c) { return 1.0 / (2.0 * kPi * std::sqrt(l.inductanceH * c)); };
+    CHECK(f(500e-12) < 600e3);
+    CHECK(f(10e-12 + 10e-12) > 1400e3); // mit kleinem Koppelkondensator
+    // Guete bei 1 MHz (Reihen- und Parallelverluste): um 90, mindestens 50
+    const double w = 2.0 * kPi * 1e6, xl = w * l.inductanceH;
+    const double q = 1.0 / (l.windingOhm / xl + xl / l.parallelOhm);
+    CHECK(q > 50.0);
+    CHECK(q < 150.0);
+}
+
 TEST_CASE("Gemittelter Detektor mit Belastung des Kreises stimmt mit dem echten Traeger ueberein", "[radio][volta3]") {
     Receiver r;
     const double fc = 600e3, fa = 5000.0, depth = 0.5;

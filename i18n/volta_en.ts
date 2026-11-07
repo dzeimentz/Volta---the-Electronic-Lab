@@ -6029,6 +6029,43 @@
         <source>Batterie %1 V</source>
         <translation>Battery %1 V</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Antennenspule 220 µH</source>
+        <translation>Antenna coil 220 µH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Spule 1 mH</source>
+        <translation>Coil 1 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Spule 10 mH</source>
+        <translation>Coil 10 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Drehkondensator</source>
+        <translation>Variable capacitor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Germaniumdiode</source>
+        <translation>Germanium diode</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Germaniumdiode</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>germanium diode</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Drehkondensator</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>variable capacitor</translation>
+    </message>
 </context>
 <context>
     <name>TitleBar</name>
@@ -6525,6 +6562,21 @@
         <location filename="../app/qml/TrimmerPanel.qml" line="71"/>
         <source>Ein Trimmer wird einmal eingestellt und bleibt dann so – in echt mit einem kleinen Schraubendreher.</source>
         <translation>A trimmer is set once and then stays that way – in real life with a small screwdriver.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Stellung des Drehkondensators</source>
+        <translation>Variable capacitor setting</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Kapazität: %1 pF</source>
+        <translation>Capacitance: %1 pF</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Dreh die Platten weiter ineinander: Die Kapazität wird größer. Dein Schwingkreis schwingt dann langsamer.</source>
+        <translation>Turn the plates further into each other: the capacitance gets larger. Your tuned circuit then oscillates more slowly.</translation>
     </message>
 </context>
 <context>

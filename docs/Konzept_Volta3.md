@@ -115,7 +115,7 @@ Neu in Volta 3 (Katalog `content/catalog/bauteile.json`, Feld `ab_band: 3`); all
 | Bauteil / Modul | Modell im Kern | Referenz (Abweichung < 2 %) |
 |---|---|---|
 | Drehkondensator 10–500 pF | Kondensator mit Drehregler im Bauteil | Resonanzfrequenz |
-| Spulen 100 µH, 1 mH, 10 mH | Induktivität mit Wicklungswiderstand und Güte | Schwingkreis, Wandler |
+| Spulen 220 µH (Antennenspule), 1 mH, 10 mH | Induktivität mit Wicklungswiderstand und Güte (220 statt 100 µH: nur so erreicht der Drehkondensator 10–500 pF auch 600 kHz) | Schwingkreis, Wandler |
 | Antenne (Draht) | Signalquelle der Senderanlage mit Innenwiderstand und kleiner Kapazität | Detektorempfänger |
 | Kristallhörer | hochohmiger Hörer (Kapazität mit Parallelwiderstand), hörbar | Detektorempfänger |
 | Schottky- und Germaniumdiode | Diodenmodell mit niedriger Schwellspannung | Hüllkurvendetektor |
@@ -245,7 +245,7 @@ Volta 3 übernimmt das Farb- und Leitkonzept aus Volta 1 (0.9.1) mit den Erweite
 | Schalten (blau) | – (Taster und Schalter aus Volta 1 genügen) |
 | Widerstände und Sensoren (grün) | Kraftsensor, Hall-Sensor |
 | Dioden und Transistoren (violett) | Schottky- und Germaniumdiode, MOSFET, Thyristor, Triac, Diac |
-| Kondensatoren und Spulen (türkis) | Drehkondensator, Spulen 100 µH … 10 mH |
+| Kondensatoren und Spulen (türkis) | Drehkondensator, Spulen 220 µH … 10 mH |
 | Bewegung und Ton (orange) | Kristallhörer, Antenne; das Thema heißt in Volta 3 »Ton und Empfang« |
 
 Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen groß. Es wird im Fach in **zwei Gruppen** gezeigt (»Dioden« und »Transistoren und Thyristoren«), mit derselben Farbe und einer Zwischenüberschrift – statt eines siebten Themas, damit die Farben der Reihe gleich bleiben (entschieden 07.11.2026).

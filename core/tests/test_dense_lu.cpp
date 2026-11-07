@@ -38,6 +38,18 @@ TEST_CASE("LU erkennt singulaere Matrix", "[lu][robust]") {
     CHECK_FALSE(lu.solve({1, 1}, x));
 }
 
+TEST_CASE("LU: Knoten nur an GMIN neben grossem Zweigkoeffizienten ist nicht singulaer", "[lu][robust]") {
+    // Volta 3: Koppelkondensator 10 pF -> Zweigkoeffizient um 1e6; daneben ein unbenutzter Knoten mit 1e-9 S
+    DenseLu lu;
+    lu.resize(3);
+    REQUIRE(lu.factor({1e-3, 0, 1, 0, 1e-9, 0, 1, 0, -2e6}));
+    std::vector<double> x(3);
+    REQUIRE(lu.solve({0, 1e-9, 1}, x));
+    CHECK(x[1] == Approx(1.0));
+    // weiterhin singulaer: abhaengige Zeilen bei grossem Koeffizienten
+    CHECK_FALSE(lu.factor({1e-9, 0, 0, 0, 2e6, 4e6, 0, 1e6, 2e6}));
+}
+
 TEST_CASE("LU weist nicht endliche Eintraege zurueck", "[lu][robust]") {
     DenseLu lu;
     lu.resize(1);

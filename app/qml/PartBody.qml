@@ -30,7 +30,7 @@ Item {
     implicitHeight: 34
 
     // Grosse Koerper zeichnerisch kleiner (Beine reichen weiter bis zu den Steckpunkten); Symbole unberuehrt
-    readonly property real sizeFactor: isLed || type === "ir_led" || type.startsWith("trimmer")
+    readonly property real sizeFactor: isLed || type === "ir_led" || type.startsWith("trimmer") || type === "drehkondensator"
         || ["taster", "wechselschalter", "reedkontakt", "widerstand", "kondensator", "elko", "motor"].indexOf(type) >= 0
         ? 0.85 : 1.0
     scale: sizeFactor
@@ -97,7 +97,8 @@ Item {
             case "elko": return electrolytic
             case "diode_si": case "diode_ge": case "zdiode_4v7": case "zdiode_5v6": return diode
             case "transistor_npn": case "transistor_pnp": return transistor
-            case "spule_100mh": case "spule_1h": return coil
+            case "spule_100mh": case "spule_1h": case "spule_220uh": case "spule_1mh": case "spule_10mh": return coil
+            case "drehkondensator": return variableCap
             case "trimmer_10k": case "trimmer_100k": return trimmer
             case "ir_led": return irLed
             case "fototransistor": return phototransistor
@@ -554,6 +555,42 @@ Item {
         }
     }
 
+    // Drehkondensator (ab Volta 3): durchsichtiges Gehaeuse mit Plattenpaket, Drehknopf mit Strich zeigt die Stellung
+    // (links 10 pF, rechts 500 pF); Bereich aufgedruckt
+    Component {
+        id: variableCap
+        Rectangle {
+            anchors.fill: parent; radius: 6
+            color: "#DCE6EC"; border.color: Theme.navy
+            Row { // Plattenpaket
+                x: 5; anchors.verticalCenter: parent.verticalCenter
+                spacing: 2
+                Repeater {
+                    model: 5
+                    Rectangle { width: 2; height: root.height * 0.6; color: "#9AA6B0" }
+                }
+            }
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.height * 0.92; height: width; radius: width / 2
+                color: "#F2F2F2"; border.color: "#5A5A5A"
+                Rectangle { // Zeigerstrich: -135 Grad (10 pF) bis +135 Grad (500 pF)
+                    anchors.centerIn: parent
+                    width: 3; height: parent.height * 0.85; radius: 1.5
+                    color: "transparent"
+                    rotation: (root.position - 0.5) * 270
+                    Rectangle { width: parent.width; height: parent.height / 2; radius: 1.5; color: "#303030" }
+                }
+            }
+            Text {
+                anchors.right: parent.right; anchors.rightMargin: 4
+                anchors.verticalCenter: parent.verticalCenter
+                text: "pF"
+                font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy
+            }
+        }
+    }
+
     Component {
         id: electrolytic
         Item {
@@ -651,7 +688,7 @@ Item {
                     Text {
                         id: label
                         anchors.centerIn: parent
-                        text: root.type === "spule_1h" ? "1 H" : "100 mH"
+                        text: ({spule_1h: "1 H", spule_220uh: "220 µH", spule_1mh: "1 mH", spule_10mh: "10 mH"})[root.type] || "100 mH"
                         color: "#3A2410"
                         font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true
                     }

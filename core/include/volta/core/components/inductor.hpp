@@ -19,6 +19,13 @@ struct InductorParams {
 
     static InductorParams mH100() noexcept { return {0.1, 30.0, 1e5, 0.1, {100.0, 0.1, 403.0}}; }
     static InductorParams h1() noexcept { return {1.0, 100.0, 1e5, 0.05, {100.0, 0.1, 403.0}}; }
+    // Ab Volta 3: kleine Spulen fuer Schwingkreise und Radio (Festinduktivitaeten bzw. Ferritantennenspule,
+    // typische Datenblattbereiche). Rp steht hier fuer die Verluste bei Hochfrequenz: Guete bei 1 MHz um 100,
+    // im Tonbereich bestimmt die Wicklung die Guete. 220 uH: Antennenspule fuer Mittelwelle (mit 10 ... 500 pF etwa
+    // 480 kHz bis ueber 1,4 MHz), Guete bei 1 MHz um 90.
+    static InductorParams uH220() noexcept { return {220e-6, 5.0, 2e5, 0.3, {100.0, 0.1, 403.0}}; }
+    static InductorParams mH1() noexcept { return {1e-3, 8.0, 2e5, 0.2, {100.0, 0.1, 403.0}}; }
+    static InductorParams mH10() noexcept { return {10e-3, 25.0, 2e5, 0.1, {100.0, 0.1, 403.0}}; }
 };
 
 // Spule (Katalogtyp `spule`): Induktivitaet L in Reihe mit dem Wicklungswiderstand R, parallel dazu Rp.

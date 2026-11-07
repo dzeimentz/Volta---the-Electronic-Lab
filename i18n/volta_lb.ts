@@ -6029,6 +6029,43 @@
         <source>Batterie %1 V</source>
         <translation>Batterie %1 V</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Antennenspule 220 µH</source>
+        <translation>Antennespull 220 µH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Spule 1 mH</source>
+        <translation>Spull 1 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Spule 10 mH</source>
+        <translation>Spull 10 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Drehkondensator</source>
+        <translation>Dréikondensator</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Germaniumdiode</source>
+        <translation>Germaniumdiod</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Germaniumdiode</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Germaniumdiod</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Drehkondensator</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Dréikondensator</translation>
+    </message>
 </context>
 <context>
     <name>TitleBar</name>
@@ -6525,6 +6562,21 @@
         <location filename="../app/qml/TrimmerPanel.qml" line="71"/>
         <source>Ein Trimmer wird einmal eingestellt und bleibt dann so – in echt mit einem kleinen Schraubendreher.</source>
         <translation>En Trimmer gëtt eemol agestallt a bleift dann esou – an echt mat engem klenge Schrauwenzéier.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Stellung des Drehkondensators</source>
+        <translation>Stellung vum Dréikondensator</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Kapazität: %1 pF</source>
+        <translation>Kapazitéit: %1 pF</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <source>Dreh die Platten weiter ineinander: Die Kapazität wird größer. Dein Schwingkreis schwingt dann langsamer.</source>
+        <translation>Dréi d’Placke méi wäit anenee: D’Kapazitéit gëtt méi grouss. Däi Schwéngkrees schwéngt dann méi lues.</translation>
     </message>
 </context>
 <context>

@@ -88,4 +88,8 @@ void Capacitor::restoreState(const ComponentState& state) noexcept {
     m_violationS = std::isfinite(state.internal[1]) ? state.internal[1] : 0.0;
 }
 
+void Capacitor::setCapacitance(double capacitanceF) noexcept {
+    if (capacitanceF > 0.0 && std::isfinite(capacitanceF)) m_params.capacitanceF = capacitanceF;
+}
+
 } // namespace volta::core
