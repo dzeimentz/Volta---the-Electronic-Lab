@@ -41,7 +41,13 @@ public:
     // true, wenn alle Anschluesse auf vorhandene Knoten zeigen.
     bool isValid() const noexcept;
 
+    // Integrationsverfahren der Zeitrechnung: false Rueckwaerts-Euler (Volta 1 und 2), true BDF2 fuer Kondensator
+    // und Spule (ab Volta 3; freie Schwingungen ohne kuenstliche Daempfung)
+    void setSecondOrder(bool on) noexcept { m_secondOrder = on; }
+    bool secondOrder() const noexcept { return m_secondOrder; }
+
 private:
+    bool m_secondOrder = false;
     std::size_t m_nodeCount = 1; // Masse existiert immer
     std::vector<std::unique_ptr<ComponentModel>> m_components;
 };

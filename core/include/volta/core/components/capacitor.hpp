@@ -54,6 +54,8 @@ private:
     double m_voltV = 0.0;     // Spannung am Ende des letzten angenommenen Schritts
     double m_violationS = 0.0; // bisherige Dauer einer Grenzwertverletzung
     double m_lastDtS = 0.0;
+    double m_prevVoltV = 0.0; // Spannung einen Schritt davor (BDF2, ab Volta 3)
+    bool m_havePrev = false;
 };
 
 } // namespace volta::core

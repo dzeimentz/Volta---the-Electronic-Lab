@@ -99,6 +99,7 @@ private:
     double m_prevDtS = 0.0;
     bool m_havePrev = false;
     bool m_predictor = false;
+    bool m_secondOrder = false; // aus Circuit::secondOrder()
     double m_tolRel = kTolRel;
     std::vector<std::size_t> m_nonlinear;
     Probe m_probe;

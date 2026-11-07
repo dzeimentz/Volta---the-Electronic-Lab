@@ -20,6 +20,7 @@ Simulator::Simulator() {
 
 Status Simulator::setCircuit(Circuit circuit) {
     if (!circuit.isValid()) return Status::InvalidCircuit;
+    m_secondOrder = circuit.secondOrder();
 
     std::size_t branches = 0;
     NodeId nextInternal = circuit.nodeCount(); // innere Knoten folgen auf die Knoten der Netzliste
@@ -205,6 +206,7 @@ Status Simulator::advance(double dtS, int depth, bool warmStart) noexcept {
     StampContext ctx;
     ctx.dtS = dtS;
     ctx.timeS = m_timeS + dtS;
+    ctx.secondOrder = m_secondOrder;
     ctx.accepted = view(m_accepted);
 
     // Auf der tiefsten Ebene kann nicht mehr halbiert werden: dort die Iterationen ausschoepfen.

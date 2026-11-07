@@ -52,6 +52,9 @@ public:
 private:
     InductorParams m_params;
     double m_currentA = 0.0;
+    double m_prevCurrentA = 0.0; // Strom einen Schritt davor (BDF2, ab Volta 3)
+    double m_lastDtS = 0.0;
+    bool m_havePrev = false;
 };
 
 } // namespace volta::core

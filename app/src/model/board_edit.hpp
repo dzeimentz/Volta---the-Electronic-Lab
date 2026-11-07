@@ -47,8 +47,10 @@ std::string earpieceId(const Board& board);
 bool needsAudioStep(const Board& board);
 // Schrittweite, die der Aufbau fuer eine ehrliche Rechnung braucht (Echtzeit, ohne Oszilloskop): 1 ms; haengt der
 // Generator in der Schaltung, mindestens 40 Schritte je Periode (1 kHz -> 25 us), hoechstens 20 us fein; mit
-// verdrahtetem Lautsprecher 20 us (needsAudioStep; audio = false in der stummen Zeitlupe).
-double requiredStepS(const Board& board, bool audio = true);
+// verdrahtetem Lautsprecher 20 us (needsAudioStep; audio = false in der stummen Zeitlupe). Ab Volta 3
+// (secondOrder, Catalog::secondOrder) mit einer Spule auf der Grundplatte 20 us: Schwingkreise bis etwa 1 kHz
+// schwingen dann mit BDF2 auf 2 % genau, auch ohne Oszilloskop und in der Zeitlupe.
+double requiredStepS(const Board& board, bool audio = true, bool secondOrder = false);
 // Groesste von Bauteilen oder Leitungen belegte Spalte bzw. Reihe (1 = A; 0: keine)
 int highestUsedColumn(const Board& board);
 int highestUsedRow(const Board& board);

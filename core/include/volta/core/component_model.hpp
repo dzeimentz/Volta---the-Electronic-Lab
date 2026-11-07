@@ -29,9 +29,26 @@ struct StampContext {
     double timeS = 0.0;       // Zeitpunkt am Ende des Schritts
     double sourceScale = 1.0; // Quellenrampe (Source Stepping) beim Arbeitspunkt, sonst 1
     SolutionView accepted;    // letzter angenommener Zustand (nur als Startwert, z. B. fuer Spannungsbegrenzung)
+    // Ab Volta 3: Kondensator und Spule rechnen mit BDF2 (zweite Ordnung), sonst Rueckwaerts-Euler
+    bool secondOrder = false;
 
     bool isDc() const noexcept { return dtS <= 0.0; }
 };
+
+// Koeffizienten der Zeitintegration y' = f: a0*y(n+1) - a1*y(n) + a2*y(n-1) = dt*f(n+1).
+// Rueckwaerts-Euler: 1, 1, 0. BDF2 mit veraenderlicher Schrittweite (w = dt/dtVorher): (1+2w)/(1+w), 1+w,
+// w^2/(1+w); ohne Vorgeschichte (erster Schritt nach dem Arbeitspunkt) oder bei einem Sprung der Schrittweite
+// ueber das Doppelte (Stabilitaetsgrenze 1+sqrt(2)) rechnet der Schritt mit Rueckwaerts-Euler.
+struct IntegrationCoeffs {
+    double a0 = 1.0, a1 = 1.0, a2 = 0.0;
+    bool secondOrder = false;
+};
+inline IntegrationCoeffs integrationCoeffs(const StampContext& ctx, bool havePrev, double prevDtS) noexcept {
+    if (!ctx.secondOrder || !havePrev || !(prevDtS > 0.0) || ctx.isDc()) return {};
+    const double w = ctx.dtS / prevDtS;
+    if (!(w <= 2.0)) return {};
+    return {(1.0 + 2.0 * w) / (1.0 + w), 1.0 + w, w * w / (1.0 + w), true};
+}
 
 // Messwerte eines Bauteils fuer die Messschnittstelle (Probe).
 struct ComponentReading {

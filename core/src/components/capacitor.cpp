@@ -23,7 +23,10 @@ Capacitor::Capacitor(std::string id, NodeId a, NodeId b, CapacitorParams params)
     if (!(m_params.failAfterS >= 0.0) || !std::isfinite(m_params.failAfterS)) m_params.failAfterS = 0.2;
 }
 
-void Capacitor::setVoltage(double voltV) noexcept { m_voltV = std::isfinite(voltV) ? voltV : 0.0; }
+void Capacitor::setVoltage(double voltV) noexcept {
+    m_voltV = std::isfinite(voltV) ? voltV : 0.0;
+    m_havePrev = false;
+}
 
 void Capacitor::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
     if (m_destroyed) { // offen; Zweigstrom null
@@ -31,6 +34,13 @@ void Capacitor::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
         return;
     }
     sys.stampConductance(terminal(0), terminal(1), 1.0 / m_params.leakOhm);
+    const IntegrationCoeffs k = integrationCoeffs(ctx, m_havePrev, m_lastDtS);
+    if (k.secondOrder) { // BDF2: U = (a1 u(n) - a2 u(n-1)) / a0 + dt / (a0 C) * I
+        const double seriesOhm = std::max(ctx.dtS / (k.a0 * m_params.capacitanceF), kMinOhm);
+        sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), (k.a1 * m_voltV - k.a2 * m_prevVoltV) / k.a0,
+                               seriesOhm);
+        return;
+    }
     const double tau = ctx.isDc() ? kDcTauRefS : ctx.dtS;
     const double seriesOhm = std::max(tau / m_params.capacitanceF, kMinOhm);
     sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), m_voltV, seriesOhm);
@@ -61,9 +71,15 @@ double Capacitor::terminalCurrent(const SolutionView& x, std::size_t t) const no
 
 void Capacitor::updateState(const SolutionView& x, double dtS) noexcept {
     m_lastDtS = dtS;
+    m_havePrev = false;
     if (m_destroyed) return;
     const double v = x.voltage(terminal(0)) - x.voltage(terminal(1));
-    if (std::isfinite(v)) m_voltV = v;
+    if (!std::isfinite(v)) return;
+    if (dtS > 0.0) { // Arbeitspunkt (dtS 0) beginnt die Vorgeschichte neu
+        m_prevVoltV = m_voltV;
+        m_havePrev = true;
+    }
+    m_voltV = v;
 }
 
 void Capacitor::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {
@@ -84,7 +100,7 @@ ComponentState Capacitor::saveState() const noexcept {
 
 void Capacitor::restoreState(const ComponentState& state) noexcept {
     ComponentModel::restoreState(state);
-    setVoltage(state.internal[0]);
+    setVoltage(state.internal[0]); // ohne Vorgeschichte: der naechste Schritt rechnet mit Rueckwaerts-Euler
     m_violationS = std::isfinite(state.internal[1]) ? state.internal[1] : 0.0;
 }
 

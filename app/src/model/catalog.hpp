@@ -49,6 +49,8 @@ struct ModuleEntry {
 struct Catalog {
     std::map<std::string, CatalogEntry> parts;
     std::map<std::string, ModuleEntry> modules;
+    // Ab Volta 3: Kondensator und Spule rechnen mit BDF2 (core::Circuit::setSecondOrder), Volta 1 und 2 unveraendert
+    bool secondOrder = false;
 
     const CatalogEntry* part(const std::string& type) const {
         const auto it = parts.find(type);

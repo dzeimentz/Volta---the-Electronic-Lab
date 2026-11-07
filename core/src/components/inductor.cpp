@@ -26,6 +26,13 @@ void Inductor::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
         return;
     }
     const double lOverDt = m_params.inductanceH / ctx.dtS;
+    const IntegrationCoeffs k = integrationCoeffs(ctx, m_havePrev, m_lastDtS);
+    if (k.secondOrder) { // BDF2: U_L = L/dt * (a0 i - a1 i(n) + a2 i(n-1))
+        sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(),
+                               -lOverDt * (k.a1 * m_currentA - k.a2 * m_prevCurrentA),
+                               m_params.windingOhm + k.a0 * lOverDt);
+        return;
+    }
     sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), -lOverDt * m_currentA,
                            m_params.windingOhm + lOverDt);
 }
@@ -47,13 +54,20 @@ double Inductor::terminalCurrent(const SolutionView& x, std::size_t t) const noe
     return t == 0 ? i : -i;
 }
 
-void Inductor::updateState(const SolutionView& x, double /*dtS*/) noexcept {
+void Inductor::updateState(const SolutionView& x, double dtS) noexcept {
+    m_lastDtS = dtS;
+    m_havePrev = false;
     if (m_destroyed) {
         m_currentA = 0.0;
         return;
     }
     const double i = x.branchCurrent(firstBranch());
-    if (std::isfinite(i)) m_currentA = i;
+    if (!std::isfinite(i)) return;
+    if (dtS > 0.0) { // Arbeitspunkt (dtS 0) beginnt die Vorgeschichte neu
+        m_prevCurrentA = m_currentA;
+        m_havePrev = true;
+    }
+    m_currentA = i;
 }
 
 void Inductor::thermal(const SolutionView& /*x*/, double dtS) noexcept {
@@ -76,6 +90,7 @@ ComponentState Inductor::saveState() const noexcept {
 void Inductor::restoreState(const ComponentState& state) noexcept {
     ComponentModel::restoreState(state);
     m_currentA = std::isfinite(state.internal[0]) ? state.internal[0] : 0.0;
+    m_havePrev = false; // der naechste Schritt rechnet mit Rueckwaerts-Euler
 }
 
 } // namespace volta::core

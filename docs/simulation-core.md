@@ -58,8 +58,15 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 ### Zeitintegration
 - Rueckwaerts-Euler (implizit, A-stabil) mit Begleitmodellen fuer Kondensator und Spule.
 - Volta 1: feste Schrittweite 1 ms, Echtzeitbezug; Zeitraffer x1, x10, x100.
-- Ab Volta 2: variable Schrittweite bis ca. 20 µs (Audio bis 20 kHz), Audioberechnung im Puffer mit kurzem Vorlauf;
-  optional Trapezregel mit Daempfung gegen Klingeln.
+- Ab Volta 2: variable Schrittweite bis ca. 20 µs (Audio bis 20 kHz), Audioberechnung im Puffer mit kurzem Vorlauf.
+- Ab Volta 3 (`Circuit::setSecondOrder`, gesetzt ueber `Catalog::secondOrder`): Kondensator und Spule rechnen mit
+  **BDF2** (Gear 2. Ordnung, veraenderliche Schrittweite, A- und L-stabil, also ohne Klingeln an Schaltflanken).
+  Rueckwaerts-Euler daempft einen freien Schwingkreis kuenstlich um etwa w^2·dt/2 (1 H, 1 µF, 20 µs: rund 20 % mehr
+  Daempfung als die Widerstaende verlangen); BDF2 bleibt dort unter 0,1 % (`tests/test_second_order.cpp`, Referenz
+  Runge-Kutta). Erster Schritt nach dem Arbeitspunkt, nach Wiederherstellen eines Zustands und nach einem Sprung der
+  Schrittweite ueber das Doppelte: Rueckwaerts-Euler. Grenze: Der Phasenfehler waechst mit (w·dt)^2; bei 20 µs
+  bleiben Schwingkreise bis etwa 1 kHz unter 2 %. Steckt in Volta 3 eine Spule, rechnet die App mit 20 µs
+  (`model::requiredStepS`). Volta 1 und 2 rechnen unveraendert mit Rueckwaerts-Euler.
 - Nach Topologiewechsel und nach Undo: Arbeitspunkt zum aktuellen Zeitpunkt mit Quellenrampe (Source Stepping)
   als Rueckfall. Gespeicherte Zustaende (Kondensatorladung, spaeter Drehzahl) gehen dabei als Anfangsbedingungen
   ein: ein Kondensator wirkt im Arbeitspunkt als Spannungsquelle seiner Ladespannung (Serienwiderstand

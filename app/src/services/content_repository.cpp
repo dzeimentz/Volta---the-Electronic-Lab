@@ -105,6 +105,7 @@ bool ContentRepository::loadCatalog(model::Catalog& out, const QString& band) {
         return false;
     }
     out = model::Catalog{};
+    out.secondOrder = bands.contains(QStringLiteral("volta3"));
     for (const QJsonValue& v : root.value(QStringLiteral("bauteile")).toArray()) {
         const QJsonObject o = v.toObject();
         bool base = false;

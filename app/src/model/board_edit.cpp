@@ -191,8 +191,11 @@ bool needsAudioStep(const Board& board) {
     return board.deskParts.has_value() && (speakerWired(board) || antennaWired(board) || !earpieceId(board).empty());
 }
 
-double requiredStepS(const Board& board, bool audio) {
+double requiredStepS(const Board& board, bool audio, bool secondOrder) {
     if (audio && needsAudioStep(board)) return kAudioStepS;
+    if (secondOrder)
+        for (const auto& p : board.parts)
+            if (p.type.rfind("spule_", 0) == 0) return kAudioStepS;
     double step = core::kDefaultStepS;
     if (hasDeskPart(board, "generator"))
         for (const auto& w : board.wires)

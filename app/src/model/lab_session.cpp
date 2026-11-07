@@ -213,7 +213,7 @@ void LabSession::updateScope() {
         c.stepS = s.simStepS();
     }
     // Schrittweite nach dem Aufbau (Generator, Lautsprecher), unabhaengig davon, ob der Ton laeuft
-    c.stepS = std::min(c.stepS, requiredStepS(m_board, m_timeScale == 1.0));
+    c.stepS = std::min(c.stepS, requiredStepS(m_board, m_timeScale == 1.0, m_catalog.secondOrder));
     if (needsAudioStep(m_board) && m_timeScale == 1.0 && m_audible && m_audio) {
         c.audio = m_audio;
         c.audioId = desk_id::kSpeaker;
