@@ -1,0 +1,141 @@
+{
+  "id": "volta3.1.5",
+  "band": "volta3",
+  "stufe": 1,
+  "titel_key": "exp3_1_5_titel",
+  "dauer_min": 15,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "kondensator",
+    "spule_100mh",
+    "spule_1h",
+    "widerstand",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_1_5_frage",
+  "vermutungen": [
+    "exp3_1_5_v1",
+    "exp3_1_5_v2",
+    "exp3_1_5_v3"
+  ],
+  "beobachtungen": [
+    "exp3_1_5_b1",
+    "exp3_1_5_b2",
+    "exp3_1_5_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 159,
+        "start_frequenz_Hz": 50,
+        "spitze_V": 1
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.002,
+        "volt_je_teilung": [
+          0.2
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "C2",
+          "C3"
+        ],
+        "wert": 1e-06
+      },
+      {
+        "id": "SP1",
+        "typ": "spule_1h",
+        "felder": [
+          "D2",
+          "D3"
+        ]
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C2"
+        }
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "C2",
+        "farbe": "blau"
+      },
+      {
+        "von": "C2",
+        "nach": "D2",
+        "farbe": "blau"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp3_1_5_s1",
+    "exp3_1_5_s2",
+    "exp3_1_5_s3"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "C2",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.5,
+        "min": 0.75
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_1_5_h1",
+    "exp3_1_5_h2",
+    "exp3_1_5_loesung"
+  ],
+  "erklaerung_key": "exp3_1_5_erklaerung",
+  "mehr_wissen_key": "exp3_1_5_mehr",
+  "weiterforschen": [
+    "exp3_1_5_w1",
+    "exp3_1_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_1_5_echt"
+}
