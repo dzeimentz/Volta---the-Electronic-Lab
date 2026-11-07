@@ -111,11 +111,21 @@ class ContentSmokeTest : public QObject {
 
 private:
     model::Catalog m_catalog;
+    model::Catalog m_catalogV3; // wie die App ab Volta 3: Kondensator und Spule mit BDF2 (Catalog::secondOrder)
+    // Katalog wie in der App des Bandes: ab Volta 3 zweite Ordnung (und damit die Schrittweite fuer Spulen)
+    const model::Catalog& catalogFor(const QString& id) const {
+        return id.startsWith(QLatin1String("volta1.")) || id.startsWith(QLatin1String("volta2.")) ||
+                       id.startsWith(QLatin1String("zuse1."))
+                   ? m_catalog
+                   : m_catalogV3;
+    }
 
 private slots:
     void initTestCase() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         QVERIFY2(repo.loadCatalog(m_catalog), qPrintable(repo.lastError()));
+        m_catalogV3 = m_catalog;
+        m_catalogV3.secondOrder = true;
     }
 
     void parsesConditions() {
@@ -247,7 +257,7 @@ private slots:
         model::SuccessEvaluator eval(exp.successCondition);
         std::vector<std::string> buildErrors;
         const double limit = std::min(exp.maxHoldS + 5.0, 60.0);
-        const double t = timeToSuccess(board, m_catalog, eval, limit, &buildErrors);
+        const double t = timeToSuccess(board, catalogFor(id), eval, limit, &buildErrors);
         QVERIFY2(buildErrors.empty(), buildErrors.empty() ? "" : buildErrors.front().c_str());
         QVERIFY2(eval.errors().empty(), eval.errors().empty() ? "" : eval.errors().front().c_str());
         QVERIFY2(t > 0.0, qPrintable(QStringLiteral("%1: Vorlage erreicht ihre Erfolgsbedingung nicht in %2 s")
@@ -275,7 +285,7 @@ private slots:
             board.desk.mainSwitch = true;
             model::SuccessEvaluator eval(exp.successCondition);
             std::vector<std::string> buildErrors;
-            const double t = timeToSuccess(board, m_catalog, eval, std::min(exp.maxHoldS + 5.0, 60.0), &buildErrors);
+            const double t = timeToSuccess(board, catalogFor(id), eval, std::min(exp.maxHoldS + 5.0, 60.0), &buildErrors);
             QVERIFY2(t > 0.0, qPrintable(QStringLiteral("%1 mit %2: Ziel nicht erreicht").arg(id, QLatin1String(colour))));
         }
     }
@@ -295,7 +305,7 @@ private slots:
         board.desk.mainSwitch = true;
         model::SuccessEvaluator eval(exp.successCondition);
         std::vector<model::CircuitFinding> findings;
-        QVERIFY(timeToSuccess(board, m_catalog, eval, std::min(exp.maxHoldS + 5.0, 60.0), nullptr, &findings) > 0.0);
+        QVERIFY(timeToSuccess(board, catalogFor(id), eval, std::min(exp.maxHoldS + 5.0, 60.0), nullptr, &findings) > 0.0);
         QVERIFY2(findings.empty(), findings.empty() ? "" : qPrintable(QStringLiteral("%1: %2").arg(id,
                                                                 QString::fromStdString(findings.front().message.text()))));
     }
@@ -323,7 +333,7 @@ private slots:
         board.desk.mainSwitch = true;
         model::SuccessEvaluator eval(exp.successCondition);
         const double limit = std::min(exp.maxHoldS + 5.0, 60.0);
-        QVERIFY2(timeToSuccess(board, m_catalog, eval, limit) < 0.0,
+        QVERIFY2(timeToSuccess(board, catalogFor(id), eval, limit) < 0.0,
                  qPrintable(QStringLiteral("%1: Erfolg auch ohne Werkzeug bzw. Raumlicht").arg(id)));
     }
 };

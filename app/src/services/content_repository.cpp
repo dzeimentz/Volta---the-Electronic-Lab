@@ -285,6 +285,10 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
             out.desk.scope.channels[static_cast<std::size_t>(c)].voltsIndex =
                 nearest(model::scopeVoltsPerDiv(), vpd.at(c).toDouble(),
                         static_cast<int>(model::scopeVoltsPerDiv().size()) - 1);
+        // Triggerpegel (ab Volta 3): z. B. ueber dem Rest einer abgeklungenen Schwingung, damit das Bild beim Sprung
+        // beginnt
+        if (o.contains(QStringLiteral("trigger_V")))
+            out.desk.scope.triggerLevelV = std::clamp(o.value(QStringLiteral("trigger_V")).toDouble(), -50.0, 50.0);
     }
     if (pult.contains(QStringLiteral("anzeigegeraet"))) {
         const QJsonObject a = pult.value(QStringLiteral("anzeigegeraet")).toObject();

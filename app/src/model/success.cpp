@@ -20,6 +20,10 @@ struct SuccessEvaluator::Node {
         bool above = false;
         double mid = 0.0, hyst = 0.0; // aus dem vorigen Fenster
         bool haveMid = false;
+        // Frequenz: Zeitpunkte der Durchgaenge durch die Mitte (bestaetigt ueber Mitte + Hysterese) und ihre Abstaende
+        double prevV = 0.0, candS = 0.0, lastCrossS = -1.0;
+        bool haveCand = false;
+        std::vector<double> intervals;
         bool result = false;
         void clear() { *this = Window{}; }
     } win;
@@ -37,22 +41,33 @@ bool accumulate(SuccessEvaluator::Node::Window& w, SuccessCondition::Statistic s
         if (keepMid) { w.mid = mid; w.hyst = hyst; w.haveMid = true; }
         w.startS = w.lastS = t;
         w.min = w.max = v;
+        w.prevV = v;
         w.above = v > w.mid;
         return false;
     }
     const double dt = t - w.lastS;
+    const double prevT = w.lastS, prevV = w.prevV;
     w.lastS = t;
+    w.prevV = v;
     w.min = std::min(w.min, v);
     w.max = std::max(w.max, v);
     w.sum += v * dt;
     w.sumSq += v * v * dt;
     w.dur += dt;
     if (w.haveMid) {
+        if (!w.above && prevV < w.mid && v >= w.mid && dt > 0.0) {
+            w.candS = prevT + (w.mid - prevV) / (v - prevV) * dt;
+            w.haveCand = true;
+        }
         if (!w.above && v > w.mid + w.hyst) {
             w.above = true;
             ++w.crossings;
+            const double at = w.haveCand ? w.candS : t;
+            if (w.lastCrossS >= 0.0) w.intervals.push_back(at - w.lastCrossS);
+            w.lastCrossS = at;
         } else if (w.above && v < w.mid - w.hyst) {
             w.above = false;
+            w.haveCand = false;
         }
     }
     const double need = stat == S::Frequency ? std::max(windowS, 1.0) : windowS;
@@ -63,18 +78,40 @@ bool accumulate(SuccessEvaluator::Node::Window& w, SuccessCondition::Statistic s
     case S::PeakToPeak: value = w.max - w.min; break;
     case S::Mean: value = mean; break;
     case S::Rms: value = std::sqrt(std::max(0.0, w.sumSq / w.dur - mean * mean)); break;
-    case S::Frequency: value = w.haveMid ? w.crossings / w.dur : -1.0; break;
+    case S::Frequency:
+        value = w.haveMid ? w.crossings / w.dur : -1.0;
+        // Median der Abstaende: Pausen zwischen Schwingungszuegen (Rechteck stoesst einen Schwingkreis an) zaehlen
+        // nicht mit; bei gleichmaessigen Signalen dasselbe wie Durchgaenge je Sekunde
+        if (w.haveMid && w.intervals.size() >= 2) {
+            std::sort(w.intervals.begin(), w.intervals.end());
+            const std::size_t n = w.intervals.size();
+            const double med = n % 2 == 1 ? w.intervals[n / 2] : 0.5 * (w.intervals[n / 2 - 1] + w.intervals[n / 2]);
+            // Mittel der Abstaende nahe am Median (gleicht die Rasterung der Schritte aus)
+            double sum = 0.0;
+            int k = 0;
+            for (double d : w.intervals)
+                if (d > 0.75 * med && d < 1.25 * med) {
+                    sum += d;
+                    ++k;
+                }
+            if (k > 0 && sum > 0.0) value = k / sum;
+        }
+        break;
     case S::Instant: value = v; break;
     }
     // naechstes Fenster: Mitte und Hysterese aus diesem; ohne Schwankung zaehlt kein Durchgang
+    // Mitte: Mittelwert, solange er mit Hysterese innerhalb der Spannweite liegt (Nulllinie einer abklingenden
+    // Schwingung), sonst die Mitte zwischen Minimum und Maximum (schmale Pulse)
     const double pp = w.max - w.min;
-    w.mid = 0.5 * (w.max + w.min);
     w.hyst = pp > 1e-9 ? 0.1 * pp : 1e300;
+    w.mid = mean - w.hyst > w.min && mean + w.hyst < w.max ? mean : 0.5 * (w.max + w.min);
     w.haveMid = true;
     w.startS = t;
     w.min = w.max = v;
     w.sum = w.sumSq = w.dur = 0.0;
     w.crossings = 0;
+    w.intervals.clear();
+    w.haveCand = false;
     w.above = v > w.mid;
     return true;
 }

@@ -33,14 +33,23 @@ void SignalWindow::add(const double* values, std::size_t count, double dtS) noex
         if (last.valid) {
             const double h = kHysteresis * (last.max - last.min);
             if (h > 1e-6) {
-                if (v < last.mean - h) a.armed = true;
-                if (a.armed && v > last.mean + h && a.havePrev) {
+                if (v < last.mean - h) {
+                    a.armed = true;
+                    a.haveCross = false;
+                }
+                // Zeitpunkt des Durchgangs durch den Mittelwert selbst; gezaehlt wird er erst, wenn die Spannung danach
+                // ueber Mittelwert + Hysterese steigt. (Der Zeitpunkt der Bestaetigung wandert bei einer abklingenden
+                // Schwingung und verfaelschte deren Frequenz um rund 5 %.)
+                if (a.armed && a.havePrev && a.prev < last.mean && v >= last.mean) {
+                    a.crossS = m_elapsedS + (last.mean - a.prev) / (v - a.prev) * dtS;
+                    a.haveCross = true;
+                }
+                if (a.armed && a.haveCross && v > last.mean + h) {
                     a.armed = false;
-                    const double span = v - a.prev;
-                    const double frac = span > 0.0 ? std::clamp((last.mean - a.prev) / span, 0.0, 1.0) : 1.0;
-                    const double at = m_elapsedS + frac * dtS;
-                    if (a.rises == 0) a.firstRiseS = at;
-                    a.lastRiseS = at;
+                    if (a.rises > 0 && a.intervalCount < static_cast<int>(a.intervals.size()))
+                        a.intervals[static_cast<std::size_t>(a.intervalCount++)] = a.crossS - a.lastRiseS;
+                    if (a.rises == 0) a.firstRiseS = a.crossS;
+                    a.lastRiseS = a.crossS;
                     ++a.rises;
                 }
             }
@@ -61,9 +70,28 @@ void SignalWindow::add(const double* values, std::size_t count, double dtS) noex
         s.min = a.min;
         s.max = a.max;
         s.frequencyHz = a.rises >= 2 && a.lastRiseS > a.firstRiseS ? (a.rises - 1) / (a.lastRiseS - a.firstRiseS) : 0.0;
+        // Median der Abstaende: Pausen zwischen Schwingungszuegen (Rechteck stoesst einen Schwingkreis an) zaehlen
+        // nicht mit; bei gleichmaessigen Signalen gleich dem Mittel
+        if (a.rises >= 2 && a.intervalCount == a.rises - 1) {
+            std::array<double, 64> sorted = a.intervals;
+            const auto n = static_cast<std::size_t>(a.intervalCount);
+            std::sort(sorted.begin(), sorted.begin() + static_cast<std::ptrdiff_t>(n));
+            const double med = n % 2 == 1 ? sorted[n / 2] : 0.5 * (sorted[n / 2 - 1] + sorted[n / 2]);
+            // Mittel der Abstaende nahe am Median (gleicht die Rasterung der Schritte aus)
+            double sum = 0.0;
+            int k = 0;
+            for (std::size_t j = 0; j < n; ++j)
+                if (sorted[j] > 0.75 * med && sorted[j] < 1.25 * med) {
+                    sum += sorted[j];
+                    ++k;
+                }
+            if (k > 0 && sum > 0.0) s.frequencyHz = k / sum;
+        }
         // Durchgangszustand (armed, prev) bleibt ueber die Fenstergrenze erhalten
         a.sum = a.sumSq = 0.0;
         a.rises = 0;
+        a.intervalCount = 0;
+        a.crossS -= m_elapsedS; // Durchgang kurz vor der Fenstergrenze, Bestaetigung im naechsten Fenster
     }
     m_elapsedS = 0.0;
 }

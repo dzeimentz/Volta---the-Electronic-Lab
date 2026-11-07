@@ -48,27 +48,55 @@ ScopeMeasure scopeMeasure(const std::vector<ScopeSample>& samples, std::size_t c
     m.mean = sum / n;
     const double span = m.max - m.min;
     if (span < 1e-3) return m; // Gleichspannung
-    const double mid = 0.5 * (m.max + m.min), h = kHysteresis * span;
-    bool armed = false, havePrev = false;
-    double prevT = 0.0, prevV = 0.0, first = 0.0, last = 0.0;
+    // Schwelle: Mittelwert, solange er mit Hysterese innerhalb der Spannweite liegt (sonst die Mitte zwischen Minimum
+    // und Maximum, z. B. bei schmalen Pulsen). Bei einer abklingenden Schwingung liegt der Mittelwert auf ihrer
+    // Nulllinie, die Mitte dagegen um den halben Unterschied der ersten Ausschlaege daneben.
+    const double h = kHysteresis * span;
+    const double mid = m.mean - h > m.min && m.mean + h < m.max ? m.mean : 0.5 * (m.max + m.min);
+    // Gezaehlt wird der Zeitpunkt, an dem die Spannung die Schwelle selbst ueberschreitet; bestaetigt erst, wenn sie
+    // danach ueber Schwelle + Hysterese steigt (nicht der Zeitpunkt der Bestaetigung: der wandert mit kleiner
+    // werdender Schwingung und verfaelschte die Frequenz einer gedaempften Schwingung um rund 5 %).
+    bool armed = false, havePrev = false, haveCross = false;
+    double prevT = 0.0, prevV = 0.0, first = 0.0, last = 0.0, cross = 0.0;
     int rises = 0;
+    std::vector<double> intervals;
     for (const auto& s : samples) {
         if (s.t < fromS || s.t > toS) continue;
         const double v = s.v[channel];
-        if (v < mid - h) armed = true;
-        if (armed && v > mid + h && havePrev) {
+        if (v < mid - h) {
+            armed = true;
+            haveCross = false;
+        }
+        if (armed && havePrev && prevV < mid && v >= mid) {
+            cross = prevT + (mid - prevV) / (v - prevV) * (s.t - prevT);
+            haveCross = true;
+        }
+        if (armed && haveCross && v > mid + h) {
             armed = false;
-            const double frac = v > prevV ? std::clamp((mid - prevV) / (v - prevV), 0.0, 1.0) : 1.0;
-            const double at = prevT + frac * (s.t - prevT);
-            if (rises == 0) first = at;
-            last = at;
+            if (rises > 0) intervals.push_back(cross - last);
+            if (rises == 0) first = cross;
+            last = cross;
             ++rises;
         }
         prevT = s.t;
         prevV = v;
         havePrev = true;
     }
-    if (rises >= 2 && last > first) m.frequencyHz = (rises - 1) / (last - first);
+    if (rises >= 2 && last > first) {
+        // Median der Abstaende: Pausen zwischen Schwingungszuegen zaehlen nicht mit (wie core::SignalWindow)
+        std::sort(intervals.begin(), intervals.end());
+        const std::size_t n = intervals.size();
+        const double med = n % 2 == 1 ? intervals[n / 2] : 0.5 * (intervals[n / 2 - 1] + intervals[n / 2]);
+        // Mittel der Abstaende nahe am Median (gleicht die Rasterung der Abtastpunkte aus)
+        double sum = 0.0;
+        int k = 0;
+        for (double d : intervals)
+            if (d > 0.75 * med && d < 1.25 * med) {
+                sum += d;
+                ++k;
+            }
+        m.frequencyHz = k > 0 && sum > 0.0 ? k / sum : (rises - 1) / (last - first);
+    }
     return m;
 }
 

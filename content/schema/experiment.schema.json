@@ -55,7 +55,8 @@
               "strom_mA": {"enum": [5, 20, 50, 200]}}},
             "oszilloskop": {"type": "object", "additionalProperties": false, "properties": {
               "zeitbasis_s": {"type": "number", "exclusiveMinimum": 0},
-              "volt_je_teilung": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}, "maxItems": 2}}},
+              "volt_je_teilung": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}, "maxItems": 2},
+              "trigger_V": {"type": "number", "minimum": -50, "maximum": 50}}},
             "anzeigegeraet": {"type": "object", "additionalProperties": false, "properties": {
               "anzahl": {"type": "integer", "minimum": 1, "maximum": 3},
               "doppelt": {"type": "boolean"}, "leistung": {"type": "boolean"}}}

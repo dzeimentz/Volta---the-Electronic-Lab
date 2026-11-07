@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstddef>
 #include <vector>
 
@@ -13,7 +14,9 @@ struct SignalSummary {
     double acRms = 0.0;      // Effektivwert des Wechselanteils: sqrt(rms^2 - mean^2)
     double min = 0.0;
     double max = 0.0;
-    double frequencyHz = 0.0; // aus steigenden Durchgaengen durch den Mittelwert des vorigen Fensters; 0 = keine
+    // aus steigenden Durchgaengen durch den Mittelwert des vorigen Fensters (Median der Abstaende, damit Pausen
+    // zwischen abklingenden Schwingungen nicht mitzaehlen); 0 = keine
+    double frequencyHz = 0.0;
     // Wechselgroesse: der Wechselanteil ueberwiegt den Gleichanteil (Konzept Volta 2, 5.4)
     bool isAc() const noexcept { return valid && acRms > 1e-3 && acRms > (mean < 0.0 ? -mean : mean); }
 };
@@ -36,6 +39,10 @@ private:
         double prev = 0.0;          // letzter Wert (Interpolation)
         bool havePrev = false;
         bool armed = false;         // unter der unteren Hysteresegrenze gewesen
+        bool haveCross = false;     // seit dem Schaerfen ueber den Mittelwert gestiegen
+        double crossS = 0.0;        // Zeitpunkt dieses Durchgangs im laufenden Fenster (kann negativ sein)
+        std::array<double, 64> intervals{}; // Abstaende aufeinanderfolgender Durchgaenge (die ersten 64)
+        int intervalCount = 0;
         int rises = 0;
         double firstRiseS = 0.0, lastRiseS = 0.0;
     };

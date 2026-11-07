@@ -19,6 +19,7 @@
 #include "model/tone_synth.hpp"
 #include "model/audio_stream.hpp"
 #include "model/meter_display.hpp"
+#include "model/oscilloscope.hpp"
 #include "model/resistor_code.hpp"
 #include "model/schematic_layout.hpp"
 #include "model/wire_router.hpp"
@@ -729,6 +730,29 @@ private slots:
     }
 
     // ab Volta 3: Senderanlage im Pult; Sender an/aus wird gespeichert, ANT speist die Antenne, Liste der Sender
+    void scopeFrequencyOfDampedRinging() {
+        // Gedaempfte Schwingung nach einem Sprung (Volta 3, Experiment 1.1): Die Anzeige trifft die Frequenz, auch
+        // wenn die Ausschlaege schrumpfen; gleichmaessige Signale messen wie bisher.
+        constexpr double kPi = 3.14159265358979323846;
+        const auto measure = [&](int kind, double f0) {
+            std::vector<model::ScopeSample> s(model::kScopePointsPerScreen);
+            for (int i = 0; i < model::kScopePointsPerScreen; ++i) {
+                const double t = 0.05 * i / model::kScopePointsPerScreen, t0 = 0.012;
+                double v = 0.0;
+                if (kind == 0) v = t < t0 ? 0.0 : 2.0 * std::exp(-75.0 * (t - t0)) * std::cos(2 * kPi * f0 * (t - t0));
+                else if (kind == 1) v = 1.0 + std::sin(2 * kPi * f0 * t);
+                else v = std::fmod(t * f0, 1.0) < 0.3 ? 1.0 : 0.0; // Rechteck, Tastgrad 30 %
+                s[static_cast<std::size_t>(i)] = {t, {v, 0.0}};
+            }
+            return model::scopeMeasure(s, 0, -1e300, 1e300).frequencyHz;
+        };
+        for (double f0 : {159.0, 503.0})
+            for (int kind : {0, 1, 2}) {
+                const double f = measure(kind, f0);
+                QVERIFY2(std::fabs(f - f0) < 0.005 * f0, qPrintable(QStringLiteral("Art %1, %2 Hz: %3").arg(kind).arg(f0).arg(f)));
+            }
+    }
+
     void deskStationsVolta3() {
         model::Board board;
         board.deskParts = std::vector<std::string>{"senderanlage"};

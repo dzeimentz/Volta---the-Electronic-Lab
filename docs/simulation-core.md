@@ -272,7 +272,11 @@ Reicht die Rechenleistung bei feinen Schritten nicht, laeuft die Simulation lang
 statt ungenau. Das Bild entsteht im Modell: Trigger (Kanal, Flanke, Pegel, juengster Durchgang mit einem ganzen
 Bild danach, eine Teilung Vorlauf; ohne Durchgang frei laufend), Rollbetrieb (das Neueste am rechten Rand, Zeitbasis
 100 ms ... 1 min je Teilung), XY-Betrieb, Kennwerte je Kanal (Spitze-Spitze, Mittel, Frequenz aus steigenden
-Durchgaengen durch die Mitte mit 10 % Hysterese).
+Durchgaengen durch den Mittelwert mit 10 % Hysterese; liegt der Mittelwert zu nah am Rand, z. B. bei schmalen
+Pulsen, durch die Mitte zwischen Minimum und Maximum). Gezaehlt wird der Zeitpunkt des Durchgangs selbst, nicht der
+der Bestaetigung ueber der Hysterese - sonst zeigte eine abklingende Schwingung rund 5 % zu wenig (seit 07.11.2026,
+ebenso `core::SignalWindow`; gleichmaessige Signale messen unveraendert). Optionaler Triggerpegel im Inhalt
+(`pult_stellung.oszilloskop.trigger_V`).
 
 **Hoerbare Simulation** (ab Volta 2, Konzept 5.3, `model/audio_stream.hpp`): Haengt der Pult-Lautsprecher in der
 Schaltung, rechnet die Bruecke mit 20 µs - auch bei ausgeschaltetem Ton, damit Messwerte und Erfolgsbedingungen

@@ -61,3 +61,31 @@ TEST_CASE("Signalstatistik: Fenster wird erst nach Ablauf veroeffentlicht", "[si
     CHECK(w.latest()[0].valid);
     CHECK(w.latest()[0].mean == Approx(2.0));
 }
+
+TEST_CASE("Signalstatistik: abklingende Schwingung misst ihre Frequenz", "[signal][volta3]") {
+    // Durchgaenge zaehlen zum Zeitpunkt des Mittelwerts, nicht zum Zeitpunkt der Bestaetigung ueber der Hysterese:
+    // der wandert, wenn die Ausschlaege kleiner werden.
+    SignalWindow w;
+    w.reset(1, 0.05);
+    const double dtS = 20e-6, f0 = 159.0;
+    for (int k = 1; k <= 5000; ++k) { // 0,1 s: zwei Fenster
+        const double t = k * dtS;
+        const double v[1] = {2.0 * std::exp(-30.0 * t) * std::cos(2.0 * kPi * f0 * t)};
+        w.add(v, 1, dtS);
+    }
+    CHECK(w.latest()[0].frequencyHz == Approx(f0).epsilon(0.005));
+}
+
+TEST_CASE("Signalstatistik: Schwingungszuege mit Pausen messen die Frequenz der Zuege", "[signal][volta3]") {
+    // Ein Rechteck mit 5 Hz stoesst einen Schwingkreis an: alle 100 ms ein abklingender Zug mit 503 Hz
+    SignalWindow w;
+    w.reset(1, 0.5);
+    const double dtS = 20e-6, f0 = 503.0;
+    for (int k = 1; k <= 50000; ++k) { // 1 s: zwei Fenster
+        const double t = k * dtS, tz = std::fmod(t, 0.1);
+        const double sign = std::fmod(t, 0.2) < 0.1 ? 1.0 : -1.0;
+        const double v[1] = {sign * 2.0 * std::exp(-250.0 * tz) * std::cos(2.0 * kPi * f0 * tz)};
+        w.add(v, 1, dtS);
+    }
+    CHECK(w.latest()[0].frequencyHz == Approx(f0).epsilon(0.01));
+}

@@ -42,7 +42,8 @@
         "zeitbasis_s": 0.005,
         "volt_je_teilung": [
           1
-        ]
+        ],
+        "trigger_V": 0.5
       }
     },
     "bauteile": [
