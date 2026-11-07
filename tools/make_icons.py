@@ -60,6 +60,7 @@ def main() -> int:
     if subprocess.run(cmd, env=env).returncode != 0:
         return 1
     for icons, name, android in ((ICONS, "volta", "android"), (ICONS / "volta2", "volta", "android-volta2"),
+                                 (ICONS / "volta3", "volta", "android-volta3"),
                                  (ROOT / "zuse" / "resources" / "icons", "zuse1", "android-zuse")):
         if subprocess.run([str(exe), str(icons / f"{name}.svg"), str(icons)] + [str(s) for s in SIZES],
                           env=env).returncode != 0:
@@ -77,7 +78,7 @@ def main() -> int:
             target.mkdir(parents=True, exist_ok=True)
             big.resize((size, size), Image.LANCZOS).save(target / "ic_launcher.png")
     apple_icons(Image)
-    print("Symbole erzeugt: app/resources/icons (mit volta2/), zuse/resources/icons, packaging/android*/res, packaging/ios, "
+    print("Symbole erzeugt: app/resources/icons (mit volta2/, volta3/), zuse/resources/icons, packaging/android*/res, packaging/ios, "
           "packaging/macos")
     return 0
 

@@ -1,0 +1,53 @@
+{
+  "band": "volta3",
+  "titel": "Volta 3 - Das Elektronik-Labor",
+  "version": "0.1.0",
+  "schema_version": 1,
+  "basis": "volta2",
+  "sprachen": [
+    "de",
+    "fr",
+    "en",
+    "lb"
+  ],
+  "quellsprache": "de",
+  "pult_nach_bedarf": [
+    {
+      "teil": "batterie",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "batterie2",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "wechselquelle",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "generator",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "kennlinienschreiber",
+      "ab_stufe": 0
+    },
+    {
+      "teil": "schalter",
+      "bei_nutzung": true
+    },
+    {
+      "teil": "p1",
+      "bei_nutzung": true
+    },
+    {
+      "teil": "p2",
+      "bei_nutzung": true
+    },
+    {
+      "teil": "lautsprecher",
+      "bei_nutzung": true
+    }
+  ],
+  "start_spalten": 10
+}

@@ -1,0 +1,20 @@
+{
+  "stufe_0_titel": "Kick-off",
+  "stufe_0_frage": "What tools does an electronics engineer need?",
+  "stufe_1_titel": "Resonant circuit and resonance",
+  "stufe_1_frage": "Why does something oscillate on its own?",
+  "stufe_2_titel": "Radio",
+  "stufe_2_frage": "How does music travel through the air?",
+  "stufe_3_titel": "Power supply",
+  "stufe_3_frage": "How do you turn a little voltage into more – without heat?",
+  "stufe_4_titel": "Thyristor and triac",
+  "stufe_4_frage": "How do you dim AC voltage?",
+  "stufe_5_titel": "Amplifier classes",
+  "stufe_5_frage": "How much power, how much heat?",
+  "stufe_6_titel": "Sensors and measuring amplifiers",
+  "stufe_6_frage": "How do you measure tiny changes?",
+  "stufe_7_titel": "Logic from voltage",
+  "stufe_7_frage": "How does a voltage become a one?",
+  "stufe_8_titel": "Clock and counters",
+  "stufe_8_frage": "How does a circuit count?"
+}

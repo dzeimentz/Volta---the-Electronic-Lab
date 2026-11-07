@@ -3,7 +3,7 @@
 // in die Einstellungen (hinter der PIN), statt Inhalte doppelt zu fuehren.
 // Ab Volta 2 ersetzen eigene Fassungen einzelne Kapitel (Pult II, Messstellen, Rechner) und neue Kapitel kommen dazu
 // (Oszilloskop, Ton und Zeitlupe). Diese Kapitel und Willkommen/Stecken zeigen eigene Teilbilder aus Volta 2
-// (qrc:/help2, nur in der Ausgabe volta2); die uebrigen die Bilder aus Volta 1. Volta 1 bleibt unveraendert.
+// (qrc:/help2, in den Ausgaben ab volta2); die uebrigen die Bilder aus Volta 1. Volta 1 bleibt unveraendert.
 import QtQuick
 import QtQuick.Controls.Basic
 

@@ -43,6 +43,12 @@ fuehren muessen.
 - Aufgaben der Lehrkraft mit Aufbau tragen dessen Pultbelegung mit; im Pult nach Bedarf genuegt auch ein Pult ohne
   Bauteile.
 
+- Volta 3 (07.11.2026, Konzept Volta 3, 12: Schritt 2): Edition `volta3` mit `"basis": "volta2"`, Abstammung
+  volta1 -> volta2 -> volta3. Alles aus Volta 1 und 2 ist sofort frei (Bauteile, Pultteile mit `ab_stufe` 0,
+  Blaetter des Formelrechners, Hilfe mit den Kapitelbildern ab Volta 2); Vorfuehrung vorerst mit den Aufbauten von
+  Volta 2. Eigenes Startbild, Symbol (`icons/volta3/`), Android-Paket `com.dcsoftwareengineering.volta3`,
+  Version 0.1.0. Abfragen der Oberflaeche lauten `band !== "volta1"` (ab Volta 2) und gelten damit auch fuer Volta 3.
+
 ## Folgen
 - Volta 1 aendert sich nicht (kein Grundband, ganzer Katalog gehoert ihm).
 - Experimente des Grundbandes bleiben ladbar (z. B. Vorfuehrung); eigene Vorfuehrungen fuer Volta 2 folgen mit den

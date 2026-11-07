@@ -31,7 +31,7 @@ Popup {
 
     // Auswahl: je Stufe mindestens ein Aufbau; recorder = Feld fuer Kanal 1 des Zeitschreibers; burn = Leuchtdiode
     // ohne Schutzwiderstand (der Musteraufbau ist die reparierte Fassung, die Vorfuehrung zeigt das Durchbrennen)
-    readonly property var entries: controller.band === "volta2" ? entriesVolta2 : entriesVolta1
+    readonly property var entries: controller.band === "" || controller.band === "volta1" ? entriesVolta1 : entriesVolta2 // Volta 3 vorerst mit denen von Volta 2
     // Volta 2: je Stufe ein Aufbau mit den neuen Geraeten (Messstellen, Kennlinienschreiber, Oszilloskop, Ton)
     readonly property var entriesVolta2: [
         { id: "volta2.0.1", text: qsTr("Messstellen zeigen Spannung, Strom und Leistung am Lämpchen – ganz ohne Messleitungen.") },

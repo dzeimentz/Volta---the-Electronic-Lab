@@ -1,0 +1,49 @@
+{
+  "stufen": [
+    {
+      "nr": 0,
+      "titel_key": "stufe_0_titel",
+      "frage_key": "stufe_0_frage"
+    },
+    {
+      "nr": 1,
+      "titel_key": "stufe_1_titel",
+      "frage_key": "stufe_1_frage"
+    },
+    {
+      "nr": 2,
+      "titel_key": "stufe_2_titel",
+      "frage_key": "stufe_2_frage"
+    },
+    {
+      "nr": 3,
+      "titel_key": "stufe_3_titel",
+      "frage_key": "stufe_3_frage"
+    },
+    {
+      "nr": 4,
+      "titel_key": "stufe_4_titel",
+      "frage_key": "stufe_4_frage"
+    },
+    {
+      "nr": 5,
+      "titel_key": "stufe_5_titel",
+      "frage_key": "stufe_5_frage"
+    },
+    {
+      "nr": 6,
+      "titel_key": "stufe_6_titel",
+      "frage_key": "stufe_6_frage"
+    },
+    {
+      "nr": 7,
+      "titel_key": "stufe_7_titel",
+      "frage_key": "stufe_7_frage"
+    },
+    {
+      "nr": 8,
+      "titel_key": "stufe_8_titel",
+      "frage_key": "stufe_8_frage"
+    }
+  ]
+}

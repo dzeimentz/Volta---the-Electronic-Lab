@@ -1,0 +1,20 @@
+{
+  "stufe_0_titel": "Auftakt",
+  "stufe_0_frage": "Welche Werkzeuge braucht ein Elektroniker?",
+  "stufe_1_titel": "Schwingkreis und Resonanz",
+  "stufe_1_frage": "Warum schwingt etwas von selbst?",
+  "stufe_2_titel": "Radio",
+  "stufe_2_frage": "Wie kommt Musik durch die Luft?",
+  "stufe_3_titel": "Stromversorgung",
+  "stufe_3_frage": "Wie macht man aus wenig Spannung mehr – ohne Wärme?",
+  "stufe_4_titel": "Thyristor und Triac",
+  "stufe_4_frage": "Wie dimmt man Wechselspannung?",
+  "stufe_5_titel": "Verstärkerklassen",
+  "stufe_5_frage": "Wie viel Leistung, wie viel Wärme?",
+  "stufe_6_titel": "Sensoren und Messverstärker",
+  "stufe_6_frage": "Wie misst man winzige Änderungen?",
+  "stufe_7_titel": "Logik aus Spannung",
+  "stufe_7_frage": "Wie wird aus einer Spannung eine Eins?",
+  "stufe_8_titel": "Takt und Zähler",
+  "stufe_8_frage": "Wie zählt eine Schaltung?"
+}

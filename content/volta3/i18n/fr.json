@@ -1,0 +1,20 @@
+{
+  "stufe_0_titel": "Lancement",
+  "stufe_0_frage": "De quels outils un électronicien a-t-il besoin ?",
+  "stufe_1_titel": "Circuit oscillant et résonance",
+  "stufe_1_frage": "Pourquoi quelque chose oscille-t-il tout seul ?",
+  "stufe_2_titel": "Radio",
+  "stufe_2_frage": "Comment la musique traverse-t-elle l'air ?",
+  "stufe_3_titel": "Alimentation",
+  "stufe_3_frage": "Comment obtenir plus de tension à partir de peu – sans chaleur ?",
+  "stufe_4_titel": "Thyristor et triac",
+  "stufe_4_frage": "Comment faire varier une tension alternative ?",
+  "stufe_5_titel": "Classes d'amplificateurs",
+  "stufe_5_frage": "Combien de puissance, combien de chaleur ?",
+  "stufe_6_titel": "Capteurs et amplificateurs de mesure",
+  "stufe_6_frage": "Comment mesurer de minuscules variations ?",
+  "stufe_7_titel": "La logique par la tension",
+  "stufe_7_frage": "Comment une tension devient-elle un « 1 » ?",
+  "stufe_8_titel": "Horloge et compteurs",
+  "stufe_8_frage": "Comment un circuit compte-t-il ?"
+}

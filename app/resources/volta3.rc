@@ -1,0 +1,3 @@
+// Windows-Ressourcen von Volta 3: Programmsymbol (Explorer, Taskleiste). Erzeugt aus icons/volta3/volta.svg
+// (tools/make_icons.py).
+IDI_ICON1 ICON "icons/volta3/volta.ico"

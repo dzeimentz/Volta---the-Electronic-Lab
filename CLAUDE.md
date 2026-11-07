@@ -64,6 +64,9 @@ ctest --preset desktop-debug
 #   (Inhaltspaket content/volta2 mit Grundband volta1, ADR-0012; Catch2 ueber FETCHCONTENT_SOURCE_DIR_CATCH2)
 cmake -S . -B build/volta2-debug -G Ninja -DVOLTA_EDITION=volta2 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="$QT_ROOT_DESKTOP"
 cmake --build build/volta2-debug
+# Volta 3 (Worktree volta-volta3, Zweig volta3): Edition volta3 mit Grundband volta2 -> build/volta3-debug/app/volta3.exe
+cmake -S . -B build/volta3-debug -G Ninja -DVOLTA_EDITION=volta3 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="$QT_ROOT_DESKTOP"
+cmake --build build/volta3-debug
 
 # Nur der Simulationskern (ohne Qt, schnell)
 cmake --preset core-only

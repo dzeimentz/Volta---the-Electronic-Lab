@@ -14,7 +14,9 @@ Flickable {
     property bool canApply: false      // ausgewaehlter Widerstand im Labor
     property string selectedPartId: ""
     property string sheet: "ohm"
-    readonly property int stage: controller.unlockedStage
+    // ab Volta 3 sind alle Blaetter der Grundbaende (Volta 1 und 2) sofort offen
+    readonly property int stage: controller.band === "" || controller.band === "volta1" || controller.band === "volta2"
+                                 ? controller.unlockedStage : 99
     readonly property bool v2: controller.band !== "volta1" // Baende ab Volta 2
     readonly property int firstStage: v2 ? 0 : 3
     function sheetStage(s) { return v2 ? s.stage2 : s.stage }
