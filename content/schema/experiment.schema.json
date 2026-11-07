@@ -37,7 +37,7 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "batterie_V": {"enum": [3, 4.5, 9]},
+            "batterie_V": {"enum": [1.5, 3, 4.5, 9]},
             "schalter": {"type": "boolean"},
             "p1": {"type": "number", "minimum": 0, "maximum": 1},
             "p2": {"type": "number", "minimum": 0, "maximum": 1},

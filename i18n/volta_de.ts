@@ -522,6 +522,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="43"/>
+        <source>Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 1,5, 3, 4,5 oder 9 Volt.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../app/qml/DeskPartInfo.qml" line="44"/>
         <source>Pluspol (rot): Von hier fließt der Strom durch deine Schaltung.</source>
         <translation type="unfinished"></translation>

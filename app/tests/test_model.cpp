@@ -123,6 +123,13 @@ private slots:
         QCOMPARE(back.desk.p1, 0.25);
         QCOMPARE(back.desk.meterMode, core::MeterMode::Ohm);
         QCOMPARE(back.desk.roomLight, 0);
+        // eine Zelle (1,5 V, ab Volta 3) bleibt erhalten, unbekannte Zellenzahlen werden zu 9 V
+        b.desk.cells = 1;
+        QVERIFY(model::boardFromJson(model::boardToJson(b), back));
+        QCOMPARE(back.desk.cells, 1);
+        b.desk.cells = 4;
+        QVERIFY(model::boardFromJson(model::boardToJson(b), back));
+        QCOMPARE(back.desk.cells, 6);
         QCOMPARE(back.desk.tools.size(), std::size_t(1));
         QVERIFY(!back.desk.tools[0].on);
         QVERIFY(!model::boardFromJson(QJsonObject{}, back)); // kein Aufbau

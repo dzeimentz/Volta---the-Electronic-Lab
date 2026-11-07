@@ -40,7 +40,10 @@ Popup {
         switch (part) {
         case "batterie": return {
             title: qsTr("Batterie"),
-            intro: qsTr("Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 3, 4,5 oder 9 Volt."),
+            // ab Volta 3 auch eine Zelle (1,5 V)
+            intro: controller && controller.band !== "" && controller.band !== "volta1" && controller.band !== "volta2"
+                   ? qsTr("Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 1,5, 3, 4,5 oder 9 Volt.")
+                   : qsTr("Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 3, 4,5 oder 9 Volt."),
             fields: [["V+", qsTr("Pluspol (rot): Von hier fließt der Strom durch deine Schaltung.")],
                      ["0V", qsTr("Minuspol (schwarz), auch GND oder Masse: Hierhin fließt der Strom zurück. Spannungen misst du gegen 0V.")]],
             tips: [qsTr("Der Hauptschalter schaltet den Strom für die ganze Schaltung ein und aus (»Ein« / »Aus«)."),

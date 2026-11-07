@@ -224,9 +224,12 @@ Rectangle {
             width: 96
             height: Theme.control - 6
             // Zahlenformat der Anzeigesprache (4,5 V / 4.5 V); Neuaufbau bei Sprachwechsel ueber qsTr-Bindung
-            model: [qsTr("%1 V").arg(3), qsTr("%1 V").arg((4.5).toLocaleString(Qt.locale(), "f", 1)), qsTr("%1 V").arg(9)]
-            currentIndex: desk.controller.cells === 2 ? 0 : (desk.controller.cells === 3 ? 1 : 2)
-            onActivated: (index) => { desk.controller.cells = [2, 3, 6][index] }
+            // ab Volta 3 auch eine Zelle (1,5 V) fuer Aufwaertswandler und Detektor (Konzept Volta 3, 5.1)
+            readonly property var choices: desk.controller.band === "" || desk.controller.band === "volta1"
+                                           || desk.controller.band === "volta2" ? [2, 3, 6] : [1, 2, 3, 6]
+            model: choices.map(c => qsTr("%1 V").arg(c % 2 === 1 ? (1.5 * c).toLocaleString(Qt.locale(), "f", 1) : 1.5 * c))
+            currentIndex: Math.max(0, choices.indexOf(desk.controller.cells))
+            onActivated: (index) => { desk.controller.cells = choices[index] }
             Accessible.name: qsTr("Batteriespannung")
         }
         Row {

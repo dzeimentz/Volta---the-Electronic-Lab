@@ -243,8 +243,8 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
             for end in ("von", "nach"):
                 if VOLTA2_ANCHORS.match(str(w.get(end, ""))):
                     rep.error(where, f"Leitung {i}: Anschluss '{w.get(end)}' gibt es erst ab Volta 2")
-    if "batterie_V" in pult and pult["batterie_V"] not in (3, 4.5, 9):
-        rep.error(where, "pult_stellung: batterie_V muss 3, 4.5 oder 9 sein")
+    if "batterie_V" in pult and pult["batterie_V"] not in ((3, 4.5, 9) if band in ("volta1", "volta2") else (1.5, 3, 4.5, 9)):
+        rep.error(where, "pult_stellung: batterie_V muss 3, 4.5 oder 9 sein (1.5 erst ab Volta 3)")
     for k in ("p1", "p2"):
         if k in pult and not (isinstance(pult[k], (int, float)) and 0 <= pult[k] <= 1):
             rep.error(where, f"pult_stellung: {k} muss zwischen 0 und 1 liegen")

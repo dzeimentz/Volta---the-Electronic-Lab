@@ -522,6 +522,11 @@
         <translation>The battery is your lab’s power source. It is made of cells of 1.5 volts each; at the top you choose 3, 4.5 or 9 volts.</translation>
     </message>
     <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="43"/>
+        <source>Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 1,5, 3, 4,5 oder 9 Volt.</source>
+        <translation>The battery is your lab’s power source. It is made of cells of 1.5 volts each; at the top you choose 1.5, 3, 4.5 or 9 volts.</translation>
+    </message>
+    <message>
         <location filename="../app/qml/DeskPartInfo.qml" line="44"/>
         <source>Pluspol (rot): Von hier fließt der Strom durch deine Schaltung.</source>
         <translation>Positive terminal (red): from here the current flows through your circuit.</translation>

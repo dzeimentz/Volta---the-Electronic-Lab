@@ -204,14 +204,16 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
     const QJsonObject pult = vorlage.value(QStringLiteral("pult_stellung")).toObject();
     if (pult.contains(QStringLiteral("batterie_V"))) {
         const double u = pult.value(QStringLiteral("batterie_V")).toDouble();
-        if (std::abs(u - 3.0) < 1e-6)
+        if (std::abs(u - 1.5) < 1e-6) // ab Volta 3 (Pruefung je Band: tools/validate_content.py)
+            out.desk.cells = 1;
+        else if (std::abs(u - 3.0) < 1e-6)
             out.desk.cells = 2;
         else if (std::abs(u - 4.5) < 1e-6)
             out.desk.cells = 3;
         else if (std::abs(u - 9.0) < 1e-6)
             out.desk.cells = 6;
         else {
-            error = QStringLiteral("Vorlage: batterie_V muss 3, 4.5 oder 9 sein");
+            error = QStringLiteral("Vorlage: batterie_V muss 1.5, 3, 4.5 oder 9 sein");
             return false;
         }
     }

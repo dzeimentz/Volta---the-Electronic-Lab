@@ -141,7 +141,7 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     const QJsonObject desk = json.value(QStringLiteral("pult")).toObject();
     DeskState& d = b.desk;
     const int cells = desk.value(QStringLiteral("zellen")).toInt(6);
-    d.cells = (cells == 2 || cells == 3 || cells == 6) ? cells : 6;
+    d.cells = (cells == 1 || cells == 2 || cells == 3 || cells == 6) ? cells : 6; // 1 Zelle ab Volta 3
     const int cells2 = desk.value(QStringLiteral("zellen2")).toInt(6);
     d.cells2 = (cells2 == 3 || cells2 == 6) ? cells2 : 6;
     d.acRmsV = desk.value(QStringLiteral("wechsel_v")).toInt(9) == 6 ? 6 : 9;
