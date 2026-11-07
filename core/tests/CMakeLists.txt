@@ -11,6 +11,7 @@ endif()
 add_executable(volta_core_tests
     test_dense_lu.cpp
     test_ac_analysis.cpp
+    test_radio.cpp
     test_events.cpp
     test_reference_dc.cpp
     test_robustness.cpp

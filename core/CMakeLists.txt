@@ -29,6 +29,7 @@ add_library(volta_core STATIC
     src/components/magnet.cpp
     src/components/sources.cpp
     src/components/inductor.cpp
+    src/components/radio.cpp
     src/modules/blink_module.cpp
     src/modules/tone_module.cpp
     src/modules/timer_module.cpp
