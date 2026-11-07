@@ -17,6 +17,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Änderungen zu v0.2 | Abgleich mit Volta 2 v0.3 (31.10.2026): Pult nach Bedarf mit Gerätefach, erweiterte Spannungsanzeige (negativ, Wechselspannung), Start mit 10 Spalten, Bezugspunkte von Generator und Wechselquelle |
 | Änderungen zu v0.3 | Entscheidungen 31.10.2026 wie Volta 2: Bezugspunkte bestätigt; Messstellen und Tastköpfe behalten ihre Namen (V1, A1, K1, D0–D7); Zeitschreiber ist Rollbetrieb des Oszilloskops; Forscherheft bleibt vorerst in der jeweiligen App |
 | Änderungen zu v0.4 | Stufen- und Experimentliste freigegeben (04.11.2026); Machbarkeitstest auf dem Tablet durchgeführt (`docs/volta3-machbarkeit.md`) und Entscheidungen vom 04.11.2026: gemittelter Hüllkurvendetektor statt einfacher Hüllkurve, Schrittweite 5 µs bei Schaltwandlern, Empfänger mit 2-facher Echtzeit-Reserve angenommen (Kapitel 4, 10, 12, 13) |
+| Nachtrag 07.11.2026 | Halbleiter in zwei Gruppen (9.2); Kennfarbe Beere `#A4266B` (9.1) |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -230,7 +231,7 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 
 ## 9. Gestaltung, Farb- und Leitkonzept
 
-Gestaltung wie Volta 1 und 2 (hell, ruhige Flächen, DC Learning Design Standard), Reihensymbol `docs/design/symbole/volta3.svg` (drei leuchtende Felder). Tick bleibt Begleitfigur, sachlicher im Ton; Texte duzen weiterhin. Die Ebene »Mehr wissen« trägt in Volta 3 Formeln und Hintergründe für die Oberstufe.
+Gestaltung wie Volta 1 und 2 (hell, ruhige Flächen, DC Learning Design Standard), Reihensymbol `docs/design/symbole/volta3.svg` (drei leuchtende Felder). Kennfarbe von Volta 3 ist **Beere `#A4266B`** (entschieden 07.11.2026) für Startbildschirm, Store, Flyer und Verpackung – kein Bauteil- oder Leitungsfarbton; sie kollidiert weder mit den Themenfarben noch mit Rot (V+, Warnung), Blau (negative Versorgung), Schwarz (GND) oder Orange/Navy der Reihe; weiße Schrift darauf ist gut lesbar (Kontrast etwa 6,6 : 1). Name und Bandzahl stehen immer dabei, die Farbe ist nie alleiniger Hinweis. Tick bleibt Begleitfigur, sachlicher im Ton; Texte duzen weiterhin. Die Ebene »Mehr wissen« trägt in Volta 3 Formeln und Hintergründe für die Oberstufe.
 
 ### 9.1 Grundsatz: dasselbe Farb- und Leitkonzept wie Volta 1 und 2
 
@@ -247,7 +248,7 @@ Volta 3 übernimmt das Farb- und Leitkonzept aus Volta 1 (0.9.1) mit den Erweite
 | Kondensatoren und Spulen (türkis) | Drehkondensator, Spulen 100 µH … 10 mH |
 | Bewegung und Ton (orange) | Kristallhörer, Antenne; das Thema heißt in Volta 3 »Ton und Empfang« |
 
-Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen groß. Vorgeschlagen ist, es im Fach in zwei Gruppen zu zeigen (»Dioden« und »Transistoren und Thyristoren«), mit derselben Farbe und einer Zwischenüberschrift – statt eines siebten Themas, damit die Farben der Reihe gleich bleiben (offene Entscheidung, Kapitel 14).
+Das Thema »Dioden und Transistoren« wird in Volta 3 mit rund 15 Bauteilen groß. Es wird im Fach in **zwei Gruppen** gezeigt (»Dioden« und »Transistoren und Thyristoren«), mit derselben Farbe und einer Zwischenüberschrift – statt eines siebten Themas, damit die Farben der Reihe gleich bleiben (entschieden 07.11.2026).
 
 **Module:** MW-Modul und UKW-Modul (Trägerplatte dunkelblau, Bildzeichen Antenne mit Wellen, »MW« bzw. »UKW« aufgedruckt), Gatter-Modul (grau, Bildzeichen NAND-Symbol nach DIN EN 60617 mit »&«), Zähler-, Dekadenzähler- und Decoder-Modul (dunkelgrün, Bildzeichen Ziffernfolge 0-1-2-3 bzw. Siebensegment-Ziffer).
 
@@ -327,8 +328,8 @@ Voraussetzung ist Volta 2 als Testversion (Oszilloskop, Generator, Wechselquelle
 | ~~Freigabe der Stufen- und Experimentliste (Kapitel 8)~~ – **freigegeben am 04.11.2026** | erledigt |
 | ~~Radiomodell, Schrittweite der Wandler, Echtzeit-Reserve des Empfängers~~ – **entschieden am 04.11.2026** nach Machbarkeitstest (Kapitel 4) | erledigt |
 | Prädiktor und Toleranz 1e-4 für Volta 3 einschalten (Messung mit echten Experimenten) | Schritt 3 |
-| Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2) | Schritt 2 |
-| Kennfarbe von Volta 3 (App-Symbol entschieden: Reihensymbol `volta3.svg`) | Schritt 2 |
+| ~~Gruppen im Thema »Dioden und Transistoren« statt eines siebten Themas (9.2)~~ – **entschieden am 07.11.2026:** zwei Gruppen | erledigt |
+| ~~Kennfarbe von Volta 3~~ – **entschieden am 07.11.2026:** Beere `#A4266B` (9.1); App-Symbol: Reihensymbol `volta3.svg` | erledigt |
 | Name der Reihe (Markenfrage Volta) | vor Schritt 6 |
 | Verkauf: eigene App oder Freischaltung in einer gemeinsamen App (abhängig von Verlagsantworten) | vor Schritt 6 |
 | Lehrplanzuordnung DE/LU/Ostbelgien | Schulpaket |
