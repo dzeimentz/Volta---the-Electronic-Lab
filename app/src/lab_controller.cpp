@@ -128,6 +128,7 @@ bool LabController::startExperiment(const QString& id) {
     m_title = m_repo.text(exp.titleKey);
     model::Board start;
     start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
+    if (exp.startGenFrequencyHz > 0.0) start.desk.genFrequencyHz = exp.startGenFrequencyHz; // Resonanz selbst finden
     start.desk.mainSwitch = false;
     start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
     if (deskOnDemand()) start.deskParts = model::deskPartsUsed(exp.templateBoard); // Pult nach Bedarf (5.5)

@@ -18,6 +18,9 @@ struct Experiment {
     bool destructive = false;
     bool colourFixed = false; // »farbe_fest«: die LED-Farbe der Vorlage ist Teil des Versuchs
     bool scopeShown = false;  // Vorlage stellt das Oszilloskop ein: beim Start eingeblendet (ab Volta 2)
+    // »start_frequenz_Hz« des Generators (ab Volta 3): Frequenz beim Start, wenn das Kind sie selbst finden soll
+    // (Resonanz); die Vorlage behaelt ihre Frequenz (Musteraufbau, Inhaltstest). 0 = wie die Vorlage
+    double startGenFrequencyHz = 0.0;
     QString titleKey;
     model::Board templateBoard; // Vorlage (Anzeige, Schritt-fuer-Schritt-Hilfe, ContentSmokeTest)
     QStringList shownVoltages;  // "anzeigen": Felder mit vorab gesetzter Spannungsanzeige

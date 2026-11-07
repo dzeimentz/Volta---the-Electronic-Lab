@@ -478,6 +478,11 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
         m_error = QStringLiteral("%1: %2").arg(id, error);
         return false;
     }
+    {
+        const QJsonObject g = vorlage.value(QStringLiteral("pult_stellung")).toObject().value(QStringLiteral("generator")).toObject();
+        if (g.contains(QStringLiteral("start_frequenz_Hz")))
+            out.startGenFrequencyHz = std::clamp(g.value(QStringLiteral("start_frequenz_Hz")).toDouble(), 1.0, 10000.0);
+    }
     if (!parseSuccess(out.success, out.successCondition, error)) {
         m_error = QStringLiteral("%1: %2").arg(id, error);
         return false;

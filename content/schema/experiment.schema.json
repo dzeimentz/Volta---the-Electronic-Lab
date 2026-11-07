@@ -48,6 +48,7 @@
             "generator": {"type": "object", "additionalProperties": false, "properties": {
               "form": {"enum": ["sinus", "dreieck", "rechteck"]},
               "frequenz_Hz": {"type": "number", "minimum": 1, "maximum": 10000},
+              "start_frequenz_Hz": {"type": "number", "minimum": 1, "maximum": 10000},
               "spitze_V": {"type": "number", "minimum": 0, "maximum": 4},
               "gleichanteil_V": {"type": "number", "minimum": -4, "maximum": 4}}},
             "kennlinienschreiber": {"type": "object", "additionalProperties": false, "properties": {

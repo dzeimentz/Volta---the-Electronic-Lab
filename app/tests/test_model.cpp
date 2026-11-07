@@ -662,6 +662,24 @@ private slots:
         QCOMPARE(m_catalog.module("blinkmodul")->pins.size(), std::size_t(4));
     }
 
+    void experimentStartFrequencyVolta3() {
+        // Resonanz selbst finden (Volta 3, 1.4): Start bei 50 Hz, Musteraufbau und Inhaltstest bei 159 Hz;
+        // Triggerpegel aus dem Inhalt; der Katalog von Volta 3 rechnet mit BDF2, der von Volta 2 nicht
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY2(repo.loadExperiment(QStringLiteral("volta3.1.4"), exp), qPrintable(repo.lastError()));
+        QCOMPARE(exp.startGenFrequencyHz, 50.0);
+        QCOMPARE(exp.templateBoard.desk.genFrequencyHz, 159.0);
+        QVERIFY(repo.loadExperiment(QStringLiteral("volta3.1.1"), exp));
+        QCOMPARE(exp.startGenFrequencyHz, 0.0);
+        QCOMPARE(exp.templateBoard.desk.scope.triggerLevelV, 0.5);
+        model::Catalog v2, v3;
+        QVERIFY(repo.loadCatalog(v2, QStringLiteral("volta2")));
+        QVERIFY(repo.loadCatalog(v3, QStringLiteral("volta3")));
+        QVERIFY(!v2.secondOrder);
+        QVERIFY(v3.secondOrder);
+    }
+
     void experimentLoads() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         services::Experiment exp;

@@ -274,8 +274,10 @@ Bild danach, eine Teilung Vorlauf; ohne Durchgang frei laufend), Rollbetrieb (da
 100 ms ... 1 min je Teilung), XY-Betrieb, Kennwerte je Kanal (Spitze-Spitze, Mittel, Frequenz aus steigenden
 Durchgaengen durch den Mittelwert mit 10 % Hysterese; liegt der Mittelwert zu nah am Rand, z. B. bei schmalen
 Pulsen, durch die Mitte zwischen Minimum und Maximum). Gezaehlt wird der Zeitpunkt des Durchgangs selbst, nicht der
-der Bestaetigung ueber der Hysterese - sonst zeigte eine abklingende Schwingung rund 5 % zu wenig (seit 07.11.2026,
-ebenso `core::SignalWindow`; gleichmaessige Signale messen unveraendert). Optionaler Triggerpegel im Inhalt
+der Bestaetigung ueber der Hysterese - sonst zeigte eine abklingende Schwingung rund 5 % zu wenig. Die Frequenz ist
+das Mittel der Abstaende nahe am Median (0,75 ... 1,25), damit Pausen zwischen Schwingungszuegen nicht mitzaehlen
+(seit 07.11.2026, ebenso `core::SignalWindow` und die Erfolgsbedingung `frequenz`; gleichmaessige Signale messen
+unveraendert). Optionaler Triggerpegel im Inhalt
 (`pult_stellung.oszilloskop.trigger_V`).
 
 **Hoerbare Simulation** (ab Volta 2, Konzept 5.3, `model/audio_stream.hpp`): Haengt der Pult-Lautsprecher in der

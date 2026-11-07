@@ -132,9 +132,10 @@ Ab Volta 2 (Bedienpult II, Konzept 5.1/5.2): Leitungen duerfen an `P:+B2`/`P:-B2
 (Wechselquelle), `P:G`/`P:G0` (Generator) und `P:KS+`/`P:KS-` (Kennlinienschreiber) enden; welche Pultteile im
 Experiment erscheinen, ergibt sich aus diesen Leitungen (Pult nach Bedarf). `pult_stellung` kennt dazu
 `batterie2_V` (4.5 | 9), `wechsel_V` (6 | 9, Effektivwert), `generator` (`form` sinus | dreieck | rechteck,
-`frequenz_Hz` 1 ... 10000, `spitze_V` 0 ... 4, `gleichanteil_V` -4 ... 4), `kennlinienschreiber` (`spannung_V`
+`frequenz_Hz` 1 ... 10000, `spitze_V` 0 ... 4, `gleichanteil_V` -4 ... 4; ab Volta 3 `start_frequenz_Hz`: Frequenz beim
+Start, wenn das Kind sie selbst finden soll - Musteraufbau und Inhaltstest nutzen `frequenz_Hz`), `kennlinienschreiber` (`spannung_V`
 2 | 5 | 10 | 20, `beide_richtungen`, `strom_mA` 5 | 20 | 50 | 200), `oszilloskop` (`zeitbasis_s` je Teilung,
-`volt_je_teilung` je Kanal; jeweils die naechste Stufe; das Oszilloskop ist dann beim Start eingeblendet) und `anzeigegeraet` (`anzahl` 1 ... 3 Anzeigen, aelter `doppelt` = 2; `leistung`). Hoechstens drei Messstellen je
+`volt_je_teilung` je Kanal; jeweils die naechste Stufe; ab Volta 3 `trigger_V` als Triggerpegel; das Oszilloskop ist dann beim Start eingeblendet) und `anzeigegeraet` (`anzahl` 1 ... 3 Anzeigen, aelter `doppelt` = 2; `leistung`). Hoechstens drei Messstellen je
 Art (UM, IM, RM) und zwei Tastkoepfe (K1, K2). Messstellen
 in der Vorlage blenden das Anzeigegeraet ein; ihre Anzeige prueft `{"bauteil": "UM1", "groesse": "anzeige", ...}`
 (Betrag in V bzw. A).
