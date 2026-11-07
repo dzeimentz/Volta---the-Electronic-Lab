@@ -77,7 +77,7 @@
     "key": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
     "field": {"type": "string", "pattern": "^[A-E](1[0-2]|[1-9])$"},
     "anchor": {"type": "string",
-      "pattern": "^([A-E](1[0-2]|[1-9])|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2|\\+B2|-B2|W~a|W~b|G|G0|KS\\+|KS-)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z0-9]+)$"},
+      "pattern": "^([A-E](1[0-2]|[1-9])|P:(\\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2|\\+B2|-B2|W~a|W~b|G|G0|KS\\+|KS-|ANT)|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\\.[a-z0-9]+)$"},
     "placement": {
       "type": "object",
       "required": ["id", "typ", "felder"],
@@ -89,7 +89,9 @@
           {"type": "array", "items": {"$ref": "#/$defs/field"}, "minItems": 2, "maxItems": 3},
           {"type": "object", "additionalProperties": {"$ref": "#/$defs/field"}}
         ]},
-        "wert": {"type": "number", "exclusiveMinimum": 0}
+        "wert": {"type": "number", "exclusiveMinimum": 0},
+        "geschlossen": {"type": "boolean"},
+        "stellung": {"type": "number", "minimum": 0, "maximum": 1}
       }
     },
     "module": {

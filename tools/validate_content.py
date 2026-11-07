@@ -20,7 +20,7 @@ CONTENT = ROOT / "content"
 
 FIELD = re.compile(r"^[A-E](1[0-2]|[1-9])$")
 ANCHOR = re.compile(
-    r"^([A-E](1[0-2]|[1-9])|P:(\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2|\+B2|-B2|W~a|W~b|G|G0|KS\+|KS-)"
+    r"^([A-E](1[0-2]|[1-9])|P:(\+9V|0V|P1a|P1s|P1b|P2a|P2s|P2b|S1|S2|LS1|LS2|\+B2|-B2|W~a|W~b|G|G0|KS\+|KS-|ANT)"
     r"|MESS:(COM|VOHM|A)|[A-Z]+[0-9]+\.[a-z0-9]+)$"
 )
 KEY = re.compile(r"^[a-z][a-z0-9_]*$")
@@ -30,6 +30,7 @@ QUANTITIES = {"strom_mA", "spannung_V", "leistung_mW", "helligkeit", "drehzahl",
 STATES = {"intakt", "ueberlastet", "zerstoert"}
 STATISTICS = {"spitze", "spitze_spitze", "mittel", "effektiv", "frequenz"}
 VOLTA2_ANCHORS = re.compile(r"^P:(\+B2|-B2|W~a|W~b|G|G0|KS\+|KS-)$")
+VOLTA3_ANCHORS = re.compile(r"^P:ANT$")
 REQUIRED = ["id", "band", "stufe", "titel_key", "zerstoerend", "bauteile_frei", "frage_key",
             "vermutungen", "vorlage", "erfolg", "hilfen", "erklaerung_key", "jetzt_in_echt_key"]
 LANGS = ["de", "fr", "en", "lb"]
@@ -243,6 +244,11 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
             for end in ("von", "nach"):
                 if VOLTA2_ANCHORS.match(str(w.get(end, ""))):
                     rep.error(where, f"Leitung {i}: Anschluss '{w.get(end)}' gibt es erst ab Volta 2")
+    if band in ("volta1", "volta2"):
+        for i, w in enumerate(tpl.get("leitungen", [])):
+            for end in ("von", "nach"):
+                if VOLTA3_ANCHORS.match(str(w.get(end, ""))):
+                    rep.error(where, f"Leitung {i}: Anschluss '{w.get(end)}' gibt es erst ab Volta 3")
     if "batterie_V" in pult and pult["batterie_V"] not in ((3, 4.5, 9) if band in ("volta1", "volta2") else (1.5, 3, 4.5, 9)):
         rep.error(where, "pult_stellung: batterie_V muss 3, 4.5 oder 9 sein (1.5 erst ab Volta 3)")
     for k in ("p1", "p2"):

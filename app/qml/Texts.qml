@@ -294,8 +294,10 @@ QtObject {
     readonly property var wireColors: ["rot", "schwarz", "blau", "gelb", "gruen", "weiss"]
     // E12-Auswahl fuer Volta 1 (Werkzeugkasten zeigt spaeter alle Werte)
     readonly property var resistorValues: [100, 220, 330, 470, 680, 1000, 2200, 4700, 10000, 47000, 100000]
-    // Folienkondensatoren ab Volta 2 (1 nF bis 1 µF)
-    readonly property var capacitorValues: [1e-9, 2.2e-9, 4.7e-9, 10e-9, 22e-9, 47e-9, 100e-9, 220e-9, 470e-9, 1e-6]
+    // Folienkondensatoren ab Volta 2 (1 nF bis 1 µF); ab Volta 3 auch Keramik 10 bis 470 pF (Koppelkondensator Radio)
+    readonly property var capacitorValues: (band !== "" && band !== "volta1" && band !== "volta2"
+                                            ? [10e-12, 22e-12, 47e-12, 100e-12, 220e-12, 470e-12] : [])
+                                           .concat([1e-9, 2.2e-9, 4.7e-9, 10e-9, 22e-9, 47e-9, 100e-9, 220e-9, 470e-9, 1e-6])
 
     // Kondensatorcode: zwei Ziffern und die Zahl der Nullen in pF (100 nF -> 104, 4,7 nF -> 472)
     function capacitorCode(v) {

@@ -146,12 +146,13 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
     const std::string plus = nodes.find(kPlus), minus = nodes.find(kMinus);
     const bool anyPart = !board.parts.empty() || !board.modules.empty();
 
-    // Eigene Quellen ab Volta 2 (Kennlinienschreiber, Wechselquelle, Generator): Knoten, die sie ueber Bauteile
-    // erreichen. Dort gelten die Batterie-Hinweise nicht (Polung wechselt, V+ wird nicht gebraucht).
+    // Eigene Quellen ab Volta 2 (Kennlinienschreiber, Wechselquelle, Generator; ab Volta 3 die Antenne der
+    // Senderanlage): Knoten, die sie ueber Bauteile erreichen. Dort gelten die Batterie-Hinweise nicht (Polung
+    // wechselt, V+ wird nicht gebraucht).
     std::set<std::string> ownSource;
     {
         std::deque<std::string> todo;
-        for (const char* a : {"P:KS+", "P:KS-", "P:W~a", "P:W~b", "P:G"})
+        for (const char* a : {"P:KS+", "P:KS-", "P:W~a", "P:W~b", "P:G", "P:ANT"})
             if (std::find(extraDesk.begin(), extraDesk.end(), a) != extraDesk.end() &&
                 terminals[nodes.find(a)].size() > 1 && ownSource.insert(nodes.find(a)).second)
                 todo.push_back(nodes.find(a));

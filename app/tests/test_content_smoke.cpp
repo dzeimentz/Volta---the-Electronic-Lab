@@ -65,6 +65,8 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
     if (buildErrors) *buildErrors = net.errors;
     core::Simulator sim;
     if (sim.setCircuit(std::move(net.circuit)) != core::Status::Ok) return -1.0;
+    // Radio (ab Volta 3): Abstimmen wie die Bruecke nach jedem Topologiewechsel
+    if (model::antennaWired(start)) core::tuneRadio(sim, model::deskStations(start));
     const int steps = static_cast<int>(std::lround(maxS / stepS));
     const int pressStep = static_cast<int>(std::lround(kPressAfterS / stepS));
     for (int i = 0; i < steps; ++i) {
