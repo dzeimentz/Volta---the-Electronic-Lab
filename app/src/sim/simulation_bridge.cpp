@@ -80,8 +80,15 @@ void SimulationBridge::applyPending() {
     std::uint64_t topology = 0;
     std::shared_ptr<StepObserver> observer;
     bool scopeChanged = false;
+    bool stationsChanged = false;
     {
         std::lock_guard<std::mutex> lock(m_inMutex);
+        if (m_stationsPending) {
+            m_stations = std::move(m_pendingStations);
+            m_pendingStations.clear();
+            m_stationsPending = false;
+            stationsChanged = true;
+        }
         if (m_scopePending) {
             m_scope = m_pendingScope;
             m_scopePending = false;
@@ -127,6 +134,9 @@ void SimulationBridge::applyPending() {
     }
     if (circuit || scopeChanged) resolveScope();
     for (const auto& a : m_actionsWork) apply(a);
+    // Radio (ab Volta 3): Abstimmen ueber die Wechselstromanalyse (Speicher nur hier, zwischen zwei Schritten)
+    if ((circuit || stationsChanged) && m_sim.hasCircuit() && (!m_stations.empty() || stationsChanged))
+        core::tuneRadio(m_sim, m_stations);
 }
 
 void SimulationBridge::apply(const Action& a) {
@@ -323,6 +333,12 @@ void SimulationBridge::setScope(const ScopeConfig& config) {
     std::lock_guard<std::mutex> lock(m_inMutex);
     m_pendingScope = config;
     m_scopePending = true;
+}
+
+void SimulationBridge::setStations(std::vector<core::RadioStation> stations) {
+    std::lock_guard<std::mutex> lock(m_inMutex);
+    m_pendingStations = std::move(stations);
+    m_stationsPending = true;
 }
 
 void SimulationBridge::resolveScope() {

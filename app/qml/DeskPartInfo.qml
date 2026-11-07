@@ -84,6 +84,13 @@ Popup {
                    qsTr("Bei einer Diode oder LED bleibt der Strom erst fast null und steigt dann steil an."),
                    qsTr("Ein Vorwiderstand im Schreiber begrenzt den Strom. So gehen die Bauteile nicht kaputt, solange du die Strombegrenzung klein lässt.")]
         }
+        case "senderanlage": return {
+            title: qsTr("Senderanlage"),
+            intro: qsTr("Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten."),
+            fields: [["ANT", qsTr("Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.")]],
+            tips: [qsTr("Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus."),
+                   qsTr("Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.")]
+        }
         case "p1": return pot(1)
         case "p2": return pot(2)
         case "schalter": return {

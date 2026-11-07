@@ -112,6 +112,7 @@ public:
     void setCells(int cells);
     void setCells2(int cells); // Batterie 2: 3 oder 6 Zellen
     void setAcRms(int volt);   // Wechselquelle: 6 oder 9 V~ (Bedienhandlung)
+    void setStationOn(int index, bool on); // Senderanlage (ab Volta 3): Sender 0..2 an/aus (Bedienhandlung)
     // Funktionsgenerator (Bedienhandlungen; Werte auf die Grenzen des Geraets begrenzt)
     void setGenWaveform(int waveform);
     void setGenFrequency(double hz);
@@ -190,6 +191,7 @@ public:
 
 private:
     void rebuild(const std::vector<sim::StateOverride>& states);
+    void updateStations();
     void postEnvironment(); // Licht und Waerme an alle Fotowiderstaende und Heissleiter
     std::vector<sim::StateOverride> captureStates() const;
     bool push(const QString& text, Board after, int mergeId = BoardCommand::NoMerge, const QString& key = {},
@@ -203,6 +205,7 @@ private:
     int m_tracerEpoch = 0;
     std::shared_ptr<AudioStream> m_audio;
     bool m_audible = false;
+    bool m_hadStations = false; // Senderanlage war im Pult (leere Liste einmal nachschicken)
     double m_timeScale = 1.0;
     bool m_scopeActive = false;
     sim::ScopeConfig m_scopeConfig; // zuletzt an die Bruecke gegeben (nur bei Aenderung neu)

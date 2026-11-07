@@ -345,6 +345,26 @@
         <source>Zeitlupe: stumm</source>
         <translation>Slow motion: muted</translation>
     </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Sender</source>
+        <translation>Transmitter</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Mittelwelle</source>
+        <translation>Medium wave</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>%1 von 3 an</source>
+        <translation>%1 of 3 on</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Senderanlage einstellen</source>
+        <translation>Set up the transmitter station</translation>
+    </message>
 </context>
 <context>
     <name>DemoDialog</name>
@@ -771,6 +791,31 @@
         <source>Aus dem Pult nehmen</source>
         <translation>Remove from desk</translation>
     </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Transmitter station</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
+        <translation>The transmitter station is your own little radio network: three medium-wave transmitters send Morse code, a melody and a time signal to the ANT field. Tap its button to switch transmitters on or off.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.</source>
+        <translation>Antenna: all transmitters arrive here at once. The return path is 0V.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus.</source>
+        <translation>A tuned circuit made of a coil and a variable capacitor picks out one transmitter.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
+        <translation>The transmitters oscillate far too fast for the display. That is why Volta calculates them differently from the rest. How is explained under “How Volta calculates”.</translation>
+    </message>
 </context>
 <context>
     <name>DeskTray</name>
@@ -893,6 +938,11 @@
         <location filename="../app/qml/DeskTray.qml" line="135"/>
         <source>einsetzen</source>
         <translation>insert</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskTray.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Transmitter station</translation>
     </message>
 </context>
 <context>
@@ -5148,6 +5198,69 @@
         <location filename="../app/qml/Splash.qml" line="37"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
+    </message>
+</context>
+<context>
+    <name>StationPanel</name>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Morsezeichen</source>
+        <translation>Morse code</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Melodie</source>
+        <translation>Melody</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Zeitzeichen</source>
+        <translation>Time signal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Transmitter station</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schließen</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation>The transmitter station sends three medium-wave transmitters to the ANT field. Connect ANT to your antenna.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
+        <translation>Each transmitter has its own frequency. Your tuned circuit picks out one of them.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
+        <translation>Switch transmitters off if you want to hear whether your receiver finds a single one.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 ein oder aus</source>
+        <translation>Transmitter %1 on or off</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 · %2 kHz</source>
+        <translation>Transmitter %1 · %2 kHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>sendet</source>
+        <translation>on air</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>aus</source>
+        <translation>off</translation>
     </message>
 </context>
 <context>

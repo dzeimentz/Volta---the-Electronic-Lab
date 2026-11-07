@@ -6,6 +6,7 @@
 #include <cmath>
 
 #include "model/anchor.hpp"
+#include "model/board_edit.hpp"
 #include "model/board_json.hpp"
 #include "model/build_guide.hpp"
 #include "model/parts_list.hpp"
@@ -725,6 +726,34 @@ private slots:
         QVERIFY(simulate(board, m_catalog, net, sim, 0.01));
         // Stellung 0,25 von a: U(s) = 9 V * 0,75 (Batterie unbelastet bis auf 10 kOhm)
         QVERIFY(std::fabs(nodeVoltage(net, sim, "P:P1s") - 9.0 * 0.75 * 10000.0 / 10001.5) < 0.01);
+    }
+
+    // ab Volta 3: Senderanlage im Pult; Sender an/aus wird gespeichert, ANT speist die Antenne, Liste der Sender
+    void deskStationsVolta3() {
+        model::Board board;
+        board.deskParts = std::vector<std::string>{"senderanlage"};
+        board.desk.stationsOn = {true, false, true};
+        board.wires.push_back({"L1", "P:ANT", "A1", "gelb"});
+        board.parts.push_back({"R1", "widerstand", {{"a", "A1"}, {"b", "A2"}}, 1000.0});
+        board.wires.push_back({"L2", "A2", "P:0V", "schwarz"});
+        model::Board back;
+        QVERIFY(model::boardFromJson(model::boardToJson(board), back));
+        QCOMPARE(back.desk.stationsOn[0], true);
+        QCOMPARE(back.desk.stationsOn[1], false);
+        QCOMPARE(back.desk.stationsOn[2], true);
+        QVERIFY(model::needsAudioStep(board)); // Antenne angeschlossen
+        const auto st = model::deskStations(board);
+        QCOMPARE(st.size(), std::size_t(3));
+        QVERIFY(st[0].on && !st[1].on && st[2].on);
+        QVERIFY(st[0].carrierHz < st[1].carrierHz && st[1].carrierHz < st[2].carrierHz);
+        model::Netlist net;
+        core::Simulator sim;
+        QVERIFY(simulate(board, m_catalog, net, sim, 0.01));
+        QVERIFY(net.desk.count(model::desk_id::kAntenna) == 1);
+        // Volta 1 (festes Pult): keine Senderanlage, nichts gespeichert
+        model::Board v1;
+        QVERIFY(!model::hasDeskPart(v1, "senderanlage"));
+        QVERIFY(!model::boardToJson(v1).value(QStringLiteral("pult")).toObject().contains(QStringLiteral("sender")));
     }
 
     void meterMeasuresThroughJacks() {

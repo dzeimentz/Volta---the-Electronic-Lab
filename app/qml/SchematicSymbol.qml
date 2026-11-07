@@ -109,6 +109,8 @@ Item {
             return {s: "M0 16 H20 M44 16 H64 " + circle(32, 16, 12), f: "", t: "G~", tx: 32, ty: 16}
         case "kennlinienschreiber": // Kennlinienschreiber: Kasten mit Kennlinie
             return {s: "M0 16 H18 M46 16 H64 M18 4 H46 V28 H18 Z M22 24 H30 Q36 24 42 8", f: "", t: "+", tx: 12, ty: 6}
+        case "antenne": // Antenne der Senderanlage (DIN EN 60617): Mast mit Dreieck, Bezug 0V (ab Volta 3)
+            return {s: "M0 16 H30 V8 M22 0 L30 8 L38 0 M30 8 V0", f: "", t: "ANT", tx: 50, ty: 16}
         case "tastkopf": // Tastkopf: Messspitze mit Kanalkreis, Bezug 0V
             return {s: "M0 16 H22 " + circle(34, 16, 12) + " M34 28 V31 M28 31 H40", f: "", t: "K", tx: 34, ty: 16}
         case "messstelle_ohm":

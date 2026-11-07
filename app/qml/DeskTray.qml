@@ -22,6 +22,7 @@ Popup {
         case "wechselquelle": return qsTr("Wechselquelle")
         case "generator": return qsTr("Funktionsgenerator")
         case "kennlinienschreiber": return qsTr("Kennlinienschreiber")
+        case "senderanlage": return qsTr("Senderanlage")
         case "p1": return qsTr("Potentiometer 1")
         case "p2": return qsTr("Potentiometer 2")
         case "schalter": return qsTr("Schalter")
@@ -35,7 +36,8 @@ Popup {
         return qsTr("ab Stufe %1").arg(item.stage)
     }
     function groupOf(part) {
-        return part.startsWith("batterie") || part === "wechselquelle" || part === "generator" ? "quellen"
+        return part.startsWith("batterie") || part === "wechselquelle" || part === "generator"
+               || part === "senderanlage" ? "quellen"
                : part === "kennlinienschreiber" ? "messen"
                : part === "lautsprecher" ? "hoeren" : "bedienen"
     }

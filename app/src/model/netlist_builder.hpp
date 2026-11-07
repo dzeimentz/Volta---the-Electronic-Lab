@@ -8,6 +8,7 @@
 #include "board.hpp"
 #include "catalog.hpp"
 #include "volta/core/circuit.hpp"
+#include "volta/core/components/radio.hpp"
 #include "volta/core/modules/blink_module.hpp"
 #include "volta/core/modules/timer_module.hpp"
 #include "volta/core/modules/tone_module.hpp"
@@ -26,6 +27,7 @@ inline constexpr const char* kAcSource = "PULT.W"; // Wechselquelle (ab Volta 2)
 inline constexpr const char* kAcLeak = "PULT.WR";        // Ableitwiderstand der potentialfreien Wechselquelle
 inline constexpr const char* kGenerator = "PULT.G";      // Funktionsgenerator (ab Volta 2)
 inline constexpr const char* kGeneratorGround = "PULT.G0"; // G0 fest an 0V
+inline constexpr const char* kAntenna = "PULT.ANT";       // Senderanlage (ab Volta 3)
 inline constexpr const char* kTracer = "PULT.KS";          // Kennlinienschreiber (ab Volta 2)
 inline constexpr const char* kTracerLeak = "PULT.KSR";     // Ableitwiderstand des potentialfreien Schreibers
 inline constexpr const char* kPot1 = "PULT.P1";
@@ -65,6 +67,10 @@ struct Netlist {
 //    die symmetrische Versorgung selbst).
 //  - Module werden als Teilschaltung expandiert; ihre Anschluesse sind die Felder der Modulleiste.
 Netlist buildNetlist(const Board& board, const Catalog& catalog);
+
+// Sender der Senderanlage (ab Volta 3, Konzept 5.3) mit ihrem Schaltzustand; leer ohne Senderanlage im Pult.
+// Drei Mittelwellensender mit eigenen Inhalten (Morsezeichen, Melodie, Zeitzeichen).
+std::vector<core::RadioStation> deskStations(const Board& board);
 
 // Uebernimmt die Bauteilzustaende (Ladung, Temperatur, zerstoert, Sicherung ...) aus einer alten in eine neue
 // Netzliste, zugeordnet ueber die Bauteilkennung. Damit bleibt der Zustand bei jedem Topologiewechsel erhalten.

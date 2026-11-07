@@ -1359,6 +1359,17 @@ void LabController::setCells2(int cells) {
     emit deskChanged();
 }
 
+bool LabController::stationOn(int index) const {
+    const auto& on = m_session->board().desk.stationsOn;
+    return index >= 0 && index < static_cast<int>(on.size()) && on[static_cast<std::size_t>(index)];
+}
+
+void LabController::setStationOn(int index, bool on) {
+    if (index < 0 || index >= 3 || stationOn(index) == on) return;
+    m_session->setStationOn(index, on);
+    emit deskChanged();
+}
+
 void LabController::setAcRms(int volt) {
     if (acRms() == volt) return;
     m_session->setAcRms(volt);

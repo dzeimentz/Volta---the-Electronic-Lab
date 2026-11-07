@@ -512,6 +512,9 @@ public:
     // Kurve des letzten Durchlaufs als flache Liste (x, y je 0 ... 1 im Schirm) und der aktuelle Punkt.
     // setTracer: Schluessel volts, bipolar, limit (Bedienhandlung)
     Q_INVOKABLE QVariantMap tracerState() const;
+    // Senderanlage (ab Volta 3): Sender 0..2 an/aus (Bedienhandlung)
+    Q_INVOKABLE bool stationOn(int index) const;
+    Q_INVOKABLE void setStationOn(int index, bool on);
     Q_INVOKABLE void setTracer(const QString& key, const QVariant& value);
     Q_PROPERTY(bool scopeActive READ scopeActive WRITE setScopeActive NOTIFY deskChanged)
     bool scopeActive() const;

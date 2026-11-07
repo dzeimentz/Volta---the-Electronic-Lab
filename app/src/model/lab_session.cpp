@@ -168,6 +168,7 @@ void LabSession::rebuild(const std::vector<sim::StateOverride>& states) {
         observer = std::make_shared<SuccessObserver>(m_success, &m_success->eval, &m_success->reached,
                                                      successIndex(m_net, m_board, m_successTemplate, m_colourFixed));
     m_topology = m_bridge.setCircuit(std::move(m_net.circuit), states, std::move(observer));
+    updateStations();
     m_idHistory.emplace_back(m_topology, m_net.componentIds);
     while (m_idHistory.size() > 32) m_idHistory.pop_front();
     if (!states.empty()) m_pendingStates.emplace_back(m_topology, states);
@@ -650,6 +651,20 @@ void LabSession::setMainSwitch(bool on) {
         m_bridge.post({desk_id::kAcSource, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
     if (hasDeskPart(m_board, "generator"))
         m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetSwitch, on ? 1.0 : 0.0});
+}
+
+void LabSession::updateStations() {
+    // ab Volta 3: Sender der Senderanlage an die Bruecke (ohne Senderanlage nur einmal die leere Liste)
+    auto stations = deskStations(m_board);
+    if (stations.empty() && !m_hadStations) return;
+    m_hadStations = !stations.empty();
+    m_bridge.setStations(std::move(stations));
+}
+
+void LabSession::setStationOn(int index, bool on) {
+    if (index < 0 || index >= static_cast<int>(m_board.desk.stationsOn.size())) return;
+    m_board.desk.stationsOn[static_cast<std::size_t>(index)] = on;
+    updateStations();
 }
 
 void LabSession::setAcRms(int volt) {

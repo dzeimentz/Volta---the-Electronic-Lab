@@ -33,6 +33,10 @@
       "ab_stufe": 0
     },
     {
+      "teil": "senderanlage",
+      "ab_stufe": 2
+    },
+    {
       "teil": "schalter",
       "bei_nutzung": true
     },

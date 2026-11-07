@@ -22,6 +22,7 @@ Rectangle {
     signal infoRequested(string name)
     signal generatorRequested() // Generatorfenster oeffnen
     signal tracerRequested()    // Kennlinienschreiber oeffnen
+    signal stationsRequested()  // Senderfenster oeffnen (ab Volta 3)
     signal trayRequested()          // Pult nach Bedarf: Geraetefach oeffnen (Einsetzen)
     signal trayRemoveRequested()    // ... zum Herausnehmen
     property real trayX: 0          // Lage des Knopfs »+« (Arbeitsflaeche)
@@ -124,7 +125,7 @@ Rectangle {
     // Schalter (zeigt die Stellung), Lautsprecher
     Repeater {
         model: desk.groups.filter(g => ["batterie", "batterie2", "wechselquelle", "generator", "kennlinienschreiber",
-                                        "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
+                                        "senderanlage", "p1", "p2", "schalter", "lautsprecher"].indexOf(g.name) >= 0)
         Shape {
             id: deskSymbol
             required property var modelData
@@ -158,6 +159,11 @@ Rectangle {
                     return {s: `M${a} ${t} V${y} H${m - r} M${m + r} ${y} H${b} V${t} M${m - r} ${y} a${r} ${r} 0 1 0 ${2 * r} 0 a${r} ${r} 0 1 0 ${-2 * r} 0`
                                + ` M${m - 6} ${y + 4} H${m + 1} C${m + 3} ${y + 4} ${m + 4} ${y} ${m + 5} ${y - 6}`,
                             f: "", plus: a + 12}
+                }
+                case "senderanlage": { // Antenne (DIN EN 60617): Mast mit Dreieck, ein Feld ANT
+                    const a = cx(0)
+                    return {s: `M${a} ${t} V${y - 12} M${a - 9} ${y - 22} L${a} ${y - 12} L${a + 9} ${y - 22} M${a} ${y - 12} V${y - 22}`,
+                            f: ""}
                 }
                 case "p1": case "p2": { // a, s, b: Widerstand zwischen a und b, Schleifer von s
                     const a = cx(0), s = cx(1), b = cx(2)
@@ -355,6 +361,25 @@ Rectangle {
             text: qsTr("bis %1").arg(parent.st.limitText || "")
             color: "white"
             font.pixelSize: Math.round((12) * Theme.fontScale)
+        }
+    }
+
+    // Senderanlage (ab Volta 3): Knopf mit der Zahl der Sender, die senden, oeffnet das Senderfenster
+    Column {
+        visible: desk.group("senderanlage") !== null
+        x: desk.centerOf("senderanlage") - width / 2
+        y: 12
+        spacing: 4
+        readonly property int onCount: { desk.controller.cells; let n = 0; for (let i = 0; i < 3; ++i) if (desk.controller.stationOn(i)) ++n; return n }
+        Label { text: qsTr("Sender"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
+        PanelButton {
+            objectName: "stationsButton"
+            width: 112
+            height: Theme.control
+            text: qsTr("Mittelwelle") + "\n" + qsTr("%1 von 3 an").arg(parent.onCount)
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+            onClicked: desk.stationsRequested()
+            Accessible.name: qsTr("Senderanlage einstellen")
         }
     }
 

@@ -160,7 +160,7 @@ bool hasDeskPart(const Board& board, const std::string& group) {
     if (group == "batterie") return true;
     if (!board.deskParts) // Volta 1: festes Pult ohne die Pultteile ab Volta 2
         return group != "batterie2" && group != "wechselquelle" && group != "generator" &&
-               group != "kennlinienschreiber";
+               group != "kennlinienschreiber" && group != "senderanlage";
     return std::find(board.deskParts->begin(), board.deskParts->end(), group) != board.deskParts->end();
 }
 
@@ -170,7 +170,17 @@ bool speakerWired(const Board& board) {
     return false;
 }
 
-bool needsAudioStep(const Board& board) { return board.deskParts.has_value() && speakerWired(board); }
+// Radio (ab Volta 3): an der Antenne haengt ein Empfaenger, dessen Huellkurve hoerbar ist
+bool antennaWired(const Board& board) {
+    if (!hasDeskPart(board, "senderanlage")) return false;
+    for (const auto& w : board.wires)
+        if (w.from == "P:ANT" || w.to == "P:ANT") return true;
+    return false;
+}
+
+bool needsAudioStep(const Board& board) {
+    return board.deskParts.has_value() && (speakerWired(board) || antennaWired(board));
+}
 
 double requiredStepS(const Board& board, bool audio) {
     if (audio && needsAudioStep(board)) return kAudioStepS;

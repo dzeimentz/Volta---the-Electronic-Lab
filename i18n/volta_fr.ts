@@ -345,6 +345,26 @@
         <source>Zeitlupe: stumm</source>
         <translation>Ralenti : muet</translation>
     </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Sender</source>
+        <translation>Émetteur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Mittelwelle</source>
+        <translation>Ondes moyennes</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>%1 von 3 an</source>
+        <translation>%1 sur 3 allumés</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Senderanlage einstellen</source>
+        <translation>Régler la station d’émission</translation>
+    </message>
 </context>
 <context>
     <name>DemoDialog</name>
@@ -771,6 +791,31 @@
         <source>Aus dem Pult nehmen</source>
         <translation>Retirer du pupitre</translation>
     </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Station d’émission</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
+        <translation>La station d’émission est ta propre petite radio : trois émetteurs en ondes moyennes envoient du morse, une mélodie et un signal horaire au champ ANT. Touche son bouton pour allumer ou éteindre des émetteurs.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.</source>
+        <translation>Antenne : ici arrivent tous les émetteurs à la fois. Le retour passe par 0V.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus.</source>
+        <translation>Un circuit oscillant fait d’une bobine et d’un condensateur variable choisit un émetteur.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
+        <translation>Les émetteurs oscillent bien trop vite pour l’affichage. Volta les calcule donc autrement que le reste. Comment ? C’est expliqué sous « Comment Volta calcule ».</translation>
+    </message>
 </context>
 <context>
     <name>DeskTray</name>
@@ -893,6 +938,11 @@
         <location filename="../app/qml/DeskTray.qml" line="135"/>
         <source>einsetzen</source>
         <translation>placer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskTray.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Station d’émission</translation>
     </message>
 </context>
 <context>
@@ -5148,6 +5198,69 @@
         <location filename="../app/qml/Splash.qml" line="37"/>
         <source>Version %1</source>
         <translation>Version %1</translation>
+    </message>
+</context>
+<context>
+    <name>StationPanel</name>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Morsezeichen</source>
+        <translation>Morse</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Melodie</source>
+        <translation>Mélodie</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Zeitzeichen</source>
+        <translation>Signal horaire</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Station d’émission</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schließen</source>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation>La station d’émission envoie trois émetteurs en ondes moyennes au champ ANT. Relie ANT à ton antenne.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
+        <translation>Chaque émetteur a sa propre fréquence. Ton circuit oscillant en choisit un.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
+        <translation>Éteins des émetteurs si tu veux entendre si ton récepteur trouve un seul émetteur.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 ein oder aus</source>
+        <translation>Émetteur %1 allumé ou éteint</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 · %2 kHz</source>
+        <translation>Émetteur %1 · %2 kHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>sendet</source>
+        <translation>émet</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>aus</source>
+        <translation>éteint</translation>
     </message>
 </context>
 <context>

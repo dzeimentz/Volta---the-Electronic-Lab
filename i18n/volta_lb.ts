@@ -345,6 +345,26 @@
         <source>Zeitlupe: stumm</source>
         <translation>Zäitlupp: stomm</translation>
     </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Sender</source>
+        <translation>Sender</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Mittelwelle</source>
+        <translation>Mëttelwell</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>%1 von 3 an</source>
+        <translation>%1 vun 3 un</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Senderanlage einstellen</source>
+        <translation>Senderanlag astellen</translation>
+    </message>
 </context>
 <context>
     <name>DemoDialog</name>
@@ -771,6 +791,31 @@
         <source>Aus dem Pult nehmen</source>
         <translation>Aus dem Pult huelen</translation>
     </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Senderanlag</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
+        <translation>D’Senderanlag ass däin eegene klenge Rundfunk: Dräi Sender op Mëttelwell schécken Morsezeechen, eng Melodie an en Zäitzeechen un d’Feld ANT. Tipp op hire Knäppchen, fir Sender un- oder auszeschalten.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.</source>
+        <translation>Antenn: Hei kommen all Sender gläichzäiteg un. De Réckwee ass 0V.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus.</source>
+        <translation>E Schwéngkrees aus Spull an Dréikondensator sicht sech ee Sender eraus.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
+        <translation>D’Sender schwénge vill ze séier fir d’Uweisung. Dofir rechent Volta se anescht wéi de Rescht. Wéi, steet ënner »Sou rechent Volta«.</translation>
+    </message>
 </context>
 <context>
     <name>DeskTray</name>
@@ -893,6 +938,11 @@
         <location filename="../app/qml/DeskTray.qml" line="135"/>
         <source>einsetzen</source>
         <translation>asetzen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskTray.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Senderanlag</translation>
     </message>
 </context>
 <context>
@@ -5148,6 +5198,69 @@
         <location filename="../app/qml/Splash.qml" line="37"/>
         <source>Version %1</source>
         <translation>Versioun %1</translation>
+    </message>
+</context>
+<context>
+    <name>StationPanel</name>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Morsezeichen</source>
+        <translation>Morsezeechen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Melodie</source>
+        <translation>Melodie</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Zeitzeichen</source>
+        <translation>Zäitzeechen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation>Senderanlag</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schließen</source>
+        <translation>Zoumaachen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation>D’Senderanlag schéckt dräi Sender op Mëttelwell un d’Feld ANT. Verbann ANT mat denger Antenn.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
+        <translation>All Sender huet seng eege Frequenz. Däi Schwéngkrees sicht sech een dovun eraus.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
+        <translation>Schalt Sender aus, wann s du héiere wëlls, ob däin Empfänger een eenzele Sender fënnt.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 ein oder aus</source>
+        <translation>Sender %1 un oder aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 · %2 kHz</source>
+        <translation>Sender %1 · %2 kHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>sendet</source>
+        <translation>sent</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>aus</source>
+        <translation>aus</translation>
     </message>
 </context>
 <context>

@@ -345,6 +345,26 @@
         <source>Zeitlupe: stumm</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Sender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Mittelwelle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>%1 von 3 an</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <source>Senderanlage einstellen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemoDialog</name>
@@ -771,6 +791,31 @@
         <source>Aus dem Pult nehmen</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DeskTray</name>
@@ -892,6 +937,11 @@
     <message>
         <location filename="../app/qml/DeskTray.qml" line="135"/>
         <source>einsetzen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskTray.qml" line="0"/>
+        <source>Senderanlage</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5147,6 +5197,69 @@
     <message>
         <location filename="../app/qml/Splash.qml" line="37"/>
         <source>Version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StationPanel</name>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Morsezeichen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Melodie</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Zeitzeichen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Senderanlage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schließen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 ein oder aus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>Sender %1 · %2 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>sendet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <source>aus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -29,6 +29,7 @@ Item {
         {name: "wechselquelle", fields: ["P:W~a", "P:W~b"], minWidth: 128}, // ab Volta 2
         {name: "generator", fields: ["P:G", "P:G0"], minWidth: 128},        // ab Volta 2
         {name: "kennlinienschreiber", fields: ["P:KS+", "P:KS-"], minWidth: 128}, // ab Volta 2
+        {name: "senderanlage", fields: ["P:ANT"], minWidth: 128},                 // ab Volta 3
         {name: "p1", fields: ["P:P1a", "P:P1s", "P:P1b"], minWidth: 120},
         {name: "p2", fields: ["P:P2a", "P:P2s", "P:P2b"], minWidth: 120},
         {name: "schalter", fields: ["P:S1", "P:S2"], minWidth: 96},
@@ -1090,6 +1091,7 @@ Item {
                 onTrayRemoveRequested: deskTray.openFor(true)
                 onGeneratorRequested: generatorPanel.open()
                 onTracerRequested: tracerPanel.open()
+                onStationsRequested: stationPanel.open()
             }
 
             // Farbiger Hintergrund des Steckbretts: eine Kachel je Feld (Reihenfarbe, nach rechts dunkler)
@@ -1844,6 +1846,12 @@ Item {
     GeneratorPanel {
         id: generatorPanel
         objectName: "generatorPanel"
+        controller: lab.controller
+    }
+
+    StationPanel {
+        id: stationPanel
+        objectName: "stationPanel"
         controller: lab.controller
     }
 

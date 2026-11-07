@@ -14,6 +14,7 @@
 #include "volta/core/circuit.hpp"
 #include "volta/core/signal_stats.hpp"
 #include "volta/core/simulator.hpp"
+#include "volta/core/components/radio.hpp"
 #include "model/audio_stream.hpp"
 #include "model/oscilloscope.hpp"
 
@@ -126,6 +127,9 @@ public:
     void setTimeScale(double scale); // Zeitraffer 1, 10, 100
     void setPaused(bool paused);
     void setScope(const ScopeConfig& config); // Oszilloskop ein-/umstellen (auch Schrittweite)
+    // Sender der Senderanlage (ab Volta 3): nach jedem Topologiewechsel und jeder Aenderung wird neu abgestimmt
+    // (core::tuneRadio, zwischen zwei Schritten)
+    void setStations(std::vector<core::RadioStation> stations);
     double stepS() const { return m_stepS; }   // aktuelle Schrittweite (nur im Simulations-Thread bzw. synchron)
 
     // Neuesten Schnappschuss holen (Kapazitaet von out wird wiederverwendet). false, wenn nichts Neues vorliegt.
@@ -172,6 +176,9 @@ private:
     std::vector<Action> m_actions;
     std::vector<Action> m_actionsWork;
     bool m_scopePending = false;
+    bool m_stationsPending = false;
+    std::vector<core::RadioStation> m_pendingStations;
+    std::vector<core::RadioStation> m_stations; // im Simulations-Thread
     ScopeConfig m_pendingScope;
 
     std::mutex m_outMutex; // Ausgang (Doppelpuffer)

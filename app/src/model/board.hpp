@@ -84,6 +84,7 @@ struct DeskState {
     DisplaySettings display;    // Anzeigegeraet ab Volta 2 (eingeblendet ueber meterVisible)
     ScopeSettings scope;        // Oszilloskop ab Volta 2
     TracerSettings tracer;      // Kennlinienschreiber ab Volta 2
+    std::array<bool, 3> stationsOn{true, true, true}; // Senderanlage ab Volta 3: Mittelwellensender an/aus
     int roomLight = 2;          // Raumlicht: 0 dunkel, 1 Daemmerung, 2 hell
     std::vector<ToolPlacement> tools;
 };

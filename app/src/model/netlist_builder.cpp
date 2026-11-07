@@ -187,6 +187,14 @@ private:
             c.add<core::FunctionGenerator>(desk_id::kGenerator, g, g0, gp).setEnabled(d.mainSwitch);
             c.add<core::Wire>(desk_id::kGeneratorGround, g0, core::kGround);
         }
+        if (hasDeskPart(m_board, "senderanlage")) {
+            // Antenneneinspeisung der Senderanlage gegen 0V (ab Volta 3): im Zeitbereich nur ihr Innenwiderstand, die
+            // Sender wirken ueber das Abstimmen (core::tuneRadio)
+            NodeId ant = 0;
+            node("P:ANT", ant, "Pult");
+            m_net.desk[desk_id::kAntenna] = c.componentCount();
+            c.add<core::AntennaFeed>(desk_id::kAntenna, ant, core::kGround);
+        }
         if (hasDeskPart(m_board, "kennlinienschreiber")) {
             // Laborgeraet mit eigenem Netzteil, potentialfrei wie ein echter Kennlinienschreiber: das Bauteil darf
             // irgendwo in der Schaltung haengen. Der Ableitwiderstand von KS- nach 0V haelt ihn rechenbar.
@@ -440,6 +448,16 @@ private:
 };
 
 } // namespace
+
+std::vector<core::RadioStation> deskStations(const Board& board) {
+    std::vector<core::RadioStation> out;
+    if (!hasDeskPart(board, "senderanlage")) return out;
+    // Traegeramplituden verschieden, damit die Sender unterschiedlich stark ankommen
+    out.push_back({600e3, 1.0, 0.5, core::StationProgram::Morse, 800.0, board.desk.stationsOn[0]});
+    out.push_back({1000e3, 0.8, 0.6, core::StationProgram::Melody, 0.0, board.desk.stationsOn[1]});
+    out.push_back({1400e3, 0.6, 0.5, core::StationProgram::TimeSignal, 1000.0, board.desk.stationsOn[2]});
+    return out;
+}
 
 Netlist buildNetlist(const Board& board, const Catalog& catalog) {
     Netlist net;

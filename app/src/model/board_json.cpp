@@ -66,6 +66,11 @@ QJsonObject boardToJson(const Board& board) {
         out.insert(QStringLiteral("pultteile"), groups);
         desk.insert(QStringLiteral("zellen2"), d.cells2);
         desk.insert(QStringLiteral("wechsel_v"), d.acRmsV);
+        if (hasDeskPart(board, "senderanlage")) { // ab Volta 3: Sender an/aus
+            QJsonArray on;
+            for (bool s : d.stationsOn) on.append(s);
+            desk.insert(QStringLiteral("sender"), on);
+        }
         desk.insert(QStringLiteral("generator"), QJsonObject{{QStringLiteral("form"), d.genWaveform},
                                                              {QStringLiteral("frequenz_hz"), d.genFrequencyHz},
                                                              {QStringLiteral("amplitude_v"), d.genAmplitudeV},
@@ -145,6 +150,9 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     const int cells2 = desk.value(QStringLiteral("zellen2")).toInt(6);
     d.cells2 = (cells2 == 3 || cells2 == 6) ? cells2 : 6;
     d.acRmsV = desk.value(QStringLiteral("wechsel_v")).toInt(9) == 6 ? 6 : 9;
+    const QJsonArray sender = desk.value(QStringLiteral("sender")).toArray();
+    for (std::size_t i = 0; i < d.stationsOn.size(); ++i)
+        d.stationsOn[i] = i < static_cast<std::size_t>(sender.size()) ? sender.at(static_cast<qsizetype>(i)).toBool(true) : true;
     const QJsonObject gen = desk.value(QStringLiteral("generator")).toObject();
     d.genWaveform = std::clamp(gen.value(QStringLiteral("form")).toInt(0), 0, 2);
     d.genFrequencyHz = std::clamp(gen.value(QStringLiteral("frequenz_hz")).toDouble(100.0), 1.0, 10000.0);

@@ -84,7 +84,7 @@ std::string displayName(const std::string& a) {
 // aktive Bauteile und Module, Verbraucher, Lautsprecher, Messgeraet
 int signalRank(const SchematicElement& e) {
     const std::string& t = e.type;
-    if (t == "batterie" || t == "wechselquelle" || t == "generator") return 0;
+    if (t == "batterie" || t == "wechselquelle" || t == "generator" || t == "antenne") return 0;
     if (t == "pultschalter" || t == "taster" || t == "schalter" || t == "reedkontakt" || t == "wechselschalter")
         return 1;
     if (t == "potentiometer" || t.rfind("trimmer", 0) == 0) return 2;
@@ -310,6 +310,7 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog, bool standa
     deskElement("PULT.W", "wechselquelle", {"P:W~a", "P:W~b"}, {"a", "b"});
     deskElement("PULT.G", "generator", {"P:G", "P:G0"}, {"g", "g0"});
     deskElement("PULT.KS", "kennlinienschreiber", {"P:KS+", "P:KS-"}, {"plus", "minus"});
+    deskElement("PULT.ANT", "antenne", {"P:ANT"}, {"ant"}); // Senderanlage ab Volta 3
     if (board.desk.meterVisible)
         deskElement("PULT.MESS", "messgeraet", {"MESS:COM", "MESS:VOHM", "MESS:A"}, {"COM", "VOHM", "A"});
 
