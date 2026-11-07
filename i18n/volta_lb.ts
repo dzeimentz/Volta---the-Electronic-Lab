@@ -6066,6 +6066,17 @@
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Dréikondensator</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Kristallhörer</source>
+        <translation>Kristallhéierer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Kristallhörer,Hörer</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Kristallhéierer,Héierer</translation>
+    </message>
 </context>
 <context>
     <name>TitleBar</name>

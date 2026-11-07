@@ -19,5 +19,6 @@
   "stufe_8_frage": "Wéi zielt eng Schaltung?",
   "lex_spule_hf": "Dës kleng Spullen hu wéineg Wéckelen. Si passe fir séier Schwéngungen. D’Antennespull mat 220 µH (Mikrohenry) bild mam Dréikondensator de Schwéngkrees vun dengem Radio. Et gëtt och 1 mH an 10 mH fir méi déif Téin.",
   "lex_drehkondensator": "En Dréikondensator huet Placken, déi sech anenee dréinen. Wat se méi wäit anenee stinn, wat d’Kapazitéit méi grouss ass: vun 10 bis 500 pF (Pikofarad). Tipp en un, da kënnt den Dréiknäppchen. Esou stëmms du e Schwéngkrees of.",
-  "lex_diode_ge": "D’Germaniumdiod leet schonn ab ongeféier 0,2 Volt. Dofir héiert se och ganz schwaach Sender. Am Radio mécht se aus der séierer Schwéngung vun der Antenn erëm den Toun."
+  "lex_diode_ge": "D’Germaniumdiod leet schonn ab ongeféier 0,2 Volt. Dofir héiert se och ganz schwaach Sender. Am Radio mécht se aus der séierer Schwéngung vun der Antenn erëm den Toun.",
+  "lex_kristallhoerer": "De Kristallhéierer ass en Ouerhéierer ouni Batterie. An him sëtzt eng dënn Kristallscheif. Läit eng Spannung un, béit se sech e bëssen a mécht esou den Toun. E brauch bal kee Stroum. Dofir geet him d’Kraaft vun de Sender am Detektorradio duer."
 }

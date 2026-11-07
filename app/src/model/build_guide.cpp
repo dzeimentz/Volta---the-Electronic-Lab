@@ -12,7 +12,7 @@ namespace {
 
 bool unpolarized(const std::string& type) {
     return type == "widerstand" || type == "gluehlampe" || type == "taster" || type == "reedkontakt" ||
-           type == "motor" || type == "kondensator" || type == "drehkondensator" || type.rfind("spule", 0) == 0;
+           type == "motor" || type == "kondensator" || type == "drehkondensator" || type == "kristallhoerer" || type.rfind("spule", 0) == 0;
 }
 
 // Modulanschluss -> Feld der Leiste (im jeweiligen Aufbau); andere Anschlusspunkte unveraendert

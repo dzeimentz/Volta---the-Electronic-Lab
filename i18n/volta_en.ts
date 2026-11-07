@@ -6066,6 +6066,17 @@
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>variable capacitor</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Kristallhörer</source>
+        <translation>Crystal earpiece</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="0"/>
+        <source>Kristallhörer,Hörer</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>crystal earpiece,earpiece</translation>
+    </message>
 </context>
 <context>
     <name>TitleBar</name>

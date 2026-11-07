@@ -279,6 +279,12 @@ private:
             c.add<core::Buzzer>(p.id, n[0], n[1], bp);
         } else if (m == "capacitor" && n.size() == 2) {
             c.add<core::Capacitor>(p.id, n[0], n[1], core::CapacitorParams::film(p.value > 0.0 ? p.value : 100e-9));
+        } else if (m == "earpiece" && n.size() == 2) {
+            // Kristallhoerer (ab Volta 3): Piezoscheibe als Kapazitaet mit Parallelwiderstand (Katalog c_F, r_ohm;
+            // typisch einige nF und sehr hochohmig). Hoerbar ist die Spannung an ihm (LabSession::updateScope).
+            core::CapacitorParams cp = core::CapacitorParams::film(e->param("c_F", 10e-9));
+            cp.leakOhm = e->param("r_ohm", 1e6);
+            c.add<core::Capacitor>(p.id, n[0], n[1], cp);
         } else if (m == "capacitor_variable" && n.size() == 2) {
             // Drehkondensator (ab Volta 3): Kapazitaet aus der Stellung des Drehknopfs
             c.add<core::Capacitor>(p.id, n[0], n[1], core::CapacitorParams::film(variableCapacitanceF(*e, p.position)));

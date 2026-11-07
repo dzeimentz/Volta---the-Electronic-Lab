@@ -126,6 +126,8 @@ Item {
                     t: type === "blinkmodul" ? "BL" : type === "tonmodul" ? "TON" : type === "zeitmodul" ? "ZEIT" : "VST", tx: 32, ty: 16}
         case "feuchtesonde": // zwei Elektroden mit Tropfen dazwischen
             return {s: "M0 16 H24 M40 16 H64 M24 6 V26 M40 6 V26 M32 9 Q36 15 32 19 Q28 15 32 9 Z", f: ""}
+        case "kristallhoerer": // Hoerer: Kasten mit gewoelbter Hoermuschel (DIN EN 60617)
+            return {s: "M0 16 H22 M42 16 H64 M22 12 H42 V24 H22 Z M22 12 Q32 0 42 12", f: ""}
         case "piezo": // Piezo-Schallgeber: Kristallplatte zwischen zwei Belaegen (DIN EN 60617) mit Schallzeichen
             return {s: "M0 16 H22 M42 16 H64 M22 6 V26 M42 6 V26 M26 8 H38 V24 H26 Z M46 4 Q52 8 46 12", f: "", t: "+", tx: 15, ty: 6}
         default:

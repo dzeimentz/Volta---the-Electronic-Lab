@@ -227,19 +227,20 @@ int main(int argc, char* argv[]) {
     }
 
     // VOLTA_DEMO_GALLERY=9 (Volta 3, mit VOLTA_DEMO_FREELAB=1 VOLTA_DEMO_DESK=senderanlage): Detektorempfaenger mit
-    // Antennenspule, Drehkondensator (auf 1000 kHz) und Germaniumdiode an der Senderanlage
+    // Antennenspule, Drehkondensator (auf 1000 kHz), Germaniumdiode und Kristallhoerer (mit 22 kOhm) an der Senderanlage
     if (qEnvironmentVariableIntValue("VOLTA_DEMO_GALLERY") == 9) {
         QTimer::singleShot(400, &lab, [&lab] {
             struct P { const char* type; const char* field; };
             const P parts[] = {{"kondensator", "A1"}, {"spule_220uh", "C1"}, {"drehkondensator", "D1"},
-                               {"diode_ge", "A4"},    {"widerstand", "C6"}};
+                               {"diode_ge", "A4"},    {"kristallhoerer", "C6"}, {"widerstand", "E6"}};
             for (const auto& p : parts)
                 lab.addPart(QString::fromLatin1(p.type), QString::fromLatin1(p.field), false, false);
             lab.setPartValue(QStringLiteral("C1"), 10e-12);
-            lab.setPartValue(QStringLiteral("R1"), 47e3);
+            lab.setPartValue(QStringLiteral("R1"), 22e3);
             lab.setPartPosition(QStringLiteral("DK1"), 0.194);
             const char* wires[][2] = {{"P:ANT", "A1"}, {"A2", "C1"}, {"A2", "D1"}, {"C2", "P:0V"},
-                                      {"D2", "P:0V"},  {"A2", "A4"}, {"A5", "C6"}, {"C7", "P:0V"}};
+                                      {"D2", "P:0V"},  {"A2", "A4"}, {"A5", "C6"}, {"C7", "P:0V"},
+                                      {"C6", "E6"},    {"E7", "P:0V"}};
             for (const auto& w : wires)
                 lab.addWire(QString::fromLatin1(w[0]), QString::fromLatin1(w[1]), QStringLiteral("blau"));
         });

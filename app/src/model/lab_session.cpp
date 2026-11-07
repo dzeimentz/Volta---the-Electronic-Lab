@@ -217,6 +217,13 @@ void LabSession::updateScope() {
     if (needsAudioStep(m_board) && m_timeScale == 1.0 && m_audible && m_audio) {
         c.audio = m_audio;
         c.audioId = desk_id::kSpeaker;
+        // ohne verdrahteten Lautsprecher klingt der Kristallhoerer (ab Volta 3): seine Spannung, volle Aussteuerung
+        // bei u_voll_V
+        const std::string ear = speakerWired(m_board) ? std::string() : earpieceId(m_board);
+        if (const CatalogEntry* e = ear.empty() ? nullptr : m_catalog.part("kristallhoerer")) {
+            c.audioId = ear;
+            c.audioVoltScale = AudioStream::kFullScaleA / e->param("u_voll_V", 0.5);
+        }
     }
     if (m_timeScale < 1.0) // Zeitlupe: etwa gleich viele Schritte je Sekunde wie in Echtzeit, hoechstens 20 us fein
         c.stepS = std::min(c.stepS, std::clamp(core::kDefaultStepS * m_timeScale, kAudioStepS, core::kDefaultStepS));
@@ -224,7 +231,7 @@ void LabSession::updateScope() {
         c.capacity == m_scopeConfig.capacity && c.stepS == m_scopeConfig.stepS &&
         c.tracerId == m_scopeConfig.tracerId && c.tracerCapacity == m_scopeConfig.tracerCapacity &&
         c.tracerEpoch == m_scopeConfig.tracerEpoch && c.audio == m_scopeConfig.audio &&
-        c.audioId == m_scopeConfig.audioId)
+        c.audioId == m_scopeConfig.audioId && c.audioVoltScale == m_scopeConfig.audioVoltScale)
         return;
     m_scopeConfig = c;
     m_bridge.setScope(c);

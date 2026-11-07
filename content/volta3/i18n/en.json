@@ -19,5 +19,6 @@
   "stufe_8_frage": "How does a circuit count?",
   "lex_spule_hf": "These small coils have only a few turns. They suit fast oscillations. The 220 µH (microhenry) antenna coil and the variable capacitor form the tuned circuit of your radio. There are also 1 mH and 10 mH coils for lower tones.",
   "lex_drehkondensator": "A variable capacitor has plates that turn into each other. The further they overlap, the larger the capacitance: from 10 to 500 pF (picofarad). Tap it and the knob appears. This is how you tune a tuned circuit.",
-  "lex_diode_ge": "The germanium diode already conducts from about 0.2 volts. That is why it can pick up very weak transmitters. In the radio it turns the fast oscillation from the antenna back into sound."
+  "lex_diode_ge": "The germanium diode already conducts from about 0.2 volts. That is why it can pick up very weak transmitters. In the radio it turns the fast oscillation from the antenna back into sound.",
+  "lex_kristallhoerer": "The crystal earpiece is an earphone without a battery. Inside it sits a thin crystal disc. When a voltage is applied, it bends a little and makes the sound. It needs almost no current. That is why the power of the transmitters is enough for it in a crystal radio."
 }

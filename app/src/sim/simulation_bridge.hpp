@@ -77,6 +77,8 @@ struct ScopeConfig {
     // Hoerbare Simulation: Strom des Bauteils audioId (Pult-Lautsprecher) in der Abtastrate des Tonstroms
     std::shared_ptr<model::AudioStream> audio;
     std::string audioId;
+    // > 0: statt des Stroms klingt die Spannung des Bauteils, umgerechnet in A je V (Kristallhoerer, ab Volta 3)
+    double audioVoltScale = 0.0;
 };
 
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.

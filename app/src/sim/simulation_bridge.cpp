@@ -310,7 +310,8 @@ void SimulationBridge::step() {
     if (dt > 0.0 && p.valid && m_audioIndex >= 0 && static_cast<std::size_t>(m_audioIndex) < p.readings.size()) {
         // Tonstrom: zwischen zwei Schritten linear auf die Abtastzeitpunkte der Soundkarte umrechnen
         const double t1 = m_sim.timeS();
-        const double a1 = p.readings[static_cast<std::size_t>(m_audioIndex)].currentA;
+        const core::ComponentReading& ar = p.readings[static_cast<std::size_t>(m_audioIndex)];
+        const double a1 = m_scope.audioVoltScale > 0.0 ? ar.voltV * m_scope.audioVoltScale : ar.currentA;
         const double dtA = 1.0 / m_scope.audio->sampleRate();
         if (m_audioNextT < 0.0 || t1 - m_audioPrevT > 0.01) { // Beginn oder Sprung
             m_audioNextT = t1;

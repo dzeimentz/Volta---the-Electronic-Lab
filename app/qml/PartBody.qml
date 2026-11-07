@@ -109,6 +109,7 @@ Item {
             case "elektromagnet": return magnet
             case "relais": return relay
             case "piezo": return piezo
+            case "kristallhoerer": return earpiece
             case "feuchtesonde": return probe
             case "messstelle_v": case "messstelle_a": case "messstelle_ohm": return measurePoint
             case "tastkopf": return scopeProbe
@@ -838,6 +839,30 @@ Item {
                     color: "transparent"; border.color: "#E8A33B"; border.width: 2
                     opacity: 0.7 - 0.25 * index
                 }
+            }
+        }
+    }
+
+    // Kristallhoerer (ab Volta 3): elfenbeinfarbenes Gehaeuse mit Ohrstoepsel, darin die Kristallscheibe
+    Component {
+        id: earpiece
+        Item {
+            Rectangle { // Gehaeuse
+                anchors.verticalCenter: parent.verticalCenter
+                x: parent.width * 0.12
+                width: parent.width * 0.56; height: parent.height * 0.9; radius: height / 2
+                color: "#EFE6CF"; border.color: "#6E6450"
+                Rectangle { // Kristallscheibe
+                    anchors.centerIn: parent
+                    width: parent.height * 0.62; height: width; radius: width / 2
+                    color: "#C9B98F"; border.color: "#8A7A55"
+                }
+            }
+            Rectangle { // Ohrstoepsel
+                anchors.verticalCenter: parent.verticalCenter
+                x: parent.width * 0.64
+                width: parent.width * 0.22; height: parent.height * 0.55; radius: height / 2
+                color: "#E2D6B6"; border.color: "#6E6450"
             }
         }
     }

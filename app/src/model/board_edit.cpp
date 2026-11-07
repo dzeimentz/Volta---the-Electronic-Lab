@@ -51,6 +51,7 @@ std::string prefixFor(const std::string& type) {
         {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
         {"spannungsregler_5v", "IC"},
         {"spule_220uh", "SP"},  {"spule_1mh", "SP"},     {"spule_10mh", "SP"},    {"drehkondensator", "DK"}, // ab Volta 3
+        {"kristallhoerer", "KH"},
         // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
         {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"},
         {"tastkopf", "TK"}}; // Tastkopf K1/K2 (»K« ist das Relais)
@@ -179,8 +180,15 @@ bool antennaWired(const Board& board) {
     return false;
 }
 
+std::string earpieceId(const Board& board) {
+    if (!board.deskParts) return {}; // Volta 1: festes Pult, kein Kristallhoerer
+    for (const auto& p : board.parts)
+        if (p.type == "kristallhoerer") return p.id;
+    return {};
+}
+
 bool needsAudioStep(const Board& board) {
-    return board.deskParts.has_value() && (speakerWired(board) || antennaWired(board));
+    return board.deskParts.has_value() && (speakerWired(board) || antennaWired(board) || !earpieceId(board).empty());
 }
 
 double requiredStepS(const Board& board, bool audio) {

@@ -59,6 +59,7 @@ QtObject {
         case "relais": return qsTr("Relais")
         case "feuchtesonde": return qsTr("Feuchtesonde")
         case "piezo": return qsTr("Piezo-Schallgeber")
+        case "kristallhoerer": return qsTr("Kristallhörer")
         case "messstelle_v": return qsTr("Spannungsmessstelle")
         case "messstelle_a": return qsTr("Strommessstelle")
         case "messstelle_ohm": return qsTr("Widerstandsmessstelle")
@@ -142,6 +143,7 @@ QtObject {
             ["transistor_npn", qsTr("Transistor", "Wortanfaenge im Aufbautext")],
             ["feuchtesonde", qsTr("Feuchtesonde", "Wortanfaenge im Aufbautext")],
             ["piezo", qsTr("Piezo", "Wortanfaenge im Aufbautext")],
+            ["kristallhoerer", qsTr("Kristallhörer,Hörer", "Wortanfaenge im Aufbautext")],
             ["zeitmodul", qsTr("Zeitmodul", "Wortanfaenge im Aufbautext")],
             ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")],
             ["opmodul", qsTr("OP-Modul", "Wortanfaenge im Aufbautext")],

@@ -39,6 +39,8 @@ std::vector<std::string> deskPartsUsed(const Board& board);
 bool speakerWired(const Board& board);
 // Radio (ab Volta 3): Steht die Senderanlage im Pult und haengt eine Leitung an ANT?
 bool antennaWired(const Board& board);
+// Kristallhoerer (ab Volta 3): erster gesteckter Kristallhoerer (Bauteil-ID), sonst leer
+std::string earpieceId(const Board& board);
 // Rechnet der Aufbau mit 20 us (hoerbare Simulation, Konzept 5.3)? Ab Volta 2 (Pult nach Bedarf), sobald der
 // Lautsprecher verdrahtet ist - unabhaengig davon, ob der Ton laeuft: so haengt das Ergebnis (auch die
 // Erfolgsbedingung) nie an der Tonausgabe.
