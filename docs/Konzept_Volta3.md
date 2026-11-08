@@ -19,6 +19,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Änderungen zu v0.4 | Stufen- und Experimentliste freigegeben (04.11.2026); Machbarkeitstest auf dem Tablet durchgeführt (`docs/volta3-machbarkeit.md`) und Entscheidungen vom 04.11.2026: gemittelter Hüllkurvendetektor statt einfacher Hüllkurve, Schrittweite 5 µs bei Schaltwandlern, Empfänger mit 2-facher Echtzeit-Reserve angenommen (Kapitel 4, 10, 12, 13) |
 | Nachtrag 07.11.2026 | Halbleiter in zwei Gruppen (9.2); Kennfarbe Beere `#A4266B` (9.1) |
 | Nachtrag 07.11.2026 (2) | Zeitrechnung für Schwingkreise: Kondensator und Spule rechnen in Volta 3 mit BDF2 (zweite Ordnung) statt Rückwärts-Euler; freie Schwingungen bis etwa 1 kHz auf 2 % genau (Kapitel 4, Stufe 1) |
+| Nachtrag 08.11.2026 | Experiment 1.7: Abstimmen durch Tauschen des Kondensators statt mit dem Drehkondensator. Der Drehko (10–500 pF) ergibt mit 1 H keinen hörbaren Ton, Werte im Mikrofarad-Bereich halten ihn im Hörbereich (Kapitel 8, Stufe 1) |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -161,7 +162,7 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 - 1.4 **Im Takt anstoßen** – Resonanz im Reihenkreis: Bei einer Frequenz fließt am meisten Strom.
 - 1.5 **Der Parallelkreis als Filter** – eine Frequenz kommt durch, die anderen nicht (Frequenzgang).
 - 1.6 **Schmal oder breit** – die Güte bestimmt, wie scharf der Kreis trennt.
-- 1.7 **Projekt: der Klangschalen-Oszillator** – Transistor und Schwingkreis erzeugen einen hörbaren Ton, der Drehkondensator stimmt ihn.
+- 1.7 **Projekt: der Klangschalen-Oszillator** – Transistor und Schwingkreis erzeugen einen hörbaren Ton; das Kind stimmt ihn durch Tauschen des Kondensators (1 µF … 100 nF, etwa 230–540 Hz; Nachtrag 08.11.2026).
 
 ### Stufe 2 – Radio: Wie kommt Musik durch die Luft? (8)
 - 2.1 **Träger und Ton** – Amplitudenmodulation mit dem Generator, am Oszilloskop gedehnt: Die Hüllkurve ist der Ton.
