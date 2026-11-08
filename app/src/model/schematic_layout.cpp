@@ -138,7 +138,8 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
         g.pins = {{-1.35, -0.5, Exit::Left}, {0.85, -1.4, Exit::Up}, {0.85, 1.0, Exit::Down}};
         return g;
     }
-    if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler" || t == "spannungsregler_5v") {
+    if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler" || t == "uebertrager" ||
+        t == "spannungsregler_5v") {
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
@@ -150,7 +151,9 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
             PinGeo& p = g.pins[k];
             p.label = n == "plus" ? "+" : n == "minus" ? "−" : n == "VOHM" ? "V/Ω" : t == "relais" ? (n == "com" ? "COM" : n == "no" ? "NO" : n == "a" ? "A" : "B") : n;
             const bool relayTop = t == "relais" && n == "a", relayBottom = t == "relais" && n == "b";
-            const bool relayRight = (t == "relais" && n == "no") || (t == "optokoppler" && (n == "c" || n == "e"));
+            const bool relayRight = (t == "relais" && n == "no") || (t == "optokoppler" && (n == "c" || n == "e")) ||
+                                    (t == "uebertrager" && (n == "a2" || n == "e2"));
+            if (t == "uebertrager") p.label = n == "a1" ? "•1" : n == "e1" ? "1" : n == "a2" ? "•2" : "2";
             if (t == "optokoppler") p.label = n == "anode" ? "A" : n == "kathode" ? "K" : n == "c" ? "C" : "E";
             if (t == "opmodul" && (n == "nichtinv" || n == "inv")) p.label = n == "nichtinv" ? "IN+" : "IN−";
             if (t == "mwmodul" && (n == "ant" || n == "abst")) p.label = n == "ant" ? "ANT" : "ABST";

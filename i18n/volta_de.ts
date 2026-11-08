@@ -6221,6 +6221,16 @@
         <translation>Speicherdrossel 10 mH</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="50"/>
+        <source>Übertrager 2 × 10 mH</source>
+        <translation>Übertrager 2 × 10 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="51"/>
+        <source>LED weiß</source>
+        <translation>LED weiß</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="49"/>
         <source>Drehkondensator</source>
         <translation type="unfinished"></translation>

@@ -37,7 +37,7 @@ Item {
 
     readonly property bool isLed: type.startsWith("led")
     readonly property color ledColor: type === "led_gruen" ? "#22B14C" : type === "led_gelb" ? "#F2C318"
-                                    : type === "led_blau" ? "#2C6BE0" : "#E8221B"
+                                    : type === "led_blau" ? "#2C6BE0" : type === "led_weiss" ? "#F4F2E8" : "#E8221B"
 
     // Farbringe eines Widerstands (4 Ringe: Ziffer, Ziffer, Multiplikator, Toleranz Gold)
     function bandColors(v) {
@@ -103,6 +103,7 @@ Item {
             case "ir_led": return irLed
             case "fototransistor": return phototransistor
             case "optokoppler": return optocoupler
+            case "uebertrager": return transformer
             case "spannungsregler_5v": return regulator
             case "fotowiderstand": return photo
             case "heissleiter": return thermistor
@@ -497,6 +498,37 @@ Item {
                     font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true; color: "white"
                     x: okPcb.f[index].x + (okPcb.f[index].x < okPcb.width / 2 ? 7 : -7 - width)
                     y: okPcb.f[index].y + (okPcb.f[index].y < okPcb.height / 2 ? 4 : -4 - height)
+                }
+            }
+        }
+    }
+
+    // Uebertrager (ab Volta 3): Ringkern mit zwei Wicklungen auf Platine; Wicklung 1 oben, Wicklung 2 unten, die
+    // Anfaenge (Punkt) links
+    Component {
+        id: transformer
+        Rectangle {
+            id: uePcb
+            anchors.fill: parent; radius: 6
+            color: "#2F6B3A"; border.color: "#173D1E"; border.width: 2
+            readonly property var f: root.feet.length === 4 ? root.feet
+                                   : [Qt.point(16, 14), Qt.point(width - 16, 14),
+                                      Qt.point(16, height - 14), Qt.point(width - 16, height - 14)]
+            Rectangle { // Ringkern mit Kupferwicklung
+                anchors.centerIn: parent
+                width: 30; height: 30; radius: 15
+                color: "#C8742F"; border.color: "#7A3E10"; border.width: 3
+                Rectangle { anchors.centerIn: parent; width: 12; height: 12; radius: 6; color: "#2F6B3A"; border.color: "#2E2E2E"; border.width: 2 }
+            }
+            Repeater {
+                model: ["•1", "1", "•2", "2"]
+                Text {
+                    required property int index
+                    required property string modelData
+                    text: modelData
+                    font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true; color: "white"
+                    x: uePcb.f[index].x + (uePcb.f[index].x < uePcb.width / 2 ? 7 : -7 - width)
+                    y: uePcb.f[index].y + (uePcb.f[index].y < uePcb.height / 2 ? 4 : -4 - height)
                 }
             }
         }

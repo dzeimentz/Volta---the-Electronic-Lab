@@ -42,6 +42,7 @@ add_executable(volta_core_tests
     components/test_regulator.cpp
     components/test_sources.cpp
     components/test_inductor.cpp
+    components/test_transformer.cpp
 )
 target_include_directories(volta_core_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(volta_core_tests PRIVATE volta::core Catch2::Catch2WithMain)

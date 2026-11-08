@@ -23,6 +23,7 @@
 #include "volta/core/components/switch.hpp"
 #include "volta/core/components/transistor.hpp"
 #include "volta/core/components/inductor.hpp"
+#include "volta/core/components/transformer.hpp"
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/regulator.hpp"
 #include "volta/core/modules/opamp_module.hpp"
@@ -314,6 +315,12 @@ private:
             auto& q = c.add<core::Phototransistor>(p.id, n[0], n[1], tp, illuminanceAt(m_board, p));
             q.setShade(shadeAt(m_board, p));
             m_receivers.push_back({&q, &p});
+        } else if (m == "transformer" && n.size() == 4) {
+            // Uebertrager (ab Volta 3): zwei gekoppelte Wicklungen, Anschluesse a1, e1, a2, e2
+            core::TransformerParams tp;
+            tp.inductance1H = tp.inductance2H = e->param("l_H", tp.inductance1H);
+            tp.coupling = e->param("k", tp.coupling);
+            c.add<core::Transformer>(p.id, n[0], n[1], n[2], n[3], tp);
         } else if (m == "optocoupler" && n.size() == 4) {
             core::OptocouplerParams op;
             op.ctr = e->param("ctr", op.ctr);
@@ -390,6 +397,7 @@ private:
         else if (e.type == "led_gruen") d = core::DiodeParams::ledGreen();
         else if (e.type == "led_gelb") d = core::DiodeParams::ledYellow();
         else if (e.type == "led_blau") d = core::DiodeParams::ledBlue();
+        else if (e.type == "led_weiss") d = core::DiodeParams::ledWhite(); // ab Volta 3
         else if (e.type == "ir_led") d = core::DiodeParams::irLed();
         else if (e.model == "led") d = core::DiodeParams::ledRed();
         else if (e.type == "zdiode_4v7") d = core::DiodeParams::zener4V7();

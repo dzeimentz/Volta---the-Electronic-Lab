@@ -6249,6 +6249,16 @@
         <translation>Storage choke 10 mH</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="50"/>
+        <source>Übertrager 2 × 10 mH</source>
+        <translation>Transformer 2 × 10 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="51"/>
+        <source>LED weiß</source>
+        <translation>LED white</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="49"/>
         <source>Drehkondensator</source>
         <translation>Variable capacitor</translation>

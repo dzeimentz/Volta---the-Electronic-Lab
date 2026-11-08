@@ -64,7 +64,7 @@ Item {
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H20 M24 6 H30 M34 6 H40 M44 6 H50", f: ""}
         case "spule_1h": // Wicklung mit Eisenkern (Strich darueber)
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H50", f: ""}
-        case "led_rot": case "led_gruen": case "led_gelb": case "led_blau": // Diode mit zwei Pfeilen nach aussen
+        case "led_rot": case "led_gruen": case "led_gelb": case "led_blau": case "led_weiss": // Diode mit zwei Pfeilen nach aussen
             return {s: diode + " " + arrowLine(29, 7, 36, 0) + " " + arrowLine(35, 9, 42, 2),
                     f: arrowHead(29, 7, 36, 0) + " " + arrowHead(35, 9, 42, 2)}
         case "ir_led": // LED-Zeichen mit »IR«
@@ -74,6 +74,10 @@ Item {
             return {s: circle(32, 19, 13) + " M0 16 H14 L26 23 M24 25 H40 M36 23 L50 16 H64 "
                        + arrowLine(18, 0, 26, 12) + " " + arrowLine(27, 0, 35, 12),
                     f: arrowHead(18, 0, 26, 12) + " " + arrowHead(27, 0, 35, 12) + " " + arrowHead(36, 23, 46, 18)}
+        case "uebertrager": // zwei Wicklungen gegeneinander, Kern als Doppelstrich, Anfaenge mit Punkt
+            return {s: "M6 2 H58 V30 H6 Z M14 11 A4.5 4 0 0 1 23 11 A4.5 4 0 0 1 32 11 A4.5 4 0 0 1 41 11 A4.5 4 0 0 1 50 11 "
+                       + "M14 21 A4.5 4 0 0 0 23 21 A4.5 4 0 0 0 32 21 A4.5 4 0 0 0 41 21 A4.5 4 0 0 0 50 21 M14 15 H50 M14 17 H50",
+                    f: "M9 6 A2 2 0 1 1 9 10 A2 2 0 1 1 9 6 M9 22 A2 2 0 1 1 9 26 A2 2 0 1 1 9 22"}
         case "optokoppler": // IR-LED und Fototransistor in einem Gehaeuse
             return {s: "M6 2 H58 V30 H6 Z M18 2 V10 M13 10 H23 L18 18 Z M13 18 H23 M18 18 V30 "
                        + arrowLine(25, 12, 33, 12) + " " + arrowLine(25, 19, 33, 19)

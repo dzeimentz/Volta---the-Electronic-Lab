@@ -41,6 +41,8 @@ struct DiodeParams {
     static DiodeParams ledYellow() noexcept { return {2.0, 0.02, 2.0, 5.0, 0.02, kLedThermal, 2.5, 3.0}; }
     static DiodeParams ledGreen() noexcept { return {2.1, 0.02, 2.0, 5.0, 0.02, kLedThermal, 2.5, 3.0}; }
     static DiodeParams ledBlue() noexcept { return {3.1, 0.02, 3.0, 10.0, 0.02, kLedThermal, 2.5, 3.0}; }
+    // Weisse LED (ab Volta 3): blauer Chip mit Leuchtstoff, Flussspannung etwa 3,0 V bei 20 mA
+    static DiodeParams ledWhite() noexcept { return {3.0, 0.02, 3.0, 10.0, 0.02, kLedThermal, 2.5, 3.0}; }
     // Z-Dioden nach BZX55 (Datenblatt: Uz bei Iz = 5 mA; rzj hoechstens 80 bzw. 25 Ohm, angesetzt 60 bzw. 20 Ohm;
     // Izmax 85 bzw. 70 mA bei Ptot 0,5 W). Durchlassrichtung wie Siliziumdiode, Bahnwiderstand 1 Ohm.
     static DiodeParams zener(double uzV, double rzOhm, double izMaxA) noexcept {

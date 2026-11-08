@@ -47,6 +47,8 @@ QtObject {
         case "spule_1mh": return qsTr("Spule 1 mH")
         case "spule_10mh": return qsTr("Spule 10 mH")
         case "drossel_10mh": return qsTr("Speicherdrossel 10 mH")
+        case "uebertrager": return qsTr("Übertrager 2 × 10 mH")
+        case "led_weiss": return qsTr("LED weiß")
         case "drehkondensator": return qsTr("Drehkondensator")
         case "diode_ge": return qsTr("Germaniumdiode")
         case "trimmer_10k": return qsTr("Trimmer 10 kΩ")
