@@ -1559,6 +1559,8 @@ QVariantMap LabController::partState(const QString& id) const {
     // Messstelle: Anzeige am Bauteil; Wechselgroesse als Effektivwert mit »~« (Statistik des Messfensters)
     const model::PartPlacement* p = m_session->board().findPart(ss(id));
     const model::CatalogEntry* e = p ? m_session->catalog().part(p->type) : nullptr;
+    // ab Volta 3 (Stufe 3, Verlustleistung): Temperatur unter dem Spannungsregler; Volta 2 bleibt unveraendert
+    if (e && e->model == "regulator" && m_band == QStringLiteral("volta3")) m.insert(QStringLiteral("showTempC"), true);
     if (e && e->model == "scope_probe") {
         const core::SignalSummary* st = m_session->readingStats(ss(id), false);
         // Spannung am Feld gegen 0V; die Statistik laeuft ueber dieselbe Groesse (Widerstand Feld -> 0V)

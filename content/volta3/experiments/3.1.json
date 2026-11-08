@@ -1,0 +1,159 @@
+{
+  "id": "volta3.3.1",
+  "band": "volta3",
+  "stufe": 3,
+  "titel_key": "exp3_3_1_titel",
+  "dauer_min": 15,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "spannungsregler_5v",
+    "widerstand",
+    "messstelle_a",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp3_3_1_frage",
+  "vermutungen": [
+    "exp3_3_1_v1",
+    "exp3_3_1_v2",
+    "exp3_3_1_v3"
+  ],
+  "beobachtungen": [
+    "exp3_3_1_b1",
+    "exp3_3_1_b2",
+    "exp3_3_1_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "anzahl": 2,
+        "leistung": true
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      },
+      {
+        "id": "IC1",
+        "typ": "spannungsregler_5v",
+        "felder": {
+          "ein": "A2",
+          "masse": "A3",
+          "aus": "A4"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A4",
+          "A5"
+        ],
+        "wert": 150
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": [
+          "B2",
+          "B4"
+        ]
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "B2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A4",
+        "nach": "B4",
+        "farbe": "gelb"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp3_3_1_s1",
+    "exp3_3_1_s2",
+    "exp3_3_1_s3",
+    "exp3_3_1_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "zwischen": [
+          3.6,
+          4.3
+        ]
+      },
+      {
+        "bauteil": "IM1",
+        "groesse": "anzeige",
+        "zwischen": [
+          0.03,
+          0.045
+        ]
+      },
+      {
+        "bauteil": "IC1",
+        "groesse": "temperatur_C",
+        "min": 45,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "IC1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "R1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_3_1_h1",
+    "exp3_3_1_h2",
+    "exp3_3_1_loesung"
+  ],
+  "erklaerung_key": "exp3_3_1_erklaerung",
+  "mehr_wissen_key": "exp3_3_1_mehr",
+  "weiterforschen": [
+    "exp3_3_1_w1",
+    "exp3_3_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_3_1_echt"
+}

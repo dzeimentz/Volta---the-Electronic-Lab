@@ -143,7 +143,7 @@ Item {
                              : root.measure ? Texts.partLabel(root.partId) + (root.meterReading !== "" ? "  " + root.meterReading : "")
                              : root.single ? (root.partState.probeText || "")
                              : fullName +(root.partType === "widerstand" ? "\n" + Texts.ohm(root.value)
-                                            : root.partType === "heissleiter" && root.partState.tempC !== undefined
+                                            : (root.partType === "heissleiter" || root.partState.showTempC === true) && root.partState.tempC !== undefined
                                               ? "\n" + qsTr("%1 °C").arg(Math.round(root.partState.tempC))
                                             : root.partType === "gluehlampe" && root.value > 0
                                               ? "\n" + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
