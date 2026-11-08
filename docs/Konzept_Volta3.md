@@ -21,6 +21,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Nachtrag 07.11.2026 (2) | Zeitrechnung für Schwingkreise: Kondensator und Spule rechnen in Volta 3 mit BDF2 (zweite Ordnung) statt Rückwärts-Euler; freie Schwingungen bis etwa 1 kHz auf 2 % genau (Kapitel 4, Stufe 1) |
 | Nachtrag 08.11.2026 | Experiment 1.7: Abstimmen durch Tauschen des Kondensators statt mit dem Drehkondensator. Der Drehko (10–500 pF) ergibt mit 1 H keinen hörbaren Ton, Werte im Mikrofarad-Bereich halten ihn im Hörbereich (Kapitel 8, Stufe 1) |
 | Nachtrag 08.11.2026 (2) | Amplitudenmodulation im Generator: Tiefe 0–100 %, Ton 100/200/500 Hz, nur ab Volta 3 sichtbar. Experiment 2.1 zeigt sie mit einem Träger von 2 kHz, Schritt für Schritt gerechnet und ohne Zeitdehnung; die Dehnung bleibt den Sendern mit echten MW-Frequenzen vorbehalten (Kapitel 5.2 und 8, Stufe 2) |
+| Nachtrag 08.11.2026 (3) | Experiment 2.6 heißt »Alle Sender auf einmal«: Die drei Sender (600/1000/1400 kHz) liegen weit auseinander; Trennschärfe zeigt sich daran, dass ein fest angekoppelter Kreis (Güte etwa 0,7) sie nicht mehr trennt (Kapitel 8, Stufe 2) |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -170,8 +171,8 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 - 2.2 **Den Sender wählen** – der Schwingkreis mit Drehkondensator lässt einen der drei Sender durch.
 - 2.3 **Die Diode holt den Ton heraus** – der Hüllkurvendetektor.
 - 2.4 **Radio ohne Batterie** – Antenne, Schwingkreis, Diode und Kristallhörer: der Detektorempfänger.
-- 2.5 **Lauter mit Verstärker** – eine Transistor- oder OP-Stufe treibt den Lautsprecher.
-- 2.6 **Zwei Sender nah beieinander** – Trennschärfe und Güte.
+- 2.5 **Lauter mit Verstärker** – eine Transistorstufe (Elko-Kopplung, Basisvorwiderstand 150 kΩ, Lautsprecher im Kollektorkreis) treibt den Lautsprecher: etwa 6 mA Tonstrom aus 0,03 mA Basisstrom.
+- 2.6 **Alle Sender auf einmal** – Trennschärfe und Güte: Fest an die Antenne gekoppelt (100 nF statt 10 pF) sinkt die Güte auf etwa 0,7, und alle Sender kommen gemischt an (Nachtrag 08.11.2026 (3)).
 - 2.7 **Das MW-Modul von innen** – Blick hinein: Wie ein fertiger Empfänger aufgebaut ist.
 - 2.8 **Projekt: UKW-Radio** – das UKW-Modul mit Lautstärke und Senderwahl; »Mehr wissen«: Frequenzmodulation.
 

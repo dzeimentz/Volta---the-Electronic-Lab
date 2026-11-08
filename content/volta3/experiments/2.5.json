@@ -1,0 +1,233 @@
+{
+  "id": "volta3.2.5",
+  "band": "volta3",
+  "stufe": 2,
+  "titel_key": "exp3_2_5_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "kondensator",
+    "spule_220uh",
+    "drehkondensator",
+    "diode_ge",
+    "widerstand",
+    "elko",
+    "transistor_npn",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_2_5_frage",
+  "vermutungen": [
+    "exp3_2_5_v1",
+    "exp3_2_5_v2",
+    "exp3_2_5_v3"
+  ],
+  "beobachtungen": [
+    "exp3_2_5_b1",
+    "exp3_2_5_b2",
+    "exp3_2_5_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 1e-11
+      },
+      {
+        "id": "SP1",
+        "typ": "spule_220uh",
+        "felder": [
+          "C1",
+          "C2"
+        ]
+      },
+      {
+        "id": "DK1",
+        "typ": "drehkondensator",
+        "felder": [
+          "D1",
+          "D2"
+        ],
+        "stellung": 0.194
+      },
+      {
+        "id": "D1",
+        "typ": "diode_ge",
+        "felder": {
+          "anode": "A4",
+          "kathode": "A5"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "E6",
+          "E7"
+        ],
+        "wert": 22000
+      },
+      {
+        "id": "C2",
+        "typ": "elko",
+        "felder": {
+          "minus": "B6",
+          "plus": "B7"
+        },
+        "wert": 1e-05
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B8",
+          "c": "B9",
+          "e": "C8",
+          "e2": "C9"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "E8",
+          "E9"
+        ],
+        "wert": 150000.0
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:ANT",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "C1",
+        "farbe": "blau"
+      },
+      {
+        "von": "A2",
+        "nach": "D1",
+        "farbe": "blau"
+      },
+      {
+        "von": "C2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "D2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "A4",
+        "farbe": "blau"
+      },
+      {
+        "von": "A5",
+        "nach": "E6",
+        "farbe": "blau"
+      },
+      {
+        "von": "E7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A5",
+        "nach": "B6",
+        "farbe": "blau"
+      },
+      {
+        "von": "B7",
+        "nach": "B8",
+        "farbe": "blau"
+      },
+      {
+        "von": "C8",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E8",
+        "nach": "B8",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "E10",
+        "farbe": "rot"
+      },
+      {
+        "von": "E9",
+        "nach": "E10",
+        "farbe": "rot"
+      },
+      {
+        "von": "E10",
+        "nach": "P:LS1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "B9",
+        "farbe": "gruen"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp3_2_5_s1",
+    "exp3_2_5_s2",
+    "exp3_2_5_s3",
+    "exp3_2_5_s4",
+    "exp3_2_5_s5"
+  ],
+  "aufbau_von": "volta3.2.2",
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "LS",
+        "groesse": "strom_mA",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.5,
+        "min": 3.0
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_2_5_h1",
+    "exp3_2_5_h2",
+    "exp3_2_5_loesung"
+  ],
+  "erklaerung_key": "exp3_2_5_erklaerung",
+  "mehr_wissen_key": "exp3_2_5_mehr",
+  "weiterforschen": [
+    "exp3_2_5_w1",
+    "exp3_2_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_2_5_echt"
+}
