@@ -189,7 +189,7 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 - 3.4 **Der Abwärtswandler** – weniger Spannung, kaum Wärme; Wirkungsgrad gegen den Längsregler: 555 mit etwa 3,8 kHz, PNP-Schalter, Si-Freilaufdiode, Speicherdrossel 10 mH, Last 120 Ω (Nachtrag 08.11.2026 (8)). Gerechnet: 5,0 V und 42 mA heraus, nur 36 mA aus der Batterie, Wirkungsgrad etwa 65 % (der Längsregler aus 3.1 käme bei derselben Last auf etwa 52 %); den Rest verbrauchen vor allem der 555 selbst, Diode und Transistor.
 - 3.5 **Eine Zelle, eine weiße LED** – der Aufwärtswandler mit 1,5 V als Sperrschwinger (Nachtrag 08.11.2026 (9)): Übertrager, NPN, 15 kΩ, weiße LED; gerechnet etwa 2600 Hz, 13 mA aus der Zelle, LED im Mittel 6 mA (Spitzen 26 mA), Kollektor bis gut 3 V; ohne LED über 300 V (»nur in der App«).
 - 3.6 **Minus aus dem Takt** – Ladungspumpe mit 555, Dioden und Kondensatoren: 555 mit etwa 140 Hz (1 kΩ, 4,7 kΩ, 1 µF), zwei Elkos 100 µF, zwei Si-Dioden, rote LED mit 1 kΩ an der Minusspannung. Gerechnet: etwa −5,5 V bei knapp 4 mA LED-Strom, ohne Last etwa −6,4 V.
-- 3.7 **Projekt: Taschenlampe mit einer Zelle** – möglichst hell bei möglichst langer Laufzeit, Wirkungsgrad im Vergleich.
+- 3.7 **Projekt: Taschenlampe mit einer Zelle** – möglichst hell bei möglichst langer Laufzeit, Wirkungsgrad im Vergleich: Sperrschwinger aus 3.5 mit 10 kΩ; gerechnet etwa 19 mA aus der Zelle, LED im Mittel knapp 9 mA (Ziel: Helligkeit ≥ 0,35 bei höchstens 25 mA); Laufzeit einer Mignonzelle mit 2000 mAh etwa 100 h statt etwa 150 h mit 15 kΩ.
 
 ### Stufe 4 – Thyristor und Triac: Wie dimmt man Wechselspannung? (6)
 - 4.1 **Einmal gezündet, bleibt er an** – Thyristor an der Batterie mit Taster.
