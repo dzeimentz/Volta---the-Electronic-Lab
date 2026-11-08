@@ -46,6 +46,7 @@ QtObject {
         case "spule_220uh": return qsTr("Antennenspule 220 µH")
         case "spule_1mh": return qsTr("Spule 1 mH")
         case "spule_10mh": return qsTr("Spule 10 mH")
+        case "drossel_10mh": return qsTr("Speicherdrossel 10 mH")
         case "drehkondensator": return qsTr("Drehkondensator")
         case "diode_ge": return qsTr("Germaniumdiode")
         case "trimmer_10k": return qsTr("Trimmer 10 kΩ")

@@ -60,6 +60,8 @@ Item {
             return {s: "M0 16 H24 M38 16 H64 M24 8 L38 16 L24 24 Z M34 6 L38 8 V24 L42 26", f: ""}
         case "spule_100mh": case "spule_220uh": case "spule_1mh": case "spule_10mh": // Wicklung als Boegen
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16", f: ""}
+        case "drossel_10mh": // Wicklung mit Ferritkern (gestrichelt darueber)
+            return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H20 M24 6 H30 M34 6 H40 M44 6 H50", f: ""}
         case "spule_1h": // Wicklung mit Eisenkern (Strich darueber)
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H50", f: ""}
         case "led_rot": case "led_gruen": case "led_gelb": case "led_blau": // Diode mit zwei Pfeilen nach aussen

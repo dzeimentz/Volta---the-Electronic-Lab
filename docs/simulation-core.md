@@ -66,7 +66,7 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
   Runge-Kutta). Erster Schritt nach dem Arbeitspunkt, nach Wiederherstellen eines Zustands und nach einem Sprung der
   Schrittweite ueber das Doppelte: Rueckwaerts-Euler. Grenze: Der Phasenfehler waechst mit (w·dt)^2; bei 20 µs
   bleiben Schwingkreise bis etwa 1 kHz unter 2 %. Steckt in Volta 3 eine Spule, rechnet die App mit 20 µs
-  (`model::requiredStepS`). Volta 1 und 2 rechnen unveraendert mit Rueckwaerts-Euler.
+  (`model::requiredStepS`), mit Speicherdrossel (Schaltwandler) mit 5 µs (`kSwitchStepS`). Volta 1 und 2 rechnen unveraendert mit Rueckwaerts-Euler.
 - Nach Topologiewechsel und nach Undo: Arbeitspunkt zum aktuellen Zeitpunkt mit Quellenrampe (Source Stepping)
   als Rueckfall. Gespeicherte Zustaende (Kondensatorladung, spaeter Drehzahl) gehen dabei als Anfangsbedingungen
   ein: ein Kondensator wirkt im Arbeitspunkt als Spannungsquelle seiner Ladespannung (Serienwiderstand
@@ -109,6 +109,7 @@ einen elektrischen Teil und – wo didaktisch relevant – ein thermisches Model
 | `leitung` (`Wire`) | 0,01 Ω | glueht ab 1 A (nur Anzeige), wird nie zerstoert | – |
 | `spule_100mh`, `spule_1h` (ab Volta 2, `Inductor`) | L in Reihe mit Wicklungswiderstand als Spannungszweig (Rueckwaerts-Euler; im Arbeitspunkt nur R), parallel Rp 100 kΩ (Wicklungskapazitaet, Kern; begrenzt die Abschaltspitze auf I·Rp); 100 mH / 30 Ω, 1 H / 100 Ω | Ueberlast > 0,1 A bzw. 50 mA; Wicklung 100 K/W, τ 10 s, 130 °C -> offen | `Destroyed` |
 | `spule_220uh`, `spule_1mh`, `spule_10mh` (ab Volta 3, `Inductor`) | wie oben; Antennenspule 220 µH / 5 Ω, Rp 200 kΩ (Guete bei 1 MHz um 90, mit 10 … 500 pF etwa 480 kHz bis ueber 1,4 MHz), 1 mH / 8 Ω, 10 mH / 25 Ω, Rp 200 kΩ | Ueberlast > 0,3 / 0,2 / 0,1 A; Wicklung wie oben | `Destroyed` |
+| `drossel_10mh` (ab Volta 3, Stufe 3, `Inductor`, Katalog `drossel` = 1) | Speicherdrossel fuer Schaltwandler: 10 mH / 2 Ω, Rp 200 kΩ, Rth 60 K/W; mit Drossel rechnet die App mit 5 µs (Lueckbetrieb auf 2 % genau, Referenztest gegen 0,5 µs) | Ueberlast > 0,5 A; Wicklung wie oben | `Destroyed` |
 | `relais` | Spule mit R; Relaiskontakt ab Ansprechstrom mit Hysterese | – | `RelayClick` |
 | `zdiode_4v7`, `zdiode_5v6` (ab Volta 2) | Diode mit Durchbruch: −Ibv·(e^(−(Ud+Ubv)/(nbv·Vt)) − e^(−Ubv/(nbv·Vt))), Begrenzung gespiegelt wie SPICE3; nach BZX55: Uz bei 5 mA, rz 60 bzw. 20 Ω, Durchlass wie Si (0,75 V, Rs 1 Ω) | Izmax 85 bzw. 70 mA, Si-Thermik | `Destroyed` |
 | `transistor_pnp` (ab Volta 2) | wie `transistor_npn` mit umgekehrten Vorzeichen (BC557B, Kennwerte gespiegelt) | wie NPN | `Destroyed` |

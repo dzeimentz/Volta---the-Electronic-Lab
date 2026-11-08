@@ -1,0 +1,380 @@
+{
+  "id": "volta3.3.4",
+  "band": "volta3",
+  "stufe": 3,
+  "titel_key": "exp3_3_4_titel",
+  "dauer_min": 30,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "diode_si",
+    "kondensator",
+    "elko",
+    "transistor_pnp",
+    "drossel_10mh",
+    "messstelle_a",
+    "messstelle_v",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_3_4_frage",
+  "vermutungen": [
+    "exp3_3_4_v1",
+    "exp3_3_4_v2",
+    "exp3_3_4_v3"
+  ],
+  "beobachtungen": [
+    "exp3_3_4_b1",
+    "exp3_3_4_b2",
+    "exp3_3_4_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "p1": 0.1,
+      "anzeigegeraet": {
+        "anzahl": 3
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.0001,
+        "volt_je_teilung": [
+          2
+        ],
+        "trigger_V": 4.0
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      },
+      {
+        "id": "C3",
+        "typ": "elko",
+        "felder": {
+          "plus": "A2",
+          "minus": "A3"
+        },
+        "wert": 0.00047
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "B2"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "D1",
+        "typ": "diode_si",
+        "felder": {
+          "anode": "C1",
+          "kathode": "C2"
+        }
+      },
+      {
+        "id": "D2",
+        "typ": "diode_si",
+        "felder": {
+          "anode": "C2",
+          "kathode": "C3"
+        }
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "C2",
+          "D2"
+        ],
+        "wert": 2.2e-08
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A4",
+          "A5"
+        ],
+        "wert": 3300
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_pnp",
+        "felder": {
+          "b": "B5",
+          "c": "B6",
+          "e": "C5",
+          "e2": "C6"
+        }
+      },
+      {
+        "id": "D3",
+        "typ": "diode_si",
+        "felder": {
+          "anode": "C7",
+          "kathode": "B7"
+        }
+      },
+      {
+        "id": "L1",
+        "typ": "drossel_10mh",
+        "felder": [
+          "B7",
+          "B8"
+        ]
+      },
+      {
+        "id": "C2",
+        "typ": "elko",
+        "felder": {
+          "plus": "B8",
+          "minus": "C8"
+        },
+        "wert": 0.0001
+      },
+      {
+        "id": "IM2",
+        "typ": "messstelle_a",
+        "felder": [
+          "B8",
+          "B9"
+        ]
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "B9",
+          "C9"
+        ],
+        "wert": 120
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": [
+          "B10",
+          "C10"
+        ]
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A7"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "TI1",
+        "typ": "timer555",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "TI1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "TI1.reset",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B2",
+        "nach": "TI1.dis",
+        "farbe": "blau"
+      },
+      {
+        "von": "B2",
+        "nach": "P:P1s",
+        "farbe": "blau"
+      },
+      {
+        "von": "P:P1a",
+        "nach": "C1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C3",
+        "nach": "P:P1b",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C2",
+        "nach": "TI1.thr",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C2",
+        "nach": "TI1.tr",
+        "farbe": "gruen"
+      },
+      {
+        "von": "TI1.aus",
+        "nach": "A4",
+        "farbe": "weiss"
+      },
+      {
+        "von": "A5",
+        "nach": "B5",
+        "farbe": "weiss"
+      },
+      {
+        "von": "A2",
+        "nach": "A6",
+        "farbe": "rot"
+      },
+      {
+        "von": "A6",
+        "nach": "C5",
+        "farbe": "rot"
+      },
+      {
+        "von": "B6",
+        "nach": "B7",
+        "farbe": "gelb"
+      },
+      {
+        "von": "B7",
+        "nach": "A7",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C8",
+        "nach": "C7",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C9",
+        "nach": "C8",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B9",
+        "nach": "B10",
+        "farbe": "rot"
+      },
+      {
+        "von": "C9",
+        "nach": "C10",
+        "farbe": "schwarz"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp3_3_4_s1",
+    "exp3_3_4_s2",
+    "exp3_3_4_s3",
+    "exp3_3_4_s4",
+    "exp3_3_4_s5",
+    "exp3_3_4_s6"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "zwischen": [
+          4.7,
+          5.4
+        ],
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "IM2",
+        "groesse": "anzeige",
+        "zwischen": [
+          0.039,
+          0.045
+        ],
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "IM1",
+        "groesse": "anzeige",
+        "zwischen": [
+          0.032,
+          0.04
+        ],
+        "dauer_s": 0.3
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "D3",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_3_4_h1",
+    "exp3_3_4_h2",
+    "exp3_3_4_loesung"
+  ],
+  "erklaerung_key": "exp3_3_4_erklaerung",
+  "mehr_wissen_key": "exp3_3_4_mehr",
+  "weiterforschen": [
+    "exp3_3_4_w1",
+    "exp3_3_4_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_3_4_echt"
+}

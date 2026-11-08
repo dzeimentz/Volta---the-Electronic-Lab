@@ -6217,6 +6217,11 @@
     </message>
     <message>
         <location filename="../app/qml/Texts.qml" line="49"/>
+        <source>Speicherdrossel 10 mH</source>
+        <translation>Speicherdrossel 10 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="49"/>
         <source>Drehkondensator</source>
         <translation type="unfinished"></translation>
     </message>

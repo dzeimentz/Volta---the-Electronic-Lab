@@ -9,6 +9,8 @@ namespace volta::model {
 
 // Schrittweite der hoerbaren Simulation (Leistungstest 14.10.2026, docs/volta2-planung.md)
 inline constexpr double kAudioStepS = 20e-6;
+// Schrittweite mit Speicherdrossel (Schaltwandler ab Volta 3, Konzept Volta 3 Kap. 4)
+inline constexpr double kSwitchStepS = 5e-6;
 
 // Hoerbare Simulation (ab Volta 2, Konzept 5.3): der Lautsprecherstrom aus der Simulation als Tonstrom.
 // Ein Erzeuger (Simulations-Thread) legt Abtastwerte in der Abtastrate der Soundkarte ab (die Bruecke rechnet sie

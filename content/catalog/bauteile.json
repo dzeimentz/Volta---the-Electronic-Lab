@@ -61,6 +61,8 @@
      "parameter": {"l_H": 0.001}, "ab_band": "volta3", "ab_stufe": 1, "lexikon_key": "lex_spule_hf"},
     {"typ": "spule_10mh", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "inductor",
      "parameter": {"l_H": 0.01}, "ab_band": "volta3", "ab_stufe": 1, "lexikon_key": "lex_spule_hf"},
+    {"typ": "drossel_10mh", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "inductor",
+     "parameter": {"l_H": 0.01, "drossel": 1}, "ab_band": "volta3", "ab_stufe": 3, "lexikon_key": "lex_drossel"},
     {"typ": "drehkondensator", "thema": "speicher", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "capacitor_variable",
      "parameter": {"c_min_F": 1e-11, "c_max_F": 5e-10}, "ab_band": "volta3", "ab_stufe": 1, "lexikon_key": "lex_drehkondensator"},
     {"typ": "kristallhoerer", "thema": "bewegung", "anschluesse": ["a", "b"], "spannweite": ["kurz", "lang"], "modell": "earpiece",

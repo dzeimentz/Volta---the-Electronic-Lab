@@ -97,7 +97,7 @@ Item {
             case "elko": return electrolytic
             case "diode_si": case "diode_ge": case "zdiode_4v7": case "zdiode_5v6": return diode
             case "transistor_npn": case "transistor_pnp": return transistor
-            case "spule_100mh": case "spule_1h": case "spule_220uh": case "spule_1mh": case "spule_10mh": return coil
+            case "spule_100mh": case "spule_1h": case "spule_220uh": case "spule_1mh": case "spule_10mh": case "drossel_10mh": return coil
             case "drehkondensator": return variableCap
             case "trimmer_10k": case "trimmer_100k": return trimmer
             case "ir_led": return irLed
@@ -659,15 +659,17 @@ Item {
         }
     }
 
-    // Spule (ab Volta 2): Spulenkoerper mit Kupferwicklung, 1 H mit Eisenkern (Kernenden grau); Wert aufgedruckt
+    // Spule (ab Volta 2): Spulenkoerper mit Kupferwicklung, 1 H mit Eisenkern (Kernenden grau), Speicherdrossel mit
+    // Ferritkern (schwarz) und Nennstrom im Aufdruck; Wert aufgedruckt
     Component {
         id: coil
         Item {
             readonly property bool core: root.type === "spule_1h"
+            readonly property bool ferrite: root.type === "drossel_10mh" // Speicherdrossel (ab Volta 3): Ferritkern
             Rectangle { // Kern bzw. Spulenkoerper ragt seitlich heraus
                 anchors.centerIn: parent
                 width: parent.width * 0.78; height: parent.height * 0.42; radius: 3
-                color: parent.core ? "#7A7F86" : "#E8E2D0"; border.color: "#5A5A5A"
+                color: parent.ferrite ? "#2E2E2E" : parent.core ? "#7A7F86" : "#E8E2D0"; border.color: "#5A5A5A"
             }
             Rectangle {
                 id: winding
@@ -689,9 +691,12 @@ Item {
                     Text {
                         id: label
                         anchors.centerIn: parent
-                        text: ({spule_1h: "1 H", spule_220uh: "220 µH", spule_1mh: "1 mH", spule_10mh: "10 mH"})[root.type] || "100 mH"
+                        text: ({spule_1h: "1 H", spule_220uh: "220 µH", spule_1mh: "1 mH", spule_10mh: "10 mH", drossel_10mh: "10 mH
+0,5 A"})[root.type] || "100 mH"
                         color: "#3A2410"
-                        font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                        lineHeight: 0.85
+                        font.pixelSize: Math.round((root.type === "drossel_10mh" ? 7 : 9) * Theme.fontScale); font.bold: true
                     }
                 }
             }

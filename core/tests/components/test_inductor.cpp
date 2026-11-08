@@ -1,4 +1,5 @@
 // Spule (ab Volta 2): RL-Einschaltvorgang, Blindwiderstand bei Wechselspannung, Abschaltspitze, Ueberhitzung, Undo.
+// Speicherdrossel (ab Volta 3): Kennwerte und Abwaertswandler mit 5 us Schrittweite.
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
@@ -8,6 +9,8 @@
 
 #include "test_support.hpp"
 #include "volta/core/components/battery.hpp"
+#include "volta/core/components/capacitor.hpp"
+#include "volta/core/components/diode.hpp"
 #include "volta/core/components/inductor.hpp"
 #include "volta/core/components/resistor.hpp"
 #include "volta/core/components/sources.hpp"
@@ -114,4 +117,41 @@ TEST_CASE("Spule: Ueberhitzung zerstoert die Wicklung, Undo stellt sie her", "[s
     for (int k = 0; k < 20; ++k) REQUIRE(rl.sim.step(1e-3) == Status::Ok); // tau = 3,2 ms
     CHECK(!rl.coil->isDestroyed());
     CHECK(rl.coil->currentA() > 0.2);
+}
+
+// Abwaertswandler wie in Volta 3, Experiment 3.4: Rechteck 0 ... 8 V mit 3,8 kHz ueber eine Diode als Schalter,
+// Freilaufdiode, Speicherdrossel, Elko 100 uF, Last 82 Ohm. Mit 5 us (Schrittweite der App mit Drossel) weicht die
+// Ausgangsspannung hoechstens 2 % von der Rechnung mit 0,5 us ab (Konzept Volta 3, Kap. 4).
+static double buckOutput(double dt) {
+    Circuit c;
+    const NodeId g = c.addNode(), sw = c.addNode(), out = c.addNode();
+    c.add<FunctionGenerator>("G1", g, kGround, GeneratorParams{Waveform::Square, 3800.0, 4.0, 4.0, 0.5});
+    c.add<Diode>("D1", g, sw, DiodeParams::silicon());
+    c.add<Diode>("D2", kGround, sw, DiodeParams::silicon());
+    c.add<Inductor>("L1", sw, out, InductorParams::choke10mH());
+    c.add<Capacitor>("C1", out, kGround, CapacitorParams::electrolytic(100e-6));
+    c.add<Resistor>("R1", out, kGround, ResistorParams{82.0});
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    const int n = static_cast<int>(std::lround(0.2 / dt));
+    for (int k = 0; k < n; ++k) REQUIRE(sim.step(dt) == Status::Ok); // Einschwingen
+    double sum = 0.0;
+    for (int k = 0; k < n / 4; ++k) {
+        REQUIRE(sim.step(dt) == Status::Ok);
+        sum += sim.probe().voltage(out);
+    }
+    requireKirchhoff(sim);
+    return sum / (n / 4);
+}
+
+TEST_CASE("Speicherdrossel: Kennwerte und Abwaertswandler mit 5 us", "[referenz][transient][spule][drossel]") {
+    const auto p = InductorParams::choke10mH();
+    CHECK(p.inductanceH == Approx(0.01));
+    CHECK(p.windingOhm == Approx(2.0));
+    CHECK(p.imaxA == Approx(0.5));
+    const double fine = buckOutput(0.5e-6);
+    const double app = buckOutput(5e-6);
+    CHECK(fine > 3.0); // etwa 0,5 * (8 V - 0,7 V) abzueglich Freilaufdiode
+    CHECK(fine < 4.5);
+    CHECK(app == Approx(fine).epsilon(0.02));
 }

@@ -26,6 +26,9 @@ struct InductorParams {
     static InductorParams uH220() noexcept { return {220e-6, 5.0, 2e5, 0.3, {100.0, 0.1, 403.0}}; }
     static InductorParams mH1() noexcept { return {1e-3, 8.0, 2e5, 0.2, {100.0, 0.1, 403.0}}; }
     static InductorParams mH10() noexcept { return {10e-3, 25.0, 2e5, 0.1, {100.0, 0.1, 403.0}}; }
+    // Speicherdrossel fuer Schaltwandler (ab Volta 3, Stufe 3): 10 mH auf Ferritkern mit dickem Draht, 2 Ohm und
+    // 0,5 A (typische Datenblattbereiche von Ringkern- und Stabkerndrosseln dieser Groesse); Rth ca. 60 K/W.
+    static InductorParams choke10mH() noexcept { return {10e-3, 2.0, 2e5, 0.5, {60.0, 0.1 * 100.0 / 60.0, 403.0}}; }
 };
 
 // Spule (Katalogtyp `spule`): Induktivitaet L in Reihe mit dem Wicklungswiderstand R, parallel dazu Rp.

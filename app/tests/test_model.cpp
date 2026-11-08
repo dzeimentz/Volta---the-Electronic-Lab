@@ -174,6 +174,16 @@ private slots:
     }
 
     // Werkzeugkasten: Farbcode in beide Richtungen, E-Reihen mit naechstem Normwert
+    void chokeNeedsSwitchStep() {
+        // Volta 3: mit Speicherdrossel (Schaltwandler) 5 us, mit Spule 20 us, Volta 1/2 (ohne zweite Ordnung) wie bisher
+        model::Board b;
+        b.parts.push_back({"L1", "spule_10mh", {{"a", "A1"}, {"b", "A2"}}});
+        QCOMPARE(model::requiredStepS(b, false, true), model::kAudioStepS);
+        b.parts.push_back({"DR1", "drossel_10mh", {{"a", "B1"}, {"b", "B2"}}});
+        QCOMPARE(model::requiredStepS(b, false, true), model::kSwitchStepS);
+        QCOMPARE(model::requiredStepS(b, false, false), volta::core::kDefaultStepS);
+    }
+
     void resistorColorCode() {
         namespace rc = model::resistor_code;
         rc::Code c = rc::encode(470.0, 4); // gelb, violett, braun, gold

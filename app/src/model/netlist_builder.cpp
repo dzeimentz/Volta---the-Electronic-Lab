@@ -323,13 +323,15 @@ private:
         } else if (m == "inductor" && n.size() == 2) {
             // 220 uH, 1 mH, 10 mH (ab Volta 3), 100 mH oder 1 H (Katalog l_H); Wicklungswiderstand und Grenzstrom wie
             // die Vorgaben des Kerns
+            // Speicherdrossel (ab Volta 3, Katalog `drossel` = 1): eigene Kennwerte mit wenig Wicklungswiderstand
             const double l = e->param("l_H", 0.1);
             c.add<core::Inductor>(p.id, n[0], n[1],
-                                  l >= 0.5    ? core::InductorParams::h1()
-                                  : l >= 0.05 ? core::InductorParams::mH100()
-                                  : l >= 5e-3 ? core::InductorParams::mH10()
-                                  : l >= 5e-4 ? core::InductorParams::mH1()
-                                              : core::InductorParams::uH220());
+                                  e->param("drossel", 0.0) > 0.0 ? core::InductorParams::choke10mH()
+                                  : l >= 0.5                     ? core::InductorParams::h1()
+                                  : l >= 0.05                    ? core::InductorParams::mH100()
+                                  : l >= 5e-3                    ? core::InductorParams::mH10()
+                                  : l >= 5e-4                    ? core::InductorParams::mH1()
+                                                                 : core::InductorParams::uH220());
         } else if (m == "ldr" && n.size() == 2) {
             core::PhotoresistorParams lp;
             lp.r10Ohm = e->param("r10_ohm", lp.r10Ohm);
