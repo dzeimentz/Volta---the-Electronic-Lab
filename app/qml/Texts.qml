@@ -49,6 +49,9 @@ QtObject {
         case "drossel_10mh": return qsTr("Speicherdrossel 10 mH")
         case "uebertrager": return qsTr("Übertrager 2 × 10 mH")
         case "led_weiss": return qsTr("LED weiß")
+        case "thyristor": return qsTr("Thyristor")
+        case "triac": return qsTr("Triac")
+        case "diac": return qsTr("Diac 6 V")
         case "drehkondensator": return qsTr("Drehkondensator")
         case "diode_ge": return qsTr("Germaniumdiode")
         case "trimmer_10k": return qsTr("Trimmer 10 kΩ")
@@ -138,6 +141,9 @@ QtObject {
             ["fototransistor", qsTr("Fototransistor", "Wortanfaenge im Aufbautext")],
             ["optokoppler", qsTr("Optokoppler", "Wortanfaenge im Aufbautext")],
             ["spannungsregler_5v", qsTr("Spannungsregler", "Wortanfaenge im Aufbautext")],
+            ["thyristor", qsTr("Thyristor", "Wortanfaenge im Aufbautext")],
+            ["triac", qsTr("Triac", "Wortanfaenge im Aufbautext")],
+            ["diac", qsTr("Diac", "Wortanfaenge im Aufbautext")],
             ["heissleiter", qsTr("Heißleiter", "Wortanfaenge im Aufbautext")],
             ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
             ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
@@ -244,6 +250,8 @@ QtObject {
             else if (s.type.startsWith("diode") || s.type.startsWith("zdiode")) t += " " + qsTr("Der Strich auf der Diode zeigt nach %1.").arg(pinField("kathode"))
             else if (s.type === "summer" || s.type === "elko" || s.type === "piezo") t += " " + qsTr("Plus kommt an %1.").arg(pinField("plus"))
             else if (s.type === "spannungsregler_5v") t += " " + qsTr("IN kommt an %1, OUT an %2.").arg(pinField("ein")).arg(pinField("aus"))
+            else if (s.type === "thyristor") t += " " + qsTr("A kommt an %1, das Gate an %2.").arg(pinField("anode")).arg(pinField("gate"))
+            else if (s.type === "triac") t += " " + qsTr("MT2 kommt an %1, das Gate an %2.").arg(pinField("mt2")).arg(pinField("gate"))
             else if (s.type === "fototransistor") t += " " + qsTr("C kommt an %1.").arg(pinField("c"))
             else if (s.type === "optokoppler") t += " " + qsTr("A kommt an %1, C an %2.").arg(pinField("anode")).arg(pinField("c"))
             else if (s.type.startsWith("transistor")) t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))

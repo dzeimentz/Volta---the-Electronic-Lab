@@ -28,6 +28,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Nachtrag 08.11.2026 (7) | 3.3 ohne »Nur in der App!« (am Taster geht ehrlich nichts kaputt; Transistordurchbruch ist noch nicht modelliert); neues Inhaltsfeld `absichtlich_verkehrt`, damit die Prüfung eine gewollt verkehrte LED nicht meldet (Kapitel 8, 3.3) |
 | Nachtrag 08.11.2026 (8) | Abwärtswandler 3.4 mit PNP-Transistor als Schalter oben, direkt vom 555 angesteuert (ein N-MOSFET bräuchte dort eine Gate-Spannung über 9 V); neue Speicherdrossel 10 mH / 2 Ω / 0,5 A, weil die Spulen für Schwingkreise zu viel Wicklungswiderstand haben; mit Drossel rechnet die App mit 5 µs (Kapitel 4). MOSFET und Schottky-Diode folgen mit 3.5 bzw. Stufe 4 |
 | Nachtrag 08.11.2026 (9) | Aufwärtswandler 3.5 als Sperrschwinger (»Joule-Dieb«): neuer Übertrager (Ringkern, 2 × 10 mH, k 0,98) und weiße LED; schwingt an einer Zelle mit 1,5 V (der 555 bräuchte 4,5 V) |
+| Nachtrag 09.11.2026 (10) | Stufe 4: Thyristor, Triac und Diac als Zustandsmodell mit echtem Gate-Übergang und Ereignisortung (statt Zwei-Transistor-Modell); Zündzustand im Zustandsschnappschuss (Undo, Topologiewechsel). Der Diac kippt bei 6 V (bidirektionaler Kippschalter für Kleinspannung); Netzdiacs mit etwa 30 V würden an 9 V~ nie kippen, das sagen die Texte offen. Triac-Anschlüsse heißen MT1/MT2, weil A1/A2 Feldnamen sind. Mit Thyristor, Triac oder Diac rechnet die App mit 100 µs |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -192,12 +193,12 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 - 3.7 **Projekt: Taschenlampe mit einer Zelle** – möglichst hell bei möglichst langer Laufzeit, Wirkungsgrad im Vergleich: Sperrschwinger aus 3.5 mit 10 kΩ; gerechnet etwa 19 mA aus der Zelle, LED im Mittel knapp 9 mA (Ziel: Helligkeit ≥ 0,35 bei höchstens 25 mA); Laufzeit einer Mignonzelle mit 2000 mAh etwa 100 h statt etwa 150 h mit 15 kΩ.
 
 ### Stufe 4 – Thyristor und Triac: Wie dimmt man Wechselspannung? (6)
-- 4.1 **Einmal gezündet, bleibt er an** – Thyristor an der Batterie mit Taster.
-- 4.2 **Wie bekommt man ihn wieder aus?** – Haltestrom und Löschen.
-- 4.3 **An Wechselspannung** – der Thyristor löscht in jeder Halbwelle von selbst.
-- 4.4 **Später zünden, weniger Licht** – Phasenanschnitt mit RC-Verzögerung an 9 V~; die angeschnittene Kurve am Oszilloskop.
-- 4.5 **Beide Halbwellen** – Triac und Diac.
-- 4.6 **Projekt: Lampendimmer für Kleinspannung** – mit dem Hinweis, dass Dimmer am Stromnetz nur Fachleute anschließen.
+- 4.1 **Einmal gezündet, bleibt er an** – Thyristor an der Batterie mit Taster: Glühlampe 10 V, Gate über 4,7 kΩ; gerechnet etwa 45 mA durch die Lampe, knapp 2 mA ins Gate, 0,8 V zwischen A und K.
+- 4.2 **Wie bekommt man ihn wieder aus?** – Haltestrom und Löschen: P1 als Vorwiderstand mit IM1, Löschtaster zwischen A und K; die Lampe wird schon ab etwa 16 mA dunkel, bei etwa 3 mA (P1 knapp über ein Viertel) geht der Strom auf null.
+- 4.3 **An Wechselspannung** – der Thyristor löscht in jeder Halbwelle von selbst: Gate über Taster und 4,7 kΩ; zündet etwa 23° nach Beginn der positiven Halbwelle, Lampe mit etwa 43 von 100 (direkt an 9 V~ etwa 84).
+- 4.4 **Später zünden, weniger Licht** – Phasenanschnitt mit RC-Verzögerung an 9 V~; die angeschnittene Kurve am Oszilloskop: 1 kΩ + P1 und 2,2 µF, Gate über 1 kΩ; Lampe von etwa 42 bis 28 von 100 (Zündwinkel bis etwa 90°), danach zündet er nicht mehr – der Grund für den Diac in 4.5.
+- 4.5 **Beide Halbwellen** – Triac und Diac: 4,7 kΩ und 0,47 µF, Diac 6 V; zündet bei etwa 68° in beiden Halbwellen, Lampe mit etwa 59 von 100.
+- 4.6 **Projekt: Lampendimmer für Kleinspannung** – mit dem Hinweis, dass Dimmer am Stromnetz nur Fachleute anschließen: 1 kΩ + P1, 0,47 µF, Diac; Lampe von etwa 71 bis 25 von 100, Ziel 30 bis 50 (P1 bei drei Vierteln etwa 44).
 
 ### Stufe 5 – Verstärkerklassen: Wie viel Leistung, wie viel Wärme? (6)
 - 5.1 **Klasse A** – immer Strom, sauberer Klang, viel Wärme: Wirkungsgrad messen.

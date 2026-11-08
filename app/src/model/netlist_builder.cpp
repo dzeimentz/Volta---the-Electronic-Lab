@@ -23,6 +23,7 @@
 #include "volta/core/components/switch.hpp"
 #include "volta/core/components/transistor.hpp"
 #include "volta/core/components/inductor.hpp"
+#include "volta/core/components/thyristor.hpp"
 #include "volta/core/components/transformer.hpp"
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/regulator.hpp"
@@ -321,6 +322,17 @@ private:
             tp.inductance1H = tp.inductance2H = e->param("l_H", tp.inductance1H);
             tp.coupling = e->param("k", tp.coupling);
             c.add<core::Transformer>(p.id, n[0], n[1], n[2], n[3], tp);
+        } else if (m == "thyristor" && n.size() == 3) {
+            // Thyristor (ab Volta 3): Anschluesse anode, kathode, gate wie im Kern
+            c.add<core::Thyristor>(p.id, n[0], n[1], n[2], core::ThyristorParams::scr());
+        } else if (m == "triac" && n.size() == 3) {
+            // Triac (ab Volta 3): mt2, mt1, gate
+            c.add<core::Thyristor>(p.id, n[0], n[1], n[2], core::ThyristorParams::triac());
+        } else if (m == "diac" && n.size() == 2) {
+            // Diac (ab Volta 3): Kippdiode fuer Kleinspannung
+            core::ThyristorParams dp = core::ThyristorParams::diac();
+            dp.breakoverV = e->param("u_kipp_V", dp.breakoverV);
+            c.add<core::Thyristor>(p.id, n[0], n[1], dp);
         } else if (m == "optocoupler" && n.size() == 4) {
             core::OptocouplerParams op;
             op.ctr = e->param("ctr", op.ctr);

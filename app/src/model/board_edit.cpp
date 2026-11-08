@@ -50,7 +50,7 @@ std::string prefixFor(const std::string& type) {
         {"spule_100mh", "SP"},  {"spule_1h", "SP"},      {"trimmer_10k", "TR"},   {"trimmer_100k", "TR"},
         {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
         {"spannungsregler_5v", "IC"},
-        {"spule_220uh", "SP"},  {"spule_1mh", "SP"},     {"spule_10mh", "SP"},    {"drossel_10mh", "DR"},  {"uebertrager", "UE"},  {"led_weiss", "D"},    {"drehkondensator", "DK"}, // ab Volta 3
+        {"spule_220uh", "SP"},  {"spule_1mh", "SP"},     {"spule_10mh", "SP"},    {"drossel_10mh", "DR"},  {"uebertrager", "UE"},  {"thyristor", "TY"},   {"triac", "TC"},   {"diac", "DI"},  {"led_weiss", "D"},    {"drehkondensator", "DK"}, // ab Volta 3
         {"kristallhoerer", "KH"},
         // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
         {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"},
@@ -202,11 +202,15 @@ double requiredStepS(const Board& board, bool audio, bool secondOrder) {
             if (p.type.rfind("spule_", 0) == 0) return kAudioStepS;
     }
     double step = core::kDefaultStepS;
+    // Thyristor, Triac, Diac (ab Volta 3, Stufe 4): Zuend- und Loeschzeitpunkt ortet der Kern selbst; 100 us halten
+    // RC-Verzoegerung und Phasenanschnitt auf 2 % genau (Referenztest gegen 10 us)
+    for (const auto& p : board.parts)
+        if (p.type == "thyristor" || p.type == "triac" || p.type == "diac") step = kThyristorStepS;
     if (hasDeskPart(board, "generator"))
         for (const auto& w : board.wires)
             if (w.from == "P:G" || w.to == "P:G") {
                 const double f = std::max(board.desk.genFrequencyHz, 1.0);
-                step = std::clamp(1.0 / (40.0 * f), kAudioStepS, core::kDefaultStepS);
+                step = std::min(step, std::clamp(1.0 / (40.0 * f), kAudioStepS, core::kDefaultStepS));
                 break;
             }
     return step;

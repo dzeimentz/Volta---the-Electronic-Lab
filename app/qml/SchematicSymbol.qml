@@ -56,6 +56,12 @@ Item {
             return {s: "M0 16 H22 M42 8 H64 M42 24 H64 M22 16 L42 8", f: ""}
         case "diode_si": case "diode_ge":
             return {s: diode, f: ""}
+        case "thyristor": // Diode mit Gate an der Kathode
+            return {s: "M0 16 H24 M38 16 H64 M24 8 L38 16 L24 24 Z M38 8 V24 M38 22 L46 30 V32", f: ""}
+        case "triac": // zwei gegenparallele Dioden zwischen zwei Strichen, Gate an A1
+            return {s: "M0 16 H22 M42 16 H64 M22 4 V28 M42 4 V28 M22 5 L42 10.5 L22 16 Z M42 16 L22 21.5 L42 27 Z M42 26 L50 32", f: ""}
+        case "diac": // wie Triac ohne Gate
+            return {s: "M0 16 H22 M42 16 H64 M22 4 V28 M42 4 V28 M22 5 L42 10.5 L22 16 Z M42 16 L22 21.5 L42 27 Z", f: ""}
         case "zdiode_4v7": case "zdiode_5v6": // Kathodenstrich mit Abwinkelung (Z-Diode)
             return {s: "M0 16 H24 M38 16 H64 M24 8 L38 16 L24 24 Z M34 6 L38 8 V24 L42 26", f: ""}
         case "spule_100mh": case "spule_220uh": case "spule_1mh": case "spule_10mh": // Wicklung als Boegen

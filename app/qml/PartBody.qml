@@ -105,6 +105,8 @@ Item {
             case "optokoppler": return optocoupler
             case "uebertrager": return transformer
             case "spannungsregler_5v": return regulator
+            case "thyristor": case "triac": return thyristorBody
+            case "diac": return diacBody
             case "fotowiderstand": return photo
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
@@ -551,6 +553,46 @@ Item {
             Text { x: 5; anchors.verticalCenter: parent.verticalCenter; text: "IN"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy }
             Text { anchors.right: parent.right; anchors.rightMargin: 5; anchors.verticalCenter: parent.verticalCenter; text: "OUT"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy }
             Text { anchors.horizontalCenter: parent.horizontalCenter; anchors.bottom: parent.bottom; anchors.bottomMargin: -1; text: "GND"; font.pixelSize: Math.round(8 * Theme.fontScale); font.bold: true; color: Theme.navy }
+        }
+    }
+
+    // Thyristor und Triac (ab Volta 3) auf Traegerplatine: TO-92-Gehaeuse mit Aufdruck, Anschluesse links A bzw. A2,
+    // Mitte G, rechts K bzw. A1 (Farbe nie allein: Aufdruck)
+    Component {
+        id: thyristorBody
+        Rectangle {
+            anchors.fill: parent; radius: 6
+            color: "#E9D7B0"; border.color: Theme.navy
+            readonly property bool triac: root.type === "triac"
+            Rectangle {
+                anchors.centerIn: parent
+                width: 34; height: parent.height * 0.82; radius: 4
+                color: "#1E1E1E"; border.color: "#000000"
+                Rectangle { anchors.top: parent.top; width: parent.width; height: parent.height / 2; radius: 10; color: "#1E1E1E" }
+                Text { anchors.centerIn: parent; text: parent.parent.triac ? "TRI" : "TY"; color: "#E0E0E0"; font.pixelSize: Math.round(11 * Theme.fontScale); font.bold: true }
+            }
+            Text { x: 5; anchors.verticalCenter: parent.verticalCenter; text: parent.triac ? "MT2" : "A"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy }
+            Text { anchors.right: parent.right; anchors.rightMargin: 5; anchors.verticalCenter: parent.verticalCenter; text: parent.triac ? "MT1" : "K"; font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: Theme.navy }
+            Text { anchors.horizontalCenter: parent.horizontalCenter; anchors.bottom: parent.bottom; anchors.bottomMargin: -1; text: "G"; font.pixelSize: Math.round(8 * Theme.fontScale); font.bold: true; color: Theme.navy }
+        }
+    }
+
+    // Diac (ab Volta 3): Glasgehaeuse ohne Kathodenring (beide Richtungen gleich), Kippspannung aufgedruckt
+    Component {
+        id: diacBody
+        Item {
+            Rectangle {
+                anchors.centerIn: parent
+                width: parent.width * 0.7; height: parent.height * 0.5
+                radius: 4
+                color: "#D8D2BE"; border.color: "#8A8470"
+                Text {
+                    anchors.centerIn: parent
+                    text: "DIAC 6V"
+                    color: "#202020"
+                    font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true
+                }
+            }
         }
     }
 

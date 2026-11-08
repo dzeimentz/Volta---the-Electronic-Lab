@@ -11,6 +11,8 @@ namespace volta::model {
 inline constexpr double kAudioStepS = 20e-6;
 // Schrittweite mit Speicherdrossel (Schaltwandler ab Volta 3, Konzept Volta 3 Kap. 4)
 inline constexpr double kSwitchStepS = 5e-6;
+// Thyristor, Triac, Diac (ab Volta 3): Schrittweite mit Ereignisortung fuer Zuenden und Loeschen
+inline constexpr double kThyristorStepS = 1e-4;
 
 // Hoerbare Simulation (ab Volta 2, Konzept 5.3): der Lautsprecherstrom aus der Simulation als Tonstrom.
 // Ein Erzeuger (Simulations-Thread) legt Abtastwerte in der Abtastrate der Soundkarte ab (die Bruecke rechnet sie

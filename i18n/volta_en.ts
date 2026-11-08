@@ -6254,6 +6254,49 @@
         <translation>Transformer 2 × 10 mH</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Thyristor</source>
+        <translation>Thyristor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Triac</source>
+        <translation>Triac</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Diac 6 V</source>
+        <translation>Diac 6 V</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Thyristor</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Thyristor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Triac</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Triac</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Diac</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Diac</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>A kommt an %1, das Gate an %2.</source>
+        <translation>A goes to %1, the gate to %2.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>MT2 kommt an %1, das Gate an %2.</source>
+        <translation>MT2 goes to %1, the gate to %2.</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="51"/>
         <source>LED weiß</source>
         <translation>LED white</translation>

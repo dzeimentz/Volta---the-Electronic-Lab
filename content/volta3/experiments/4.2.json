@@ -1,0 +1,177 @@
+{
+  "id": "volta3.4.2",
+  "band": "volta3",
+  "stufe": 4,
+  "titel_key": "exp3_4_2_titel",
+  "dauer_min": 25,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "gluehlampe",
+    "thyristor",
+    "taster",
+    "widerstand",
+    "messstelle_a",
+    "leitung"
+  ],
+  "frage_key": "exp3_4_2_frage",
+  "vermutungen": [
+    "exp3_4_2_v1",
+    "exp3_4_2_v2",
+    "exp3_4_2_v3"
+  ],
+  "beobachtungen": [
+    "exp3_4_2_b1",
+    "exp3_4_2_b2",
+    "exp3_4_2_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "p1": 0.0,
+      "anzeigegeraet": {
+        "anzahl": 1
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      },
+      {
+        "id": "L1",
+        "typ": "gluehlampe",
+        "felder": [
+          "A2",
+          "A4"
+        ],
+        "wert": 10
+      },
+      {
+        "id": "TY1",
+        "typ": "thyristor",
+        "felder": {
+          "anode": "A6",
+          "gate": "A7",
+          "kathode": "A8"
+        }
+      },
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "B1",
+          "B3"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B3",
+          "B5"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "S2",
+        "typ": "taster",
+        "felder": [
+          "C6",
+          "C8"
+        ]
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A4",
+        "nach": "P:P1a",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:P1s",
+        "nach": "A6",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A8",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B5",
+        "nach": "A7",
+        "farbe": "blau"
+      },
+      {
+        "von": "A6",
+        "nach": "C6",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C8",
+        "nach": "A8",
+        "farbe": "schwarz"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_4_2_s1",
+    "exp3_4_2_s2",
+    "exp3_4_2_s3",
+    "exp3_4_2_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "IM1",
+        "groesse": "anzeige",
+        "min": 0.03,
+        "dauer_s": 0.5
+      },
+      {
+        "bauteil": "TY1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_4_2_h1",
+    "exp3_4_2_h2",
+    "exp3_4_2_loesung"
+  ],
+  "erklaerung_key": "exp3_4_2_erklaerung",
+  "mehr_wissen_key": "exp3_4_2_mehr",
+  "weiterforschen": [
+    "exp3_4_2_w1",
+    "exp3_4_2_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_4_2_echt"
+}

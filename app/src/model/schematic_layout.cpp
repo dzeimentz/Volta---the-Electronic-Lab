@@ -233,6 +233,17 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
                   {0.0, flip ? -1.0 : 1.0, flip ? Exit::Up : Exit::Down}};
         return g;
     }
+    if ((t == "thyristor" || t == "triac") && e.nodes.size() == 3) {
+        // wie ein Zweipol senkrecht (Anode bzw. A2 oben), Gate seitlich unten an der Kathode bzw. A1
+        // (Schaltzeichen 64 x 32: Gate bei 46|32 bzw. 50|32)
+        const bool flip = below(0, 1) || (!has(0) && has(1));
+        g.rotation = flip ? 270 : 90;
+        const double gx = t == "triac" ? 0.5625 : 0.4375;
+        g.pins.push_back({0.0, flip ? 1.0 : -1.0, flip ? Exit::Down : Exit::Up});
+        g.pins.push_back({0.0, flip ? -1.0 : 1.0, flip ? Exit::Up : Exit::Down});
+        g.pins.push_back({flip ? 0.5 : -0.5, flip ? -gx : gx, flip ? Exit::Right : Exit::Left});
+        return g;
+    }
     // Zweipol senkrecht: Anschluss 0 oben (Drehung 90), sonst unten (270)
     const bool flip = e.nodes.size() == 2 && (below(0, 1) || (!has(0) && has(1)));
     g.rotation = flip ? 270 : 90;
