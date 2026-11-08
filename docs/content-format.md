@@ -115,6 +115,8 @@ Bedingungen werden ueber den simulierten Zustand geprueft; jeder funktionierende
 | Verknuepfung | `{"alle": [...]}`, `{"eine": [...]}`, `{"nicht": {...}}` |
 
 Groessen: `strom_mA`, `spannung_V`, `leistung_mW`, `helligkeit` (0..1), `drehzahl`, `frequenz_Hz`, `temperatur_C`.
+Bei Modulen gilt der Messwert des Hauptbauteils; beim UKW-Modul (ab Volta 3) ist `helligkeit` der Empfang 0..1
+(1 = Sender sauber eingestellt), z. B. `{"bauteil": "UKW1", "groesse": "helligkeit", "min": 0.5, "dauer_s": 0.5}`.
 Bauteilbezug ueber die Rolle in der Vorlage: Das Kind darf andere Bezeichner verwenden; die Zuordnung erfolgt ueber
 Typ und Funktion (z. B. »die einzige rote LED«). Bei Mehrdeutigkeit `rolle` statt `bauteil` verwenden.
 

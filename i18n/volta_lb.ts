@@ -3544,208 +3544,281 @@
 <context>
     <name>ModuleInside</name>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="60"/>
+        <location filename="../app/qml/ModuleInside.qml" line="61"/>
         <source>Blick hinein: %1 %2</source>
         <translation>Bléck eran: %1%2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="73"/>
+        <location filename="../app/qml/ModuleInside.qml" line="74"/>
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="93"/>
+        <location filename="../app/qml/ModuleInside.qml" line="94"/>
         <source>Ein Ton schwingt Hunderte Male in jeder Sekunde – zu schnell, um jede Schwingung einzeln nachzurechnen. Darum arbeitet das Tonmodul in Volta mit einem Verhaltensmodell: An seinen Anschlüssen verhält es sich wie der echte Baustein, und den Ton spielt es direkt ab.</source>
         <translation>En Toun schwéngt Honnerte vu Mol an all Sekonn – ze séier, fir all Schwéngung eenzel nozerechnen. Dofir schafft d&apos;Tounmodul a Volta mat engem Verhalensmodell: Un sengen Uschlëss verhält et sech wéi de richtegen Deel, an den Toun spillt et direkt of.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="95"/>
+        <location filename="../app/qml/ModuleInside.qml" line="96"/>
         <source>Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.</source>
         <translation>Am Zäitmodul leet a Rou den Transistor T1. En Drock op »start« schalt T2 un; säi Sprong dréckt iwwer den Elko C d&apos;Basis vun T1 an de Minus, T1 spärt. Eréischt wann sech C iwwer R_zeit ëmgelueden huet – ongeféier 3 Sekonnen –, leet T1 erëm. Soulaang T1 spärt, schalt T3 den Ausgang. Wat s du hei gesäis, gëtt grad gerechent.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="97"/>
+        <location filename="../app/qml/ModuleInside.qml" line="98"/>
         <source>Im Timer 555 teilen drei gleiche Widerstände die Versorgung: CV liegt bei zwei Dritteln, darunter ein Drittel. Zwei Vergleicher beobachten THR und TR. Fällt TR unter ein Drittel, setzt das Flipflop den Ausgang hoch; steigt THR über zwei Drittel, setzt es ihn zurück, und DIS entlädt nach GND. R auf GND hält den Ausgang aus. Volta rechnet den 555 mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Vergleicher kippt.</source>
         <translation>Am Timer 555 deelen dräi gläich Widderstänn d’Versuergung: CV läit bei zwee Drëttel, drënner een Drëttel. Zwee Vergläicher iwwerwaachen THR an TR. Fält TR ënner een Drëttel, setzt de Flipflop den Ausgang op héich; klëmmt THR iwwer zwee Drëttel, setzt hien en zréck, an DIS entlued op GND. R op GND hält den Ausgang aus. Volta rechent den 555 mat engem Verhalensmodell a fënnt de genauen Abléck, an deem e Vergläicher kippt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="99"/>
+        <location filename="../app/qml/ModuleInside.qml" line="100"/>
         <source>Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.</source>
         <translation>En Operatiounsverstärker vergläicht seng zwee Agäng: Hie verstäerkt den Ënnerscheed tëscht IN+ an IN− ongeféier 200 000-fach. Schonn ee Millivolt Ënnerscheed géif den Ausgang bis u seng Grenz dreiwen – knapp ënner Plus oder knapp iwwer Minus. Mat enger Réckféierung vum Ausgang op IN− reegelt hie sech selwer esou, datt béid Agäng bal gläich sinn. Volta rechent hie mat engem Ersatzmodell, dat sech un den Uschlëss wéi de richtege Baustee verhält.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="101"/>
+        <location filename="../app/qml/ModuleInside.qml" line="102"/>
+        <source>Im MW-Modul steckt der Empfänger, den du selbst gebaut hast. C_ant koppelt die Antenne lose an den Schwingkreis aus der Spule L und deinem Drehkondensator an »Abst.«. Die Diode D holt den Ton aus dem Träger, R_last ist ihre Last. C_ton gibt den Ton an die Basis von T1 weiter, R_b stellt den Ruhestrom ein. T1 treibt den Lautsprecher zwischen Plus und »aus«. Den Träger mit etwa einer Million Schwingungen pro Sekunde rechnet Volta als Hüllkurve; alles andere wird gerade Schritt für Schritt gerechnet.</source>
+        <translation>Am MW-Modul stécht den Empfänger, deen s du selwer gebaut hues. C_ant koppelt d’Antenn lass un de Schwéngkrees aus der Spull L an dengem Dréikondensator op »Abst.«. D’Diod D hëlt den Toun aus dem Träger eraus, R_last ass hir Last. C_ton gëtt den Toun un d’Basis vun T1 weider, R_b stellt de Rouestroum an. T1 dreift de Lautsprecher tëscht Plus an »aus«. Den Träger mat ongeféier enger Millioun Schwéngungen an der Sekonn rechent Volta als Hüllkurv; alles anert gëtt grad Schrëtt fir Schrëtt gerechent.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="104"/>
+        <source>Ein UKW-Sender schwingt rund 100 Millionen Mal in jeder Sekunde. Seinen Ton trägt er nicht in der Stärke, sondern im Takt: Die Frequenz wird im Rhythmus des Tons ein wenig schneller und langsamer. Das ist zu schnell, um es Schwingung für Schwingung zu rechnen. Darum arbeitet das UKW-Modul in Volta mit einem Verhaltensmodell: Die Spannung an »Abst.« wählt die Frequenz, die Spannung an »Laut« die Lautstärke. An seinen Anschlüssen verhält es sich wie ein echter Empfänger.</source>
+        <translation>En UKW-Sender schwéngt ronn 100 Millioune Mol an all Sekonn. Säin Toun dréit en net an der Stäerkt, mee am Takt: D’Frequenz gëtt am Rhythmus vum Toun e bësse méi séier a méi lues. Dat ass ze séier, fir et Schwéngung fir Schwéngung ze rechnen. Dofir schafft d’UKW-Modul am Volta mat engem Verhalensmodell: D’Spannung op »Abst.« wielt d’Frequenz, d’Spannung op »Laut« d’Lautstäerkt. Un sengen Uschlëss verhält et sech wéi en echten Empfänger.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="106"/>
         <source>Im Verstärkermodul arbeiten zwei Transistoren hintereinander: Der winzige Eingangsstrom steuert T1, und der rund 200-mal größere Strom von T1 steuert T2. Zusammen verstärken sie etwa 40 000-fach. Was du hier siehst, wird gerade gerechnet.</source>
         <translation>Am Verstäerkermodul schaffen zwee Transisteren hannereneen: De winzegen Aganksstroum steiert T1, an de ronn 200-mol méi grousse Stroum vun T1 steiert T2. Zesumme verstäerken se ongeféier 40.000-fach. Wat s du hei gesäis, gëtt grad gerechent.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="102"/>
+        <location filename="../app/qml/ModuleInside.qml" line="107"/>
         <source>Im Blinkmodul arbeiten zwei Transistoren gegeneinander: Immer leitet einer, der andere sperrt. Die Kondensatoren laden sich langsam um und kippen die Schaltung hin und her. Ein dritter Transistor schaltet den Ausgang. Was du hier siehst, wird gerade gerechnet.</source>
         <translation>Am Blénkmodul schaffen zwee Transisteren géinteneen: Ëmmer leet deen een, deen anere spärt. D&apos;Kondensatore luede sech lues ëm a kippen d&apos;Schaltung hin an hier. En drëtten Transistor schalt den Ausgang. Wat s du hei gesäis, gëtt grad gerechent.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="207"/>
-        <location filename="../app/qml/ModuleInside.qml" line="279"/>
-        <location filename="../app/qml/ModuleInside.qml" line="298"/>
-        <location filename="../app/qml/ModuleInside.qml" line="303"/>
-        <location filename="../app/qml/ModuleInside.qml" line="315"/>
-        <location filename="../app/qml/ModuleInside.qml" line="339"/>
-        <location filename="../app/qml/ModuleInside.qml" line="339"/>
+        <location filename="../app/qml/ModuleInside.qml" line="212"/>
+        <location filename="../app/qml/ModuleInside.qml" line="290"/>
+        <location filename="../app/qml/ModuleInside.qml" line="309"/>
+        <location filename="../app/qml/ModuleInside.qml" line="314"/>
+        <location filename="../app/qml/ModuleInside.qml" line="326"/>
         <location filename="../app/qml/ModuleInside.qml" line="350"/>
-        <location filename="../app/qml/ModuleInside.qml" line="389"/>
+        <location filename="../app/qml/ModuleInside.qml" line="350"/>
+        <location filename="../app/qml/ModuleInside.qml" line="361"/>
+        <location filename="../app/qml/ModuleInside.qml" line="400"/>
+        <location filename="../app/qml/ModuleInside.qml" line="463"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="240"/>
-        <location filename="../app/qml/ModuleInside.qml" line="278"/>
+        <location filename="../app/qml/ModuleInside.qml" line="245"/>
+        <location filename="../app/qml/ModuleInside.qml" line="289"/>
         <source>leitet</source>
         <translation>leet</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="240"/>
-        <location filename="../app/qml/ModuleInside.qml" line="278"/>
+        <location filename="../app/qml/ModuleInside.qml" line="245"/>
+        <location filename="../app/qml/ModuleInside.qml" line="289"/>
         <source>sperrt</source>
         <translation>spärt</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="241"/>
-        <location filename="../app/qml/ModuleInside.qml" line="278"/>
-        <location filename="../app/qml/ModuleInside.qml" line="280"/>
-        <location filename="../app/qml/ModuleInside.qml" line="350"/>
-        <location filename="../app/qml/ModuleInside.qml" line="409"/>
+        <location filename="../app/qml/ModuleInside.qml" line="246"/>
+        <location filename="../app/qml/ModuleInside.qml" line="289"/>
+        <location filename="../app/qml/ModuleInside.qml" line="291"/>
+        <location filename="../app/qml/ModuleInside.qml" line="361"/>
+        <location filename="../app/qml/ModuleInside.qml" line="420"/>
+        <location filename="../app/qml/ModuleInside.qml" line="486"/>
         <source>%1 mA</source>
         <translation>%1 mA</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="297"/>
+        <location filename="../app/qml/ModuleInside.qml" line="308"/>
         <source>Vergleicher TR</source>
         <translation>Vergläicher TR</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="298"/>
+        <location filename="../app/qml/ModuleInside.qml" line="309"/>
         <source>unter ⅓: setzen</source>
         <translation>ënner ⅓: setzen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="302"/>
+        <location filename="../app/qml/ModuleInside.qml" line="313"/>
         <source>Vergleicher THR</source>
         <translation>Vergläicher THR</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="303"/>
+        <location filename="../app/qml/ModuleInside.qml" line="314"/>
         <source>über ⅔: zurück</source>
         <translation>iwwer ⅔: zréck</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="308"/>
+        <location filename="../app/qml/ModuleInside.qml" line="319"/>
         <source>Flipflop</source>
         <translation>Flipflop</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="309"/>
+        <location filename="../app/qml/ModuleInside.qml" line="320"/>
         <source>Reset: aus</source>
         <translation>Reset: aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="309"/>
+        <location filename="../app/qml/ModuleInside.qml" line="320"/>
         <source>gesetzt</source>
         <translation>gesat</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="309"/>
+        <location filename="../app/qml/ModuleInside.qml" line="320"/>
         <source>zurückgesetzt</source>
         <translation>zréckgesat</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="315"/>
+        <location filename="../app/qml/ModuleInside.qml" line="326"/>
         <source>DIS offen</source>
         <translation>DIS op</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="315"/>
+        <location filename="../app/qml/ModuleInside.qml" line="326"/>
         <source>DIS entlädt</source>
         <translation>DIS entlued</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="324"/>
+        <location filename="../app/qml/ModuleInside.qml" line="335"/>
         <source>Unter 4,5 V arbeitet der 555 nicht. </source>
         <translation>Ënner 4,5 V schafft den 555 net. </translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="325"/>
+        <location filename="../app/qml/ModuleInside.qml" line="336"/>
         <source>Versorgung: %1 V, CV: %2 V (zwei Drittel), Schwelle für TR: %3 V (ein Drittel). Alle Spannungen sind gegen GND gemessen.</source>
         <translation>Versuergung: %1 V, CV: %2 V (zwee Drëttel), Schwell fir TR: %3 V (een Drëttel). All Spannunge si géint GND gemooss.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="338"/>
+        <location filename="../app/qml/ModuleInside.qml" line="349"/>
         <source>Eingänge</source>
         <translation>Agäng</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="343"/>
+        <location filename="../app/qml/ModuleInside.qml" line="354"/>
         <source>Unterschied × 200 000</source>
         <translation>Ënnerscheed × 200 000</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="344"/>
+        <location filename="../app/qml/ModuleInside.qml" line="355"/>
         <source>%1 mV</source>
         <translation>%1 mV</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="359"/>
+        <location filename="../app/qml/ModuleInside.qml" line="370"/>
         <source>Versorgung: %1 V. Der Ausgang reicht bis etwa 1,5 V unter Plus und 1,5 V über Minus; alle Spannungen sind gegen Minus gemessen. Mehr als etwa 25 mA liefert die Endstufe nicht.</source>
         <translation>Versuergung: %1 V. Den Ausgang geet bis ongeféier 1,5 V ënner Plus an 1,5 V iwwer Minus; all Spannunge si géint Minus gemooss. Méi wéi ongeféier 25 mA liwwert d’Endstuf net.</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="388"/>
+        <location filename="../app/qml/ModuleInside.qml" line="399"/>
         <source>Eingang „ein“</source>
         <translation>Agang »ein«</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="394"/>
+        <location filename="../app/qml/ModuleInside.qml" line="405"/>
         <source>Schaltschwelle</source>
         <translation>Schaltschwell</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="395"/>
+        <location filename="../app/qml/ModuleInside.qml" line="406"/>
         <source>ab 1,5 V: an</source>
         <translation>ab 1,5 V: un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="400"/>
+        <location filename="../app/qml/ModuleInside.qml" line="411"/>
         <source>Melodie und Tongeber</source>
         <translation>Melodie an Toungeber</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="402"/>
+        <location filename="../app/qml/ModuleInside.qml" line="413"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="402"/>
+        <location filename="../app/qml/ModuleInside.qml" line="413"/>
         <source>Pause</source>
         <translation>Paus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="403"/>
+        <location filename="../app/qml/ModuleInside.qml" line="414"/>
         <source>still</source>
         <translation>stil</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="314"/>
-        <location filename="../app/qml/ModuleInside.qml" line="349"/>
-        <location filename="../app/qml/ModuleInside.qml" line="408"/>
+        <location filename="../app/qml/ModuleInside.qml" line="462"/>
+        <source>Abstimmung</source>
+        <translation>Ofstëmmung</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="463"/>
+        <source>%1 MHz</source>
+        <translation>%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="467"/>
+        <source>Sender oder Rauschen</source>
+        <translation>Sender oder Rauschen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="468"/>
+        <source>Empfang %1 %</source>
+        <translation>Empfang %1 %</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="468"/>
+        <source>nur Rauschen</source>
+        <translation>just Rauschen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="473"/>
+        <source>FM-Demodulator</source>
+        <translation>FM-Demodulator</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="474"/>
+        <source>Ton</source>
+        <translation>Toun</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="474"/>
+        <source>Rauschen</source>
+        <translation>Rauschen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="479"/>
+        <source>Lautstärke</source>
+        <translation>Lautstäerkt</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="480"/>
+        <source>%1 %</source>
+        <translation>%1 %</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="495"/>
+        <source>Unter 3 V schweigt das UKW-Modul. </source>
+        <translation>Ënner 3 V schweigt d’UKW-Modul. </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="496"/>
+        <source>Versorgung: %1 V. Von 0 V bis zur Versorgung an »Abst.« reicht die Skala von 87,5 bis 108 MHz. Die Sender der Senderanlage liegen bei 89,3, 96,8 und 104,5 MHz. Kein Sender? Dann hängt »ANT« vielleicht nicht an der Antenne.</source>
+        <translation>Versuergung: %1 V. Vun 0 V bis zur Versuergung op »Abst.« geet d’Skala vun 87,5 bis 108 MHz. D’Sender vun der Senderanlag leie bei 89,3, 96,8 an 104,5 MHz. Kee Sender? Da hänkt »ANT« vläicht net un der Antenn.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="325"/>
+        <location filename="../app/qml/ModuleInside.qml" line="360"/>
+        <location filename="../app/qml/ModuleInside.qml" line="419"/>
+        <location filename="../app/qml/ModuleInside.qml" line="485"/>
         <source>Endstufe „aus“</source>
         <translation>Endstuf „aus“</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="417"/>
+        <location filename="../app/qml/ModuleInside.qml" line="428"/>
         <source>Melodie:</source>
         <translation>Melodie:</translation>
     </message>
     <message>
-        <location filename="../app/qml/ModuleInside.qml" line="437"/>
+        <location filename="../app/qml/ModuleInside.qml" line="448"/>
         <source>Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.</source>
         <translation>Versuergung: %1 V. D&apos;Endstuf schalt am Takt vum Toun un an aus; Volta rechent mam Mëttelwäert vum Stroum. E Lautsprecher tëscht Plus an »aus« spillt d&apos;Melodie mat.</translation>
     </message>
@@ -5852,209 +5925,241 @@
         <translation>Timer 555</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="156"/>
+        <location filename="../app/qml/Texts.qml" line="151"/>
+        <source>MW-Modul</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>MW-Modul</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="152"/>
+        <source>UKW-Modul</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>UKW-Modul</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="158"/>
         <source>Blinkmodul</source>
         <translation>Blénkmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="157"/>
+        <location filename="../app/qml/Texts.qml" line="159"/>
         <source>Tonmodul</source>
         <translation>Tounmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="158"/>
+        <location filename="../app/qml/Texts.qml" line="160"/>
         <source>Zeitmodul</source>
         <translation>Zäitmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="159"/>
+        <location filename="../app/qml/Texts.qml" line="161"/>
         <source>Verstärkermodul</source>
         <translation>Verstäerkermodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="160"/>
+        <location filename="../app/qml/Texts.qml" line="162"/>
         <source>OP-Modul</source>
         <translation>OP-Modul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="161"/>
+        <location filename="../app/qml/Texts.qml" line="163"/>
         <source>Timer 555</source>
         <translation>Timer 555</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="171"/>
+        <location filename="../app/qml/Texts.qml" line="164"/>
+        <source>MW-Modul</source>
+        <translation>MW-Modul</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="165"/>
+        <source>UKW-Modul</source>
+        <translation>UKW-Modul</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="175"/>
         <source>aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="172"/>
+        <location filename="../app/qml/Texts.qml" line="176"/>
         <source>ein</source>
         <translation>ein</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="173"/>
+        <location filename="../app/qml/Texts.qml" line="177"/>
         <source>Takt</source>
         <translation>Takt</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="174"/>
+        <location filename="../app/qml/Texts.qml" line="178"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="187"/>
+        <source>Abst.</source>
+        <translation>Abst.</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="188"/>
+        <source>Laut</source>
+        <translation>Laut</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="195"/>
         <source>Rot</source>
         <translation>Rout</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="189"/>
+        <location filename="../app/qml/Texts.qml" line="196"/>
         <source>Schwarz</source>
         <translation>Schwaarz</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="190"/>
+        <location filename="../app/qml/Texts.qml" line="197"/>
         <source>Blau</source>
         <translation>Blo</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="191"/>
+        <location filename="../app/qml/Texts.qml" line="198"/>
         <source>Gelb</source>
         <translation>Giel</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="192"/>
+        <location filename="../app/qml/Texts.qml" line="199"/>
         <source>Grün</source>
         <translation>Gréng</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="193"/>
+        <location filename="../app/qml/Texts.qml" line="200"/>
         <source>Weiß</source>
         <translation>Wäiss</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="217"/>
+        <location filename="../app/qml/Texts.qml" line="224"/>
         <source>Jetzt ist alles an seinem Platz. Probiere aus, was passiert!</source>
         <translation>Elo ass alles op senger Plaz. Probéier aus, wat geschitt!</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="219"/>
+        <location filename="../app/qml/Texts.qml" line="226"/>
         <source>Schalte den Hauptschalter der Batterie ein.</source>
         <translation>Maach den Haaptschalter vun der Batterie un.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="221"/>
+        <location filename="../app/qml/Texts.qml" line="228"/>
         <source>Setze das %1 ab Feld %2 in die Modulleiste.</source>
         <translation>Setz d&apos;Modul %1 ab Feld %2 an d&apos;Modulläischt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="223"/>
+        <location filename="../app/qml/Texts.qml" line="230"/>
         <source>Ziehe eine Leitung von %1 nach %2.</source>
         <translation>Zéi eng Leitung vu %1 op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="227"/>
+        <location filename="../app/qml/Texts.qml" line="234"/>
         <source>eine Leuchtdiode (Farbe egal)</source>
         <translation>eng Liichtdiod (Faarf egal)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="229"/>
+        <location filename="../app/qml/Texts.qml" line="236"/>
         <source>Stecke %1 auf %2, %3 und %4.</source>
         <translation>Stiech %1 op %2, %3 a %4.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="231"/>
+        <location filename="../app/qml/Texts.qml" line="238"/>
         <source>Stecke %1 auf %2, %3, %4 und %5.</source>
         <translation>Stiech %1 op %2, %3, %4 a %5.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="232"/>
+        <location filename="../app/qml/Texts.qml" line="239"/>
         <source>Stecke %1 auf %2 und %3.</source>
         <translation>Stiech %1 op %2 a %3.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="233"/>
+        <location filename="../app/qml/Texts.qml" line="240"/>
         <source>Das lange Bein kommt an %1.</source>
         <translation>Dat laangt Been kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="234"/>
+        <location filename="../app/qml/Texts.qml" line="241"/>
         <source>Der Strich auf der Diode zeigt nach %1.</source>
         <translation>De Stréch op der Diod weist op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="235"/>
+        <location filename="../app/qml/Texts.qml" line="242"/>
         <source>Plus kommt an %1.</source>
         <translation>Plus kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="236"/>
+        <location filename="../app/qml/Texts.qml" line="243"/>
         <source>IN kommt an %1, OUT an %2.</source>
         <translation>IN kënnt op %1, OUT op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="237"/>
+        <location filename="../app/qml/Texts.qml" line="244"/>
         <source>C kommt an %1.</source>
         <translation>C kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="238"/>
+        <location filename="../app/qml/Texts.qml" line="245"/>
         <source>A kommt an %1, C an %2.</source>
         <translation>A kënnt op %1, C op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="239"/>
+        <location filename="../app/qml/Texts.qml" line="246"/>
         <source>B kommt an %1, C an %2.</source>
         <translation>B kënnt op %1, C op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="240"/>
+        <location filename="../app/qml/Texts.qml" line="247"/>
         <source>Die Mitte kommt an %1.</source>
         <translation>D&apos;Mëtt kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="242"/>
+        <location filename="../app/qml/Texts.qml" line="249"/>
         <source>Wert: %1.</source>
         <translation>Wäert: %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="244"/>
+        <location filename="../app/qml/Texts.qml" line="251"/>
         <source>Nennspannung: %1 V.</source>
         <translation>Nennspannung: %1 V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="270"/>
+        <location filename="../app/qml/Texts.qml" line="277"/>
         <source>Taschenlampe</source>
         <translation>Täscheluucht</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="271"/>
+        <location filename="../app/qml/Texts.qml" line="278"/>
         <source>Föhn</source>
         <translation>Fön</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="272"/>
+        <location filename="../app/qml/Texts.qml" line="279"/>
         <source>Wassertropfen</source>
         <translation>Waasserdrëps</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="273"/>
+        <location filename="../app/qml/Texts.qml" line="280"/>
         <source>Abdeckkarte</source>
         <translation>Ofdeckkaart</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="282"/>
-        <location filename="../app/qml/Texts.qml" line="285"/>
-        <location filename="../app/qml/Texts.qml" line="288"/>
+        <location filename="../app/qml/Texts.qml" line="289"/>
+        <location filename="../app/qml/Texts.qml" line="292"/>
+        <location filename="../app/qml/Texts.qml" line="295"/>
         <source>%1 × %2</source>
         <translation>%1 × %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="287"/>
+        <location filename="../app/qml/Texts.qml" line="294"/>
         <source>%1 × Leitung %2</source>
         <translation>%1 x Leitung %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="289"/>
+        <location filename="../app/qml/Texts.qml" line="296"/>
         <source>Batterie %1 V</source>
         <translation>Batterie %1 V</translation>
     </message>
@@ -6673,12 +6778,12 @@
         <translation>%1 Spëtzt · %2</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1989"/>
+        <location filename="../app/src/lab_controller.cpp" line="2008"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dësen Deel gëtt mat Stuf %1 fräigeschalt.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="2050"/>
+        <location filename="../app/src/lab_controller.cpp" line="2069"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dëst Modul gëtt mat Stuf %1 fräigeschalt.</translation>
     </message>

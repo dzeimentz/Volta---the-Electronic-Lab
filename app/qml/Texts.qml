@@ -147,7 +147,9 @@ QtObject {
             ["zeitmodul", qsTr("Zeitmodul", "Wortanfaenge im Aufbautext")],
             ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")],
             ["opmodul", qsTr("OP-Modul", "Wortanfaenge im Aufbautext")],
-            ["timer555", qsTr("Timer 555", "Wortanfaenge im Aufbautext")]
+            ["timer555", qsTr("Timer 555", "Wortanfaenge im Aufbautext")],
+            ["mwmodul", qsTr("MW-Modul", "Wortanfaenge im Aufbautext")],
+            ["ukwmodul", qsTr("UKW-Modul", "Wortanfaenge im Aufbautext")]
         ]
     }
 
@@ -159,6 +161,8 @@ QtObject {
         case "verstaerkermodul": return qsTr("Verstärkermodul")
         case "opmodul": return qsTr("OP-Modul")
         case "timer555": return qsTr("Timer 555")
+        case "mwmodul": return qsTr("MW-Modul")
+        case "ukwmodul": return qsTr("UKW-Modul")
         }
         return type
     }
@@ -179,6 +183,9 @@ QtObject {
         case "cv": return "CV"
         case "thr": return "THR"
         case "dis": return "DIS"
+        case "ant": return "ANT"
+        case "abst": return qsTr("Abst.")
+        case "laut": return qsTr("Laut")
         }
         return pin
     }

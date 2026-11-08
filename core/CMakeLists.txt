@@ -35,6 +35,8 @@ add_library(volta_core STATIC
     src/modules/timer_module.cpp
     src/modules/opamp_module.cpp
     src/modules/timer555_module.cpp
+    src/modules/radio_module.cpp
+    src/modules/fm_module.cpp
 )
 add_library(volta::core ALIAS volta_core)
 

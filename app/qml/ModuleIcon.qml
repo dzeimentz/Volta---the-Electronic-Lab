@@ -27,6 +27,12 @@ Item {
             return "M 7 3 L 29 16 L 7 29 Z M 10 10 h5 M 12.5 7.5 v5 M 10 22 h5"
         case "timer555":
             return "M 2 24 h 8 v -16 h 10 v 16 h 8 v -16 h 10 v 16 h 8"
+        case "mwmodul": // Antenne mit Wellen (Konzept Volta 3, Kap. 9)
+            return "M 16 30 V 12 M 16 12 L 10 3 M 16 12 L 22 3 M 10 3 H 22"
+                 + " M 6 10 q -3 4 0 8 M 26 10 q 3 4 0 8 M 2 7 q -5 7 0 14 M 30 7 q 5 7 0 14"
+        case "ukwmodul": // Dipolantenne unter einer Welle mit wechselndem Abstand (Frequenzmodulation)
+            return "M 16 30 V 17 M 5 17 H 27"
+                 + " M 3 8 q 2.5 -6 5 0 t 5 0 q 1.5 -6 3 0 t 3 0 q 1 -6 2 0 t 2 0 q 1.5 -6 3 0 t 3 0"
         case "zeitmodul":
             return "M 6 18.5 a 10 10 0 1 0 20 0 a 10 10 0 1 0 -20 0 M 13 3 h6 M 16 3 v5.5 M 16 18.5 l 4.5 -5.5 M 24 9.5 l 2 -2"
         }

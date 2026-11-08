@@ -224,8 +224,23 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
   nach +U). Kippzeiten mit Ereignisortung. Astabil R1 1 kOhm, R2 10 kOhm, 10 uF: Modell 147,4 ms gegen 145,6 ms nach
   der Datenblattformel (DIS entlaedt nur bis ca. 0,09 V, wie real); bei 5 ms Schrittweite ca. 2,3 % laenger
   (Rueckwaerts-Euler), ohne Ereignisortung waeren es weitere ca. 3,4 %.
-- **Verhaltensmodell** (Volta 3): Empfangsmodule; liefern ein Tonsignal aus eigenen Aufnahmen, abhaengig von
-  Abstimmung und Antenne. Im Elternbereich als solches offengelegt.
+- **MW-Modul** (`addMwModule`, `mwmodul`, ab Volta 3, Stufe 2, Teilschaltung; Anschluesse plus, minus, ant, abst,
+  aus): derselbe Empfaenger wie aus Einzelteilen in Stufe 2 - C_ant 10 pF (lose Antennenkopplung), L 220 uH von abst
+  nach minus, Detektordiode D (Germanium, gemittelter Huellkurvendetektor, abgestimmt ueber `tuneRadio`) mit R_last
+  22 kOhm, Elko C_ton 10 uF auf die Basis von T1, R_b 150 kOhm von plus (Ruhestrom etwa 11 mA), Lautsprecher zwischen
+  plus und aus. Der Drehkondensator wird aussen von abst nach minus gesteckt. Test: gleiche Ergebnisse wie der
+  Aufbau aus Einzelteilen (`test_radio_module.cpp`).
+- **UKW-Modul** (`addFmModule`, `ukwmodul`, ab Volta 3, Stufe 2, Verhaltensmodell; Anschluesse plus, minus, ant,
+  abst, laut, aus): Ein UKW-Traeger (87,5 ... 108 MHz) und seine Frequenzmodulation sind im Zeitbereich nicht
+  rechenbar; das Modul ist ein Ersatzschaltbild aus Ruhestrom (1,8 kOhm plus -> minus), Eingaengen (abst und laut
+  100 kOhm, ant 75 Ohm gegen minus) und einer Endstufe aus -> minus, deren Leitwert Schritt fuer Schritt dem
+  demodulierten Ton folgt: laut * (0,5 + 0,45 * a(t)) / 100 Ohm, a(t) = q * Programm + (1 - q) * 0,3 * Rauschen.
+  Die Frequenz ist 87,5 MHz + 20,5 MHz * U(abst) / U(plus - minus), die Lautstaerke U(laut) / U(plus - minus).
+  Empfang q = 1 bis 0,25 MHz neben einem der drei UKW-Sender (89,3 Zeitzeichen, 96,8 Melodie, 104,5 Morse), ab
+  0,6 MHz nur Rauschen (Fangbereich breiter als real, damit der Pultregler einen Sender sicher trifft); ohne
+  Leitungsweg von ant zum Antennenfeld der Senderanlage nur Rauschen. Unter 3 V schweigt es. Messwerte: level =
+  Empfang q, displayValue = MHz, displayRange = Lautstaerke, displayFlags = Sender + 1. Im »Blick hinein« als
+  Blockbild offengelegt. Test: `test_fm_module.cpp`.
 - **Logikmodell** (Volta 3, Zuse 1): ereignisgesteuerte Gatter mit Kopplung an analoge Pegel.
 
 ## Programmierschnittstelle (Phase 0)

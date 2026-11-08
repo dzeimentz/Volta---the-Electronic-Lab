@@ -4,6 +4,7 @@
 // - Verhaltensmodell (Timer 555): Teiler, zwei Komparatoren, Flipflop und Endstufe als Blockbild mit den
 //   aktuellen Spannungen.
 // - Makromodell (OP-Modul): Eingaenge, Differenzverstaerker und Endstufe als Blockbild mit den aktuellen Spannungen.
+// - Teilschaltung (MW-Modul, ab Volta 3): der Empfaenger aus Stufe 2 als Bauteilliste mit Live-Werten.
 // - Verhaltensmodell (Tonmodul): der Aufbau als Blockbild mit den Werten an den Anschluessen und einer Erklaerung,
 //   warum hier nicht jede Schwingung einzeln gerechnet wird.
 import QtQuick
@@ -97,6 +98,10 @@ Popup {
                       ? qsTr("Im Timer 555 teilen drei gleiche Widerstände die Versorgung: CV liegt bei zwei Dritteln, darunter ein Drittel. Zwei Vergleicher beobachten THR und TR. Fällt TR unter ein Drittel, setzt das Flipflop den Ausgang hoch; steigt THR über zwei Drittel, setzt es ihn zurück, und DIS entlädt nach GND. R auf GND hält den Ausgang aus. Volta rechnet den 555 mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Vergleicher kippt.")
                       : inside.moduleType === "opmodul"
                       ? qsTr("Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.")
+                      : inside.moduleType === "mwmodul"
+                      ? qsTr("Im MW-Modul steckt der Empfänger, den du selbst gebaut hast. C_ant koppelt die Antenne lose an den Schwingkreis aus der Spule L und deinem Drehkondensator an »Abst.«. Die Diode D holt den Ton aus dem Träger, R_last ist ihre Last. C_ton gibt den Ton an die Basis von T1 weiter, R_b stellt den Ruhestrom ein. T1 treibt den Lautsprecher zwischen Plus und »aus«. Den Träger mit etwa einer Million Schwingungen pro Sekunde rechnet Volta als Hüllkurve; alles andere wird gerade Schritt für Schritt gerechnet.")
+                      : inside.moduleType === "ukwmodul"
+                      ? qsTr("Ein UKW-Sender schwingt rund 100 Millionen Mal in jeder Sekunde. Seinen Ton trägt er nicht in der Stärke, sondern im Takt: Die Frequenz wird im Rhythmus des Tons ein wenig schneller und langsamer. Das ist zu schnell, um es Schwingung für Schwingung zu rechnen. Darum arbeitet das UKW-Modul in Volta mit einem Verhaltensmodell: Die Spannung an »Abst.« wählt die Frequenz, die Spannung an »Laut« die Lautstärke. An seinen Anschlüssen verhält es sich wie ein echter Empfänger.")
                       : inside.moduleType === "verstaerkermodul"
                       ? qsTr("Im Verstärkermodul arbeiten zwei Transistoren hintereinander: Der winzige Eingangsstrom steuert T1, und der rund 200-mal größere Strom von T1 steuert T2. Zusammen verstärken sie etwa 40 000-fach. Was du hier siehst, wird gerade gerechnet.")
                       : qsTr("Im Blinkmodul arbeiten zwei Transistoren gegeneinander: Immer leitet einer, der andere sperrt. Die Kondensatoren laden sich langsam um und kippen die Schaltung hin und her. Ein dritter Transistor schaltet den Ausgang. Was du hier siehst, wird gerade gerechnet.")
@@ -253,6 +258,7 @@ Popup {
             // ---------------------------------------------------------- Teilschaltung: Bauteilliste mit Live-Werten
             Column {
                 visible: inside.moduleType === "zeitmodul" || inside.moduleType === "verstaerkermodul"
+                         || inside.moduleType === "mwmodul"
                 width: parent.width
                 spacing: 4
                 Repeater {
@@ -260,7 +266,12 @@ Popup {
                     Rectangle {
                         required property var modelData
                         readonly property bool transistor: modelData.name.startsWith("T")
-                        readonly property bool cap: modelData.name === "C"
+                        readonly property bool cap: modelData.name === "C" || modelData.name === "C_ton"
+                        // Schaltzeichen: Transistor, Elko, Kondensator, Spule, Diode, sonst Widerstand
+                        readonly property string symbol: transistor ? "transistor_npn" : cap ? "elko"
+                                                        : modelData.name === "C_ant" ? "kondensator"
+                                                        : modelData.name === "L" ? "spule_220uh"
+                                                        : modelData.name === "D" ? "diode_ge" : "widerstand"
                         width: parent.width; height: 34; radius: 6
                         color: transistor && modelData.on ? "#E3F4E5" : "white"
                         border.color: transistor && modelData.on ? "#2E7D32" : Theme.fieldOutline
@@ -270,7 +281,7 @@ Popup {
                             SchematicSymbol {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 44; height: 22
-                                type: parent.parent.transistor ? "transistor_npn" : parent.parent.cap ? "elko" : "widerstand"
+                                type: parent.parent.symbol
                             }
                             Label { anchors.verticalCenter: parent.verticalCenter; width: 70; text: modelData.name; font.bold: true; color: Theme.navy }
                             Label {
@@ -435,6 +446,54 @@ Popup {
                     color: "#4A5866"
                     font.pixelSize: Math.round(13 * Theme.fontScale)
                     text: qsTr("Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.").arg(inside.num(inside.info.supplyV, 1))
+                }
+            }
+
+            // ---------------------------------------------------------- Verhaltensmodell: UKW-Empfaenger als Blockbild
+            Column {
+                visible: inside.moduleType === "ukwmodul"
+                width: parent.width
+                spacing: 10
+                readonly property bool tuned: (inside.info.station ?? -1) >= 0
+                Flow {
+                    width: parent.width
+                    spacing: 6
+                    Block {
+                        title: qsTr("Abstimmung")
+                        value: qsTr("%1 V").arg(inside.num(inside.info.tuneV, 2)) + "\n" + qsTr("%1 MHz").arg(inside.num(inside.info.mhz, 1))
+                    }
+                    Label { text: "→"; font.pixelSize: 22; color: Theme.navy; height: 74; verticalAlignment: Text.AlignVCenter }
+                    Block {
+                        title: qsTr("Sender oder Rauschen")
+                        value: parent.parent.tuned ? qsTr("Empfang %1 %").arg(inside.num(100 * (inside.info.reception || 0), 0)) : qsTr("nur Rauschen")
+                        lit: parent.parent.tuned
+                    }
+                    Label { text: "→"; font.pixelSize: 22; color: Theme.navy; height: 74; verticalAlignment: Text.AlignVCenter }
+                    Block {
+                        title: qsTr("FM-Demodulator")
+                        value: parent.parent.tuned ? qsTr("Ton") : qsTr("Rauschen")
+                        lit: parent.parent.tuned
+                    }
+                    Label { text: "→"; font.pixelSize: 22; color: Theme.navy; height: 74; verticalAlignment: Text.AlignVCenter }
+                    Block {
+                        title: qsTr("Lautstärke")
+                        value: qsTr("%1 %").arg(inside.num(100 * (inside.info.volume || 0), 0))
+                        lit: (inside.info.volume || 0) > 0.05
+                    }
+                    Label { text: "→"; font.pixelSize: 22; color: Theme.navy; height: 74; verticalAlignment: Text.AlignVCenter }
+                    Block {
+                        title: qsTr("Endstufe „aus“")
+                        value: qsTr("%1 mA").arg(inside.num(Math.abs(inside.info.outmA || 0), 0))
+                        lit: Math.abs(inside.info.outmA || 0) > 1
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    color: "#4A5866"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    text: (inside.info.powered === false ? qsTr("Unter 3 V schweigt das UKW-Modul. ") : "")
+                          + qsTr("Versorgung: %1 V. Von 0 V bis zur Versorgung an »Abst.« reicht die Skala von 87,5 bis 108 MHz. Die Sender der Senderanlage liegen bei 89,3, 96,8 und 104,5 MHz. Kein Sender? Dann hängt »ANT« vielleicht nicht an der Antenne.").arg(inside.num(inside.info.supplyV, 1))
                 }
             }
         }

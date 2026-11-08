@@ -22,6 +22,8 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Nachtrag 08.11.2026 | Experiment 1.7: Abstimmen durch Tauschen des Kondensators statt mit dem Drehkondensator. Der Drehko (10–500 pF) ergibt mit 1 H keinen hörbaren Ton, Werte im Mikrofarad-Bereich halten ihn im Hörbereich (Kapitel 8, Stufe 1) |
 | Nachtrag 08.11.2026 (2) | Amplitudenmodulation im Generator: Tiefe 0–100 %, Ton 100/200/500 Hz, nur ab Volta 3 sichtbar. Experiment 2.1 zeigt sie mit einem Träger von 2 kHz, Schritt für Schritt gerechnet und ohne Zeitdehnung; die Dehnung bleibt den Sendern mit echten MW-Frequenzen vorbehalten (Kapitel 5.2 und 8, Stufe 2) |
 | Nachtrag 08.11.2026 (3) | Experiment 2.6 heißt »Alle Sender auf einmal«: Die drei Sender (600/1000/1400 kHz) liegen weit auseinander; Trennschärfe zeigt sich daran, dass ein fest angekoppelter Kreis (Güte etwa 0,7) sie nicht mehr trennt (Kapitel 8, Stufe 2) |
+| Nachtrag 08.11.2026 (4) | MW-Modul als echte Teilschaltung statt Verhaltensmodell: genau der Empfänger aus 2.2 und 2.5 (Kopplung 10 pF, Spule 220 µH, Ge-Diode mit 22 kΩ, Transistorstufe); der Drehkondensator steckt außen an »Abst.«. »Blick hinein« zeigt alle Teile mit Live-Werten (Kapitel 5.4 und 6) |
+| Nachtrag 08.11.2026 (5) | UKW-Modul als Verhaltensmodell mit sechs Anschlüssen: Senderwahl über die Spannung an »Abst.« (87,5–108 MHz), Lautstärke über die Spannung an »Laut«, in 2.8 mit den Pultreglern P1 und P2. Drei UKW-Sender statt zwei (89,3 Zeitzeichen, 96,8 Melodie, 104,5 Morse), immer an; Fangbereich 0,25 MHz voll, ab 0,6 MHz Rauschen (breiter als real, damit der Pultregler trifft). Trägerplatte petrol statt dunkelblau und Bildzeichen Dipol unter einer Welle mit wechselndem Abstand, damit MW- und UKW-Modul nicht verwechselt werden (Kapitel 5.4, 6 und 8, Stufe 2) |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -129,7 +131,7 @@ Neu in Volta 3 (Katalog `content/catalog/bauteile.json`, Feld `ab_band: 3`); all
 | Kraftsensor (Dehnungsmessstreifen-Brücke) | vier Widerstände mit Kraftanteil | Waage |
 | Hall-Sensor | Spannungsausgang proportional zum Magnetfeld | Magnetfeld messen |
 | Siebensegmentanzeige | sieben LEDs mit gemeinsamer Kathode | Anzeige |
-| **MW-Modul** | Verhaltensmodell: Abstimmung mit Drehkondensator, Hüllkurve, Tonausgang | Empfang der Senderanlage |
+| **MW-Modul** | Teilschaltung (Nachtrag 08.11.2026 (4)): Kopplung, Spule, Detektordiode, Transistorstufe; Drehkondensator außen an »Abst.« | Empfang der Senderanlage |
 | **UKW-Modul** | Verhaltensmodell: Abstimmung, Frequenzdemodulation erklärt, Tonausgang | Empfang der Senderanlage |
 | **Gatter-Modul** | vier NAND, ereignisgesteuert, Ein-/Ausgänge an den Kern gekoppelt | Wahrheitstabelle, Schaltschwellen |
 | **Zähler-Modul** | 4-Bit-Binärzähler mit Takt und Rücksetzen | Teiler, Zählfolge |

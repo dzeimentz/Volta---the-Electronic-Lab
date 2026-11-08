@@ -1,6 +1,7 @@
 #include "netlist_builder.hpp"
 
 #include <algorithm>
+#include <set>
 #include <unordered_map>
 
 #include "anchor.hpp"
@@ -25,6 +26,8 @@
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/regulator.hpp"
 #include "volta/core/modules/opamp_module.hpp"
+#include "volta/core/modules/fm_module.hpp"
+#include "volta/core/modules/radio_module.hpp"
 #include "volta/core/modules/timer555_module.hpp"
 #include "volta/core/components/wire.hpp"
 
@@ -400,6 +403,25 @@ private:
             for (const auto& [d, lp] : m_irLeds) q->addEmitter(d, irCoupling(*lp, *rp));
     }
 
+    // Zwei Anschlusspunkte haengen allein ueber Leitungen zusammen (Kontaktfelder und Modulsteckplaetze sind Knoten,
+    // Bauteile trennen)
+    bool wiredTogether(const std::string& from, const std::string& to) const {
+        const std::string goal = canonical(to);
+        std::set<std::string> seen{canonical(from)};
+        std::vector<std::string> todo{canonical(from)};
+        while (!todo.empty()) {
+            const std::string at = todo.back();
+            todo.pop_back();
+            if (at == goal) return true;
+            for (const auto& w : m_board.wires) {
+                const std::string a = canonical(w.from), b = canonical(w.to);
+                const std::string* next = a == at ? &b : b == at ? &a : nullptr;
+                if (next && seen.insert(*next).second) todo.push_back(*next);
+            }
+        }
+        return false;
+    }
+
     void buildWire(const WirePlacement& w) {
         NodeId a = 0, b = 0;
         const std::string ctx = "Leitung " + w.id;
@@ -452,6 +474,20 @@ private:
         } else if (m.type == "tonmodul" && n.size() == 4) {
             // Katalog: plus, minus, ein, aus
             const core::SubcircuitRange r = core::addToneModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3]});
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
+        } else if (m.type == "mwmodul" && n.size() == 5) {
+            // Katalog: plus, minus, ant, abst, aus (ab Volta 3; Teilschaltung, Endstufe T1)
+            const core::SubcircuitRange r = core::addMwModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4]});
+            m_net.modules[m.id] = r;
+            for (std::size_t i = r.first; i < r.first + r.count; ++i)
+                if (m_net.circuit.component(i).id() == m.id + ".T1") m_net.moduleMain[m.id] = i;
+        } else if (m.type == "ukwmodul" && n.size() == 6) {
+            // Katalog: plus, minus, ant, abst, laut, aus (ab Volta 3; Verhaltensmodell). Empfang nur, wenn ant ueber
+            // Leitungen (auch ueber Kontaktfelder) am Antennenfeld der Senderanlage haengt
+            const bool antenna = hasDeskPart(m_board, "senderanlage") && wiredTogether("P:ANT", m.id + ".ant");
+            const core::SubcircuitRange r =
+                core::addFmModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4], n[5]}, antenna);
             m_net.modules[m.id] = r;
             m_net.moduleMain[m.id] = r.first;
         } else {

@@ -1,0 +1,125 @@
+{
+  "id": "volta3.2.7",
+  "band": "volta3",
+  "stufe": 2,
+  "titel_key": "exp3_2_7_titel",
+  "dauer_min": 15,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "drehkondensator",
+    "leitung"
+  ],
+  "frage_key": "exp3_2_7_frage",
+  "vermutungen": [
+    "exp3_2_7_v1",
+    "exp3_2_7_v2",
+    "exp3_2_7_v3"
+  ],
+  "beobachtungen": [
+    "exp3_2_7_b1",
+    "exp3_2_7_b2",
+    "exp3_2_7_b3"
+  ],
+  "vermutung_passt": [
+    0
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "DK1",
+        "typ": "drehkondensator",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "stellung": 0.194
+      }
+    ],
+    "module": [
+      {
+        "id": "MW1",
+        "typ": "mwmodul",
+        "feld": 1
+      }
+    ],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "MW1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "MW1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:ANT",
+        "nach": "MW1.ant",
+        "farbe": "gelb"
+      },
+      {
+        "von": "MW1.abst",
+        "nach": "A1",
+        "farbe": "blau"
+      },
+      {
+        "von": "A2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B1",
+        "nach": "P:LS1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "MW1.aus",
+        "farbe": "gruen"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp3_2_7_s1",
+    "exp3_2_7_s2",
+    "exp3_2_7_s3",
+    "exp3_2_7_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "LS",
+        "groesse": "strom_mA",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.5,
+        "min": 3.0
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_2_7_h1",
+    "exp3_2_7_h2",
+    "exp3_2_7_loesung"
+  ],
+  "erklaerung_key": "exp3_2_7_erklaerung",
+  "mehr_wissen_key": "exp3_2_7_mehr",
+  "weiterforschen": [
+    "exp3_2_7_w1",
+    "exp3_2_7_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_2_7_echt"
+}

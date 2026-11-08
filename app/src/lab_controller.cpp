@@ -1740,6 +1740,9 @@ QVariantMap LabController::moduleState(const QString& id) const {
         m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
         m.insert(QStringLiteral("level"), r->level);
         m.insert(QStringLiteral("note"), static_cast<int>(r->displayValue));
+    } else if (type == "ukwmodul") {
+        // UKW-Modul: ein Sender ist eingestellt (Empfang ueber null)
+        m.insert(QStringLiteral("active"), r->displayFlags > 0);
     } else if (type == "opmodul" || type == "timer555") {
         // OP: Ausgang ueber der Mitte der Versorgung; 555: Flipflop gesetzt (Ausgang hoch)
         m.insert(QStringLiteral("active"), r->level > 0.5);
@@ -1771,6 +1774,22 @@ QVariantMap LabController::moduleInside(const QString& id) const {
             m.insert(QStringLiteral("frequencyHz"), r->frequencyHz);
             m.insert(QStringLiteral("playing"), r->displayValue >= 0.0);
             m.insert(QStringLiteral("inV"), m_session->voltage(mid + ".ein") - m_session->voltage(mid + ".minus"));
+        }
+        return m;
+    }
+    if (type == "ukwmodul") {
+        // Verhaltensmodell: Abstimmung, Empfang, Lautstaerke und Endstufe (core::FmModule::read)
+        if (const core::ComponentReading* r = m_session->moduleReading(mid)) {
+            const double vm = m_session->voltage(mid + ".minus");
+            m.insert(QStringLiteral("supplyV"), r->voltV);
+            m.insert(QStringLiteral("tuneV"), m_session->voltage(mid + ".abst") - vm);
+            m.insert(QStringLiteral("volumeV"), m_session->voltage(mid + ".laut") - vm);
+            m.insert(QStringLiteral("mhz"), r->displayValue);
+            m.insert(QStringLiteral("reception"), r->level);
+            m.insert(QStringLiteral("station"), r->displayFlags - 1);
+            m.insert(QStringLiteral("volume"), r->displayRange);
+            m.insert(QStringLiteral("outmA"), r->currentA * 1e3);
+            m.insert(QStringLiteral("powered"), r->voltV >= 3.0);
         }
         return m;
     }
