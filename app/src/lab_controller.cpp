@@ -1370,7 +1370,7 @@ bool LabController::stationOn(int index) const {
 }
 
 void LabController::setStationOn(int index, bool on) {
-    if (index < 0 || index >= 3 || stationOn(index) == on) return;
+    if (index < 0 || index >= 6 || stationOn(index) == on) return;
     m_session->setStationOn(index, on);
     emit deskChanged();
 }

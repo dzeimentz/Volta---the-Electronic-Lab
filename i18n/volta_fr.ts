@@ -95,17 +95,17 @@
         <translation>Affichage de tension %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="865"/>
+        <location filename="../app/src/model/lab_session.cpp" line="871"/>
         <source>Sicherung tauschen</source>
         <translation>Changer le fusible</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="870"/>
+        <location filename="../app/src/model/lab_session.cpp" line="876"/>
         <source>Drehregler P%1 reparieren</source>
         <translation>Réparer le bouton de réglage P%1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="875"/>
+        <location filename="../app/src/model/lab_session.cpp" line="881"/>
         <source>Lautsprecher reparieren</source>
         <translation>Réparer le haut-parleur</translation>
     </message>
@@ -288,6 +288,16 @@
         <translation>jusqu’à %1</translation>
     </message>
     <message>
+        <location filename="../app/qml/ControlDesk.qml" line="379"/>
+        <source>MW und UKW</source>
+        <translation>PO et FM</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="379"/>
+        <source>%1 von 6 an</source>
+        <translation>%1 sur 6 en marche</translation>
+    </message>
+    <message>
         <location filename="../app/qml/ControlDesk.qml" line="418"/>
         <source>Gerätefach: Pultteile einsetzen</source>
         <translation>Bac à appareils : placer des éléments du pupitre</translation>
@@ -349,14 +359,12 @@
         <translation>Émetteur</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="379"/>
         <source>Mittelwelle</source>
-        <translation>Ondes moyennes</translation>
+        <translation type="vanished">Ondes moyennes</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="379"/>
         <source>%1 von 3 an</source>
-        <translation>%1 sur 3 allumés</translation>
+        <translation type="vanished">%1 sur 3 allumés</translation>
     </message>
     <message>
         <location filename="../app/qml/ControlDesk.qml" line="382"/>
@@ -700,92 +708,102 @@
         <translation>Une résistance série dans le traceur limite le courant. Ainsi les composants ne s’abîment pas tant que tu gardes une limite de courant basse.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="97"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
+        <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle und drei auf UKW schicken Morsezeichen, Melodien und Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
+        <translation>La station d’émission est ta propre petite radio : trois émetteurs en ondes moyennes et trois en FM envoient du morse, des mélodies et des tops horaires vers le champ ANT. Touche son bouton pour allumer ou éteindre des émetteurs.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="92"/>
+        <source>Auf 1000 kHz spielt »O Holy Night«. Dieses Lied soll Reginald Fessenden am Heiligabend 1906 auf der Geige gespielt haben. Vielleicht war das die erste Musik im Radio. Ganz sicher weiß man es nicht, denn er hat es erst viel später erzählt.</source>
+        <translation>Sur 1000 kHz, on entend « Minuit, chrétiens ». Reginald Fessenden aurait joué ce chant au violon la veille de Noël 1906. C’était peut-être la première musique à la radio. On n’en est pas tout à fait sûr, car il ne l’a raconté que bien plus tard.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="98"/>
         <source>Schalter</source>
         <translation>Interrupteur</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="98"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
         <source>Der Kippschalter verbindet zwei Felder oder trennt sie. Tippe auf ihn, um ihn umzulegen.</source>
         <translation>L’interrupteur à bascule relie deux champs ou les sépare. Touche-le pour le basculer.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
         <source>Kontakt 1</source>
         <translation>Contact 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
         <source>Kontakt 2</source>
         <translation>Contact 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="101"/>
         <source>Knebel oben (»ein«): S1 und S2 sind verbunden, Strom kann fließen.</source>
         <translation>Levier en haut (« marche ») : S1 et S2 sont reliés, le courant peut passer.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="101"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="102"/>
         <source>Knebel unten (»aus«): Die Verbindung ist getrennt.</source>
         <translation>Levier en bas (« arrêt ») : la liaison est coupée.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="104"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="105"/>
         <source>Lautsprecher</source>
         <translation>Haut-parleur</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="105"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
         <source>Der Lautsprecher macht aus einem Strom, der sich schnell ändert, einen Ton. Seine Spule hat 8 Ω.</source>
         <translation>Le haut-parleur transforme un courant qui change rapidement en son. Sa bobine fait 8 Ω.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
         <source>Anschluss 1</source>
         <translation>Borne 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
         <source>Anschluss 2</source>
         <translation>Borne 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="108"/>
         <source>Fließt ein gleichbleibender Strom, bleibt er stumm.</source>
         <translation>Avec un courant constant, il reste muet.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="108"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="109"/>
         <source>Der Leuchtring zeigt, ob und wie laut ein Ton erklingt.</source>
         <translation>L’anneau lumineux montre si un son retentit et à quel volume.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="109"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="110"/>
         <source>Wie herum du ihn anschließt, ist egal.</source>
         <translation>Peu importe dans quel sens tu le branches.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="151"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="152"/>
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="174"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="175"/>
         <source>Anschlüsse</source>
         <translation>Bornes</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="219"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="220"/>
         <source>An den Feldern stecken noch Leitungen. Sie werden mit abgezogen – »Rückgängig« holt alles zurück.</source>
         <translation>Des fils sont encore branchés sur les cases. Ils seront retirés aussi – « Annuler » remet tout en place.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="228"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="229"/>
         <source>Trotzdem herausnehmen</source>
         <translation>Retirer quand même</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="228"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="229"/>
         <source>Aus dem Pult nehmen</source>
         <translation>Retirer du pupitre</translation>
     </message>
@@ -795,9 +813,8 @@
         <translation>Station d’émission</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
         <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
-        <translation>La station d’émission est ta propre petite radio : trois émetteurs en ondes moyennes envoient du morse, une mélodie et un signal horaire au champ ANT. Touche son bouton pour allumer ou éteindre des émetteurs.</translation>
+        <translation type="vanished">La station d’émission est ta propre petite radio : trois émetteurs en ondes moyennes envoient du morse, une mélodie et un signal horaire au champ ANT. Touche son bouton pour allumer ou éteindre des émetteurs.</translation>
     </message>
     <message>
         <location filename="../app/qml/DeskPartInfo.qml" line="90"/>
@@ -810,7 +827,7 @@
         <translation>Un circuit oscillant fait d’une bobine et d’un condensateur variable choisit un émetteur.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="92"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="93"/>
         <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
         <translation>Les émetteurs oscillent bien trop vite pour l’affichage. Volta les calcule donc autrement que le reste. Comment ? C’est expliqué sous « Comment Volta calcule ».</translation>
     </message>
@@ -3340,7 +3357,7 @@
         <translation>Cette case est en dehors de la plaque.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="857"/>
+        <location filename="../app/src/model/lab_session.cpp" line="863"/>
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation>Débranche d&apos;abord les fils du multimètre.</translation>
     </message>
@@ -5305,62 +5322,110 @@
 <context>
     <name>StationPanel</name>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="14"/>
+        <location filename="../app/qml/StationPanel.qml" line="15"/>
+        <location filename="../app/qml/StationPanel.qml" line="22"/>
         <source>Morsezeichen</source>
         <translation>Morse</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="15"/>
         <source>Melodie</source>
-        <translation>Mélodie</translation>
+        <translation type="vanished">Mélodie</translation>
     </message>
     <message>
         <location filename="../app/qml/StationPanel.qml" line="16"/>
+        <source>»O Holy Night« wie 1906</source>
+        <translation>« Minuit, chrétiens » comme en 1906</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="17"/>
+        <location filename="../app/qml/StationPanel.qml" line="20"/>
         <source>Zeitzeichen</source>
         <translation>Signal horaire</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="44"/>
+        <location filename="../app/qml/StationPanel.qml" line="21"/>
+        <source>Volta-Melodie</source>
+        <translation>Mélodie Volta</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="50"/>
         <source>Senderanlage</source>
         <translation>Station d’émission</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="69"/>
+        <location filename="../app/qml/StationPanel.qml" line="75"/>
         <source>Schließen</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="77"/>
-        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
-        <translation>La station d’émission envoie trois émetteurs en ondes moyennes au champ ANT. Relie ANT à ton antenne.</translation>
+        <location filename="../app/qml/StationPanel.qml" line="83"/>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle und drei auf UKW an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation>La station d’émission envoie trois émetteurs en ondes moyennes et trois en FM vers le champ ANT. Relie ANT à ton antenne.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="78"/>
+        <location filename="../app/qml/StationPanel.qml" line="99"/>
+        <source>Mittelwelle (MW)</source>
+        <translation>Ondes moyennes (PO)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="102"/>
+        <source>Sender %1</source>
+        <translation>Émetteur %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="102"/>
+        <source>%1 kHz</source>
+        <translation>%1 kHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="104"/>
+        <source>UKW</source>
+        <translation>FM</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="108"/>
+        <source>UKW %1</source>
+        <translation>FM %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="109"/>
+        <source>%1 MHz</source>
+        <translation>%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="145"/>
+        <source>%1 ein oder aus</source>
+        <translation>%1 en marche ou arrêté</translation>
+    </message>
+    <message>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation type="vanished">La station d’émission envoie trois émetteurs en ondes moyennes au champ ANT. Relie ANT à ton antenne.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="84"/>
         <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
         <translation>Chaque émetteur a sa propre fréquence. Ton circuit oscillant en choisit un.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="79"/>
+        <location filename="../app/qml/StationPanel.qml" line="85"/>
         <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
         <translation>Éteins des émetteurs si tu veux entendre si ton récepteur trouve un seul émetteur.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="104"/>
         <source>Sender %1 ein oder aus</source>
-        <translation>Émetteur %1 allumé ou éteint</translation>
+        <translation type="vanished">Émetteur %1 allumé ou éteint</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="109"/>
         <source>Sender %1 · %2 kHz</source>
-        <translation>Émetteur %1 · %2 kHz</translation>
+        <translation type="vanished">Émetteur %1 · %2 kHz</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="115"/>
+        <location filename="../app/qml/StationPanel.qml" line="156"/>
         <source>sendet</source>
         <translation>émet</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="115"/>
+        <location filename="../app/qml/StationPanel.qml" line="156"/>
         <source>aus</source>
         <translation>éteint</translation>
     </message>

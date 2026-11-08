@@ -86,9 +86,10 @@ Popup {
         }
         case "senderanlage": return {
             title: qsTr("Senderanlage"),
-            intro: qsTr("Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten."),
+            intro: qsTr("Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle und drei auf UKW schicken Morsezeichen, Melodien und Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten."),
             fields: [["ANT", qsTr("Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.")]],
             tips: [qsTr("Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus."),
+                   qsTr("Auf 1000 kHz spielt »O Holy Night«. Dieses Lied soll Reginald Fessenden am Heiligabend 1906 auf der Geige gespielt haben. Vielleicht war das die erste Musik im Radio. Ganz sicher weiß man es nicht, denn er hat es erst viel später erzählt."),
                    qsTr("Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.")]
         }
         case "p1": return pot(1)

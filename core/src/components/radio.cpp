@@ -26,10 +26,44 @@ constexpr char kMorse[] = "1010101110"   // V ...-
 constexpr std::size_t kMorseUnits = sizeof(kMorse) - 1;
 constexpr double kMorseUnitS = 0.08; // 15 Woerter je Minute
 
-// Selbst erdachte Tonfolge (Halbtoene ueber C5 = 523,25 Hz; -1 = Pause), je 0,25 s
-constexpr int kMelody[] = {0, 4, 7, 12, 7, 4, 0, -1, 2, 5, 9, 14, 9, 5, 2, -1, 4, 7, 11, 16, 11, 7, 4, 0, -1, -1};
-constexpr std::size_t kMelodyNotes = sizeof(kMelody) / sizeof(kMelody[0]);
-constexpr double kNoteS = 0.25;
+// Tonfolgen: Halbtoene ueber C5 = 523,25 Hz (kRest = Pause) und Dauer in Einheiten
+constexpr int kRest = -100;
+struct Note {
+    int semitone;
+    int units;
+};
+
+// Volta-Erkennungsmelodie (eigene Komposition): "Vol-ta, Vol-ta" als Quintsprung abwaerts, dann die Tonleiter
+// hinauf ("das E-lek-tro-nik-La-bor"); Einheit = Achtel zu 0,2 s, 6,4 s mit Pause
+constexpr Note kMelody[] = {{7, 2}, {0, 2}, {7, 2}, {0, 2}, {kRest, 1}, {0, 1}, {2, 1}, {4, 1}, {5, 1},
+                            {7, 1}, {9, 1}, {7, 4}, {kRest, 4}};
+constexpr double kMelodyUnitS = 0.2;
+
+// "Minuit, chretiens" / "O Holy Night" (Adolphe Adam 1847, gemeinfrei), erste Zeile bis "... Saviour's birth",
+// abgelesen aus der Ausgabe G. Schirmer 1871 ("Social Evenings", Wikimedia Commons); eine Oktave hoeher wie auf der
+// Geige. Einheit = Triolenachtel (der 4/4-Satz mit punktierten Sechzehnteln entspricht dem ueblichen 12/8), 0,28 s;
+// 15,4 s mit Pause
+constexpr Note kCarol[] = {{4, 1},  {4, 5},  {7, 1}, {7, 5}, {7, 1}, {9, 2}, {9, 1},  {5, 2}, {9, 1},
+                           {12, 6}, {7, 2},  {7, 1}, {4, 2}, {2, 1}, {0, 2}, {0, 1},  {4, 2}, {5, 1},
+                           {7, 3},  {5, 2},  {2, 1}, {0, 6}, {kRest, 6}};
+constexpr double kCarolUnitS = 0.28;
+
+template <std::size_t N>
+double playNotes(const Note (&notes)[N], double unitS, double timeS) noexcept {
+    int total = 0;
+    for (const Note& n : notes) total += n.units;
+    const double periodS = total * unitS;
+    double t = std::fmod(timeS, periodS);
+    for (const Note& n : notes) {
+        const double durS = n.units * unitS;
+        if (t < durS) {
+            if (n.semitone == kRest || t > durS - 0.02) return 0.0; // kurze Luecke zwischen den Toenen
+            return std::sin(2.0 * kPi * 523.25 * std::pow(2.0, n.semitone / 12.0) * timeS);
+        }
+        t -= durS;
+    }
+    return 0.0;
+}
 
 double tone(double hz, double t) noexcept { return std::sin(2.0 * kPi * hz * t); }
 } // namespace
@@ -50,13 +84,10 @@ double stationSignal(StationProgram program, double toneHz, double timeS) noexce
         const bool full = std::fmod(sec, 10.0) < 0.5;
         return frac < (full ? 0.5 : 0.1) ? tone(toneHz, timeS) : 0.0;
     }
-    case StationProgram::Melody: {
-        const auto n = static_cast<std::size_t>(std::floor(timeS / kNoteS));
-        const int note = kMelody[n % kMelodyNotes];
-        const double inNote = timeS - double(n) * kNoteS;
-        if (note < 0 || inNote > kNoteS - 0.02) return 0.0; // kurze Luecke zwischen den Toenen
-        return tone(523.25 * std::pow(2.0, note / 12.0), timeS);
-    }
+    case StationProgram::Melody:
+        return playNotes(kMelody, kMelodyUnitS, timeS);
+    case StationProgram::Carol:
+        return playNotes(kCarol, kCarolUnitS, timeS);
     }
     return 0.0;
 }

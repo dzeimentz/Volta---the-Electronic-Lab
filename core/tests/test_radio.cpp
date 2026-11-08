@@ -99,9 +99,32 @@ std::pair<double, double> meanAndAmplitude(const std::vector<double>& v, double 
 }
 } // namespace
 
+TEST_CASE("Melodien spielen ihre Toene in der richtigen Reihenfolge", "[radio][volta3]") {
+    // Grundfrequenz eines Tonabschnitts aus den Nulldurchgaengen
+    auto pitchAt = [](StationProgram p, double t0) {
+        int crossings = 0;
+        double prev = stationSignal(p, 0.0, t0);
+        for (int i = 1; i <= 1000; ++i) { // 0,1 s in 0,1 ms
+            const double s = stationSignal(p, 0.0, t0 + i * 1e-4);
+            if ((prev < 0.0) != (s < 0.0)) ++crossings;
+            prev = s;
+        }
+        return crossings / 2.0 / 0.1;
+    };
+    // Volta-Melodie: G5 (784 Hz), dann C5 (523 Hz), Einheit 0,2 s
+    CHECK(pitchAt(StationProgram::Melody, 0.1) == Catch::Approx(784.0).epsilon(0.03));
+    CHECK(pitchAt(StationProgram::Melody, 0.5) == Catch::Approx(523.25).epsilon(0.03));
+    // "O Holy Night": E5 (659 Hz) auf "O ho-", der Spitzenton C6 (1047 Hz) auf "shin-", Einheit 0,28 s
+    CHECK(pitchAt(StationProgram::Carol, 0.6) == Catch::Approx(659.3).epsilon(0.03));
+    CHECK(pitchAt(StationProgram::Carol, 25 * 0.28 - 1.0) == Catch::Approx(1046.5).epsilon(0.03));
+    // Pause am Ende, dann von vorn (55 Einheiten)
+    CHECK(stationSignal(StationProgram::Carol, 0.0, 52 * 0.28) == 0.0);
+    CHECK(pitchAt(StationProgram::Carol, 0.6 + 55 * 0.28) == Catch::Approx(659.3).epsilon(0.03));
+}
+
 TEST_CASE("Sendersignale bleiben im Bereich und haben Pausen", "[radio][volta3]") {
     for (StationProgram p : {StationProgram::Tone, StationProgram::Morse, StationProgram::TimeSignal,
-                             StationProgram::Melody}) {
+                             StationProgram::Melody, StationProgram::Carol}) {
         double lo = 0.0, hi = 0.0;
         int silent = 0;
         for (int i = 0; i < 200000; ++i) { // 20 s in 0,1 ms

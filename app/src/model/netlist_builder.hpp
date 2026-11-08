@@ -69,10 +69,13 @@ struct Netlist {
 Netlist buildNetlist(const Board& board, const Catalog& catalog);
 
 // Sender der Senderanlage (ab Volta 3, Konzept 5.3) mit ihrem Schaltzustand; leer ohne Senderanlage im Pult.
-// Drei Mittelwellensender mit eigenen Inhalten (Morsezeichen, Melodie, Zeitzeichen).
+// Drei Mittelwellensender mit eigenen Inhalten (Morsezeichen, "O Holy Night", Zeitzeichen); die UKW-Sender (Index 3-5
+// im Schaltzustand) stecken im Verhaltensmodell des UKW-Moduls.
 // Drehkondensator (ab Volta 3): Kapazitaet bei Stellung 0..1 (linear zwischen c_min_F und c_max_F des Katalogs)
 double variableCapacitanceF(const CatalogEntry& entry, double position);
 std::vector<core::RadioStation> deskStations(const Board& board);
+// UKW-Sender der Senderanlage (89,3/96,8/104,5 MHz, im Kern kFmStations) als Bitmaske: Bit i = Sender sendet
+unsigned fmStationMask(const Board& board);
 
 // Uebernimmt die Bauteilzustaende (Ladung, Temperatur, zerstoert, Sicherung ...) aus einer alten in eine neue
 // Netzliste, zugeordnet ueber die Bauteilkennung. Damit bleibt der Zustand bei jedem Topologiewechsel erhalten.

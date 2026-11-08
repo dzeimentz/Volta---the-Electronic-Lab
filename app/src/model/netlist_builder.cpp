@@ -486,8 +486,8 @@ private:
             // Katalog: plus, minus, ant, abst, laut, aus (ab Volta 3; Verhaltensmodell). Empfang nur, wenn ant ueber
             // Leitungen (auch ueber Kontaktfelder) am Antennenfeld der Senderanlage haengt
             const bool antenna = hasDeskPart(m_board, "senderanlage") && wiredTogether("P:ANT", m.id + ".ant");
-            const core::SubcircuitRange r =
-                core::addFmModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4], n[5]}, antenna);
+            const core::SubcircuitRange r = core::addFmModule(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4], n[5]},
+                                                              antenna, fmStationMask(m_board));
             m_net.modules[m.id] = r;
             m_net.moduleMain[m.id] = r.first;
         } else {
@@ -515,9 +515,16 @@ std::vector<core::RadioStation> deskStations(const Board& board) {
     if (!hasDeskPart(board, "senderanlage")) return out;
     // Traegeramplituden verschieden, damit die Sender unterschiedlich stark ankommen
     out.push_back({600e3, 1.0, 0.5, core::StationProgram::Morse, 800.0, board.desk.stationsOn[0]});
-    out.push_back({1000e3, 0.8, 0.6, core::StationProgram::Melody, 0.0, board.desk.stationsOn[1]});
+    out.push_back({1000e3, 0.8, 0.6, core::StationProgram::Carol, 0.0, board.desk.stationsOn[1]}); // historisch
     out.push_back({1400e3, 0.6, 0.5, core::StationProgram::TimeSignal, 1000.0, board.desk.stationsOn[2]});
     return out;
+}
+
+unsigned fmStationMask(const Board& board) {
+    unsigned mask = 0;
+    for (std::size_t i = 0; i < 3; ++i)
+        if (board.desk.stationsOn[3 + i]) mask |= 1u << i;
+    return mask;
 }
 
 Netlist buildNetlist(const Board& board, const Catalog& catalog) {

@@ -29,7 +29,9 @@ enum class StationProgram {
     Tone,       // Dauerton
     Morse,      // Morsezeichen "VOLTA" mit Ton, dann Pause
     TimeSignal, // Zeitzeichen: kurzer Piep jede Sekunde, langer zur vollen Minute (hier alle 10 s)
-    Melody,     // einfache selbst erdachte Tonfolge
+    Melody,     // Volta-Erkennungsmelodie (eigene Komposition, 08.11.2026)
+    Carol,      // erste Zeile von "Minuit, chretiens" (Adolphe Adam 1847, gemeinfrei) - das Lied, das Reginald
+                // Fessenden am 24.12.1906 als erste Musik im Rundfunk gespielt haben soll (nur spaeter berichtet)
 };
 
 // Modulationssignal des Programms zur Zeit t (s), Tonhoehe toneHz (Morse, Zeitzeichen; die Melodie hat eigene Toene).

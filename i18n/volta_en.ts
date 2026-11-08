@@ -95,17 +95,17 @@
         <translation>Voltage display %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="865"/>
+        <location filename="../app/src/model/lab_session.cpp" line="871"/>
         <source>Sicherung tauschen</source>
         <translation>Replace fuse</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="870"/>
+        <location filename="../app/src/model/lab_session.cpp" line="876"/>
         <source>Drehregler P%1 reparieren</source>
         <translation>Repair control knob P%1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="875"/>
+        <location filename="../app/src/model/lab_session.cpp" line="881"/>
         <source>Lautsprecher reparieren</source>
         <translation>Repair loudspeaker</translation>
     </message>
@@ -288,6 +288,16 @@
         <translation>up to %1</translation>
     </message>
     <message>
+        <location filename="../app/qml/ControlDesk.qml" line="379"/>
+        <source>MW und UKW</source>
+        <translation>MW and FM</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ControlDesk.qml" line="379"/>
+        <source>%1 von 6 an</source>
+        <translation>%1 of 6 on</translation>
+    </message>
+    <message>
         <location filename="../app/qml/ControlDesk.qml" line="418"/>
         <source>Gerätefach: Pultteile einsetzen</source>
         <translation>Device tray: insert desk parts</translation>
@@ -349,14 +359,12 @@
         <translation>Transmitter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="379"/>
         <source>Mittelwelle</source>
-        <translation>Medium wave</translation>
+        <translation type="vanished">Medium wave</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="379"/>
         <source>%1 von 3 an</source>
-        <translation>%1 of 3 on</translation>
+        <translation type="vanished">%1 of 3 on</translation>
     </message>
     <message>
         <location filename="../app/qml/ControlDesk.qml" line="382"/>
@@ -700,92 +708,102 @@
         <translation>A series resistor inside the tracer limits the current. That way components are not damaged as long as you keep the current limit low.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="97"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
+        <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle und drei auf UKW schicken Morsezeichen, Melodien und Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
+        <translation>The transmitter set is your own little broadcasting station: three medium-wave and three FM transmitters send Morse code, melodies and time signals to the field ANT. Tap its button to switch transmitters on or off.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="92"/>
+        <source>Auf 1000 kHz spielt »O Holy Night«. Dieses Lied soll Reginald Fessenden am Heiligabend 1906 auf der Geige gespielt haben. Vielleicht war das die erste Musik im Radio. Ganz sicher weiß man es nicht, denn er hat es erst viel später erzählt.</source>
+        <translation>On 1000 kHz you hear “O Holy Night”. Reginald Fessenden is said to have played this song on the violin on Christmas Eve 1906. Maybe that was the first music on the radio. Nobody knows for sure, because he only told the story much later.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DeskPartInfo.qml" line="98"/>
         <source>Schalter</source>
         <translation>Switch</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="98"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
         <source>Der Kippschalter verbindet zwei Felder oder trennt sie. Tippe auf ihn, um ihn umzulegen.</source>
         <translation>The toggle switch connects two fields or separates them. Tap it to flip it.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
         <source>Kontakt 1</source>
         <translation>Contact 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
         <source>Kontakt 2</source>
         <translation>Contact 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="101"/>
         <source>Knebel oben (»ein«): S1 und S2 sind verbunden, Strom kann fließen.</source>
         <translation>Lever up (“on”): S1 and S2 are connected, current can flow.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="101"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="102"/>
         <source>Knebel unten (»aus«): Die Verbindung ist getrennt.</source>
         <translation>Lever down (“off”): the connection is broken.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="104"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="105"/>
         <source>Lautsprecher</source>
         <translation>Loudspeaker</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="105"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
         <source>Der Lautsprecher macht aus einem Strom, der sich schnell ändert, einen Ton. Seine Spule hat 8 Ω.</source>
         <translation>The loudspeaker turns a current that changes quickly into a sound. Its coil has 8 Ω.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
         <source>Anschluss 1</source>
         <translation>Terminal 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
         <source>Anschluss 2</source>
         <translation>Terminal 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="108"/>
         <source>Fließt ein gleichbleibender Strom, bleibt er stumm.</source>
         <translation>With a steady current it stays silent.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="108"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="109"/>
         <source>Der Leuchtring zeigt, ob und wie laut ein Ton erklingt.</source>
         <translation>The light ring shows whether a sound plays and how loud it is.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="109"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="110"/>
         <source>Wie herum du ihn anschließt, ist egal.</source>
         <translation>It doesn’t matter which way round you connect it.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="151"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="152"/>
         <source>Schließen</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="174"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="175"/>
         <source>Anschlüsse</source>
         <translation>Terminals</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="219"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="220"/>
         <source>An den Feldern stecken noch Leitungen. Sie werden mit abgezogen – »Rückgängig« holt alles zurück.</source>
         <translation>Wires are still plugged into the fields. They will be removed too – “Undo” brings everything back.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="228"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="229"/>
         <source>Trotzdem herausnehmen</source>
         <translation>Remove anyway</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="228"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="229"/>
         <source>Aus dem Pult nehmen</source>
         <translation>Remove from desk</translation>
     </message>
@@ -795,9 +813,8 @@
         <translation>Transmitter station</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
         <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
-        <translation>The transmitter station is your own little radio network: three medium-wave transmitters send Morse code, a melody and a time signal to the ANT field. Tap its button to switch transmitters on or off.</translation>
+        <translation type="vanished">The transmitter station is your own little radio network: three medium-wave transmitters send Morse code, a melody and a time signal to the ANT field. Tap its button to switch transmitters on or off.</translation>
     </message>
     <message>
         <location filename="../app/qml/DeskPartInfo.qml" line="90"/>
@@ -810,7 +827,7 @@
         <translation>A tuned circuit made of a coil and a variable capacitor picks out one transmitter.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="92"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="93"/>
         <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
         <translation>The transmitters oscillate far too fast for the display. That is why Volta calculates them differently from the rest. How is explained under “How Volta calculates”.</translation>
     </message>
@@ -3340,7 +3357,7 @@
         <translation>This field is outside the base board.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="857"/>
+        <location filename="../app/src/model/lab_session.cpp" line="863"/>
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation>First unplug the wires from the meter.</translation>
     </message>
@@ -5305,62 +5322,110 @@
 <context>
     <name>StationPanel</name>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="14"/>
+        <location filename="../app/qml/StationPanel.qml" line="15"/>
+        <location filename="../app/qml/StationPanel.qml" line="22"/>
         <source>Morsezeichen</source>
         <translation>Morse code</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="15"/>
         <source>Melodie</source>
-        <translation>Melody</translation>
+        <translation type="vanished">Melody</translation>
     </message>
     <message>
         <location filename="../app/qml/StationPanel.qml" line="16"/>
+        <source>»O Holy Night« wie 1906</source>
+        <translation>“O Holy Night” as in 1906</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="17"/>
+        <location filename="../app/qml/StationPanel.qml" line="20"/>
         <source>Zeitzeichen</source>
         <translation>Time signal</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="44"/>
+        <location filename="../app/qml/StationPanel.qml" line="21"/>
+        <source>Volta-Melodie</source>
+        <translation>Volta melody</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="50"/>
         <source>Senderanlage</source>
         <translation>Transmitter station</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="69"/>
+        <location filename="../app/qml/StationPanel.qml" line="75"/>
         <source>Schließen</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="77"/>
-        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
-        <translation>The transmitter station sends three medium-wave transmitters to the ANT field. Connect ANT to your antenna.</translation>
+        <location filename="../app/qml/StationPanel.qml" line="83"/>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle und drei auf UKW an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation>The transmitter set sends three medium-wave and three FM transmitters to the field ANT. Connect ANT to your antenna.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="78"/>
+        <location filename="../app/qml/StationPanel.qml" line="99"/>
+        <source>Mittelwelle (MW)</source>
+        <translation>Medium wave (MW)</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="102"/>
+        <source>Sender %1</source>
+        <translation>Transmitter %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="102"/>
+        <source>%1 kHz</source>
+        <translation>%1 kHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="104"/>
+        <source>UKW</source>
+        <translation>FM</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="108"/>
+        <source>UKW %1</source>
+        <translation>FM %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="109"/>
+        <source>%1 MHz</source>
+        <translation>%1 MHz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="145"/>
+        <source>%1 ein oder aus</source>
+        <translation>%1 on or off</translation>
+    </message>
+    <message>
+        <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
+        <translation type="vanished">The transmitter station sends three medium-wave transmitters to the ANT field. Connect ANT to your antenna.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/StationPanel.qml" line="84"/>
         <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
         <translation>Each transmitter has its own frequency. Your tuned circuit picks out one of them.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="79"/>
+        <location filename="../app/qml/StationPanel.qml" line="85"/>
         <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
         <translation>Switch transmitters off if you want to hear whether your receiver finds a single one.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="104"/>
         <source>Sender %1 ein oder aus</source>
-        <translation>Transmitter %1 on or off</translation>
+        <translation type="vanished">Transmitter %1 on or off</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="109"/>
         <source>Sender %1 · %2 kHz</source>
-        <translation>Transmitter %1 · %2 kHz</translation>
+        <translation type="vanished">Transmitter %1 · %2 kHz</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="115"/>
+        <location filename="../app/qml/StationPanel.qml" line="156"/>
         <source>sendet</source>
         <translation>on air</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="115"/>
+        <location filename="../app/qml/StationPanel.qml" line="156"/>
         <source>aus</source>
         <translation>off</translation>
     </message>

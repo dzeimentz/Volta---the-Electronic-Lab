@@ -236,9 +236,10 @@ eine dauerhafte Ueberlast fuer unbedenklich haelt.
   100 kOhm, ant 75 Ohm gegen minus) und einer Endstufe aus -> minus, deren Leitwert Schritt fuer Schritt dem
   demodulierten Ton folgt: laut * (0,5 + 0,45 * a(t)) / 100 Ohm, a(t) = q * Programm + (1 - q) * 0,3 * Rauschen.
   Die Frequenz ist 87,5 MHz + 20,5 MHz * U(abst) / U(plus - minus), die Lautstaerke U(laut) / U(plus - minus).
-  Empfang q = 1 bis 0,25 MHz neben einem der drei UKW-Sender (89,3 Zeitzeichen, 96,8 Melodie, 104,5 Morse), ab
+  Empfang q = 1 bis 0,25 MHz neben einem der drei UKW-Sender (89,3 Zeitzeichen, 96,8 Volta-Melodie, 104,5 Morse), ab
   0,6 MHz nur Rauschen (Fangbereich breiter als real, damit der Pultregler einen Sender sicher trifft); ohne
-  Leitungsweg von ant zum Antennenfeld der Senderanlage nur Rauschen. Unter 3 V schweigt es. Messwerte: level =
+  Leitungsweg von ant zum Antennenfeld der Senderanlage nur Rauschen. Im Senderfenster ausgeschaltete UKW-Sender
+  fallen aus der Suche heraus (dort nur Rauschen; Bedienhandlung `SetFmStations` als Bitmaske). Unter 3 V schweigt es. Messwerte: level =
   Empfang q, displayValue = MHz, displayRange = Lautstaerke, displayFlags = Sender + 1. Im »Blick hinein« als
   Blockbild offengelegt. Test: `test_fm_module.cpp`.
 - **Logikmodell** (Volta 3, Zuse 1): ereignisgesteuerte Gatter mit Kopplung an analoge Pegel.

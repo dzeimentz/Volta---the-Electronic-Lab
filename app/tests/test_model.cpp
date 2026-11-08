@@ -799,7 +799,7 @@ private slots:
     void deskStationsVolta3() {
         model::Board board;
         board.deskParts = std::vector<std::string>{"senderanlage"};
-        board.desk.stationsOn = {true, false, true};
+        board.desk.stationsOn = {true, false, true, true, false, true};
         board.wires.push_back({"L1", "P:ANT", "A1", "gelb"});
         board.parts.push_back({"R1", "widerstand", {{"a", "A1"}, {"b", "A2"}}, 1000.0});
         board.wires.push_back({"L2", "A2", "P:0V", "schwarz"});
@@ -808,6 +808,8 @@ private slots:
         QCOMPARE(back.desk.stationsOn[0], true);
         QCOMPARE(back.desk.stationsOn[1], false);
         QCOMPARE(back.desk.stationsOn[2], true);
+        QCOMPARE(back.desk.stationsOn[4], false); // UKW 2 (ab Volta 3)
+        QCOMPARE(back.desk.stationsOn[5], true);
         QVERIFY(model::needsAudioStep(board)); // Antenne angeschlossen
         const auto st = model::deskStations(board);
         QCOMPARE(st.size(), std::size_t(3));

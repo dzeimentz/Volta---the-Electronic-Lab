@@ -23,7 +23,7 @@ struct Run {
 };
 
 // 9-V-Batterie, Spannungsteiler (10 kOhm gesamt) fuer abst und laut, 8-Ohm-Last zwischen plus und aus.
-Run listen(double tune, double volume, bool antenna) {
+Run listen(double tune, double volume, bool antenna, unsigned stationsOn = 0b111u) {
     Circuit c;
     const NodeId plus = c.addNode(), ant = c.addNode(), ab = c.addNode(), la = c.addNode(), out = c.addNode();
     c.add<Battery>("B", plus, kGround);
@@ -37,7 +37,7 @@ Run listen(double tune, double volume, bool antenna) {
     const std::size_t ls = c.componentCount();
     c.add<Resistor>("LS", plus, out, ResistorParams{8.0});
     const std::size_t fm = c.componentCount();
-    addFmModule(c, "UKW1", {plus, kGround, ant, ab, la, out}, antenna);
+    addFmModule(c, "UKW1", {plus, kGround, ant, ab, la, out}, antenna, stationsOn);
     Simulator sim;
     REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
     double lo = 1e9, hi = -1e9, sum = 0.0;
@@ -97,4 +97,12 @@ TEST_CASE("UKW-Modul empfaengt abgestimmt den Sender, dazwischen rauscht es", "[
     const Run silent = listen(k, 0.0, true);
     CHECK(silent.ppA < 1e-4);
     CHECK(silent.meanA < 1e-4);
+
+    // Sender 2 im Senderfenster ausgeschaltet: auf 96,8 MHz nur Rauschen, die anderen Sender bleiben
+    const Run off = listen(k, 0.7, true, 0b101u);
+    CHECK(off.station == -1);
+    CHECK(off.quality == 0.0);
+    CHECK(off.ppA < 0.5 * exact.ppA);
+    const Run other = listen(tuneFor(104.5), 0.7, true, 0b101u);
+    CHECK(other.station == 2);
 }

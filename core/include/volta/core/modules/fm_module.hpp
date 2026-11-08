@@ -35,9 +35,10 @@ struct FmModuleParams {
     double edgeMHz = 0.6;
     double noise = 0.3;           // Rauschen zwischen den Sendern (Anteil der Aussteuerung)
     bool antenna = false;         // ant haengt an der Antenne der Senderanlage (von der Netzliste gesetzt)
+    unsigned stationsOn = 0b111u; // Senderfenster: Bit i = UKW-Sender i sendet (aus: dort nur Rauschen)
 };
 
-// UKW-Sender der Senderanlage (eigene Programme wie bei Mittelwelle; immer an).
+// UKW-Sender der Senderanlage (eigene Programme wie bei Mittelwelle; im Senderfenster schaltbar).
 struct FmStation {
     double mhz;
     StationProgram program;
@@ -68,6 +69,8 @@ public:
     double volume() const noexcept { return m_volume; }
     int station() const noexcept { return m_station; } // naechster Sender (Index in kFmStations), -1 ohne Empfang
     bool powered() const noexcept { return m_powered; }
+    // Senderfenster (Bedienhandlung): Bit i = UKW-Sender i sendet
+    void setStationsOn(unsigned mask) noexcept { m_params.stationsOn = mask & 0b111u; }
     // Empfang q bei der Frequenz f (MHz) und naechster Sender
     double receptionAt(double mhz, int& station) const noexcept;
 
@@ -94,6 +97,7 @@ private:
     double m_g = kGmin; // Leitwert der Endstufe im laufenden Loesungsvorgang
 };
 
-SubcircuitRange addFmModule(Circuit& circuit, const std::string& prefix, const FmModulePins& pins, bool antenna);
+SubcircuitRange addFmModule(Circuit& circuit, const std::string& prefix, const FmModulePins& pins, bool antenna,
+                            unsigned stationsOn = 0b111u);
 
 } // namespace volta::core

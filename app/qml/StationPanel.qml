@@ -1,6 +1,6 @@
-// Senderfenster (ab Volta 3, Konzept 5.3): drei Mittelwellensender der Senderanlage an der Antenne ANT, je Sender
-// Schalter, Frequenz und Inhalt (eigene Inhalte: Morsezeichen, Melodie, Zeitzeichen). Alles Bedienhandlungen (kein
-// Befehl); der Zustand steht als Text neben dem Schalter (Farbe nie allein). Nicht modal und verschiebbar wie das
+// Senderfenster (ab Volta 3, Konzept 5.3): drei Mittelwellen- und drei UKW-Sender der Senderanlage an der Antenne
+// ANT, je Sender Schalter, Frequenz und Inhalt (Morsezeichen, Zeitzeichen, Volta-Melodie und das gemeinfreie Lied
+// »O Holy Night«). Alles Bedienhandlungen (kein Befehl); der Zustand steht als Text neben dem Schalter (Farbe nie allein). Nicht modal und verschiebbar wie das
 // Generatorfenster.
 import QtQuick
 import QtQuick.Controls.Basic
@@ -10,10 +10,16 @@ Popup {
     property var controller: null
     property bool showHelp: false
 
-    readonly property var stations: [
-        {khz: 600, content: qsTr("Morsezeichen")},
-        {khz: 1000, content: qsTr("Melodie")},
-        {khz: 1400, content: qsTr("Zeitzeichen")}
+    // index = Schaltzustand im Pult (0-2 Mittelwelle, 3-5 UKW, wie desk.stationsOn)
+    readonly property var mwStations: [
+        {index: 0, khz: 600, content: qsTr("Morsezeichen")},
+        {index: 1, khz: 1000, content: qsTr("»O Holy Night« wie 1906")},
+        {index: 2, khz: 1400, content: qsTr("Zeitzeichen")}
+    ]
+    readonly property var fmStations: [
+        {index: 3, mhz: 89.3, content: qsTr("Zeitzeichen")},
+        {index: 4, mhz: 96.8, content: qsTr("Volta-Melodie")},
+        {index: 5, mhz: 104.5, content: qsTr("Morsezeichen")}
     ]
 
     modal: false
@@ -74,49 +80,82 @@ Popup {
             objectName: "stationHelp"
             visible: panel.showHelp
             width: parent.width
-            lines: [qsTr("Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne."),
+            lines: [qsTr("Die Senderanlage schickt drei Sender auf Mittelwelle und drei auf UKW an das Feld ANT. Verbinde ANT mit deiner Antenne."),
                     qsTr("Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus."),
                     qsTr("Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.")]
         }
 
-        Repeater {
-            model: panel.stations
-            Rectangle {
-                id: row
-                required property var modelData
-                required property int index
-                readonly property bool on: { panel.controller ? panel.controller.cells : 0; return panel.controller ? panel.controller.stationOn(index) : false }
+        Flickable {
+            objectName: "stationList"
+            width: parent.width
+            height: Math.min(contentHeight, panel.parent ? panel.parent.height - 2 * Theme.control - 64 : contentHeight)
+            contentHeight: list.height
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            Column {
+                id: list
                 width: parent.width
-                height: Theme.control + 12
-                radius: 8
-                color: on ? "#EEF4FB" : "#F3F1EA"
-                border.color: on ? "#2873B0" : "#B8B4A8"
-                border.width: 1
-                Row {
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: 10
-                    spacing: 10
-                    Switch {
-                        objectName: "stationSwitch" + row.index
-                        anchors.verticalCenter: parent.verticalCenter
-                        checked: row.on
-                        onToggled: panel.controller.setStationOn(row.index, checked)
-                        Accessible.name: qsTr("Sender %1 ein oder aus").arg(row.index + 1)
+                spacing: 8
+                BandLabel { text: qsTr("Mittelwelle (MW)") }
+                Repeater {
+                    model: panel.mwStations
+                    StationRow { band: qsTr("Sender %1").arg(modelData.index + 1); freq: qsTr("%1 kHz").arg(modelData.khz) }
+                }
+                BandLabel { text: qsTr("UKW") }
+                Repeater {
+                    model: panel.fmStations
+                    StationRow {
+                        band: qsTr("UKW %1").arg(modelData.index - 2)
+                        freq: qsTr("%1 MHz").arg(Number(modelData.mhz).toLocaleString(Qt.locale(), "f", 1))
                     }
-                    Column {
-                        anchors.verticalCenter: parent.verticalCenter
-                        Label {
-                            text: qsTr("Sender %1 · %2 kHz").arg(row.index + 1).arg(row.modelData.khz)
-                            color: Theme.navy
-                            font.bold: true
-                            font.pixelSize: Math.round(15 * Theme.fontScale)
-                        }
-                        Label {
-                            text: row.modelData.content + " · " + (row.on ? qsTr("sendet") : qsTr("aus"))
-                            color: "#3A4652"
-                            font.pixelSize: Math.round(13 * Theme.fontScale)
-                        }
-                    }
+                }
+            }
+        }
+    }
+
+    component BandLabel: Label {
+        color: Theme.navy
+        font.bold: true
+        font.pixelSize: Math.round(14 * Theme.fontScale)
+        topPadding: 2
+    }
+
+    component StationRow: Rectangle {
+        id: row
+        required property var modelData
+        property string band
+        property string freq
+        readonly property int station: modelData.index
+        readonly property bool on: { panel.controller ? panel.controller.cells : 0; return panel.controller ? panel.controller.stationOn(station) : false }
+        width: list.width
+        height: Theme.control + 8
+        radius: 8
+        color: on ? "#EEF4FB" : "#F3F1EA"
+        border.color: on ? "#2873B0" : "#B8B4A8"
+        border.width: 1
+        Row {
+            anchors.verticalCenter: parent.verticalCenter
+            x: 10
+            spacing: 10
+            Switch {
+                objectName: "stationSwitch" + row.station
+                anchors.verticalCenter: parent.verticalCenter
+                checked: row.on
+                onToggled: panel.controller.setStationOn(row.station, checked)
+                Accessible.name: qsTr("%1 ein oder aus").arg(row.band)
+            }
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+                Label {
+                    text: row.band + " · " + row.freq
+                    color: Theme.navy
+                    font.bold: true
+                    font.pixelSize: Math.round(15 * Theme.fontScale)
+                }
+                Label {
+                    text: row.modelData.content + " · " + (row.on ? qsTr("sendet") : qsTr("aus"))
+                    color: "#3A4652"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
                 }
             }
         }

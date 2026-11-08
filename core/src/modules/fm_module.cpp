@@ -33,6 +33,7 @@ double FmModule::receptionAt(double mhz, int& station) const noexcept {
     if (!m_params.antenna) return 0.0;
     double best = 1e9;
     for (std::size_t i = 0; i < kFmStations.size(); ++i) {
+        if (!(m_params.stationsOn & (1u << i))) continue; // ausgeschalteter Sender: dort nur Rauschen
         const double d = std::fabs(mhz - kFmStations[i].mhz);
         if (d < best) {
             best = d;
@@ -121,11 +122,13 @@ void FmModule::restoreState(const ComponentState& state) noexcept {
     m_timeS = std::isfinite(state.internal[0]) && state.internal[0] >= 0.0 ? state.internal[0] : 0.0;
 }
 
-SubcircuitRange addFmModule(Circuit& circuit, const std::string& prefix, const FmModulePins& pins, bool antenna) {
+SubcircuitRange addFmModule(Circuit& circuit, const std::string& prefix, const FmModulePins& pins, bool antenna,
+                            unsigned stationsOn) {
     SubcircuitRange range;
     range.first = circuit.componentCount();
     FmModuleParams p;
     p.antenna = antenna;
+    p.stationsOn = stationsOn & 0b111u;
     circuit.add<FmModule>(prefix, pins, p);
     range.count = circuit.componentCount() - range.first;
     return range;

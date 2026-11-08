@@ -43,7 +43,8 @@ struct Action {
         SetTracerMin,    // Kennlinienschreiber: value = kleinste Pruefspannung in V
         SetTracerMax,    // Kennlinienschreiber: value = hoechste Pruefspannung in V
         SetTracerOhm,    // Kennlinienschreiber: value = Vorwiderstand in Ohm
-        SetCapacitance   // Drehkondensator (ab Volta 3): value = Kapazitaet in F; stimmt das Radio neu ab
+        SetCapacitance,  // Drehkondensator (ab Volta 3): value = Kapazitaet in F; stimmt das Radio neu ab
+        SetFmStations    // UKW-Modul (ab Volta 3): value = Bitmaske der UKW-Sender, die senden
     };
     std::string componentId;
     Type type = Type::SetSwitch;

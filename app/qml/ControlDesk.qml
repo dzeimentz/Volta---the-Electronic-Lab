@@ -370,13 +370,13 @@ Rectangle {
         x: desk.centerOf("senderanlage") - width / 2
         y: 12
         spacing: 4
-        readonly property int onCount: { desk.controller.cells; let n = 0; for (let i = 0; i < 3; ++i) if (desk.controller.stationOn(i)) ++n; return n }
+        readonly property int onCount: { desk.controller.cells; let n = 0; for (let i = 0; i < 6; ++i) if (desk.controller.stationOn(i)) ++n; return n }
         Label { text: qsTr("Sender"); color: "white"; font.pixelSize: Math.round((13) * Theme.fontScale); font.bold: true; anchors.horizontalCenter: parent.horizontalCenter }
         PanelButton {
             objectName: "stationsButton"
             width: 112
             height: Theme.control
-            text: qsTr("Mittelwelle") + "\n" + qsTr("%1 von 3 an").arg(parent.onCount)
+            text: qsTr("MW und UKW") + "\n" + qsTr("%1 von 6 an").arg(parent.onCount)
             font.pixelSize: Math.round(12 * Theme.fontScale)
             onClicked: desk.stationsRequested()
             Accessible.name: qsTr("Senderanlage einstellen")

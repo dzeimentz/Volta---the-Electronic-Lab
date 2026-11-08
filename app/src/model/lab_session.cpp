@@ -671,6 +671,12 @@ void LabSession::updateStations() {
 void LabSession::setStationOn(int index, bool on) {
     if (index < 0 || index >= static_cast<int>(m_board.desk.stationsOn.size())) return;
     m_board.desk.stationsOn[static_cast<std::size_t>(index)] = on;
+    if (index >= 3) { // UKW: die Sender stecken im Verhaltensmodell der UKW-Module
+        const double mask = static_cast<double>(fmStationMask(m_board));
+        for (const auto& m : m_board.modules)
+            if (m.type == "ukwmodul") m_bridge.post({m.id, sim::Action::Type::SetFmStations, mask});
+        return;
+    }
     updateStations();
 }
 

@@ -15,6 +15,7 @@
 #include "volta/core/components/motor.hpp"
 #include "volta/core/components/potentiometer.hpp"
 #include "volta/core/components/switch.hpp"
+#include "volta/core/modules/fm_module.hpp"
 
 namespace volta::sim {
 
@@ -161,6 +162,9 @@ void SimulationBridge::apply(const Action& a) {
         break;
     case Action::Type::SetCapacitance:
         if (auto* k = dynamic_cast<core::Capacitor*>(&c)) k->setCapacitance(a.value);
+        break;
+    case Action::Type::SetFmStations:
+        if (auto* f = dynamic_cast<core::FmModule*>(&c)) f->setStationsOn(static_cast<unsigned>(std::lround(a.value)));
         break;
     case Action::Type::SetCells:
         if (auto* b = dynamic_cast<core::Battery*>(&c)) b->setCells(static_cast<int>(std::lround(a.value)));
