@@ -10,6 +10,9 @@ Popup {
     id: panel
     property var controller: null
     property bool showHelp: false
+    // Amplitudenmodulation gibt es ab Volta 3 (Konzept Volta 3, 5.2); Volta 1 und 2 zeigen sie nicht
+    readonly property bool hasAm: controller !== null && controller.band !== "" && controller.band !== "volta1"
+                                  && controller.band !== "volta2"
 
     // Dekade der Frequenz: 1, 10, 100 oder 1000 Hz; der Regler waehlt das 1- bis 10-Fache
     readonly property int decade: controller ? (controller.genFrequency < 10 ? 1 : controller.genFrequency < 100 ? 10
@@ -97,6 +100,7 @@ Popup {
                     qsTr("Frequenz: Wähle zuerst den Bereich, dann stellst du mit dem Regler fein ein. Mehr Hertz heißt höherer Ton."),
                     qsTr("Spitze: So weit schwingt die Spannung nach oben und nach unten."),
                     qsTr("Gleichanteil: Er schiebt die ganze Kurve nach oben oder nach unten.")]
+                   .concat(panel.hasAm ? [qsTr("Modulation: Ein Ton macht die Kurve abwechselnd größer und kleiner. Die Spitzen bilden dann die Form des Tons nach.")] : [])
         }
 
         Label { text: qsTr("Signalform"); font.bold: true; color: Theme.navy }
@@ -225,6 +229,62 @@ Popup {
             value: panel.controller ? panel.controller.genOffset : 0
             onMoved: panel.controller.genOffset = Math.round(value * 10) / 10
             Accessible.name: qsTr("Gleichanteil")
+        }
+
+        // Amplitudenmodulation (ab Volta 3): Tiefe und Ton gehoeren zusammen (gemeinsamer Rahmen)
+        Rectangle {
+            objectName: "genAmFrame"
+            visible: panel.hasAm
+            width: parent.width
+            height: amColumn.implicitHeight + 20
+            radius: 8
+            color: "transparent"
+            border.color: "#9AA9B8"
+            border.width: 1.5
+            Column {
+                id: amColumn
+                x: 10; y: 10
+                width: parent.width - 20
+                spacing: 6
+                Label {
+                    objectName: "genAmLabel"
+                    text: panel.controller && panel.controller.genAmDepth > 0
+                          ? qsTr("Modulation: %1 %").arg(panel.number(panel.controller.genAmDepth * 100, 0))
+                          : qsTr("Modulation: aus")
+                    font.bold: true
+                    color: Theme.navy
+                }
+                Slider {
+                    objectName: "genAmDepthSlider"
+                    width: parent.width
+                    height: Theme.control
+                    from: 0; to: 1; stepSize: 0.05
+                    value: panel.controller ? panel.controller.genAmDepth : 0
+                    onMoved: panel.controller.genAmDepth = Math.round(value * 20) / 20
+                    Accessible.name: qsTr("Modulation")
+                }
+                Label {
+                    text: qsTr("Ton: %1").arg(panel.controller ? panel.frequencyText(panel.controller.genAmTone) : "")
+                    color: Theme.navy
+                }
+                Row {
+                    spacing: 6
+                    Repeater {
+                        model: [100, 200, 500]
+                        PanelButton {
+                            required property int modelData
+                            objectName: "genAmTone" + modelData
+                            height: Theme.control
+                            width: (amColumn.width - 12) / 3
+                            checkable: true
+                            checked: panel.controller !== null && panel.controller.genAmTone === modelData
+                            text: qsTr("%1 Hz").arg(modelData)
+                            onClicked: panel.controller.genAmTone = modelData
+                            Accessible.name: qsTr("Ton %1 Hz").arg(modelData)
+                        }
+                    }
+                }
+            }
         }
         Label {
             width: parent.width

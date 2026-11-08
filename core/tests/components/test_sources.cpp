@@ -176,3 +176,42 @@ TEST_CASE("Funktionsgenerator: Rechteck schaltet auf die Schrittgrenze", "[trans
     }
     CHECK(highs == 500); // Tastverhaeltnis 50 %
 }
+
+TEST_CASE("Funktionsgenerator mit Amplitudenmodulation: Huellkurve folgt dem Ton", "[referenz][transient][quelle]") {
+    // Traeger 2 kHz, 1 V Spitze, Ton 100 Hz, Tiefe 50 %: Huellkurve schwankt zwischen 0,5 und 1,5 V
+    GeneratorParams p{Waveform::Sine, 2000.0, 1.0, 0.0, 50.0};
+    p.amDepth = 0.5;
+    p.amToneHz = 100.0;
+    {
+        FunctionGenerator g("G1", 1, 0, p);
+        CHECK(g.emfAt(0.25, 0.25) == Approx(1.5));
+        CHECK(g.emfAt(0.25, 0.75) == Approx(0.5));
+        CHECK(g.emfAt(0.25, 0.0) == Approx(1.0));
+        g.setAmDepth(2.0);
+        CHECK(g.params().amDepth == 1.0);
+        g.setAmTone(5.0);
+        CHECK(g.params().amToneHz == 20.0);
+        g.setAmDepth(0.0); // aus: wie ohne Modulation
+        CHECK(g.emfAt(0.25, 0.75) == 1.0);
+    }
+    Circuit c;
+    const NodeId out = c.addNode();
+    c.add<FunctionGenerator>("G1", out, kGround, p);
+    c.add<Resistor>("R1", out, kGround, ResistorParams{10000.0});
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    const double k = 10000.0 / 10050.0;
+    // je Tonperiode (10 ms) die groesste Spitze in den beiden Haelften: oben 1,5 V, unten (zweite Haelfte) 0,5 V
+    double hiFirst = 0.0, hiSecond = 0.0;
+    for (int i = 0; i < 10000; ++i) { // 2 us, 20 ms = 2 Tonperioden; die zweite wird ausgewertet
+        REQUIRE(sim.step(2e-6) == Status::Ok);
+        if (i < 5000) continue;
+        const double v = std::fabs(sim.probe().voltage(out));
+        const double tone = std::fmod(i * 2e-6, 0.01);
+        if (std::fabs(tone - 0.0025) < 0.00025) hiFirst = std::max(hiFirst, v);  // um das Tonmaximum
+        if (std::fabs(tone - 0.0075) < 0.00025) hiSecond = std::max(hiSecond, v); // um das Tonminimum
+    }
+    CHECK(hiFirst == Approx(1.5 * k).epsilon(5e-3));
+    CHECK(hiSecond == Approx(0.5 * k).epsilon(5e-3));
+    requireKirchhoff(sim);
+}

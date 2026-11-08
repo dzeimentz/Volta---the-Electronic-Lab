@@ -4,108 +4,108 @@
 <context>
     <name>Befehl</name>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="354"/>
+        <location filename="../app/src/model/lab_session.cpp" line="362"/>
         <source>Grundplatte 1–%1</source>
         <translation>Grondplack 1–%1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="388"/>
+        <location filename="../app/src/model/lab_session.cpp" line="396"/>
         <source>Pultteil einsetzen</source>
         <translation>Pultdeel asetzen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="405"/>
+        <location filename="../app/src/model/lab_session.cpp" line="413"/>
         <source>Pultteil herausnehmen</source>
         <translation>Pultdeel eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="411"/>
+        <location filename="../app/src/model/lab_session.cpp" line="419"/>
         <source>Aufbau übernehmen</source>
         <translation>Opbau iwwerhuelen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="440"/>
+        <location filename="../app/src/model/lab_session.cpp" line="448"/>
         <source>%1 setzen</source>
         <translation>%1 setzen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="476"/>
-        <location filename="../app/src/model/lab_session.cpp" line="564"/>
+        <location filename="../app/src/model/lab_session.cpp" line="484"/>
+        <location filename="../app/src/model/lab_session.cpp" line="572"/>
         <source>%1 verschieben</source>
         <translation>%1 réckelen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="486"/>
+        <location filename="../app/src/model/lab_session.cpp" line="494"/>
         <source>%1 umdrehen</source>
         <translation>%1 ëmdréien</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="496"/>
+        <location filename="../app/src/model/lab_session.cpp" line="504"/>
         <source>%1 drehen</source>
         <translation>%1 dréien</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="504"/>
+        <location filename="../app/src/model/lab_session.cpp" line="512"/>
         <source>%1 entfernen</source>
         <translation>%1 ewechhuelen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="520"/>
+        <location filename="../app/src/model/lab_session.cpp" line="528"/>
         <source>Wert von %1 ändern</source>
         <translation>Wäert vu %1 änneren</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="527"/>
+        <location filename="../app/src/model/lab_session.cpp" line="535"/>
         <source>%1 reparieren</source>
         <translation>%1 reparéieren</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="540"/>
+        <location filename="../app/src/model/lab_session.cpp" line="548"/>
         <source>%1 einsetzen</source>
         <translation>%1 asetzen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="580"/>
+        <location filename="../app/src/model/lab_session.cpp" line="588"/>
         <source>%1 herausnehmen</source>
         <translation>%1 eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="591"/>
+        <location filename="../app/src/model/lab_session.cpp" line="599"/>
         <source>Leitung %1 ziehen</source>
         <translation>Leitung %1 zéien</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="607"/>
+        <location filename="../app/src/model/lab_session.cpp" line="615"/>
         <source>Leitung %1 umsetzen</source>
         <translation>Leitung %1 ëmsetzen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="616"/>
+        <location filename="../app/src/model/lab_session.cpp" line="624"/>
         <source>Leitung %1 löschen</source>
         <translation>Leitung %1 läschen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="626"/>
+        <location filename="../app/src/model/lab_session.cpp" line="634"/>
         <source>Leitung %1 umfärben</source>
         <translation>Leitung %1 ëmfierwen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="638"/>
+        <location filename="../app/src/model/lab_session.cpp" line="646"/>
         <source>Spannungsanzeige %1</source>
         <translation>Spannungsanzeig %1</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="824"/>
+        <location filename="../app/src/model/lab_session.cpp" line="865"/>
         <source>Sicherung tauschen</source>
         <translation>Sécherung tauschen</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="829"/>
+        <location filename="../app/src/model/lab_session.cpp" line="870"/>
         <source>Drehregler P%1 reparieren</source>
         <translation>Dréiregler P%1 reparéieren</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="834"/>
+        <location filename="../app/src/model/lab_session.cpp" line="875"/>
         <source>Lautsprecher reparieren</source>
         <translation>Lautsprecher reparéieren</translation>
     </message>
@@ -136,232 +136,230 @@
 <context>
     <name>ControlDesk</name>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="73"/>
+        <location filename="../app/qml/ControlDesk.qml" line="74"/>
         <source>Was ist das?</source>
         <translation>Wat ass dat?</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="101"/>
+        <location filename="../app/qml/ControlDesk.qml" line="102"/>
         <source>Generator läuft</source>
         <translation>Generator leeft</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="101"/>
+        <location filename="../app/qml/ControlDesk.qml" line="102"/>
         <source>Generator aus</source>
         <translation>Generator aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="102"/>
+        <location filename="../app/qml/ControlDesk.qml" line="103"/>
         <source>Wechselquelle an</source>
         <translation>Wiesselquell un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="102"/>
+        <location filename="../app/qml/ControlDesk.qml" line="103"/>
         <source>Wechselquelle aus</source>
         <translation>Wiesselquell aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="103"/>
+        <location filename="../app/qml/ControlDesk.qml" line="104"/>
         <source>Kennlinienschreiber an (eigenes Netzteil)</source>
         <translation>Kennlinneschreiwer un (eegent Netzdeel)</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="221"/>
+        <location filename="../app/qml/ControlDesk.qml" line="227"/>
         <source>Batterie</source>
         <translation>Batterie</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="227"/>
-        <location filename="../app/qml/ControlDesk.qml" line="227"/>
-        <location filename="../app/qml/ControlDesk.qml" line="227"/>
-        <location filename="../app/qml/ControlDesk.qml" line="263"/>
-        <location filename="../app/qml/ControlDesk.qml" line="263"/>
+        <location filename="../app/qml/ControlDesk.qml" line="236"/>
+        <location filename="../app/qml/ControlDesk.qml" line="272"/>
+        <location filename="../app/qml/ControlDesk.qml" line="272"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="230"/>
+        <location filename="../app/qml/ControlDesk.qml" line="239"/>
         <source>Batteriespannung</source>
         <translation>Batteriespannung</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="239"/>
+        <location filename="../app/qml/ControlDesk.qml" line="248"/>
         <source>Hauptschalter</source>
         <translation>Haaptschalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="244"/>
-        <location filename="../app/qml/ControlDesk.qml" line="270"/>
-        <location filename="../app/qml/ControlDesk.qml" line="297"/>
+        <location filename="../app/qml/ControlDesk.qml" line="253"/>
+        <location filename="../app/qml/ControlDesk.qml" line="279"/>
+        <location filename="../app/qml/ControlDesk.qml" line="306"/>
         <source>Ein</source>
         <translation>Un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="244"/>
-        <location filename="../app/qml/ControlDesk.qml" line="270"/>
-        <location filename="../app/qml/ControlDesk.qml" line="297"/>
+        <location filename="../app/qml/ControlDesk.qml" line="253"/>
+        <location filename="../app/qml/ControlDesk.qml" line="279"/>
+        <location filename="../app/qml/ControlDesk.qml" line="306"/>
         <source>Aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="258"/>
+        <location filename="../app/qml/ControlDesk.qml" line="267"/>
         <source>Batterie 2</source>
         <translation>Batterie 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="266"/>
+        <location filename="../app/qml/ControlDesk.qml" line="275"/>
         <source>Spannung von Batterie 2</source>
         <translation>Spannung vun der Batterie 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="283"/>
+        <location filename="../app/qml/ControlDesk.qml" line="292"/>
         <source>Wechselquelle</source>
         <translation>Wiesselquell</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="290"/>
-        <location filename="../app/qml/ControlDesk.qml" line="290"/>
+        <location filename="../app/qml/ControlDesk.qml" line="299"/>
+        <location filename="../app/qml/ControlDesk.qml" line="299"/>
         <source>%1 V~</source>
         <translation>%1 V~</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="293"/>
+        <location filename="../app/qml/ControlDesk.qml" line="302"/>
         <source>Spannung der Wechselquelle</source>
         <translation>Spannung vun der Wiesselquell</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="310"/>
+        <location filename="../app/qml/ControlDesk.qml" line="319"/>
         <source>Generator</source>
         <translation>Generator</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="315"/>
+        <location filename="../app/qml/ControlDesk.qml" line="324"/>
         <source>Sinus</source>
         <translation>Sinus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="315"/>
+        <location filename="../app/qml/ControlDesk.qml" line="324"/>
         <source>Dreieck</source>
         <translation>Dräieck</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="315"/>
+        <location filename="../app/qml/ControlDesk.qml" line="324"/>
         <source>Rechteck</source>
         <translation>Rechteck</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="318"/>
+        <location filename="../app/qml/ControlDesk.qml" line="327"/>
         <source>%1 kHz</source>
         <translation>%1 kHz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="319"/>
+        <location filename="../app/qml/ControlDesk.qml" line="328"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="322"/>
+        <location filename="../app/qml/ControlDesk.qml" line="331"/>
         <source>Funktionsgenerator einstellen</source>
         <translation>Funktiounsgenerator astellen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="326"/>
+        <location filename="../app/qml/ControlDesk.qml" line="335"/>
         <source>%1 V Spitze</source>
         <translation>%1 V Spëtzt</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="340"/>
+        <location filename="../app/qml/ControlDesk.qml" line="349"/>
         <source>Kennlinie</source>
         <translation>Kennlinn</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="345"/>
+        <location filename="../app/qml/ControlDesk.qml" line="354"/>
         <source>Zeichnen</source>
         <translation>Zeechnen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="348"/>
+        <location filename="../app/qml/ControlDesk.qml" line="357"/>
         <source>Kennlinienschreiber öffnen</source>
         <translation>Kennlinneschreiwer opmaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="352"/>
+        <location filename="../app/qml/ControlDesk.qml" line="361"/>
         <source>bis %1</source>
         <translation>bis %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="390"/>
+        <location filename="../app/qml/ControlDesk.qml" line="418"/>
         <source>Gerätefach: Pultteile einsetzen</source>
         <translation>Gerätefach: Pultdeeler asetzen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="397"/>
+        <location filename="../app/qml/ControlDesk.qml" line="425"/>
         <source>Pultteile herausnehmen</source>
         <translation>Pultdeeler eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="406"/>
+        <location filename="../app/qml/ControlDesk.qml" line="434"/>
         <source>Potentiometer 1</source>
         <translation>Potentiometer 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="418"/>
+        <location filename="../app/qml/ControlDesk.qml" line="446"/>
         <source>Potentiometer 2</source>
         <translation>Potentiometer 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="458"/>
+        <location filename="../app/qml/ControlDesk.qml" line="486"/>
         <source>ein</source>
         <translation>un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="463"/>
+        <location filename="../app/qml/ControlDesk.qml" line="491"/>
         <source>aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="470"/>
-        <location filename="../app/qml/ControlDesk.qml" line="477"/>
+        <location filename="../app/qml/ControlDesk.qml" line="498"/>
+        <location filename="../app/qml/ControlDesk.qml" line="505"/>
         <source>Schalter</source>
         <translation>Schalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="498"/>
+        <location filename="../app/qml/ControlDesk.qml" line="526"/>
         <source>♪ gerechnet</source>
         <translation>♪ gerechent</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="498"/>
+        <location filename="../app/qml/ControlDesk.qml" line="526"/>
         <source>♪ Ersatzton</source>
         <translation>♪ Ersatztoun</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="499"/>
+        <location filename="../app/qml/ControlDesk.qml" line="527"/>
         <source>Lautsprecher</source>
         <translation>Lautsprecher</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="499"/>
+        <location filename="../app/qml/ControlDesk.qml" line="527"/>
         <source>Zeitlupe: stumm</source>
         <translation>Zäitlupp: stomm</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <location filename="../app/qml/ControlDesk.qml" line="374"/>
         <source>Sender</source>
         <translation>Sender</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <location filename="../app/qml/ControlDesk.qml" line="379"/>
         <source>Mittelwelle</source>
         <translation>Mëttelwell</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <location filename="../app/qml/ControlDesk.qml" line="379"/>
         <source>%1 von 3 an</source>
         <translation>%1 vun 3 un</translation>
     </message>
     <message>
-        <location filename="../app/qml/ControlDesk.qml" line="0"/>
+        <location filename="../app/qml/ControlDesk.qml" line="382"/>
         <source>Senderanlage einstellen</source>
         <translation>Senderanlag astellen</translation>
     </message>
@@ -537,282 +535,282 @@
         <translation>Batterie</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="43"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="46"/>
         <source>Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 3, 4,5 oder 9 Volt.</source>
         <translation>D&apos;Batterie ass d&apos;Stroumquell vun dengem Labo. Si besteet aus Zelle mat all 1,5 Volt; uewen wiels du 3, 4,5 oder 9 Volt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="43"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="45"/>
         <source>Die Batterie ist die Stromquelle deines Labors. Sie besteht aus Zellen mit je 1,5 Volt; oben wählst du 1,5, 3, 4,5 oder 9 Volt.</source>
         <translation>D&apos;Batterie ass d&apos;Stroumquell vun dengem Labo. Si besteet aus Zelle mat all 1,5 Volt; uewen wiels du 1,5, 3, 4,5 oder 9 Volt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="44"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="47"/>
         <source>Pluspol (rot): Von hier fließt der Strom durch deine Schaltung.</source>
         <translation>Pluspol (rout): Vun hei fléisst de Stroum duerch deng Schaltung.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="45"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="48"/>
         <source>Minuspol (schwarz), auch GND oder Masse: Hierhin fließt der Strom zurück. Spannungen misst du gegen 0V.</source>
         <translation>Minuspol (schwaarz), och GND oder Mass: Heihin fléisst de Stroum zréck. Spannunge moos du géint 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="46"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="49"/>
         <source>Der Hauptschalter schaltet den Strom für die ganze Schaltung ein und aus (»Ein« / »Aus«).</source>
         <translation>Den Haaptschalter schalt de Stroum fir déi ganz Schaltung un an aus (»Un« / »aus«).</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="47"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="50"/>
         <source>Verbinde V+ nie direkt mit 0V – das ist ein Kurzschluss.</source>
         <translation>Verbann V+ ni direkt mat 0V – dat ass e Kuerzschluss.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="50"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="53"/>
         <source>Batterie 2</source>
         <translation>Batterie 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="51"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="54"/>
         <source>Die zweite Batterie ist von der ersten getrennt. Du wählst 4,5 oder 9 Volt; der Hauptschalter schaltet beide Batterien zugleich.</source>
         <translation>Déi zweet Batterie ass vun der éischter getrennt. Du wiels 4,5 oder 9 Volt; den Haaptschalter schalt béid Batterien zur selwechter Zäit.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="52"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="55"/>
         <source>Pluspol (rot) der zweiten Batterie.</source>
         <translation>Pluspol (rout) vun der zweeter Batterie.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="53"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="56"/>
         <source>Minuspol (blau) der zweiten Batterie.</source>
         <translation>Minuspol (blo) vun der zweeter Batterie.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="54"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="57"/>
         <source>Verbindest du +B2 mit 0V, liegt −B2 unter 0V: Dort misst du eine negative Spannung. So entsteht eine Versorgung mit Plus, Minus und der Mitte 0V.</source>
         <translation>Verbënns du +B2 mat 0V, läit −B2 ënner 0V: Do moss du eng negativ Spannung. Sou entsteet eng Versuergung mat Plus, Minus an der Mëtt 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="55"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="58"/>
         <source>Verbinde +B2 nie direkt mit −B2 – das ist ein Kurzschluss.</source>
         <translation>Verbann ni +B2 direkt mat −B2 – dat ass e Kuerzschluss.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="58"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="61"/>
         <source>Wechselquelle</source>
         <translation>Wiesselquell</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="59"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="62"/>
         <source>Die Wechselquelle liefert eine Wechselspannung wie ein kleiner Transformator: 6 oder 9 Volt (Effektivwert), 50 Schwingungen je Sekunde. Plus und Minus tauschen ständig die Seiten.</source>
         <translation>D&apos;Wiesselquell liwwert eng Wiesselspannung wéi e klengen Transformator: 6 oder 9 Volt (Effektivwäert), 50 Schwéngungen pro Sekonn. Plus a Minus tauschen dauernd d&apos;Säiten.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="60"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="63"/>
         <source>Anschluss a der Wicklung.</source>
         <translation>Uschloss a vun der Wécklung.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="61"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="64"/>
         <source>Anschluss b der Wicklung.</source>
         <translation>Uschloss b vun der Wécklung.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="62"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="65"/>
         <source>Die Wechselquelle hat keine Verbindung zu 0V – wie die Wicklung eines echten Transformators. Willst du die Spannung gegen 0V messen oder am Oszilloskop sehen, verbinde einen Anschluss mit 0V.</source>
         <translation>D&apos;Wiesselquell huet keng Verbindung mat 0V – wéi d&apos;Wécklung vun engem richtegen Transformator. Wann s du d&apos;Spannung géint 0V moosse oder um Oszilloskop gesi wëlls, verbann een Uschloss mat 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="63"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="66"/>
         <source>Der Hauptschalter schaltet sie zusammen mit der Batterie ein und aus.</source>
         <translation>Den Haaptschalter schalt se zesumme mat der Batterie un an aus.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="64"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="67"/>
         <source>Bei 9 V~ ist die Spitze 9 V · 1,41 = 12,7 V. Das ist eine Kleinspannung – mit der Steckdose experimentierst du nie!</source>
         <translation>Bei 9 V~ ass d&apos;Spëtzt 9 V · 1,41 = 12,7 V. Dat ass eng Klengspannung – mat der Steckdous experimentéiers du ni!</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="67"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="70"/>
         <source>Funktionsgenerator</source>
         <translation>Funktiounsgenerator</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="68"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="71"/>
         <source>Der Funktionsgenerator erzeugt Sinus, Dreieck oder Rechteck mit 1 Hz bis 10 kHz. Tippe auf seinen Knopf, um Form, Frequenz, Spitze und Gleichanteil einzustellen.</source>
         <translation>De Funktiounsgenerator mécht Sinus, Dräieck oder Rechteck vun 1 Hz bis 10 kHz. Tipp op säi Knäppchen, fir Form, Frequenz, Spëtzt a Gläichundeel anzestellen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="69"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="72"/>
         <source>Ausgang des Generators (50 Ω Innenwiderstand).</source>
         <translation>Ausgang vum Generator (50 Ω Bannewidderstand).</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="70"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="73"/>
         <source>Masse des Generators (schwarz), fest mit 0V verbunden.</source>
         <translation>Mass vum Generator (schwaarz), fest mat 0V verbonnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="71"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="74"/>
         <source>Weil G0 schon an 0V liegt, misst das Oszilloskop das Signal an G direkt.</source>
         <translation>Well G0 schonn op 0V läit, moosst den Oszilloskop d&apos;Signal un G direkt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="72"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="75"/>
         <source>Der Hauptschalter schaltet ihn zusammen mit der Batterie ein und aus. Die kleine Lampe oben links zeigt, ob er läuft.</source>
         <translation>Den Haaptschalter schalt en zesumme mat der Batterie un an aus. Déi kleng Luucht uewe lénks weist, ob e leeft.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="73"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="76"/>
         <source>Am Lautsprecher hörst du die Frequenz als Tonhöhe.</source>
         <translation>Um Lautsprecher héiers du d&apos;Frequenz als Toun.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="76"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="79"/>
         <source>Kennlinienschreiber</source>
         <translation>Kennlinneschreiwer</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="77"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="80"/>
         <source>Der Kennlinienschreiber zeigt, wie viel Strom durch ein Bauteil fließt, wenn die Spannung daran steigt. Er fährt die Spannung selbst durch und zeichnet den Strom darüber. Tippe auf seinen Knopf, um die Kennlinie zu sehen.</source>
         <translation>De Kennlinneschreiwer weist, wéi vill Stroum duerch e Bauelement fléisst, wann d’Spannung dorun eropgeet. E fiert d’Spannung selwer duerch a zeechent de Stroum doriwwer. Tipp op säi Knäppchen, fir d’Kennlinn ze gesinn.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="78"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="81"/>
         <source>Prüfspannung: hier fließt der Strom aus dem Schreiber in das Bauteil.</source>
         <translation>Préifspannung: hei fléisst de Stroum aus dem Schreiwer an d’Bauelement.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="79"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="82"/>
         <source>Rückleitung des Schreibers. Er hat ein eigenes Netzteil und braucht den Hauptschalter nicht.</source>
         <translation>Récklaf vum Schreiwer. Hien huet en eegent Netzdeel a brauch den Haaptschalter net.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="80"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="83"/>
         <source>Ein Widerstand ergibt eine Gerade: doppelte Spannung, doppelter Strom.</source>
         <translation>E Widderstand gëtt eng Riicht: duebel Spannung, duebele Stroum.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="81"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="84"/>
         <source>Bei einer Diode oder LED bleibt der Strom erst fast null und steigt dann steil an.</source>
         <translation>Bei enger Diode oder LED bleift de Stroum fir d’éischt bal null a klëmmt dann steil un.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="82"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="85"/>
         <source>Ein Vorwiderstand im Schreiber begrenzt den Strom. So gehen die Bauteile nicht kaputt, solange du die Strombegrenzung klein lässt.</source>
         <translation>E Virwiderstand am Schreiwer begrenzt de Stroum. Sou gi d’Bauelementer net futti, soulaang s du d’Stroumbegrenzung kleng léiss.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="87"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="97"/>
         <source>Schalter</source>
         <translation>Schalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="88"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="98"/>
         <source>Der Kippschalter verbindet zwei Felder oder trennt sie. Tippe auf ihn, um ihn umzulegen.</source>
         <translation>De Kippschalter verbënnt zwee Felder oder trennt se. Tipp drop, fir en ëmzeleeën.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
         <source>Kontakt 1</source>
         <translation>Kontakt 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
         <source>Kontakt 2</source>
         <translation>Kontakt 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="90"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="100"/>
         <source>Knebel oben (»ein«): S1 und S2 sind verbunden, Strom kann fließen.</source>
         <translation>Hiewel uewen (»un«): S1 an S2 si verbonnen, Stroum ka fléissen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="91"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="101"/>
         <source>Knebel unten (»aus«): Die Verbindung ist getrennt.</source>
         <translation>Hiewel ënnen (»aus«): D&apos;Verbindung ass getrennt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="94"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="104"/>
         <source>Lautsprecher</source>
         <translation>Lautsprecher</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="95"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="105"/>
         <source>Der Lautsprecher macht aus einem Strom, der sich schnell ändert, einen Ton. Seine Spule hat 8 Ω.</source>
         <translation>De Lautsprecher mécht aus engem Stroum, dee sech séier ännert, en Toun. Seng Spull huet 8 Ω.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="96"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
         <source>Anschluss 1</source>
         <translation>Uschloss 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="96"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="106"/>
         <source>Anschluss 2</source>
         <translation>Uschloss 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="97"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="107"/>
         <source>Fließt ein gleichbleibender Strom, bleibt er stumm.</source>
         <translation>Fléisst e gläichbleiwende Stroum, bleift en stomm.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="98"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="108"/>
         <source>Der Leuchtring zeigt, ob und wie laut ein Ton erklingt.</source>
         <translation>De Liichtrank weist, ob an wéi haart en Toun klingt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="99"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="109"/>
         <source>Wie herum du ihn anschließt, ist egal.</source>
         <translation>Wéi ronderëm s du en uschléiss, ass egal.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="141"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="151"/>
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="164"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="174"/>
         <source>Anschlüsse</source>
         <translation>Uschlëss</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="209"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="219"/>
         <source>An den Feldern stecken noch Leitungen. Sie werden mit abgezogen – »Rückgängig« holt alles zurück.</source>
         <translation>Op de Felder stieche nach Leitungen. Si ginn mat erausgezunn – »Réckgängeg« bréngt alles zréck.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="218"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="228"/>
         <source>Trotzdem herausnehmen</source>
         <translation>Trotzdeem eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="218"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="228"/>
         <source>Aus dem Pult nehmen</source>
         <translation>Aus dem Pult huelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="88"/>
         <source>Senderanlage</source>
         <translation>Senderanlag</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="89"/>
         <source>Die Senderanlage ist dein eigener kleiner Rundfunk: Drei Sender auf Mittelwelle schicken Morsezeichen, eine Melodie und ein Zeitzeichen an das Feld ANT. Tippe auf ihren Knopf, um Sender ein- oder auszuschalten.</source>
         <translation>D’Senderanlag ass däin eegene klenge Rundfunk: Dräi Sender op Mëttelwell schécken Morsezeechen, eng Melodie an en Zäitzeechen un d’Feld ANT. Tipp op hire Knäppchen, fir Sender un- oder auszeschalten.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="90"/>
         <source>Antenne: Hier kommen alle Sender zugleich an. Den Rückweg bildet 0V.</source>
         <translation>Antenn: Hei kommen all Sender gläichzäiteg un. De Réckwee ass 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="91"/>
         <source>Ein Schwingkreis aus Spule und Drehkondensator sucht sich einen Sender aus.</source>
         <translation>E Schwéngkrees aus Spull an Dréikondensator sicht sech ee Sender eraus.</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskPartInfo.qml" line="0"/>
+        <location filename="../app/qml/DeskPartInfo.qml" line="92"/>
         <source>Die Sender schwingen viel zu schnell für die Anzeige. Volta rechnet sie deshalb anders als den Rest. Wie, steht unter »So rechnet Volta«.</source>
         <translation>D’Sender schwénge vill ze séier fir d’Uweisung. Dofir rechent Volta se anescht wéi de Rescht. Wéi, steet ënner »Sou rechent Volta«.</translation>
     </message>
@@ -845,102 +843,102 @@
         <translation>Kennlinneschreiwer</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="25"/>
+        <location filename="../app/qml/DeskTray.qml" line="26"/>
         <source>Potentiometer 1</source>
         <translation>Potentiometer 1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="26"/>
+        <location filename="../app/qml/DeskTray.qml" line="27"/>
         <source>Potentiometer 2</source>
         <translation>Potentiometer 2</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="27"/>
+        <location filename="../app/qml/DeskTray.qml" line="28"/>
         <source>Schalter</source>
         <translation>Schalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="28"/>
+        <location filename="../app/qml/DeskTray.qml" line="29"/>
         <source>Lautsprecher</source>
         <translation>Lautsprecher</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="33"/>
+        <location filename="../app/qml/DeskTray.qml" line="34"/>
         <source>kommt mit einem Experiment</source>
         <translation>kënnt mat engem Experiment</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="34"/>
+        <location filename="../app/qml/DeskTray.qml" line="35"/>
         <source>ab Experiment %1</source>
         <translation>ab Experiment %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="43"/>
+        <location filename="../app/qml/DeskTray.qml" line="45"/>
         <source>Quellen</source>
         <translation>Quellen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="44"/>
+        <location filename="../app/qml/DeskTray.qml" line="46"/>
         <source>Bedienen</source>
         <translation>Bedéngen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="45"/>
+        <location filename="../app/qml/DeskTray.qml" line="47"/>
         <source>Messen</source>
         <translation>Moossen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="46"/>
+        <location filename="../app/qml/DeskTray.qml" line="48"/>
         <source>Hören</source>
         <translation>Lauschteren</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="68"/>
+        <location filename="../app/qml/DeskTray.qml" line="70"/>
         <source>Gerätefach</source>
         <translation>Gerätefach</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="68"/>
+        <location filename="../app/qml/DeskTray.qml" line="70"/>
         <source>Pultteile herausnehmen</source>
         <translation>Pultdeeler eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="80"/>
+        <location filename="../app/qml/DeskTray.qml" line="82"/>
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="131"/>
+        <location filename="../app/qml/DeskTray.qml" line="133"/>
         <source>herausnehmen, Leitungen gehen mit</source>
         <translation>eraushuelen, Leitunge ginn mat</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="132"/>
+        <location filename="../app/qml/DeskTray.qml" line="134"/>
         <source>herausnehmen</source>
         <translation>eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="133"/>
+        <location filename="../app/qml/DeskTray.qml" line="135"/>
         <source>steht im Pult</source>
         <translation>steet am Pult</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="150"/>
+        <location filename="../app/qml/DeskTray.qml" line="152"/>
         <source>Pult zeigen: alles Freigeschaltete einsetzen</source>
         <translation>Pult weisen: alles Fräigeschalten asetzen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="35"/>
+        <location filename="../app/qml/DeskTray.qml" line="36"/>
         <source>ab Stufe %1</source>
         <translation>ab Stuf %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="135"/>
+        <location filename="../app/qml/DeskTray.qml" line="137"/>
         <source>einsetzen</source>
         <translation>asetzen</translation>
     </message>
     <message>
-        <location filename="../app/qml/DeskTray.qml" line="0"/>
+        <location filename="../app/qml/DeskTray.qml" line="25"/>
         <source>Senderanlage</source>
         <translation>Senderanlag</translation>
     </message>
@@ -1297,350 +1295,350 @@
 <context>
     <name>FormulaCalculator</name>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="26"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="28"/>
         <source>Ohmsches Gesetz</source>
         <translation>Ohmscht Gesetz</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="27"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="29"/>
         <source>Vorwiderstand LED</source>
         <translation>Virwidderstand LED</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="28"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="30"/>
         <source>Reihe und parallel</source>
         <translation>Rei a parallel</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="29"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="31"/>
         <source>Leistung</source>
         <translation>Leeschtung</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="30"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="32"/>
         <source>Spannungsteiler</source>
         <translation>Spannungsdeeler</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="31"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="33"/>
         <source>Zeitkonstante</source>
         <translation>Zäitkonstant</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="32"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="34"/>
         <source>Kippstufe</source>
         <translation>Kippstuf</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="33"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="35"/>
         <source>Grenzfrequenz</source>
         <translation>Grenzfrequenz</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="34"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="36"/>
         <source>Effektivwert</source>
         <translation>Effektivwäert</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="35"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="37"/>
         <source>Brummspannung</source>
         <translation>Brummspannung</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="36"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="38"/>
         <source>Verstärkung Transistor</source>
         <translation>Verstäerkung Transistor</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="37"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="39"/>
         <source>Verstärkung OP</source>
         <translation>Verstäerkung OP</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="38"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="40"/>
         <source>Timer 555</source>
         <translation>Timer 555</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="39"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="41"/>
         <source>Rechner</source>
         <translation>Rechner</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="130"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="132"/>
         <source>Der Formelrechner wird mit Stufe 3 freigeschaltet.</source>
         <translation>De Formelrechner gëtt mat Stuf 3 fräigeschalt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="165"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="167"/>
         <source>Trage zwei Größen ein, lass die gesuchte leer.</source>
         <translation>Dron zwou Gréissten an, looss déi gesichten eidel.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="199"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="201"/>
         <source>U = R · I = %1 · %2</source>
         <translation>U = R · I = %1 · %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="200"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="202"/>
         <source>R = U ÷ I = %1 ÷ %2</source>
         <translation>R = U ÷ I = %1 ÷ %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="201"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="203"/>
         <source>I = U ÷ R = %1 ÷ %2</source>
         <translation>I = U ÷ R = %1 ÷ %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="215"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="217"/>
         <source>rot</source>
         <translation>rout</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="215"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="217"/>
         <source>gelb</source>
         <translation>giel</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="215"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="217"/>
         <source>grün</source>
         <translation>gréng</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="215"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="217"/>
         <source>blau</source>
         <translation>blo</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="230"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="232"/>
         <source>R = %1 → Normwert %2</source>
         <translation>R = %1 → Normwäert %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="231"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="233"/>
         <source>R = (Ub − Uf) ÷ I = (%1 − %2) ÷ %3. Mit %4 fließen %5, der Widerstand wird mit %6 belastet.</source>
         <translation>R = (Ub - Uf) ÷ I = (%1 - %2) ÷ %3. Mat %4 fléissen %5, de Widderstand gëtt mat %6 belaascht.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="234"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="236"/>
         <source>Achtung: mehr als 0,25 W – der Widerstand würde zu heiß.</source>
         <translation>Opgepasst: méi wéi 0,25 W – de Widderstand géif ze waarm ginn.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="241"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="243"/>
         <source>Normwert auf %1 übernehmen</source>
         <translation>Normwäert op %1 iwwerhuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="241"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="243"/>
         <source>Erst einen Widerstand auswählen</source>
         <translation>Wiel fir d&apos;éischt e Widderstand aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="251"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="253"/>
         <source>Zwei oder drei Widerstände: hintereinander (Reihe) und nebeneinander (parallel).</source>
         <translation>Zwee oder dräi Widderstänn: hannereneen (Rei) a niewenteneen (parallel).</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="254"/>
-        <location filename="../app/qml/FormulaCalculator.qml" line="270"/>
-        <location filename="../app/qml/FormulaCalculator.qml" line="416"/>
-        <location filename="../app/qml/FormulaCalculator.qml" line="440"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="256"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="272"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="418"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="442"/>
         <source>leer</source>
         <translation>eidel</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="257"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="259"/>
         <source>Reihe: %1 · parallel: %2</source>
         <translation>Rei: %1 parallel: %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="258"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="260"/>
         <source>Reihe: R = R1 + R2 + … · parallel: 1/R = 1/R1 + 1/R2 + … (parallel immer kleiner als der kleinste)</source>
         <translation>Rei: R = R1 + R2 + ...; parallel: 1/R = 1/R1 + 1/R2 + ... (parallel ëmmer méi kleng wéi dee klengsten)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="267"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="269"/>
         <source>Zwei der drei Größen genügen.</source>
         <translation>Zwou vun den dräi Gréisste ginn duer.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="275"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="277"/>
         <source>P = U · I</source>
         <translation>P = U · I</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="276"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="278"/>
         <source>P = I · I · R</source>
         <translation>P = I · I · R</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="276"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="278"/>
         <source>P = U · U ÷ R</source>
         <translation>P = U · U ÷ R</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="277"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="279"/>
         <source>mehr als 0,25 W: zu viel für die Widerstände im Kasten.</source>
         <translation>méi wéi 0,25 W: ze vill fir d&apos;Widderstänn an der Këscht.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="292"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="294"/>
         <source>Ua = Ue · R2 ÷ (R1 + R2) = %1 · %2 ÷ %3 (ohne Last)</source>
         <translation>Ua = Ue · R2 ÷ (R1 + R2) = %1 · %2 ÷ %3 (ouni Laascht)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="308"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="310"/>
         <source>τ = R · C. Nach τ ist der Kondensator zu 63 % geladen, nach 5 τ = %1 praktisch voll.</source>
         <translation>τ = R · C. No τ ass de Kondensator zu 63% gelueden, no 5 τ = %1 praktesch voll.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="345"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="347"/>
         <source>Symmetrische Kippstufe: beide Hälften mit gleichem R und C.</source>
         <translation>Symmetresch Kippstuf: béid Hälften mat deem selwechten R a C.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="350"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="352"/>
         <source>f = %1 (alle %2 ein Blink)</source>
         <translation>f = %1 (all %2 ee Blénk)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="351"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="353"/>
         <source>Jede Hälfte dauert 0,69 · R · C = %1; f = 1 ÷ (2 · 0,69 · R · C)</source>
         <translation>All Hallschent dauert 0,69 · R · C = %1; f = 1 ÷ (2 · 0,69 · R · C)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="360"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="362"/>
         <source>RC-Glied (Tiefpass oder Hochpass) und Wien-Brücke: Bei dieser Frequenz wirken Widerstand und Kondensator gleich stark.</source>
         <translation>RC-Glidd (Déifpass oder Héichpass) a Wien-Bréck: Bei dëser Frequenz wierken de Widderstand an de Kondensator gläich staark.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="366"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="368"/>
         <source>f = 1 ÷ (2π · R · C) = 1 ÷ (6,28 · %1 · %2)</source>
         <translation>f = 1 ÷ (2π · R · C) = 1 ÷ (6,28 · %1 · %2)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="375"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="377"/>
         <source>Für eine Sinusspannung: Der Effektivwert macht in einem Widerstand so viel Wärme wie eine gleich große Gleichspannung.</source>
         <translation>Fir eng Sinusspannung: Den Effektivwäert mécht an engem Widderstand esou vill Wäermt wéi eng gläich grouss Gläichspannung.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="379"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="381"/>
         <source>Ueff = %1 · Uss = %2</source>
         <translation>Ueff = %1 · Uss = %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="380"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="382"/>
         <source>Ueff = Us ÷ 1,41 = %1 ÷ 1,41. Von Spitze zu Spitze ist es doppelt so viel wie Us.</source>
         <translation>Ueff = Us ÷ 1,41 = %1 ÷ 1,41. Vu Spëtzt zu Spëtzt ass et duebel esou vill wéi Us.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="389"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="391"/>
         <source>Wie weit sinkt die Spannung am Ladeelko zwischen zwei Nachladungen? Eine Näherung für kleine Brummspannungen.</source>
         <translation>Wéi wäit fält d’Spannung um Luedelko tëscht zwee Noluedungen? Eng Approximatioun fir kleng Brummspannungen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="393"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="395"/>
         <source>Einweg</source>
         <translation>Eewee</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="393"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="395"/>
         <source>Brücke</source>
         <translation>Bréck</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="402"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="404"/>
         <source>ΔU ≈ I ÷ (2 · f · C) = %1 ÷ (2 · %2 · %3). Die Brücke lädt zweimal je Schwingung nach.</source>
         <translation>ΔU ≈ I ÷ (2 · f · C) = %1 ÷ (2 · %2 · %3). D’Bréck luet zweemol pro Schwéngung no.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="403"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="405"/>
         <source>ΔU ≈ I ÷ (f · C) = %1 ÷ (%2 · %3). Einweg lädt einmal je Schwingung nach.</source>
         <translation>ΔU ≈ I ÷ (f · C) = %1 ÷ (%2 · %3). Eewee luet eemol pro Schwéngung no.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="413"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="415"/>
         <source>Emitterschaltung mit Emitterwiderstand: Die Verstärkung hängt fast nur von RC und RE ab.</source>
         <translation>Emitterschaltung mat Emitterwidderstand: D’Verstäerkung hänkt bal nëmme vu RC an RE of.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="420"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="422"/>
         <source>v ≈ −RC ÷ RE = −%1 ÷ %2. Das Minus heißt: Der Ausgang bewegt sich gegen den Eingang.</source>
         <translation>v ≈ −RC ÷ RE = −%1 ÷ %2. De Minus heescht: Den Ausgang beweegt sech géint den Agang.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="432"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="434"/>
         <source>invertierend</source>
         <translation>invertéierend</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="432"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="434"/>
         <source>nichtinvertierend</source>
         <translation>net-invertéierend</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="435"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="437"/>
         <source>Eingang über Rin an IN−, Rf vom Ausgang zurück an IN−, IN+ an 0V.</source>
         <translation>Agang iwwer Rin un IN−, Rf vum Ausgang zréck un IN−, IN+ un 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="436"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="438"/>
         <source>Eingang an IN+, Rf vom Ausgang an IN−, Rg von IN− an 0V.</source>
         <translation>Agang un IN+, Rf vum Ausgang un IN−, Rg vun IN− un 0V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="444"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="446"/>
         <source>v = −Rf ÷ Rin = −%1 ÷ %2</source>
         <translation>v = −Rf ÷ Rin = −%1 ÷ %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="444"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="446"/>
         <source>v = 1 + Rf ÷ Rg = 1 + %1 ÷ %2</source>
         <translation>v = 1 + Rf ÷ Rg = 1 + %1 ÷ %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="446"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="448"/>
         <source>Näher als etwa 1,5 V an die Versorgung kommt der Ausgang nicht.</source>
         <translation>Méi no wéi ongeféier 1,5 V un d’Versuergung kënnt den Ausgang net.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="458"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="460"/>
         <source>astabil (Blinker)</source>
         <translation>astabil (Blénker)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="458"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="460"/>
         <source>monostabil (Zeitschalter)</source>
         <translation>monostabil (Zäitschalter)</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="467"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="469"/>
         <source>f = %1 · oben %2, unten %3</source>
         <translation>f = %1 · uewen %2, ënnen %3</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="470"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="472"/>
         <source>f ≈ 1,44 ÷ ((R1 + 2 · R2) · C). Oben: 0,69 · (R1 + R2) · C, unten: 0,69 · R2 · C. Der Ausgang ist %1 % der Zeit oben.</source>
         <translation>f ≈ 1,44 ÷ ((R1 + 2 · R2) · C). Uewen: 0,69 · (R1 + R2) · C, ënnen: 0,69 · R2 · C. Den Ausgang ass %1 % vun der Zäit uewen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="471"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="473"/>
         <source>t ≈ 1,1 · R · C = 1,1 · %1 · %2</source>
         <translation>t ≈ 1,1 · R · C = 1,1 · %1 · %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="493"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="495"/>
         <source>Eingabe prüfen</source>
         <translation>Agab préiwen</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="523"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="525"/>
         <source>Zeichen löschen</source>
         <translation>Zeeche läschen</translation>
     </message>
     <message>
-        <location filename="../app/qml/FormulaCalculator.qml" line="533"/>
+        <location filename="../app/qml/FormulaCalculator.qml" line="535"/>
         <source>Vorsätze: p = billionstel, n = milliardstel, µ = millionstel, m = tausendstel, k = tausend, M = Million.</source>
         <translation>Virpäss: p = Billiounstel, n = Milliardstel, µ = Milliounstel, m = Dausendstel, k = Dausend, M = Millioun.</translation>
     </message>
@@ -1648,129 +1646,160 @@
 <context>
     <name>GeneratorPanel</name>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="19"/>
-        <location filename="../app/qml/GeneratorPanel.qml" line="182"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="22"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="186"/>
         <source>%1 kHz</source>
         <translation>%1 kHz</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="20"/>
-        <location filename="../app/qml/GeneratorPanel.qml" line="182"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="23"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="186"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="281"/>
         <source>%1 Hz</source>
         <translation>%1 Hz</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="51"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="54"/>
         <source>Generator läuft</source>
         <translation>Generator leeft</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="51"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="54"/>
         <source>Generator aus</source>
         <translation>Generator aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="59"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="62"/>
         <source>Funktionsgenerator</source>
         <translation>Funktiounsgenerator</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="85"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="88"/>
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="94"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="97"/>
         <source>Der Generator erzeugt eine Wechselspannung an G. G0 ist fest mit 0V verbunden.</source>
         <translation>De Generator mécht eng Wiesselspannung un G. G0 ass fest mat 0V verbonnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="95"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="98"/>
         <source>Er läuft nur, wenn der Hauptschalter an ist. Dann leuchtet die Lampe im Pult.</source>
         <translation>E leeft nëmmen, wann den Haaptschalter un ass. Da liicht d&apos;Luucht am Pult.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="96"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="99"/>
         <source>Signalform: Sinus klingt weich, Rechteck hart, Dreieck dazwischen.</source>
         <translation>Signalform: Sinus kléngt mëll, Rechteck haart, Dräieck dertëscht.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="97"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="100"/>
         <source>Frequenz: Wähle zuerst den Bereich, dann stellst du mit dem Regler fein ein. Mehr Hertz heißt höherer Ton.</source>
         <translation>Frequenz: Wiel fir d&apos;éischt de Beräich, dann stells du mam Regler fein an. Méi Hertz heescht méi héijen Toun.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="98"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="101"/>
         <source>Spitze: So weit schwingt die Spannung nach oben und nach unten.</source>
         <translation>Spëtzt: Sou wäit schwéngt d&apos;Spannung no uewen an no ënnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="99"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="102"/>
         <source>Gleichanteil: Er schiebt die ganze Kurve nach oben oder nach unten.</source>
         <translation>Gläichundeel: E schéckt déi ganz Kurv no uewen oder no ënnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="102"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="103"/>
+        <source>Modulation: Ein Ton macht die Kurve abwechselnd größer und kleiner. Die Spitzen bilden dann die Form des Tons nach.</source>
+        <translation>Modulatioun: En Toun mécht d’Kurv ofwiesselnd méi grouss a méi kleng. D’Spëtzte bilden dann d’Form vum Toun no.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="106"/>
         <source>Signalform</source>
         <translation>Signalform</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="106"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="110"/>
         <source>Sinus</source>
         <translation>Sinus</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="106"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="110"/>
         <source>Dreieck</source>
         <translation>Dräieck</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="106"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="110"/>
         <source>Rechteck</source>
         <translation>Rechteck</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="167"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="171"/>
         <source>Frequenz: %1</source>
         <translation>Frequenz: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="184"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="188"/>
         <source>Frequenzbereich ab %1</source>
         <translation>Frequenzberäich ab %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="195"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="199"/>
         <source>Frequenz fein</source>
         <translation>Frequenz fein</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="201"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="205"/>
         <source>Spitze: %1 V</source>
         <translation>Spëtzt: %1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="212"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="216"/>
         <source>Spitze</source>
         <translation>Spëtzt</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="216"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="220"/>
         <source>Gleichanteil: %1 V</source>
         <translation>Gläichundeel: %1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="227"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="231"/>
         <source>Gleichanteil</source>
         <translation>Gläichundeel</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="234"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="252"/>
+        <source>Modulation: %1 %</source>
+        <translation>Modulatioun: %1 %</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="253"/>
+        <source>Modulation: aus</source>
+        <translation>Modulatioun: aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="264"/>
+        <source>Modulation</source>
+        <translation>Modulatioun</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="267"/>
+        <source>Ton: %1</source>
+        <translation>Toun: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="283"/>
+        <source>Ton %1 Hz</source>
+        <translation>Toun %1 Hz</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="294"/>
         <source>Der Ausgang G hat 50 Ω Innenwiderstand, G0 ist fest mit 0V verbunden.</source>
         <translation>Den Ausgang G huet 50 Ω Bannewidderstand, G0 ass fest mat 0V verbonnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/GeneratorPanel.qml" line="235"/>
+        <location filename="../app/qml/GeneratorPanel.qml" line="295"/>
         <source>Der Generator ist aus. Schalte den Hauptschalter ein.</source>
         <translation>De Generator ass aus. Schalt den Haaptschalter un.</translation>
     </message>
@@ -2652,409 +2681,409 @@
 <context>
     <name>Lab</name>
     <message>
-        <location filename="../app/qml/Lab.qml" line="736"/>
+        <location filename="../app/qml/Lab.qml" line="737"/>
         <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
         <translation>Leitungsfaarf automatesch: Plus rout, Minus schwaarz</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="737"/>
+        <location filename="../app/qml/Lab.qml" line="738"/>
         <source>Leitungsfarbe automatisch: aus</source>
         <translation>Leitungsfaarf automatesch: aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="743"/>
+        <location filename="../app/qml/Lab.qml" line="744"/>
         <source>Lieblingsfarbe: %1</source>
         <translation>Léifste Faarf: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="744"/>
+        <location filename="../app/qml/Lab.qml" line="745"/>
         <source>Automatik an (Plus rot, Minus schwarz)</source>
         <translation>Automatik un (Plus rout, Minus schwaarz)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="744"/>
+        <location filename="../app/qml/Lab.qml" line="745"/>
         <source>Automatik aus</source>
         <translation>Automatik aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="746"/>
+        <location filename="../app/qml/Lab.qml" line="747"/>
         <source>Langer Druck schaltet die Automatik um.</source>
         <translation>Laangen Drock schalt d&apos;Automatik ëm.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1048"/>
+        <location filename="../app/qml/Lab.qml" line="1051"/>
         <source>Ganze Platte zeigen</source>
         <translation>Ganz Plack weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="467"/>
+        <location filename="../app/qml/Lab.qml" line="468"/>
         <source>Stufe %1: %2</source>
         <translation>Stuf %1: %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="461"/>
+        <location filename="../app/qml/Lab.qml" line="462"/>
         <source>Freies Labor</source>
         <translation>Fräie Labo</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="445"/>
         <location filename="../app/qml/Lab.qml" line="446"/>
+        <location filename="../app/qml/Lab.qml" line="447"/>
         <source>Startseite</source>
         <translation>Startplaz</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="561"/>
+        <location filename="../app/qml/Lab.qml" line="562"/>
         <source>Rückgängig: %1</source>
         <translation>Réckgängeg: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="562"/>
+        <location filename="../app/qml/Lab.qml" line="563"/>
         <source>Rückgängig</source>
         <translation>Réckgängeg</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="576"/>
+        <location filename="../app/qml/Lab.qml" line="577"/>
         <source>Wiederholen: %1</source>
         <translation>Widderhuelen: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="577"/>
+        <location filename="../app/qml/Lab.qml" line="578"/>
         <source>Wiederholen</source>
         <translation>Widderhuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1266"/>
+        <location filename="../app/qml/Lab.qml" line="1270"/>
         <source>Weniger Felder je Reihe</source>
         <translation>Manner Felder pro Rei</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1255"/>
+        <location filename="../app/qml/Lab.qml" line="1259"/>
         <source>1–%1</source>
         <translation>1–%1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="518"/>
         <location filename="../app/qml/Lab.qml" line="519"/>
+        <location filename="../app/qml/Lab.qml" line="520"/>
         <source>Experiment wählen</source>
         <translation>Experiment wielen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="342"/>
+        <location filename="../app/qml/Lab.qml" line="343"/>
         <source>Strom aus – Steckmodus. Zum Testen den Hauptschalter wieder einschalten.</source>
         <translation>Stroum aus – Steckmodus. Fir ze testen, maach den Haaptschalter erëm un.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="530"/>
+        <location filename="../app/qml/Lab.qml" line="531"/>
         <source>Betrieb: Schaltung testen. Antippen schaltet aus und wechselt in den Steckmodus.</source>
         <translation>Betrib: Schaltung testen. Untippe schalt aus a wiesselt an de Steckmodus.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="531"/>
+        <location filename="../app/qml/Lab.qml" line="532"/>
         <source>Steckmodus: aufbauen und ändern. Antippen schaltet ein und wechselt in den Betrieb.</source>
         <translation>Steckmodus: opbauen an änneren. Untippe schalt un a wiesselt an de Betrib.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="532"/>
-        <location filename="../app/qml/Lab.qml" line="534"/>
+        <location filename="../app/qml/Lab.qml" line="533"/>
+        <location filename="../app/qml/Lab.qml" line="535"/>
         <source>Betrieb</source>
         <translation>Betrib</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="532"/>
-        <location filename="../app/qml/Lab.qml" line="534"/>
+        <location filename="../app/qml/Lab.qml" line="533"/>
+        <location filename="../app/qml/Lab.qml" line="535"/>
         <source>Stecken</source>
         <translation>Stiechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1259"/>
+        <location filename="../app/qml/Lab.qml" line="1263"/>
         <source>Felder je Reihe: %1</source>
         <translation>Felder pro Rei: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1248"/>
+        <location filename="../app/qml/Lab.qml" line="1252"/>
         <source>Mehr Felder je Reihe</source>
         <translation>Méi Felder pro Rei</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="356"/>
+        <location filename="../app/qml/Lab.qml" line="357"/>
         <source>Doppeltippen dreht ein Bauteil. Langer Druck oder Rechtsklick öffnet das Menü (Farbe, Drehen, Löschen …).</source>
         <translation>Doppeltippen dréit en Deel. E laangen Drock oder Rietsklick mécht de Menü op (Faarf, Dréien, Läschen ...).</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="399"/>
+        <location filename="../app/qml/Lab.qml" line="400"/>
         <source>Diese Schaltung ist zu aufwendig, um sie Schritt für Schritt hörbar zu rechnen. Du hörst einen Ton mit der Frequenz, die die Simulation ergibt.</source>
         <translation>Dës Schaltung ass ze opwänneg, fir se Schrëtt fir Schrëtt hörbar ze rechnen. Du héiers en Toun mat der Frequenz, déi d’Simulatioun ergëtt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="594"/>
         <location filename="../app/qml/Lab.qml" line="595"/>
+        <location filename="../app/qml/Lab.qml" line="596"/>
         <source>Werkzeugkasten</source>
         <translation>Këscht</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="611"/>
+        <location filename="../app/qml/Lab.qml" line="612"/>
         <source>Spannungsanzeige auf allen belegten Feldern</source>
         <translation>Spannungsuweisung op alle besaten Felder</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="612"/>
+        <location filename="../app/qml/Lab.qml" line="613"/>
         <source>Spannungsanzeige automatisch aus</source>
         <translation>Automatesch Spannungsuweisung aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="615"/>
+        <location filename="../app/qml/Lab.qml" line="616"/>
         <source>Spannungsanzeige automatisch ausschalten</source>
         <translation>Automatesch Spannungsuweisung ausschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="616"/>
+        <location filename="../app/qml/Lab.qml" line="617"/>
         <source>Spannungsanzeige auf allen belegten Feldern zeigen</source>
         <translation>Spannung op alle besaten Felder weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="636"/>
+        <location filename="../app/qml/Lab.qml" line="637"/>
         <source>Messgerät ausblenden</source>
         <translation>Miessapparat ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="636"/>
+        <location filename="../app/qml/Lab.qml" line="637"/>
         <source>Messgerät einblenden</source>
         <translation>Miessapparat ablenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="661"/>
+        <location filename="../app/qml/Lab.qml" line="662"/>
         <source>Schaltplan ausblenden</source>
         <translation>Schaltplang ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="661"/>
+        <location filename="../app/qml/Lab.qml" line="662"/>
         <source>Schaltplan zeigen</source>
         <translation>Schaltplang weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="683"/>
+        <location filename="../app/qml/Lab.qml" line="684"/>
         <source>Oszilloskop ausblenden</source>
         <translation>Oszilloskop ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="683"/>
+        <location filename="../app/qml/Lab.qml" line="684"/>
         <source>Oszilloskop zeigen</source>
         <translation>Oszilloskop weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="684"/>
+        <location filename="../app/qml/Lab.qml" line="685"/>
         <source>Zeitschreiber ausblenden</source>
         <translation>Zäitschreiwer ausblenden</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="684"/>
+        <location filename="../app/qml/Lab.qml" line="685"/>
         <source>Zeitschreiber zeigen</source>
         <translation>Zäitschreiwer weisen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="717"/>
+        <location filename="../app/qml/Lab.qml" line="718"/>
         <source>Zeitlupe: aus (Echtzeit). Antippen: 1/10</source>
         <translation>Zäitlupp: aus (Echtzäit). Tippen: 1/10</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="718"/>
+        <location filename="../app/qml/Lab.qml" line="719"/>
         <source>Zeitlupe: 1/%1, Ton stumm. Antippen: langsamer bzw. aus</source>
         <translation>Zäitlupp: 1/%1, Toun stomm. Tippen: méi lues oder aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="829"/>
+        <location filename="../app/qml/Lab.qml" line="830"/>
         <source>Zeit %1 s</source>
         <translation>Zäit %1 s</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="885"/>
-        <location filename="../app/qml/Lab.qml" line="905"/>
+        <location filename="../app/qml/Lab.qml" line="888"/>
+        <location filename="../app/qml/Lab.qml" line="908"/>
         <source>%1 wird mit Stufe %2 freigeschaltet.</source>
         <translation>%1 gëtt mat Stuf %2 fräigeschalt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="918"/>
+        <location filename="../app/qml/Lab.qml" line="921"/>
         <source>Module gehören in die Modulleiste unten.</source>
         <translation>Moduler gehéieren an d&apos;Modulläischt ënnen.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1294"/>
+        <location filename="../app/qml/Lab.qml" line="1298"/>
         <source>Löschen: Ausgewähltes antippen oder Bauteil hierher ziehen</source>
         <translation>Läschen: Dat Ausgewielt untippen oder Deel heihinner zéien</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1295"/>
-        <location filename="../app/qml/Lab.qml" line="2090"/>
+        <location filename="../app/qml/Lab.qml" line="1299"/>
+        <location filename="../app/qml/Lab.qml" line="2100"/>
         <source>Löschen</source>
         <translation>Läschen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1465"/>
+        <location filename="../app/qml/Lab.qml" line="1469"/>
         <source>Leitung %1 von %2 nach %3</source>
         <translation>Leitung %1 vu %2 op %3</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1636"/>
+        <location filename="../app/qml/Lab.qml" line="1640"/>
         <source>Licht, Wärme, Wasser</source>
         <translation>Liicht, Hëtzt, Waasser</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1643"/>
+        <location filename="../app/qml/Lab.qml" line="1647"/>
         <source>Raum hell</source>
         <translation>Raum hell</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1643"/>
+        <location filename="../app/qml/Lab.qml" line="1647"/>
         <source>Dämmerung</source>
         <translation>Dämmerung</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1643"/>
+        <location filename="../app/qml/Lab.qml" line="1647"/>
         <source>Dunkel</source>
         <translation>Däischter</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1646"/>
+        <location filename="../app/qml/Lab.qml" line="1650"/>
         <source>Raumlicht umschalten</source>
         <translation>Raumliicht ëmschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1712"/>
+        <location filename="../app/qml/Lab.qml" line="1716"/>
         <source>Spannungsanzeige ein/aus</source>
         <translation>Spannungsanzeig un/aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1724"/>
+        <location filename="../app/qml/Lab.qml" line="1728"/>
         <source>Zeitschreiber Kanal %1: Messgerät</source>
         <translation>Zäitschreiwer Kanal %1: Miessapparat</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1725"/>
+        <location filename="../app/qml/Lab.qml" line="1729"/>
         <source>Zeitschreiber Kanal %1: hier messen</source>
         <translation>Zäitschreiwer Kanal %1: hei moossen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1741"/>
+        <location filename="../app/qml/Lab.qml" line="1745"/>
         <source>Drehen</source>
         <translation>Dréien</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1746"/>
+        <location filename="../app/qml/Lab.qml" line="1750"/>
         <source>Umdrehen (Polung)</source>
         <translation>Ëmdréien (Polung)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1751"/>
+        <location filename="../app/qml/Lab.qml" line="1755"/>
         <source>Kurz stecken</source>
         <translation>Kuerz stiechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1751"/>
+        <location filename="../app/qml/Lab.qml" line="1755"/>
         <source>Lang stecken</source>
         <translation>Laang stiechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1761"/>
+        <location filename="../app/qml/Lab.qml" line="1765"/>
         <source>Wert</source>
         <translation>Wäert</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1782"/>
+        <location filename="../app/qml/Lab.qml" line="1786"/>
         <source>Nennspannung</source>
         <translation>Nennspannung</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1789"/>
+        <location filename="../app/qml/Lab.qml" line="1793"/>
         <source>%1 V</source>
         <translation>%1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1800"/>
+        <location filename="../app/qml/Lab.qml" line="1804"/>
         <source>Reparieren</source>
         <translation>Reparéieren</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1807"/>
+        <location filename="../app/qml/Lab.qml" line="1811"/>
         <source>Entfernen</source>
         <translation>Ewechhuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1820"/>
+        <location filename="../app/qml/Lab.qml" line="1824"/>
         <source>Blick hinein</source>
         <translation>Bléck eran</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1825"/>
+        <location filename="../app/qml/Lab.qml" line="1829"/>
         <source>Herausnehmen</source>
         <translation>Eraushuelen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1874"/>
+        <location filename="../app/qml/Lab.qml" line="1884"/>
         <source>Ausschalten</source>
         <translation>Ausschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1874"/>
+        <location filename="../app/qml/Lab.qml" line="1884"/>
         <source>Einschalten</source>
         <translation>Uschalten</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1879"/>
+        <location filename="../app/qml/Lab.qml" line="1889"/>
         <source>Wegräumen</source>
         <translation>Ewechraumen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1896"/>
+        <location filename="../app/qml/Lab.qml" line="1906"/>
         <source>Farbe: %1</source>
         <translation>Faarf: %1</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="1908"/>
+        <location filename="../app/qml/Lab.qml" line="1918"/>
         <source>Leitung löschen</source>
         <translation>Leitung läschen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2066"/>
+        <location filename="../app/qml/Lab.qml" line="2076"/>
         <source>Alles abbauen?</source>
         <translation>Alles ofbauen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2066"/>
+        <location filename="../app/qml/Lab.qml" line="2076"/>
         <source>Löschen?</source>
         <translation>Läschen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2073"/>
+        <location filename="../app/qml/Lab.qml" line="2083"/>
         <source>%1 %2 von der Grundplatte nehmen?</source>
         <translation>%1 %2 vun der Grondplack huelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2074"/>
+        <location filename="../app/qml/Lab.qml" line="2084"/>
         <source>Diese Leitung entfernen?</source>
         <translation>Dës Leitung ewechhuelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2075"/>
+        <location filename="../app/qml/Lab.qml" line="2085"/>
         <source>%1 %2 aus der Modulleiste nehmen?</source>
         <translation>%1 %2 aus der Modulläischt huelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2076"/>
+        <location filename="../app/qml/Lab.qml" line="2086"/>
         <source>Alle Bauteile, Leitungen und Module von der Grundplatte nehmen?</source>
         <translation>All Deeler, Leitungen a Moduler vun der Grondplack huelen?</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2077"/>
+        <location filename="../app/qml/Lab.qml" line="2087"/>
         <source>Mit »Rückgängig« holst du es wieder zurück.</source>
         <translation>Mat »Réckgängeg« hëls du et erëm zréck.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2084"/>
+        <location filename="../app/qml/Lab.qml" line="2094"/>
         <source>Abbrechen</source>
         <translation>Ofbriechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Lab.qml" line="2090"/>
+        <location filename="../app/qml/Lab.qml" line="2100"/>
         <source>Alles abbauen</source>
         <translation>Alles ofbauen</translation>
     </message>
@@ -3149,279 +3178,279 @@
 <context>
     <name>Meldung</name>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="93"/>
+        <location filename="../app/src/model/board_edit.cpp" line="95"/>
         <source>So weit lassen sich die Beine dieses Bauteils nicht spreizen.</source>
         <translation>Sou wäit loossen sech d&apos;Been vun dësem Deel net auserneen zéien.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="99"/>
-        <location filename="../app/src/model/lab_session.cpp" line="466"/>
+        <location filename="../app/src/model/board_edit.cpp" line="101"/>
+        <location filename="../app/src/model/lab_session.cpp" line="474"/>
         <source>Das Bauteil passt dort nicht auf die Grundplatte.</source>
         <translation>Den Deel passt do net op d&apos;Grondplack.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="104"/>
+        <location filename="../app/src/model/board_edit.cpp" line="106"/>
         <source>Die Anschlüsse passen nicht zur Lage des Bauteils.</source>
         <translation>D&apos;Uschlëss passen net zur Lag vum Deel.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="111"/>
+        <location filename="../app/src/model/board_edit.cpp" line="113"/>
         <source>Anschluss %1 fehlt in der Lage des Bauteils.</source>
         <translation>Uschloss %1 feelt an der Lag vum Deel.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="449"/>
-        <location filename="../app/src/model/lab_session.cpp" line="427"/>
-        <location filename="../app/src/model/lab_session.cpp" line="461"/>
-        <location filename="../app/src/model/lab_session.cpp" line="484"/>
+        <location filename="../app/src/model/board_edit.cpp" line="471"/>
+        <location filename="../app/src/model/lab_session.cpp" line="435"/>
+        <location filename="../app/src/model/lab_session.cpp" line="469"/>
+        <location filename="../app/src/model/lab_session.cpp" line="492"/>
         <source>Unbekanntes Bauteil „%1“.</source>
         <translation>Onbekannten Deel »%1«.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="453"/>
+        <location filename="../app/src/model/board_edit.cpp" line="475"/>
         <source>%1: Die Anschlüsse sind unvollständig.</source>
         <translation>%1: D&apos;Uschlëss sinn onvollstänneg.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="459"/>
+        <location filename="../app/src/model/board_edit.cpp" line="481"/>
         <source>Bauteile stecken nur auf Feldern der Grundplatte.</source>
         <translation>Deeler stiechen nëmmen op Felder vun der Grondplack.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="463"/>
+        <location filename="../app/src/model/board_edit.cpp" line="485"/>
         <source>Feld %1 liegt außerhalb der Grundplatte.</source>
         <translation>D’Feld %1 läit ausserhalb vun der Grondplack.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="469"/>
+        <location filename="../app/src/model/board_edit.cpp" line="491"/>
         <source>Zwei Beine dürfen nicht im selben Feld stecken.</source>
         <translation>Zwou Been däerfen net am selwechte Feld stiechen.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="474"/>
+        <location filename="../app/src/model/board_edit.cpp" line="496"/>
         <source>Feld %1 ist voll.</source>
         <translation>Feld %1 ass voll.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="480"/>
+        <location filename="../app/src/model/board_edit.cpp" line="502"/>
         <source>Die Kennung %1 ist schon vergeben.</source>
         <translation>D&apos;Kennung %1 ass scho verginn.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="490"/>
+        <location filename="../app/src/model/board_edit.cpp" line="512"/>
         <source>Das Oszilloskop hat nur die Tastköpfe K1 und K2.</source>
         <translation>D’Oszilloskop huet nëmmen d’Taschtkäpp K1 a K2.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="491"/>
+        <location filename="../app/src/model/board_edit.cpp" line="513"/>
         <source>Von dieser Messstelle sind schon drei gesteckt.</source>
         <translation>Vun dëser Moosstell stieche schonn dräi.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="508"/>
+        <location filename="../app/src/model/board_edit.cpp" line="530"/>
         <source>Dort kann keine Leitung stecken.</source>
         <translation>Do kann keng Leitung stiechen.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="512"/>
+        <location filename="../app/src/model/board_edit.cpp" line="534"/>
         <source>Anfang und Ende der Leitung liegen im selben Feld.</source>
         <translation>Ufank an Enn vun der Leitung leien am selwechte Feld.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="651"/>
+        <location filename="../app/src/model/board_edit.cpp" line="673"/>
         <source>Unbekanntes Modul „%1“.</source>
         <translation>Onbekannt Modul »%1«.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="656"/>
+        <location filename="../app/src/model/board_edit.cpp" line="678"/>
         <source>Das Modul passt dort nicht in die Modulleiste.</source>
         <translation>D&apos;Modul passt do net an d&apos;Modulläischt.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/board_edit.cpp" line="664"/>
+        <location filename="../app/src/model/board_edit.cpp" line="686"/>
         <source>Dort steckt schon ein Modul.</source>
         <translation>Do stécht scho e Modul.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="335"/>
+        <location filename="../app/src/model/lab_session.cpp" line="343"/>
         <source>Die Grundplatte hat 8, 10 oder 12 Felder je Reihe.</source>
         <translation>D&apos;Grondplack huet 8, 10 oder 12 Felder pro Rei.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="338"/>
+        <location filename="../app/src/model/lab_session.cpp" line="346"/>
         <source>In den Feldern %1–%2 steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
         <translation>An de Felder %1-%2 stécht nach eppes. Huel do fir d&apos;éischt Deeler a Leitungen eraus.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="343"/>
+        <location filename="../app/src/model/lab_session.cpp" line="351"/>
         <source>Diese Größe hat die Grundplatte nicht.</source>
         <translation>Dës Gréisst huet d’Grondplack net.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="346"/>
+        <location filename="../app/src/model/lab_session.cpp" line="354"/>
         <source>Auf den wegfallenden Feldern steckt noch etwas. Nimm dort zuerst Bauteile und Leitungen heraus.</source>
         <translation>Op de Felder, déi ewechfalen, stécht nach eppes. Huel do fir d’éischt Bauteiler a Leitungen eraus.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="459"/>
-        <location filename="../app/src/model/lab_session.cpp" line="482"/>
-        <location filename="../app/src/model/lab_session.cpp" line="492"/>
-        <location filename="../app/src/model/lab_session.cpp" line="502"/>
-        <location filename="../app/src/model/lab_session.cpp" line="511"/>
-        <location filename="../app/src/model/lab_session.cpp" line="525"/>
+        <location filename="../app/src/model/lab_session.cpp" line="467"/>
+        <location filename="../app/src/model/lab_session.cpp" line="490"/>
+        <location filename="../app/src/model/lab_session.cpp" line="500"/>
+        <location filename="../app/src/model/lab_session.cpp" line="510"/>
+        <location filename="../app/src/model/lab_session.cpp" line="519"/>
+        <location filename="../app/src/model/lab_session.cpp" line="533"/>
         <source>Bauteil %1 nicht gefunden.</source>
         <translation>Deel %1 net fonnt.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="494"/>
+        <location filename="../app/src/model/lab_session.cpp" line="502"/>
         <source>Nur Platinen lassen sich so drehen.</source>
         <translation>Nëmme Platine loossen sech sou dréien.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="508"/>
+        <location filename="../app/src/model/lab_session.cpp" line="516"/>
         <source>Dieser Wert geht nicht.</source>
         <translation>Dëse Wäert geet net.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="516"/>
+        <location filename="../app/src/model/lab_session.cpp" line="524"/>
         <source>Diese Nennspannung gibt es nicht.</source>
         <translation>Dës Nennspannung gëtt et net.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="546"/>
-        <location filename="../app/src/model/lab_session.cpp" line="571"/>
+        <location filename="../app/src/model/lab_session.cpp" line="554"/>
+        <location filename="../app/src/model/lab_session.cpp" line="579"/>
         <source>Modul %1 nicht gefunden.</source>
         <translation>Modul %1 net fonnt.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="597"/>
-        <location filename="../app/src/model/lab_session.cpp" line="614"/>
+        <location filename="../app/src/model/lab_session.cpp" line="605"/>
         <location filename="../app/src/model/lab_session.cpp" line="622"/>
+        <location filename="../app/src/model/lab_session.cpp" line="630"/>
         <source>Leitung %1 nicht gefunden.</source>
         <translation>Leitung %1 net fonnt.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="631"/>
+        <location filename="../app/src/model/lab_session.cpp" line="639"/>
         <source>Die Spannungsanzeige gibt es nur an Feldern.</source>
         <translation>D&apos;Spannungsanzeig gëtt et nëmmen op Felder.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="632"/>
+        <location filename="../app/src/model/lab_session.cpp" line="640"/>
         <source>Dieses Feld liegt außerhalb der Grundplatte.</source>
         <translation>Dëst Feld läit ausserhalb vun der Grondplack.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/lab_session.cpp" line="816"/>
+        <location filename="../app/src/model/lab_session.cpp" line="857"/>
         <source>Zieh zuerst die Leitungen vom Messgerät ab.</source>
         <translation>Zéi fir d&apos;éischt d&apos;Leitunge vum Miessapparat of.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="183"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="184"/>
         <source>Beide Beine von %1 sind direkt miteinander verbunden. Kann der Strom dann überhaupt durch %1 fließen?</source>
         <translation>Béid Been vu %1 sinn direkt matenee verbonnen. Kann de Stroum dann iwwerhaapt duerch %1 fléissen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="208"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="209"/>
         <source>Das Bein von %1 auf Feld %2 ist mit nichts verbunden. Wohin soll der Strom von dort fließen?</source>
         <translation>D&apos;Been vu %1 op Feld %2 ass mat näischt verbonnen. Wouhin soll de Stroum vun do fléissen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="217"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="218"/>
         <source>Die Leitung von %1 nach %2 verbindet nichts. Wo soll sie hinführen?</source>
         <translation>D&apos;Leitung vu %1 op %2 verbënnt näischt. Wouhin soll se féieren?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="243"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="244"/>
         <source>Ist der Hauptschalter an der Batterie eingeschaltet?</source>
         <translation>Ass den Haaptschalter un der Batterie ageschalt?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="258"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="259"/>
         <source>Ist dein Aufbau mit dem Minuspol 0V verbunden?</source>
         <translation>Ass däin Opbau mam Minuspol 0V verbonnen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="275"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="276"/>
         <source>Drückst du den Taster %1? Erst dann ist der Kreis geschlossen.</source>
         <translation>Drécks du op den Taster %1? Eréischt dann ass de Krees zou.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="278"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="279"/>
         <source>Ist %1 in der richtigen Stellung? Dort kommt der Strom gerade nicht weiter.</source>
         <translation>Ass %1 an der richteger Positioun? Do kënnt de Stroum grad net weider.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="284"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="285"/>
         <source>Ist der Schalter S am Pult eingeschaltet?</source>
         <translation>Ass de Schalter S um Pult ageschalt?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="297"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="298"/>
         <source>Von Feld %1 aus geht es nicht weiter. Wie kommt der Strom von hier zurück zum Minuspol (0V)?</source>
         <translation>Vu Feld %1 aus geet et net weider. Wéi kënnt de Stroum vun hei zréck bei de Minuspol (0V)?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="174"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="175"/>
         <source>Fließt der Strom hier von V+ direkt nach 0V, ohne durch ein Bauteil zu gehen?</source>
         <translation>Fléisst de Stroum hei vu V+ direkt op 0V, ouni duerch en Deel ze goen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="255"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="256"/>
         <source>Ist dein Aufbau mit dem Pluspol V+ verbunden?</source>
         <translation>Ass däin Opbau mam Pluspol V+ verbonnen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="313"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="314"/>
         <source>Aus der Batterie fließt sehr viel Strom. Gibt es einen Weg von V+ nach 0V, auf dem kein Bauteil den Strom bremst?</source>
         <translation>Aus der Batterie fléisst ganz vill Stroum. Gëtt et e Wee vu V+ op 0V, op deem keen Deel de Stroum bremst?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="326"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="327"/>
         <source>%1 ist kaputt gegangen. Was hätte den Strom durch %1 begrenzen können?</source>
         <translation>%1 ass futti gaangen. Wat hätt de Stroum duerch %1 begrenze kënnen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="329"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="330"/>
         <source>%1 ist kaputt gegangen. Was hat %1 zu viel Strom oder Spannung gegeben?</source>
         <translation>%1 ass futti gaangen. Wat huet %1 ze vill Stroum oder Spannung ginn?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="334"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="335"/>
         <source>Steckt das lange Bein (Anode) von %1 auf der Seite zum Pluspol?</source>
         <translation>Stécht dat laangt Been (Anod) vu %1 op der Säit zum Pluspol?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="339"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="340"/>
         <source>Zeigt das Plus-Bein von %1 zum Pluspol?</source>
         <translation>Weist dat Plus-Been vu %1 zum Pluspol?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="342"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="343"/>
         <source>Durch %1 fließt sehr viel Strom. Was könnte den Strom begrenzen?</source>
         <translation>Duerch %1 fléisst ganz vill Stroum. Wat kéint de Stroum begrenzen?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="348"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="349"/>
         <source>%1 ist überlastet. Passt die Spannung zum Lämpchen?</source>
         <translation>%1 ass iwwerlaascht. Passt d&apos;Spannung bei d&apos;Bierchend?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="351"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="352"/>
         <source>%1 wird sehr warm. Fließt durch %1 zu viel Strom?</source>
         <translation>%1 gëtt ganz waarm. Fléisst duerch %1 ze vill Stroum?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="366"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="367"/>
         <source>Drehregler P%1 ist durchgebrannt. Was hätte den Strom durch ihn begrenzen können? Tippe auf den Drehknopf, um ihn zu reparieren.</source>
         <translation>Den Dréiregler P%1 ass duerchgebrannt. Wat hätt de Stroum duerch hie begrenze kënnen? Tipp op den Dréiknapp, fir en ze reparéieren.</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="372"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="373"/>
         <source>Drehregler P%1 wird sehr warm. Fließt durch ihn zu viel Strom?</source>
         <translation>Den Dréiregler P%1 gëtt ganz waarm. Fléisst ze vill Stroum duerch hien?</translation>
     </message>
     <message>
-        <location filename="../app/src/model/circuit_check.cpp" line="378"/>
+        <location filename="../app/src/model/circuit_check.cpp" line="379"/>
         <source>Der Lautsprecher ist kaputt gegangen. Was hätte den Strom durch ihn begrenzen können? Tippe auf den Lautsprecher, um ihn zu reparieren.</source>
         <translation>De Lautsprecher ass futti gaangen. Wat hätt de Stroum duerch hie begrenze kënnen? Tipp op de Lautsprecher, fir en ze reparéieren.</translation>
     </message>
@@ -5203,62 +5232,62 @@
 <context>
     <name>StationPanel</name>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="14"/>
         <source>Morsezeichen</source>
         <translation>Morsezeechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="15"/>
         <source>Melodie</source>
         <translation>Melodie</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="16"/>
         <source>Zeitzeichen</source>
         <translation>Zäitzeechen</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="44"/>
         <source>Senderanlage</source>
         <translation>Senderanlag</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="69"/>
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="77"/>
         <source>Die Senderanlage schickt drei Sender auf Mittelwelle an das Feld ANT. Verbinde ANT mit deiner Antenne.</source>
         <translation>D’Senderanlag schéckt dräi Sender op Mëttelwell un d’Feld ANT. Verbann ANT mat denger Antenn.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="78"/>
         <source>Jeder Sender hat seine eigene Frequenz. Dein Schwingkreis sucht sich einen davon aus.</source>
         <translation>All Sender huet seng eege Frequenz. Däi Schwéngkrees sicht sech een dovun eraus.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="79"/>
         <source>Schalte Sender aus, wenn du hören willst, ob dein Empfänger einen einzelnen Sender findet.</source>
         <translation>Schalt Sender aus, wann s du héiere wëlls, ob däin Empfänger een eenzele Sender fënnt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="104"/>
         <source>Sender %1 ein oder aus</source>
         <translation>Sender %1 un oder aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="109"/>
         <source>Sender %1 · %2 kHz</source>
         <translation>Sender %1 · %2 kHz</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="115"/>
         <source>sendet</source>
         <translation>sent</translation>
     </message>
     <message>
-        <location filename="../app/qml/StationPanel.qml" line="0"/>
+        <location filename="../app/qml/StationPanel.qml" line="115"/>
         <source>aus</source>
         <translation>aus</translation>
     </message>
@@ -5550,529 +5579,529 @@
         <translation>Spull 1 H</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="46"/>
+        <location filename="../app/qml/Texts.qml" line="51"/>
         <source>Trimmer 10 kΩ</source>
         <translation>Trimmer 10 kΩ</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="47"/>
+        <location filename="../app/qml/Texts.qml" line="52"/>
         <source>Trimmer 100 kΩ</source>
         <translation>Trimmer 100 kΩ</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="48"/>
+        <location filename="../app/qml/Texts.qml" line="53"/>
         <source>IR-LED</source>
         <translation>IR-LED</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="49"/>
+        <location filename="../app/qml/Texts.qml" line="54"/>
         <source>Fototransistor</source>
         <translation>Fototransistor</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="50"/>
+        <location filename="../app/qml/Texts.qml" line="55"/>
         <source>Optokoppler</source>
         <translation>Optokoppler</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="51"/>
+        <location filename="../app/qml/Texts.qml" line="56"/>
         <source>Spannungsregler 5 V</source>
         <translation>Spannungsregler 5 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="52"/>
+        <location filename="../app/qml/Texts.qml" line="57"/>
         <source>Heißleiter</source>
         <translation>Waarmleeder</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="53"/>
+        <location filename="../app/qml/Texts.qml" line="58"/>
         <source>Elektromagnet</source>
         <translation>Elektromagnéit</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="54"/>
+        <location filename="../app/qml/Texts.qml" line="59"/>
         <source>Relais</source>
         <translation>Relais</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="55"/>
+        <location filename="../app/qml/Texts.qml" line="60"/>
         <source>Feuchtesonde</source>
         <translation>Fiichtegkeetssond</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="56"/>
+        <location filename="../app/qml/Texts.qml" line="61"/>
         <source>Piezo-Schallgeber</source>
         <translation>Piezo-Tounmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="57"/>
+        <location filename="../app/qml/Texts.qml" line="63"/>
         <source>Spannungsmessstelle</source>
         <translation>Spannungs-Moosstell</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="58"/>
+        <location filename="../app/qml/Texts.qml" line="64"/>
         <source>Strommessstelle</source>
         <translation>Stroum-Moosstell</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="59"/>
+        <location filename="../app/qml/Texts.qml" line="65"/>
         <source>Widerstandsmessstelle</source>
         <translation>Widderstands-Moosstell</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="60"/>
+        <location filename="../app/qml/Texts.qml" line="66"/>
         <source>Tastkopf</source>
         <translation>Taschtkapp</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="76"/>
+        <location filename="../app/qml/Texts.qml" line="82"/>
         <source>bis,damit,dass,wenn,sodass,ob,sonst,aber,weil</source>
         <comment>Woerter nach einem Komma, an dem der Aufbauschritt nicht in Stichpunkte geteilt wird</comment>
         <translation>bis,fir,wann,datt,soss,mee,well,ob</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="110"/>
+        <location filename="../app/qml/Texts.qml" line="116"/>
         <source>Glühlämpchen,Lämpchen</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Gléibierchen,Bierchen</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="111"/>
+        <location filename="../app/qml/Texts.qml" line="117"/>
         <source>Taster</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Taster</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="112"/>
+        <location filename="../app/qml/Texts.qml" line="118"/>
         <source>Summer</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Summer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="113"/>
+        <location filename="../app/qml/Texts.qml" line="119"/>
         <source>Motor</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Motor</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="114"/>
+        <location filename="../app/qml/Texts.qml" line="120"/>
         <source>Widerstand,Widerstände</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Widderstand,Widderstänn</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="115"/>
+        <location filename="../app/qml/Texts.qml" line="121"/>
         <source>IR-LED,Infrarot-LED</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>IR-LED,Infrarout-LED</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="116"/>
+        <location filename="../app/qml/Texts.qml" line="122"/>
         <source>Leuchtdiode,LED</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Liichtdiod,LED</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="117"/>
+        <location filename="../app/qml/Texts.qml" line="123"/>
         <source>Wechselschalter</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Wiesselschalter</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="118"/>
+        <location filename="../app/qml/Texts.qml" line="124"/>
         <source>Reedkontakt</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Reedkontakt</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="119"/>
+        <location filename="../app/qml/Texts.qml" line="125"/>
         <source>Z-Diode</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Z-Diod</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="120"/>
+        <location filename="../app/qml/Texts.qml" line="127"/>
         <source>Diode</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Diod</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="121"/>
+        <location filename="../app/qml/Texts.qml" line="129"/>
         <source>Spule</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Spull</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="122"/>
+        <location filename="../app/qml/Texts.qml" line="130"/>
         <source>Trimmer</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Trimmer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="123"/>
+        <location filename="../app/qml/Texts.qml" line="131"/>
         <source>Blinkmodul</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Blénkmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="124"/>
+        <location filename="../app/qml/Texts.qml" line="132"/>
         <source>Tonmodul</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Tounmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="125"/>
+        <location filename="../app/qml/Texts.qml" line="133"/>
         <source>Lautsprecher</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Lautsprecher</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="126"/>
+        <location filename="../app/qml/Texts.qml" line="134"/>
         <source>Fotowiderstand</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Fotowidderstand</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="127"/>
+        <location filename="../app/qml/Texts.qml" line="135"/>
         <source>Fototransistor</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Fototransistor</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="128"/>
+        <location filename="../app/qml/Texts.qml" line="136"/>
         <source>Optokoppler</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Optokoppler</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="129"/>
+        <location filename="../app/qml/Texts.qml" line="137"/>
         <source>Spannungsregler</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Spannungsregler</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="130"/>
+        <location filename="../app/qml/Texts.qml" line="138"/>
         <source>Heißleiter</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Waarmleeder</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="131"/>
+        <location filename="../app/qml/Texts.qml" line="139"/>
         <source>Elko</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Elko</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="132"/>
+        <location filename="../app/qml/Texts.qml" line="140"/>
         <source>Elektromagnet</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Elektromagnéit</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="133"/>
+        <location filename="../app/qml/Texts.qml" line="141"/>
         <source>Relais</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Relais</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="134"/>
+        <location filename="../app/qml/Texts.qml" line="142"/>
         <source>PNP-Transistor</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>PNP-Transistor</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="135"/>
+        <location filename="../app/qml/Texts.qml" line="143"/>
         <source>Transistor</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Transistor</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="136"/>
+        <location filename="../app/qml/Texts.qml" line="144"/>
         <source>Feuchtesonde</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Fiichtegkeetssond</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="137"/>
+        <location filename="../app/qml/Texts.qml" line="145"/>
         <source>Piezo</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Piezo</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="138"/>
+        <location filename="../app/qml/Texts.qml" line="147"/>
         <source>Zeitmodul</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Zäitmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="139"/>
+        <location filename="../app/qml/Texts.qml" line="148"/>
         <source>Verstärkermodul</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Verstäerkermodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="140"/>
+        <location filename="../app/qml/Texts.qml" line="149"/>
         <source>OP-Modul</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>OP-Modul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="141"/>
+        <location filename="../app/qml/Texts.qml" line="150"/>
         <source>Timer 555</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Timer 555</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="147"/>
+        <location filename="../app/qml/Texts.qml" line="156"/>
         <source>Blinkmodul</source>
         <translation>Blénkmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="148"/>
+        <location filename="../app/qml/Texts.qml" line="157"/>
         <source>Tonmodul</source>
         <translation>Tounmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="149"/>
+        <location filename="../app/qml/Texts.qml" line="158"/>
         <source>Zeitmodul</source>
         <translation>Zäitmodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="150"/>
+        <location filename="../app/qml/Texts.qml" line="159"/>
         <source>Verstärkermodul</source>
         <translation>Verstäerkermodul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="151"/>
+        <location filename="../app/qml/Texts.qml" line="160"/>
         <source>OP-Modul</source>
         <translation>OP-Modul</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="152"/>
+        <location filename="../app/qml/Texts.qml" line="161"/>
         <source>Timer 555</source>
         <translation>Timer 555</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="162"/>
+        <location filename="../app/qml/Texts.qml" line="171"/>
         <source>aus</source>
         <translation>aus</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="163"/>
+        <location filename="../app/qml/Texts.qml" line="172"/>
         <source>ein</source>
         <translation>ein</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="164"/>
+        <location filename="../app/qml/Texts.qml" line="173"/>
         <source>Takt</source>
         <translation>Takt</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="165"/>
+        <location filename="../app/qml/Texts.qml" line="174"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="179"/>
+        <location filename="../app/qml/Texts.qml" line="188"/>
         <source>Rot</source>
         <translation>Rout</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="180"/>
+        <location filename="../app/qml/Texts.qml" line="189"/>
         <source>Schwarz</source>
         <translation>Schwaarz</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="181"/>
+        <location filename="../app/qml/Texts.qml" line="190"/>
         <source>Blau</source>
         <translation>Blo</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="182"/>
+        <location filename="../app/qml/Texts.qml" line="191"/>
         <source>Gelb</source>
         <translation>Giel</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="183"/>
+        <location filename="../app/qml/Texts.qml" line="192"/>
         <source>Grün</source>
         <translation>Gréng</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="184"/>
+        <location filename="../app/qml/Texts.qml" line="193"/>
         <source>Weiß</source>
         <translation>Wäiss</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="208"/>
+        <location filename="../app/qml/Texts.qml" line="217"/>
         <source>Jetzt ist alles an seinem Platz. Probiere aus, was passiert!</source>
         <translation>Elo ass alles op senger Plaz. Probéier aus, wat geschitt!</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="210"/>
+        <location filename="../app/qml/Texts.qml" line="219"/>
         <source>Schalte den Hauptschalter der Batterie ein.</source>
         <translation>Maach den Haaptschalter vun der Batterie un.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="212"/>
+        <location filename="../app/qml/Texts.qml" line="221"/>
         <source>Setze das %1 ab Feld %2 in die Modulleiste.</source>
         <translation>Setz d&apos;Modul %1 ab Feld %2 an d&apos;Modulläischt.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="214"/>
+        <location filename="../app/qml/Texts.qml" line="223"/>
         <source>Ziehe eine Leitung von %1 nach %2.</source>
         <translation>Zéi eng Leitung vu %1 op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="218"/>
+        <location filename="../app/qml/Texts.qml" line="227"/>
         <source>eine Leuchtdiode (Farbe egal)</source>
         <translation>eng Liichtdiod (Faarf egal)</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="220"/>
+        <location filename="../app/qml/Texts.qml" line="229"/>
         <source>Stecke %1 auf %2, %3 und %4.</source>
         <translation>Stiech %1 op %2, %3 a %4.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="222"/>
+        <location filename="../app/qml/Texts.qml" line="231"/>
         <source>Stecke %1 auf %2, %3, %4 und %5.</source>
         <translation>Stiech %1 op %2, %3, %4 a %5.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="223"/>
+        <location filename="../app/qml/Texts.qml" line="232"/>
         <source>Stecke %1 auf %2 und %3.</source>
         <translation>Stiech %1 op %2 a %3.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="224"/>
+        <location filename="../app/qml/Texts.qml" line="233"/>
         <source>Das lange Bein kommt an %1.</source>
         <translation>Dat laangt Been kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="225"/>
+        <location filename="../app/qml/Texts.qml" line="234"/>
         <source>Der Strich auf der Diode zeigt nach %1.</source>
         <translation>De Stréch op der Diod weist op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="226"/>
+        <location filename="../app/qml/Texts.qml" line="235"/>
         <source>Plus kommt an %1.</source>
         <translation>Plus kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="227"/>
+        <location filename="../app/qml/Texts.qml" line="236"/>
         <source>IN kommt an %1, OUT an %2.</source>
         <translation>IN kënnt op %1, OUT op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="228"/>
+        <location filename="../app/qml/Texts.qml" line="237"/>
         <source>C kommt an %1.</source>
         <translation>C kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="229"/>
+        <location filename="../app/qml/Texts.qml" line="238"/>
         <source>A kommt an %1, C an %2.</source>
         <translation>A kënnt op %1, C op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="230"/>
+        <location filename="../app/qml/Texts.qml" line="239"/>
         <source>B kommt an %1, C an %2.</source>
         <translation>B kënnt op %1, C op %2.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="231"/>
+        <location filename="../app/qml/Texts.qml" line="240"/>
         <source>Die Mitte kommt an %1.</source>
         <translation>D&apos;Mëtt kënnt op %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="233"/>
+        <location filename="../app/qml/Texts.qml" line="242"/>
         <source>Wert: %1.</source>
         <translation>Wäert: %1.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="235"/>
+        <location filename="../app/qml/Texts.qml" line="244"/>
         <source>Nennspannung: %1 V.</source>
         <translation>Nennspannung: %1 V.</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="261"/>
+        <location filename="../app/qml/Texts.qml" line="270"/>
         <source>Taschenlampe</source>
         <translation>Täscheluucht</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="262"/>
+        <location filename="../app/qml/Texts.qml" line="271"/>
         <source>Föhn</source>
         <translation>Fön</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="263"/>
+        <location filename="../app/qml/Texts.qml" line="272"/>
         <source>Wassertropfen</source>
         <translation>Waasserdrëps</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="264"/>
+        <location filename="../app/qml/Texts.qml" line="273"/>
         <source>Abdeckkarte</source>
         <translation>Ofdeckkaart</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="273"/>
-        <location filename="../app/qml/Texts.qml" line="276"/>
-        <location filename="../app/qml/Texts.qml" line="279"/>
+        <location filename="../app/qml/Texts.qml" line="282"/>
+        <location filename="../app/qml/Texts.qml" line="285"/>
+        <location filename="../app/qml/Texts.qml" line="288"/>
         <source>%1 × %2</source>
         <translation>%1 × %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="278"/>
+        <location filename="../app/qml/Texts.qml" line="287"/>
         <source>%1 × Leitung %2</source>
         <translation>%1 x Leitung %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="280"/>
+        <location filename="../app/qml/Texts.qml" line="289"/>
         <source>Batterie %1 V</source>
         <translation>Batterie %1 V</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="46"/>
         <source>Antennenspule 220 µH</source>
         <translation>Antennespull 220 µH</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="47"/>
         <source>Spule 1 mH</source>
         <translation>Spull 1 mH</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="48"/>
         <source>Spule 10 mH</source>
         <translation>Spull 10 mH</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="49"/>
         <source>Drehkondensator</source>
         <translation>Dréikondensator</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="50"/>
         <source>Germaniumdiode</source>
         <translation>Germaniumdiod</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="126"/>
         <source>Germaniumdiode</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Germaniumdiod</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="128"/>
         <source>Drehkondensator</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Dréikondensator</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="62"/>
         <source>Kristallhörer</source>
         <translation>Kristallhéierer</translation>
     </message>
     <message>
-        <location filename="../app/qml/Texts.qml" line="0"/>
+        <location filename="../app/qml/Texts.qml" line="146"/>
         <source>Kristallhörer,Hörer</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Kristallhéierer,Héierer</translation>
@@ -6377,9 +6406,6 @@
     <message>
         <location filename="../app/qml/TopBarActions.qml" line="171"/>
         <location filename="../app/qml/TopBarActions.qml" line="172"/>
-        <location filename="../app/tests/test_ui.cpp" line="487"/>
-        <location filename="../app/tests/test_ui.cpp" line="491"/>
-        <location filename="../app/tests/test_ui.cpp" line="502"/>
         <source>Einstellungen</source>
         <translation>Astellungen</translation>
     </message>
@@ -6555,37 +6581,37 @@
 <context>
     <name>TrimmerPanel</name>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="45"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="48"/>
         <source>Schließen</source>
         <translation>Zoumaachen</translation>
     </message>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="58"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="61"/>
         <source>Stellung des Trimmers</source>
         <translation>Stellung vum Trimmer</translation>
     </message>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="64"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="67"/>
         <source>a bis s: %1 · s bis b: %2</source>
         <translation>a bis s: %1 · s bis b: %2</translation>
     </message>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="71"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="75"/>
         <source>Ein Trimmer wird einmal eingestellt und bleibt dann so – in echt mit einem kleinen Schraubendreher.</source>
         <translation>En Trimmer gëtt eemol agestallt a bleift dann esou – an echt mat engem klenge Schrauwenzéier.</translation>
     </message>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="61"/>
         <source>Stellung des Drehkondensators</source>
         <translation>Stellung vum Dréikondensator</translation>
     </message>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="67"/>
         <source>Kapazität: %1 pF</source>
         <translation>Kapazitéit: %1 pF</translation>
     </message>
     <message>
-        <location filename="../app/qml/TrimmerPanel.qml" line="0"/>
+        <location filename="../app/qml/TrimmerPanel.qml" line="74"/>
         <source>Dreh die Platten weiter ineinander: Die Kapazität wird größer. Dein Schwingkreis schwingt dann langsamer.</source>
         <translation>Dréi d’Placke méi wäit anenee: D’Kapazitéit gëtt méi grouss. Däi Schwéngkrees schwéngt dann méi lues.</translation>
     </message>
@@ -6621,38 +6647,38 @@
 <context>
     <name>volta::LabController</name>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="533"/>
+        <location filename="../app/src/lab_controller.cpp" line="535"/>
         <source>Forscher</source>
         <translation>Fuerscher</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="943"/>
-        <location filename="../app/src/lab_controller.cpp" line="1003"/>
+        <location filename="../app/src/lab_controller.cpp" line="947"/>
+        <location filename="../app/src/lab_controller.cpp" line="1007"/>
         <source>Freies Labor</source>
         <translation>Fräie Labo</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1102"/>
+        <location filename="../app/src/lab_controller.cpp" line="1106"/>
         <source>Alles abbauen</source>
         <translation>Alles ofbauen</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1107"/>
+        <location filename="../app/src/lab_controller.cpp" line="1111"/>
         <source>Musteraufbau zeigen</source>
         <translation>Musteropbau weisen</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1537"/>
+        <location filename="../app/src/lab_controller.cpp" line="1567"/>
         <source>%1 Spitze · %2</source>
         <translation>%1 Spëtzt · %2</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="1959"/>
+        <location filename="../app/src/lab_controller.cpp" line="1989"/>
         <source>Dieses Bauteil wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dësen Deel gëtt mat Stuf %1 fräigeschalt.</translation>
     </message>
     <message>
-        <location filename="../app/src/lab_controller.cpp" line="2020"/>
+        <location filename="../app/src/lab_controller.cpp" line="2050"/>
         <source>Dieses Modul wird mit Stufe %1 freigeschaltet.</source>
         <translation>Dëst Modul gëtt mat Stuf %1 fräigeschalt.</translation>
     </message>

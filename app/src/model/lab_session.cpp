@@ -270,7 +270,7 @@ double LabSession::voltageScale() const {
     if (hasDeskPart(m_board, "batterie2")) ref = std::max(ref, 1.5 * m_board.desk.cells2);
     if (hasDeskPart(m_board, "wechselquelle")) ref = std::max(ref, std::sqrt(2.0) * m_board.desk.acRmsV);
     if (hasDeskPart(m_board, "generator"))
-        ref = std::max(ref, std::fabs(m_board.desk.genOffsetV) + m_board.desk.genAmplitudeV);
+        ref = std::max(ref, std::fabs(m_board.desk.genOffsetV) + m_board.desk.genAmplitudeV * (1.0 + m_board.desk.genAmDepth));
     if (hasDeskPart(m_board, "kennlinienschreiber")) ref = std::max(ref, m_board.desk.tracer.maxV());
     return ref;
 }
@@ -701,6 +701,17 @@ void LabSession::setGenOffset(double volt) {
     m_board.desk.genOffsetV = std::isfinite(volt) ? std::clamp(volt, -4.0, 4.0) : 0.0;
     m_bars.clear();
     m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenOffset, m_board.desk.genOffsetV});
+}
+
+void LabSession::setGenAmDepth(double depth) {
+    m_board.desk.genAmDepth = std::isfinite(depth) ? std::clamp(depth, 0.0, 1.0) : 0.0;
+    m_bars.clear();
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenAmDepth, m_board.desk.genAmDepth});
+}
+
+void LabSession::setGenAmTone(double hz) {
+    m_board.desk.genAmToneHz = std::isfinite(hz) ? std::clamp(hz, 20.0, 1000.0) : 100.0;
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenAmTone, m_board.desk.genAmToneHz});
 }
 
 void LabSession::setAudioStream(std::shared_ptr<AudioStream> stream) {

@@ -21,6 +21,8 @@ struct Experiment {
     // »start_frequenz_Hz« des Generators (ab Volta 3): Frequenz beim Start, wenn das Kind sie selbst finden soll
     // (Resonanz); die Vorlage behaelt ihre Frequenz (Musteraufbau, Inhaltstest). 0 = wie die Vorlage
     double startGenFrequencyHz = 0.0;
+    // »start_am_tiefe« (ab Volta 3): Modulationstiefe beim Start, wenn das Kind sie selbst einstellt; < 0 = wie die Vorlage
+    double startGenAmDepth = -1.0;
     QString titleKey;
     model::Board templateBoard; // Vorlage (Anzeige, Schritt-fuer-Schritt-Hilfe, ContentSmokeTest)
     QStringList shownVoltages;  // "anzeigen": Felder mit vorab gesetzter Spannungsanzeige

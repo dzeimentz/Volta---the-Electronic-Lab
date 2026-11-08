@@ -71,10 +71,15 @@ QJsonObject boardToJson(const Board& board) {
             for (bool s : d.stationsOn) on.append(s);
             desk.insert(QStringLiteral("sender"), on);
         }
-        desk.insert(QStringLiteral("generator"), QJsonObject{{QStringLiteral("form"), d.genWaveform},
-                                                             {QStringLiteral("frequenz_hz"), d.genFrequencyHz},
-                                                             {QStringLiteral("amplitude_v"), d.genAmplitudeV},
-                                                             {QStringLiteral("gleichanteil_v"), d.genOffsetV}});
+        QJsonObject gen{{QStringLiteral("form"), d.genWaveform},
+                        {QStringLiteral("frequenz_hz"), d.genFrequencyHz},
+                        {QStringLiteral("amplitude_v"), d.genAmplitudeV},
+                        {QStringLiteral("gleichanteil_v"), d.genOffsetV}};
+        if (d.genAmDepth > 0.0 || d.genAmToneHz != 100.0) { // ab Volta 3; sonst unveraendert wie bisher
+            gen.insert(QStringLiteral("am_tiefe"), d.genAmDepth);
+            gen.insert(QStringLiteral("am_ton_hz"), d.genAmToneHz);
+        }
+        desk.insert(QStringLiteral("generator"), gen);
         desk.insert(QStringLiteral("kennlinienschreiber"),
                     QJsonObject{{QStringLiteral("volt_index"), d.tracer.voltsIndex},
                                 {QStringLiteral("beide_richtungen"), d.tracer.bipolar},
@@ -158,6 +163,8 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     d.genFrequencyHz = std::clamp(gen.value(QStringLiteral("frequenz_hz")).toDouble(100.0), 1.0, 10000.0);
     d.genAmplitudeV = std::clamp(gen.value(QStringLiteral("amplitude_v")).toDouble(1.0), 0.0, 4.0);
     d.genOffsetV = std::clamp(gen.value(QStringLiteral("gleichanteil_v")).toDouble(0.0), -4.0, 4.0);
+    d.genAmDepth = std::clamp(gen.value(QStringLiteral("am_tiefe")).toDouble(0.0), 0.0, 1.0);
+    d.genAmToneHz = std::clamp(gen.value(QStringLiteral("am_ton_hz")).toDouble(100.0), 20.0, 1000.0);
     const QJsonObject osc = desk.value(QStringLiteral("oszilloskop")).toObject();
     const int lastTimebase = static_cast<int>(scopeTimebases().size()) - 1;
     const int lastVolts = static_cast<int>(scopeVoltsPerDiv().size()) - 1;

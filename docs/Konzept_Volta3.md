@@ -20,6 +20,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Nachtrag 07.11.2026 | Halbleiter in zwei Gruppen (9.2); Kennfarbe Beere `#A4266B` (9.1) |
 | Nachtrag 07.11.2026 (2) | Zeitrechnung für Schwingkreise: Kondensator und Spule rechnen in Volta 3 mit BDF2 (zweite Ordnung) statt Rückwärts-Euler; freie Schwingungen bis etwa 1 kHz auf 2 % genau (Kapitel 4, Stufe 1) |
 | Nachtrag 08.11.2026 | Experiment 1.7: Abstimmen durch Tauschen des Kondensators statt mit dem Drehkondensator. Der Drehko (10–500 pF) ergibt mit 1 H keinen hörbaren Ton, Werte im Mikrofarad-Bereich halten ihn im Hörbereich (Kapitel 8, Stufe 1) |
+| Nachtrag 08.11.2026 (2) | Amplitudenmodulation im Generator: Tiefe 0–100 %, Ton 100/200/500 Hz, nur ab Volta 3 sichtbar. Experiment 2.1 zeigt sie mit einem Träger von 2 kHz, Schritt für Schritt gerechnet und ohne Zeitdehnung; die Dehnung bleibt den Sendern mit echten MW-Frequenzen vorbehalten (Kapitel 5.2 und 8, Stufe 2) |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -165,7 +166,7 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 - 1.7 **Projekt: der Klangschalen-Oszillator** – Transistor und Schwingkreis erzeugen einen hörbaren Ton; das Kind stimmt ihn durch Tauschen des Kondensators (1 µF … 100 nF, etwa 230–540 Hz; Nachtrag 08.11.2026).
 
 ### Stufe 2 – Radio: Wie kommt Musik durch die Luft? (8)
-- 2.1 **Träger und Ton** – Amplitudenmodulation mit dem Generator, am Oszilloskop gedehnt: Die Hüllkurve ist der Ton.
+- 2.1 **Träger und Ton** – Amplitudenmodulation mit dem Generator: Träger 2 kHz, Ton 100 Hz, echt gerechnet (Nachtrag 08.11.2026 (2)): Die Hüllkurve ist der Ton.
 - 2.2 **Den Sender wählen** – der Schwingkreis mit Drehkondensator lässt einen der drei Sender durch.
 - 2.3 **Die Diode holt den Ton heraus** – der Hüllkurvendetektor.
 - 2.4 **Radio ohne Batterie** – Antenne, Schwingkreis, Diode und Kristallhörer: der Detektorempfänger.

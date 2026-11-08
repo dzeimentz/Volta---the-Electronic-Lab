@@ -88,6 +88,8 @@ FunctionGenerator::FunctionGenerator(std::string id, NodeId out, NodeId ground, 
     setFrequency(m_params.frequencyHz);
     setAmplitude(m_params.amplitudeV);
     setOffset(m_params.offsetV);
+    setAmDepth(m_params.amDepth);
+    setAmTone(m_params.amToneHz);
     if (!(m_params.outputOhm >= kMinOhm) || !std::isfinite(m_params.outputOhm)) m_params.outputOhm = 50.0;
 }
 
@@ -104,7 +106,16 @@ void FunctionGenerator::setOffset(double volt) noexcept {
     m_params.offsetV = std::clamp(finiteOr(volt, 0.0), -GeneratorParams::kMaxOffsetV, GeneratorParams::kMaxOffsetV);
 }
 
-double FunctionGenerator::emfAt(double phase) const noexcept {
+void FunctionGenerator::setAmDepth(double depth) noexcept {
+    m_params.amDepth = std::clamp(finiteOr(depth, 0.0), 0.0, 1.0);
+}
+
+void FunctionGenerator::setAmTone(double hz) noexcept {
+    m_params.amToneHz =
+        std::clamp(finiteOr(hz, 100.0), GeneratorParams::kMinAmToneHz, GeneratorParams::kMaxAmToneHz);
+}
+
+double FunctionGenerator::emfAt(double phase, double tonePhase) const noexcept {
     const double p = wrapPhase(phase);
     double shape = 0.0;
     switch (m_params.waveform) {
@@ -112,12 +123,14 @@ double FunctionGenerator::emfAt(double phase) const noexcept {
     case Waveform::Triangle: shape = p < 0.25 ? 4.0 * p : p < 0.75 ? 2.0 - 4.0 * p : 4.0 * p - 4.0; break;
     case Waveform::Square: shape = p < 0.5 ? 1.0 : -1.0; break;
     }
+    if (m_params.amDepth > 0.0) shape *= 1.0 + m_params.amDepth * std::sin(2.0 * kPi * wrapPhase(tonePhase));
     return m_params.offsetV + m_params.amplitudeV * shape;
 }
 
 void FunctionGenerator::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
     const double p = ctx.isDc() ? m_phase : m_phase + m_params.frequencyHz * ctx.dtS;
-    const double emf = m_enabled ? emfAt(p) * ctx.sourceScale : 0.0;
+    const double tp = ctx.isDc() ? m_tonePhase : m_tonePhase + m_params.amToneHz * ctx.dtS;
+    const double emf = m_enabled ? emfAt(p, tp) * ctx.sourceScale : 0.0;
     sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emf, m_params.outputOhm);
 }
 
@@ -132,7 +145,10 @@ double FunctionGenerator::terminalCurrent(const SolutionView& x, std::size_t t) 
 }
 
 void FunctionGenerator::updateState(const SolutionView& /*x*/, double dtS) noexcept {
-    if (dtS > 0.0) m_phase = wrapPhase(m_phase + m_params.frequencyHz * dtS);
+    if (dtS > 0.0) {
+        m_phase = wrapPhase(m_phase + m_params.frequencyHz * dtS);
+        m_tonePhase = wrapPhase(m_tonePhase + m_params.amToneHz * dtS);
+    }
 }
 
 ComponentReading FunctionGenerator::read(const SolutionView& x) const noexcept {

@@ -129,6 +129,7 @@ bool LabController::startExperiment(const QString& id) {
     model::Board start;
     start.desk = exp.templateBoard.desk; // Pultstellung der Vorlage; Einschalten ist Sache des Kindes
     if (exp.startGenFrequencyHz > 0.0) start.desk.genFrequencyHz = exp.startGenFrequencyHz; // Resonanz selbst finden
+    if (exp.startGenAmDepth >= 0.0) start.desk.genAmDepth = exp.startGenAmDepth;             // Modulation selbst einstellen
     start.desk.mainSwitch = false;
     start.modules = exp.templateBoard.modules; // Module stecken schon in der Modulleiste (ein Modulfach folgt)
     if (deskOnDemand()) start.deskParts = model::deskPartsUsed(exp.templateBoard); // Pult nach Bedarf (5.5)
@@ -1401,6 +1402,18 @@ void LabController::setGenAmplitude(double peakV) {
 void LabController::setGenOffset(double volt) {
     if (genOffset() == volt) return;
     m_session->setGenOffset(volt);
+    emit deskChanged();
+}
+
+void LabController::setGenAmDepth(double depth) {
+    if (genAmDepth() == depth) return;
+    m_session->setGenAmDepth(depth);
+    emit deskChanged();
+}
+
+void LabController::setGenAmTone(double hz) {
+    if (genAmTone() == hz) return;
+    m_session->setGenAmTone(hz);
     emit deskChanged();
 }
 

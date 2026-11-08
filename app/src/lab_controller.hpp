@@ -103,6 +103,8 @@ class LabController : public QObject {
     Q_PROPERTY(double genFrequency READ genFrequency WRITE setGenFrequency NOTIFY deskChanged)
     Q_PROPERTY(double genAmplitude READ genAmplitude WRITE setGenAmplitude NOTIFY deskChanged)
     Q_PROPERTY(double genOffset READ genOffset WRITE setGenOffset NOTIFY deskChanged)
+    Q_PROPERTY(double genAmDepth READ genAmDepth WRITE setGenAmDepth NOTIFY deskChanged) // ab Volta 3
+    Q_PROPERTY(double genAmTone READ genAmTone WRITE setGenAmTone NOTIFY deskChanged)    // ab Volta 3
     // Pult nach Bedarf (ab Volta 2): Geraetefach statt Stufenanpassung; deskTray: [{part, present, locked, stage}]
     //   locked: noch nicht frei; unlock: "stufe" (stage), "experiment" (experiment: Nummer, z. B. "0.3") oder "nutzung"
     Q_PROPERTY(bool deskOnDemand READ deskOnDemand CONSTANT)
@@ -323,6 +325,10 @@ public:
     void setGenAmplitude(double peakV);
     double genOffset() const { return m_session->board().desk.genOffsetV; }
     void setGenOffset(double volt);
+    double genAmDepth() const { return m_session->board().desk.genAmDepth; }
+    void setGenAmDepth(double depth);
+    double genAmTone() const { return m_session->board().desk.genAmToneHz; }
+    void setGenAmTone(double hz);
     bool deskOnDemand() const { return !m_deskOffers.isEmpty(); }
     int startColumns() const { return m_startColumns; }
     QVariantList deskTray() const;

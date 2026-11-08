@@ -50,7 +50,10 @@
               "frequenz_Hz": {"type": "number", "minimum": 1, "maximum": 10000},
               "start_frequenz_Hz": {"type": "number", "minimum": 1, "maximum": 10000},
               "spitze_V": {"type": "number", "minimum": 0, "maximum": 4},
-              "gleichanteil_V": {"type": "number", "minimum": -4, "maximum": 4}}},
+              "gleichanteil_V": {"type": "number", "minimum": -4, "maximum": 4},
+              "am_tiefe": {"type": "number", "minimum": 0, "maximum": 1},
+              "am_ton_Hz": {"type": "number", "minimum": 20, "maximum": 1000},
+              "start_am_tiefe": {"type": "number", "minimum": 0, "maximum": 1}}},
             "kennlinienschreiber": {"type": "object", "additionalProperties": false, "properties": {
               "spannung_V": {"enum": [2, 5, 10, 20]}, "beide_richtungen": {"type": "boolean"},
               "strom_mA": {"enum": [5, 20, 50, 200]}}},

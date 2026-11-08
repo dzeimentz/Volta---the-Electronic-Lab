@@ -38,6 +38,8 @@ struct Action {
         SetGenFrequency, // Funktionsgenerator: value = Frequenz in Hz
         SetGenAmplitude, // Funktionsgenerator: value = Spitze in V
         SetGenOffset,    // Funktionsgenerator: value = Gleichanteil in V
+        SetGenAmDepth,   // Funktionsgenerator (ab Volta 3): value = Tiefe der Amplitudenmodulation 0..1
+        SetGenAmTone,    // Funktionsgenerator (ab Volta 3): value = Ton der Amplitudenmodulation in Hz
         SetTracerMin,    // Kennlinienschreiber: value = kleinste Pruefspannung in V
         SetTracerMax,    // Kennlinienschreiber: value = hoechste Pruefspannung in V
         SetTracerOhm,    // Kennlinienschreiber: value = Vorwiderstand in Ohm

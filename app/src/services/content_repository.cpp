@@ -253,6 +253,8 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
         out.desk.genFrequencyHz = std::clamp(g.value(QStringLiteral("frequenz_Hz")).toDouble(100.0), 1.0, 10000.0);
         out.desk.genAmplitudeV = std::clamp(g.value(QStringLiteral("spitze_V")).toDouble(1.0), 0.0, 4.0);
         out.desk.genOffsetV = std::clamp(g.value(QStringLiteral("gleichanteil_V")).toDouble(0.0), -4.0, 4.0);
+        out.desk.genAmDepth = std::clamp(g.value(QStringLiteral("am_tiefe")).toDouble(0.0), 0.0, 1.0);
+        out.desk.genAmToneHz = std::clamp(g.value(QStringLiteral("am_ton_Hz")).toDouble(100.0), 20.0, 1000.0);
     }
     if (pult.contains(QStringLiteral("kennlinienschreiber"))) {
         const QJsonObject k = pult.value(QStringLiteral("kennlinienschreiber")).toObject();
@@ -482,6 +484,8 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
         const QJsonObject g = vorlage.value(QStringLiteral("pult_stellung")).toObject().value(QStringLiteral("generator")).toObject();
         if (g.contains(QStringLiteral("start_frequenz_Hz")))
             out.startGenFrequencyHz = std::clamp(g.value(QStringLiteral("start_frequenz_Hz")).toDouble(), 1.0, 10000.0);
+        if (g.contains(QStringLiteral("start_am_tiefe")))
+            out.startGenAmDepth = std::clamp(g.value(QStringLiteral("start_am_tiefe")).toDouble(), 0.0, 1.0);
     }
     if (!parseSuccess(out.success, out.successCondition, error)) {
         m_error = QStringLiteral("%1: %2").arg(id, error);

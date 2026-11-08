@@ -204,6 +204,12 @@ void SimulationBridge::apply(const Action& a) {
     case Action::Type::SetGenOffset:
         if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setOffset(a.value);
         break;
+    case Action::Type::SetGenAmDepth:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setAmDepth(a.value);
+        break;
+    case Action::Type::SetGenAmTone:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setAmTone(a.value);
+        break;
     case Action::Type::SetTracerMin:
         if (auto* t = dynamic_cast<core::CurveTracer*>(&c)) t->setRange(a.value, t->params().maxV);
         break;

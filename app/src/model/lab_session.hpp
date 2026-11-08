@@ -118,6 +118,8 @@ public:
     void setGenFrequency(double hz);
     void setGenAmplitude(double peakV);
     void setGenOffset(double volt);
+    void setGenAmDepth(double depth);
+    void setGenAmTone(double hz);
     void setTracerSettings(const TracerSettings& s); // Kennlinienschreiber (Bedienhandlung)
     // Hoerbare Simulation (ab Volta 2, Konzept 5.3): Tonstrom des Audiodienstes; audible = Lautsprecher hoerbar
     // rechnen (Schrittweite 20 us, nur bei Echtzeit). Zeitlupe/Zeitraffer: timeScale (< 1 Zeitlupe, dann feinere

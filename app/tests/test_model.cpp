@@ -680,6 +680,31 @@ private slots:
         QVERIFY(v3.secondOrder);
     }
 
+    void experimentAmplitudeModulationVolta3() {
+        // Traeger und Ton (Volta 3, 2.1): Musteraufbau mit 50 % Modulation, das Kind beginnt ohne
+        services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
+        services::Experiment exp;
+        QVERIFY2(repo.loadExperiment(QStringLiteral("volta3.2.1"), exp), qPrintable(repo.lastError()));
+        QCOMPARE(exp.templateBoard.desk.genAmDepth, 0.5);
+        QCOMPARE(exp.templateBoard.desk.genAmToneHz, 100.0);
+        QCOMPARE(exp.startGenAmDepth, 0.0);
+        QVERIFY(repo.loadExperiment(QStringLiteral("volta3.1.4"), exp));
+        QCOMPARE(exp.templateBoard.desk.genAmDepth, 0.0);
+        QVERIFY(exp.startGenAmDepth < 0.0);
+        // Speichern: ohne Modulation keine neuen Schluessel (Volta 1/2 unveraendert), mit Modulation hin und zurueck
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"generator"}; // Generatorstellung gibt es nur mit Pult nach Bedarf
+        QJsonObject gen = model::boardToJson(b).value(QStringLiteral("pult")).toObject()
+                              .value(QStringLiteral("generator")).toObject();
+        QVERIFY(!gen.contains(QStringLiteral("am_tiefe")));
+        b.desk.genAmDepth = 0.75;
+        b.desk.genAmToneHz = 500.0;
+        model::Board back;
+        QVERIFY(model::boardFromJson(model::boardToJson(b), back));
+        QCOMPARE(back.desk.genAmDepth, 0.75);
+        QCOMPARE(back.desk.genAmToneHz, 500.0);
+    }
+
     void experimentLoads() {
         services::ContentRepository repo(QStringLiteral(VOLTA_CONTENT_DIR));
         services::Experiment exp;

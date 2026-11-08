@@ -62,11 +62,17 @@ struct GeneratorParams {
     double amplitudeV = 1.0;
     double offsetV = 0.0;
     double outputOhm = 50.0;
+    // Amplitudenmodulation (ab Volta 3, Konzept 5.2): Die Kurve wird mit (1 + amDepth * sin(2 pi amToneHz t))
+    // multipliziert; amDepth 0 = aus (dann bitgleich ohne Modulation), 1 = 100 %. Der Gleichanteil bleibt.
+    double amDepth = 0.0;
+    double amToneHz = 100.0;
 
     static constexpr double kMinFrequencyHz = 1.0;
     static constexpr double kMaxFrequencyHz = 10000.0;
     static constexpr double kMaxAmplitudeV = 4.0;
     static constexpr double kMaxOffsetV = 4.0;
+    static constexpr double kMinAmToneHz = 20.0;
+    static constexpr double kMaxAmToneHz = 1000.0;
 };
 
 // Funktionsgenerator (Pultfelder G, G0; G0 legt die App an 0V): Anschluss 0 = Ausgang, Anschluss 1 = Masse.
@@ -83,13 +89,16 @@ public:
     void setFrequency(double hz) noexcept;
     void setAmplitude(double peakV) noexcept;
     void setOffset(double volt) noexcept;
+    void setAmDepth(double depth) noexcept;
+    void setAmTone(double hz) noexcept;
     // Aus (Hauptschalter, Konzept Volta 2 ab 02.11.2026): Ausgang 0 V ueber den Ausgangswiderstand, die Phase
     // laeuft weiter
     void setEnabled(bool on) noexcept { m_enabled = on; }
     bool isEnabled() const noexcept { return m_enabled; }
     double phase() const noexcept { return m_phase; }
-    // Leerlaufspannung bei der Phase p
-    double emfAt(double phase) const noexcept;
+    double tonePhase() const noexcept { return m_tonePhase; }
+    // Leerlaufspannung bei der Phase p (Traeger) und tp (Ton der Amplitudenmodulation)
+    double emfAt(double phase, double tonePhase = 0.0) const noexcept;
 
     std::size_t branchCount() const noexcept override { return 1; }
     void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
@@ -103,6 +112,7 @@ private:
     GeneratorParams m_params;
     bool m_enabled = true;
     double m_phase = 0.0;
+    double m_tonePhase = 0.0;
 };
 
 // Kennwerte des Kennlinienschreibers (ab Volta 2, Konzept 5.2): Pruefspannung -20 ... +20 V, Vorwiderstand zur
