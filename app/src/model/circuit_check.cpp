@@ -163,6 +163,9 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
                 if (ed.to != minus && ownSource.insert(ed.to).second) todo.push_back(ed.to);
         }
     }
+    auto intended = [&](const std::string& id) {
+        return std::find(in.intendedReversed.begin(), in.intendedReversed.end(), id) != in.intendedReversed.end();
+    };
     auto onOwnSource = [&](const PartPlacement& p) {
         for (const auto& [pin, field] : p.pins)
             if (ownSource.count(nodes.find(field))) return true;
@@ -330,12 +333,12 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
                                     : msg(QT_TRANSLATE_NOOP("Meldung", "%1 ist kaputt gegangen. Was hat %1 zu viel "
                                                                       "Strom oder Spannung gegeben?"),
                                           {p.id})});
-            } else if (model == "led" && r->voltV < -1.0 && !onOwnSource(p)) {
+            } else if (model == "led" && r->voltV < -1.0 && !onOwnSource(p) && !intended(p.id)) {
                 reversed.push_back({CircuitFinding::Kind::Reversed, p.id, where,
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Steckt das lange Bein (Anode) von %1 auf der "
                                                                      "Seite zum Pluspol?"),
                                         {p.id})});
-            } else if (model == "capacitor_polar" && r->voltV < -0.5 && !onOwnSource(p)) {
+            } else if (model == "capacitor_polar" && r->voltV < -0.5 && !onOwnSource(p) && !intended(p.id)) {
                 reversed.push_back({CircuitFinding::Kind::Reversed, p.id, where,
                                     msg(QT_TRANSLATE_NOOP("Meldung", "Zeigt das Plus-Bein von %1 zum Pluspol?"), {p.id})});
             } else if (model == "led" && (r->overloaded || std::fabs(r->currentA) > 0.03)) {

@@ -178,6 +178,8 @@ public:
     // dieses Typs in Reihenfolge. Jeder funktionierende Aufbau gilt.
     void setSuccess(const SuccessCondition& condition, const Board& templateBoard, bool colourFixed = true);
     void clearSuccess();
+    // Bauteile, die im Experiment mit Absicht verkehrt herum stecken (Fehlersuche meldet sie nicht)
+    void setIntendedReversed(std::vector<std::string> ids) { m_intendedReversed = std::move(ids); }
     bool successActive() const { return m_success != nullptr; }
     // Erfolg im aktuellen Aufbau erreicht (gilt bis zur naechsten Aufbauaenderung; Bedienhandlungen loeschen ihn nicht)
     bool successReached() const;
@@ -220,6 +222,7 @@ private:
     struct SuccessTracker;
     std::shared_ptr<SuccessTracker> m_success;
     Board m_successTemplate;
+    std::vector<std::string> m_intendedReversed; // Experiment: mit Absicht verkehrt herum gesteckt
     bool m_colourFixed = true; // LED-Farbe der Vorlage verbindlich (catalog.hpp, sameKind)
     // Bauteilkennungen der letzten Topologie-Versionen: Zustaende aus einem Schnappschuss einer aelteren Version
     // (Befehle ohne Simulationsfortschritt dazwischen) bleiben ueber die Kennung zuordenbar.

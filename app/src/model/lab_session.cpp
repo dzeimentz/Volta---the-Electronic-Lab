@@ -114,6 +114,7 @@ void LabSession::setSuccess(const SuccessCondition& condition, const Board& temp
 }
 
 void LabSession::clearSuccess() {
+    m_intendedReversed.clear();
     m_success.reset();
     m_successTemplate = {};
     rebuild({});
@@ -913,7 +914,8 @@ bool LabSession::speakerReading(core::ComponentReading& out) const {
 std::vector<CircuitFinding> LabSession::checkCircuit() const {
     return model::checkCircuit({m_board, m_catalog, [this](const std::string& id) -> const core::ComponentReading* {
                                     return id.rfind("PULT.", 0) == 0 ? deskReading(id) : reading(id);
-                                }});
+                                },
+                                m_intendedReversed});
 }
 
 const core::ComponentReading* LabSession::deskReading(const std::string& deskId) const {

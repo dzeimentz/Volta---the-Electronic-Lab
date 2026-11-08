@@ -46,7 +46,8 @@ constexpr double kPressAfterS = 0.5;
 // Simuliert bis zu maxS; liefert die Zeit, zu der der Bewerter erstmals erfuellt ist (oder -1)
 double timeToSuccess(const model::Board& board, const model::Catalog& cat, model::SuccessEvaluator& eval, double maxS,
                      std::vector<std::string>* buildErrors = nullptr,
-                     std::vector<model::CircuitFinding>* findings = nullptr) {
+                     std::vector<model::CircuitFinding>* findings = nullptr,
+                     const std::vector<std::string>& intendedReversed = {}) {
     model::Board start = board;
     // Pultteile ab Volta 2 in der Vorlage: Pult nach Bedarf wie in der App (LabController::startExperiment)
     if (!start.deskParts) {
@@ -89,7 +90,7 @@ double timeToSuccess(const model::Board& board, const model::Catalog& cat, model
                 };
                 model::Board checked = board; // Taster gedrueckt, Pultteile wie in der App
                 checked.deskParts = start.deskParts;
-                *findings = model::checkCircuit({checked, cat, lookup});
+                *findings = model::checkCircuit({checked, cat, lookup, intendedReversed});
             }
             return sim.timeS();
         }
@@ -305,7 +306,8 @@ private slots:
         board.desk.mainSwitch = true;
         model::SuccessEvaluator eval(exp.successCondition);
         std::vector<model::CircuitFinding> findings;
-        QVERIFY(timeToSuccess(board, catalogFor(id), eval, std::min(exp.maxHoldS + 5.0, 60.0), nullptr, &findings) > 0.0);
+        QVERIFY(timeToSuccess(board, catalogFor(id), eval, std::min(exp.maxHoldS + 5.0, 60.0), nullptr, &findings,
+                                exp.intendedReversed) > 0.0);
         QVERIFY2(findings.empty(), findings.empty() ? "" : qPrintable(QStringLiteral("%1: %2").arg(id,
                                                                 QString::fromStdString(findings.front().message.text()))));
     }

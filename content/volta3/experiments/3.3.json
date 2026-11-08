@@ -1,0 +1,161 @@
+{
+  "id": "volta3.3.3",
+  "band": "volta3",
+  "stufe": 3,
+  "titel_key": "exp3_3_3_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "absichtlich_verkehrt": [
+    "D1"
+  ],
+  "bauteile_frei": [
+    "taster",
+    "widerstand",
+    "spule_1h",
+    "led_rot",
+    "diode_si",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_3_3_frage",
+  "vermutungen": [
+    "exp3_3_3_v1",
+    "exp3_3_3_v2",
+    "exp3_3_3_v3"
+  ],
+  "beobachtungen": [
+    "exp3_3_3_b1",
+    "exp3_3_3_b2",
+    "exp3_3_3_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "oszilloskop": {
+        "zeitbasis_s": 0.01,
+        "volt_je_teilung": [
+          2
+        ],
+        "trigger_V": 1.0
+      }
+    },
+    "bauteile": [
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "A3"
+        ],
+        "wert": 150
+      },
+      {
+        "id": "L1",
+        "typ": "spule_1h",
+        "felder": [
+          "A3",
+          "A5"
+        ]
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B5",
+          "kathode": "B3"
+        }
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C3"
+        }
+      }
+    ],
+    "module": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A3",
+        "nach": "B3",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A5",
+        "nach": "B5",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A3",
+        "nach": "C3",
+        "farbe": "gelb"
+      }
+    ],
+    "anzeigen": []
+  },
+  "schritte": [
+    "exp3_3_3_s1",
+    "exp3_3_3_s2",
+    "exp3_3_3_s3",
+    "exp3_3_3_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "L1",
+        "groesse": "strom_mA",
+        "zwischen": [
+          30,
+          42
+        ],
+        "dauer_s": 0.5
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_3_3_h1",
+    "exp3_3_3_h2",
+    "exp3_3_3_loesung"
+  ],
+  "erklaerung_key": "exp3_3_3_erklaerung",
+  "mehr_wissen_key": "exp3_3_3_mehr",
+  "weiterforschen": [
+    "exp3_3_3_w1",
+    "exp3_3_3_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_3_3_echt"
+}

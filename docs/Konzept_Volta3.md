@@ -182,7 +182,7 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 ### Stufe 3 – Stromversorgung: Wie macht man aus wenig Spannung mehr – ohne Wärme? (7)
 - 3.1 **Der Regler wird warm** – Verlustleistung am Längsregler aus Volta 2 messen.
 - 3.2 **Schalten statt bremsen** – Pulsweite an einer Lampe: Der Mittelwert zählt.
-- 3.3 **Die Spule wehrt sich** – Abschaltspannung und Freilaufdiode (»Nur in der App!« ohne Diode).
+- 3.3 **Die Spule wehrt sich** – Abschaltspannung und Freilaufdiode: Eine verkehrt herum gesteckte LED blitzt beim Loslassen des Tasters auf (etwa 36 mA für 10 ms, −2 V an der Spule). Ohne LED springt die Spannung auf über 1000 V; das zeigt das Weiterforschen mit dem Hinweis »nur in der App« (Schlag an der Spule). Kein »Nur in der App!« im Sinn eines zerstörten Bauteils (Nachtrag 08.11.2026 (7)): Am Taster geht ehrlich nichts kaputt, und das Transistormodell kennt noch keinen Durchbruch. Damit die Prüfung die Absicht nicht als Fehler meldet, nennt das Experiment die LED unter `absichtlich_verkehrt`.
 - 3.4 **Der Abwärtswandler** – weniger Spannung, kaum Wärme; Wirkungsgrad gegen den Längsregler.
 - 3.5 **Eine Zelle, eine weiße LED** – der Aufwärtswandler mit 1,5 V.
 - 3.6 **Minus aus dem Takt** – Ladungspumpe mit 555, Dioden und Kondensatoren.

@@ -45,6 +45,9 @@ struct CircuitCheckInput {
     const Catalog& catalog;
     // Messwerte der laufenden Simulation je Bauteil-ID (nullptr: keine); Batterie unter der Kennung "PULT.B"
     std::function<const core::ComponentReading*(const std::string&)> reading;
+    // Bauteile, die im Experiment mit Absicht verkehrt herum stecken (»absichtlich_verkehrt«, ab Volta 3, z. B. die
+    // LED als Freilaufweg neben einer Spule): keine Meldung »verkehrt herum«
+    std::vector<std::string> intendedReversed{};
 };
 
 // Auffaelligkeiten, wichtigste zuerst (Kurzschluss, Zerstoerung, Verpolung ... Hauptschalter)

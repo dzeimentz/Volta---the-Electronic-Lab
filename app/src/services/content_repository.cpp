@@ -449,6 +449,8 @@ bool ContentRepository::loadExperiment(const QString& id, Experiment& out) {
     out.stage = o.value(QStringLiteral("stufe")).toInt();
     out.destructive = o.value(QStringLiteral("zerstoerend")).toBool();
     out.colourFixed = o.value(QStringLiteral("farbe_fest")).toBool();
+    for (const auto& v : o.value(QStringLiteral("absichtlich_verkehrt")).toArray())
+        out.intendedReversed.push_back(v.toString().toStdString());
     out.scopeShown = o.value(QStringLiteral("vorlage")).toObject().value(QStringLiteral("pult_stellung")).toObject()
                          .contains(QStringLiteral("oszilloskop"));
     out.titleKey = o.value(QStringLiteral("titel_key")).toString();

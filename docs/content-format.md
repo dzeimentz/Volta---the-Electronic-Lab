@@ -185,3 +185,8 @@ Ohne Angabe sind Leuchtdioden in der Farbe austauschbar: Steckt das Kind eine gr
 zaehlt sie fuer Erfolgsbedingung, »Fertig« und Schritt-fuer-Schritt-Hilfe wie die Vorlage (`model::sameKind`). Der
 ContentSmokeTest prueft, dass jede solche Vorlage ihr Ziel mit jeder LED-Farbe erreicht. `"farbe_fest": true` setzen,
 wenn die Farbe zum Versuch gehoert (Ampel rot/gruen 2.11, rot gegen blau 2.20, Wechselblinker 4.10).
+
+### Absichtlich verkehrt (`absichtlich_verkehrt`, optional, ab Volta 3)
+Liste von Bauteil-IDs der Vorlage, die mit Absicht verkehrt herum stecken, z. B. `["D1"]` fuer die LED als
+Freilaufweg neben einer Spule (Volta 3, 3.3). Die Fehlersuche meldet fuer diese Bauteile kein »verkehrt herum«
+(LED, Elko); der ContentSmokeTest prueft die Vorlage mit derselben Ausnahme.

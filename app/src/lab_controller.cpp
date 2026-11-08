@@ -142,6 +142,7 @@ bool LabController::startExperiment(const QString& id) {
     else
         start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
     m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
+    m_session->setIntendedReversed(exp.intendedReversed);
     loadSessionBoard(start);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
     setGuideActive(false); // Aufbauhilfe beginnt jedes Experiment ausgeschaltet

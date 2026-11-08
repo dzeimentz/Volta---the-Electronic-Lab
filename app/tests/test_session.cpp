@@ -182,6 +182,28 @@ private slots:
     }
 
     // Durchgebrannter Drehregler: Fehlersuche nennt ihn an seinen Pultfeldern, Reparieren ist ein Befehl
+    void intendedReversedLedIsNotReported() {
+        // Volta 3, 3.3: LED mit Absicht verkehrt herum (Freilaufweg neben der Spule) - keine Meldung »verkehrt«
+        auto s = session();
+        std::string id;
+        QVERIFY(s->addPart("led_rot", "A1", Orientation::Horizontal, Span::Short, &id)); // Anode A1, Kathode A2
+        QVERIFY(s->addWire("P:0V", "A1", "schwarz"));
+        QVERIFY(s->addWire("P:+9V", "A2", "rot"));
+        s->setMainSwitch(true);
+        run(*s, 0.1);
+        auto reversed = [&] {
+            const auto f = s->checkCircuit();
+            return std::any_of(f.begin(), f.end(),
+                               [](const model::CircuitFinding& x) { return x.kind == model::CircuitFinding::Kind::Reversed; });
+        };
+        QVERIFY(reversed());
+        s->setIntendedReversed({id});
+        QVERIFY(!reversed());
+        s->clearSuccess(); // Experiment verlassen: wieder normal
+        run(*s, 0.1);
+        QVERIFY(reversed());
+    }
+
     void burntPotIsFoundAndRepaired() {
         auto s = session();
         s->setMainSwitch(true);
