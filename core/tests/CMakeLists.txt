@@ -30,6 +30,7 @@ add_executable(volta_core_tests
     test_opamp_module.cpp
     test_timer555.cpp
     test_gate_module.cpp
+    test_counter_module.cpp
     test_signal_stats.cpp
     test_fuzz.cpp
     components/test_transistor.cpp

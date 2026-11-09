@@ -39,6 +39,7 @@ add_library(volta_core STATIC
     src/modules/opamp_module.cpp
     src/modules/timer555_module.cpp
     src/modules/gate_module.cpp
+    src/modules/counter_module.cpp
     src/modules/radio_module.cpp
     src/modules/fm_module.cpp
 )

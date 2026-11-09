@@ -89,3 +89,28 @@ TEST_CASE("Signalstatistik: Schwingungszuege mit Pausen messen die Frequenz der 
     }
     CHECK(w.latest()[0].frequencyHz == Approx(f0).epsilon(0.01));
 }
+
+TEST_CASE("Signalstatistik: Frequenzzaehler zaehlt Flanken je Fenster ueber die Torzeit", "[signal][volta3]") {
+    // Rechteck 68,7 Hz (0 ... 7,3 V wie ein 555): je 0,1-s-Fenster 6 oder 7 steigende Durchgaenge, in zehn
+    // Fenstern (Torzeit 1 s) 68 oder 69; das erste Fenster kennt noch keine Schwelle
+    SignalWindow w;
+    w.reset(1, 0.1);
+    const double dtS = 20e-6, f = 68.7;
+    std::uint64_t seen = 0;
+    int sum = 0, windows = 0;
+    for (int k = 1; k <= 55000; ++k) { // 1,1 s
+        const double t = k * dtS;
+        const double v[1] = {std::fmod(t * f, 1.0) < 0.6 ? 7.3 : 0.1};
+        w.add(v, 1, dtS);
+        const SignalSummary& s = w.latest()[0];
+        if (s.windows != seen) {
+            seen = s.windows;
+            if (seen == 1) continue;
+            CHECK((s.rises == 6 || s.rises == 7));
+            sum += s.rises;
+            ++windows;
+        }
+    }
+    REQUIRE(windows == 10);
+    CHECK((sum == 68 || sum == 69));
+}

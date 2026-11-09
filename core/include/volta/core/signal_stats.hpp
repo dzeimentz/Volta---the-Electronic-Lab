@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <cstddef>
 #include <vector>
 
@@ -17,6 +18,10 @@ struct SignalSummary {
     // aus steigenden Durchgaengen durch den Mittelwert des vorigen Fensters (Median der Abstaende, damit Pausen
     // zwischen abklingenden Schwingungen nicht mitzaehlen); 0 = keine
     double frequencyHz = 0.0;
+    // Frequenzzaehler (ab Volta 3): bestaetigte steigende Durchgaenge in diesem Fenster und Zahl der bisher
+    // abgeschlossenen Fenster (zum Aufsummieren ueber eine Torzeit aus mehreren Fenstern)
+    int rises = 0;
+    std::uint64_t windows = 0;
     // Wechselgroesse: der Wechselanteil ueberwiegt den Gleichanteil (Konzept Volta 2, 5.4)
     bool isAc() const noexcept { return valid && acRms > 1e-3 && acRms > (mean < 0.0 ? -mean : mean); }
 };

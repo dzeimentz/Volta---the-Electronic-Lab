@@ -69,6 +69,8 @@ void SignalWindow::add(const double* values, std::size_t count, double dtS) noex
         s.acRms = std::sqrt(std::max(0.0, s.rms * s.rms - s.mean * s.mean));
         s.min = a.min;
         s.max = a.max;
+        s.rises = a.rises;
+        ++s.windows;
         s.frequencyHz = a.rises >= 2 && a.lastRiseS > a.firstRiseS ? (a.rises - 1) / (a.lastRiseS - a.firstRiseS) : 0.0;
         // Median der Abstaende: Pausen zwischen Schwingungszuegen (Rechteck stoesst einen Schwingkreis an) zaehlen
         // nicht mit; bei gleichmaessigen Signalen gleich dem Mittel
