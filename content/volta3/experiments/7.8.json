@@ -1,0 +1,311 @@
+{
+  "id": "volta3.7.8",
+  "band": "volta3",
+  "stufe": 7,
+  "titel_key": "exp3_7_8_titel",
+  "dauer_min": 40,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "taster",
+    "widerstand",
+    "elko",
+    "led_rot",
+    "logiktastkopf",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp3_7_8_frage",
+  "vermutungen": [
+    "exp3_7_8_v1",
+    "exp3_7_8_v2",
+    "exp3_7_8_v3"
+  ],
+  "beobachtungen": [
+    "exp3_7_8_b1",
+    "exp3_7_8_b2",
+    "exp3_7_8_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "anzahl": 1
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "A2",
+          "A3"
+        ],
+        "geschlossen": true
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "S2",
+        "typ": "taster",
+        "felder": [
+          "A6",
+          "A7"
+        ],
+        "geschlossen": false
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "D1",
+          "D2"
+        ],
+        "wert": 100000
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "D2",
+          "minus": "D3"
+        },
+        "wert": 1e-05
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "E5",
+          "kathode": "E6"
+        }
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "E6",
+          "E7"
+        ],
+        "wert": 680
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": {
+          "plus": "B8",
+          "minus": "B9"
+        }
+      },
+      {
+        "id": "LA1",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "A2"
+        }
+      },
+      {
+        "id": "LA2",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "C2"
+        }
+      },
+      {
+        "id": "LA3",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "D1"
+        }
+      },
+      {
+        "id": "LA4",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "E5"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "GM1",
+        "typ": "gattermodul",
+        "feld": 1
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "GM1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "GM1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A5",
+        "farbe": "rot"
+      },
+      {
+        "von": "A7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "GM1.a2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A6",
+        "nach": "GM1.a1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "GM1.y2",
+        "nach": "C2",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C2",
+        "nach": "GM1.b1",
+        "farbe": "gruen"
+      },
+      {
+        "von": "GM1.y1",
+        "nach": "C9",
+        "farbe": "blau"
+      },
+      {
+        "von": "C9",
+        "nach": "GM1.b2",
+        "farbe": "blau"
+      },
+      {
+        "von": "C2",
+        "nach": "GM1.a3",
+        "farbe": "gruen"
+      },
+      {
+        "von": "GM1.y3",
+        "nach": "D1",
+        "farbe": "weiss"
+      },
+      {
+        "von": "D2",
+        "nach": "GM1.b3",
+        "farbe": "weiss"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "D1",
+        "nach": "GM1.a4",
+        "farbe": "weiss"
+      },
+      {
+        "von": "D1",
+        "nach": "GM1.b4",
+        "farbe": "weiss"
+      },
+      {
+        "von": "GM1.y4",
+        "nach": "E5",
+        "farbe": "gelb"
+      },
+      {
+        "von": "E7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C2",
+        "nach": "B8",
+        "farbe": "gruen"
+      },
+      {
+        "von": "B9",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_7_8_s1",
+    "exp3_7_8_s2",
+    "exp3_7_8_s3",
+    "exp3_7_8_s4",
+    "exp3_7_8_s5",
+    "exp3_7_8_s6",
+    "exp3_7_8_s7"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "dauer_s": 1,
+        "min": 6.0
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "C1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_7_8_h1",
+    "exp3_7_8_h2",
+    "exp3_7_8_loesung"
+  ],
+  "erklaerung_key": "exp3_7_8_erklaerung",
+  "mehr_wissen_key": "exp3_7_8_mehr",
+  "weiterforschen": [
+    "exp3_7_8_w1",
+    "exp3_7_8_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_7_8_echt"
+}

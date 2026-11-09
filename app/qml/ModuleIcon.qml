@@ -1,6 +1,6 @@
 // Piktogramm eines Moduls (Wiedererkennung neben Name und Plattenfarbe, Farbe nie allein): Blinkmodul Gluehbirne
 // mit Strahlen, Tonmodul Note, Verstaerkermodul kleine Welle -> grosse Welle, Zeitmodul Stoppuhr, OP-Modul Dreieck
-// mit + und -, Timer 555 Rechteckpuls.
+// mit + und -, Timer 555 Rechteckpuls, Gatter-Modul NAND-Zeichen (Halbkreis mit Kreis am Ausgang).
 // Gezeichnet in einem Raster der Hoehe 32 (Verstaerker breiter: 48) und auf die Hoehe des Elements skaliert; die
 // Breite ergibt sich daraus.
 import QtQuick
@@ -27,6 +27,9 @@ Item {
             return "M 7 3 L 29 16 L 7 29 Z M 10 10 h5 M 12.5 7.5 v5 M 10 22 h5"
         case "timer555":
             return "M 2 24 h 8 v -16 h 10 v 16 h 8 v -16 h 10 v 16 h 8"
+        case "gattermodul": // NAND: zwei Eingaenge, Halbkreis, Negationskreis, Ausgang
+            return "M 2 10 h 6 M 2 22 h 6 M 8 4 h 8 a 12 12 0 0 1 0 24 h -8 Z"
+                 + " M 28 16 a 2.5 2.5 0 1 0 5 0 a 2.5 2.5 0 1 0 -5 0"
         case "mwmodul": // Antenne mit Wellen (Konzept Volta 3, Kap. 9)
             return "M 16 30 V 12 M 16 12 L 10 3 M 16 12 L 22 3 M 10 3 H 22"
                  + " M 6 10 q -3 4 0 8 M 26 10 q 3 4 0 8 M 2 7 q -5 7 0 14 M 30 7 q 5 7 0 14"

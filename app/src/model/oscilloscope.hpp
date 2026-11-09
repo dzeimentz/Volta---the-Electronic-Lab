@@ -23,6 +23,20 @@ struct ScopeSample {
     std::array<double, kScopeChannels> v{};
 };
 
+// Logikanalysator (ab Volta 3, Stufe 7): acht Kanaele an den Logik-Tastkoepfen LA1-LA8 (Bezug 0V). Die Bruecke
+// tastet die Spannungen ab; H, L oder ? (verbotener Bereich) entscheidet die Anzeige mit den Schwellen 70 % und
+// 30 % der Batteriespannung (CMOS). Zwei Zeitfenster: fein 20 ms (Prellen) und grob 5 s (Bedienen).
+inline constexpr std::size_t kLogicChannels = 8;
+inline constexpr std::size_t kLogicPoints = 1000; // Abtastpunkte je Fenster
+inline constexpr double kLogicFineWindowS = 20e-3;
+inline constexpr double kLogicCoarseWindowS = 5.0;
+inline constexpr double kLogicHighFraction = 0.7;
+inline constexpr double kLogicLowFraction = 0.3;
+struct LogicSample {
+    double t = 0.0;
+    std::array<float, kLogicChannels> v{};
+};
+
 // Kennlinienschreiber (ab Volta 2, Konzept 5.2): hoechste Pruefspannung, nur positiv oder beide Richtungen, Strom-
 // begrenzung (daraus der Vorwiderstand). Ein Durchlauf hin und zurueck dauert kTracerPeriodS; die Bruecke tastet
 // ihn mit kTracerPoints Punkten ab (v[0] = Spannung zwischen KS+ und KS-, v[1] = Strom aus KS+ durch das Bauteil).

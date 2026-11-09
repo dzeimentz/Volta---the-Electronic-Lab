@@ -187,6 +187,21 @@ std::array<std::string, kScopeChannels> LabSession::scopeProbes() const {
     return out;
 }
 
+std::array<std::string, kLogicChannels> LabSession::logicProbes() const {
+    std::array<std::string, kLogicChannels> out;
+    for (const auto& p : m_board.parts) {
+        if (p.type != "logiktastkopf" || p.id.size() < 3) continue;
+        const int n = std::atoi(p.id.c_str() + 2); // LA1 -> Kanal 1
+        if (n >= 1 && n <= static_cast<int>(kLogicChannels)) out[static_cast<std::size_t>(n - 1)] = p.id;
+    }
+    return out;
+}
+
+void LabSession::setLogicFine(bool fine) {
+    m_logicFine = fine;
+    updateScope();
+}
+
 void LabSession::setScopeActive(bool active) {
     m_scopeActive = active;
     updateScope();
@@ -213,6 +228,15 @@ void LabSession::updateScope() {
         c.capacity = 2 * kScopePointsPerScreen + 200; // zwei Bilder: Trigger mit Vorlauf findet immer ein ganzes
         c.stepS = s.simStepS();
     }
+    // Logikanalysator (ab Volta 3): tastet, sobald ein Logik-Tastkopf steckt; fein mit 20 us
+    c.logicIds = logicProbes();
+    if (std::any_of(c.logicIds.begin(), c.logicIds.end(), [](const std::string& s) { return !s.empty(); })) {
+        c.logicIntervalS = logicWindowS() / static_cast<double>(kLogicPoints);
+        c.logicCapacity = kLogicPoints + 20;
+        if (m_logicFine) c.stepS = std::min(c.stepS, kAudioStepS);
+    } else {
+        c.logicIds = {};
+    }
     // Schrittweite nach dem Aufbau (Generator, Lautsprecher), unabhaengig davon, ob der Ton laeuft
     c.stepS = std::min(c.stepS, requiredStepS(m_board, m_timeScale == 1.0, m_catalog.secondOrder));
     if (needsAudioStep(m_board) && m_timeScale == 1.0 && m_audible && m_audio) {
@@ -232,7 +256,9 @@ void LabSession::updateScope() {
         c.capacity == m_scopeConfig.capacity && c.stepS == m_scopeConfig.stepS &&
         c.tracerId == m_scopeConfig.tracerId && c.tracerCapacity == m_scopeConfig.tracerCapacity &&
         c.tracerEpoch == m_scopeConfig.tracerEpoch && c.audio == m_scopeConfig.audio &&
-        c.audioId == m_scopeConfig.audioId && c.audioVoltScale == m_scopeConfig.audioVoltScale)
+        c.audioId == m_scopeConfig.audioId && c.audioVoltScale == m_scopeConfig.audioVoltScale &&
+        c.logicIds == m_scopeConfig.logicIds && c.logicIntervalS == m_scopeConfig.logicIntervalS &&
+        c.logicCapacity == m_scopeConfig.logicCapacity)
         return;
     m_scopeConfig = c;
     m_bridge.setScope(c);

@@ -861,7 +861,7 @@ Item {
         id: schematicPanel
         objectName: "schematicPanel"
         controller: lab.controller
-        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: scopePanel.top }
+        anchors { right: experimentPanel.left; top: toolbar.bottom; bottom: logicPanel.top }
         readonly property bool shown: lab.schematicVisible && lab.controller.schematicAvailable
         visible: shown
         // die Spalte waechst und schrumpft mit der Stufe des Plans im selben Verhaeltnis (verkleinert mehr Platz
@@ -957,10 +957,26 @@ Item {
         onCloseRequested: lab.recorderVisible = false
     }
 
+    // Logikanalysator (ab Volta 3): erscheint, sobald ein Logik-Tastkopf steckt
+    LogicPanel {
+        id: logicPanel
+        objectName: "logicPanel"
+        controller: lab.controller
+        readonly property bool shown: {
+            const parts = lab.controller.parts
+            for (let k = 0; k < parts.length; ++k)
+                if (parts[k].type === "logiktastkopf") return true
+            return false
+        }
+        visible: shown
+        anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.top }
+        height: shown ? Math.min(implicitHeight, Math.max(120, lab.height * 0.32)) : 0
+    }
+
     Rectangle {
         id: boardArea
         objectName: "boardArea"
-        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: scopePanel.top }
+        anchors { left: tray.right; right: schematicPanel.left; top: toolbar.bottom; bottom: logicPanel.top }
         color: Theme.board
         clip: true
 

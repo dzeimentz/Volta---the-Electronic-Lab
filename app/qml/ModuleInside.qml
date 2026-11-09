@@ -96,6 +96,8 @@ Popup {
                       ? qsTr("Im Zeitmodul leitet in Ruhe der Transistor T1. Ein Druck auf »start« schaltet T2 ein; dessen Sprung drückt über den Elko C die Basis von T1 ins Minus, T1 sperrt. Erst wenn sich C über R_zeit umgeladen hat – etwa 3 Sekunden –, leitet T1 wieder. Solange T1 sperrt, schaltet T3 den Ausgang. Was du hier siehst, wird gerade gerechnet.")
                       : inside.moduleType === "timer555"
                       ? qsTr("Im Timer 555 teilen drei gleiche Widerstände die Versorgung: CV liegt bei zwei Dritteln, darunter ein Drittel. Zwei Vergleicher beobachten THR und TR. Fällt TR unter ein Drittel, setzt das Flipflop den Ausgang hoch; steigt THR über zwei Drittel, setzt es ihn zurück, und DIS entlädt nach GND. R auf GND hält den Ausgang aus. Volta rechnet den 555 mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Vergleicher kippt.")
+                      : inside.moduleType === "gattermodul"
+                      ? qsTr("Im Gatter-Modul stecken vier NAND-Gatter an einer gemeinsamen Versorgung. Jedes Gatter hat die Eingänge A und B und den Ausgang Y. Nur wenn A und B beide H sind, ist Y auf L – sonst auf H. Die Eingänge sind Schmitt-Trigger: H erkennen sie erst über 60 % der Versorgung, L erst unter 40 %. Dazwischen bleibt der alte Zustand. Volta rechnet die Gatter mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.")
                       : inside.moduleType === "opmodul"
                       ? qsTr("Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.")
                       : inside.moduleType === "mwmodul"
@@ -335,6 +337,43 @@ Popup {
                     text: (inside.info.powered === false ? qsTr("Unter 4,5 V arbeitet der 555 nicht. ") : "")
                           + qsTr("Versorgung: %1 V, CV: %2 V (zwei Drittel), Schwelle für TR: %3 V (ein Drittel). Alle Spannungen sind gegen GND gemessen.")
                             .arg(inside.num(inside.info.supplyV, 1)).arg(inside.num(inside.info.cvV, 2)).arg(inside.num((inside.info.cvV || 0) / 2, 2))
+                }
+            }
+
+            // ---------------------------------------------------------- Verhaltensmodell: vier NAND-Gatter
+            Column {
+                visible: inside.moduleType === "gattermodul"
+                width: parent.width
+                spacing: 8
+                Repeater {
+                    model: inside.moduleType === "gattermodul" ? (inside.info.gates || []) : []
+                    Row {
+                        required property var modelData
+                        required property int index
+                        spacing: 6
+                        Block {
+                            title: qsTr("%1A und %1B").arg(index + 1)
+                            value: (modelData.a ? "H" : "L") + " (" + qsTr("%1 V").arg(inside.num(modelData.aV, 1)) + ")  "
+                                   + (modelData.b ? "H" : "L") + " (" + qsTr("%1 V").arg(inside.num(modelData.bV, 1)) + ")"
+                            lit: modelData.a && modelData.b
+                        }
+                        Label { anchors.verticalCenter: parent.verticalCenter; text: "→ NAND →"; font.pixelSize: 16; color: Theme.navy }
+                        Block {
+                            title: qsTr("Ausgang %1Y").arg(index + 1)
+                            value: (modelData.y ? "H" : "L") + " (" + qsTr("%1 V").arg(inside.num(modelData.yV, 1)) + ")"
+                            lit: modelData.y
+                        }
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    color: "#4A5866"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    text: (inside.info.powered === false ? qsTr("Unter 3 V arbeiten die Gatter nicht. ") : "")
+                          + qsTr("Versorgung: %1 V. H ab %2 V, L unter %3 V. Alle Spannungen sind gegen Minus gemessen.")
+                            .arg(inside.num(inside.info.supplyV, 1)).arg(inside.num((inside.info.supplyV || 0) * 0.6, 1))
+                            .arg(inside.num((inside.info.supplyV || 0) * 0.4, 1))
                 }
             }
 

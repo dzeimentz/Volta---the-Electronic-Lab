@@ -1,0 +1,237 @@
+{
+  "id": "volta3.7.3",
+  "band": "volta3",
+  "stufe": 7,
+  "titel_key": "exp3_7_3_titel",
+  "dauer_min": 25,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "wechselschalter",
+    "widerstand",
+    "transistor_npn",
+    "logiktastkopf",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp3_7_3_frage",
+  "vermutungen": [
+    "exp3_7_3_v1",
+    "exp3_7_3_v2",
+    "exp3_7_3_v3"
+  ],
+  "beobachtungen": [
+    "exp3_7_3_b1",
+    "exp3_7_3_b2",
+    "exp3_7_3_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "anzahl": 1
+      }
+    },
+    "bauteile": [
+      {
+        "id": "W1",
+        "typ": "wechselschalter",
+        "felder": {
+          "a": "A1",
+          "mitte": "A2",
+          "b": "A3"
+        },
+        "geschlossen": false
+      },
+      {
+        "id": "W2",
+        "typ": "wechselschalter",
+        "felder": {
+          "a": "A5",
+          "mitte": "A6",
+          "b": "A7"
+        },
+        "geschlossen": false
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "B2",
+          "B3"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "T1",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "B3",
+          "c": "B4",
+          "e": "C3",
+          "e2": "C4"
+        }
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "D2",
+          "D3"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "T2",
+        "typ": "transistor_npn",
+        "felder": {
+          "b": "D3",
+          "c": "D4",
+          "e": "E3",
+          "e2": "E4"
+        }
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "B4",
+          "B5"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "LA1",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "A2"
+        }
+      },
+      {
+        "id": "LA2",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "A6"
+        }
+      },
+      {
+        "id": "LA3",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "B4"
+        }
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": {
+          "plus": "C6",
+          "minus": "C7"
+        }
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A5",
+        "farbe": "rot"
+      },
+      {
+        "von": "A7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "B2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A6",
+        "nach": "D2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C3",
+        "nach": "D4",
+        "farbe": "blau"
+      },
+      {
+        "von": "E3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "B5",
+        "farbe": "rot"
+      },
+      {
+        "von": "B4",
+        "nach": "C6",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_7_3_s1",
+    "exp3_7_3_s2",
+    "exp3_7_3_s3",
+    "exp3_7_3_s4",
+    "exp3_7_3_s5",
+    "exp3_7_3_s6"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "dauer_s": 1,
+        "max": 0.6
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "T2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_7_3_h1",
+    "exp3_7_3_h2",
+    "exp3_7_3_loesung"
+  ],
+  "erklaerung_key": "exp3_7_3_erklaerung",
+  "mehr_wissen_key": "exp3_7_3_mehr",
+  "weiterforschen": [
+    "exp3_7_3_w1",
+    "exp3_7_3_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_7_3_echt"
+}

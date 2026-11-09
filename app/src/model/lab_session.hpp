@@ -154,6 +154,13 @@ public:
     void setScopeSettings(const ScopeSettings& s);
     // Tastkoepfe K1/K2: Bauteilkennung je Kanal (leer = nicht gesteckt)
     std::array<std::string, kScopeChannels> scopeProbes() const;
+    // Logikanalysator (ab Volta 3): Logik-Tastkoepfe LA1-LA8 je Kanal; feines (20 ms) oder grobes (5 s) Zeitfenster
+    std::array<std::string, kLogicChannels> logicProbes() const;
+    void setLogicFine(bool fine);
+    bool logicFine() const { return m_logicFine; }
+    double logicWindowS() const { return m_logicFine ? kLogicFineWindowS : kLogicCoarseWindowS; }
+    const std::vector<LogicSample>& logicSamples() const { return m_snap.logic; }
+    bool logicHas(std::size_t c) const { return c < kLogicChannels && m_snap.logicHas[c]; }
     bool setMeterVisible(bool visible);
     bool replaceMeterFuse();
     // Lautsprecher des Pults reparieren (Befehl, wie Reparieren eines Bauteils)
@@ -212,6 +219,7 @@ private:
     bool m_hadStations = false; // Senderanlage war im Pult (leere Liste einmal nachschicken)
     double m_timeScale = 1.0;
     bool m_scopeActive = false;
+    bool m_logicFine = false;
     sim::ScopeConfig m_scopeConfig; // zuletzt an die Bruecke gegeben (nur bei Aenderung neu)
     void updateScope();
     sim::Snapshot m_snap;

@@ -32,6 +32,7 @@
 #include "volta/core/modules/fm_module.hpp"
 #include "volta/core/modules/radio_module.hpp"
 #include "volta/core/modules/timer555_module.hpp"
+#include "volta/core/modules/gate_module.hpp"
 #include "volta/core/components/wire.hpp"
 
 namespace volta::model {
@@ -275,7 +276,9 @@ private:
             lp.iNomA = e->variantParam("u_nenn_V", lp.uNomV, "i_nenn_mA", lp.iNomA * 1e3) * 1e-3;
             c.add<core::Lamp>(p.id, n[0], n[1], lp);
         } else if (m == "switch" && n.size() == 2) {
-            c.add<core::Switch>(p.id, n[0], n[1], p.closed);
+            core::Switch& sw = c.add<core::Switch>(p.id, n[0], n[1], p.closed);
+            // ab Volta 3 mit Logik auf der Platte (Gatter-Modul oder Logik-Tastkopf): der Taster prellt
+            if (p.type == "taster" && m_catalog.secondOrder && logicOnBoard(m_board)) sw.setBounce(true);
         } else if (m == "changeover_switch" && n.size() == 3) {
             c.add<core::ChangeoverSwitch>(p.id, n[0], n[1], n[2], p.closed);
         } else if (m == "motor" && n.size() == 2) {
@@ -402,6 +405,11 @@ private:
             core::PotentiometerParams pp;
             pp.ohm = p.value > 0.0 ? p.value : e->param("r_ohm", pp.ohm); // Trimmer: Katalogwert
             c.add<core::Potentiometer>(p.id, n[0], n[1], n[2], pp, p.position);
+        } else if (m == "logic_probe" && n.size() == 1) {
+            // Logik-Tastkopf (ab Volta 3): hochohmig gegen 0V wie der Tastkopf; H, L oder ? entscheidet die Anzeige
+            core::ResistorParams rp;
+            rp.ohm = e->param("r_ein_ohm", 10e6);
+            c.add<core::Resistor>(p.id, n[0], core::kGround, rp);
         } else if (m == "scope_probe" && n.size() == 1) {
             // Tastkopf des Oszilloskops (ab Volta 2): Eingangswiderstand 10 MOhm gegen 0V wie ein echter
             // Tastkopf; der Strom dahin ist der Messwert der Spannung am Feld
@@ -514,6 +522,15 @@ private:
             // Katalog: minus, tr, aus, reset, cv, thr, dis, plus (Pins 1 bis 8, Verhaltensmodell mit Ereignisortung)
             const core::SubcircuitRange r =
                 core::addTimer555(m_net.circuit, m.id, {n[0], n[1], n[2], n[3], n[4], n[5], n[6], n[7]});
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
+        } else if (m.type == "gattermodul" && n.size() == 14) {
+            // Katalog: plus, minus, a1, b1, y1, ..., a4, b4, y4 (ab Volta 3; vier NAND mit Schmitt-Eingaengen)
+            core::GateModulePins gp;
+            gp.plus = n[0];
+            gp.minus = n[1];
+            for (std::size_t k = 0; k < 12; ++k) gp.io[k] = n[2 + k];
+            const core::SubcircuitRange r = core::addGateModule(m_net.circuit, m.id, gp);
             m_net.modules[m.id] = r;
             m_net.moduleMain[m.id] = r.first;
         } else if (m.type == "tonmodul" && n.size() == 4) {

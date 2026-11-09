@@ -18,6 +18,7 @@ enum class Span { Short = 1, Long = 2 }; // ein bzw. zwei Feldabstaende
 inline constexpr int kSocketsPerField = 5;
 inline constexpr int kMaxMeasurePointsPerType = 3; // Messstellen V, A, Ohm je Art (drei Anzeigen)
 inline constexpr int kMaxScopeProbes = 2;          // Tastkoepfe K1, K2 des Oszilloskops
+inline constexpr int kMaxLogicProbes = 8;          // Logik-Tastkoepfe LA1-LA8 des Logikanalysators (ab Volta 3)
 // Einstellbare Breite der Grundplatte (Spalten je Reihe), Schritt 2
 inline constexpr int kMinColumns = 8;
 inline constexpr int kMaxColumns = 12;
@@ -51,6 +52,8 @@ bool needsAudioStep(const Board& board);
 // (secondOrder, Catalog::secondOrder) mit einer Spule auf der Grundplatte 20 us: Schwingkreise bis etwa 1 kHz
 // schwingen dann mit BDF2 auf 2 % genau, auch ohne Oszilloskop und in der Zeitlupe.
 double requiredStepS(const Board& board, bool audio = true, bool secondOrder = false);
+// Logik auf der Grundplatte (ab Volta 3): Gatter-Modul oder Logik-Tastkopf
+bool logicOnBoard(const Board& board);
 // Groesste von Bauteilen oder Leitungen belegte Spalte bzw. Reihe (1 = A; 0: keine)
 int highestUsedColumn(const Board& board);
 int highestUsedRow(const Board& board);

@@ -145,7 +145,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
-        g.h = t == "timer555" ? 4.0 : 2.0; // 555: fuenf Anschluesse links
+        g.h = t == "timer555" ? 4.0 : t == "gattermodul" ? 6.0 : 2.0; // 555: fuenf Anschluesse links
         std::vector<std::size_t> left, right;
         g.pins.resize(e.nodes.size());
         for (std::size_t k = 0; k < e.nodes.size(); ++k) {
@@ -163,6 +163,13 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
                 continue;
             }
             if (t == "hallsensor" && n == "aus") p.label = "A";
+            if (t == "gattermodul" && n.size() == 2 && n[1] >= '1' && n[1] <= '4') { // 1A, 1B, 1Y wie im Datenblatt
+                p.label = std::string(1, n[1]) + static_cast<char>(n[0] - 'a' + 'A');
+                if (n[0] == 'y') {
+                    right.push_back(k);
+                    continue;
+                }
+            }
             if (t == "opmodul" && (n == "nichtinv" || n == "inv")) p.label = n == "nichtinv" ? "IN+" : "IN−";
             if (t == "mwmodul" && (n == "ant" || n == "abst")) p.label = n == "ant" ? "ANT" : "ABST";
             if (t == "ukwmodul" && (n == "ant" || n == "abst" || n == "laut"))

@@ -84,6 +84,10 @@ struct ScopeConfig {
     std::string audioId;
     // > 0: statt des Stroms klingt die Spannung des Bauteils, umgerechnet in A je V (Kristallhoerer, ab Volta 3)
     double audioVoltScale = 0.0;
+    // Logikanalysator (ab Volta 3): Logik-Tastkoepfe je Kanal (leer = keiner), Abtastabstand und Puffergroesse
+    std::array<std::string, model::kLogicChannels> logicIds;
+    double logicIntervalS = 0.0;
+    std::size_t logicCapacity = 0;
 };
 
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.
@@ -104,6 +108,9 @@ struct Snapshot {
     std::array<bool, model::kScopeChannels> scopeHas{};
     // Kennlinienschreiber: v[0] = Spannung KS+ gegen KS-, v[1] = Strom aus KS+ (aelteste zuerst)
     std::vector<model::ScopeSample> tracer;
+    // Logikanalysator (ab Volta 3): Spannungen der Logik-Tastkoepfe (aelteste zuerst), je Kanal angeschlossen
+    std::vector<model::LogicSample> logic;
+    std::array<bool, model::kLogicChannels> logicHas{};
     core::Status lastStatus = core::Status::Ok;
     double realtimeRatio = 1.0;               // erreichte Simulationszeit je Wanduhrzeit (1 = Echtzeit)
 };
@@ -167,6 +174,10 @@ private:
     std::size_t m_scopeHead = 0, m_scopeCount = 0;
     std::array<long, model::kScopeChannels> m_scopeIndex{-1, -1};
     double m_scopeLastT = -1.0;
+    std::vector<model::LogicSample> m_logicRing; // Logikanalysator
+    std::size_t m_logicHead = 0, m_logicCount = 0;
+    std::array<long, model::kLogicChannels> m_logicIndex{-1, -1, -1, -1, -1, -1, -1, -1};
+    double m_logicLastT = -1.0;
     std::vector<model::ScopeSample> m_tracerRing; // Kennlinienschreiber
     std::size_t m_tracerHead = 0, m_tracerCount = 0;
     long m_tracerIndex = -1;

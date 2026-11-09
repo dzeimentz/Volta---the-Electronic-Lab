@@ -112,7 +112,9 @@
     {"typ": "messstelle_ohm", "thema": "messen", "anschluesse": ["plus", "minus"], "spannweite": ["kurz", "lang"], "modell": "measure_ohm",
      "parameter": {}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_messstelle_ohm"},
     {"typ": "tastkopf", "thema": "messen", "anschluesse": ["spitze"], "spannweite": ["kurz", "lang"], "modell": "scope_probe",
-     "parameter": {"r_ein_ohm": 10000000}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_tastkopf"}
+     "parameter": {"r_ein_ohm": 10000000}, "ab_band": "volta2", "ab_stufe": 0, "lexikon_key": "lex_tastkopf"},
+    {"typ": "logiktastkopf", "thema": "messen", "anschluesse": ["spitze"], "spannweite": ["kurz", "lang"], "modell": "logic_probe",
+     "parameter": {"r_ein_ohm": 10000000}, "ab_band": "volta3", "ab_stufe": 7, "lexikon_key": "lex_logiktastkopf"}
   ],
   "module": [
     {"typ": "blinkmodul", "anschluesse": ["plus", "minus", "aus", "takt"], "breite": 4, "art": "teilschaltung",
@@ -130,6 +132,8 @@
     {"typ": "mwmodul", "anschluesse": ["plus", "minus", "ant", "abst", "aus"], "breite": 5, "art": "teilschaltung",
      "ab_band": "volta3", "ab_stufe": 2, "lexikon_key": "lex_mwmodul"},
     {"typ": "ukwmodul", "anschluesse": ["plus", "minus", "ant", "abst", "laut", "aus"], "breite": 6, "art": "verhaltensmodell",
-     "ab_band": "volta3", "ab_stufe": 2, "lexikon_key": "lex_ukwmodul"}
+     "ab_band": "volta3", "ab_stufe": 2, "lexikon_key": "lex_ukwmodul"},
+    {"typ": "gattermodul", "anschluesse": ["plus", "minus", "a1", "b1", "y1", "a2", "b2", "y2", "a3", "b3", "y3", "a4", "b4", "y4"],
+     "breite": 14, "art": "verhaltensmodell", "ab_band": "volta3", "ab_stufe": 7, "lexikon_key": "lex_gattermodul"}
   ]
 }

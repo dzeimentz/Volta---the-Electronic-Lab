@@ -3106,6 +3106,49 @@
     </message>
 </context>
 <context>
+    <name>LogicPanel</name>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Logikanalysator</source>
+        <translation>Logikanalysator</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>fein: %1</source>
+        <translation>fein: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>grob: %1</source>
+        <translation>grof: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Zeitfenster umschalten</source>
+        <translation>Zäitfënster ëmschalten</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Weiter</source>
+        <translation>Weider</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Standbild</source>
+        <translation>Standbild</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H über %1 · L unter %2 · dazwischen ?</source>
+        <translation>H iwwer %1 · L ënner %2 · dertëscht ?</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Stecke einen Logik-Tastkopf auf ein Feld.</source>
+        <translation>Steck e Logik-Tastkapp op e Feld.</translation>
+    </message>
+</context>
+<context>
     <name>LicensesDialog</name>
     <message>
         <location filename="../app/qml/LicensesDialog.qml" line="58"/>
@@ -3470,6 +3513,11 @@
         <location filename="../app/src/model/circuit_check.cpp" line="379"/>
         <source>Der Lautsprecher ist kaputt gegangen. Was hätte den Strom durch ihn begrenzen können? Tippe auf den Lautsprecher, um ihn zu reparieren.</source>
         <translation>De Lautsprecher ass futti gaangen. Wat hätt de Stroum duerch hie begrenze kënnen? Tipp op de Lautsprecher, fir en ze reparéieren.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="1"/>
+        <source>Der Logikanalysator hat acht Kanäle LA1 bis LA8.</source>
+        <translation>De Logikanalysator huet aacht Kanäl LA1 bis LA8.</translation>
     </message>
 </context>
 <context>
@@ -3838,6 +3886,31 @@
         <location filename="../app/qml/ModuleInside.qml" line="448"/>
         <source>Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.</source>
         <translation>Versuergung: %1 V. D&apos;Endstuf schalt am Takt vum Toun un an aus; Volta rechent mam Mëttelwäert vum Stroum. E Lautsprecher tëscht Plus an »aus« spillt d&apos;Melodie mat.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Im Gatter-Modul stecken vier NAND-Gatter an einer gemeinsamen Versorgung. Jedes Gatter hat die Eingänge A und B und den Ausgang Y. Nur wenn A und B beide H sind, ist Y auf L – sonst auf H. Die Eingänge sind Schmitt-Trigger: H erkennen sie erst über 60 % der Versorgung, L erst unter 40 %. Dazwischen bleibt der alte Zustand. Volta rechnet die Gatter mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.</source>
+        <translation>Am Gatter-Modul stieche véier NAND-Gatter un enger gemeinsamer Versuergung. All Gatter huet d&apos;Agäng A a B an den Ausgang Y. Nëmmen wann A a B allebéid H sinn, ass Y op L – soss op H. D&apos;Agäng si Schmitt-Trigger: H erkennen se eréischt iwwer 60 % vun der Versuergung, L eréischt ënner 40 %. Dertëscht bleift den ale Zoustand. Volta rechent d&apos;Gatter mat engem Verhalensmodell a fënnt de genauen Abléck, an deem en Agang kippt.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>%1A und %1B</source>
+        <translation>%1A an %1B</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Ausgang %1Y</source>
+        <translation>Ausgang %1Y</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Unter 3 V arbeiten die Gatter nicht. </source>
+        <translation>Ënner 3 V schaffen d&apos;Gatter net. </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Versorgung: %1 V. H ab %2 V, L unter %3 V. Alle Spannungen sind gegen Minus gemessen.</source>
+        <translation>Versuergung: %1 V. H ab %2 V, L ënner %3 V. All Spannunge si géint Minus gemooss.</translation>
     </message>
 </context>
 <context>
@@ -6445,6 +6518,28 @@
         <source>Kristallhörer,Hörer</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Kristallhéierer,Héierer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Logik-Tastkopf</source>
+        <translation>Logik-Tastkapp</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Gatter-Modul</source>
+        <translation>Gatter-Modul</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Gatter-Modul</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Gatter-Modul</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Logik-Tastkopf</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Logik-Tastkapp</translation>
     </message>
 </context>
 <context>

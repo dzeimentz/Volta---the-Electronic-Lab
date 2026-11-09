@@ -119,6 +119,7 @@ Item {
             case "feuchtesonde": return probe
             case "messstelle_v": case "messstelle_a": case "messstelle_ohm": return measurePoint
             case "tastkopf": return scopeProbe
+            case "logiktastkopf": return logicProbe
             }
             return root.isLed ? led : generic
         }
@@ -1054,6 +1055,38 @@ Item {
             Text { // Bezug 0V
                 anchors.right: parent.right; anchors.rightMargin: 3; anchors.bottom: parent.bottom
                 text: "⏚"; color: "#1E2B38"; font.pixelSize: 11
+            }
+        }
+    }
+
+    // Logik-Tastkopf (ab Volta 3): dunkler Griff mit Kanal »LA1« ... »LA8« und dem Pegel H, L oder ? als Buchstabe
+    // (Farbe nie allein: H gruen, L grau, ? gelb, immer mit Buchstaben); Spitze nach unten ins Feld
+    Component {
+        id: logicProbe
+        Item {
+            readonly property string letter: root.level > 0.75 ? "H" : root.level < 0.25 ? "L" : "?"
+            Rectangle {
+                anchors.fill: parent
+                radius: 6
+                color: "#2B3440"
+                border.color: "#11161C"; border.width: 2
+            }
+            Text {
+                anchors.left: parent.left; anchors.leftMargin: 3; anchors.verticalCenter: parent.verticalCenter
+                text: "LA" + (root.tag > 0 ? root.tag : "")
+                color: "white"
+                font.pixelSize: Math.round(10 * Theme.fontScale); font.bold: true
+            }
+            Rectangle {
+                anchors.right: parent.right; anchors.rightMargin: 2; anchors.verticalCenter: parent.verticalCenter
+                width: 14; height: 18; radius: 3
+                color: parent.letter === "H" ? "#4CC36A" : parent.letter === "L" ? "#9AA5B1" : "#F2C230"
+                Text {
+                    anchors.centerIn: parent
+                    text: parent.parent.letter
+                    color: "#11161C"
+                    font.pixelSize: Math.round(12 * Theme.fontScale); font.bold: true
+                }
             }
         }
     }

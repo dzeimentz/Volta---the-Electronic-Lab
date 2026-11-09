@@ -77,6 +77,7 @@ QtObject {
         case "messstelle_a": return qsTr("Strommessstelle")
         case "messstelle_ohm": return qsTr("Widerstandsmessstelle")
         case "tastkopf": return qsTr("Tastkopf")
+        case "logiktastkopf": return qsTr("Logik-Tastkopf")
         }
         return type
     }
@@ -172,7 +173,9 @@ QtObject {
             ["opmodul", qsTr("OP-Modul", "Wortanfaenge im Aufbautext")],
             ["timer555", qsTr("Timer 555", "Wortanfaenge im Aufbautext")],
             ["mwmodul", qsTr("MW-Modul", "Wortanfaenge im Aufbautext")],
-            ["ukwmodul", qsTr("UKW-Modul", "Wortanfaenge im Aufbautext")]
+            ["ukwmodul", qsTr("UKW-Modul", "Wortanfaenge im Aufbautext")],
+            ["gattermodul", qsTr("Gatter-Modul", "Wortanfaenge im Aufbautext")],
+            ["logiktastkopf", qsTr("Logik-Tastkopf", "Wortanfaenge im Aufbautext")]
         ]
     }
 
@@ -186,6 +189,7 @@ QtObject {
         case "timer555": return qsTr("Timer 555")
         case "mwmodul": return qsTr("MW-Modul")
         case "ukwmodul": return qsTr("UKW-Modul")
+        case "gattermodul": return qsTr("Gatter-Modul")
         }
         return type
     }
@@ -212,6 +216,8 @@ QtObject {
         case "outp": return "A+"
         case "outn": return "A−"
         }
+        // Gatter-Modul: a1 -> 1A, b1 -> 1B, y1 -> 1Y (wie im Datenblatt; »A1« waere ein Feldname)
+        if (/^[aby][1-4]$/.test(pin)) return pin[1] + pin[0].toUpperCase()
         return pin
     }
 

@@ -518,6 +518,11 @@ public:
     // Kurve des letzten Durchlaufs als flache Liste (x, y je 0 ... 1 im Schirm) und der aktuelle Punkt.
     // setTracer: Schluessel volts, bipolar, limit (Bedienhandlung)
     Q_INVOKABLE QVariantMap tracerState() const;
+    // Logikanalysator (ab Volta 3): {fine, windowText, highText, lowText, channels: [{label, has, level (0 L,
+    // 1 ?, 2 H), segs (flach: x0, x1, Pegel je Abschnitt, x 0 ... 1 im Fenster)}]}; setLogicFine: Zeitfenster
+    Q_INVOKABLE QVariantMap logicState() const;
+    Q_INVOKABLE void setLogicFine(bool fine);
+    double logicSupplyV() const; // Bezug der Logikschwellen: Batterie des Pults
     // Senderanlage (ab Volta 3): Sender 0..2 an/aus (Bedienhandlung)
     Q_INVOKABLE bool stationOn(int index) const;
     Q_INVOKABLE void setStationOn(int index, bool on);

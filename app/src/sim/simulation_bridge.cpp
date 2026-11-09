@@ -133,6 +133,8 @@ void SimulationBridge::applyPending() {
         m_back.scope.reserve(m_scope.capacity);
         m_tracerRing.assign(m_scope.tracerCapacity, model::ScopeSample{});
         m_back.tracer.reserve(m_scope.tracerCapacity);
+        m_logicRing.assign(m_scope.logicCapacity, model::LogicSample{});
+        m_back.logic.reserve(m_scope.logicCapacity);
         m_stepS = m_scope.stepS > 0.0 ? m_scope.stepS : core::kDefaultStepS;
     }
     if (circuit || scopeChanged) resolveScope();
@@ -251,6 +253,10 @@ void SimulationBridge::publish(double realtimeRatio) {
     for (std::size_t k = 0; k < m_scopeCount; ++k)
         m_back.scope[k] = m_scopeRing[(m_scopeHead + m_scopeRing.size() - m_scopeCount + k) % m_scopeRing.size()];
     for (std::size_t c = 0; c < model::kScopeChannels; ++c) m_back.scopeHas[c] = m_scopeIndex[c] >= 0;
+    m_back.logic.resize(m_logicCount);
+    for (std::size_t k = 0; k < m_logicCount; ++k)
+        m_back.logic[k] = m_logicRing[(m_logicHead + m_logicRing.size() - m_logicCount + k) % m_logicRing.size()];
+    for (std::size_t c = 0; c < model::kLogicChannels; ++c) m_back.logicHas[c] = m_logicIndex[c] >= 0;
     m_back.tracer.resize(m_tracerCount);
     for (std::size_t k = 0; k < m_tracerCount; ++k)
         m_back.tracer[k] =
@@ -272,6 +278,8 @@ void SimulationBridge::publish(double realtimeRatio) {
     std::swap(m_front.scope, m_back.scope);
     std::swap(m_front.scopeHas, m_back.scopeHas);
     std::swap(m_front.tracer, m_back.tracer);
+    std::swap(m_front.logic, m_back.logic);
+    std::swap(m_front.logicHas, m_back.logicHas);
     m_back.lastStatus = m_front.lastStatus;
     m_fresh = true;
 }
@@ -295,6 +303,8 @@ bool SimulationBridge::latest(Snapshot& out) {
     out.scope.assign(m_front.scope.begin(), m_front.scope.end());
     out.scopeHas = m_front.scopeHas;
     out.tracer.assign(m_front.tracer.begin(), m_front.tracer.end());
+    out.logic.assign(m_front.logic.begin(), m_front.logic.end());
+    out.logicHas = m_front.logicHas;
     m_fresh = false;
     return true;
 }
@@ -324,6 +334,19 @@ void SimulationBridge::step() {
         }
         m_scopeHead = (m_scopeHead + 1) % m_scopeRing.size();
         m_scopeCount = std::min(m_scopeCount + 1, m_scopeRing.size());
+    }
+    if (dt > 0.0 && p.valid && !m_logicRing.empty() && m_sim.timeS() - m_logicLastT >= m_scope.logicIntervalS * 0.999) {
+        m_logicLastT = m_sim.timeS();
+        model::LogicSample& s = m_logicRing[m_logicHead];
+        s.t = m_logicLastT;
+        for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
+            const long i = m_logicIndex[c];
+            s.v[c] = i >= 0 && static_cast<std::size_t>(i) < p.readings.size()
+                         ? static_cast<float>(p.readings[static_cast<std::size_t>(i)].voltV)
+                         : 0.0f;
+        }
+        m_logicHead = (m_logicHead + 1) % m_logicRing.size();
+        m_logicCount = std::min(m_logicCount + 1, m_logicRing.size());
     }
     if (dt > 0.0 && p.valid && m_audioIndex >= 0 && static_cast<std::size_t>(m_audioIndex) < p.readings.size()) {
         // Tonstrom: zwischen zwei Schritten linear auf die Abtastzeitpunkte der Soundkarte umrechnen
@@ -375,6 +398,12 @@ void SimulationBridge::resolveScope() {
     }
     m_scopeHead = m_scopeCount = 0;
     m_scopeLastT = -1.0;
+    for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
+        const auto it = m_scope.logicIds[c].empty() ? m_index.end() : m_index.find(m_scope.logicIds[c]);
+        m_logicIndex[c] = it == m_index.end() ? -1 : static_cast<long>(it->second);
+    }
+    m_logicHead = m_logicCount = 0;
+    m_logicLastT = -1.0;
     const auto t = m_scope.tracerId.empty() ? m_index.end() : m_index.find(m_scope.tracerId);
     m_tracerIndex = t == m_index.end() ? -1 : static_cast<long>(t->second);
     m_tracerHead = m_tracerCount = 0;

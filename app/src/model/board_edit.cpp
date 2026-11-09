@@ -54,7 +54,8 @@ std::string prefixFor(const std::string& type) {
         {"kristallhoerer", "KH"},
         // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
         {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"},
-        {"tastkopf", "TK"}}; // Tastkopf K1/K2 (»K« ist das Relais)
+        {"tastkopf", "TK"},  // Tastkopf K1/K2 (»K« ist das Relais)
+        {"logiktastkopf", "LA"}}; // Logik-Tastkopf LA1-LA8 (ab Volta 3; »L« allein waere eine Spule)
     const auto it = prefixes.find(type);
     if (it != prefixes.end()) return it->second;
     if (type.rfind("led_", 0) == 0) return "D";
@@ -191,6 +192,14 @@ bool needsAudioStep(const Board& board) {
     return board.deskParts.has_value() && (speakerWired(board) || antennaWired(board) || !earpieceId(board).empty());
 }
 
+bool logicOnBoard(const Board& board) {
+    for (const auto& p : board.parts)
+        if (p.type == "logiktastkopf") return true;
+    for (const auto& m : board.modules)
+        if (m.type == "gattermodul") return true;
+    return false;
+}
+
 double requiredStepS(const Board& board, bool audio, bool secondOrder) {
     // Ab Volta 3 geht die Speicherdrossel vor: Schaltwandler und Klasse-D-Stufe (Stufe 5) rechnen auch mit
     // Lautsprecher in 5 us (Tonausgabe folgt der feineren Schrittweite)
@@ -207,6 +216,14 @@ double requiredStepS(const Board& board, bool audio, bool secondOrder) {
             if (p.type.rfind("spule_", 0) == 0) return kAudioStepS;
     }
     double step = core::kDefaultStepS;
+    // Logik (ab Volta 3, Stufe 7): Gatter und Prellen ortet der Kern selbst; 100 us zeigen die Prellimpulse
+    // (0,2-0,9 ms) im Logikanalysator und halten RC-Entprellung und Schmitt-Oszillator auf 2 % genau
+    if (secondOrder)
+        for (const auto& p : board.parts)
+            if (p.type == "logiktastkopf") step = kThyristorStepS;
+    if (secondOrder)
+        for (const auto& m : board.modules)
+            if (m.type == "gattermodul") step = kThyristorStepS;
     // Thyristor, Triac, Diac (ab Volta 3, Stufe 4): Zuend- und Loeschzeitpunkt ortet der Kern selbst; 100 us halten
     // RC-Verzoegerung und Phasenanschnitt auf 2 % genau (Referenztest gegen 10 us)
     for (const auto& p : board.parts)
@@ -521,9 +538,13 @@ bool canPlace(const Board& board, const Catalog& catalog, const PartPlacement& p
         int same = 0;
         for (const auto& p : board.parts)
             if (p.type == part.type && p.id != part.id && p.id != ignoreId) ++same;
-        if (same >= (e->model == "scope_probe" ? kMaxScopeProbes : kMaxMeasurePointsPerType)) {
+        const int limit = e->model == "scope_probe" ? kMaxScopeProbes
+                        : e->model == "logic_probe" ? kMaxLogicProbes : kMaxMeasurePointsPerType;
+        if (same >= limit) {
             error = e->model == "scope_probe"
                         ? msg(QT_TRANSLATE_NOOP("Meldung", "Das Oszilloskop hat nur die Tastköpfe K1 und K2."))
+                    : e->model == "logic_probe"
+                        ? msg(QT_TRANSLATE_NOOP("Meldung", "Der Logikanalysator hat acht Kanäle LA1 bis LA8."))
                         : msg(QT_TRANSLATE_NOOP("Meldung", "Von dieser Messstelle sind schon drei gesteckt."));
             return false;
         }
@@ -707,7 +728,7 @@ bool canPlaceModule(const Board& board, const Catalog& catalog, const ModulePlac
 std::string nextModuleId(const Board& board, const std::string& type) {
     const std::string prefix = type == "blinkmodul" ? "BL" : type == "tonmodul" ? "TM" : type == "zeitmodul" ? "ZM"
                              : type == "verstaerkermodul" ? "VM" : type == "opmodul" ? "OP" : type == "timer555" ? "TIM"
-                             : type == "mwmodul" ? "MW" : type == "ukwmodul" ? "UKW" : "MOD";
+                             : type == "mwmodul" ? "MW" : type == "ukwmodul" ? "UKW" : type == "gattermodul" ? "GM" : "MOD";
     std::set<int> used;
     for (const auto& m : board.modules) {
         if (m.id.size() > prefix.size() && m.id.compare(0, prefix.size(), prefix) == 0) {

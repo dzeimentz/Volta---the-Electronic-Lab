@@ -3106,6 +3106,49 @@
     </message>
 </context>
 <context>
+    <name>LogicPanel</name>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Logikanalysator</source>
+        <translation>Analyseur logique</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>fein: %1</source>
+        <translation>fin : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>grob: %1</source>
+        <translation>grossier : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Zeitfenster umschalten</source>
+        <translation>Changer la fenêtre de temps</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Weiter</source>
+        <translation>Reprendre</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Standbild</source>
+        <translation>Image figée</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H über %1 · L unter %2 · dazwischen ?</source>
+        <translation>H au-dessus de %1 · L en dessous de %2 · entre les deux ?</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Stecke einen Logik-Tastkopf auf ein Feld.</source>
+        <translation>Place une sonde logique sur un champ.</translation>
+    </message>
+</context>
+<context>
     <name>LicensesDialog</name>
     <message>
         <location filename="../app/qml/LicensesDialog.qml" line="58"/>
@@ -3470,6 +3513,11 @@
         <location filename="../app/src/model/circuit_check.cpp" line="379"/>
         <source>Der Lautsprecher ist kaputt gegangen. Was hätte den Strom durch ihn begrenzen können? Tippe auf den Lautsprecher, um ihn zu reparieren.</source>
         <translation>Le haut-parleur est cassé. Qu’est-ce qui aurait pu limiter le courant qui le traverse ? Touche le haut-parleur pour le réparer.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/board_edit.cpp" line="1"/>
+        <source>Der Logikanalysator hat acht Kanäle LA1 bis LA8.</source>
+        <translation>L&apos;analyseur logique a huit canaux LA1 à LA8.</translation>
     </message>
 </context>
 <context>
@@ -3838,6 +3886,31 @@
         <location filename="../app/qml/ModuleInside.qml" line="448"/>
         <source>Versorgung: %1 V. Die Endstufe schaltet im Takt des Tons ein und aus; Volta rechnet mit dem Mittelwert des Stroms. Ein Lautsprecher zwischen Plus und „aus“ spielt die Melodie mit.</source>
         <translation>Alimentation : %1 V. L&apos;étage de sortie s&apos;allume et s&apos;éteint au rythme du son ; Volta calcule avec la valeur moyenne du courant. Un haut-parleur entre plus et « sortie » joue la mélodie.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Im Gatter-Modul stecken vier NAND-Gatter an einer gemeinsamen Versorgung. Jedes Gatter hat die Eingänge A und B und den Ausgang Y. Nur wenn A und B beide H sind, ist Y auf L – sonst auf H. Die Eingänge sind Schmitt-Trigger: H erkennen sie erst über 60 % der Versorgung, L erst unter 40 %. Dazwischen bleibt der alte Zustand. Volta rechnet die Gatter mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.</source>
+        <translation>Le module de portes contient quatre portes NAND sur une alimentation commune. Chaque porte a les entrées A et B et la sortie Y. Y n&apos;est à L que si A et B sont tous deux à H – sinon à H. Les entrées sont des triggers de Schmitt : elles voient H seulement au-dessus de 60 % de l&apos;alimentation, et L seulement en dessous de 40 %. Entre les deux, l&apos;ancien état reste. Volta calcule les portes avec un modèle de comportement et trouve l&apos;instant exact où une entrée bascule.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>%1A und %1B</source>
+        <translation>%1A et %1B</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Ausgang %1Y</source>
+        <translation>Sortie %1Y</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Unter 3 V arbeiten die Gatter nicht. </source>
+        <translation>En dessous de 3 V, les portes ne fonctionnent pas. </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Versorgung: %1 V. H ab %2 V, L unter %3 V. Alle Spannungen sind gegen Minus gemessen.</source>
+        <translation>Alimentation : %1 V. H à partir de %2 V, L en dessous de %3 V. Toutes les tensions sont mesurées par rapport au moins.</translation>
     </message>
 </context>
 <context>
@@ -6445,6 +6518,28 @@
         <source>Kristallhörer,Hörer</source>
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>écouteur à cristal,écouteur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Logik-Tastkopf</source>
+        <translation>Sonde logique</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Gatter-Modul</source>
+        <translation>Module de portes</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Gatter-Modul</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Module de portes,module de portes</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Logik-Tastkopf</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Sonde logique,sonde logique</translation>
     </message>
 </context>
 <context>

@@ -278,10 +278,10 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
     per_type: dict[str, int] = {}
     for p in tpl.get("bauteile", []):
         typ = str(p.get("typ", ""))
-        if typ.startswith("messstelle_") or typ == "tastkopf":
+        if typ.startswith("messstelle_") or typ in ("tastkopf", "logiktastkopf"):
             per_type[typ] = per_type.get(typ, 0) + 1
     for typ, n in per_type.items():
-        limit = 2 if typ == "tastkopf" else 3
+        limit = 2 if typ == "tastkopf" else 8 if typ == "logiktastkopf" else 3
         if n > limit:
             rep.error(where, f"{n} Bauteile '{typ}' in der Vorlage, erlaubt sind {limit}")
     check_condition(exp.get("erfolg"), f"{where}:erfolg", part_ids, rep, measure_ids)

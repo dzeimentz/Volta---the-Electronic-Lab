@@ -37,6 +37,15 @@
 namespace volta {
 
 namespace {
+// Logikpegel aus der Spannung gegen 0V: 2 = H, 0 = L, 1 = verbotener Bereich (CMOS-Schwellen 70 % / 30 %)
+int logicLevel(double v, double supplyV) {
+    if (v > model::kLogicHighFraction * supplyV) return 2;
+    if (v < model::kLogicLowFraction * supplyV) return 0;
+    return 1;
+}
+} // namespace
+
+namespace {
 constexpr int kFrameMs = 16;     // ca. 60 Bilder je Sekunde
 constexpr double kNotifyS = 0.1; // Anzeigen mit ca. 10 Hz aktualisieren
 
@@ -1562,7 +1571,13 @@ QVariantMap LabController::partState(const QString& id) const {
     const model::CatalogEntry* e = p ? m_session->catalog().part(p->type) : nullptr;
     // ab Volta 3 (Stufe 3, Verlustleistung): Temperatur unter dem Spannungsregler; Volta 2 bleibt unveraendert
     if (e && e->model == "regulator" && m_band == QStringLiteral("volta3")) m.insert(QStringLiteral("showTempC"), true);
-    if (e && e->model == "scope_probe") {
+    if (e && e->model == "logic_probe") {
+        // Logik-Tastkopf (ab Volta 3): H, L oder ? mit der Spannung; level 1 / 0 / 0,5 fuer die Anzeige am Griff
+        const int lv = logicLevel(r->voltV, logicSupplyV());
+        m.insert(QStringLiteral("level"), lv == 2 ? 1.0 : lv == 0 ? 0.0 : 0.5);
+        m.insert(QStringLiteral("probeText"), (lv == 2 ? QStringLiteral("H") : lv == 0 ? QStringLiteral("L") : QStringLiteral("?"))
+                                                   + QStringLiteral(" · ") + siText(r->voltV, "V"));
+    } else if (e && e->model == "scope_probe") {
         const core::SignalSummary* st = m_session->readingStats(ss(id), false);
         // Spannung am Feld gegen 0V; die Statistik laeuft ueber dieselbe Groesse (Widerstand Feld -> 0V)
         QString text;
@@ -1746,6 +1761,9 @@ QVariantMap LabController::moduleState(const QString& id) const {
     } else if (type == "ukwmodul") {
         // UKW-Modul: ein Sender ist eingestellt (Empfang ueber null)
         m.insert(QStringLiteral("active"), r->displayFlags > 0);
+    } else if (type == "gattermodul") {
+        // Gatter-Modul: versorgt (ab 3 V)
+        m.insert(QStringLiteral("active"), r->voltV >= 3.0);
     } else if (type == "opmodul" || type == "timer555") {
         // OP: Ausgang ueber der Mitte der Versorgung; 555: Flipflop gesetzt (Ausgang hoch)
         m.insert(QStringLiteral("active"), r->level > 0.5);
@@ -1828,6 +1846,30 @@ QVariantMap LabController::moduleInside(const QString& id) const {
             m.insert(QStringLiteral("outV"), r->displayValue);
             m.insert(QStringLiteral("powered"), r->voltV >= 4.5);
         }
+        return m;
+    }
+    if (type == "gattermodul") {
+        // Verhaltensmodell: je Gatter Eingaenge (Zustand mit Hysterese) und Ausgang, Spannungen gegen minus
+        QVariantList gates;
+        double supply = 0.0;
+        const double vm = m_session->voltage(mid + ".minus");
+        for (std::size_t g = 0; g < 4; ++g) {
+            const std::size_t i = range->second.first + g;
+            if (i >= snap.readings.size() || i >= snap.states.size()) break;
+            const core::ComponentReading& r = snap.readings[i];
+            const core::ComponentState& st = snap.states[i];
+            supply = r.voltV;
+            const std::string n = std::to_string(g + 1);
+            gates << QVariantMap{{QStringLiteral("a"), st.internal[0] > 0.5},
+                                 {QStringLiteral("b"), st.internal[1] > 0.5},
+                                 {QStringLiteral("y"), r.level > 0.5},
+                                 {QStringLiteral("aV"), m_session->voltage(mid + ".a" + n) - vm},
+                                 {QStringLiteral("bV"), m_session->voltage(mid + ".b" + n) - vm},
+                                 {QStringLiteral("yV"), r.displayValue}};
+        }
+        m.insert(QStringLiteral("gates"), gates);
+        m.insert(QStringLiteral("supplyV"), supply);
+        m.insert(QStringLiteral("powered"), supply >= 3.0);
         return m;
     }
     // Teilschaltung: Messwerte der inneren Bauteile (Kennung "<Modul>.<Name>")
@@ -2331,7 +2373,8 @@ QVariantMap LabController::meterState() {
 namespace {
 // Messart einer Messstelle: 0 V, 1 A, 2 Ohm; -1 = keine Messstelle
 int measureKind(const model::CatalogEntry* e) {
-    if (!e || e->theme != "messen" || e->model == "scope_probe") return -1; // Tastkoepfe gehoeren zum Oszilloskop
+    if (!e || e->theme != "messen" || e->model == "scope_probe" || e->model == "logic_probe")
+        return -1; // Tastkoepfe gehoeren zum Oszilloskop bzw. Logikanalysator
     return e->model == "measure_ampere" ? 1 : e->model == "measure_ohm" ? 2 : 0;
 }
 // Sichtbare Kennung: UM1 -> V1, IM1 -> A1, RM1 -> Ohm1
@@ -2489,6 +2532,59 @@ void LabController::setDisplayAc(int slot, bool ac) {
     emit deskChanged();
 }
 
+
+double LabController::logicSupplyV() const { return 1.5 * m_session->board().desk.cells; }
+
+QVariantMap LabController::logicState() const {
+    QVariantMap m;
+    const double w = m_session->logicWindowS();
+    const double ub = logicSupplyV();
+    m.insert(QStringLiteral("fine"), m_session->logicFine());
+    m.insert(QStringLiteral("windowText"), siText(w, "s"));
+    m.insert(QStringLiteral("highText"), siText(model::kLogicHighFraction * ub, "V"));
+    m.insert(QStringLiteral("lowText"), siText(model::kLogicLowFraction * ub, "V"));
+    const auto probes = m_session->logicProbes();
+    const bool current = m_session->snapshotCurrent();
+    const auto& samples = m_session->logicSamples();
+    const double tEnd = current && !samples.empty() ? samples.back().t : 0.0;
+    const double t0 = tEnd - w;
+    QVariantList channels;
+    for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
+        if (probes[c].empty()) continue;
+        QVariantMap ch{{QStringLiteral("label"), QStringLiteral("LA%1").arg(c + 1)},
+                       {QStringLiteral("id"), qs(probes[c])}};
+        QVariantList segs;
+        int level = -1;
+        if (current && m_session->logicHas(c)) {
+            double x0 = -1.0;
+            int prev = -1;
+            for (const auto& s : samples) {
+                if (s.t < t0) continue;
+                const double x = std::clamp((s.t - t0) / w, 0.0, 1.0);
+                const int lv = logicLevel(s.v[c], ub);
+                if (lv != prev) {
+                    if (prev >= 0) segs << x0 << x << prev;
+                    x0 = x;
+                    prev = lv;
+                }
+            }
+            if (prev >= 0) segs << x0 << 1.0 << prev;
+            level = prev;
+        }
+        ch.insert(QStringLiteral("has"), level >= 0);
+        ch.insert(QStringLiteral("level"), level);
+        ch.insert(QStringLiteral("segs"), segs);
+        channels << ch;
+    }
+    m.insert(QStringLiteral("channels"), channels);
+    return m;
+}
+
+void LabController::setLogicFine(bool fine) {
+    if (fine == m_session->logicFine()) return;
+    m_session->setLogicFine(fine);
+    emit deskChanged();
+}
 
 bool LabController::scopeActive() const { return m_session->scopeActive(); }
 void LabController::setScopeActive(bool active) {
