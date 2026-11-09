@@ -9,6 +9,7 @@
 #include "model/audio_stream.hpp"
 #include "model/board_edit.hpp"
 #include "model/circuit_check.hpp"
+#include "model/environment.hpp"
 #include "model/netlist_builder.hpp"
 #include "model/success.hpp"
 #include "services/content_repository.hpp"
@@ -326,7 +327,8 @@ private slots:
         bool hasSensor = false;
         for (const auto& p : board.parts)
             if (p.type == "fotowiderstand" || p.type == "heissleiter" || p.type == "feuchtesonde" ||
-                p.type == "fototransistor")
+                p.type == "fototransistor" || p.type == "kraftsensor" || p.type == "hallsensor" ||
+                (p.type == "diode_si" && model::toolPlaced(board, model::kToolDryer)))
                 hasSensor = true;
         if (!hasSensor) QSKIP("kein Sensor");
         if (!board.desk.tools.empty()) board.desk.tools.clear();

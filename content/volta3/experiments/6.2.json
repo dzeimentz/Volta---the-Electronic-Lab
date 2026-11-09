@@ -1,0 +1,140 @@
+{
+  "id": "volta3.6.2",
+  "band": "volta3",
+  "stufe": 6,
+  "titel_key": "exp3_6_2_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "heissleiter",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp3_6_2_frage",
+  "vermutungen": [
+    "exp3_6_2_v1",
+    "exp3_6_2_v2",
+    "exp3_6_2_v3"
+  ],
+  "beobachtungen": [
+    "exp3_6_2_b1",
+    "exp3_6_2_b2",
+    "exp3_6_2_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "anzahl": 1
+      },
+      "p1": 0.444
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "NTC1",
+        "typ": "heissleiter",
+        "felder": [
+          "A2",
+          "A3"
+        ]
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": {
+          "plus": "B2",
+          "minus": "C2"
+        }
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "P:P1a",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:P1b",
+        "nach": "A3",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:P1s",
+        "nach": "B2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "C2",
+        "farbe": "blau"
+      }
+    ],
+    "werkzeuge": [
+      {
+        "typ": "foehn",
+        "feld": "A3"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_6_2_s1",
+    "exp3_6_2_s2",
+    "exp3_6_2_s3",
+    "exp3_6_2_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "dauer_s": 1,
+        "min": 1.0
+      },
+      {
+        "bauteil": "NTC1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_6_2_h1",
+    "exp3_6_2_h2",
+    "exp3_6_2_loesung"
+  ],
+  "erklaerung_key": "exp3_6_2_erklaerung",
+  "mehr_wissen_key": "exp3_6_2_mehr",
+  "weiterforschen": [
+    "exp3_6_2_w1",
+    "exp3_6_2_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_6_2_echt"
+}

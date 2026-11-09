@@ -141,7 +141,7 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
         return g;
     }
     if (e.module || t == "messgeraet" || t == "relais" || t == "optokoppler" || t == "uebertrager" ||
-        t == "spannungsregler_5v") {
+        t == "spannungsregler_5v" || t == "kraftsensor" || t == "hallsensor") {
         // Block: Plus oben, Minus unten, Ausgaenge rechts, uebrige Eingaenge links
         g.block = true;
         g.w = 4.0;
@@ -157,6 +157,12 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
                                     (t == "uebertrager" && (n == "a2" || n == "e2"));
             if (t == "uebertrager") p.label = n == "a1" ? "•1" : n == "e1" ? "1" : n == "a2" ? "•2" : "2";
             if (t == "optokoppler") p.label = n == "anode" ? "A" : n == "kathode" ? "K" : n == "c" ? "C" : "E";
+            if (t == "kraftsensor" && (n == "outp" || n == "outn")) { // Brueckenausgang rechts
+                p.label = n == "outp" ? "A+" : "A−";
+                right.push_back(k);
+                continue;
+            }
+            if (t == "hallsensor" && n == "aus") p.label = "A";
             if (t == "opmodul" && (n == "nichtinv" || n == "inv")) p.label = n == "nichtinv" ? "IN+" : "IN−";
             if (t == "mwmodul" && (n == "ant" || n == "abst")) p.label = n == "ant" ? "ANT" : "ABST";
             if (t == "ukwmodul" && (n == "ant" || n == "abst" || n == "laut"))

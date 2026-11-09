@@ -223,16 +223,26 @@ Item {
     }
     // Abdeckkarte (ab Volta 2): sobald der Fototransistor da ist (Lichtschranke unterbrechen)
     readonly property bool cardAvailable: catalogEntry("fototransistor").type !== undefined
+    // Gewichte und Magnet (ab Volta 3): sobald Kraftsensor bzw. Hall-Sensor im Katalog sind
+    readonly property bool weightsAvailable: catalogEntry("kraftsensor").type !== undefined
+    readonly property bool magnetAvailable: catalogEntry("hallsensor").type !== undefined
+    readonly property var environmentTools: {
+        let l = ["taschenlampe", "foehn", "wasser"]
+        if (cardAvailable) l.push("karte")
+        if (weightsAvailable) l.push("gewicht100", "gewicht200", "gewicht500")
+        if (magnetAvailable) l.push("magnet")
+        return l
+    }
 
     // Licht und Waerme gibt es, sobald Fotowiderstand oder Heissleiter verfuegbar oder gesteckt sind
     readonly property bool environmentAvailable: {
         const tray = controller.trayParts
         for (let i = 0; i < tray.length; ++i)
-            if (["fotowiderstand", "heissleiter", "feuchtesonde", "fototransistor"].indexOf(tray[i].type) >= 0
+            if (["fotowiderstand", "heissleiter", "feuchtesonde", "fototransistor", "kraftsensor", "hallsensor"].indexOf(tray[i].type) >= 0
                     && !tray[i].locked) return true
         const parts = controller.parts
         for (let k = 0; k < parts.length; ++k)
-            if (["fotowiderstand", "heissleiter", "feuchtesonde", "fototransistor"].indexOf(parts[k].type) >= 0) return true
+            if (["fotowiderstand", "heissleiter", "feuchtesonde", "fototransistor", "kraftsensor", "hallsensor"].indexOf(parts[k].type) >= 0) return true
         return controller.tools.length > 0 || controller.roomLight !== 2
     }
 
@@ -1597,7 +1607,8 @@ Item {
                     toolType: modelData.type
                     on: modelData.on
                     reach: (modelData.type === "taschenlampe" ? 1.2 : modelData.type === "wasser" ? 0.8
-                            : modelData.type === "karte" ? 0.6 : 1.5) * (Theme.fieldWidth + Theme.fieldGap)
+                            : modelData.type === "karte" ? 0.6 : modelData.type.startsWith("gewicht") ? 0.5
+                            : modelData.type === "magnet" ? 1.0 : 1.5) * (Theme.fieldWidth + Theme.fieldGap)
                     x: at.x - width / 2
                     y: at.y - height / 2
                     z: 20
@@ -1605,7 +1616,8 @@ Item {
                         const c = lab.toolCell(Qt.point(at.x + delta.x, at.y + delta.y))
                         lab.controller.placeTool(modelData.type, c.x, c.y)
                     }
-                    onToggled: lab.controller.setToolOn(modelData.type, !modelData.on)
+                    // Gewichte kennen kein Ein und Aus; der Magnet wird umgedreht
+                    onToggled: if (!modelData.type.startsWith("gewicht")) lab.controller.setToolOn(modelData.type, !modelData.on)
                     onMenuRequested: (scenePos) => {
                         toolMenu.toolType = modelData.type
                         toolMenu.toolOn = modelData.on
@@ -1638,7 +1650,7 @@ Item {
             anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; bottomMargin: 4 }
             z: 30
             title: qsTr("Licht, Wärme, Wasser")
-            count: lab.cardAvailable ? 5 : 4
+            count: lab.environmentTools.length + 1
                 Button {
                     objectName: "roomLightButton"
                     height: Theme.control
@@ -1651,7 +1663,7 @@ Item {
                     font.pixelSize: Math.round(13 * Theme.fontScale)
                 }
                 Repeater {
-                    model: lab.cardAvailable ? ["taschenlampe", "foehn", "wasser", "karte"] : ["taschenlampe", "foehn", "wasser"]
+                    model: lab.environmentTools
                     Rectangle {
                         id: envTile
                         required property string modelData
@@ -1664,7 +1676,7 @@ Item {
                         Row {
                             anchors.centerIn: parent
                             spacing: 6
-                            Text { anchors.verticalCenter: parent.verticalCenter; text: envTile.modelData === "taschenlampe" ? "🔦" : envTile.modelData === "wasser" ? "💧" : envTile.modelData === "karte" ? "▮" : "♨"; font.pixelSize: 20; color: envTile.modelData === "karte" ? "#4A5560" : "#B23A10" }
+                            Text { anchors.verticalCenter: parent.verticalCenter; text: envTile.modelData === "taschenlampe" ? "🔦" : envTile.modelData === "wasser" ? "💧" : envTile.modelData === "karte" ? "▮" : envTile.modelData.startsWith("gewicht") ? "⚖" : envTile.modelData === "magnet" ? "🧲" : "♨"; font.pixelSize: 20; color: envTile.modelData === "karte" || envTile.modelData.startsWith("gewicht") ? "#4A5560" : "#B23A10" }
                             Label {
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: Texts.toolName(envTile.modelData)
@@ -1688,7 +1700,7 @@ Item {
                             onTapped: {
                                 const t = lab.toolOf(envTile.modelData)
                                 if (t === null) lab.controller.placeTool(envTile.modelData, Math.max(1, lab.columns / 2), 2)
-                                else lab.controller.setToolOn(envTile.modelData, !t.on)
+                                else if (!envTile.modelData.startsWith("gewicht")) lab.controller.setToolOn(envTile.modelData, !t.on)
                             }
                         }
                         Accessible.name: Texts.toolName(modelData)

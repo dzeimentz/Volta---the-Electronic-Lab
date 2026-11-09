@@ -7,6 +7,7 @@
 
 #include "model/netlist_builder.hpp"
 #include "volta/core/components/capacitor.hpp"
+#include "volta/core/components/diode.hpp"
 #include "volta/core/components/optics.hpp"
 #include "volta/core/components/sensors.hpp"
 #include "volta/core/components/sources.hpp"
@@ -188,6 +189,13 @@ void SimulationBridge::apply(const Action& a) {
         break;
     case Action::Type::SetAmbient:
         if (auto* t = dynamic_cast<core::Thermistor*>(&c)) t->setAmbient(a.value);
+        else if (auto* d = dynamic_cast<core::Diode*>(&c)) d->setAmbient(a.value);
+        break;
+    case Action::Type::SetLoad:
+        if (auto* k = dynamic_cast<core::LoadCell*>(&c)) k->setLoad(a.value);
+        break;
+    case Action::Type::SetField:
+        if (auto* h = dynamic_cast<core::HallSensor*>(&c)) h->setField(a.value);
         break;
     case Action::Type::SetWetness:
         if (auto* f = dynamic_cast<core::MoistureProbe*>(&c)) f->setWetness(a.value);

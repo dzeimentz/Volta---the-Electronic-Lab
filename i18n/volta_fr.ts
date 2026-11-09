@@ -6357,6 +6357,58 @@
         <translation>La grille va en %1, le drain en %2.</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Kraftsensor</source>
+        <translation>Capteur de force</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Hall-Sensor</source>
+        <translation>Capteur à effet Hall</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Kraftsensor</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Capteur de force,capteur de force</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Hall-Sensor</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Capteur à effet Hall,capteur à effet Hall,capteur Hall</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Plus kommt an %1, A+ an %2.</source>
+        <translation>Le plus va en %1, A+ en %2.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Plus kommt an %1, der Ausgang an %2.</source>
+        <translation>Le plus va en %1, la sortie en %2.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Gewicht 100 g</source>
+        <translation>Poids 100 g</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Gewicht 200 g</source>
+        <translation>Poids 200 g</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Gewicht 500 g</source>
+        <translation>Poids 500 g</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Magnet</source>
+        <translation>Aimant</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="51"/>
         <source>LED weiß</source>
         <translation>LED blanche</translation>

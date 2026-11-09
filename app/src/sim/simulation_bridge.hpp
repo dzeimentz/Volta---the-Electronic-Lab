@@ -31,8 +31,10 @@ struct Action {
         SetMeterAnalog,  // Messgeraet: value != 0 analog
         SetIlluminance,  // Fotowiderstand, Fototransistor: value = Beleuchtungsstaerke in lx
         SetShade,        // Fototransistor: value = Anteil der IR-Strahlung, der ankommt (Abdeckkarte), 0..1
-        SetAmbient,      // Heissleiter: value = Lufttemperatur am Bauteil in K
+        SetAmbient,      // Heissleiter, Diode (ab Volta 3): value = Lufttemperatur am Bauteil in K
         SetWetness,      // Feuchtesonde: value = Naesse 0..1
+        SetLoad,         // Kraftsensor (ab Volta 3): value = Last in kg
+        SetField,        // Hall-Sensor (ab Volta 3): value = Flussdichte in mT
         SetAcRms,        // Wechselquelle: value = Effektivwert in V
         SetGenWaveform,  // Funktionsgenerator: value = 0 Sinus, 1 Dreieck, 2 Rechteck
         SetGenFrequency, // Funktionsgenerator: value = Frequenz in Hz

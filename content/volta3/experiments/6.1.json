@@ -1,0 +1,141 @@
+{
+  "id": "volta3.6.1",
+  "band": "volta3",
+  "stufe": 6,
+  "titel_key": "exp3_6_1_titel",
+  "dauer_min": 15,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp3_6_1_frage",
+  "vermutungen": [
+    "exp3_6_1_v1",
+    "exp3_6_1_v2",
+    "exp3_6_1_v3"
+  ],
+  "beobachtungen": [
+    "exp3_6_1_b1",
+    "exp3_6_1_b2",
+    "exp3_6_1_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "anzahl": 1
+      },
+      "p1": 0.5
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "A3"
+        ],
+        "wert": 4700
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": {
+          "plus": "B2",
+          "minus": "C2"
+        }
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "P:P1a",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:P1b",
+        "nach": "A3",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:P1s",
+        "nach": "B2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "C2",
+        "farbe": "blau"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_6_1_s1",
+    "exp3_6_1_s2",
+    "exp3_6_1_s3",
+    "exp3_6_1_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "dauer_s": 1,
+        "zwischen": [
+          -0.03,
+          0.03
+        ]
+      },
+      {
+        "bauteil": "R1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "R2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_6_1_h1",
+    "exp3_6_1_h2",
+    "exp3_6_1_loesung"
+  ],
+  "erklaerung_key": "exp3_6_1_erklaerung",
+  "mehr_wissen_key": "exp3_6_1_mehr",
+  "weiterforschen": [
+    "exp3_6_1_w1",
+    "exp3_6_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_6_1_echt"
+}

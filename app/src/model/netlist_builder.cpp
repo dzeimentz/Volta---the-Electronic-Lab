@@ -265,6 +265,9 @@ private:
         } else if ((m == "led" || m == "diode") && n.size() == 2) {
             auto& d = c.add<core::Diode>(p.id, n[0], n[1], diodeParams(*e));
             if (p.type == "ir_led") m_irLeds.push_back({&d, &p});
+            // Diode als Thermometer (ab Volta 3): mit Foehn auf der Grundplatte folgt die Kennlinie der Temperatur
+            if (m == "diode" && m_catalog.secondOrder && toolPlaced(m_board, kToolDryer))
+                d.setAmbient(airTemperatureAt(m_board, p));
         } else if (m == "lamp" && n.size() == 2) {
             // Variante ueber die Nennspannung (Wert des Bauteils); ohne Wert: Katalogvorgabe
             core::LampParams lp;
@@ -371,6 +374,17 @@ private:
             tp.r25Ohm = e->param("r25_ohm", tp.r25Ohm);
             tp.betaK = e->param("b_K", tp.betaK);
             c.add<core::Thermistor>(p.id, n[0], n[1], tp, airTemperatureAt(m_board, p));
+        } else if (m == "loadcell" && n.size() == 4) {
+            // Kraftsensor (ab Volta 3): Vollbruecke, Anschluesse plus, minus, outp, outn
+            core::LoadCellParams lp;
+            lp.r0Ohm = e->param("r0_ohm", lp.r0Ohm);
+            lp.strainPerKg = e->param("mV_V_kg", lp.strainPerKg * 1e3) * 1e-3;
+            c.add<core::LoadCell>(p.id, n[0], n[1], n[2], n[3], lp, loadAt(m_board, p));
+        } else if (m == "hall" && n.size() == 3) {
+            // Hall-Sensor (ab Volta 3): Anschluesse plus, minus, aus
+            core::HallSensorParams hp;
+            hp.sensPerMt = e->param("s_mV_mT_5V", hp.sensPerMt * 5000.0) / 5000.0;
+            c.add<core::HallSensor>(p.id, n[0], n[1], n[2], hp, magneticFieldAt(m_board, p));
         } else if (m == "moisture" && n.size() == 2) {
             core::MoistureProbeParams mp;
             mp.dryOhm = e->param("r_trocken_ohm", mp.dryOhm);

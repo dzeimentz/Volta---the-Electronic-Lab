@@ -1,0 +1,362 @@
+{
+  "id": "volta3.6.8",
+  "band": "volta3",
+  "stufe": 6,
+  "titel_key": "exp3_6_8_titel",
+  "dauer_min": 40,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "kraftsensor",
+    "widerstand",
+    "led_gruen",
+    "led_rot",
+    "leitung"
+  ],
+  "frage_key": "exp3_6_8_frage",
+  "vermutungen": [
+    "exp3_6_8_v1",
+    "exp3_6_8_v2",
+    "exp3_6_8_v3"
+  ],
+  "beobachtungen": [
+    "exp3_6_8_b1",
+    "exp3_6_8_b2",
+    "exp3_6_8_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "batterie2_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "KS1",
+        "typ": "kraftsensor",
+        "felder": {
+          "plus": "A1",
+          "minus": "A2",
+          "outp": "B1",
+          "outn": "B2"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "C1",
+          "C2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "C2",
+          "C3"
+        ],
+        "wert": 1000000
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "D1",
+          "D2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "D2",
+          "D3"
+        ],
+        "wert": 1000000
+      },
+      {
+        "id": "R7",
+        "typ": "widerstand",
+        "felder": [
+          "A6",
+          "A7"
+        ],
+        "wert": 39000
+      },
+      {
+        "id": "R8",
+        "typ": "widerstand",
+        "felder": [
+          "A7",
+          "A8"
+        ],
+        "wert": 1200
+      },
+      {
+        "id": "R9",
+        "typ": "widerstand",
+        "felder": [
+          "A8",
+          "A9"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "D1",
+        "typ": "led_gruen",
+        "felder": {
+          "anode": "C5",
+          "kathode": "C6"
+        }
+      },
+      {
+        "id": "R5",
+        "typ": "widerstand",
+        "felder": [
+          "C6",
+          "C7"
+        ],
+        "wert": 680
+      },
+      {
+        "id": "D2",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "D5",
+          "kathode": "D6"
+        }
+      },
+      {
+        "id": "R6",
+        "typ": "widerstand",
+        "felder": [
+          "D6",
+          "D7"
+        ],
+        "wert": 680
+      }
+    ],
+    "module": [
+      {
+        "id": "OP1",
+        "typ": "opmodul",
+        "feld": 1
+      },
+      {
+        "id": "OP2",
+        "typ": "opmodul",
+        "feld": 6
+      },
+      {
+        "id": "OP3",
+        "typ": "opmodul",
+        "feld": 11
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+B2",
+        "nach": "E4",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:-B2",
+        "nach": "E5",
+        "farbe": "blau"
+      },
+      {
+        "von": "B2",
+        "nach": "C1",
+        "farbe": "blau"
+      },
+      {
+        "von": "B1",
+        "nach": "D1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "OP1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "E5",
+        "nach": "OP1.minus",
+        "farbe": "blau"
+      },
+      {
+        "von": "D2",
+        "nach": "OP1.nichtinv",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C2",
+        "nach": "OP1.inv",
+        "farbe": "blau"
+      },
+      {
+        "von": "OP1.aus",
+        "nach": "C3",
+        "farbe": "gruen"
+      },
+      {
+        "von": "A1",
+        "nach": "A6",
+        "farbe": "rot"
+      },
+      {
+        "von": "A9",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:0V",
+        "nach": "E1",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "OP2.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "E1",
+        "nach": "OP2.minus",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C3",
+        "nach": "OP2.nichtinv",
+        "farbe": "gruen"
+      },
+      {
+        "von": "A8",
+        "nach": "OP2.inv",
+        "farbe": "weiss"
+      },
+      {
+        "von": "OP2.aus",
+        "nach": "C5",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "OP3.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "E1",
+        "nach": "OP3.minus",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "C3",
+        "nach": "OP3.nichtinv",
+        "farbe": "gruen"
+      },
+      {
+        "von": "A7",
+        "nach": "OP3.inv",
+        "farbe": "weiss"
+      },
+      {
+        "von": "OP3.aus",
+        "nach": "D5",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "werkzeuge": [
+      {
+        "typ": "gewicht500",
+        "feld": "B2"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_6_8_s1",
+    "exp3_6_8_s2",
+    "exp3_6_8_s3",
+    "exp3_6_8_s4",
+    "exp3_6_8_s5",
+    "exp3_6_8_s6",
+    "exp3_6_8_s7"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "D2",
+        "groesse": "helligkeit",
+        "max": 0.05
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "D2",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "KS1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_6_8_h1",
+    "exp3_6_8_h2",
+    "exp3_6_8_loesung"
+  ],
+  "erklaerung_key": "exp3_6_8_erklaerung",
+  "mehr_wissen_key": "exp3_6_8_mehr",
+  "weiterforschen": [
+    "exp3_6_8_w1",
+    "exp3_6_8_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_6_8_echt"
+}

@@ -112,6 +112,8 @@ Item {
             case "heissleiter": return thermistor
             case "elektromagnet": return magnet
             case "relais": return relay
+            case "kraftsensor": return loadCell
+            case "hallsensor": return hallSensor
             case "piezo": return piezo
             case "kristallhoerer": return earpiece
             case "feuchtesonde": return probe
@@ -901,6 +903,84 @@ Item {
                     x: rpcb.f[index].x + (rpcb.f[index].x < rpcb.width / 2 ? 7 : -7 - width)
                     y: rpcb.f[index].y + (rpcb.f[index].y < rpcb.height / 2 ? 4 : -4 - height)
                 }
+            }
+        }
+    }
+
+    // Kraftsensor (ab Volta 3): Aluminiumtraeger mit Dehnungsmessstreifen auf der Platine; biegt sich mit der Last
+    Component {
+        id: loadCell
+        Rectangle {
+            id: kpcb
+            anchors.fill: parent; radius: 6
+            color: "#2F6B3A"; border.color: "#173D1E"; border.width: 2
+            readonly property var f: root.feet.length === 4 ? root.feet
+                                   : [Qt.point(16, 14), Qt.point(width - 16, 14),
+                                      Qt.point(16, height - 14), Qt.point(width - 16, height - 14)]
+            Rectangle { // Traeger, in der Mitte durchgebogen (Darstellung, Last 0..2 kg)
+                anchors.centerIn: parent
+                width: parent.width * 0.7; height: parent.height * 0.3; radius: 3
+                color: "#C8CDD2"; border.color: "#6E767E"
+                rotation: 0
+                Rectangle { // Dehnungsmessstreifen: Maeanderfeld
+                    anchors.centerIn: parent
+                    width: parent.width * 0.4; height: parent.height * 0.6
+                    color: "#E8B04A"; border.color: "#8A5A10"
+                    Repeater {
+                        model: 4
+                        Rectangle { required property int index; x: 2 + index * (parent.width - 4) / 4; y: 2; width: 1.5; height: parent.height - 4; color: "#8A5A10" }
+                    }
+                }
+                Rectangle { // Biegung als Pfeil nach unten, waechst mit der Last
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.bottom
+                    width: 4; height: Math.min(10, 10 * root.level * 2); color: "#F2D16B"
+                    visible: root.level > 0.01
+                }
+            }
+            Repeater {
+                model: ["+", "−", "A+", "A−"]
+                Text {
+                    required property int index
+                    required property string modelData
+                    text: modelData
+                    font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: "white"
+                    x: kpcb.f[index].x + (kpcb.f[index].x < kpcb.width / 2 ? 7 : -7 - width)
+                    y: kpcb.f[index].y + (kpcb.f[index].y < kpcb.height / 2 ? 4 : -4 - height)
+                }
+            }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top; anchors.topMargin: 2
+                text: "kg"
+                font.pixelSize: Math.round(9 * Theme.fontScale); font.bold: true; color: "white"
+            }
+        }
+    }
+
+    // Hall-Sensor (ab Volta 3): kleines schwarzes Gehaeuse mit drei Beinen (+, -, Ausgang), Beschriftung H
+    Component {
+        id: hallSensor
+        Rectangle {
+            anchors.fill: parent; radius: 6
+            color: "#E9D7B0"; border.color: Theme.navy
+            Repeater {
+                model: ["+", "−", "A"]
+                Text {
+                    required property int index
+                    required property string modelData
+                    x: (index * 2 + 1) * parent.width / 6 - width / 2
+                    anchors.bottom: parent.bottom; anchors.bottomMargin: 1
+                    text: modelData
+                    font.pixelSize: Math.round(10 * Theme.fontScale); font.bold: true; color: Theme.navy
+                }
+            }
+            Rectangle {
+                anchors.horizontalCenter: parent.horizontalCenter
+                y: 3
+                width: parent.width * 0.42; height: parent.height * 0.6; radius: 3
+                color: "#1E1E1E"; border.color: "#000000"
+                Text { anchors.centerIn: parent; text: "H"; color: "white"; font.bold: true; font.pixelSize: Math.round(12 * Theme.fontScale) }
             }
         }
     }

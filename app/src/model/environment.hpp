@@ -32,6 +32,18 @@ inline constexpr double kCardReach = 0.45;
 // unberuecksichtigt (Vereinfachung). Ausgangswert fuer die Kalibrierung.
 inline constexpr double kIrCoupling = 0.2;
 inline constexpr double kIrReach = 1.0;
+// Gewichte (ab Volta 3): liegen auf dem Kraftsensor, wenn ihre Mitte hoechstens kWeightReach Felder von der Mitte des
+// Sensors entfernt ist; die Massen addieren sich.
+inline constexpr const char* kToolWeight100 = "gewicht100";
+inline constexpr const char* kToolWeight200 = "gewicht200";
+inline constexpr const char* kToolWeight500 = "gewicht500";
+inline constexpr double kWeightReach = 1.0;
+// Magnet (ab Volta 3): kleiner Scheibenmagnet, Flussdichte direkt ueber dem Hall-Sensor 90 mT, nach aussen wie ein
+// Dipol B = B0 / (1 + (d / d0)^2)^1,5 mit d0 = 0,7 Feld (ein Feld weiter ca. 17 mT). Eingeschaltet zeigt der Suedpol
+// zur Grundplatte (positives Feld), ausgeschaltet (umgedreht) der Nordpol.
+inline constexpr const char* kToolMagnet = "magnet";
+inline constexpr double kMagnetPeakMt = 90.0;
+inline constexpr double kMagnetReach = 0.7;
 
 // Mitte eines Bauteils in Feldeinheiten; false, wenn es nicht auf Feldern der Grundplatte steckt
 bool partCenter(const PartPlacement& part, double& col, double& row);
@@ -45,5 +57,11 @@ double irCoupling(const PartPlacement& led, const PartPlacement& receiver);
 double airTemperatureAt(const Board& board, const PartPlacement& part);
 // Naesse am Bauteil 0..1 (Wassertropfen; d0 = 0,6: direkt darunter nass, ein Feld weiter ca. 0,26)
 double wetnessAt(const Board& board, const PartPlacement& part);
+// Last auf dem Kraftsensor in kg (Summe der aufgelegten Gewichte)
+double loadAt(const Board& board, const PartPlacement& part);
+// Flussdichte am Hall-Sensor in mT (Vorzeichen: Suedpol zur Grundplatte positiv)
+double magneticFieldAt(const Board& board, const PartPlacement& part);
+// true, wenn ein Werkzeug dieses Typs auf der Grundplatte liegt (ein oder aus)
+bool toolPlaced(const Board& board, const std::string& type);
 
 } // namespace volta::model

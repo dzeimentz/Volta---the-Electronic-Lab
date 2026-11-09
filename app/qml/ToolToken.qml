@@ -19,6 +19,8 @@ Item {
     readonly property bool flash: toolType === "taschenlampe"
     readonly property bool water: toolType === "wasser"
     readonly property bool card: toolType === "karte" // Abdeckkarte (ab Volta 2)
+    readonly property bool weight: toolType.startsWith("gewicht") // Gewichte (ab Volta 3): immer wirksam
+    readonly property bool magnet: toolType === "magnet"          // Magnet (ab Volta 3): an = Suedpol unten
 
     transform: Translate {
         x: drag.active ? drag.activeTranslation.x : 0
@@ -27,12 +29,13 @@ Item {
 
     // Schein (Licht gelb, warme Luft orange), nach aussen schwaecher: drei Ringe
     Repeater {
-        model: tool.on ? [1.0, 0.66, 0.36] : []
+        model: tool.on || tool.magnet ? (tool.weight ? [1.0] : [1.0, 0.66, 0.36]) : []
         Rectangle {
             required property real modelData
             anchors.centerIn: parent
             width: tool.reach * 2 * modelData; height: width; radius: width / 2
-            color: tool.flash ? "#FFF3A0" : tool.water ? "#5AA9E6" : tool.card ? "#4A5560" : "#FF8C3A"
+            color: tool.flash ? "#FFF3A0" : tool.water ? "#5AA9E6" : tool.card || tool.weight ? "#4A5560"
+                 : tool.magnet ? (tool.on ? "#2C62C9" : "#C0392B") : "#FF8C3A"
             opacity: 0.15
         }
     }
@@ -40,13 +43,14 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: width / 2
-        color: tool.on ? (tool.flash ? "#FFE58A" : tool.water ? "#BFE0F7" : tool.card ? "#F4F6F8" : "#FFB27A") : "#C9CED4"
+        color: tool.weight ? "#B8BEC5" : tool.magnet ? (tool.on ? "#BFD3F2" : "#F2C4BF")
+             : tool.on ? (tool.flash ? "#FFE58A" : tool.water ? "#BFE0F7" : tool.card ? "#F4F6F8" : "#FFB27A") : "#C9CED4"
         border.color: Theme.navy
         border.width: 2
         Text {
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -5
-            text: tool.flash ? "🔦" : tool.water ? "💧" : tool.card ? "▮" : "♨"
+            text: tool.flash ? "🔦" : tool.water ? "💧" : tool.card ? "▮" : tool.weight ? "⚖" : tool.magnet ? "🧲" : "♨"
             font.pixelSize: 24
             color: tool.flash ? "#2E3B4A" : "#B23A10"
         }
@@ -54,7 +58,9 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 4
-            text: tool.on ? qsTr("an") : qsTr("aus")
+            // Gewicht: Masse; Magnet: der Pol, der zur Grundplatte zeigt (Buchstabe, nicht nur Farbe)
+            text: tool.weight ? tool.toolType.substring(7) + " g" : tool.magnet ? (tool.on ? "S" : "N")
+                  : tool.on ? qsTr("an") : qsTr("aus")
             font.pixelSize: 10
             font.bold: true
             color: Theme.navy
@@ -86,5 +92,6 @@ Item {
             else tool.toggled()
         }
     }
-    Accessible.name: (flash ? qsTr("Taschenlampe") : water ? qsTr("Wassertropfen") : qsTr("Föhn")) + ", " + (on ? qsTr("an") : qsTr("aus"))
+    Accessible.name: weight ? Texts.toolName(toolType) : magnet ? Texts.toolName(toolType) + ", " + (on ? "S" : "N")
+                     : (flash ? qsTr("Taschenlampe") : water ? qsTr("Wassertropfen") : qsTr("Föhn")) + ", " + (on ? qsTr("an") : qsTr("aus"))
 }

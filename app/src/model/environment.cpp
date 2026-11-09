@@ -63,4 +63,33 @@ double airTemperatureAt(const Board& board, const PartPlacement& part) {
     return core::kAmbientK + std::min(kDryerRiseK, toolEffect(board, part, kToolDryer, kDryerRiseK, kDryerReach));
 }
 
+double loadAt(const Board& board, const PartPlacement& part) {
+    double col = 0.0, row = 0.0;
+    if (!partCenter(part, col, row)) return 0.0;
+    double kg = 0.0;
+    for (const auto& t : board.desk.tools) {
+        const double m = t.type == kToolWeight100 ? 0.1 : t.type == kToolWeight200 ? 0.2 : t.type == kToolWeight500 ? 0.5 : 0.0;
+        if (m > 0.0 && std::hypot(t.col - col, t.row - row) <= kWeightReach) kg += m;
+    }
+    return kg;
+}
+
+double magneticFieldAt(const Board& board, const PartPlacement& part) {
+    double col = 0.0, row = 0.0;
+    if (!partCenter(part, col, row)) return 0.0;
+    double b = 0.0;
+    for (const auto& t : board.desk.tools) {
+        if (t.type != kToolMagnet) continue;
+        const double d = std::hypot(t.col - col, t.row - row) / kMagnetReach;
+        b += (t.on ? 1.0 : -1.0) * kMagnetPeakMt / std::pow(1.0 + d * d, 1.5);
+    }
+    return b;
+}
+
+bool toolPlaced(const Board& board, const std::string& type) {
+    for (const auto& t : board.desk.tools)
+        if (t.type == type) return true;
+    return false;
+}
+
 } // namespace volta::model

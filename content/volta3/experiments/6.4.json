@@ -1,0 +1,225 @@
+{
+  "id": "volta3.6.4",
+  "band": "volta3",
+  "stufe": 6,
+  "titel_key": "exp3_6_4_titel",
+  "dauer_min": 25,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "kraftsensor",
+    "widerstand",
+    "messstelle_v",
+    "leitung"
+  ],
+  "frage_key": "exp3_6_4_frage",
+  "vermutungen": [
+    "exp3_6_4_v1",
+    "exp3_6_4_v2",
+    "exp3_6_4_v3"
+  ],
+  "beobachtungen": [
+    "exp3_6_4_b1",
+    "exp3_6_4_b2",
+    "exp3_6_4_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "anzeigegeraet": {
+        "anzahl": 1
+      },
+      "batterie2_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "KS1",
+        "typ": "kraftsensor",
+        "felder": {
+          "plus": "A1",
+          "minus": "A2",
+          "outp": "B1",
+          "outn": "B2"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "C1",
+          "C2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "C2",
+          "C3"
+        ],
+        "wert": 1000000
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "D1",
+          "D2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R4",
+        "typ": "widerstand",
+        "felder": [
+          "D2",
+          "D3"
+        ],
+        "wert": 1000000
+      },
+      {
+        "id": "UM1",
+        "typ": "messstelle_v",
+        "felder": {
+          "plus": "C4",
+          "minus": "C5"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "OP1",
+        "typ": "opmodul",
+        "feld": 1
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+B2",
+        "nach": "E4",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:-B2",
+        "nach": "E5",
+        "farbe": "blau"
+      },
+      {
+        "von": "B2",
+        "nach": "C1",
+        "farbe": "blau"
+      },
+      {
+        "von": "B1",
+        "nach": "D1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A1",
+        "nach": "OP1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "E5",
+        "nach": "OP1.minus",
+        "farbe": "blau"
+      },
+      {
+        "von": "D2",
+        "nach": "OP1.nichtinv",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C2",
+        "nach": "OP1.inv",
+        "farbe": "blau"
+      },
+      {
+        "von": "OP1.aus",
+        "nach": "C3",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C3",
+        "nach": "C4",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ],
+    "werkzeuge": [
+      {
+        "typ": "gewicht500",
+        "feld": "B2"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_6_4_s1",
+    "exp3_6_4_s2",
+    "exp3_6_4_s3",
+    "exp3_6_4_s4",
+    "exp3_6_4_s5",
+    "exp3_6_4_s6"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "UM1",
+        "groesse": "anzeige",
+        "dauer_s": 1,
+        "zwischen": [
+          0.38,
+          0.47
+        ]
+      },
+      {
+        "bauteil": "KS1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_6_4_h1",
+    "exp3_6_4_h2",
+    "exp3_6_4_loesung"
+  ],
+  "erklaerung_key": "exp3_6_4_erklaerung",
+  "mehr_wissen_key": "exp3_6_4_mehr",
+  "weiterforschen": [
+    "exp3_6_4_w1",
+    "exp3_6_4_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_6_4_echt"
+}
