@@ -47,7 +47,8 @@ QString fieldLabel(const std::string& a) {
 QString pinMark(const std::string& type, const std::string& pin) {
     if (pin == "anode" || pin == "plus") return QStringLiteral("+");
     if (pin == "kathode" || pin == "minus") return QStringLiteral("−");
-    if (type == "transistor_npn" || type == "transistor_pnp") return pin == "b" ? QStringLiteral("B") : pin == "c" ? QStringLiteral("C") : QStringLiteral("E");
+    if (type == "mosfet_n" || type == "mosfet_p") return pin == "g" ? QStringLiteral("G") : pin == "d" ? QStringLiteral("D") : QStringLiteral("S");
+    if (type == "transistor_npn" || type == "transistor_pnp" || type == "leistung_npn" || type == "leistung_pnp") return pin == "b" ? QStringLiteral("B") : pin == "c" ? QStringLiteral("C") : QStringLiteral("E");
     if (type == "wechselschalter" && pin == "mitte") return QStringLiteral("M");
     if (type == "spannungsregler_5v") return pin == "ein" ? QStringLiteral("IN") : pin == "aus" ? QStringLiteral("OUT") : QStringLiteral("GND");
     if (type == "fototransistor" || type == "optokoppler") return pin == "c" ? QStringLiteral("C") : QStringLiteral("E");

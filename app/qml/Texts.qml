@@ -47,6 +47,11 @@ QtObject {
         case "spule_1mh": return qsTr("Spule 1 mH")
         case "spule_10mh": return qsTr("Spule 10 mH")
         case "drossel_10mh": return qsTr("Speicherdrossel 10 mH")
+        case "drossel_1mh": return qsTr("Drossel 1 mH")
+        case "leistung_npn": return qsTr("Leistungstransistor NPN")
+        case "leistung_pnp": return qsTr("Leistungstransistor PNP")
+        case "mosfet_n": return qsTr("MOSFET N-Kanal")
+        case "mosfet_p": return qsTr("MOSFET P-Kanal")
         case "uebertrager": return qsTr("Übertrager 2 × 10 mH")
         case "led_weiss": return qsTr("LED weiß")
         case "thyristor": return qsTr("Thyristor")
@@ -148,6 +153,11 @@ QtObject {
             ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
             ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
             ["relais", qsTr("Relais", "Wortanfaenge im Aufbautext")],
+            ["leistung_pnp", qsTr("PNP-Leistungstransistor", "Wortanfaenge im Aufbautext")],
+            ["leistung_npn", qsTr("Leistungstransistor", "Wortanfaenge im Aufbautext")],
+            ["mosfet_p", qsTr("MOSFET P-Kanal", "Wortanfaenge im Aufbautext")],
+            ["mosfet_n", qsTr("MOSFET N-Kanal", "Wortanfaenge im Aufbautext")],
+            ["drossel_1mh", qsTr("Drossel", "Wortanfaenge im Aufbautext")],
             ["transistor_pnp", qsTr("PNP-Transistor", "Wortanfaenge im Aufbautext")],
             ["transistor_npn", qsTr("Transistor", "Wortanfaenge im Aufbautext")],
             ["feuchtesonde", qsTr("Feuchtesonde", "Wortanfaenge im Aufbautext")],
@@ -254,7 +264,8 @@ QtObject {
             else if (s.type === "triac") t += " " + qsTr("MT2 kommt an %1, das Gate an %2.").arg(pinField("mt2")).arg(pinField("gate"))
             else if (s.type === "fototransistor") t += " " + qsTr("C kommt an %1.").arg(pinField("c"))
             else if (s.type === "optokoppler") t += " " + qsTr("A kommt an %1, C an %2.").arg(pinField("anode")).arg(pinField("c"))
-            else if (s.type.startsWith("transistor")) t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
+            else if (s.type.startsWith("mosfet_")) t += " " + qsTr("Das Gate kommt an %1, der Drain an %2.").arg(pinField("g")).arg(pinField("d"))
+            else if (s.type.startsWith("transistor") || s.type.startsWith("leistung_")) t += " " + qsTr("B kommt an %1, C an %2.").arg(pinField("b")).arg(pinField("c"))
             else if (s.type === "wechselschalter") t += " " + qsTr("Die Mitte kommt an %1.").arg(pinField("mitte"))
             if ((s.type === "widerstand" || s.type === "kondensator" || s.type === "elko") && s.value > 0)
                 t += " " + qsTr("Wert: %1.").arg(partValue(s.type, s.value))

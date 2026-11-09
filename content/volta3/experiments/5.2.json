@@ -1,0 +1,268 @@
+{
+  "id": "volta3.5.2",
+  "band": "volta3",
+  "stufe": 5,
+  "titel_key": "exp3_5_2_titel",
+  "dauer_min": 25,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "leistung_npn",
+    "leistung_pnp",
+    "widerstand",
+    "elko",
+    "messstelle_a",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_5_2_frage",
+  "vermutungen": [
+    "exp3_5_2_v1",
+    "exp3_5_2_v2",
+    "exp3_5_2_v3"
+  ],
+  "beobachtungen": [
+    "exp3_5_2_b1",
+    "exp3_5_2_b2",
+    "exp3_5_2_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 200,
+        "spitze_V": 3
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.001,
+        "volt_je_teilung": [
+          2,
+          2
+        ],
+        "trigger_V": 0.5
+      },
+      "anzeigegeraet": {
+        "anzahl": 1
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "A3"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "C3",
+          "D3"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "B3",
+          "minus": "B2"
+        },
+        "wert": 0.0001
+      },
+      {
+        "id": "T1",
+        "typ": "leistung_npn",
+        "felder": {
+          "b": "A5",
+          "c": "A6",
+          "e": "B5",
+          "e2": "B6"
+        }
+      },
+      {
+        "id": "T2",
+        "typ": "leistung_pnp",
+        "felder": {
+          "b": "D5",
+          "c": "D6",
+          "e": "E5",
+          "e2": "E6"
+        }
+      },
+      {
+        "id": "C2",
+        "typ": "elko",
+        "felder": {
+          "plus": "B7",
+          "minus": "B8"
+        },
+        "wert": 0.001
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C7"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C2"
+        }
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "P:G",
+        "nach": "B2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A3",
+        "nach": "A5",
+        "farbe": "blau"
+      },
+      {
+        "von": "C3",
+        "nach": "D5",
+        "farbe": "blau"
+      },
+      {
+        "von": "A2",
+        "nach": "A6",
+        "farbe": "rot"
+      },
+      {
+        "von": "D6",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B6",
+        "nach": "E6",
+        "farbe": "gruen"
+      },
+      {
+        "von": "B6",
+        "nach": "B7",
+        "farbe": "gruen"
+      },
+      {
+        "von": "B8",
+        "nach": "P:LS1",
+        "farbe": "gruen"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "B9",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B9",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "B7",
+        "nach": "C7",
+        "farbe": "gruen"
+      },
+      {
+        "von": "B2",
+        "nach": "C2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A3",
+        "nach": "B3",
+        "farbe": "blau"
+      },
+      {
+        "von": "B3",
+        "nach": "C3",
+        "farbe": "blau"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_5_2_s1",
+    "exp3_5_2_s2",
+    "exp3_5_2_s3",
+    "exp3_5_2_s4",
+    "exp3_5_2_s5"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "LS",
+        "groesse": "strom_mA",
+        "auswertung": "effektiv",
+        "fenster_s": 0.2,
+        "min": 120
+      },
+      {
+        "bauteil": "IM1",
+        "groesse": "anzeige",
+        "auswertung": "mittel",
+        "fenster_s": 0.2,
+        "zwischen": [
+          0.05,
+          0.085
+        ]
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "T2",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_5_2_h1",
+    "exp3_5_2_h2",
+    "exp3_5_2_loesung"
+  ],
+  "erklaerung_key": "exp3_5_2_erklaerung",
+  "mehr_wissen_key": "exp3_5_2_mehr",
+  "weiterforschen": [
+    "exp3_5_2_w1",
+    "exp3_5_2_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_5_2_echt"
+}

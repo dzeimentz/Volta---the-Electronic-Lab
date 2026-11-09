@@ -66,7 +66,7 @@ Item {
             return {s: "M0 16 H24 M38 16 H64 M24 8 L38 16 L24 24 Z M34 6 L38 8 V24 L42 26", f: ""}
         case "spule_100mh": case "spule_220uh": case "spule_1mh": case "spule_10mh": // Wicklung als Boegen
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16", f: ""}
-        case "drossel_10mh": // Wicklung mit Ferritkern (gestrichelt darueber)
+        case "drossel_10mh": case "drossel_1mh": // Wicklung mit Ferritkern (gestrichelt darueber)
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H20 M24 6 H30 M34 6 H40 M44 6 H50", f: ""}
         case "spule_1h": // Wicklung mit Eisenkern (Strich darueber)
             return {s: "M0 16 H14 M50 16 H64 M14 16 A4.5 5 0 0 1 23 16 A4.5 5 0 0 1 32 16 A4.5 5 0 0 1 41 16 A4.5 5 0 0 1 50 16 M14 6 H50", f: ""}
@@ -97,9 +97,17 @@ Item {
             return {s: "M0 16 H29 M35 16 H64 M29 6 V26 M35 6 V26 " + arrowLine(22, 28, 42, 4), f: arrowHead(22, 28, 42, 4)}
         case "elko": // gepolt: Plusbelag hohl, Minusbelag gefuellt
             return {s: "M0 16 H25 M39 16 H64 M25 6 H29 V26 H25 Z", f: "M35 6 H39 V26 H35 Z", t: "+", tx: 19, ty: 7}
+        case "mosfet_n": // Anreicherung: Gate links, unterbrochener Kanal, Drain oben, Source unten, Pfeil zum Kanal
+            return {s: "M8 16 H24 M24 8 V24 M28 6 V12 M28 13 V19 M28 20 V26 M28 9 H40 V0 M28 23 H40 V32 M40 23 V16 H33 " +
+                       circle(34, 16, 14), f: arrowHead(36, 16, 29, 16)}
+        case "mosfet_p": // wie N-Kanal, Pfeil vom Kanal weg
+            return {s: "M8 16 H24 M24 8 V24 M28 6 V12 M28 13 V19 M28 20 V26 M28 9 H40 V0 M28 23 H40 V32 M40 23 V16 H35 " +
+                       circle(34, 16, 14), f: arrowHead(29, 16, 37, 16)}
+        case "leistung_npn":
         case "transistor_npn": // Basis links, Kollektor oben, Emitter unten mit Pfeil nach aussen
             return {s: circle(34, 16, 14) + " M8 16 H28 M28 8 V24 M28 12 L40 4 V0 " + arrowLine(28, 20, 39, 27) + " M39 27 L40 32",
                     f: arrowHead(28, 20, 39, 27)}
+        case "leistung_pnp":
         case "transistor_pnp": // wie NPN, Emitterpfeil zeigt zur Basis hin
             return {s: circle(34, 16, 14) + " M8 16 H28 M28 8 V24 M28 12 L40 4 V0 " + arrowLine(39, 27, 28, 20) + " M39 27 L40 32",
                     f: arrowHead(39, 27, 29, 20.6)}

@@ -92,7 +92,9 @@ int signalRank(const SchematicElement& e) {
     if (t == "widerstand" || t == "fotowiderstand" || t == "kondensator" || t == "elko" || t.rfind("diode", 0) == 0 ||
         t.rfind("zdiode", 0) == 0 || t.rfind("spule", 0) == 0)
         return 3;
-    if (t == "transistor_npn" || t == "transistor_pnp" || t == "darlington" || e.module) return 4;
+    if (t == "transistor_npn" || t == "transistor_pnp" || t == "darlington" || t.rfind("leistung_", 0) == 0 ||
+        t.rfind("mosfet_", 0) == 0 || e.module)
+        return 4;
     if (t == "lautsprecher") return 6;
     if (t == "messgeraet" || t == "kennlinienschreiber") return 7;
     return 5; // LED, Gluehlampe, Motor, Summer
@@ -197,7 +199,8 @@ ElementGeo geometry(const SchematicElement& e, const std::vector<double>& rowOf,
         side(right, g.w / 2, Exit::Right);
         return g;
     }
-    if ((t == "transistor_npn" || t == "transistor_pnp") && e.nodes.size() >= 3) {
+    if ((t == "transistor_npn" || t == "transistor_pnp" || t.rfind("leistung_", 0) == 0 || t.rfind("mosfet_", 0) == 0) &&
+        e.nodes.size() >= 3) {
         // B links, C oben, E unten (Schaltzeichen 64 x 32: B bei 8|16, C bei 40|0, E bei 40|32)
         const bool flip = below(1, 2); // Kollektor unter dem Emitter: halbe Drehung
         g.rotation = flip ? 180 : 0;
@@ -518,7 +521,8 @@ Schematic buildSchematic(const Board& board, const Catalog& catalog, bool standa
         int transistors = 0, candidate = -1;
         for (std::size_t i = 0; i < out.elements.size(); ++i) {
             const std::string& t = out.elements[i].type;
-            if (t == "transistor_npn" || t == "transistor_pnp" || t == "fototransistor") {
+            if (t == "transistor_npn" || t == "transistor_pnp" || t == "fototransistor" || t.rfind("leistung_", 0) == 0 ||
+                t.rfind("mosfet_", 0) == 0) {
                 ++transistors;
                 candidate = static_cast<int>(i);
             }

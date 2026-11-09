@@ -1,0 +1,357 @@
+{
+  "id": "volta3.5.6",
+  "band": "volta3",
+  "stufe": 5,
+  "titel_key": "exp3_5_6_titel",
+  "dauer_min": 30,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "mosfet_n",
+    "mosfet_p",
+    "drossel_1mh",
+    "widerstand",
+    "kondensator",
+    "elko",
+    "messstelle_a",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_5_6_frage",
+  "vermutungen": [
+    "exp3_5_6_v1",
+    "exp3_5_6_v2",
+    "exp3_5_6_v3"
+  ],
+  "beobachtungen": [
+    "exp3_5_6_b1",
+    "exp3_5_6_b2",
+    "exp3_5_6_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 200,
+        "spitze_V": 2.5
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.001,
+        "volt_je_teilung": [
+          5,
+          2
+        ],
+        "trigger_V": 0.5
+      },
+      "anzeigegeraet": {
+        "anzahl": 1
+      }
+    },
+    "bauteile": [
+      {
+        "id": "IM1",
+        "typ": "messstelle_a",
+        "felder": [
+          "A1",
+          "A2"
+        ]
+      },
+      {
+        "id": "CB",
+        "typ": "elko",
+        "felder": {
+          "plus": "A2",
+          "minus": "B2"
+        },
+        "wert": 0.00047
+      },
+      {
+        "id": "RA",
+        "typ": "widerstand",
+        "felder": [
+          "A3",
+          "A4"
+        ],
+        "wert": 2200
+      },
+      {
+        "id": "RB",
+        "typ": "widerstand",
+        "felder": [
+          "A4",
+          "A5"
+        ],
+        "wert": 15000
+      },
+      {
+        "id": "CT",
+        "typ": "kondensator",
+        "felder": [
+          "A5",
+          "B5"
+        ],
+        "wert": 1e-08
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "C3",
+          "minus": "C2"
+        },
+        "wert": 1e-05
+      },
+      {
+        "id": "T1",
+        "typ": "mosfet_p",
+        "felder": {
+          "g": "A7",
+          "d": "A8",
+          "s": "B7",
+          "s2": "B8"
+        }
+      },
+      {
+        "id": "T2",
+        "typ": "mosfet_n",
+        "felder": {
+          "g": "C7",
+          "d": "C8",
+          "s": "D7",
+          "s2": "D8"
+        }
+      },
+      {
+        "id": "L1",
+        "typ": "drossel_1mh",
+        "felder": [
+          "A9",
+          "A10"
+        ]
+      },
+      {
+        "id": "C2",
+        "typ": "elko",
+        "felder": {
+          "plus": "A10",
+          "minus": "B10"
+        },
+        "wert": 2.2e-05
+      },
+      {
+        "id": "C3",
+        "typ": "elko",
+        "felder": {
+          "plus": "C10",
+          "minus": "D10"
+        },
+        "wert": 0.001
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "B9"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C9"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "TI1",
+        "typ": "timer555",
+        "feld": 1
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B2",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "TI1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "A2",
+        "nach": "TI1.reset",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A2",
+        "nach": "A3",
+        "farbe": "rot"
+      },
+      {
+        "von": "A4",
+        "nach": "TI1.dis",
+        "farbe": "blau"
+      },
+      {
+        "von": "A5",
+        "nach": "TI1.thr",
+        "farbe": "gruen"
+      },
+      {
+        "von": "A5",
+        "nach": "TI1.tr",
+        "farbe": "gruen"
+      },
+      {
+        "von": "B5",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:G",
+        "nach": "C2",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C3",
+        "nach": "TI1.cv",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "B7",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.aus",
+        "nach": "A7",
+        "farbe": "weiss"
+      },
+      {
+        "von": "A7",
+        "nach": "C7",
+        "farbe": "weiss"
+      },
+      {
+        "von": "D8",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A8",
+        "nach": "C8",
+        "farbe": "blau"
+      },
+      {
+        "von": "A8",
+        "nach": "A9",
+        "farbe": "blau"
+      },
+      {
+        "von": "B10",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A10",
+        "nach": "C10",
+        "farbe": "gruen"
+      },
+      {
+        "von": "D10",
+        "nach": "P:LS1",
+        "farbe": "gruen"
+      },
+      {
+        "von": "P:LS2",
+        "nach": "E10",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E10",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A8",
+        "nach": "B9",
+        "farbe": "blau"
+      },
+      {
+        "von": "A10",
+        "nach": "C9",
+        "farbe": "gruen"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_5_6_s1",
+    "exp3_5_6_s2",
+    "exp3_5_6_s3",
+    "exp3_5_6_s4"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "LS",
+        "groesse": "strom_mA",
+        "auswertung": "effektiv",
+        "fenster_s": 0.2,
+        "min": 160
+      },
+      {
+        "bauteil": "IM1",
+        "groesse": "anzeige",
+        "auswertung": "mittel",
+        "fenster_s": 0.2,
+        "max": 0.05
+      },
+      {
+        "bauteil": "T1",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "T2",
+        "zustand": "intakt"
+      },
+      {
+        "bauteil": "L1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_5_6_h1",
+    "exp3_5_6_h2",
+    "exp3_5_6_loesung"
+  ],
+  "erklaerung_key": "exp3_5_6_erklaerung",
+  "mehr_wissen_key": "exp3_5_6_mehr",
+  "weiterforschen": [
+    "exp3_5_6_w1",
+    "exp3_5_6_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_5_6_echt",
+  "aufbau_von": "volta3.5.5"
+}

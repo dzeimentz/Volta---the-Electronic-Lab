@@ -96,8 +96,9 @@ Item {
             case "kondensator": return capacitor
             case "elko": return electrolytic
             case "diode_si": case "diode_ge": case "zdiode_4v7": case "zdiode_5v6": return diode
-            case "transistor_npn": case "transistor_pnp": return transistor
-            case "spule_100mh": case "spule_1h": case "spule_220uh": case "spule_1mh": case "spule_10mh": case "drossel_10mh": return coil
+            case "transistor_npn": case "transistor_pnp": case "leistung_npn": case "leistung_pnp":
+            case "mosfet_n": case "mosfet_p": return transistor
+            case "spule_100mh": case "spule_1h": case "spule_220uh": case "spule_1mh": case "spule_10mh": case "drossel_10mh": case "drossel_1mh": return coil
             case "drehkondensator": return variableCap
             case "trimmer_10k": case "trimmer_100k": return trimmer
             case "ir_led": return irLed
@@ -714,12 +715,17 @@ Item {
                 width: 26; height: 22; radius: 11
                 color: "#1E1E1E"; border.color: "#000000"
                 Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: parent.height / 2; color: "#1E1E1E" }
-                // NPN: »T«, PNP: »P« (ab Volta 2; die Bauart steht auf dem Gehaeuse, nicht nur in der Farbe)
-                Text { anchors.centerIn: parent; text: root.type === "transistor_pnp" ? "P" : "T"; color: "#E0E0E0"; font.pixelSize: Math.round((11) * Theme.fontScale); font.bold: true }
+                // NPN: »T«, PNP: »P« (ab Volta 2; die Bauart steht auf dem Gehaeuse, nicht nur in der Farbe); ab Volta 3
+                // Leistungstransistor »LN«/»LP«, MOSFET »MN«/»MP«
+                Text {
+                    anchors.centerIn: parent
+                    text: ({transistor_pnp: "P", leistung_npn: "LN", leistung_pnp: "LP", mosfet_n: "MN", mosfet_p: "MP"})[root.type] || "T"
+                    color: "#E0E0E0"; font.pixelSize: Math.round((text.length > 1 ? 9 : 11) * Theme.fontScale); font.bold: true
+                }
             }
             // Fussbezeichnung (Farbe nie allein: Buchstaben)
             Repeater {
-                model: ["B", "C", "E", "E"]
+                model: root.type.startsWith("mosfet_") ? ["G", "D", "S", "S"] : ["B", "C", "E", "E"]
                 Text {
                     required property int index
                     required property string modelData
@@ -739,7 +745,7 @@ Item {
         id: coil
         Item {
             readonly property bool core: root.type === "spule_1h"
-            readonly property bool ferrite: root.type === "drossel_10mh" // Speicherdrossel (ab Volta 3): Ferritkern
+            readonly property bool ferrite: root.type.startsWith("drossel_") // Speicherdrossel (ab Volta 3): Ferritkern
             Rectangle { // Kern bzw. Spulenkoerper ragt seitlich heraus
                 anchors.centerIn: parent
                 width: parent.width * 0.78; height: parent.height * 0.42; radius: 3
@@ -766,11 +772,12 @@ Item {
                         id: label
                         anchors.centerIn: parent
                         text: ({spule_1h: "1 H", spule_220uh: "220 µH", spule_1mh: "1 mH", spule_10mh: "10 mH", drossel_10mh: "10 mH
-0,5 A"})[root.type] || "100 mH"
+0,5 A", drossel_1mh: "1 mH
+1,5 A"})[root.type] || "100 mH"
                         color: "#3A2410"
                         horizontalAlignment: Text.AlignHCenter
                         lineHeight: 0.85
-                        font.pixelSize: Math.round((root.type === "drossel_10mh" ? 7 : 9) * Theme.fontScale); font.bold: true
+                        font.pixelSize: Math.round((root.type.startsWith("drossel_") ? 7 : 9) * Theme.fontScale); font.bold: true
                     }
                 }
             }

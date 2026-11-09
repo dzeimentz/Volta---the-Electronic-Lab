@@ -197,6 +197,10 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
             for (const char* pin : {"b", "c"})
                 if (isLoose(pin)) report.push_back(pin);
             if (isLoose("e") && isLoose("e2")) report.push_back("e");
+        } else if (model == "mosfet_n" || model == "mosfet_p") {
+            for (const char* pin : {"g", "d"})
+                if (isLoose(pin)) report.push_back(pin);
+            if (isLoose("s") && isLoose("s2")) report.push_back("s");
         } else if (model == "relay") {
             if (isLoose("a") != isLoose("b")) report.push_back(isLoose("a") ? "a" : "b"); // Spule halb angeschlossen
             if (isLoose("com") != isLoose("no")) report.push_back(isLoose("com") ? "com" : "no");

@@ -50,7 +50,7 @@ std::string prefixFor(const std::string& type) {
         {"spule_100mh", "SP"},  {"spule_1h", "SP"},      {"trimmer_10k", "TR"},   {"trimmer_100k", "TR"},
         {"ir_led", "D"},        {"fototransistor", "FT"}, {"optokoppler", "OK"},
         {"spannungsregler_5v", "IC"},
-        {"spule_220uh", "SP"},  {"spule_1mh", "SP"},     {"spule_10mh", "SP"},    {"drossel_10mh", "DR"},  {"uebertrager", "UE"},  {"thyristor", "TY"},   {"triac", "TC"},   {"diac", "DI"},  {"led_weiss", "D"},    {"drehkondensator", "DK"}, // ab Volta 3
+        {"spule_220uh", "SP"},  {"spule_1mh", "SP"},     {"spule_10mh", "SP"},    {"drossel_10mh", "DR"},  {"drossel_1mh", "DR"},  {"leistung_npn", "T"},  {"leistung_pnp", "T"},  {"mosfet_n", "T"},  {"mosfet_p", "T"},  {"uebertrager", "UE"},  {"thyristor", "TY"},   {"triac", "TC"},   {"diac", "DI"},  {"led_weiss", "D"},    {"drehkondensator", "DK"}, // ab Volta 3
         {"kristallhoerer", "KH"},
         // Messstellen: U, I, R wie in den Formeln (die Anzeige schreibt V1, A1, Ω1; »A1« waere ein Feldname)
         {"messstelle_v", "UM"}, {"messstelle_a", "IM"}, {"messstelle_ohm", "RM"},
@@ -192,6 +192,11 @@ bool needsAudioStep(const Board& board) {
 }
 
 double requiredStepS(const Board& board, bool audio, bool secondOrder) {
+    // Ab Volta 3 geht die Speicherdrossel vor: Schaltwandler und Klasse-D-Stufe (Stufe 5) rechnen auch mit
+    // Lautsprecher in 5 us (Tonausgabe folgt der feineren Schrittweite)
+    if (secondOrder)
+        for (const auto& p : board.parts)
+            if (p.type.rfind("drossel_", 0) == 0) return kSwitchStepS;
     if (audio && needsAudioStep(board)) return kAudioStepS;
     if (secondOrder) {
         // Schaltwandler (ab Volta 3, Konzept Kap. 4, entschieden 04.11.2026): mit Speicherdrossel 5 us, damit der

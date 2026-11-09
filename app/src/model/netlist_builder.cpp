@@ -23,6 +23,7 @@
 #include "volta/core/components/switch.hpp"
 #include "volta/core/components/transistor.hpp"
 #include "volta/core/components/inductor.hpp"
+#include "volta/core/components/mosfet.hpp"
 #include "volta/core/components/thyristor.hpp"
 #include "volta/core/components/transformer.hpp"
 #include "volta/core/components/optics.hpp"
@@ -300,16 +301,23 @@ private:
                                    core::CapacitorParams::electrolytic(p.value > 0.0 ? p.value : 100e-6,
                                                                        e->param("umax_V", 16.0)));
         } else if (m == "bjt_npn" && (n.size() == 3 || n.size() == 4)) {
-            core::BjtParams bp;
+            // Leistungstransistor (ab Volta 3, Katalog `leistung` = 1): Kennwerte angelehnt an BD139
+            core::BjtParams bp = e->param("leistung", 0.0) > 0.0 ? core::BjtParams::bd139() : core::BjtParams{};
             bp.betaF = e->param("beta", bp.betaF);
             c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
             // 2-x-2-Platine: der vierte Fuss (e2) ist ueber eine Leiterbahn mit E verbunden
             if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
         } else if (m == "bjt_pnp" && (n.size() == 3 || n.size() == 4)) {
-            core::BjtParams bp = core::BjtParams::bc557();
+            core::BjtParams bp = e->param("leistung", 0.0) > 0.0 ? core::BjtParams::bd140() : core::BjtParams::bc557();
             bp.betaF = e->param("beta", bp.betaF);
             c.add<core::Npn>(p.id, n[0], n[1], n[2], bp);
             if (n.size() == 4) c.add<core::Wire>(p.id + ".E2", n[2], n[3]);
+        } else if ((m == "mosfet_n" || m == "mosfet_p") && (n.size() == 3 || n.size() == 4)) {
+            // MOSFET (ab Volta 3, Stufe 5); 2-x-2-Platine wie der Transistor, der vierte Fuss (s2) ist die Source
+            core::MosfetParams mp = m == "mosfet_p" ? core::MosfetParams::pChannelDefault() : core::MosfetParams::nChannel();
+            mp.vthV = e->param("u_th_V", mp.vthV);
+            c.add<core::Mosfet>(p.id, n[0], n[1], n[2], mp);
+            if (n.size() == 4) c.add<core::Wire>(p.id + ".S2", n[2], n[3]);
         } else if (m == "phototransistor" && n.size() == 2) {
             core::PhototransistorParams tp;
             tp.luxSensitivityA = e->param("s_uA_lx", tp.luxSensitivityA * 1e6) * 1e-6;
@@ -345,7 +353,8 @@ private:
             // Speicherdrossel (ab Volta 3, Katalog `drossel` = 1): eigene Kennwerte mit wenig Wicklungswiderstand
             const double l = e->param("l_H", 0.1);
             c.add<core::Inductor>(p.id, n[0], n[1],
-                                  e->param("drossel", 0.0) > 0.0 ? core::InductorParams::choke10mH()
+                                  e->param("drossel", 0.0) > 0.0 ? (l < 5e-3 ? core::InductorParams::choke1mH()
+                                                                             : core::InductorParams::choke10mH())
                                   : l >= 0.5                     ? core::InductorParams::h1()
                                   : l >= 0.05                    ? core::InductorParams::mH100()
                                   : l >= 5e-3                    ? core::InductorParams::mH10()

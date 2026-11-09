@@ -29,6 +29,7 @@ Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_Volta3_v0.5.pdf`
 | Nachtrag 08.11.2026 (8) | Abwärtswandler 3.4 mit PNP-Transistor als Schalter oben, direkt vom 555 angesteuert (ein N-MOSFET bräuchte dort eine Gate-Spannung über 9 V); neue Speicherdrossel 10 mH / 2 Ω / 0,5 A, weil die Spulen für Schwingkreise zu viel Wicklungswiderstand haben; mit Drossel rechnet die App mit 5 µs (Kapitel 4). MOSFET und Schottky-Diode folgen mit 3.5 bzw. Stufe 4 |
 | Nachtrag 08.11.2026 (9) | Aufwärtswandler 3.5 als Sperrschwinger (»Joule-Dieb«): neuer Übertrager (Ringkern, 2 × 10 mH, k 0,98) und weiße LED; schwingt an einer Zelle mit 1,5 V (der 555 bräuchte 4,5 V) |
 | Nachtrag 09.11.2026 (10) | Stufe 4: Thyristor, Triac und Diac als Zustandsmodell mit echtem Gate-Übergang und Ereignisortung (statt Zwei-Transistor-Modell); Zündzustand im Zustandsschnappschuss (Undo, Topologiewechsel). Der Diac kippt bei 6 V (bidirektionaler Kippschalter für Kleinspannung); Netzdiacs mit etwa 30 V würden an 9 V~ nie kippen, das sagen die Texte offen. Triac-Anschlüsse heißen MT1/MT2, weil A1/A2 Feldnamen sind. Mit Thyristor, Triac oder Diac rechnet die App mit 100 µs |
+| Nachtrag 09.11.2026 (11) | Stufe 5: neue Bauteile Leistungstransistor NPN/PNP (angelehnt an BD139/BD140, 1,5 A) – BC547/BC557 vertragen am 8-Ω-Lautsprecher nur 0,1 A –, MOSFET N- und P-Kanal (Logikpegel) und Drossel 1 mH / 1,5 A als Ausgangsdrossel. Klasse D als MOSFET-Halbbrücke, gesteuert vom 555 (Ton am CV-Eingang moduliert die Pulsweite, etwa 4,5 kHz), LC-Tiefpass 1 mH / 22 µF; ein OP als Komparator würde mit seiner Anstiegsrate beide MOSFETs gleichzeitig öffnen (Querstrom). Mit Drossel rechnet die App auch mit Lautsprecher in 5 µs (10 µs wichen 2,8 % ab); die Rechnung läuft dann auf dem Desktop etwa mit halber Echtzeit, der Ton folgt dem Ersatzweg. Kernkorrektur: Begrenzt kMinOhm den Serienwiderstand eines großen Elkos in sehr kurzen Teilschritten (Ereignisortung), zählt der Überschuss als Verlustwiderstand und nicht zur Ladung (nur mit BDF2, Volta 1/2 unverändert); vorher entstand dabei Scheinenergie |
 | Name | Arbeitstitel; die Namensfrage der Reihe ist offen (`docs/partner/rechte-und-lizenzen.md`, Abschnitt 3) |
 
 ## 1. Zusammenfassung
@@ -201,12 +202,12 @@ Aufbau wie Volta 1 und 2: Stufen mit Leitfrage, Experimente mit Forschungskreisl
 - 4.6 **Projekt: Lampendimmer für Kleinspannung** – mit dem Hinweis, dass Dimmer am Stromnetz nur Fachleute anschließen: 1 kΩ + P1, 0,47 µF, Diac; Lampe von etwa 71 bis 25 von 100, Ziel 30 bis 50 (P1 bei drei Vierteln etwa 44).
 
 ### Stufe 5 – Verstärkerklassen: Wie viel Leistung, wie viel Wärme? (6)
-- 5.1 **Klasse A** – immer Strom, sauberer Klang, viel Wärme: Wirkungsgrad messen.
-- 5.2 **Klasse B** – Gegentakt spart Strom, aber Übernahmeverzerrung (sehen und hören).
-- 5.3 **Klasse AB** – zwei Dioden schaffen die Lücke weg.
-- 5.4 **Wohin geht die Leistung?** – Leistung am Lautsprecher und Wärme in den Transistoren im Vergleich.
-- 5.5 **Klasse D** – schalten mit Pulsweite, Tiefpass am Ausgang (langsamere Schaltfrequenz, offen erklärt).
-- 5.6 **Projekt: der sparsamste Verstärker** – gleiche Lautstärke, kleinste Batterieleistung.
+- 5.1 **Klasse A** – immer Strom, sauberer Klang, viel Wärme: Wirkungsgrad messen. Emitterfolger mit Leistungstransistor, Lautsprecher als Emitterwiderstand, 8,2 kΩ an der Basis; gerechnet etwa 107 mA Ruhestrom (0,96 W), am Lautsprecher etwa 33 mW Ton (3–4 %), fast 0,8 W im Transistor.
+- 5.2 **Klasse B** – Gegentakt spart Strom, aber Übernahmeverzerrung (sehen und hören). Komplementäre Emitterfolger, Basen über 2 × 1 kΩ auf halber Spannung, Generator 3 V; ohne Ton etwa 5 mA, mit Ton etwa 69 mA und 0,2 W am Lautsprecher (etwa 32 %), Lücke am Nulldurchgang am Oszilloskop.
+- 5.3 **Klasse AB** – zwei Dioden schaffen die Lücke weg. Etwa 28 mA Ruhestrom, mit Ton etwa 89 mA und 0,26 W am Lautsprecher.
+- 5.4 **Wohin geht die Leistung?** – Leistung am Lautsprecher und Wärme in den Transistoren im Vergleich. Klasse AB bei 4 V: Batterie etwa 0,86 W (96 mA), Lautsprecher etwa 0,3 W, je Transistor etwa 0,25 W.
+- 5.5 **Klasse D** – schalten mit Pulsweite, Tiefpass am Ausgang (langsamere Schaltfrequenz, offen erklärt). 555 mit 2,2 kΩ / 15 kΩ / 10 nF (etwa 4,5 kHz), Ton am CV-Eingang, MOSFET-Halbbrücke, 1 mH / 22 µF; bei 2,5 V etwa 0,27 W am Lautsprecher aus 0,39 W (etwa 70 %), die MOSFETs zusammen etwa 16 mW.
+- 5.6 **Projekt: der sparsamste Verstärker** – gleiche Lautstärke, kleinste Batterieleistung. Ziel: etwa so laut wie in 5.4 mit weniger als 50 mA; Klasse D schafft es mit etwa 44 mA (Klasse AB 96 mA), bei 3 V steigt der Strom auf etwa 70 mA.
 
 ### Stufe 6 – Sensoren und Messverstärker: Wie misst man winzige Änderungen? (8)
 - 6.1 **Die Messbrücke** – zwei Spannungsteiler, Nullabgleich mit P1.

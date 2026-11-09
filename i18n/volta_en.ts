@@ -6297,6 +6297,66 @@
         <translation>MT2 goes to %1, the gate to %2.</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Drossel 1 mH</source>
+        <translation>Choke 1 mH</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Leistungstransistor NPN</source>
+        <translation>NPN power transistor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Leistungstransistor PNP</source>
+        <translation>PNP power transistor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>MOSFET N-Kanal</source>
+        <translation>N-channel MOSFET</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>MOSFET P-Kanal</source>
+        <translation>P-channel MOSFET</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>PNP-Leistungstransistor</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>PNP power transistor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Leistungstransistor</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>NPN power transistor</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>MOSFET P-Kanal</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>P-channel MOSFET</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>MOSFET N-Kanal</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>N-channel MOSFET</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Drossel</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Choke</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="52"/>
+        <source>Das Gate kommt an %1, der Drain an %2.</source>
+        <translation>The gate goes to %1, the drain to %2.</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="51"/>
         <source>LED weiß</source>
         <translation>LED white</translation>
