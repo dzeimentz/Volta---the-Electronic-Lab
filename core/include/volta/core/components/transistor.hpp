@@ -27,6 +27,28 @@ struct BjtParams {
 
     // PNP-Komplementaertyp zum BC547B, angelehnt an BC557B (gleiche Stromverstaerkungsgruppe B, Ic 0,1 A, Ptot
     // 0,5 W); Kennwerte gespiegelt wie BC547B, damit Gegentaktstufen symmetrisch arbeiten.
+    // Leistungstransistoren (ab Volta 3, Stufe 5: Endstufen am 8-Ohm-Lautsprecher), angelehnt an BD139/BD140:
+    // Ic 1,5 A, Ptot 1,25 W ohne Kuehlkoerper (Rth ca. 100 K/W), Stromverstaerkung ca. 120, Ube ca. 0,7 V bei 0,1 A.
+    // Ohne Bahnwiderstaende: Ube und Uce(sat) bei 0,5 A etwas zu klein (Datenblatt ca. 0,8 V bzw. 0,5 V).
+    static BjtParams bd139() noexcept {
+        BjtParams p;
+        p.isA = 1.5e-13;
+        p.betaF = 120.0;
+        p.betaR = 5.0;
+        p.icMaxA = 1.5;
+        p.cbeF = 100e-12;
+        p.cbcF = 30e-12;
+        p.tauFS = 3e-9;
+        p.tauRS = 50e-9;
+        p.thermal = ThermalParams{100.0, 5.0 / 100.0, 423.0};
+        return p;
+    }
+    static BjtParams bd140() noexcept {
+        BjtParams p = bd139();
+        p.pnp = true;
+        return p;
+    }
+
     static BjtParams bc557() noexcept {
         BjtParams p;
         p.pnp = true;

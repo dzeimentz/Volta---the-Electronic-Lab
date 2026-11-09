@@ -31,6 +31,7 @@ add_library(volta_core STATIC
     src/components/inductor.cpp
     src/components/transformer.cpp
     src/components/thyristor.cpp
+    src/components/mosfet.cpp
     src/components/radio.cpp
     src/modules/blink_module.cpp
     src/modules/tone_module.cpp

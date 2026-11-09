@@ -28,6 +28,15 @@ void Capacitor::setVoltage(double voltV) noexcept {
     m_havePrev = false;
 }
 
+void Capacitor::beginSolve(const StampContext& ctx) noexcept {
+    // Volta 1 und 2 (Rueckwaerts-Euler) bleiben bitgleich: dort uebernimmt der Kondensator weiter die Klemmenspannung.
+    m_extraOhm = 0.0;
+    if (!ctx.secondOrder || ctx.isDc()) return;
+    const IntegrationCoeffs k = integrationCoeffs(ctx, m_havePrev, m_lastDtS);
+    const double idealOhm = ctx.dtS / ((k.secondOrder ? k.a0 : 1.0) * m_params.capacitanceF);
+    if (idealOhm < kMinOhm) m_extraOhm = kMinOhm - idealOhm;
+}
+
 void Capacitor::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
     if (m_destroyed) { // offen; Zweigstrom null
         sys.stampBranchOpen(firstBranch());
@@ -73,7 +82,9 @@ void Capacitor::updateState(const SolutionView& x, double dtS) noexcept {
     m_lastDtS = dtS;
     m_havePrev = false;
     if (m_destroyed) return;
-    const double v = x.voltage(terminal(0)) - x.voltage(terminal(1));
+    double v = x.voltage(terminal(0)) - x.voltage(terminal(1));
+    // Begrenzter Serienwiderstand: Die Ladung folgt nur dem Strom, nicht dem Spannungsabfall am Verlustanteil
+    if (m_extraOhm > 0.0 && dtS > 0.0) v -= m_extraOhm * x.branchCurrent(firstBranch());
     if (!std::isfinite(v)) return;
     if (dtS > 0.0) { // Arbeitspunkt (dtS 0) beginnt die Vorgeschichte neu
         m_prevVoltV = m_voltV;

@@ -29,6 +29,9 @@ struct InductorParams {
     // Speicherdrossel fuer Schaltwandler (ab Volta 3, Stufe 3): 10 mH auf Ferritkern mit dickem Draht, 2 Ohm und
     // 0,5 A (typische Datenblattbereiche von Ringkern- und Stabkerndrosseln dieser Groesse); Rth ca. 60 K/W.
     static InductorParams choke10mH() noexcept { return {10e-3, 2.0, 2e5, 0.5, {60.0, 0.1 * 100.0 / 60.0, 403.0}}; }
+    // Ausgangsdrossel fuer die Klasse-D-Stufe (ab Volta 3, Stufe 5): 1 mH, 0,3 Ohm, 1,5 A (Ringkerndrossel dieser
+    // Groesse); mit 22 uF ergibt sie am 8-Ohm-Lautsprecher einen Tiefpass um 1 kHz.
+    static InductorParams choke1mH() noexcept { return {1e-3, 0.3, 2e5, 1.5, {60.0, 0.1 * 100.0 / 60.0, 403.0}}; }
 };
 
 // Spule (Katalogtyp `spule`): Induktivitaet L in Reihe mit dem Wicklungswiderstand R, parallel dazu Rp.

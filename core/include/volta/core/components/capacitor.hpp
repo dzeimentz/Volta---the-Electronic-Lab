@@ -41,6 +41,7 @@ public:
     void setCapacitance(double capacitanceF) noexcept;
 
     std::size_t branchCount() const noexcept override { return 1; }
+    void beginSolve(const StampContext& ctx) noexcept override;
     void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
     bool stampAc(ComplexMna& sys, const AcContext& ctx) const noexcept override;
     double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
@@ -56,6 +57,9 @@ private:
     double m_lastDtS = 0.0;
     double m_prevVoltV = 0.0; // Spannung einen Schritt davor (BDF2, ab Volta 3)
     bool m_havePrev = false;
+    // Ab Volta 3: Anteil des Serienwiderstands ueber dt/(a0*C), wenn kMinOhm ihn begrenzt (sehr kurze Teilschritte
+    // der Ereignisortung an grossen Elkos). Er wirkt als Verlustwiderstand und zaehlt nicht zur Ladung.
+    double m_extraOhm = 0.0;
 };
 
 } // namespace volta::core
