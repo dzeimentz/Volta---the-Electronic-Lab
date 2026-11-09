@@ -1764,6 +1764,16 @@ QVariantMap LabController::moduleState(const QString& id) const {
     } else if (type == "gattermodul") {
         // Gatter-Modul: versorgt (ab 3 V)
         m.insert(QStringLiteral("active"), r->voltV >= 3.0);
+    } else if (type == "zaehlermodul" || type == "dekadenzaehler") {
+        // Zaehler: versorgt (ab 3 V), Zaehlerstand
+        m.insert(QStringLiteral("active"), r->voltV >= 3.0);
+        m.insert(QStringLiteral("count"), static_cast<int>(std::lround(r->displayValue)));
+    } else if (type == "anzeigemodul") {
+        // Anzeige-Modul: Ziffer (-1 dunkel) und Segmente a ... g als Bits
+        const int digit = static_cast<int>(std::lround(r->displayValue));
+        m.insert(QStringLiteral("active"), digit >= 0);
+        m.insert(QStringLiteral("digit"), digit);
+        m.insert(QStringLiteral("segments"), r->displayFlags);
     } else if (type == "opmodul" || type == "timer555") {
         // OP: Ausgang ueber der Mitte der Versorgung; 555: Flipflop gesetzt (Ausgang hoch)
         m.insert(QStringLiteral("active"), r->level > 0.5);
@@ -1845,6 +1855,35 @@ QVariantMap LabController::moduleInside(const QString& id) const {
             m.insert(QStringLiteral("high"), r->level > 0.5);
             m.insert(QStringLiteral("outV"), r->displayValue);
             m.insert(QStringLiteral("powered"), r->voltV >= 4.5);
+        }
+        return m;
+    }
+    if (type == "zaehlermodul" || type == "dekadenzaehler" || type == "anzeigemodul") {
+        // Verhaltensmodell: Eingaenge mit Zustand (Hysterese), Zaehlerstand bzw. Ziffer, Spannungen gegen minus
+        const std::size_t i = range->second.first;
+        if (i >= snap.readings.size() || i >= snap.states.size()) return m;
+        const core::ComponentReading& r = snap.readings[i];
+        const core::ComponentState& st = snap.states[i];
+        const double vm = m_session->voltage(mid + ".minus");
+        m.insert(QStringLiteral("supplyV"), r.voltV);
+        m.insert(QStringLiteral("powered"), r.voltV >= 3.0);
+        if (type == "anzeigemodul") {
+            const int v = static_cast<int>(std::lround(st.internal[0]));
+            QVariantList bits;
+            const char* names[4] = {"a", "b", "c", "d"};
+            for (int k = 0; k < 4; ++k)
+                bits << QVariantMap{{QStringLiteral("high"), ((v >> k) & 1) != 0},
+                                    {QStringLiteral("v"), m_session->voltage(mid + "." + names[k]) - vm}};
+            m.insert(QStringLiteral("inputs"), bits);
+            m.insert(QStringLiteral("value"), v);
+            m.insert(QStringLiteral("digit"), static_cast<int>(std::lround(r.displayValue)));
+            m.insert(QStringLiteral("currentmA"), r.currentA * 1000.0);
+        } else {
+            m.insert(QStringLiteral("clockHigh"), st.internal[0] > 0.5);
+            m.insert(QStringLiteral("resetHigh"), st.internal[1] > 0.5);
+            m.insert(QStringLiteral("clockV"), m_session->voltage(mid + ".clk") - vm);
+            m.insert(QStringLiteral("resetV"), m_session->voltage(mid + ".reset") - vm);
+            m.insert(QStringLiteral("count"), static_cast<int>(std::lround(st.internal[2])));
         }
         return m;
     }
@@ -2446,6 +2485,35 @@ QVariantMap LabController::displayState(int slot) const {
     m.insert(QStringLiteral("range"), range);
     const bool acChosen = d.meters[slot].ac && mode != core::MeterMode::Ohm;
     m.insert(QStringLiteral("ac"), acChosen);
+    // Frequenzzaehler (ab Volta 3): Flanken der Spannung in der Torzeit zaehlen, f = Zahl / Torzeit
+    const bool hzAllowed = m_session->catalog().secondOrder && mode == core::MeterMode::Volt;
+    m.insert(QStringLiteral("hzAllowed"), hzAllowed);
+    const int gate = hzAllowed ? d.meters[slot].gate : 0;
+    m.insert(QStringLiteral("gate"), gate);
+    if (gate > 0) {
+        const int windows = gate == 1 ? 1 : 10;
+        const double gateS = 0.1 * windows;
+        const int edges = m_session->gateEdges(ss(source), windows);
+        m.insert(QStringLiteral("ranges"), QStringList{});
+        m.insert(QStringLiteral("range"), -1);
+        m.insert(QStringLiteral("gateText"), gate == 1 ? QStringLiteral("0,1 s") : QStringLiteral("1 s"));
+        if (edges < 0) {
+            m.insert(QStringLiteral("text"), QStringLiteral("- - -"));
+            m.insert(QStringLiteral("unit"), QStringLiteral("Hz"));
+            return m;
+        }
+        const double f = edges / gateS;
+        m.insert(QStringLiteral("value"), f);
+        m.insert(QStringLiteral("edges"), edges);
+        if (f >= 10000.0) {
+            m.insert(QStringLiteral("text"), QLocale().toString(f / 1000.0, 'f', gate == 1 ? 2 : 3));
+            m.insert(QStringLiteral("unit"), QStringLiteral("kHz"));
+        } else {
+            m.insert(QStringLiteral("text"), QString::number(static_cast<long long>(std::lround(f))));
+            m.insert(QStringLiteral("unit"), QStringLiteral("Hz"));
+        }
+        return m;
+    }
     const core::ComponentReading* r = m_session->reading(ss(source));
     if (!r) {
         m.insert(QStringLiteral("text"), QStringLiteral("- - -"));
@@ -2532,6 +2600,16 @@ void LabController::setDisplayAc(int slot, bool ac) {
     emit deskChanged();
 }
 
+
+void LabController::setDisplayGate(int slot, int gate) {
+    if (slot < 0 || slot >= model::kDisplaySlots) return;
+    model::DisplaySettings s = m_session->board().desk.display;
+    s.meters[slot].source = ss(displayState(slot).value(QStringLiteral("id")).toString());
+    s.meters[slot].gate = std::clamp(gate, 0, 2);
+    if (s.meters[slot].gate > 0) s.meters[slot].ac = false;
+    m_session->setDisplaySettings(s);
+    emit deskChanged();
+}
 
 double LabController::logicSupplyV() const { return 1.5 * m_session->board().desk.cells; }
 

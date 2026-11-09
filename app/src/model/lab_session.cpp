@@ -266,6 +266,28 @@ void LabSession::updateScope() {
 
 bool LabSession::poll() {
     const bool fresh = m_bridge.latest(m_snap);
+    if (fresh) {
+        // Frequenzzaehler: Durchgaenge je abgeschlossenem Fenster mitschreiben (neue Schaltung: neu beginnen)
+        if (m_edgesTopology != m_snap.topology || m_edges.size() != m_snap.readingStats.size() / 2) {
+            m_edges.assign(m_snap.readingStats.size() / 2, EdgeHistory{});
+            m_edgesTopology = m_snap.topology;
+        }
+        for (std::size_t i = 0; i < m_edges.size(); ++i) {
+            const core::SignalSummary& st = m_snap.readingStats[2 * i];
+            EdgeHistory& h = m_edges[i];
+            if (!st.valid || st.windows == h.lastWindow) continue;
+            const bool first = h.lastWindow == 0;
+            const bool skipped = !first && st.windows != h.lastWindow + 1; // Fenster verpasst: neu zaehlen
+            h.lastWindow = st.windows;
+            if (first || skipped) { // erstes Fenster nach dem Start: Schwelle erst ab dem zweiten bekannt
+                h.filled = h.next = 0;
+                if (first) continue;
+            }
+            h.rises[static_cast<std::size_t>(h.next)] = st.rises;
+            h.next = (h.next + 1) % 10;
+            h.filled = std::min(10, h.filled + 1);
+        }
+    }
     // Vorgaben, die der Schnappschuss bereits enthaelt, werden nicht mehr gebraucht
     m_pendingStates.erase(std::remove_if(m_pendingStates.begin(), m_pendingStates.end(),
                                          [this](const auto& p) { return p.first <= m_snap.topology; }),
@@ -290,6 +312,17 @@ const core::SignalSummary* LabSession::readingStats(const std::string& partId, b
     if (!snapshotCurrent() || it == m_net.parts.end()) return nullptr;
     const std::size_t k = 2 * it->second + (current ? 1 : 0);
     return k < m_snap.readingStats.size() ? &m_snap.readingStats[k] : nullptr;
+}
+
+int LabSession::gateEdges(const std::string& partId, int windows) const {
+    const auto it = m_net.parts.find(partId);
+    if (!snapshotCurrent() || it == m_net.parts.end() || it->second >= m_edges.size()) return -1;
+    const EdgeHistory& h = m_edges[it->second];
+    windows = std::clamp(windows, 1, 10);
+    if (h.filled < windows) return -1;
+    int sum = 0;
+    for (int k = 1; k <= windows; ++k) sum += h.rises[static_cast<std::size_t>((h.next - k + 10) % 10)];
+    return sum;
 }
 
 double LabSession::voltageScale() const {

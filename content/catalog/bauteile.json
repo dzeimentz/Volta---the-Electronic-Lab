@@ -134,6 +134,12 @@
     {"typ": "ukwmodul", "anschluesse": ["plus", "minus", "ant", "abst", "laut", "aus"], "breite": 6, "art": "verhaltensmodell",
      "ab_band": "volta3", "ab_stufe": 2, "lexikon_key": "lex_ukwmodul"},
     {"typ": "gattermodul", "anschluesse": ["plus", "minus", "a1", "b1", "y1", "a2", "b2", "y2", "a3", "b3", "y3", "a4", "b4", "y4"],
-     "breite": 14, "art": "verhaltensmodell", "ab_band": "volta3", "ab_stufe": 7, "lexikon_key": "lex_gattermodul"}
+     "breite": 14, "art": "verhaltensmodell", "ab_band": "volta3", "ab_stufe": 7, "lexikon_key": "lex_gattermodul"},
+    {"typ": "zaehlermodul", "anschluesse": ["plus", "minus", "clk", "reset", "q0", "q1", "q2", "q3"],
+     "breite": 8, "art": "verhaltensmodell", "ab_band": "volta3", "ab_stufe": 8, "lexikon_key": "lex_zaehlermodul"},
+    {"typ": "dekadenzaehler", "anschluesse": ["plus", "minus", "clk", "reset", "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9"],
+     "breite": 14, "art": "verhaltensmodell", "ab_band": "volta3", "ab_stufe": 8, "lexikon_key": "lex_dekadenzaehler"},
+    {"typ": "anzeigemodul", "anschluesse": ["plus", "minus", "a", "b", "c", "d"],
+     "breite": 6, "art": "verhaltensmodell", "ab_band": "volta3", "ab_stufe": 8, "lexikon_key": "lex_anzeigemodul"}
   ]
 }

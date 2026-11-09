@@ -36,7 +36,8 @@ QtObject {
     function modulePlate(type) {
         return type === "tonmodul" ? "#6A4C8C" : type === "zeitmodul" ? "#7A5A1E"
              : type === "verstaerkermodul" ? "#2E6B4A" : type === "opmodul" ? "#7A1F2B" : type === "timer555" ? "#3A3F46"
-             : type === "mwmodul" ? "#1F3A68" : type === "ukwmodul" ? "#1E5C5C" : type === "gattermodul" ? "#4B3A1E" : "#2F6F8F"
+             : type === "mwmodul" ? "#1F3A68" : type === "ukwmodul" ? "#1E5C5C" : type === "gattermodul" ? "#4B3A1E"
+             : type === "zaehlermodul" ? "#2F4A1E" : type === "dekadenzaehler" ? "#1E4A3A" : type === "anzeigemodul" ? "#1F2A24" : "#2F6F8F"
     }
     readonly property color accent: "#2873B0" // Weiss darauf 5:1 (WCAG AA)
     readonly property color signalOrange: "#FF6B1A"

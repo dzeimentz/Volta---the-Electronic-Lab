@@ -1,6 +1,7 @@
 // Piktogramm eines Moduls (Wiedererkennung neben Name und Plattenfarbe, Farbe nie allein): Blinkmodul Gluehbirne
 // mit Strahlen, Tonmodul Note, Verstaerkermodul kleine Welle -> grosse Welle, Zeitmodul Stoppuhr, OP-Modul Dreieck
-// mit + und -, Timer 555 Rechteckpuls, Gatter-Modul NAND-Zeichen (Halbkreis mit Kreis am Ausgang).
+// mit + und -, Timer 555 Rechteckpuls, Gatter-Modul NAND-Zeichen (Halbkreis mit Kreis am Ausgang), Zaehler-Modul
+// Takt mit Treppe, Dekadenzaehler Lauflicht, Anzeige-Modul Siebensegment-Ziffer.
 // Gezeichnet in einem Raster der Hoehe 32 (Verstaerker breiter: 48) und auf die Hoehe des Elements skaliert; die
 // Breite ergibt sich daraus.
 import QtQuick
@@ -30,6 +31,14 @@ Item {
         case "gattermodul": // NAND: zwei Eingaenge, Halbkreis, Negationskreis, Ausgang
             return "M 2 10 h 6 M 2 22 h 6 M 8 4 h 8 a 12 12 0 0 1 0 24 h -8 Z"
                  + " M 28 16 a 2.5 2.5 0 1 0 5 0 a 2.5 2.5 0 1 0 -5 0"
+        case "zaehlermodul": // Zaehler: Taktimpuls mit Treppe darueber
+            return "M 2 29 h 5 v -6 h 5 v 6 h 5 v -6 h 5 v 6 h 5 M 4 17 h 6 v -4 h 6 v -4 h 6 v -4 h 6"
+        case "dekadenzaehler": // Lauflicht: zehn Punkte, einer gross
+            return "M 2 16 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 M 8 16 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0"
+                 + " M 13 16 a 3.5 3.5 0 1 0 7 0 a 3.5 3.5 0 1 0 -7 0 M 22 16 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0"
+                 + " M 27 16 a 1.5 1.5 0 1 0 3 0 a 1.5 1.5 0 1 0 -3 0 M 4 26 h 24"
+        case "anzeigemodul": // Siebensegment-Ziffer 8
+            return "M 10 3 h 12 M 9 5 v 10 M 23 5 v 10 M 10 16 h 12 M 9 17 v 10 M 23 17 v 10 M 10 29 h 12"
         case "mwmodul": // Antenne mit Wellen (Konzept Volta 3, Kap. 9)
             return "M 16 30 V 12 M 16 12 L 10 3 M 16 12 L 22 3 M 10 3 H 22"
                  + " M 6 10 q -3 4 0 8 M 26 10 q 3 4 0 8 M 2 7 q -5 7 0 14 M 30 7 q 5 7 0 14"

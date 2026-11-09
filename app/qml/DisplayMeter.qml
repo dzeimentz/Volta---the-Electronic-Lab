@@ -139,9 +139,10 @@ Rectangle {
                         Text { id: tagText; anchors.centerIn: parent; text: unit.st.label || ""; color: "white"; font.bold: true; font.pixelSize: Math.round(12 * Theme.fontScale) }
                     }
                     Label {
-                        visible: unit.valid && (unit.st.ranges || []).length > 0
+                        visible: unit.valid && ((unit.st.ranges || []).length > 0 || (unit.st.gate || 0) > 0)
                         anchors.right: parent.right; anchors.rightMargin: 6; y: 4
-                        text: unit.st.range >= 0 ? unit.st.ranges[unit.st.range] : qsTr("Auto")
+                        text: (unit.st.gate || 0) > 0 ? qsTr("Tor %1").arg(unit.st.gateText || "")
+                              : unit.st.range >= 0 ? unit.st.ranges[unit.st.range] : qsTr("Auto")
                         font.pixelSize: Math.round(10 * Theme.fontScale)
                         color: "#33402C"
                     }
@@ -213,7 +214,9 @@ Rectangle {
                         id: rangeButton
                         objectName: "displayRange" + unit.slot
                         width: parent.cell; height: Theme.control
-                        text: unit.st.range >= 0 ? (unit.st.ranges || [])[unit.st.range] : qsTr("Auto")
+                        enabled: (unit.st.gate || 0) === 0
+                        text: (unit.st.gate || 0) > 0 ? unit.st.gateText || ""
+                              : unit.st.range >= 0 ? (unit.st.ranges || [])[unit.st.range] : qsTr("Auto")
                         font.pixelSize: Math.round(11 * Theme.fontScale)
                         leftPadding: 2; rightPadding: 2
                         onClicked: rangeMenu.open()
@@ -240,16 +243,24 @@ Rectangle {
                             }
                         }
                     }
-                    Button { // Gleich- oder Wechselgroesse (nicht bei Ohm)
+                    Button { // Gleich- oder Wechselgroesse (nicht bei Ohm); ab Volta 3 bei Spannung weiter zum Frequenzzaehler
                         objectName: "displayAc" + unit.slot
                         width: parent.cell; height: Theme.control
                         enabled: unit.st.kind !== 2
-                        text: unit.st.ac ? "~" : "⎓"
-                        font.pixelSize: Math.round(18 * Theme.fontScale)
+                        readonly property int gate: unit.st.gate || 0
+                        text: gate > 0 ? "Hz" : unit.st.ac ? "~" : "⎓"
+                        font.pixelSize: Math.round((gate > 0 ? 14 : 18) * Theme.fontScale)
                         font.bold: true
-                        onClicked: meter.controller.setDisplayAc(unit.slot, !unit.st.ac)
+                        // ⎓ -> ~ -> Hz (Tor 0,1 s) -> Hz (Tor 1 s) -> ⎓
+                        onClicked: {
+                            if (gate === 1) meter.controller.setDisplayGate(unit.slot, 2)
+                            else if (gate === 2) meter.controller.setDisplayGate(unit.slot, 0)
+                            else if (unit.st.ac && unit.st.hzAllowed) meter.controller.setDisplayGate(unit.slot, 1)
+                            else meter.controller.setDisplayAc(unit.slot, !unit.st.ac)
+                        }
                         ToolTip.visible: hovered
-                        ToolTip.text: unit.st.ac ? qsTr("Wechselgröße (Effektivwert)") : qsTr("Gleichgröße")
+                        ToolTip.text: gate > 0 ? qsTr("Frequenzzähler: Flanken in %1 zählen").arg(unit.st.gateText || "")
+                                    : unit.st.ac ? qsTr("Wechselgröße (Effektivwert)") : qsTr("Gleichgröße")
                         Accessible.name: ToolTip.text
                     }
                 }

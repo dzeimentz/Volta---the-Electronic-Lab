@@ -32,6 +32,7 @@
 #include "volta/core/modules/fm_module.hpp"
 #include "volta/core/modules/radio_module.hpp"
 #include "volta/core/modules/timer555_module.hpp"
+#include "volta/core/modules/counter_module.hpp"
 #include "volta/core/modules/gate_module.hpp"
 #include "volta/core/components/wire.hpp"
 
@@ -531,6 +532,24 @@ private:
             gp.minus = n[1];
             for (std::size_t k = 0; k < 12; ++k) gp.io[k] = n[2 + k];
             const core::SubcircuitRange r = core::addGateModule(m_net.circuit, m.id, gp);
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
+        } else if ((m.type == "zaehlermodul" && n.size() == 8) || (m.type == "dekadenzaehler" && n.size() == 14)) {
+            // Katalog: plus, minus, takt, reset, q0 ... q3 bzw. q0 ... q9 (ab Volta 3, Stufe 8; Schmitt-Eingaenge)
+            core::CounterModulePins cp;
+            cp.plus = n[0];
+            cp.minus = n[1];
+            cp.clock = n[2];
+            cp.reset = n[3];
+            for (std::size_t k = 4; k < n.size(); ++k) cp.q[k - 4] = n[k];
+            const core::SubcircuitRange r = m.type == "zaehlermodul"
+                                                ? core::addBinaryCounterModule(m_net.circuit, m.id, cp)
+                                                : core::addDecadeCounterModule(m_net.circuit, m.id, cp);
+            m_net.modules[m.id] = r;
+            m_net.moduleMain[m.id] = r.first;
+        } else if (m.type == "anzeigemodul" && n.size() == 6) {
+            // Katalog: plus, minus, a, b, c, d (Decoder mit Siebensegmentanzeige und Vorwiderstaenden, Stufe 8)
+            const core::SubcircuitRange r = core::addDisplayModule(m_net.circuit, m.id, n[0], n[1], {n[2], n[3], n[4], n[5]});
             m_net.modules[m.id] = r;
             m_net.moduleMain[m.id] = r.first;
         } else if (m.type == "tonmodul" && n.size() == 4) {

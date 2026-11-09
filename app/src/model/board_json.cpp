@@ -85,10 +85,13 @@ QJsonObject boardToJson(const Board& board) {
                                 {QStringLiteral("beide_richtungen"), d.tracer.bipolar},
                                 {QStringLiteral("strom_index"), d.tracer.limitIndex}});
         QJsonArray meters;
-        for (const auto& s : d.display.meters)
-            meters.append(QJsonObject{{QStringLiteral("messstelle"), qs(s.source)},
-                                     {QStringLiteral("bereich"), s.range},
-                                     {QStringLiteral("wechsel"), s.ac}});
+        for (const auto& s : d.display.meters) {
+            QJsonObject o{{QStringLiteral("messstelle"), qs(s.source)},
+                          {QStringLiteral("bereich"), s.range},
+                          {QStringLiteral("wechsel"), s.ac}};
+            if (s.gate > 0) o.insert(QStringLiteral("torzeit"), s.gate); // nur ab Volta 3 gesetzt
+            meters.append(o);
+        }
         QJsonArray scopeChannels;
         for (const auto& ch : d.scope.channels)
             scopeChannels.append(QJsonObject{{QStringLiteral("volt_index"), ch.voltsIndex},
@@ -197,6 +200,7 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
         d.display.meters[i] = {ss(o.value(QStringLiteral("messstelle"))),
                               std::clamp(o.value(QStringLiteral("bereich")).toInt(-1), -1, 4),
                               o.value(QStringLiteral("wechsel")).toBool(false)};
+        d.display.meters[i].gate = std::clamp(o.value(QStringLiteral("torzeit")).toInt(0), 0, 2);
     }
     if (json.contains(QStringLiteral("pultteile"))) {
         std::vector<std::string> groups;

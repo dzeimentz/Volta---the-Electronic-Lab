@@ -54,6 +54,7 @@ struct DisplaySlot {
     std::string source;
     int range = -1;
     bool ac = false;
+    int gate = 0; // Frequenzzaehler (ab Volta 3, Spannung): 0 aus, 1 Torzeit 0,1 s, 2 Torzeit 1 s
 };
 
 // Anzeigegeraet (ab Volta 2, Konzept 5.2): eine, zwei oder drei Anzeigen, auf Wunsch Leistung aus V und A

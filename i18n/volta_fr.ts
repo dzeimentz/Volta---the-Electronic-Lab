@@ -1065,6 +1065,16 @@
         <source>Leistung: eine V- und eine A-Anzeige wählen</source>
         <translation>Puissance : choisis un affichage V et un affichage A</translation>
     </message>
+    <message>
+        <location filename="../app/qml/DisplayMeter.qml" line="1"/>
+        <source>Tor %1</source>
+        <translation>Porte %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/DisplayMeter.qml" line="1"/>
+        <source>Frequenzzähler: Flanken in %1 zählen</source>
+        <translation>Fréquencemètre : compter les fronts en %1</translation>
+    </message>
 </context>
 <context>
     <name>ExperimentPanel</name>
@@ -3912,6 +3922,61 @@
         <source>Versorgung: %1 V. H ab %2 V, L unter %3 V. Alle Spannungen sind gegen Minus gemessen.</source>
         <translation>Alimentation : %1 V. H à partir de %2 V, L en dessous de %3 V. Toutes les tensions sont mesurées par rapport au moins.</translation>
     </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Das Zähler-Modul zählt Taktimpulse. Bei jeder steigenden Flanke an CLK – wenn die Spannung von L auf H springt – zählt es eins weiter. Den Zählerstand zeigt es als Dualzahl an Q0 bis Q3: Q0 zählt 1, Q1 zählt 2, Q2 zählt 4 und Q3 zählt 8. Nach 15 kommt wieder 0. Solange »R« auf H liegt, bleibt der Zähler auf 0. Volta rechnet den Zähler mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.</source>
+        <translation>Le module compteur compte les impulsions d&apos;horloge. À chaque front montant sur CLK – quand la tension saute de L à H – il avance d&apos;un. Il montre le compte comme nombre binaire sur Q0 à Q3 : Q0 compte 1, Q1 compte 2, Q2 compte 4 et Q3 compte 8. Après 15 revient 0. Tant que « R » est à H, le compteur reste à 0. Volta calcule le compteur avec un modèle de comportement et trouve l&apos;instant exact où une entrée bascule.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Im Dekadenzähler ist immer genau einer der zehn Ausgänge Q0 bis Q9 auf H. Jede steigende Flanke an CLK schiebt das H einen Ausgang weiter. Nach Q9 kommt wieder Q0. Liegt »R« auf H, springt er auf Q0 zurück. Volta rechnet den Zähler mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.</source>
+        <translation>Dans le compteur décimal, une seule des dix sorties Q0 à Q9 est toujours à H. Chaque front montant sur CLK fait avancer le H d&apos;une sortie. Après Q9 revient Q0. Si « R » est à H, il revient à Q0. Volta calcule le compteur avec un modèle de comportement et trouve l&apos;instant exact où une entrée bascule.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Auf dem Anzeige-Modul sitzen ein Decoder und eine Siebensegmentanzeige mit eingebauten Vorwiderständen. Der Decoder liest an A, B, C und D eine Dualzahl: A zählt 1, B zählt 2, C zählt 4 und D zählt 8. Dann schaltet er genau die Segmente ein, die diese Ziffer zeigen. Zahlen über 9 kann eine einzelne Ziffer nicht zeigen – dann bleibt die Anzeige dunkel. Jedes leuchtende Segment zieht seinen eigenen Strom.</source>
+        <translation>Le module d&apos;affichage porte un décodeur et un afficheur à sept segments avec résistances série intégrées. Le décodeur lit un nombre binaire sur A, B, C et D : A compte 1, B compte 2, C compte 4 et D compte 8. Puis il allume exactement les segments qui montrent ce chiffre. Un seul chiffre ne peut pas montrer les nombres au-dessus de 9 – l&apos;afficheur reste alors éteint. Chaque segment allumé consomme son propre courant.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Zählerstand</source>
+        <translation>Compte</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Ausgang H</source>
+        <translation>Sortie H</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Unter 3 V arbeitet der Zähler nicht. </source>
+        <translation>En dessous de 3 V, le compteur ne fonctionne pas. </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Decoder</source>
+        <translation>Décodeur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Anzeige</source>
+        <translation>Affichage</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>dunkel</source>
+        <translation>éteint</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Unter 3 V arbeitet der Decoder nicht. </source>
+        <translation>En dessous de 3 V, le décodeur ne fonctionne pas. </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleInside.qml" line="1"/>
+        <source>Versorgung: %1 V. H ab %2 V, L unter %3 V. Jedes Segment hat einen Vorwiderstand von 680 Ω. Alle Spannungen sind gegen Minus gemessen.</source>
+        <translation>Alimentation : %1 V. H à partir de %2 V, L en dessous de %3 V. Chaque segment a une résistance série de 680 Ω. Toutes les tensions sont mesurées par rapport au moins.</translation>
+    </message>
 </context>
 <context>
     <name>ModuleItem</name>
@@ -3940,6 +4005,64 @@
         <location filename="../app/qml/ModuleItem.qml" line="121"/>
         <source>Blick hinein</source>
         <translation>Regard à l&apos;intérieur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleItem.qml" line="1"/>
+        <source>Anzeige %1</source>
+        <translation>Affichage %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ModuleItem.qml" line="1"/>
+        <source>Anzeige dunkel</source>
+        <translation>Affichage éteint</translation>
+    </message>
+</context>
+<context>
+    <name>NumberSystems</name>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>Tippe auf ein Bit, um es zwischen 0 und 1 umzuschalten. Über jedem Bit steht, wie viel es zählt. Die Zahl ist die Summe der Bits mit einer 1.</source>
+        <translation>Touche un bit pour le faire passer de 0 à 1. Au-dessus de chaque bit, tu vois combien il compte. Le nombre est la somme des bits à 1.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>%1 Bit</source>
+        <translation>%1 bits</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>Bit %1: %2</source>
+        <translation>Bit %1 : %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>dezimal</source>
+        <translation>décimal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>eins weniger</source>
+        <translation>un de moins</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>eins mehr</source>
+        <translation>un de plus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>dual</source>
+        <translation>binaire</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>hexadezimal</source>
+        <translation>hexadécimal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/NumberSystems.qml" line="1"/>
+        <source>Ein Bit ist eine Stelle mit 0 oder 1. Vier Bits reichen bis 15, acht Bits – ein Byte – bis 255. Hexadezimal fasst je vier Bits zu einer Ziffer 0 … 9, A … F zusammen.</source>
+        <translation>Un bit est une position qui vaut 0 ou 1. Quatre bits vont jusqu&apos;à 15, huit bits – un octet – jusqu&apos;à 255. L&apos;hexadécimal regroupe quatre bits en un chiffre de 0 … 9, A … F.</translation>
     </message>
 </context>
 <context>
@@ -6541,6 +6664,39 @@
         <comment>Wortanfaenge im Aufbautext</comment>
         <translation>Sonde logique,sonde logique</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Zähler-Modul</source>
+        <translation>Module compteur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Dekadenzähler</source>
+        <translation>Compteur décimal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Anzeige-Modul</source>
+        <translation>Module d&apos;affichage</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Zähler-Modul</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Module compteur,module compteur</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Dekadenzähler</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Compteur décimal,compteur décimal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Anzeige-Modul</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Module d&apos;affichage,module d&apos;affichage</translation>
+    </message>
 </context>
 <context>
     <name>TitleBar</name>
@@ -6788,6 +6944,11 @@
         <location filename="../app/qml/ToolboxPanel.qml" line="431"/>
         <source>Widerstände gibt es nicht in jedem Wert, sondern in genormten Stufen. In der Reihe E12 hat jede Zehnerstufe 12 Werte.</source>
         <translation>Les résistances n&apos;existent pas dans toutes les valeurs, mais en paliers normalisés. Dans la série E12, chaque décade compte 12 valeurs.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ToolboxPanel.qml" line="1"/>
+        <source>Zahlen</source>
+        <translation>Nombres</translation>
     </message>
 </context>
 <context>

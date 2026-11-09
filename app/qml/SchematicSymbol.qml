@@ -143,6 +143,12 @@ Item {
             return {s: "M0 16 H14 M50 16 H64 M14 2 H50 V30 H14 Z", f: "", t: "555", tx: 32, ty: 16}
         case "gattermodul": // Kasten mit »&« und Negationskreis (DIN EN 60617, vier NAND)
             return {s: "M0 16 H14 M54 16 H64 M14 2 H46 V30 H14 Z " + circle(50, 16, 4), f: "", t: "&", tx: 30, ty: 16}
+        case "zaehlermodul": // Kasten mit »CTR4« (DIN EN 60617: Zaehler)
+            return {s: "M0 16 H14 M50 16 H64 M14 2 H50 V30 H14 Z", f: "", t: "CTR4", tx: 32, ty: 16}
+        case "dekadenzaehler":
+            return {s: "M0 16 H14 M50 16 H64 M14 2 H50 V30 H14 Z", f: "", t: "CTR10", tx: 32, ty: 16}
+        case "anzeigemodul": // Decoder mit Siebensegment: Kasten mit Ziffer 8
+            return {s: "M0 16 H22 M22 2 H48 V30 H22 Z M30 6 H40 M29 7 V15 M41 7 V15 M30 16 H40 M29 17 V25 M41 17 V25 M30 26 H40", f: ""}
         case "logiktastkopf": // Logik-Tastkopf: Messspitze mit Kanalkasten, Bezug 0V
             return {s: "M0 16 H22 M22 6 H46 V26 H22 Z M34 26 V31 M28 31 H40", f: "", t: "LA", tx: 34, ty: 16}
         case "blinkmodul": case "tonmodul": case "zeitmodul": case "verstaerkermodul": case "mwmodul":

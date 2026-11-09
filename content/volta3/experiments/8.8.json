@@ -1,0 +1,284 @@
+{
+  "id": "volta3.8.8",
+  "band": "volta3",
+  "stufe": 8,
+  "titel_key": "exp3_8_8_titel",
+  "dauer_min": 40,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "wechselschalter",
+    "taster",
+    "widerstand",
+    "led_rot",
+    "logiktastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_8_8_frage",
+  "vermutungen": [
+    "exp3_8_8_v1",
+    "exp3_8_8_v2",
+    "exp3_8_8_v3"
+  ],
+  "beobachtungen": [
+    "exp3_8_8_b1",
+    "exp3_8_8_b2",
+    "exp3_8_8_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "generator": {
+        "form": "rechteck",
+        "frequenz_Hz": 10,
+        "spitze_V": 4,
+        "gleichanteil_V": 4
+      }
+    },
+    "bauteile": [
+      {
+        "id": "W1",
+        "typ": "wechselschalter",
+        "felder": {
+          "a": "A2",
+          "mitte": "A1",
+          "b": "A3"
+        },
+        "geschlossen": false
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "A3",
+          "A4"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "A2",
+          "B2"
+        ],
+        "wert": 680
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "B2",
+          "kathode": "B3"
+        }
+      },
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "E1",
+          "E2"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "S1",
+        "typ": "taster",
+        "felder": [
+          "E2",
+          "E3"
+        ],
+        "geschlossen": false
+      },
+      {
+        "id": "LA1",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "E2"
+        }
+      },
+      {
+        "id": "LA2",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "A3"
+        }
+      },
+      {
+        "id": "LA3",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "C5"
+        }
+      },
+      {
+        "id": "LA4",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "C8"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "ZL1",
+        "typ": "zaehlermodul",
+        "feld": 1
+      },
+      {
+        "id": "AN1",
+        "typ": "anzeigemodul",
+        "feld": 9
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "E1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:G0",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "ZL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "ZL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "AN1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "AN1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "A4",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "A3",
+        "nach": "ZL1.reset",
+        "farbe": "weiss"
+      },
+      {
+        "von": "B3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E2",
+        "nach": "ZL1.clk",
+        "farbe": "blau"
+      },
+      {
+        "von": "ZL1.q0",
+        "nach": "C5",
+        "farbe": "gruen"
+      },
+      {
+        "von": "ZL1.q1",
+        "nach": "C6",
+        "farbe": "gruen"
+      },
+      {
+        "von": "ZL1.q2",
+        "nach": "C7",
+        "farbe": "gruen"
+      },
+      {
+        "von": "ZL1.q3",
+        "nach": "C8",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C5",
+        "nach": "AN1.a",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C6",
+        "nach": "AN1.b",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C7",
+        "nach": "AN1.c",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C8",
+        "nach": "AN1.d",
+        "farbe": "gruen"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_8_8_s1",
+    "exp3_8_8_s2",
+    "exp3_8_8_s3",
+    "exp3_8_8_s4",
+    "exp3_8_8_s5",
+    "exp3_8_8_s6",
+    "exp3_8_8_s7"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "D1",
+        "groesse": "helligkeit",
+        "min": 0.2,
+        "dauer_s": 1
+      },
+      {
+        "bauteil": "AN1",
+        "groesse": "anzeige",
+        "zwischen": [
+          4.5,
+          5.5
+        ],
+        "dauer_s": 0.05
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_8_8_h1",
+    "exp3_8_8_h2",
+    "exp3_8_8_loesung"
+  ],
+  "erklaerung_key": "exp3_8_8_erklaerung",
+  "mehr_wissen_key": "exp3_8_8_mehr",
+  "weiterforschen": [
+    "exp3_8_8_w1",
+    "exp3_8_8_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_8_8_echt"
+}

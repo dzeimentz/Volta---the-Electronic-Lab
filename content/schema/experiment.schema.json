@@ -64,7 +64,8 @@
               "trigger_V": {"type": "number", "minimum": -50, "maximum": 50}}},
             "anzeigegeraet": {"type": "object", "additionalProperties": false, "properties": {
               "anzahl": {"type": "integer", "minimum": 1, "maximum": 3},
-              "doppelt": {"type": "boolean"}, "leistung": {"type": "boolean"}}}
+              "doppelt": {"type": "boolean"}, "leistung": {"type": "boolean"},
+              "torzeit_s": {"enum": [0.1, 1]}}}
           }
         }
       }

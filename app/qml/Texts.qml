@@ -175,7 +175,10 @@ QtObject {
             ["mwmodul", qsTr("MW-Modul", "Wortanfaenge im Aufbautext")],
             ["ukwmodul", qsTr("UKW-Modul", "Wortanfaenge im Aufbautext")],
             ["gattermodul", qsTr("Gatter-Modul", "Wortanfaenge im Aufbautext")],
-            ["logiktastkopf", qsTr("Logik-Tastkopf", "Wortanfaenge im Aufbautext")]
+            ["logiktastkopf", qsTr("Logik-Tastkopf", "Wortanfaenge im Aufbautext")],
+            ["dekadenzaehler", qsTr("Dekadenzähler", "Wortanfaenge im Aufbautext")],
+            ["zaehlermodul", qsTr("Zähler-Modul", "Wortanfaenge im Aufbautext")],
+            ["anzeigemodul", qsTr("Anzeige-Modul", "Wortanfaenge im Aufbautext")]
         ]
     }
 
@@ -190,6 +193,9 @@ QtObject {
         case "mwmodul": return qsTr("MW-Modul")
         case "ukwmodul": return qsTr("UKW-Modul")
         case "gattermodul": return qsTr("Gatter-Modul")
+        case "zaehlermodul": return qsTr("Zähler-Modul")
+        case "dekadenzaehler": return qsTr("Dekadenzähler")
+        case "anzeigemodul": return qsTr("Anzeige-Modul")
         }
         return type
     }
@@ -202,6 +208,7 @@ QtObject {
         case "aus": return qsTr("aus")
         case "ein": return qsTr("ein")
         case "takt": return qsTr("Takt")
+        case "clk": return "CLK"
         case "start": return qsTr("Start")
         case "nichtinv": return "IN+"
         case "inv": return "IN−"
@@ -216,6 +223,9 @@ QtObject {
         case "outp": return "A+"
         case "outn": return "A−"
         }
+        // Zaehler: q0 -> Q0; Anzeige-Modul: a ... d -> A ... D (Wertigkeit 1, 2, 4, 8)
+        if (/^q[0-9]$/.test(pin)) return pin.toUpperCase()
+        if (/^[a-d]$/.test(pin)) return pin.toUpperCase()
         // Gatter-Modul: a1 -> 1A, b1 -> 1B, y1 -> 1Y (wie im Datenblatt; »A1« waere ein Feldname)
         if (/^[aby][1-4]$/.test(pin)) return pin[1] + pin[0].toUpperCase()
         return pin

@@ -52,6 +52,8 @@ bool needsAudioStep(const Board& board);
 // (secondOrder, Catalog::secondOrder) mit einer Spule auf der Grundplatte 20 us: Schwingkreise bis etwa 1 kHz
 // schwingen dann mit BDF2 auf 2 % genau, auch ohne Oszilloskop und in der Zeitlupe.
 double requiredStepS(const Board& board, bool audio = true, bool secondOrder = false);
+// Logik-Module der Stufen 7 und 8 (Gatter, Zaehler, Dekadenzaehler, Anzeige): Verhaltensmodelle mit Schmitt-Eingaengen
+bool isLogicModule(const std::string& type);
 // Logik auf der Grundplatte (ab Volta 3): Gatter-Modul oder Logik-Tastkopf
 bool logicOnBoard(const Board& board);
 // Groesste von Bauteilen oder Leitungen belegte Spalte bzw. Reihe (1 = A; 0: keine)

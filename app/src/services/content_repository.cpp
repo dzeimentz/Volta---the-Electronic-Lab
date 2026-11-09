@@ -297,6 +297,9 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
         out.desk.display.count = std::clamp(a.value(QStringLiteral("anzahl")).toInt(a.value(QStringLiteral("doppelt")).toBool(false) ? 2 : 1),
                                             1, model::kDisplaySlots);
         out.desk.display.power = a.value(QStringLiteral("leistung")).toBool(false);
+        // Frequenzzaehler an der ersten Anzeige (ab Volta 3): Torzeit 0,1 oder 1 s
+        if (a.contains(QStringLiteral("torzeit_s")))
+            out.desk.display.meters[0].gate = a.value(QStringLiteral("torzeit_s")).toDouble() >= 0.5 ? 2 : 1;
     }
     // Messstellen in der Vorlage: Anzeigegeraet eingeblendet (Volta 2)
     for (const auto& p : out.parts)

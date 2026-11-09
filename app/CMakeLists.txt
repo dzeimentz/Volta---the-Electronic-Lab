@@ -202,6 +202,7 @@ qt_add_qml_module(volta_ui
         qml/ScopePanel.qml
         qml/TracerPanel.qml
         qml/LogicPanel.qml
+        qml/NumberSystems.qml
         qml/SpeakerRing.qml
         qml/SchematicSymbol.qml
         qml/ModuleIcon.qml

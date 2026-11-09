@@ -45,7 +45,11 @@ Popup {
         for (let i = 0; i < list.length; ++i) if (list[i].name === name) return list[i]
         return ({currentmA: 0, voltV: 0, on: false})
     }
-    function num(v, digits) { return Number(v || 0).toLocaleString(Qt.locale(), "f", digits) }
+    // gerundet auf die gezeigten Stellen; »-0,0« (winzig negativ) erscheint als 0,0
+    function num(v, digits) {
+        const k = Math.pow(10, digits), r = Math.round(Number(v || 0) * k) / k
+        return Number(r === 0 ? 0 : r).toLocaleString(Qt.locale(), "f", digits)
+    }
 
     Rectangle {
         id: header
@@ -98,6 +102,12 @@ Popup {
                       ? qsTr("Im Timer 555 teilen drei gleiche Widerstände die Versorgung: CV liegt bei zwei Dritteln, darunter ein Drittel. Zwei Vergleicher beobachten THR und TR. Fällt TR unter ein Drittel, setzt das Flipflop den Ausgang hoch; steigt THR über zwei Drittel, setzt es ihn zurück, und DIS entlädt nach GND. R auf GND hält den Ausgang aus. Volta rechnet den 555 mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Vergleicher kippt.")
                       : inside.moduleType === "gattermodul"
                       ? qsTr("Im Gatter-Modul stecken vier NAND-Gatter an einer gemeinsamen Versorgung. Jedes Gatter hat die Eingänge A und B und den Ausgang Y. Nur wenn A und B beide H sind, ist Y auf L – sonst auf H. Die Eingänge sind Schmitt-Trigger: H erkennen sie erst über 60 % der Versorgung, L erst unter 40 %. Dazwischen bleibt der alte Zustand. Volta rechnet die Gatter mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.")
+                      : inside.moduleType === "zaehlermodul"
+                      ? qsTr("Das Zähler-Modul zählt Taktimpulse. Bei jeder steigenden Flanke an CLK – wenn die Spannung von L auf H springt – zählt es eins weiter. Den Zählerstand zeigt es als Dualzahl an Q0 bis Q3: Q0 zählt 1, Q1 zählt 2, Q2 zählt 4 und Q3 zählt 8. Nach 15 kommt wieder 0. Solange »R« auf H liegt, bleibt der Zähler auf 0. Volta rechnet den Zähler mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.")
+                      : inside.moduleType === "dekadenzaehler"
+                      ? qsTr("Im Dekadenzähler ist immer genau einer der zehn Ausgänge Q0 bis Q9 auf H. Jede steigende Flanke an CLK schiebt das H einen Ausgang weiter. Nach Q9 kommt wieder Q0. Liegt »R« auf H, springt er auf Q0 zurück. Volta rechnet den Zähler mit einem Verhaltensmodell und findet den genauen Augenblick, in dem ein Eingang kippt.")
+                      : inside.moduleType === "anzeigemodul"
+                      ? qsTr("Auf dem Anzeige-Modul sitzen ein Decoder und eine Siebensegmentanzeige mit eingebauten Vorwiderständen. Der Decoder liest an A, B, C und D eine Dualzahl: A zählt 1, B zählt 2, C zählt 4 und D zählt 8. Dann schaltet er genau die Segmente ein, die diese Ziffer zeigen. Zahlen über 9 kann eine einzelne Ziffer nicht zeigen – dann bleibt die Anzeige dunkel. Jedes leuchtende Segment zieht seinen eigenen Strom.")
                       : inside.moduleType === "opmodul"
                       ? qsTr("Ein Operationsverstärker vergleicht seine beiden Eingänge: Er verstärkt den Unterschied zwischen IN+ und IN− etwa 200 000-fach. Schon ein Millivolt Unterschied würde den Ausgang bis an seine Grenze treiben – knapp unter Plus oder knapp über Minus. Mit einer Rückführung vom Ausgang auf IN− regelt er sich selbst so, dass beide Eingänge fast gleich sind. Volta rechnet ihn mit einem Ersatzmodell, das sich an den Anschlüssen wie der echte Baustein verhält.")
                       : inside.moduleType === "mwmodul"
@@ -372,6 +382,107 @@ Popup {
                     font.pixelSize: Math.round(13 * Theme.fontScale)
                     text: (inside.info.powered === false ? qsTr("Unter 3 V arbeiten die Gatter nicht. ") : "")
                           + qsTr("Versorgung: %1 V. H ab %2 V, L unter %3 V. Alle Spannungen sind gegen Minus gemessen.")
+                            .arg(inside.num(inside.info.supplyV, 1)).arg(inside.num((inside.info.supplyV || 0) * 0.6, 1))
+                            .arg(inside.num((inside.info.supplyV || 0) * 0.4, 1))
+                }
+            }
+
+            // ---------------------------------------------------------- Verhaltensmodell: Zaehler
+            Column {
+                visible: inside.moduleType === "zaehlermodul" || inside.moduleType === "dekadenzaehler"
+                width: parent.width
+                spacing: 10
+                Row {
+                    spacing: 6
+                    Column {
+                        spacing: 6
+                        Block {
+                            title: "CLK"
+                            value: (inside.info.clockHigh ? "H" : "L") + " (" + qsTr("%1 V").arg(inside.num(inside.info.clockV, 1)) + ")"
+                            lit: inside.info.clockHigh === true
+                        }
+                        Block {
+                            title: "R"
+                            value: (inside.info.resetHigh ? "H" : "L") + " (" + qsTr("%1 V").arg(inside.num(inside.info.resetV, 1)) + ")"
+                            lit: inside.info.resetHigh === true
+                        }
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        anchors.verticalCenter: parent.verticalCenter
+                        title: qsTr("Zählerstand")
+                        readonly property int c: inside.info.count || 0
+                        value: inside.moduleType === "zaehlermodul"
+                               ? c + "  =  " + ((c >> 3) & 1) + ((c >> 2) & 1) + ((c >> 1) & 1) + (c & 1)
+                               : String(c)
+                        lit: inside.info.powered === true
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        anchors.verticalCenter: parent.verticalCenter
+                        title: qsTr("Ausgang H")
+                        readonly property int c: inside.info.count || 0
+                        value: inside.moduleType === "zaehlermodul"
+                               ? [3, 2, 1, 0].filter(k => (c >> k) & 1).map(k => "Q" + k).join(" ") || "–"
+                               : "Q" + c
+                        lit: inside.info.powered === true
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    color: "#4A5866"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    text: (inside.info.powered === false ? qsTr("Unter 3 V arbeitet der Zähler nicht. ") : "")
+                          + qsTr("Versorgung: %1 V. H ab %2 V, L unter %3 V. Alle Spannungen sind gegen Minus gemessen.")
+                            .arg(inside.num(inside.info.supplyV, 1)).arg(inside.num((inside.info.supplyV || 0) * 0.6, 1))
+                            .arg(inside.num((inside.info.supplyV || 0) * 0.4, 1))
+                }
+            }
+
+            // ---------------------------------------------------------- Verhaltensmodell: Decoder mit Anzeige
+            Column {
+                visible: inside.moduleType === "anzeigemodul"
+                width: parent.width
+                spacing: 10
+                Row {
+                    spacing: 6
+                    Column {
+                        spacing: 4
+                        Repeater {
+                            model: inside.moduleType === "anzeigemodul" ? (inside.info.inputs || []) : []
+                            Block {
+                                required property var modelData
+                                required property int index
+                                title: ["A (1)", "B (2)", "C (4)", "D (8)"][index]
+                                value: (modelData.high ? "H" : "L") + " (" + qsTr("%1 V").arg(inside.num(modelData.v, 1)) + ")"
+                                lit: modelData.high
+                            }
+                        }
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        anchors.verticalCenter: parent.verticalCenter
+                        title: qsTr("Decoder")
+                        value: String(inside.info.value || 0)
+                        lit: inside.info.powered === true
+                    }
+                    Label { anchors.verticalCenter: parent.verticalCenter; text: "→"; font.pixelSize: 22; color: Theme.navy }
+                    Block {
+                        anchors.verticalCenter: parent.verticalCenter
+                        title: qsTr("Anzeige")
+                        value: ((inside.info.digit ?? -1) >= 0 ? String(inside.info.digit) : qsTr("dunkel"))
+                               + "\n" + qsTr("%1 mA").arg(inside.num(inside.info.currentmA, 1))
+                        lit: (inside.info.digit ?? -1) >= 0
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                    color: "#4A5866"
+                    font.pixelSize: Math.round(13 * Theme.fontScale)
+                    text: (inside.info.powered === false ? qsTr("Unter 3 V arbeitet der Decoder nicht. ") : "")
+                          + qsTr("Versorgung: %1 V. H ab %2 V, L unter %3 V. Jedes Segment hat einen Vorwiderstand von 680 Ω. Alle Spannungen sind gegen Minus gemessen.")
                             .arg(inside.num(inside.info.supplyV, 1)).arg(inside.num((inside.info.supplyV || 0) * 0.6, 1))
                             .arg(inside.num((inside.info.supplyV || 0) * 0.4, 1))
                 }

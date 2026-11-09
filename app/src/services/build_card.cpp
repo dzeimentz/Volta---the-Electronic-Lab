@@ -53,6 +53,9 @@ QString pinMark(const std::string& type, const std::string& pin) {
     if (type == "kraftsensor") return pin == "outp" ? QStringLiteral("A+") : QStringLiteral("A−");
     if (type == "hallsensor" && pin == "aus") return QStringLiteral("A");
     if (type == "gattermodul" && pin.size() == 2) return QString::fromStdString(pin.substr(1, 1)) + QString::fromStdString(pin.substr(0, 1)).toUpper();
+    if ((type == "zaehlermodul" || type == "dekadenzaehler") && pin.size() == 2 && pin[0] == 'q') return QString::fromStdString(pin).toUpper();
+    if ((type == "zaehlermodul" || type == "dekadenzaehler") && pin == "clk") return QStringLiteral("CLK");
+    if (type == "anzeigemodul" && pin.size() == 1) return QString::fromStdString(pin).toUpper();
     if (type == "spannungsregler_5v") return pin == "ein" ? QStringLiteral("IN") : pin == "aus" ? QStringLiteral("OUT") : QStringLiteral("GND");
     if (type == "fototransistor" || type == "optokoppler") return pin == "c" ? QStringLiteral("C") : QStringLiteral("E");
     if (type == "relais" && (pin == "com" || pin == "no")) return QString::fromStdString(pin).toUpper();

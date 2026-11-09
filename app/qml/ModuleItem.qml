@@ -58,8 +58,30 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 8
 
+            // Anzeige-Modul: Siebensegment-Ziffer (Segmente a ... g als Bits 0 ... 6; dunkle Segmente bleiben sichtbar)
+            Item {
+                objectName: "moduleDigit_" + mod.moduleId
+                visible: mod.moduleType === "anzeigemodul"
+                anchors.verticalCenter: parent.verticalCenter
+                width: 24; height: 40
+                readonly property int mask: mod.moduleState.segments || 0
+                Rectangle { anchors.fill: parent; anchors.margins: -2; radius: 3; color: "#0E1411" }
+                Repeater {
+                    // x, y, Breite, Hoehe je Segment a b c d e f g
+                    model: [[4, 0, 16, 4], [20, 4, 4, 15], [20, 21, 4, 15], [4, 36, 16, 4], [0, 21, 4, 15], [0, 4, 4, 15], [4, 18, 16, 4]]
+                    Rectangle {
+                        required property var modelData
+                        required property int index
+                        x: modelData[0]; y: modelData[1]; width: modelData[2]; height: modelData[3]
+                        radius: 1.5
+                        color: (parent.mask >> index) & 1 ? "#FF3B30" : "#2A3530"
+                    }
+                }
+                Accessible.name: (mod.moduleState.digit ?? -1) >= 0 ? qsTr("Anzeige %1").arg(mod.moduleState.digit) : qsTr("Anzeige dunkel")
+            }
             // Zustand: Blinkmodul Ausgangslampe, Tonmodul kleiner Leuchtring in der Farbe der Tonhoehe
             Rectangle {
+                visible: mod.moduleType !== "anzeigemodul"
                 anchors.verticalCenter: parent.verticalCenter
                 width: 22; height: 22; radius: 11
                 color: !mod.active ? "#3A3F46"
@@ -99,6 +121,10 @@ Item {
                         // Text zusaetzlich zur Lampe (Farbe nie allein)
                         text: mod.moduleId + "  " + (mod.moduleType === "tonmodul"
                                                      ? (mod.active ? "♪" : "–")
+                                                     : mod.moduleType === "anzeigemodul"
+                                                     ? (mod.active ? String(mod.moduleState.digit) : "–")
+                                                     : (mod.moduleType === "zaehlermodul" || mod.moduleType === "dekadenzaehler") && mod.active
+                                                     ? String(mod.moduleState.count ?? 0)
                                                      : (mod.active ? qsTr("an") : qsTr("aus")))
                         color: "#E6ECF2"
                         font.pixelSize: Math.round(11 * Theme.fontScale)

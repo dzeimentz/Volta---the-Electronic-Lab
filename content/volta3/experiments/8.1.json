@@ -1,0 +1,188 @@
+{
+  "id": "volta3.8.1",
+  "band": "volta3",
+  "stufe": 8,
+  "titel_key": "exp3_8_1_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "elko",
+    "led_rot",
+    "logiktastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_8_1_frage",
+  "vermutungen": [
+    "exp3_8_1_v1",
+    "exp3_8_1_v2",
+    "exp3_8_1_v3"
+  ],
+  "beobachtungen": [
+    "exp3_8_1_b1",
+    "exp3_8_1_b2",
+    "exp3_8_1_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "B1"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "R2",
+        "typ": "widerstand",
+        "felder": [
+          "B1",
+          "C1"
+        ],
+        "wert": 22000
+      },
+      {
+        "id": "C1",
+        "typ": "elko",
+        "felder": {
+          "plus": "C1",
+          "minus": "D1"
+        },
+        "wert": 1e-05
+      },
+      {
+        "id": "R3",
+        "typ": "widerstand",
+        "felder": [
+          "A5",
+          "A6"
+        ],
+        "wert": 680
+      },
+      {
+        "id": "D1",
+        "typ": "led_rot",
+        "felder": {
+          "anode": "A6",
+          "kathode": "A7"
+        }
+      },
+      {
+        "id": "LA1",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "A5"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "TI1",
+        "typ": "timer555",
+        "feld": 1
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:+9V",
+        "nach": "A1",
+        "farbe": "rot"
+      },
+      {
+        "von": "B1",
+        "nach": "TI1.dis",
+        "farbe": "blau"
+      },
+      {
+        "von": "C1",
+        "nach": "TI1.thr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "C1",
+        "nach": "TI1.tr",
+        "farbe": "gelb"
+      },
+      {
+        "von": "D1",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "TI1.reset",
+        "farbe": "rot"
+      },
+      {
+        "von": "TI1.aus",
+        "nach": "A5",
+        "farbe": "blau"
+      },
+      {
+        "von": "A7",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_8_1_s1",
+    "exp3_8_1_s2",
+    "exp3_8_1_s3",
+    "exp3_8_1_s4",
+    "exp3_8_1_s5"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "A5",
+        "groesse": "spannung_V",
+        "auswertung": "frequenz",
+        "fenster_s": 2,
+        "zwischen": [
+          2.3,
+          3.0
+        ]
+      },
+      {
+        "bauteil": "D1",
+        "zustand": "intakt"
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_8_1_h1",
+    "exp3_8_1_h2",
+    "exp3_8_1_loesung"
+  ],
+  "erklaerung_key": "exp3_8_1_erklaerung",
+  "mehr_wissen_key": "exp3_8_1_mehr",
+  "weiterforschen": [
+    "exp3_8_1_w1",
+    "exp3_8_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_8_1_echt"
+}

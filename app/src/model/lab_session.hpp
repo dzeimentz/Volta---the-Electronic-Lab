@@ -56,6 +56,9 @@ public:
     const core::ComponentReading* reading(const std::string& partId) const;
     // Signalstatistik eines Bauteils ueber das letzte Messfenster: Spannung (current = false) bzw. Strom
     const core::SignalSummary* readingStats(const std::string& partId, bool current) const;
+    // Frequenzzaehler (ab Volta 3): steigende Durchgaenge der Spannung an einem Bauteil in den letzten `windows`
+    // Messfenstern (je 0,1 s); -1, solange noch nicht so viele Fenster gezaehlt sind
+    int gateEdges(const std::string& partId, int windows) const;
     // Spannungsanzeige 0-4 Balken mit Hysterese (docs/domain-model.md). Ab Volta 2 (Konzept 5.4) auch negativ
     // (Balken nach unten, blau, Minuszeichen) und Wechselspannung (Effektivwert, »~«): Ein Feld gilt als
     // Wechselspannung, wenn im letzten Messfenster der Wechselanteil den Gleichanteil ueberwiegt. Ein Balken steht
@@ -223,6 +226,14 @@ private:
     sim::ScopeConfig m_scopeConfig; // zuletzt an die Bruecke gegeben (nur bei Aenderung neu)
     void updateScope();
     sim::Snapshot m_snap;
+    // Frequenzzaehler: je Spannungskanal der Bauteilstatistik die Durchgaenge der letzten zehn Fenster
+    struct EdgeHistory {
+        std::uint64_t lastWindow = 0;
+        std::array<int, 10> rises{};
+        int filled = 0, next = 0;
+    };
+    std::vector<EdgeHistory> m_edges;
+    std::uint64_t m_edgesTopology = 0;
     std::uint64_t m_topology = 0;
     QUndoStack m_undo;
     Message m_error;

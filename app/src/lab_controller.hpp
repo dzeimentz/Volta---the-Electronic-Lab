@@ -510,6 +510,8 @@ public:
     Q_INVOKABLE void setDisplaySource(int slot, const QString& id);
     Q_INVOKABLE void setDisplayRange(int slot, int range);
     Q_INVOKABLE void setDisplayAc(int slot, bool ac);
+    // Frequenzzaehler (ab Volta 3, nur Spannung): 0 aus, 1 Torzeit 0,1 s, 2 Torzeit 1 s
+    Q_INVOKABLE void setDisplayGate(int slot, int gate);
     // Oszilloskop ab Volta 2: Bild samt Einstellungen und Kennwerten; Einstellung je Schluessel (timebase, roll, xy,
     // triggerChannel, triggerRising, triggerLevel, volts0/1, position0/1); scopeActive = eingeblendet
     Q_INVOKABLE QVariantMap scopeState() const;

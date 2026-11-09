@@ -273,6 +273,8 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
     if set(exp.get("vermutung_passt", []) or []) & set(exp.get("vermutung_offen", []) or []):
         rep.error(where, "eine Vermutung kann nicht zugleich passen und offen sein")
     measure_ids = {p.get("id") for p in tpl.get("bauteile", []) if str(p.get("typ", "")).startswith("messstelle_")}
+    # Zaehler und Anzeige-Modul (ab Volta 3, Stufe 8): Zaehlerstand bzw. angezeigte Ziffer
+    measure_ids |= {m.get("id") for m in tpl.get("module", []) if m.get("typ") in ("zaehlermodul", "dekadenzaehler", "anzeigemodul")}
     # wie beim Stecken (board_edit.cpp): hoechstens drei Messstellen je Art, zwei Tastkoepfe; die Vorlage umgeht die
     # Pruefung beim Laden, darum hier
     per_type: dict[str, int] = {}

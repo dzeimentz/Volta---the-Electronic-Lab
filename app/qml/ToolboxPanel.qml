@@ -119,6 +119,8 @@ Drawer {
                 TabButton { objectName: "tabCalc"; text: qsTr("Rechner"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
                 TabButton { objectName: "tabCheck"; text: qsTr("Fehlersuche"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
                 TabButton { objectName: "tabParts"; text: qsTr("Teileliste"); height: Theme.control; width: implicitWidth; leftPadding: 12; rightPadding: 12 }
+                // Zahlensysteme ab Volta 3 (Stufe 8); in Volta 1/2 ausgeblendet, damit die Reihenfolge der Seiten bleibt
+                TabButton { objectName: "tabNumbers"; text: qsTr("Zahlen"); visible: box.controller.band === "volta3"; height: Theme.control; width: visible ? implicitWidth : 0; leftPadding: 12; rightPadding: 12 }
             }
 
             component TabArrow: Rectangle {
@@ -491,6 +493,11 @@ Drawer {
                 id: partsList
                 objectName: "partsList"
                 controller: box.controller
+            }
+
+            // ------------------------------------------------------------ Zahlensysteme (ab Volta 3)
+            NumberSystems {
+                objectName: "numberSystems"
             }
         }
     }

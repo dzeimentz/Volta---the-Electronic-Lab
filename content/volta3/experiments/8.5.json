@@ -1,0 +1,205 @@
+{
+  "id": "volta3.8.5",
+  "band": "volta3",
+  "stufe": 8,
+  "titel_key": "exp3_8_5_titel",
+  "dauer_min": 20,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "logiktastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_8_5_frage",
+  "vermutungen": [
+    "exp3_8_5_v1",
+    "exp3_8_5_v2",
+    "exp3_8_5_v3"
+  ],
+  "beobachtungen": [
+    "exp3_8_5_b1",
+    "exp3_8_5_b2",
+    "exp3_8_5_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "batterie_V": 9,
+      "generator": {
+        "form": "rechteck",
+        "frequenz_Hz": 2,
+        "spitze_V": 4,
+        "gleichanteil_V": 4
+      }
+    },
+    "bauteile": [
+      {
+        "id": "LA1",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "E1"
+        }
+      },
+      {
+        "id": "LA2",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "A4"
+        }
+      },
+      {
+        "id": "LA3",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "B4"
+        }
+      },
+      {
+        "id": "LA4",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "C4"
+        }
+      },
+      {
+        "id": "LA5",
+        "typ": "logiktastkopf",
+        "felder": {
+          "spitze": "D4"
+        }
+      }
+    ],
+    "module": [
+      {
+        "id": "ZL1",
+        "typ": "zaehlermodul",
+        "feld": 1
+      },
+      {
+        "id": "AN1",
+        "typ": "anzeigemodul",
+        "feld": 9
+      }
+    ],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "E1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "P:G0",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "ZL1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "ZL1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "P:+9V",
+        "nach": "AN1.plus",
+        "farbe": "rot"
+      },
+      {
+        "von": "AN1.minus",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "E1",
+        "nach": "ZL1.clk",
+        "farbe": "blau"
+      },
+      {
+        "von": "ZL1.reset",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      },
+      {
+        "von": "ZL1.q0",
+        "nach": "A4",
+        "farbe": "gruen"
+      },
+      {
+        "von": "ZL1.q1",
+        "nach": "B4",
+        "farbe": "gruen"
+      },
+      {
+        "von": "ZL1.q2",
+        "nach": "C4",
+        "farbe": "gruen"
+      },
+      {
+        "von": "ZL1.q3",
+        "nach": "D4",
+        "farbe": "gruen"
+      },
+      {
+        "von": "A4",
+        "nach": "AN1.a",
+        "farbe": "gruen"
+      },
+      {
+        "von": "B4",
+        "nach": "AN1.b",
+        "farbe": "gruen"
+      },
+      {
+        "von": "C4",
+        "nach": "AN1.c",
+        "farbe": "gruen"
+      },
+      {
+        "von": "D4",
+        "nach": "AN1.d",
+        "farbe": "gruen"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_8_5_s1",
+    "exp3_8_5_s2",
+    "exp3_8_5_s3",
+    "exp3_8_5_s4",
+    "exp3_8_5_s5"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "bauteil": "AN1",
+        "groesse": "anzeige",
+        "zwischen": [
+          6.5,
+          7.5
+        ],
+        "dauer_s": 0.3
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_8_5_h1",
+    "exp3_8_5_h2",
+    "exp3_8_5_loesung"
+  ],
+  "erklaerung_key": "exp3_8_5_erklaerung",
+  "mehr_wissen_key": "exp3_8_5_mehr",
+  "weiterforschen": [
+    "exp3_8_5_w1",
+    "exp3_8_5_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_8_5_echt"
+}
