@@ -1,0 +1,127 @@
+{
+  "id": "volta3.0.1",
+  "band": "volta3",
+  "stufe": 0,
+  "titel_key": "exp3_0_1_titel",
+  "dauer_min": 15,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "kondensator",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_0_1_frage",
+  "vermutungen": [
+    "exp3_0_1_v1",
+    "exp3_0_1_v2",
+    "exp3_0_1_v3"
+  ],
+  "beobachtungen": [
+    "exp3_0_1_b1",
+    "exp3_0_1_b2",
+    "exp3_0_1_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "sinus",
+        "frequenz_Hz": 1584,
+        "start_frequenz_Hz": 100,
+        "spitze_V": 1
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.0005,
+        "volt_je_teilung": [
+          0.5
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 10000
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "C2",
+          "C3"
+        ],
+        "wert": 1e-08
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C2"
+        }
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "C2",
+        "farbe": "blau"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_0_1_s1",
+    "exp3_0_1_s2",
+    "exp3_0_1_s3",
+    "exp3_0_1_s4",
+    "exp3_0_1_s5"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "C2",
+        "groesse": "spannung_V",
+        "auswertung": "spitze_spitze",
+        "fenster_s": 0.5,
+        "zwischen": [
+          1.3,
+          1.53
+        ]
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_0_1_h1",
+    "exp3_0_1_h2",
+    "exp3_0_1_loesung"
+  ],
+  "erklaerung_key": "exp3_0_1_erklaerung",
+  "mehr_wissen_key": "exp3_0_1_mehr",
+  "weiterforschen": [
+    "exp3_0_1_w1",
+    "exp3_0_1_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_0_1_echt"
+}

@@ -2204,6 +2204,9 @@ void LabController::setCells(int cells) {
     emit deskChanged();
 }
 void LabController::setTimeScale(double scale) {
+    // mit Lupe hoechstens so schnell, wie der Dehnungsfaktor erlaubt (sonst schafft die feine Rechnung es nicht)
+    const int stretch = m_session->board().desk.scope.stretchFactor();
+    if (stretch > 1) scale = std::min(scale, 1.0 / stretch);
     if (scale == m_timeScale) return;
     m_timeScale = scale;
     m_session->setTimeScale(scale);
@@ -2664,6 +2667,107 @@ void LabController::setLogicFine(bool fine) {
     emit deskChanged();
 }
 
+namespace {
+// Frequenz mit drei gueltigen Stellen bis MHz (Frequenzgang-Schreiber)
+QString hzText(double hz) {
+    if (hz >= 999.5e3) return siText(hz / 1e6, "") + QStringLiteral("MHz");
+    return siText(hz, "Hz");
+}
+// Bauteile, die schalten statt linear zu verstaerken: dort gilt die Kurve des Frequenzgang-Schreibers nicht
+bool switchingModel(const std::string& model) {
+    return model == "led" || model == "diode" || model == "thyristor" || model == "triac" || model == "diac" ||
+           model == "relay";
+}
+bool switchingModule(const std::string& type) {
+    return type == "timer555" || model::isLogicModule(type) || type == "blinkmodul";
+}
+constexpr double kBodeDecades = 7.0; // 1 Hz ... 10 MHz
+} // namespace
+
+bool LabController::bodeAvailable() const {
+    return m_session->catalog().secondOrder && model::hasDeskPart(m_session->board(), "generator");
+}
+
+void LabController::requestBode() {
+    if (!bodeAvailable() || !mainSwitch()) return;
+    const auto probes = m_session->scopeProbes();
+    if (probes[0].empty()) return;
+    m_session->bridge().requestSweep(model::desk_id::kGenerator, probes[0]);
+}
+
+QVariantMap LabController::bodeState() const {
+    QVariantMap m;
+    const model::Board& board = m_session->board();
+    QStringList switching;
+    for (const auto& p : board.parts)
+        if (const model::CatalogEntry* e = m_session->catalog().part(p.type))
+            if (switchingModel(e->model) && !switching.contains(qs(p.type))) switching << qs(p.type);
+    for (const auto& mo : board.modules)
+        if (switchingModule(mo.type) && !switching.contains(qs(mo.type))) switching << qs(mo.type);
+    m.insert(QStringLiteral("switching"), switching);
+    const auto probes = m_session->scopeProbes();
+    QString status = QStringLiteral("ok");
+    const auto& sweep = m_session->snapshot().sweep;
+    if (!bodeAvailable()) status = QStringLiteral("nogen");
+    else if (probes[0].empty()) status = QStringLiteral("noprobe");
+    else if (!mainSwitch()) status = QStringLiteral("off");
+    else if (!switching.isEmpty()) status = QStringLiteral("switching");
+    else if (!sweep || !m_session->snapshotCurrent() || sweep->topology != m_session->snapshot().topology)
+        status = QStringLiteral("wait");
+    else if (sweep->status != core::Status::Ok || sweep->response.kind == core::FrequencyResponse::Kind::None)
+        status = QStringLiteral("error");
+    m.insert(QStringLiteral("status"), status);
+    if (status != QLatin1String("ok")) return m;
+
+    const core::FrequencyResponse& r = sweep->response;
+    // senkrecht 80 dB, oben auf die naechste volle 10 dB ueber dem Hoechstwert
+    const double top = std::ceil(r.maxDb / 10.0 - 1e-9) * 10.0;
+    const double bottom = top - 80.0;
+    m.insert(QStringLiteral("topDb"), top);
+    m.insert(QStringLiteral("bottomDb"), bottom);
+    auto xOf = [](double hz) { return std::clamp(std::log10(hz) / kBodeDecades, 0.0, 1.0); };
+    QVariantList curve, phase;
+    curve.reserve(static_cast<int>(sweep->freqsHz.size()) * 2);
+    phase.reserve(static_cast<int>(sweep->freqsHz.size()) * 2);
+    for (std::size_t i = 0; i < sweep->freqsHz.size(); ++i) {
+        const double x = xOf(sweep->freqsHz[i]);
+        curve << x << std::clamp((r.db[i] - bottom) / 80.0, -0.02, 1.02);
+        // Phase -180 ... +180 Grad ueber die ganze Hoehe (stetig fortgesetzt, in den Bereich gefaltet)
+        double ph = std::fmod(r.phaseDeg[i] + 180.0, 360.0);
+        if (ph < 0.0) ph += 360.0;
+        phase << x << ph / 360.0;
+    }
+    m.insert(QStringLiteral("curve"), curve);
+    m.insert(QStringLiteral("phase"), phase);
+    QString kind;
+    switch (r.kind) {
+    case core::FrequencyResponse::Kind::Flat: kind = QStringLiteral("flat"); break;
+    case core::FrequencyResponse::Kind::LowPass: kind = QStringLiteral("lowpass"); break;
+    case core::FrequencyResponse::Kind::HighPass: kind = QStringLiteral("highpass"); break;
+    case core::FrequencyResponse::Kind::BandPass: kind = QStringLiteral("bandpass"); break;
+    case core::FrequencyResponse::Kind::BandStop: kind = QStringLiteral("bandstop"); break;
+    default: break;
+    }
+    m.insert(QStringLiteral("kind"), kind);
+    QVariantList markers;
+    auto mark = [&](double hz, const char* k, const QString& key) {
+        if (!(hz > 0.0)) return;
+        m.insert(key, hzText(hz));
+        markers << QVariantMap{{QStringLiteral("x"), xOf(hz)}, {QStringLiteral("kind"), QString::fromLatin1(k)},
+                               {QStringLiteral("text"), hzText(hz)}};
+    };
+    mark(r.resonanceHz, "res", QStringLiteral("resonanceText"));
+    mark(r.cutLowHz, "cut", QStringLiteral("cutLowText"));
+    mark(r.cutHighHz, "cut", QStringLiteral("cutHighText"));
+    m.insert(QStringLiteral("markers"), markers);
+    if (r.bandwidthHz > 0.0) m.insert(QStringLiteral("bandwidthText"), hzText(r.bandwidthHz));
+    if (r.quality > 0.0) m.insert(QStringLiteral("qualityText"), localNumber(r.quality, r.quality >= 10.0 ? 0 : 1));
+    // auf eine Nachkommastelle gerundet, ohne »-0,0«
+    const double maxDb = std::round(r.maxDb * 10.0) / 10.0;
+    m.insert(QStringLiteral("maxDbText"), localNumber(maxDb == 0.0 ? 0.0 : maxDb, 1) + QStringLiteral(" dB"));
+    return m;
+}
+
 bool LabController::scopeActive() const { return m_session->scopeActive(); }
 void LabController::setScopeActive(bool active) {
     if (active == m_session->scopeActive()) return;
@@ -2679,9 +2783,16 @@ void LabController::setScope(const QString& key, const QVariant& value) {
         // Normalbetrieb bis 1 s je Teilung, Rollbetrieb ab 100 ms
         s.timebaseIndex = std::clamp(value.toInt(), s.roll ? model::kScopeFirstRollTimebase : 0,
                                      s.roll ? lastTb : model::kScopeLastNormalTimebase);
+    } else if (key == QLatin1String("stretch")) {
+        // Lupe (ab Volta 3): zeitgedehnt, nicht im Roll- und XY-Betrieb
+        if (!m_session->catalog().secondOrder) return;
+        s.stretch = std::clamp(value.toInt(), 0, 3);
+        if (s.stretch > 0) s.roll = s.xy = false;
+        s.timebaseIndex = std::min(s.timebaseIndex, model::kScopeLastNormalTimebase);
     } else if (key == QLatin1String("roll")) {
         s.roll = value.toBool();
         if (s.roll) s.xy = false;
+        if (s.roll) s.stretch = 0;
         s.timebaseIndex = s.roll ? std::max(s.timebaseIndex, model::kScopeFirstRollTimebase)
                                  : std::min(s.timebaseIndex, model::kScopeLastNormalTimebase);
     } else if (key == QLatin1String("xy")) {
@@ -2722,7 +2833,15 @@ void LabController::setScope(const QString& key, const QVariant& value) {
     } else {
         return;
     }
+    if (s.xy) s.stretch = 0;
+    const int oldFactor = m_session->board().desk.scope.stretchFactor();
     m_session->setScopeSettings(s);
+    // Lupe: die Simulation laeuft um den Dehnungsfaktor langsamer (Zeitlupe); ohne Lupe wieder in Echtzeit
+    if (s.stretchFactor() != oldFactor) {
+        m_timeScale = -1.0; // erzwingt die Uebernahme
+        setTimeScale(1.0 / s.stretchFactor());
+        return;
+    }
     emit deskChanged();
 }
 
@@ -2776,6 +2895,9 @@ QVariantMap LabController::scopeState() const {
     m.insert(QStringLiteral("timebaseText"), siText(s.timebaseS(), "s"));
     m.insert(QStringLiteral("roll"), s.roll);
     m.insert(QStringLiteral("xy"), s.xy);
+    m.insert(QStringLiteral("stretchAvailable"), m_session->catalog().secondOrder);
+    m.insert(QStringLiteral("stretch"), s.stretch);
+    m.insert(QStringLiteral("stretchFactor"), s.stretchFactor());
     m.insert(QStringLiteral("triggerChannel"), s.triggerChannel);
     m.insert(QStringLiteral("triggerRising"), s.triggerRising);
     m.insert(QStringLiteral("triggerLevel"), s.triggerLevelV);

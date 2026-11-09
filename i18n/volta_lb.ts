@@ -111,6 +111,139 @@
     </message>
 </context>
 <context>
+    <name>BodePanel</name>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Tiefpass: tiefe Frequenzen kommen durch</source>
+        <translation>Déifpass: déif Frequenze kommen duerch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Hochpass: hohe Frequenzen kommen durch</source>
+        <translation>Héichpass: héich Frequenze kommen duerch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Bandpass: ein Bereich um die Resonanz kommt durch</source>
+        <translation>Bandpass: e Beräich ronderëm d&apos;Resonanz kënnt duerch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Bandsperre: ein Bereich wird gesperrt</source>
+        <translation>Bandspär: e Beräich gëtt gespaart</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>gerade: alle Frequenzen kommen gleich durch</source>
+        <translation>riicht: all Frequenze kommen gläich duerch</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Der Frequenzgang-Schreiber braucht den Generator im Pult.</source>
+        <translation>De Frequenzgang-Schreiwer brauch de Generator am Pult.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Stecke den Tastkopf K1 an den Ausgang der Schaltung. Der Eingang ist der Generator G.</source>
+        <translation>Steech den Tastkapp K1 un den Ausgang vun der Schaltung. Den Agang ass de Generator G.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Schalte den Hauptschalter ein.</source>
+        <translation>Schalt den Haaptschalter un.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Volta rechnet …</source>
+        <translation>Volta rechent …</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Hier kommt vom Generator nichts an K1 an. Ist G mit der Schaltung verbunden?</source>
+        <translation>Hei kënnt vum Generator näischt un K1 un. Ass G mat der Schaltung verbonnen?</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Keine Kurve: %1 schaltet, statt gleichmäßig zu verstärken. Der Frequenzgang gilt nur für Schaltungen, die jedes Signal gleich behandeln – miss solche Schaltungen mit dem Oszilloskop.</source>
+        <translation>Keng Kurve: %1 schalt, amplaz gläichméisseg ze verstäerken. De Frequenzgang gëllt just fir Schaltungen, déi all Signal gläich behandelen – miess esou Schaltunge mam Oszilloskop.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Frequenzgang-Schreiber</source>
+        <translation>Frequenzgang-Schreiwer</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Eingang G · Ausgang K1</source>
+        <translation>Agang G · Ausgang K1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Phase: an</source>
+        <translation>Phas: un</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Phase: aus</source>
+        <translation>Phas: aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Phase zeigen</source>
+        <translation>Phas weisen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Frequenzgang-Schreiber schließen</source>
+        <translation>Frequenzgang-Schreiwer zoumaachen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>f₀ </source>
+        <translation>f₀ </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>fg </source>
+        <translation>fg </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Resonanz f₀: %1</source>
+        <translation>Resonanz f₀: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>untere Grenzfrequenz: %1</source>
+        <translation>ënnescht Grenzfrequenz: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>obere Grenzfrequenz: %1</source>
+        <translation>iewescht Grenzfrequenz: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Bandbreite: %1</source>
+        <translation>Bandbreet: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Güte: %1</source>
+        <translation>Gidd: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>höchste Verstärkung: %1</source>
+        <translation>héchst Verstäerkung: %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Grenzfrequenz: dort ist die Spannung 3 dB unter dem Höchstwert, also etwa 71 %.</source>
+        <translation>Grenzfrequenz: do ass d&apos;Spannung 3 dB ënner dem Héchstwäert, also ongeféier 71 %.</translation>
+    </message>
+</context>
+<context>
     <name>ContactField</name>
     <message>
         <location filename="../app/qml/ContactField.qml" line="160"/>
@@ -3114,6 +3247,16 @@
         <source>Alles abbauen</source>
         <translation>Alles ofbauen</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Frequenzgang-Schreiber ausblenden</source>
+        <translation>Frequenzgang-Schreiwer verstoppen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Frequenzgang-Schreiber zeigen</source>
+        <translation>Frequenzgang-Schreiwer weisen</translation>
+    </message>
 </context>
 <context>
     <name>LogicPanel</name>
@@ -5477,6 +5620,31 @@
         <location filename="../app/qml/ScopePanel.qml" line="259"/>
         <source>Oszilloskop schließen</source>
         <translation>Oszilloskop zoumaachen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe ×%1</source>
+        <translation>Lupp ×%1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe aus</source>
+        <translation>Lupp aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe: schnelle Vorgänge gedehnt zeigen. Antippen: ×10, ×100, ×1000, aus</source>
+        <translation>Lupp: séier Virgäng gedeent weisen. Tippen: ×10, ×100, ×1000, aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe ×%1 gedehnt</source>
+        <translation>Lupp ×%1 gedeent</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>×%1 gedehnt</source>
+        <translation>×%1 gedeent</translation>
     </message>
 </context>
 <context>

@@ -368,6 +368,7 @@ Item {
     }
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property bool recorderVisible: false // Zeitschreiber unter der Arbeitsflaeche
+    property bool bodeVisible: false     // Frequenzgang-Schreiber (ab Volta 3)
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
     // Lieblingsfarbe (Stern im Farbmenue): Leitungen ohne Verbindung zu einem Pol. Mit der Farbautomatik zeigt der
@@ -700,6 +701,27 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
+            // Frequenzgang-Schreiber ein-/ausblenden (ab Volta 3, mit Generator im Pult)
+            ToolButton {
+                objectName: "bodeToggle"
+                visible: lab.controller.bodeAvailable
+                width: Theme.control; height: Theme.control
+                checkable: true
+                checked: lab.bodeVisible
+                onClicked: lab.bodeVisible = !lab.bodeVisible
+                text: "dB"
+                font.pixelSize: 15
+                font.bold: true
+                palette.buttonText: "white"
+                ToolTip.visible: hovered
+                ToolTip.text: lab.bodeVisible ? qsTr("Frequenzgang-Schreiber ausblenden") : qsTr("Frequenzgang-Schreiber zeigen")
+                Accessible.name: ToolTip.text
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
             // Zeitlupe (ab Volta 2, Konzept 5.3): 1, 1/10, 1/100, 1/1000 der Echtzeit; Ton ist dann stumm. Symbol: Lupe
             // mit Uhrzeigern (gezeichnet); die Stufe steht als Text daneben (Farbe nie allein)
             ToolButton {
@@ -957,6 +979,18 @@ Item {
         onCloseRequested: lab.recorderVisible = false
     }
 
+    // Frequenzgang-Schreiber (ab Volta 3): ueber dem Oszilloskop, ueber die Werkzeugleiste ein- und ausgeblendet
+    BodePanel {
+        id: bodePanel
+        objectName: "bodePanel"
+        controller: lab.controller
+        readonly property bool shown: lab.bodeVisible && lab.controller.bodeAvailable
+        visible: shown
+        anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.top }
+        height: shown ? Math.max(200, Math.min(270, lab.height * 0.32)) : 0
+        onCloseRequested: lab.bodeVisible = false
+    }
+
     // Logikanalysator (ab Volta 3): erscheint, sobald ein Logik-Tastkopf steckt
     LogicPanel {
         id: logicPanel
@@ -969,7 +1003,7 @@ Item {
             return false
         }
         visible: shown
-        anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.top }
+        anchors { left: tray.right; right: experimentPanel.left; bottom: bodePanel.top }
         height: shown ? Math.min(implicitHeight, Math.max(120, lab.height * 0.32)) : 0
     }
 

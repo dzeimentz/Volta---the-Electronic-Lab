@@ -26,10 +26,19 @@ const std::vector<double>& scopeVoltsPerDiv() {
 
 double ScopeSettings::timebaseS() const {
     const auto& t = scopeTimebases();
-    return t[static_cast<std::size_t>(std::clamp(timebaseIndex, 0, static_cast<int>(t.size()) - 1))];
+    const double base = t[static_cast<std::size_t>(std::clamp(timebaseIndex, 0, static_cast<int>(t.size()) - 1))];
+    return stretch > 0 ? base / stretchFactor() : base;
 }
 
-double ScopeSettings::simStepS() const { return std::clamp(timebaseS() / kStepsPerDiv, kMinStepS, kMaxStepS); }
+int ScopeSettings::stretchFactor() const {
+    static constexpr int f[] = {1, 10, 100, 1000};
+    return f[std::clamp(stretch, 0, 3)];
+}
+
+double ScopeSettings::simStepS() const {
+    // mit Lupe darf die Simulation um den Dehnungsfaktor feiner rechnen (sie laeuft dann ebenso viel langsamer)
+    return std::clamp(timebaseS() / kStepsPerDiv, kMinStepS / stretchFactor(), kMaxStepS);
+}
 
 ScopeMeasure scopeMeasure(const std::vector<ScopeSample>& samples, std::size_t channel, double fromS, double toS) {
     ScopeMeasure m;

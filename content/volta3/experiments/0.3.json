@@ -1,0 +1,136 @@
+{
+  "id": "volta3.0.3",
+  "band": "volta3",
+  "stufe": 0,
+  "titel_key": "exp3_0_3_titel",
+  "dauer_min": 15,
+  "zerstoerend": false,
+  "bauteile_frei": [
+    "widerstand",
+    "kondensator",
+    "tastkopf",
+    "leitung"
+  ],
+  "frage_key": "exp3_0_3_frage",
+  "vermutungen": [
+    "exp3_0_3_v1",
+    "exp3_0_3_v2",
+    "exp3_0_3_v3"
+  ],
+  "beobachtungen": [
+    "exp3_0_3_b1",
+    "exp3_0_3_b2",
+    "exp3_0_3_b3"
+  ],
+  "vermutung_passt": [
+    1
+  ],
+  "vermutung_offen": [
+    2
+  ],
+  "vorlage": {
+    "pult": "bedienpult_2",
+    "pult_stellung": {
+      "generator": {
+        "form": "rechteck",
+        "frequenz_Hz": 10000,
+        "start_frequenz_Hz": 1000,
+        "spitze_V": 2,
+        "gleichanteil_V": 2
+      },
+      "oszilloskop": {
+        "zeitbasis_s": 0.0001,
+        "volt_je_teilung": [
+          1,
+          1
+        ]
+      }
+    },
+    "bauteile": [
+      {
+        "id": "R1",
+        "typ": "widerstand",
+        "felder": [
+          "A1",
+          "A2"
+        ],
+        "wert": 1000
+      },
+      {
+        "id": "C1",
+        "typ": "kondensator",
+        "felder": [
+          "C2",
+          "C3"
+        ],
+        "wert": 1e-08
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "C2"
+        }
+      },
+      {
+        "id": "TK2",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A1"
+        }
+      }
+    ],
+    "module": [],
+    "anzeigen": [],
+    "leitungen": [
+      {
+        "von": "P:G",
+        "nach": "A1",
+        "farbe": "gelb"
+      },
+      {
+        "von": "A2",
+        "nach": "C2",
+        "farbe": "blau"
+      },
+      {
+        "von": "C3",
+        "nach": "P:0V",
+        "farbe": "schwarz"
+      }
+    ]
+  },
+  "schritte": [
+    "exp3_0_3_s1",
+    "exp3_0_3_s2",
+    "exp3_0_3_s3",
+    "exp3_0_3_s4",
+    "exp3_0_3_s5"
+  ],
+  "erfolg": {
+    "alle": [
+      {
+        "feld": "C2",
+        "groesse": "spannung_V",
+        "auswertung": "frequenz",
+        "fenster_s": 0.5,
+        "zwischen": [
+          9000,
+          11000
+        ]
+      }
+    ]
+  },
+  "hilfen": [
+    "exp3_0_3_h1",
+    "exp3_0_3_h2",
+    "exp3_0_3_loesung"
+  ],
+  "erklaerung_key": "exp3_0_3_erklaerung",
+  "mehr_wissen_key": "exp3_0_3_mehr",
+  "weiterforschen": [
+    "exp3_0_3_w1",
+    "exp3_0_3_w2"
+  ],
+  "jetzt_in_echt_key": "exp3_0_3_echt"
+}

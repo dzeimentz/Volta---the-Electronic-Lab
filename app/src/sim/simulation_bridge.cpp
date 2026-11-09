@@ -26,6 +26,9 @@ constexpr double kPublishS = 1.0 / 120.0;    // Schnappschuesse mit ca. 120 Hz
 constexpr double kMaxCatchUpS = 0.05;        // je Durchlauf hoechstens 50 ms Wanduhrzeit aufholen
 constexpr std::size_t kEventBacklog = 512;   // Ereignisse, bis die Oberflaeche sie abholt
 constexpr double kStatsWindowS = 0.1;        // Messfenster der Signalstatistik (5 Perioden bei 50 Hz)
+constexpr double kSweepMinHz = 1.0;           // Frequenzgang-Schreiber: 1 Hz ... 10 MHz (Konzept 5.2)
+constexpr double kSweepMaxHz = 1e7;
+constexpr int kSweepPerDecade = 50;           // grob 351 Punkte, fein um die Marken
 } // namespace
 
 SimulationBridge::SimulationBridge() {
@@ -84,6 +87,9 @@ void SimulationBridge::applyPending() {
     std::shared_ptr<StepObserver> observer;
     bool scopeChanged = false;
     bool stationsChanged = false;
+    bool sweep = false;
+    std::string sweepExcitation, sweepProbe;
+    std::uint64_t sweepRequest = 0;
     {
         std::lock_guard<std::mutex> lock(m_inMutex);
         if (m_stationsPending) {
@@ -91,6 +97,13 @@ void SimulationBridge::applyPending() {
             m_pendingStations.clear();
             m_stationsPending = false;
             stationsChanged = true;
+        }
+        if (m_sweepPending) {
+            sweep = true;
+            sweepExcitation = m_sweepExcitation;
+            sweepProbe = m_sweepProbe;
+            sweepRequest = m_sweepRequest;
+            m_sweepPending = false;
         }
         if (m_scopePending) {
             m_scope = m_pendingScope;
@@ -146,6 +159,25 @@ void SimulationBridge::applyPending() {
     // Radio (ab Volta 3): Abstimmen ueber die Wechselstromanalyse (Speicher nur hier, zwischen zwei Schritten)
     if ((circuit || stationsChanged || retune) && m_sim.hasCircuit() && (!m_stations.empty() || stationsChanged))
         core::tuneRadio(m_sim, m_stations);
+    // Frequenzgang-Schreiber (ab Volta 3): Wechselstromanalyse am angenommenen Zustand, Speicher nur hier
+    if (sweep) {
+        auto d = std::make_shared<SweepData>();
+        d->request = sweepRequest;
+        d->topology = m_activeTopology;
+        const auto g = m_index.find(sweepExcitation);
+        const auto p = m_index.find(sweepProbe);
+        if (!m_sim.hasCircuit()) {
+            d->status = core::Status::NoCircuit;
+        } else if (g == m_index.end() || p == m_index.end()) {
+            d->status = core::Status::InvalidCircuit;
+        } else {
+            std::vector<core::Complex> h;
+            const core::NodeId out = m_sim.circuit().component(p->second).terminal(0);
+            d->status = core::sweepResponse(m_sim, g->second, out, core::kGround, kSweepMinHz, kSweepMaxHz,
+                                            kSweepPerDecade, d->freqsHz, h, d->response);
+        }
+        m_sweep = std::move(d);
+    }
 }
 
 void SimulationBridge::apply(const Action& a) {
@@ -249,6 +281,7 @@ void SimulationBridge::publish(double realtimeRatio) {
     m_back.states.resize(c.componentCount());
     for (std::size_t i = 0; i < c.componentCount(); ++i) m_back.states[i] = c.component(i).saveState();
     m_back.realtimeRatio = realtimeRatio;
+    m_back.sweep = m_sweep;
     m_back.scope.resize(m_scopeCount);
     for (std::size_t k = 0; k < m_scopeCount; ++k)
         m_back.scope[k] = m_scopeRing[(m_scopeHead + m_scopeRing.size() - m_scopeCount + k) % m_scopeRing.size()];
@@ -280,6 +313,7 @@ void SimulationBridge::publish(double realtimeRatio) {
     std::swap(m_front.tracer, m_back.tracer);
     std::swap(m_front.logic, m_back.logic);
     std::swap(m_front.logicHas, m_back.logicHas);
+    std::swap(m_front.sweep, m_back.sweep);
     m_back.lastStatus = m_front.lastStatus;
     m_fresh = true;
 }
@@ -305,6 +339,7 @@ bool SimulationBridge::latest(Snapshot& out) {
     out.tracer.assign(m_front.tracer.begin(), m_front.tracer.end());
     out.logic.assign(m_front.logic.begin(), m_front.logic.end());
     out.logicHas = m_front.logicHas;
+    out.sweep = m_front.sweep;
     m_fresh = false;
     return true;
 }
@@ -389,6 +424,14 @@ void SimulationBridge::setStations(std::vector<core::RadioStation> stations) {
     std::lock_guard<std::mutex> lock(m_inMutex);
     m_pendingStations = std::move(stations);
     m_stationsPending = true;
+}
+
+std::uint64_t SimulationBridge::requestSweep(std::string excitationId, std::string probeId) {
+    std::lock_guard<std::mutex> lock(m_inMutex);
+    m_sweepExcitation = std::move(excitationId);
+    m_sweepProbe = std::move(probeId);
+    m_sweepPending = true;
+    return ++m_sweepRequest;
 }
 
 void SimulationBridge::resolveScope() {

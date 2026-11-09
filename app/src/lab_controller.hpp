@@ -524,6 +524,15 @@ public:
     // 1 ?, 2 H), segs (flach: x0, x1, Pegel je Abschnitt, x 0 ... 1 im Fenster)}]}; setLogicFine: Zeitfenster
     Q_INVOKABLE QVariantMap logicState() const;
     Q_INVOKABLE void setLogicFine(bool fine);
+    // Frequenzgang-Schreiber (ab Volta 3): Generator -> Tastkopf K1. bodeAvailable: Volta 3 mit Generator im Pult.
+    // bodeState: {status ("ok", "nogen", "noprobe", "off", "switching", "wait", "error"), switching: [Typen, die
+    // schalten], curve/phase (flach: x 0 ... 1 ueber 1 Hz ... 10 MHz logarithmisch, y 0 ... 1 von unten), topDb,
+    // bottomDb, kind, markers [{x, kind ("res", "cut"), text}], resonanceText, cutLowText, cutHighText,
+    // bandwidthText, qualityText, maxDbText}; requestBode: neuen Durchlauf anfordern (zwischen zwei Schritten)
+    Q_PROPERTY(bool bodeAvailable READ bodeAvailable NOTIFY deskChanged)
+    bool bodeAvailable() const;
+    Q_INVOKABLE QVariantMap bodeState() const;
+    Q_INVOKABLE void requestBode();
     double logicSupplyV() const; // Bezug der Logikschwellen: Batterie des Pults
     // Senderanlage (ab Volta 3): Sender 0..2 an/aus (Bedienhandlung)
     Q_INVOKABLE bool stationOn(int index) const;

@@ -111,6 +111,139 @@
     </message>
 </context>
 <context>
+    <name>BodePanel</name>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Tiefpass: tiefe Frequenzen kommen durch</source>
+        <translation>Passe-bas : les basses fréquences passent</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Hochpass: hohe Frequenzen kommen durch</source>
+        <translation>Passe-haut : les hautes fréquences passent</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Bandpass: ein Bereich um die Resonanz kommt durch</source>
+        <translation>Passe-bande : une plage autour de la résonance passe</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Bandsperre: ein Bereich wird gesperrt</source>
+        <translation>Coupe-bande : une plage est bloquée</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>gerade: alle Frequenzen kommen gleich durch</source>
+        <translation>plate : toutes les fréquences passent pareil</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Der Frequenzgang-Schreiber braucht den Generator im Pult.</source>
+        <translation>Le traceur de réponse en fréquence a besoin du générateur dans le pupitre.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Stecke den Tastkopf K1 an den Ausgang der Schaltung. Der Eingang ist der Generator G.</source>
+        <translation>Place la sonde K1 sur la sortie du circuit. L&apos;entrée est le générateur G.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Schalte den Hauptschalter ein.</source>
+        <translation>Allume l&apos;interrupteur principal.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Volta rechnet …</source>
+        <translation>Volta calcule …</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Hier kommt vom Generator nichts an K1 an. Ist G mit der Schaltung verbunden?</source>
+        <translation>Rien du générateur n&apos;arrive en K1. G est-il relié au circuit ?</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Keine Kurve: %1 schaltet, statt gleichmäßig zu verstärken. Der Frequenzgang gilt nur für Schaltungen, die jedes Signal gleich behandeln – miss solche Schaltungen mit dem Oszilloskop.</source>
+        <translation>Pas de courbe : %1 commute au lieu d&apos;amplifier régulièrement. La réponse en fréquence ne vaut que pour les circuits qui traitent chaque signal de la même façon – mesure ces circuits avec l&apos;oscilloscope.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Frequenzgang-Schreiber</source>
+        <translation>Traceur de réponse en fréquence</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Eingang G · Ausgang K1</source>
+        <translation>Entrée G · sortie K1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Phase: an</source>
+        <translation>Phase : oui</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Phase: aus</source>
+        <translation>Phase : non</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Phase zeigen</source>
+        <translation>Afficher la phase</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Frequenzgang-Schreiber schließen</source>
+        <translation>Fermer le traceur de réponse en fréquence</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>f₀ </source>
+        <translation>f₀ </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>fg </source>
+        <translation>fc </translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Resonanz f₀: %1</source>
+        <translation>Résonance f₀ : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>untere Grenzfrequenz: %1</source>
+        <translation>fréquence de coupure basse : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>obere Grenzfrequenz: %1</source>
+        <translation>fréquence de coupure haute : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Bandbreite: %1</source>
+        <translation>Bande passante : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Güte: %1</source>
+        <translation>Facteur de qualité : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>höchste Verstärkung: %1</source>
+        <translation>gain maximal : %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/BodePanel.qml" line="1"/>
+        <source>Grenzfrequenz: dort ist die Spannung 3 dB unter dem Höchstwert, also etwa 71 %.</source>
+        <translation>Fréquence de coupure : la tension y est 3 dB sous la valeur maximale, soit environ 71 %.</translation>
+    </message>
+</context>
+<context>
     <name>ContactField</name>
     <message>
         <location filename="../app/qml/ContactField.qml" line="160"/>
@@ -3114,6 +3247,16 @@
         <source>Alles abbauen</source>
         <translation>Tout démonter</translation>
     </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Frequenzgang-Schreiber ausblenden</source>
+        <translation>Masquer le traceur de réponse en fréquence</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Frequenzgang-Schreiber zeigen</source>
+        <translation>Afficher le traceur de réponse en fréquence</translation>
+    </message>
 </context>
 <context>
     <name>LogicPanel</name>
@@ -5477,6 +5620,31 @@
         <location filename="../app/qml/ScopePanel.qml" line="259"/>
         <source>Oszilloskop schließen</source>
         <translation>Fermer l’oscilloscope</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe ×%1</source>
+        <translation>Loupe ×%1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe aus</source>
+        <translation>Loupe arrêtée</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe: schnelle Vorgänge gedehnt zeigen. Antippen: ×10, ×100, ×1000, aus</source>
+        <translation>Loupe : montrer les phénomènes rapides étirés. Toucher : ×10, ×100, ×1000, arrêt</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Lupe ×%1 gedehnt</source>
+        <translation>Loupe ×%1 étiré</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>×%1 gedehnt</source>
+        <translation>×%1 étiré</translation>
     </message>
 </context>
 <context>

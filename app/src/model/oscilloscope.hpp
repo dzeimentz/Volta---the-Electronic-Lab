@@ -80,8 +80,12 @@ struct ScopeSettings {
     bool triggerRising = true;
     double triggerLevelV = 0.0;
     std::array<ScopeChannelSettings, kScopeChannels> channels{};
+    // Lupe (ab Volta 3, zeitgedehnte Darstellung): 0 aus, 1 x10, 2 x100, 3 x1000. Die Zeitbasis wird um den Faktor
+    // kuerzer, die Simulation rechnet entsprechend feiner und laeuft so viel langsamer als die Echtzeit (Zeitlupe).
+    int stretch = 0;
 
-    double timebaseS() const;
+    int stretchFactor() const;
+    double timebaseS() const; // echte Zeit je Teilung (mit Lupe gedehnt dargestellt)
     double screenS() const { return timebaseS() * kScopeDivX; }
     // Abtastabstand fuer den Ringpuffer und passende Schrittweite der Simulation (feiner bei kurzer Zeitbasis)
     double sampleIntervalS() const { return screenS() / kScopePointsPerScreen; }

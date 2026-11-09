@@ -151,6 +151,41 @@ Rectangle {
             color: "#E0E8E4"
             font.pixelSize: Math.round(13 * Theme.fontScale)
         }
+        // Lupe: gestrichelter Rahmen, Lupenzeichen und Faktor - nie nur eine andere Farbe (Konzept 9)
+        Shape {
+            objectName: "scopeStretchFrame"
+            visible: (panel.sc.stretch || 0) > 0 && !panel.sc.xy
+            anchors.fill: parent
+            ShapePath {
+                strokeColor: "#F2C230"; strokeWidth: 2; fillColor: "transparent"
+                strokeStyle: ShapePath.DashLine; dashPattern: [5, 3]
+                PathPolyline {
+                    path: [Qt.point(2, 2), Qt.point(screen.width - 2, 2), Qt.point(screen.width - 2, screen.height - 2),
+                           Qt.point(2, screen.height - 2), Qt.point(2, 2)]
+                }
+            }
+        }
+        Rectangle {
+            visible: (panel.sc.stretch || 0) > 0 && !panel.sc.xy
+            anchors { right: parent.right; bottom: parent.bottom; margins: 6 }
+            width: stretchRow.implicitWidth + 10; height: stretchRow.implicitHeight + 4
+            radius: 4
+            color: "#0E1A16"
+            border.color: "#F2C230"
+            Row {
+                id: stretchRow
+                anchors.centerIn: parent
+                spacing: 3
+                DrawnIcon { anchors.verticalCenter: parent.verticalCenter; kind: "magnifier"; color: "#F2C230"; size: 16 }
+                Label {
+                    objectName: "scopeStretchLabel"
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("×%1 gedehnt").arg(panel.sc.stretchFactor || 1)
+                    color: "#F2C230"
+                    font.pixelSize: Math.round(11 * Theme.fontScale); font.bold: true
+                }
+            }
+        }
         Accessible.role: Accessible.Graphic
         Accessible.name: qsTr("Oszilloskop-Schirm")
     }
@@ -345,6 +380,31 @@ Rectangle {
                                 DrawnIcon { visible: panel.frozen; anchors.centerIn: parent; kind: "right"; color: "white"; size: 18 }
                             }
                             ToolTip.text: panel.frozen ? qsTr("Weiterlaufen") : qsTr("Standbild"); Accessible.name: ToolTip.text
+                        }
+                    }
+                    // Lupe (ab Volta 3): zeitgedehnt x10, x100, x1000; die Simulation laeuft dann so viel langsamer
+                    Row {
+                        visible: panel.sc.stretchAvailable === true
+                        spacing: 4
+                        Btn {
+                            id: stretchButton
+                            objectName: "scopeStretch"
+                            checkable: true
+                            checked: (panel.sc.stretch || 0) > 0
+                            enabled: !panel.sc.xy
+                            onClicked: panel.controller.setScope("stretch", ((panel.sc.stretch || 0) + 1) % 4)
+                            contentItem: Row {
+                                spacing: 4
+                                DrawnIcon { anchors.verticalCenter: parent.verticalCenter; kind: "magnifier"; color: stretchButton.ink; size: 20 }
+                                Label {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: (panel.sc.stretch || 0) > 0 ? qsTr("Lupe ×%1").arg(panel.sc.stretchFactor) : qsTr("Lupe aus")
+                                    color: stretchButton.ink
+                                    font.pixelSize: Math.round(12 * Theme.fontScale)
+                                }
+                            }
+                            ToolTip.text: qsTr("Lupe: schnelle Vorgänge gedehnt zeigen. Antippen: ×10, ×100, ×1000, aus")
+                            Accessible.name: (panel.sc.stretch || 0) > 0 ? qsTr("Lupe ×%1 gedehnt").arg(panel.sc.stretchFactor) : qsTr("Lupe aus")
                         }
                     }
                 }

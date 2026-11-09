@@ -639,6 +639,22 @@ int main(int argc, char* argv[]) {
                 l->setProperty("schematicVisible", true);
         });
 
+    // Entwicklerhilfe (Volta 3): VOLTA_DEMO_BODE=1 blendet den Frequenzgang-Schreiber ein, VOLTA_DEMO_STRETCH=1|2|3
+    // stellt die Lupe des Oszilloskops auf x10, x100 bzw. x1000 und blendet es ein; VOLTA_DEMO_GEN_HZ=<Hz> stellt dazu
+    // den Generator (wie das Kind nach der Aufgabe)
+    if (qEnvironmentVariableIntValue("VOLTA_DEMO_BODE") == 1 || qEnvironmentVariableIntValue("VOLTA_DEMO_STRETCH") > 0)
+        QTimer::singleShot(1500, &engine, [&engine, &lab] {
+            const auto roots = engine.rootObjects();
+            QObject* l = roots.isEmpty() ? nullptr : roots.first()->findChild<QObject*>(QStringLiteral("lab"));
+            if (!l) return;
+            if (qEnvironmentVariableIntValue("VOLTA_DEMO_BODE") == 1) l->setProperty("bodeVisible", true);
+            if (const double hz = qEnvironmentVariable("VOLTA_DEMO_GEN_HZ").toDouble(); hz > 0.0) lab.setGenFrequency(hz);
+            if (const int s = qEnvironmentVariableIntValue("VOLTA_DEMO_STRETCH"); s > 0) {
+                l->setProperty("recorderVisible", true);
+                lab.setScope(QStringLiteral("stretch"), s);
+            }
+        });
+
     // Entwicklerhilfe: VOLTA_DEMO_SELECT=<Bauteil-ID> bzw. VOLTA_DEMO_SELECT_WIRE=<Leitungs-ID> waehlt aus
     // (Sichtpruefung der Loeschen-Knoepfe)
     if (!qEnvironmentVariableIsEmpty("VOLTA_DEMO_SELECT") || !qEnvironmentVariableIsEmpty("VOLTA_DEMO_SELECT_WIRE"))

@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "volta/core/circuit.hpp"
+#include "volta/core/frequency_response.hpp"
 #include "volta/core/signal_stats.hpp"
 #include "volta/core/simulator.hpp"
 #include "volta/core/components/radio.hpp"
@@ -90,6 +91,15 @@ struct ScopeConfig {
     std::size_t logicCapacity = 0;
 };
 
+// Frequenzgang-Schreiber (ab Volta 3): Ergebnis eines Durchlaufs 1 Hz ... 10 MHz vom Generator zum Tastkopf
+struct SweepData {
+    std::uint64_t request = 0; // Nummer der Anforderung (requestSweep)
+    std::uint64_t topology = 0;
+    core::Status status = core::Status::NoCircuit;
+    std::vector<double> freqsHz;
+    core::FrequencyResponse response;
+};
+
 // Schnappschuss fuer die Oberflaeche. Indizes wie in der Netzliste der Topologie-Version `topology`.
 struct Snapshot {
     std::uint64_t topology = 0;
@@ -111,6 +121,7 @@ struct Snapshot {
     // Logikanalysator (ab Volta 3): Spannungen der Logik-Tastkoepfe (aelteste zuerst), je Kanal angeschlossen
     std::vector<model::LogicSample> logic;
     std::array<bool, model::kLogicChannels> logicHas{};
+    std::shared_ptr<const SweepData> sweep; // Frequenzgang-Schreiber: letzter Durchlauf (leer = keiner)
     core::Status lastStatus = core::Status::Ok;
     double realtimeRatio = 1.0;               // erreichte Simulationszeit je Wanduhrzeit (1 = Echtzeit)
 };
@@ -145,6 +156,10 @@ public:
     // Sender der Senderanlage (ab Volta 3): nach jedem Topologiewechsel und jeder Aenderung wird neu abgestimmt
     // (core::tuneRadio, zwischen zwei Schritten)
     void setStations(std::vector<core::RadioStation> stations);
+    // Frequenzgang-Schreiber (ab Volta 3): zwischen zwei Schritten einen Durchlauf von der Anregung excitationId
+    // (Funktionsgenerator) zur Spannung am Tastkopf probeId gegen 0V rechnen; Ergebnis in Snapshot::sweep.
+    // Liefert die Nummer der Anforderung.
+    std::uint64_t requestSweep(std::string excitationId, std::string probeId);
     double stepS() const { return m_stepS; }   // aktuelle Schrittweite (nur im Simulations-Thread bzw. synchron)
 
     // Neuesten Schnappschuss holen (Kapazitaet von out wird wiederverwendet). false, wenn nichts Neues vorliegt.
@@ -196,6 +211,10 @@ private:
     std::vector<Action> m_actionsWork;
     bool m_scopePending = false;
     bool m_stationsPending = false;
+    bool m_sweepPending = false;
+    std::string m_sweepExcitation, m_sweepProbe;
+    std::uint64_t m_sweepRequest = 0;
+    std::shared_ptr<const SweepData> m_sweep; // im Simulations-Thread erzeugt, unveraendert weitergereicht
     std::vector<core::RadioStation> m_pendingStations;
     std::vector<core::RadioStation> m_stations; // im Simulations-Thread
     ScopeConfig m_pendingScope;
