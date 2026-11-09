@@ -87,6 +87,14 @@ getestet (Abweichung < 2 %) und ist so angelegt, dass Volta 2 (Audio, Operations
 - Ideale Schleifen aus Quellen und Leitungen vermeiden: Innenwiderstand der Batterie, Leitungswiderstand
   0,01 Ω je Leitung (in der Darstellung vernachlaessigt).
 - Offene Knoten: Ableitwiderstand 1 GΩ gegen Masse (GMIN), damit `G` regulaer bleibt.
+- Wechselstromanalyse (ab Volta 3): der komplexe Loeser misst die Pivot-Schwelle je Spalte (1e-13 des groessten
+  Betrags der Spalte), nicht an der ganzen Matrix - bei 1 Hz bringt ein Kondensator viele MΩ in die Matrix, und offene
+  Pultfelder, die nur ueber GMIN an Masse haengen, galten sonst faelschlich als singulaer.
+- Frequenzgang-Schreiber (ab Volta 3, `frequency_response.hpp`): `sweepResponse` rechnet 1 Hz ... 10 MHz mit 50
+  Punkten je Dekade und danach je 201 Punkte fein um Resonanz und Grenzfrequenzen; `analyzeResponse` bestimmt dB,
+  stetige Phase, Art (Tief-, Hoch-, Bandpass, Bandsperre, gerade), Grenzfrequenzen bei −3 dB unter dem Hoechstwert
+  (logarithmisch interpoliert), Resonanz (Parabel ueber log f), Bandbreite und Guete. Referenz
+  `test_frequency_response.cpp`: RC-Tief- und CR-Hochpass, Parallelkreis (f0, B, Q auf 1 bzw. 2 %), Kreis mit 1 MHz.
 - Kurzschlusserkennung: Strom durch Quelle > Grenzwert -> Erwaermung Batterie und Leitung, Ereignis.
 
 ## Bauteilmodelle Volta 1

@@ -9,6 +9,7 @@ add_library(volta_core STATIC
     src/simulator.cpp
     src/complex_mna.cpp
     src/ac_analysis.cpp
+    src/frequency_response.cpp
     src/signal_stats.cpp
     src/components/resistor.cpp
     src/components/battery.cpp

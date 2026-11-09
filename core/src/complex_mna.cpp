@@ -53,10 +53,14 @@ void ComplexMna::stampBranchOpen(std::size_t branch) noexcept {
 }
 
 bool solveComplexDense(std::vector<Complex>& a, std::vector<Complex>& b, std::size_t n) noexcept {
-    double scale = 0.0;
-    for (const Complex& v : a) scale = std::max(scale, std::abs(v));
-    const double tiny = std::max(scale, 1.0) * 1e-14;
+    // Schwelle je Spalte: ein offenes Feld haengt nur ueber kGmin (1 nS) an 0V, waehrend ein Kondensator bei 1 Hz
+    // Impedanzen von vielen MOhm in die Matrix bringt. Eine Schwelle relativ zum groessten Eintrag der ganzen Matrix
+    // hielte das offene Feld faelschlich fuer singulaer; gemessen wird daher an der eigenen Spalte.
+    std::vector<double> colMax(n, 0.0);
+    for (std::size_t r = 0; r < n; ++r)
+        for (std::size_t c = 0; c < n; ++c) colMax[c] = std::max(colMax[c], std::abs(a[r * n + c]));
     for (std::size_t k = 0; k < n; ++k) {
+        const double tiny = colMax[k] * 1e-13;
         std::size_t piv = k;
         double best = std::abs(a[k * n + k]);
         for (std::size_t r = k + 1; r < n; ++r) {
@@ -66,7 +70,7 @@ bool solveComplexDense(std::vector<Complex>& a, std::vector<Complex>& b, std::si
                 piv = r;
             }
         }
-        if (!(best > tiny)) return false;
+        if (!(best > tiny) || best == 0.0) return false;
         if (piv != k) {
             for (std::size_t c = 0; c < n; ++c) std::swap(a[k * n + c], a[piv * n + c]);
             std::swap(b[k], b[piv]);
