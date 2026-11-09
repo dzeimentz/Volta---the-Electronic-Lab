@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <memory>
 #include <string>
 
 #include "test_support.hpp"
@@ -427,4 +428,34 @@ TEST_CASE("Z-Diode mit zu kleinem Vorwiderstand wird zerstoert", "[diode][zdiode
     for (int i = 0; i < 4000 && !zc.z->isDestroyed(); ++i) zc.sim.step();
     CHECK(zc.z->isDestroyed());
     requireFinite(zc.sim.probe());
+}
+
+TEST_CASE("Diode als Thermometer: etwa -2 mV/K bei 1 mA, ohne Umgebung unveraendert", "[diode]") {
+    auto build = [](bool coupled) {
+        Circuit c;
+        const NodeId p = c.addNode(), k = c.addNode();
+        c.add<Battery>("B1", p, kGround);
+        c.add<Resistor>("R1", p, k, ResistorParams{8200.0});
+        c.add<Diode>("D1", k, kGround);
+        auto sim = std::make_unique<Simulator>();
+        REQUIRE(sim->setCircuit(std::move(c)) == Status::Ok);
+        if (coupled) static_cast<Diode&>(sim->circuit().component(2)).setAmbient(kAmbientK);
+        return sim;
+    };
+    auto plain = build(false);
+    auto warm = build(true);
+    for (int i = 0; i < 1000; ++i) {
+        REQUIRE(plain->step(0.001) == Status::Ok);
+        REQUIRE(warm->step(0.001) == Status::Ok);
+    }
+    // bei Raumtemperatur gleich (bis auf die Eigenerwaermung, < 1 mV)
+    CHECK(near(warm->probe().voltage(2), plain->probe().voltage(2), 1e-3));
+    const double v20 = warm->probe().voltage(2);
+    static_cast<Diode&>(warm->circuit().component(2)).setAmbient(kAmbientK + 60.0);
+    for (int i = 0; i < 4000; ++i) REQUIRE(warm->step(0.01) == Status::Ok); // 40 s, tau 5 s
+    const double t = warm->probe().readings[2].tempK;
+    CHECK(t == Catch::Approx(kAmbientK + 60.0).margin(0.5));
+    const double slope = (warm->probe().voltage(2) - v20) / (t - kAmbientK);
+    CHECK(slope < -1.7e-3);
+    CHECK(slope > -2.3e-3);
 }

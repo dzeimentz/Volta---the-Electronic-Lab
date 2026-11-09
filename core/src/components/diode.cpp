@@ -37,6 +37,7 @@ Diode::Diode(std::string id, NodeId anode, NodeId cathode, DiodeParams params)
     // nicht definiert.
     if (!std::isfinite(m_vcrit) || m_vcrit < m_nVt) m_vcrit = m_nVt;
     m_xMax = pn::linearFromArg(m_isA, m_nVt, kMaxConductance - kJunctionGmin);
+    m_isA0 = m_isA;
     if (!(m_params.bvV > 0.0) || !std::isfinite(m_params.bvV)) m_params.bvV = 0.0;
     if (m_params.bvV > 0.0) {
         if (!(m_params.ibvA > 0.0) || !std::isfinite(m_params.ibvA)) m_params.ibvA = 0.005;
@@ -135,7 +136,29 @@ void Diode::thermal(const SolutionView& x, double dtS) noexcept {
     m_lastDtS = dtS;
     m_lastCurrentA = std::fabs(terminalCurrent(x, 0)); // auch im Durchbruch
     const double p = (x.voltage(terminal(0)) - x.voltage(terminal(1))) * m_lastCurrentA;
-    integrateThermal(m_destroyed ? 0.0 : p, dtS, m_params.thermal);
+    integrateThermal(m_destroyed ? 0.0 : p, dtS, m_params.thermal, m_ambientK);
+}
+
+void Diode::setAmbient(double kelvin) noexcept {
+    m_ambientK = std::isfinite(kelvin) ? std::clamp(kelvin, 233.15, 473.15) : kAmbientK;
+    m_tempCoupled = true;
+}
+
+void Diode::beginSolve(const StampContext& /*ctx*/) noexcept {
+    if (!m_tempCoupled) return;
+    const double t = std::clamp(m_tempK, 200.0, 600.0);
+    if (std::fabs(t - m_tempLinK) < 1e-6) return;
+    m_tempLinK = t;
+    constexpr double kEgV = 1.11;
+    constexpr double kXti = 3.0;
+    const double ratio = t / kAmbientK;
+    const double vt = kBoltzmannJPerK * t / kElementaryChargeC;
+    m_nVt = m_params.n * vt;
+    m_isA = m_isA0 * std::pow(ratio, kXti / m_params.n) * std::exp((ratio - 1.0) * kEgV / m_nVt);
+    if (!(m_isA > 0.0) || !std::isfinite(m_isA)) m_isA = m_isA0;
+    m_vcrit = m_nVt * std::log(m_nVt / (std::sqrt(2.0) * m_isA));
+    if (!std::isfinite(m_vcrit) || m_vcrit < m_nVt) m_vcrit = m_nVt;
+    m_xMax = pn::linearFromArg(m_isA, m_nVt, kMaxConductance - kJunctionGmin);
 }
 
 void Diode::checkLimits(EventQueue& events, std::size_t index, double timeS) noexcept {

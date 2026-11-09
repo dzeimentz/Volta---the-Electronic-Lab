@@ -73,6 +73,11 @@ public:
     double saturationCurrentA() const noexcept { return m_isA; }
     double thermalVoltageV() const noexcept { return m_nVt / m_params.n; }
     double criticalVoltageV() const noexcept { return m_vcrit; }
+    // Umgebungstemperatur am Bauteil (Bedienhandlung, ab Volta 3: Foehn). Erst danach haengt die Kennlinie von der
+    // Sperrschichttemperatur ab (SPICE: Is(T) = Is (T/T0)^(XTI/n) exp((T/T0 - 1) Eg / (n Vt(T))), Vt(T) = kT/q,
+    // Eg 1,11 eV, XTI 3; bei 20 Grad C unveraendert): bei 1 mA etwa -2 mV/K.
+    void setAmbient(double kelvin) noexcept;
+    void beginSolve(const StampContext& ctx) noexcept override;
     // Betrag des Stroms im letzten angenommenen Zeitschritt (IR-LED als Lichtquelle des Fototransistors)
     double currentA() const noexcept { return m_lastCurrentA; }
 
@@ -116,6 +121,10 @@ private:
     double m_lastCurrentA = 0.0;
     double m_lastDtS = 0.0;
     double m_overloadS = 0.0; // bisherige Dauer starker Stromueberlast
+    bool m_tempCoupled = false; // erst nach setAmbient
+    double m_ambientK = kAmbientK;
+    double m_isA0 = 1e-14;      // Saettigungsstrom bei kAmbientK
+    double m_tempLinK = kAmbientK; // Temperatur, fuer die m_isA und m_nVt gelten
 };
 
 } // namespace volta::core

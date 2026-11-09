@@ -116,4 +116,65 @@ private:
     double m_g = 5e-8;
 };
 
+// Kraftsensor (Katalogtyp `kraftsensor`, ab Volta 3): Waegezelle mit vier Dehnungsmessstreifen als Vollbruecke.
+// Die Last biegt den Traeger; zwei Streifen werden gedehnt (R0 (1 + e)), zwei gestaucht (R0 (1 - e)), e = Last *
+// strainPerKg. Anschluesse: 0 plus, 1 minus (Speisung), 2 outP, 3 outN (Brueckenausgang). Zweige: plus-outP R0 (1 - e),
+// outP-minus R0 (1 + e), plus-outN R0 (1 + e), outN-minus R0 (1 - e): Ausgangsdifferenz U_outP - U_outN = U_Speisung * e.
+// Kennwerte wie kleine Waegezellen (1 kOhm-Bruecke, 1 mV/V bei Nennlast 1 kg); ueber maxKg liegt der Traeger am
+// Anschlag (die Anzeige steigt nicht weiter). Die Last ist eine Bedienhandlung (Gewichte aus der Umgebungsleiste).
+struct LoadCellParams {
+    double r0Ohm = 1000.0;
+    double strainPerKg = 1.0e-3; // relative Widerstandsaenderung je kg = Ausgangsdifferenz je Speisespannung
+    double maxKg = 2.0;
+};
+
+class LoadCell final : public ComponentModel {
+public:
+    LoadCell(std::string id, NodeId plus, NodeId minus, NodeId outP, NodeId outN, LoadCellParams params = {},
+             double kg = 0.0);
+
+    void setLoad(double kg) noexcept; // Bedienhandlung
+    double load() const noexcept { return m_kg; }
+
+    void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
+    double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
+    ComponentReading read(const SolutionView& x) const noexcept override;
+
+private:
+    double arm(int k) const noexcept; // Leitwert der Zweige 0 plus-outP, 1 outP-minus, 2 plus-outN, 3 outN-minus
+    LoadCellParams m_params;
+    double m_kg = 0.0;
+};
+
+// Hall-Sensor (Katalogtyp `hallsensor`, ab Volta 3): linearer, ratiometrischer Hall-Baustein (wie SS49E): Ausgang =
+// U_minus + U_Speisung * a mit a = 0,5 + sensPerMt * B (B in mT, positiv, wenn der Suedpol zur Beschriftung zeigt),
+// begrenzt auf minRatio..maxRatio; bei 5 V sind das 14 mV/mT. Ausgang ueber outOhm (Stromquelle aus plus),
+// Eigenverbrauch als Widerstand zwischen plus und minus (ca. 5 mA bei 5 V). Anschluesse: 0 plus, 1 minus, 2 out.
+// Die Flussdichte ist eine Bedienhandlung (Magnet aus der Umgebungsleiste).
+struct HallSensorParams {
+    double sensPerMt = 0.0028;
+    double minRatio = 0.04;
+    double maxRatio = 0.96;
+    double outOhm = 100.0;
+    double supplyOhm = 1000.0;
+};
+
+class HallSensor final : public ComponentModel {
+public:
+    HallSensor(std::string id, NodeId plus, NodeId minus, NodeId out, HallSensorParams params = {}, double mT = 0.0);
+
+    void setField(double mT) noexcept; // Bedienhandlung
+    double field() const noexcept { return m_mT; }
+    double ratio() const noexcept;
+
+    void stamp(MnaSystem& sys, const StampContext& ctx) const noexcept override;
+    double terminalCurrent(const SolutionView& x, std::size_t t) const noexcept override;
+    ComponentReading read(const SolutionView& x) const noexcept override;
+
+private:
+    double outCurrent(const SolutionView& x) const noexcept; // aus plus in den Ausgang
+    HallSensorParams m_params;
+    double m_mT = 0.0;
+};
+
 } // namespace volta::core

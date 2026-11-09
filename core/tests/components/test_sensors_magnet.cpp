@@ -130,3 +130,65 @@ TEST_CASE("Relais zieht mit Verzoegerung an, faellt mit Hysterese ab, Kontakt sc
     run(sim, 0.01);
     CHECK(k.isClosed());
 }
+
+TEST_CASE("Kraftsensor: Vollbruecke, Ausgangsdifferenz = Speisespannung * Dehnung", "[sensor]") {
+    Circuit c;
+    const NodeId plus = c.addNode(), a = c.addNode(), b = c.addNode();
+    c.add<Battery>("B1", plus, kGround);
+    c.add<LoadCell>("KS1", plus, kGround, a, b);
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    auto& k = static_cast<LoadCell&>(sim.circuit().component(1));
+    run(sim, 0.02);
+    const double ub = sim.probe().voltage(plus);
+    CHECK(near(sim.probe().voltage(a) - sim.probe().voltage(b), 0.0, 1e-9));
+    CHECK(near(sim.probe().voltage(a), ub / 2.0, 1e-6));
+    // Bruecke aus vier 1-kOhm-Zweigen: 1 kOhm zwischen plus und minus
+    CHECK(near(sim.probe().readings[1].currentA, ub / 1000.0, 1e-7));
+    for (double kg : {0.1, 0.5, 1.0}) {
+        k.setLoad(kg);
+        run(sim, 0.02);
+        const double diff = sim.probe().voltage(a) - sim.probe().voltage(b);
+        CHECK(diff == Approx(ub * kg * 1e-3).epsilon(1e-6)); // 1 mV/V je kg
+        CHECK(sim.probe().readings[1].displayValue == Approx(diff));
+    }
+    k.setLoad(5.0); // Anschlag bei 2 kg
+    CHECK(k.load() == Approx(2.0));
+    // belastet: Innenwiderstand je Ausgang 500 Ohm
+    k.setLoad(1.0);
+    Circuit c2;
+    const NodeId p2 = c2.addNode(), a2 = c2.addNode(), b2 = c2.addNode();
+    c2.add<Battery>("B1", p2, kGround);
+    c2.add<LoadCell>("KS1", p2, kGround, a2, b2, LoadCellParams{}, 1.0);
+    c2.add<Resistor>("RL", a2, b2, ResistorParams{1000.0});
+    Simulator s2;
+    REQUIRE(s2.setCircuit(std::move(c2)) == Status::Ok);
+    run(s2, 0.02);
+    const double u0 = s2.probe().voltage(p2) * 1e-3;
+    CHECK(s2.probe().voltage(a2) - s2.probe().voltage(b2) == Approx(u0 * 1000.0 / 2000.0).epsilon(2e-3));
+}
+
+TEST_CASE("Hall-Sensor: ratiometrisch, 14 mV/mT bei 5 V, begrenzt", "[sensor]") {
+    Circuit c;
+    const NodeId plus = c.addNode(), out = c.addNode();
+    c.add<Battery>("B1", plus, kGround, BatteryParams{3});
+    c.add<HallSensor>("HS1", plus, kGround, out);
+    c.add<Resistor>("RL", out, kGround, ResistorParams{1e6});
+    Simulator sim;
+    REQUIRE(sim.setCircuit(std::move(c)) == Status::Ok);
+    auto& h = static_cast<HallSensor&>(sim.circuit().component(1));
+    run(sim, 0.02);
+    const double ub = sim.probe().voltage(plus);
+    CHECK(near(sim.probe().voltage(out), ub / 2.0, ub * 1e-4));
+    h.setField(50.0);
+    run(sim, 0.02);
+    CHECK(sim.probe().voltage(out) - ub / 2.0 == Approx(ub * 0.0028 * 50.0).epsilon(5e-3));
+    h.setField(-50.0);
+    run(sim, 0.02);
+    CHECK(ub / 2.0 - sim.probe().voltage(out) == Approx(ub * 0.0028 * 50.0).epsilon(5e-3));
+    h.setField(1000.0);
+    run(sim, 0.02);
+    CHECK(sim.probe().voltage(out) == Approx(0.96 * ub).epsilon(5e-3));
+    // Eigenverbrauch ca. 4,5 mA bei 4,5 V
+    CHECK(-sim.probe().readings[0].currentA == Approx(ub / 1000.0 + sim.probe().voltage(out) / 1e6).epsilon(2e-2));
+}

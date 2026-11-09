@@ -207,4 +207,116 @@ void MoistureProbe::restoreState(const ComponentState& state) noexcept {
     if (std::isfinite(state.internal[0])) m_wet = std::clamp(state.internal[0], 0.0, 1.0);
 }
 
+// ------------------------------------------------------------------ Kraftsensor
+
+LoadCell::LoadCell(std::string id, NodeId plus, NodeId minus, NodeId outP, NodeId outN, LoadCellParams params,
+                   double kg)
+    : ComponentModel(std::move(id), {plus, minus, outP, outN}), m_params(params) {
+    m_params.r0Ohm = sane(m_params.r0Ohm, 1000.0);
+    m_params.strainPerKg = sane(m_params.strainPerKg, 1.0e-3);
+    m_params.maxKg = sane(m_params.maxKg, 2.0);
+    setLoad(kg);
+}
+
+void LoadCell::setLoad(double kg) noexcept {
+    m_kg = std::isfinite(kg) ? std::clamp(kg, 0.0, m_params.maxKg) : 0.0;
+}
+
+double LoadCell::arm(int k) const noexcept {
+    const double e = m_kg * m_params.strainPerKg;
+    const bool stretched = k == 1 || k == 2;
+    return 1.0 / (m_params.r0Ohm * (stretched ? 1.0 + e : 1.0 - e));
+}
+
+void LoadCell::stamp(MnaSystem& sys, const StampContext& /*ctx*/) const noexcept {
+    sys.stampConductance(terminal(0), terminal(2), arm(0));
+    sys.stampConductance(terminal(2), terminal(1), arm(1));
+    sys.stampConductance(terminal(0), terminal(3), arm(2));
+    sys.stampConductance(terminal(3), terminal(1), arm(3));
+}
+
+double LoadCell::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
+    const double vp = x.voltage(terminal(0));
+    const double vm = x.voltage(terminal(1));
+    const double va = x.voltage(terminal(2));
+    const double vb = x.voltage(terminal(3));
+    const double i0 = (vp - va) * arm(0); // plus -> outP
+    const double i1 = (va - vm) * arm(1); // outP -> minus
+    const double i2 = (vp - vb) * arm(2); // plus -> outN
+    const double i3 = (vb - vm) * arm(3); // outN -> minus
+    switch (t) {
+    case 0: return i0 + i2;
+    case 1: return -(i1 + i3);
+    case 2: return i1 - i0;
+    default: return i3 - i2;
+    }
+}
+
+ComponentReading LoadCell::read(const SolutionView& x) const noexcept {
+    ComponentReading r = ComponentModel::read(x);
+    r.level = m_kg / m_params.maxKg;
+    r.displayValue = x.voltage(terminal(2)) - x.voltage(terminal(3)); // Brueckenspannung
+    return r;
+}
+
+// ------------------------------------------------------------------ Hall-Sensor
+
+HallSensor::HallSensor(std::string id, NodeId plus, NodeId minus, NodeId out, HallSensorParams params, double mT)
+    : ComponentModel(std::move(id), {plus, minus, out}), m_params(params) {
+    m_params.sensPerMt = sane(m_params.sensPerMt, 0.0028);
+    m_params.outOhm = sane(m_params.outOhm, 100.0);
+    m_params.supplyOhm = sane(m_params.supplyOhm, 1000.0);
+    if (!(m_params.minRatio >= 0.0 && m_params.maxRatio <= 1.0 && m_params.minRatio < m_params.maxRatio)) {
+        m_params.minRatio = 0.04;
+        m_params.maxRatio = 0.96;
+    }
+    setField(mT);
+}
+
+void HallSensor::setField(double mT) noexcept { m_mT = std::isfinite(mT) ? std::clamp(mT, -2000.0, 2000.0) : 0.0; }
+
+double HallSensor::ratio() const noexcept {
+    return std::clamp(0.5 + m_params.sensPerMt * m_mT, m_params.minRatio, m_params.maxRatio);
+}
+
+void HallSensor::stamp(MnaSystem& sys, const StampContext& /*ctx*/) const noexcept {
+    const NodeId p = terminal(0);
+    const NodeId m = terminal(1);
+    const NodeId o = terminal(2);
+    sys.stampConductance(p, m, 1.0 / m_params.supplyOhm);
+    // i (aus plus in den Ausgang) = G (U_m + a (U_p - U_m) - U_o); Zeilen = abfliessende Stroeme
+    const double g = 1.0 / m_params.outOhm;
+    const double a = ratio();
+    sys.stampNodeMatrix(o, o, g);
+    sys.stampNodeMatrix(o, p, -g * a);
+    sys.stampNodeMatrix(o, m, -g * (1.0 - a));
+    sys.stampNodeMatrix(p, o, -g);
+    sys.stampNodeMatrix(p, p, g * a);
+    sys.stampNodeMatrix(p, m, g * (1.0 - a));
+}
+
+double HallSensor::outCurrent(const SolutionView& x) const noexcept {
+    const double vp = x.voltage(terminal(0));
+    const double vm = x.voltage(terminal(1));
+    const double a = ratio();
+    return (vm + a * (vp - vm) - x.voltage(terminal(2))) / m_params.outOhm;
+}
+
+double HallSensor::terminalCurrent(const SolutionView& x, std::size_t t) const noexcept {
+    const double is = (x.voltage(terminal(0)) - x.voltage(terminal(1))) / m_params.supplyOhm;
+    const double io = outCurrent(x);
+    switch (t) {
+    case 0: return is + io;
+    case 1: return -is;
+    default: return -io;
+    }
+}
+
+ComponentReading HallSensor::read(const SolutionView& x) const noexcept {
+    ComponentReading r = ComponentModel::read(x);
+    r.level = ratio();
+    r.displayValue = m_mT;
+    return r;
+}
+
 } // namespace volta::core
