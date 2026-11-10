@@ -256,6 +256,12 @@ void SimulationBridge::apply(const Action& a) {
     case Action::Type::SetGenAmTone:
         if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setAmTone(a.value);
         break;
+    case Action::Type::SetGenSweepFactor:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setSweep(a.value, g->params().sweepTimeS);
+        break;
+    case Action::Type::SetGenSweepTime:
+        if (auto* g = dynamic_cast<core::FunctionGenerator*>(&c)) g->setSweep(g->params().sweepFactor, a.value);
+        break;
     case Action::Type::SetTracerMin:
         if (auto* t = dynamic_cast<core::CurveTracer*>(&c)) t->setRange(a.value, t->params().maxV);
         break;

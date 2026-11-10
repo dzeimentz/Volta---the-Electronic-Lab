@@ -18,8 +18,10 @@ Flickable {
     readonly property int stage: controller.band === "" || controller.band === "volta1" || controller.band === "volta2"
                                  ? controller.unlockedStage : 99
     readonly property bool v2: controller.band !== "volta1" // Baende ab Volta 2
+    readonly property bool v3: controller.band === "volta3"
     readonly property int firstStage: v2 ? 0 : 3
-    function sheetStage(s) { return v2 ? s.stage2 : s.stage }
+    // stage3: Blaetter, die es erst ab Volta 3 gibt (in den Grundbaenden -1)
+    function sheetStage(s) { return v3 && s.stage3 !== undefined ? s.stage3 : v2 ? s.stage2 : s.stage }
 
     contentHeight: col.implicitHeight + 20
     clip: true
@@ -38,6 +40,12 @@ Flickable {
         {id: "gainT", name: qsTr("Verstärkung Transistor"), stage: -1, stage2: 4},
         {id: "gainOp", name: qsTr("Verstärkung OP"), stage: -1, stage2: 5},
         {id: "t555", name: qsTr("Timer 555"), stage: -1, stage2: 6},
+        {id: "thomson", name: qsTr("Schwingkreis"), stage: -1, stage2: -1, stage3: 0},
+        {id: "quality", name: qsTr("Bandbreite und Güte"), stage: -1, stage2: -1, stage3: 0},
+        {id: "efficiency", name: qsTr("Wirkungsgrad"), stage: -1, stage2: -1, stage3: 0},
+        {id: "db", name: qsTr("Pegel in dB"), stage: -1, stage2: -1, stage3: 0},
+        {id: "duty", name: qsTr("Tastverhältnis"), stage: -1, stage2: -1, stage3: 0},
+        {id: "divide", name: qsTr("Frequenzteiler"), stage: -1, stage2: -1, stage3: 0},
         {id: "plain", name: qsTr("Rechner"), stage: 3, stage2: 0}
     ]
     // Auswahlknoepfe (Einweg/Bruecke, invertierend/nichtinvertierend, astabil/monostabil)
@@ -471,6 +479,126 @@ Flickable {
                 way: tmode.current === "astable"
                      ? (!r.ok ? "" : qsTr("f ≈ 1,44 ÷ ((R1 + 2 · R2) · C). Oben: 0,69 · (R1 + R2) · C, unten: 0,69 · R2 · C. Der Ausgang ist %1 % der Zeit oben.").arg(Math.round(r.duty * 100)))
                      : (!r.monoOk ? "" : qsTr("t ≈ 1,1 · R · C = 1,1 · %1 · %2").arg(calc.fmt(calc.val(tr1), "Ω")).arg(calc.fmt(calc.val(t3), "F")))
+            }
+        }
+
+        // ---------------------------------------------------------- ab Volta 3: Schwingkreis (Thomson)
+        Column {
+            visible: calc.v3 && calc.sheet === "thomson"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Spule und Kondensator bilden einen Schwingkreis. Bei der Resonanzfrequenz schwingt er am stärksten.") }
+            Quantity { id: thl; symbol: "L"; unit: "H"; text: "220µ" }
+            Quantity { id: thc; symbol: "C"; unit: "F"; text: "100p" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("thomson", {L: calc.val(thl), C: calc.val(thc)})
+                value: !r.ok ? "" : "f₀ = " + calc.fmt(r.f, "Hz")
+                way: !r.ok ? "" : qsTr("f₀ = 1 ÷ (2 · π · √(L · C)) = 1 ÷ (2 · π · √(%1 · %2)). Dort sind die Blindwiderstände von Spule und Kondensator gleich groß: je %3.")
+                                  .arg(calc.fmt(calc.val(thl), "H")).arg(calc.fmt(calc.val(thc), "F")).arg(calc.fmt(r.X, "Ω"))
+            }
+        }
+
+        // ---------------------------------------------------------- ab Volta 3: Bandbreite und Güte
+        Column {
+            visible: calc.v3 && calc.sheet === "quality"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Lies am Frequenzgang-Schreiber die untere und die obere Grenzfrequenz ab.") }
+            Quantity { id: qfu; symbol: "fu"; unit: "Hz"; text: "900" }
+            Quantity { id: qfo; symbol: "fo"; unit: "Hz"; text: "1,1k" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("quality", {fu: calc.val(qfu), fo: calc.val(qfo)})
+                value: !r.ok ? "" : qsTr("B = %1 · f₀ = %2 · Q = %3").arg(calc.fmt(r.B, "Hz")).arg(calc.fmt(r.f0, "Hz")).arg(calc.plain(r.Q))
+                way: !r.ok ? "" : qsTr("B = fo − fu. f₀ = √(fu · fo). Q = f₀ ÷ B. Je größer die Güte, desto schmaler und spitzer die Kurve.")
+            }
+            Body {
+                visible: calc.val(qfo) > 0 && calc.val(qfu) >= calc.val(qfo)
+                text: qsTr("Die obere Grenzfrequenz fo muss größer sein als die untere fu.")
+                color: "#C62828"
+            }
+        }
+
+        // ---------------------------------------------------------- ab Volta 3: Wirkungsgrad
+        Column {
+            visible: calc.v3 && calc.sheet === "efficiency"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Miss Spannung und Strom am Eingang und am Ausgang.") }
+            Quantity { id: eue; symbol: "Ue"; unit: "V"; text: "9" }
+            Quantity { id: eie; symbol: "Ie"; unit: "A"; text: "100m" }
+            Quantity { id: eua; symbol: "Ua"; unit: "V"; text: "5" }
+            Quantity { id: eia; symbol: "Ia"; unit: "A"; text: "100m" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("efficiency", {Ue: calc.val(eue), Ie: calc.val(eie), Ua: calc.val(eua), Ia: calc.val(eia)})
+                warn: r.ok && r.impossible
+                value: !r.ok ? "" : r.impossible ? qsTr("Heraus kommt mehr, als hineingeht. Prüfe deine Messung.")
+                                                 : "η = " + Math.round(r.eta * 100) + " % · " + qsTr("Verlust %1").arg(calc.fmt(r.loss, "W"))
+                way: !r.ok || r.impossible ? "" : qsTr("η = Pab ÷ Pzu = (%1 · %2) ÷ (%3 · %4) = %5 ÷ %6. Der Verlust wird zu Wärme.")
+                                                  .arg(calc.fmt(calc.val(eua), "V")).arg(calc.fmt(calc.val(eia), "A"))
+                                                  .arg(calc.fmt(calc.val(eue), "V")).arg(calc.fmt(calc.val(eie), "A"))
+                                                  .arg(calc.fmt(r.Pout, "W")).arg(calc.fmt(r.Pin, "W"))
+            }
+        }
+
+        // ---------------------------------------------------------- ab Volta 3: Pegel in dB
+        Column {
+            visible: calc.v3 && calc.sheet === "db"
+            width: parent.width
+            spacing: 8
+            Choice {
+                id: dbmode
+                current: "forward"
+                options: [{id: "forward", name: qsTr("Spannungen → dB")}, {id: "back", name: qsTr("dB → Spannung")}]
+            }
+            Quantity { id: dbue; symbol: "Ue"; unit: "V"; text: "1" }
+            Quantity { id: dbua; visible: dbmode.current === "forward"; symbol: "Ua"; unit: "V"; text: "0,5" }
+            Quantity { id: dbv; visible: dbmode.current === "back"; symbol: "dB"; unit: "dB"; text: "−3" }
+            Result {
+                readonly property var r: dbmode.current === "forward"
+                                         ? calc.controller.formulaSheet("db", {mode: "forward", Ue: calc.val(dbue), Ua: calc.val(dbua)})
+                                         : calc.controller.formulaSheet("db", dbEval.ok ? {mode: "back", dB: dbEval.value, Ue: calc.val(dbue)} : {mode: "back"})
+                readonly property var dbEval: calc.controller.formulaEval(dbv.text)
+                value: !r.ok ? "" : dbmode.current === "forward"
+                                    ? calc.plain(Math.round(r.dB * 10) / 10 + 0) + " dB"
+                                    : "Ua ÷ Ue = " + calc.plain(r.v) + (calc.val(dbue) > 0 ? " · Ua = " + calc.fmt(r.Ua, "V") : "")
+                way: !r.ok ? "" : dbmode.current === "forward"
+                                  ? qsTr("Pegel = 20 · lg(Ua ÷ Ue) = 20 · lg(%1). Minus heißt: Am Ausgang kommt weniger an.").arg(calc.plain(r.v))
+                                  : qsTr("Ua ÷ Ue = 10 hoch (dB ÷ 20). +20 dB = zehnmal, +6 dB ≈ doppelt, −3 dB ≈ 71 %.")
+            }
+        }
+
+        // ---------------------------------------------------------- ab Volta 3: Tastverhaeltnis
+        Column {
+            visible: calc.v3 && calc.sheet === "duty"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Lies im Oszilloskop oder Logikanalysator ab, wie lange das Signal oben und unten ist.") }
+            Quantity { id: dth; symbol: "t oben"; unit: "s"; text: "1m" }
+            Quantity { id: dtl; symbol: "t unten"; unit: "s"; text: "3m" }
+            Quantity { id: dtu; symbol: "U"; unit: "V"; hint: qsTr("leer") }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("duty", {th: calc.val(dth), tl: calc.val(dtl)})
+                value: !r.ok ? "" : qsTr("%1 % oben · f = %2").arg(Math.round(r.duty * 100)).arg(calc.fmt(r.f, "Hz"))
+                                    + (calc.val(dtu) > 0 ? " · " + qsTr("Mittelwert %1").arg(calc.fmt(r.duty * calc.val(dtu), "V")) : "")
+                way: !r.ok ? "" : qsTr("Tastverhältnis = t oben ÷ T, T = t oben + t unten = %1. f = 1 ÷ T.").arg(calc.fmt(r.T, "s"))
+                                  + (calc.val(dtu) > 0 ? " " + qsTr("Mittelwert = Tastverhältnis · U.") : "")
+            }
+        }
+
+        // ---------------------------------------------------------- ab Volta 3: Frequenzteiler
+        Column {
+            visible: calc.v3 && calc.sheet === "divide"
+            width: parent.width
+            spacing: 8
+            Body { text: qsTr("Ein Zähler teilt die Frequenz am Takteingang.") }
+            Quantity { id: dvf; symbol: "f"; unit: "Hz"; text: "1k" }
+            Quantity { id: dvn; symbol: "n"; unit: ""; text: "2" }
+            Result {
+                readonly property var r: calc.controller.formulaSheet("divide", {f: calc.val(dvf), n: calc.val(dvn)})
+                value: !r.ok ? "" : "f ÷ n = " + calc.fmt(r.out, "Hz")
+                way: !r.ok ? "" : qsTr("Zähler: Q0 %1, Q1 %2, Q2 %3, Q3 %4 – jeder Ausgang halbiert. Dekadenzähler: jeder Ausgang %5.")
+                                  .arg(calc.fmt(r.q[0], "Hz")).arg(calc.fmt(r.q[1], "Hz")).arg(calc.fmt(r.q[2], "Hz"))
+                                  .arg(calc.fmt(r.q[3], "Hz")).arg(calc.fmt(r.decade, "Hz"))
             }
         }
 

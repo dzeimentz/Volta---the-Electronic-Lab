@@ -266,4 +266,51 @@ double rippleV(double ampere, double farad, double hz, bool bridge) {
     return ampere / ((bridge ? 2.0 : 1.0) * hz * farad);
 }
 
+double thomsonHz(double henry, double farad) {
+    if (!(henry > 0.0) || !(farad > 0.0)) return 0.0;
+    return 1.0 / (2.0 * std::acos(-1.0) * std::sqrt(henry * farad));
+}
+
+Band band(double lowHz, double highHz) {
+    Band b;
+    if (!(lowHz > 0.0) || !(highHz > lowHz)) return b;
+    b.bandwidthHz = highHz - lowHz;
+    b.centerHz = std::sqrt(lowHz * highHz);
+    b.quality = b.centerHz / b.bandwidthHz;
+    b.ok = true;
+    return b;
+}
+
+Efficiency efficiency(double inV, double inA, double outV, double outA) {
+    Efficiency e;
+    e.inW = inV * inA;
+    e.outW = outV * outA;
+    if (!(e.inW > 0.0) || e.outW < 0.0) return e;
+    e.lossW = e.inW - e.outW;
+    e.eta = e.outW / e.inW;
+    e.impossible = e.outW > e.inW * (1.0 + 1e-9);
+    e.ok = true;
+    return e;
+}
+
+bool decibel(double inV, double outV, double& db) {
+    if (!(inV > 0.0) || !(outV > 0.0)) return false;
+    db = 20.0 * std::log10(outV / inV);
+    return true;
+}
+
+double ratioFromDb(double db) { return std::pow(10.0, db / 20.0); }
+
+Duty dutyCycle(double highS, double lowS) {
+    Duty d;
+    if (highS < 0.0 || lowS < 0.0 || !(highS + lowS > 0.0)) return d;
+    d.periodS = highS + lowS;
+    d.hz = 1.0 / d.periodS;
+    d.duty = highS / d.periodS;
+    d.ok = true;
+    return d;
+}
+
+double divideHz(double hz, double n) { return hz > 0.0 && n >= 1.0 ? hz / n : 0.0; }
+
 } // namespace volta::model::formula

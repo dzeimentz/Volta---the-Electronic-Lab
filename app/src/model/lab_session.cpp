@@ -232,7 +232,7 @@ void LabSession::updateScope() {
     c.logicIds = logicProbes();
     if (std::any_of(c.logicIds.begin(), c.logicIds.end(), [](const std::string& s) { return !s.empty(); })) {
         c.logicIntervalS = logicWindowS() / static_cast<double>(kLogicPoints);
-        c.logicCapacity = kLogicPoints + 20;
+        c.logicCapacity = 2 * kLogicPoints + 20; // zwei Fenster: der Trigger findet ein ganzes Bild mit Vorlauf
         if (m_logicFine) c.stepS = std::min(c.stepS, kAudioStepS);
     } else {
         c.logicIds = {};
@@ -778,6 +778,14 @@ void LabSession::setGenAmDepth(double depth) {
 void LabSession::setGenAmTone(double hz) {
     m_board.desk.genAmToneHz = std::isfinite(hz) ? std::clamp(hz, 20.0, 1000.0) : 100.0;
     m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenAmTone, m_board.desk.genAmToneHz});
+}
+
+void LabSession::setGenSweep(double factor, double timeS) {
+    m_board.desk.genSweepFactor = std::isfinite(factor) ? std::clamp(factor, 1.0, 1000.0) : 1.0;
+    m_board.desk.genSweepTimeS = std::isfinite(timeS) ? std::clamp(timeS, 0.1, 20.0) : 1.0;
+    m_bars.clear();
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenSweepFactor, m_board.desk.genSweepFactor});
+    m_bridge.post({desk_id::kGenerator, sim::Action::Type::SetGenSweepTime, m_board.desk.genSweepTimeS});
 }
 
 void LabSession::setAudioStream(std::shared_ptr<AudioStream> stream) {

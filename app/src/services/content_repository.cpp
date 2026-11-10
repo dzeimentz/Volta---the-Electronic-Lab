@@ -255,6 +255,8 @@ bool ContentRepository::parseTemplate(const QJsonObject& vorlage, const model::C
         out.desk.genOffsetV = std::clamp(g.value(QStringLiteral("gleichanteil_V")).toDouble(0.0), -4.0, 4.0);
         out.desk.genAmDepth = std::clamp(g.value(QStringLiteral("am_tiefe")).toDouble(0.0), 0.0, 1.0);
         out.desk.genAmToneHz = std::clamp(g.value(QStringLiteral("am_ton_Hz")).toDouble(100.0), 20.0, 1000.0);
+        out.desk.genSweepFactor = std::clamp(g.value(QStringLiteral("wobbel_faktor")).toDouble(1.0), 1.0, 1000.0);
+        out.desk.genSweepTimeS = std::clamp(g.value(QStringLiteral("wobbel_zeit_s")).toDouble(1.0), 0.1, 20.0);
     }
     if (pult.contains(QStringLiteral("kennlinienschreiber"))) {
         const QJsonObject k = pult.value(QStringLiteral("kennlinienschreiber")).toObject();

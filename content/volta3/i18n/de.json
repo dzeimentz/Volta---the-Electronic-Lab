@@ -1291,5 +1291,17 @@
   "exp3_0_3_mehr": "Die Ladekurve hat eine Zeitkonstante τ = R · C, hier 1 kΩ · 10 nF = 10 µs. Nach einer Zeitkonstante ist der Kondensator zu etwa 63 % geladen, nach fünf fast ganz.",
   "exp3_0_3_w1": "Stelle die Lupe auf ×100. Wie lang ist jetzt ein Kästchen?",
   "exp3_0_3_w2": "Ersetze 1 kΩ durch 10 kΩ. Kommt der Kondensator noch ganz hinauf?",
-  "exp3_0_3_echt": "Echte Oszilloskope zeigen auch sehr schnelle Signale, ganz ohne Zeitlupe. Sie tasten dafür viele Millionen Mal in der Sekunde ab."
+  "exp3_0_3_echt": "Echte Oszilloskope zeigen auch sehr schnelle Signale, ganz ohne Zeitlupe. Sie tasten dafür viele Millionen Mal in der Sekunde ab.",
+  "lex_begriff_modulation_name": "Modulation",
+  "lex_begriff_modulation": "Modulation heißt: Ein Signal reitet auf einem anderen. Beim Radio verändert die Musik eine schnelle Trägerschwingung. Bei AM ändert sich ihre Höhe, bei FM ihre Frequenz. Der Empfänger holt die Musik wieder heraus. Das nennt man Demodulation.",
+  "lex_begriff_resonanz_name": "Resonanz",
+  "lex_begriff_resonanz": "Resonanz heißt: Ein Schwingkreis schwingt bei einer bestimmten Frequenz besonders stark mit. Das ist seine Resonanzfrequenz f₀. Für Spule und Kondensator gilt f₀ = 1 : (2 · π · √(L · C)). So wählt dein Radio einen Sender aus.",
+  "lex_begriff_wirkungsgrad_name": "Wirkungsgrad",
+  "lex_begriff_wirkungsgrad": "Der Wirkungsgrad η sagt, wie viel von der hineingesteckten Leistung nützlich wieder herauskommt: η = Pab : Pzu. Der Rest wird zu Wärme. Ein Spannungsregler schafft an 9 V für 5 V nur etwa 55 %. Ein Schaltwandler schafft oft 80 % und mehr.",
+  "lex_begriff_pegel_name": "Pegel",
+  "lex_begriff_pegel": "Ein Pegel vergleicht zwei Spannungen in Dezibel (dB). 20 dB mehr heißt: zehnmal so viel Spannung. 6 dB mehr ist etwa doppelt so viel. 3 dB weniger sind etwa 71 %. In der Digitaltechnik heißt Pegel auch einfach H oder L.",
+  "lex_begriff_flanke_name": "Flanke",
+  "lex_begriff_flanke": "Eine Flanke ist der Augenblick, in dem ein digitales Signal springt. Von L nach H ist es die steigende Flanke, von H nach L die fallende. Ein Zähler zählt bei einer Flanke weiter, nicht die ganze Zeit, in der das Signal H ist.",
+  "lex_begriff_prellen_name": "Prellen",
+  "lex_begriff_prellen": "Ein Taster schließt nicht sauber. Seine Kontakte federn ein paar Mal hin und her, bevor sie ruhig liegen. Das dauert nur 1 bis 3 ms. Ein Zähler sieht dabei mehrere Flanken und zählt zu viel. Ein Kondensator oder ein Schmitt-Trigger glättet das. Das heißt Entprellen."
 }

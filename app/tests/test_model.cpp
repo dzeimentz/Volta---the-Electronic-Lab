@@ -1178,6 +1178,31 @@ private slots:
         QVERIFY(approx(f::rippleV(0.02, 100e-6, 50.0, false), 4.0));
         QVERIFY(approx(f::rippleV(0.02, 100e-6, 50.0, true), 2.0));
         QCOMPARE(f::rippleV(0.0, 100e-6, 50.0, true), 0.0);
+        // ab Volta 3: Schwingkreis 220 uH / 100 pF -> 1,073 MHz (Mittelwelle)
+        QVERIFY(std::fabs(f::thomsonHz(220e-6, 100e-12) - 1.0730e6) < 1e2);
+        QCOMPARE(f::thomsonHz(0.0, 100e-12), 0.0);
+        // Bandbreite 900 Hz .. 1100 Hz: B 200 Hz, f0 = Wurzel(990000) = 995 Hz, Q ~ 4,97
+        const auto b = f::band(900.0, 1100.0);
+        QVERIFY(b.ok && approx(b.bandwidthHz, 200.0) && std::fabs(b.centerHz - 994.987) < 1e-3);
+        QVERIFY(std::fabs(b.quality - 4.97494) < 1e-4);
+        QVERIFY(!f::band(1100.0, 900.0).ok);
+        // Wirkungsgrad: 9 V, 0,1 A hinein, 5 V, 0,1 A heraus -> 55,6 %, 0,4 W Verlust
+        const auto e = f::efficiency(9.0, 0.1, 5.0, 0.1);
+        QVERIFY(e.ok && !e.impossible && std::fabs(e.eta - 5.0 / 9.0) < 1e-12 && approx(e.lossW, 0.4));
+        QVERIFY(f::efficiency(5.0, 0.1, 9.0, 0.1).impossible);
+        // Pegel: zehnfache Spannung = 20 dB, halbe ~ -6,02 dB
+        double db = 0.0;
+        QVERIFY(f::decibel(0.1, 1.0, db) && approx(db, 20.0));
+        QVERIFY(f::decibel(2.0, 1.0, db) && std::fabs(db + 6.0206) < 1e-4);
+        QVERIFY(!f::decibel(0.0, 1.0, db));
+        QVERIFY(std::fabs(f::ratioFromDb(-3.0) - 0.70795) < 1e-5);
+        // Tastverhaeltnis: 1 ms oben, 3 ms unten -> 25 %, 250 Hz
+        const auto d = f::dutyCycle(1e-3, 3e-3);
+        QVERIFY(d.ok && approx(d.duty, 0.25) && approx(d.hz, 250.0) && approx(d.periodS, 4e-3));
+        QVERIFY(!f::dutyCycle(0.0, 0.0).ok);
+        // Frequenzteiler
+        QVERIFY(approx(f::divideHz(1000.0, 16.0), 62.5));
+        QCOMPARE(f::divideHz(1000.0, 0.0), 0.0);
     }
 
     void errorsAreReported() {

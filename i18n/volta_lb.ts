@@ -1802,6 +1802,141 @@
         <source>Vorsätze: p = billionstel, n = milliardstel, µ = millionstel, m = tausendstel, k = tausend, M = Million.</source>
         <translation>Virpäss: p = Billiounstel, n = Milliardstel, µ = Milliounstel, m = Dausendstel, k = Dausend, M = Millioun.</translation>
     </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Schwingkreis</source>
+        <translation>Schwéngkrees</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Bandbreite und Güte</source>
+        <translation>Bandbreet a Gidd</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Wirkungsgrad</source>
+        <translation>Wierkungsgrad</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Pegel in dB</source>
+        <translation>Pegel an dB</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Tastverhältnis</source>
+        <translation>Tastverhältnis</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Frequenzteiler</source>
+        <translation>Frequenzdeeler</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Spule und Kondensator bilden einen Schwingkreis. Bei der Resonanzfrequenz schwingt er am stärksten.</source>
+        <translation>Spull a Kondensator bilden e Schwéngkrees. Bei der Resonanzfrequenz schwéngt en am stäerksten.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>f₀ = 1 ÷ (2 · π · √(L · C)) = 1 ÷ (2 · π · √(%1 · %2)). Dort sind die Blindwiderstände von Spule und Kondensator gleich groß: je %3.</source>
+        <translation>f₀ = 1 ÷ (2 · π · √(L · C)) = 1 ÷ (2 · π · √(%1 · %2)). Do si d&apos;Blindwidderstänn vu Spull a Kondensator gläich grouss: all %3.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Lies am Frequenzgang-Schreiber die untere und die obere Grenzfrequenz ab.</source>
+        <translation>Liess um Frequenzgang-Schreiwer déi ënnescht an déi iewescht Grenzfrequenz of.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>B = %1 · f₀ = %2 · Q = %3</source>
+        <translation>B = %1 · f₀ = %2 · Q = %3</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>B = fo − fu. f₀ = √(fu · fo). Q = f₀ ÷ B. Je größer die Güte, desto schmaler und spitzer die Kurve.</source>
+        <translation>B = fo − fu. f₀ = √(fu · fo). Q = f₀ ÷ B. Wat d&apos;Gidd méi grouss ass, wat d&apos;Kurve méi schmuel a méi spatz ass.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Die obere Grenzfrequenz fo muss größer sein als die untere fu.</source>
+        <translation>Déi iewescht Grenzfrequenz fo muss méi grouss si wéi déi ënnescht fu.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Miss Spannung und Strom am Eingang und am Ausgang.</source>
+        <translation>Miess Spannung a Stroum um Agang an um Ausgang.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Heraus kommt mehr, als hineingeht. Prüfe deine Messung.</source>
+        <translation>Et kënnt méi eraus, wéi erageet. Kuck deng Miessung no.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Verlust %1</source>
+        <translation>Verloscht %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>η = Pab ÷ Pzu = (%1 · %2) ÷ (%3 · %4) = %5 ÷ %6. Der Verlust wird zu Wärme.</source>
+        <translation>η = Pof ÷ Pzou = (%1 · %2) ÷ (%3 · %4) = %5 ÷ %6. De Verloscht gëtt zu Wäermt.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Spannungen → dB</source>
+        <translation>Spannungen → dB</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>dB → Spannung</source>
+        <translation>dB → Spannung</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Pegel = 20 · lg(Ua ÷ Ue) = 20 · lg(%1). Minus heißt: Am Ausgang kommt weniger an.</source>
+        <translation>Pegel = 20 · lg(Ua ÷ Ue) = 20 · lg(%1). Minus heescht: Um Ausgang kënnt manner un.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Ua ÷ Ue = 10 hoch (dB ÷ 20). +20 dB = zehnmal, +6 dB ≈ doppelt, −3 dB ≈ 71 %.</source>
+        <translation>Ua ÷ Ue = 10 hoch (dB ÷ 20). +20 dB = zéngmol, +6 dB ≈ duebel, −3 dB ≈ 71 %.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Lies im Oszilloskop oder Logikanalysator ab, wie lange das Signal oben und unten ist.</source>
+        <translation>Liess um Oszilloskop oder um Logikanalysator of, wéi laang d&apos;Signal uewen an ënnen ass.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>%1 % oben · f = %2</source>
+        <translation>%1 % uewen · f = %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Tastverhältnis = t oben ÷ T, T = t oben + t unten = %1. f = 1 ÷ T.</source>
+        <translation>Tastverhältnis = t uewen ÷ T, T = t uewen + t ënnen = %1. f = 1 ÷ T.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Mittelwert %1</source>
+        <translation>Mëttelwäert %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Mittelwert = Tastverhältnis · U.</source>
+        <translation>Mëttelwäert = Tastverhältnis · U.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Ein Zähler teilt die Frequenz am Takteingang.</source>
+        <translation>En Zieler deelt d&apos;Frequenz um Taktagang.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/FormulaCalculator.qml" line="1"/>
+        <source>Zähler: Q0 %1, Q1 %2, Q2 %3, Q3 %4 – jeder Ausgang halbiert. Dekadenzähler: jeder Ausgang %5.</source>
+        <translation>Zieler: Q0 %1, Q1 %2, Q2 %3, Q3 %4 – all Ausgang hallefen. Dekadenzieler: all Ausgang %5.</translation>
+    </message>
 </context>
 <context>
     <name>GeneratorPanel</name>
@@ -1962,6 +2097,46 @@
         <location filename="../app/qml/GeneratorPanel.qml" line="295"/>
         <source>Der Generator ist aus. Schalte den Hauptschalter ein.</source>
         <translation>De Generator ass aus. Schalt den Haaptschalter un.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>Wobbeln: %1 bis %2 in %3 s</source>
+        <translation>Wobbelen: %1 bis %2 an %3 s</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>Wobbeln: aus</source>
+        <translation>Wobbelen: aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>aus</source>
+        <translation>aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>Wobbeln aus</source>
+        <translation>Wobbelen aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>Wobbeln bis zum %1-Fachen</source>
+        <translation>Wobbelen bis zum %1-Fachen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>%1 s</source>
+        <translation>%1 s</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>Durchlauf %1 s</source>
+        <translation>Duerchlaf %1 s</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/GeneratorPanel.qml" line="1"/>
+        <source>Die Frequenz steigt immer wieder vom eingestellten Wert bis zum Endwert. Am Oszilloskop siehst du so, bei welcher Frequenz deine Schaltung am meisten durchlässt.</source>
+        <translation>D&apos;Frequenz klëmmt ëmmer erëm vum agestallte Wäert bis zum Ennwäert. Um Oszilloskop gesäis du esou, bei wéi enger Frequenz deng Schaltung am meeschte duerchléisst.</translation>
     </message>
 </context>
 <context>
@@ -2476,6 +2651,156 @@
         <location filename="../app/qml/HelpDialog.qml" line="350"/>
         <source>Am Computer: Strg+Z macht rückgängig, Strg+Y wiederholt, Entf entfernt die Auswahl. Mit der Maus öffnet ein Rechtsklick das Menü.</source>
         <translation>Um Computer: Ctrl+Z mécht réckgängeg, Ctrl+Y widderhëlt, Del läscht d&apos;Auswiel. Mat der Maus mécht e Rietsklick de Menü op.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Hallo, ich bin Tick! Willkommen in Volta 3. Hier geht es um Schwingkreise und Radio, um Stromversorgung, Thyristoren, Sensoren, Logik und Zähler. Was passiert, rechnet Volta wirklich aus.</source>
+        <translation>Moien, ech sinn Tick! Wëllkomm am Volta 3. Hei geet et ëm Schwéngkreeser a Radio, ëm Stroumversuergung, Thyristoren, Sensoren, Logik an Zieler. Wat geschitt, rechent Volta wierklech aus.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Farbcode und E-Reihen: Welche Widerstände gibt es?</source>
+        <translation>Faarfcode an E-Reien: Wéi eng Widderstänn gëtt et?</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Lexikon: Was macht welches Bauteil und welches Modul? Dazu Begriffe wie Resonanz, Modulation, Pegel, Flanke und Prellen.</source>
+        <translation>Lexikon: Wat mécht all Bauelement an all Modul? Dozou Begrëffer wéi Resonanz, Modulatioun, Pegel, Flank a Prellen.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Rechner: Formeln mit Rechenweg. Neu sind Schwingkreis, Bandbreite und Güte, Wirkungsgrad, Pegel in dB, Tastverhältnis und Frequenzteiler.</source>
+        <translation>Rechner: Formele mam Rechewee. Nei si Schwéngkrees, Bandbreet a Gidd, Wierkungsgrad, Pegel an dB, Tastverhältnis a Frequenzdeeler.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Fehlersuche: Ich prüfe deinen Aufbau. Ich kenne jetzt auch Fallen wie ein offenes Gate, eine Spule ohne Freilaufdiode oder einen prellenden Taster.</source>
+        <translation>Feelersich: Ech kucken däin Opbau no. Ech kennen elo och Fale wéi en oppent Gate, eng Spull ouni Fräilafdiod oder en Taster, deen prellt.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Zahlensysteme: dieselbe Zahl binär, dezimal und hexadezimal.</source>
+        <translation>Zuelesystemer: déi selwecht Zuel binär, dezimal an hexadezimal.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Frequenzgang und Lupe</source>
+        <translation>Frequenzgang a Lupp</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Welche Frequenzen lässt deine Schaltung durch? Der Frequenzgang-Schreiber zeigt es dir für alle Frequenzen auf einmal.</source>
+        <translation>Wéi eng Frequenze léisst deng Schaltung duerch? De Frequenzgang-Schreiwer weist der et fir all Frequenzen op eemol.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Verbinde den Generator G mit dem Eingang deiner Schaltung und stecke den Tastkopf K1 an den Ausgang.</source>
+        <translation>Verbann de Generator G mam Agang vun denger Schaltung a steech den Tastkapp K1 un den Ausgang.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Tippe in der Werkzeugleiste auf »dB«. Die Kurve reicht von 1 Hz bis 10 MHz. Oben ist viel Spannung, unten wenig.</source>
+        <translation>Tipp an der Geschirleescht op »dB«. D&apos;Kurve geet vun 1 Hz bis 10 MHz. Uewen ass vill Spannung, ënne wéineg.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Die Marken f₀ und fg zeigen Resonanz und Grenzfrequenz. Daneben stehen sie als Zahl, dazu Bandbreite und Güte.</source>
+        <translation>D&apos;Marke f₀ an fg weisen Resonanz a Grenzfrequenz. Dernieft stinn se als Zuel, dozou Bandbreet a Gidd.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Bei Schaltungen, die schalten (zum Beispiel mit Leuchtdioden oder Logik), zeige ich einen Hinweis statt einer Kurve.</source>
+        <translation>Bei Schaltungen, déi schalten (zum Beispill mat Liichtdioden oder Logik), weisen ech en Hiweis amplaz vun enger Kurve.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Die Lupe im Oszilloskop dehnt schnelle Vorgänge ×10, ×100 oder ×1000. Gedehnte Bilder haben einen gestrichelten Rahmen und den Faktor.</source>
+        <translation>D&apos;Lupp am Oszilloskop deent séier Virgäng ×10, ×100 oder ×1000. Gedeent Biller hunn e gestrichelte Rumm an de Faktor.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Generator: Modulation und Wobbeln</source>
+        <translation>Generator: Modulatioun a Wobbelen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Der Generator kann in Volta 3 zwei neue Dinge: einen Ton aufprägen und seine Frequenz selbst durchlaufen lassen.</source>
+        <translation>De Generator kann am Volta 3 zwou nei Saachen: en Toun opdrécken a seng Frequenz selwer duerchlafe loossen.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Modulation: Der Regler macht die Kurve im Takt eines Tons größer und kleiner. So arbeitet ein Mittelwellensender.</source>
+        <translation>Modulatioun: De Regler mécht d&apos;Kurve am Takt vun engem Toun méi grouss a méi kleng. Esou schafft e Mëttelwellesender.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Wobbeln: Die Frequenz steigt immer wieder vom eingestellten Wert bis zum 10-, 100- oder 1000-Fachen, in 1, 5 oder 10 Sekunden.</source>
+        <translation>Wobbelen: D&apos;Frequenz klëmmt ëmmer erëm vum agestallte Wäert bis zum 10-, 100- oder 1000-Fachen, an 1, 5 oder 10 Sekonnen.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Hängt ein Schwingkreis am Generator, wird die Kurve im Oszilloskop beim Wobbeln dort am größten, wo er in Resonanz ist.</source>
+        <translation>Hänkt e Schwéngkrees um Generator, gëtt d&apos;Kurve am Oszilloskop beim Wobbelen do am gréissten, wou en a Resonanz ass.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Senderanlage und Radio</source>
+        <translation>Senderanlag a Radio</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Im Pult steht eine kleine Senderanlage. Sie sendet nur in Volta – eigene Aufnahmen, kein echtes Radio.</source>
+        <translation>Am Pult steet eng kleng Senderanlag. Si sent just am Volta – eegen Opnamen, kee richtege Radio.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Hole die Senderanlage aus dem Gerätefach ins Pult. Ihr Feld ANT ist die Antenne: Verbinde es mit deinem Empfänger.</source>
+        <translation>Hol d&apos;Senderanlag aus dem Gerätefach an d&apos;Pult. Hiert Feld ANT ass d&apos;Antenn: Verbann et mat dengem Empfänger.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Im Senderfenster schaltest du die Sender ein und aus.</source>
+        <translation>An der Senderfënster schalts du d&apos;Sender un an aus.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Mit Spule und Drehkondensator stimmst du deinen Empfänger ab. Der Drehknopf erscheint, wenn du den Drehkondensator antippst.</source>
+        <translation>Mat Spull an Dréikondensator stëmms du däin Empfänger of. Den Dréiknäppchen erschéngt, wann s du den Dréikondensator untipps.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Logikanalysator</source>
+        <translation>Logikanalysator</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>In der Digitaltechnik zählt nur H oder L. Der Logikanalysator zeigt viele Signale untereinander.</source>
+        <translation>An der Digitaltechnik zielt just H oder L. De Logikanalysator weist vill Signaler ënnerteneen.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Stecke Logik-Tastköpfe LA1 bis LA8 auf Felder. Jeder bekommt eine Zeile. H liegt oben, L unten, dazwischen das gestreifte Band »?«.</source>
+        <translation>Steech Logik-Tastkäpp LA1 bis LA8 op Felder. All Tastkapp kritt eng Zeil. H läit uewen, L ënnen, dertëscht dat gestreift Band »?«.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>»fein« zeigt 20 ms (da siehst du das Prellen), »grob« zeigt 5 s.</source>
+        <translation>»fein« weist 20 ms (do gesäis du d&apos;Prellen), »grob« weist 5 s.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Trigger: Wähle je Kanal H, L, ↑ (steigende) oder ↓ (fallende Flanke). Dann steht das Bild still, der Auslöser liegt bei T.</source>
+        <translation>Trigger: Wiel fir all Kanal H, L, ↑ (steigend) oder ↓ (falend Flank). Da steet d&apos;Bild roueg, den Ausléiser läit bei T.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Zeitmarken: Tippe auf die Spuren für A und B. Darüber steht der Abstand in µs oder ms.</source>
+        <translation>Zäitmarken: Tipp op d&apos;Spuere fir A a B. Driwwer steet den Ofstand an µs oder ms.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/HelpDialog.qml" line="1"/>
+        <source>Die Schwellen für H und L stellst du selbst ein. Sie gelten nur für die Anzeige.</source>
+        <translation>D&apos;Schwelle fir H an L stells du selwer an. Si gëllen just fir d&apos;Unzeig.</translation>
     </message>
 </context>
 <context>
@@ -3300,6 +3625,141 @@
         <source>Stecke einen Logik-Tastkopf auf ein Feld.</source>
         <translation>Steck e Logik-Tastkapp op e Feld.</translation>
     </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Trigger: aus</source>
+        <translation>Trigger: aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Trigger: wartet</source>
+        <translation>Trigger: waart</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Trigger: ausgelöst</source>
+        <translation>Trigger: ausgeléist</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Trigger einstellen</source>
+        <translation>Trigger astellen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H über %1 · L unter %2</source>
+        <translation>H iwwer %1 · L ënner %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Schwellen einstellen</source>
+        <translation>Schwellen astellen</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Tippe auf die Spuren: Marke A, dann B.</source>
+        <translation>Tipp op d&apos;Spueren: Mark A, dann B.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Marke A gesetzt. Tippe für Marke B.</source>
+        <translation>Mark A gesat. Tipp fir Mark B.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>A–B: %1 · 1 ÷ Δt = %2</source>
+        <translation>A–B: %1 · 1 ÷ Δt = %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>A–B: 0 s</source>
+        <translation>A–B: 0 s</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Marken weg</source>
+        <translation>Marke fort</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Trigger %1: %2</source>
+        <translation>Trigger %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>egal</source>
+        <translation>egal</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H</source>
+        <translation>H</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>L</source>
+        <translation>L</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>steigende Flanke</source>
+        <translation>steigend Flank</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>fallende Flanke</source>
+        <translation>falend Flank</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Trigger aus</source>
+        <translation>Trigger aus</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>↑ steigende, ↓ fallende Flanke. Mehrere Kanäle zusammen sind ein Muster. Der Auslöser steht bei T.</source>
+        <translation>↑ steigend, ↓ falend Flank. E puer Kanäl zesummen sinn e Muster. Den Ausléiser steet bei T.</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H über %1</source>
+        <translation>H iwwer %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>L unter %1</source>
+        <translation>L ënner %1</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H-Schwelle tiefer</source>
+        <translation>H-Schwell méi déif</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>H-Schwelle höher</source>
+        <translation>H-Schwell méi héich</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>L-Schwelle tiefer</source>
+        <translation>L-Schwell méi déif</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>L-Schwelle höher</source>
+        <translation>L-Schwell méi héich</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Standard</source>
+        <translation>Standard</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Die Schwellen gelten nur für die Anzeige. Die Bausteine selbst schalten bei ihren eigenen Schwellen.</source>
+        <translation>D&apos;Schwelle gëllen just fir d&apos;Unzeig. D&apos;Bausteng selwer schalten bei hiren eegene Schwellen.</translation>
+    </message>
 </context>
 <context>
     <name>LicensesDialog</name>
@@ -3671,6 +4131,36 @@
         <location filename="../app/src/model/board_edit.cpp" line="1"/>
         <source>Der Logikanalysator hat acht Kanäle LA1 bis LA8.</source>
         <translation>De Logikanalysator huet aacht Kanäl LA1 bis LA8.</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="1"/>
+        <source>Am Gate von %1 fließt Strom, durch %1 selbst aber weniger als der Haltestrom (etwa 3 mA). Bleibt %1 eingeschaltet, wenn das Gate keinen Strom mehr bekommt?</source>
+        <translation>Um Gate vun %1 fléisst Stroum, duerch %1 selwer awer manner wéi den Haltstroum (ongeféier 3 mA). Bleift %1 ugeschalt, wann d&apos;Gate kee Stroum méi kritt?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="1"/>
+        <source>Das Gate von %1 hängt nur an einem Taster oder Kondensator. Welche Spannung hat das Gate, wenn der Taster offen ist?</source>
+        <translation>D&apos;Gate vun %1 hänkt just un engem Taster oder Kondensator. Wéi eng Spannung huet d&apos;Gate, wann den Taster op ass?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="1"/>
+        <source>Schaltet %2 den Strom durch die Spule von %1 ab, entsteht dort eine hohe Spannungsspitze. Was fängt sie ab, damit %2 heil bleibt?</source>
+        <translation>Schalt %2 de Stroum duerch d&apos;Spull vun %1 of, entsteet do eng héich Spannungsspëtzt. Wat fänkt se of, fir datt %2 ganz bleift?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="1"/>
+        <source>Eingang %2 von %1 ist mit nichts verbunden, sein Ausgang aber schon. Soll dieser Eingang H oder L sein?</source>
+        <translation>Agang %2 vun %1 ass mat näischt verbonnen, säin Ausgang awer schonn. Soll dësen Agang H oder L sinn?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="1"/>
+        <source>Taster %1 führt direkt an den Takteingang von %2. Ein Taster prellt beim Drücken. Zählt %2 dann einmal oder mehrmals?</source>
+        <translation>Taster %1 geet direkt un den Taktagang vun %2. En Taster prellt beim Drécken. Zielt %2 dann eemol oder e puermol?</translation>
+    </message>
+    <message>
+        <location filename="../app/src/model/circuit_check.cpp" line="1"/>
+        <source>Zwischen dem Generator G und dem Schwingkreis aus %1 und %2 liegt kein Widerstand. Was begrenzt dann den Strom, und woran erkennst du die Resonanz?</source>
+        <translation>Tëscht dem Generator G an dem Schwéngkrees aus %1 an %2 läit kee Widderstand. Wat begrenzt dann de Stroum, a wourun erkenns du d&apos;Resonanz?</translation>
     </message>
 </context>
 <context>

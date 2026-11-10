@@ -79,6 +79,10 @@ QJsonObject boardToJson(const Board& board) {
             gen.insert(QStringLiteral("am_tiefe"), d.genAmDepth);
             gen.insert(QStringLiteral("am_ton_hz"), d.genAmToneHz);
         }
+        if (d.genSweepFactor > 1.0 || d.genSweepTimeS != 1.0) { // ab Volta 3; sonst unveraendert wie bisher
+            gen.insert(QStringLiteral("wobbel_faktor"), d.genSweepFactor);
+            gen.insert(QStringLiteral("wobbel_zeit_s"), d.genSweepTimeS);
+        }
         desk.insert(QStringLiteral("generator"), gen);
         desk.insert(QStringLiteral("kennlinienschreiber"),
                     QJsonObject{{QStringLiteral("volt_index"), d.tracer.voltsIndex},
@@ -168,6 +172,8 @@ bool boardFromJson(const QJsonObject& json, Board& out) {
     d.genOffsetV = std::clamp(gen.value(QStringLiteral("gleichanteil_v")).toDouble(0.0), -4.0, 4.0);
     d.genAmDepth = std::clamp(gen.value(QStringLiteral("am_tiefe")).toDouble(0.0), 0.0, 1.0);
     d.genAmToneHz = std::clamp(gen.value(QStringLiteral("am_ton_hz")).toDouble(100.0), 20.0, 1000.0);
+    d.genSweepFactor = std::clamp(gen.value(QStringLiteral("wobbel_faktor")).toDouble(1.0), 1.0, 1000.0);
+    d.genSweepTimeS = std::clamp(gen.value(QStringLiteral("wobbel_zeit_s")).toDouble(1.0), 0.1, 20.0);
     const QJsonObject osc = desk.value(QStringLiteral("oszilloskop")).toObject();
     const int lastTimebase = static_cast<int>(scopeTimebases().size()) - 1;
     const int lastVolts = static_cast<int>(scopeVoltsPerDiv().size()) - 1;

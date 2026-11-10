@@ -452,13 +452,30 @@ Drawer {
                     SchematicSymbol {
                         x: 8; y: 10
                         width: 60; height: 30
-                        type: modelData.type
+                        visible: !modelData.term
+                        type: modelData.term ? "" : modelData.type
+                    }
+                    // Begriff ohne Bauteil (ab Volta 3): Anfangsbuchstabe statt Schaltzeichen
+                    Rectangle {
+                        x: 18; y: 8
+                        width: 40; height: 40
+                        radius: 20
+                        visible: modelData.term === true
+                        color: "#E3ECF5"
+                        border.color: Theme.navy
+                        Label {
+                            anchors.centerIn: parent
+                            text: modelData.term ? modelData.name.charAt(0) : ""
+                            font.pixelSize: Math.round(18 * Theme.fontScale)
+                            font.bold: true
+                            color: Theme.navy
+                        }
                     }
                     Column {
                         x: 80; y: 8
                         width: parent.width - 90
                         spacing: 2
-                        Label { text: Texts.partName(modelData.type); font.pixelSize: Math.round(15 * Theme.fontScale); font.bold: true; color: Theme.navy }
+                        Label { text: modelData.term ? modelData.name : Texts.partName(modelData.type); font.pixelSize: Math.round(15 * Theme.fontScale); font.bold: true; color: Theme.navy }
                         Label {
                             id: lexText
                             width: parent.width

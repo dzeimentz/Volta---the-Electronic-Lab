@@ -1291,5 +1291,17 @@
   "exp3_0_3_mehr": "D'Luedkurve huet eng Zäitkonstant τ = R · C, hei 1 kΩ · 10 nF = 10 µs. No enger Zäitkonstant ass de Kondensator zu ongeféier 63 % gelueden, no fënnef bal ganz.",
   "exp3_0_3_w1": "Stell d'Lupp op ×100. Wéi laang ass elo e Kascht?",
   "exp3_0_3_w2": "Ersetz 1 kΩ duerch 10 kΩ. Kënnt de Kondensator nach ganz erop?",
-  "exp3_0_3_echt": "Richteg Oszilloskope weisen och ganz séier Signaler, ganz ouni Zäitlupp. Dofir taaschte si vill Millioune Mol an der Sekonn of."
+  "exp3_0_3_echt": "Richteg Oszilloskope weisen och ganz séier Signaler, ganz ouni Zäitlupp. Dofir taaschte si vill Millioune Mol an der Sekonn of.",
+  "lex_begriff_modulation_name": "Modulatioun",
+  "lex_begriff_modulation": "Modulatioun heescht: E Signal reit op engem aneren. Beim Radio ännert d'Musek eng séier Drägerschwéngung. Bei AM ännert sech hir Héicht, bei FM hir Frequenz. Den Empfänger hëlt d'Musek erëm eraus. Dat nennt een Demodulatioun.",
+  "lex_begriff_resonanz_name": "Resonanz",
+  "lex_begriff_resonanz": "Resonanz heescht: E Schwéngkrees schwéngt bei enger bestëmmter Frequenz besonnesch staark mat. Dat ass seng Resonanzfrequenz f₀. Fir Spull a Kondensator gëllt f₀ = 1 : (2 · π · √(L · C)). Esou wielt däi Radio e Sender aus.",
+  "lex_begriff_wirkungsgrad_name": "Wierkungsgrad",
+  "lex_begriff_wirkungsgrad": "De Wierkungsgrad η seet, wéi vill vun der Leeschtung, déi s du erasteechs, nëtzlech erëm erauskënnt: η = Pof : Pzou. De Rescht gëtt zu Wäermt. E Spannungsregler packt un 9 V fir 5 V just ongeféier 55 %. E Schaltwandler packt dacks 80 % a méi.",
+  "lex_begriff_pegel_name": "Pegel",
+  "lex_begriff_pegel": "E Pegel vergläicht zwou Spannungen an Dezibel (dB). 20 dB méi heescht: zéngmol esou vill Spannung. 6 dB méi ass ongeféier duebel esou vill. 3 dB manner sinn ongeféier 71 %. An der Digitaltechnik heescht Pegel och einfach H oder L.",
+  "lex_begriff_flanke_name": "Flank",
+  "lex_begriff_flanke": "Eng Flank ass den Ament, an deem en digitaalt Signal spréngt. Vun L op H ass et déi steigend Flank, vun H op L déi falend. En Zieler zielt bei enger Flank weider, net déi ganz Zäit, an där d'Signal H ass.",
+  "lex_begriff_prellen_name": "Prellen",
+  "lex_begriff_prellen": "En Taster mécht net propper zou. Seng Kontakter fiederen e puermol hin an hier, ier se roueg leien. Dat dauert just 1 bis 3 ms. En Zieler gesäit dobäi e puer Flanken an zielt ze vill. E Kondensator oder e Schmitt-Trigger fläit dat aus. Dat heescht Entprellen."
 }

@@ -145,6 +145,9 @@ Item {
                              : fullName +(root.partType === "widerstand" ? "\n" + Texts.ohm(root.value)
                                             : (root.partType === "heissleiter" || root.partState.showTempC === true) && root.partState.tempC !== undefined
                                               ? "\n" + qsTr("%1 °C").arg(Math.round(root.partState.tempC))
+                                            : root.partType === "kondensator" || root.partType === "elko"
+                                              // Kapazitaet lesbar unter dem Bauteil; ohne Wert der Standard der Simulation (netlist_builder)
+                                              ? "\n" + Texts.farad(root.value > 0 ? root.value : root.partType === "elko" ? 100e-6 : 100e-9)
                                             : root.partType === "gluehlampe" && root.value > 0
                                               ? "\n" + qsTr("%1 V").arg(root.value.toLocaleString(Qt.locale(), "f", root.value % 1 === 0 ? 0 : 1))
                                               : "")

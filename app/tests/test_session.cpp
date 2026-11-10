@@ -182,6 +182,57 @@ private slots:
     }
 
     // Durchgebrannter Drehregler: Fehlersuche nennt ihn an seinen Pultfeldern, Reparieren ist ein Befehl
+    void advancedChecksFindTypicalFaults() {
+        // Volta 3 (Catalog::secondOrder): Fehlersuche fuer fortgeschrittene Schaltungen; Volta 1/2 melden das nicht
+        using K = model::CircuitFinding::Kind;
+        model::Catalog v3 = m_catalog;
+        v3.secondOrder = true;
+        auto kinds = [](const model::Board& b, const model::Catalog& c) {
+            std::vector<K> k;
+            for (const auto& f : model::checkCircuit({b, c, nullptr})) k.push_back(f.kind);
+            return k;
+        };
+        auto has = [&](const model::Board& b, K kind) {
+            const auto k = kinds(b, v3);
+            return std::find(k.begin(), k.end(), kind) != k.end();
+        };
+        model::Board b;
+        b.deskParts = std::vector<std::string>{"batterie", "generator"};
+        // Taster von V+ direkt an den Takt des Zaehlers (Ausgang verdrahtet): prellt
+        b.modules.push_back({"ZL1", "zaehlermodul", 1});
+        b.parts.push_back({"S1", "taster", {{"a", "A1"}, {"b", "A2"}}});
+        b.parts.push_back({"R1", "widerstand", {{"a", "B1"}, {"b", "B2"}}});
+        b.wires.push_back({"W1", "P:+9V", "A1"});
+        b.wires.push_back({"W2", "A2", "ZL1.clk"});
+        b.wires.push_back({"W3", "ZL1.q0", "B1"});
+        QVERIFY(has(b, K::Bouncing));
+        b.parts.push_back({"C9", "kondensator", {{"a", "A2"}, {"b", "A5"}}, 100e-9}); // Entprellung
+        QVERIFY(!has(b, K::Bouncing));
+        // Gatter-Modul: Ausgang Y1 verdrahtet, Eingaenge offen
+        b.modules.push_back({"GM1", "gattermodul", 9});
+        b.wires.push_back({"W4", "GM1.y1", "B2"});
+        QVERIFY(has(b, K::OpenInput));
+        // MOSFET-Gate nur am Taster
+        b.parts.push_back({"T1", "mosfet_n", {{"g", "C1"}, {"d", "C2"}, {"s", "C3"}, {"s2", "C4"}}});
+        b.parts.push_back({"S2", "taster", {{"a", "C1"}, {"b", "C5"}}});
+        QVERIFY(has(b, K::FloatingGate));
+        // Relaisspule am Transistor ohne Freilauf
+        b.parts.push_back({"K1", "relais", {{"a", "D1"}, {"b", "D2"}, {"com", "D3"}, {"no", "D4"}}});
+        b.parts.push_back({"T2", "transistor_npn", {{"b", "E1"}, {"c", "D2"}, {"e", "E3"}, {"e2", "E4"}}});
+        QVERIFY(has(b, K::NoFreewheel));
+        // Parallelschwingkreis direkt am Generator
+        b.parts.push_back({"L1", "spule_1h", {{"a", "D6"}, {"b", "D7"}}});
+        b.parts.push_back({"C1", "kondensator", {{"a", "E6"}, {"b", "E7"}}, 1e-6});
+        b.wires.push_back({"W5", "P:G", "D6"});
+        b.wires.push_back({"W6", "D6", "E6"});
+        b.wires.push_back({"W7", "D7", "E7"});
+        QVERIFY(has(b, K::Undamped));
+        // Volta 1/2: keine dieser Meldungen
+        for (K k : kinds(b, m_catalog))
+            QVERIFY(k != K::Bouncing && k != K::OpenInput && k != K::FloatingGate && k != K::NoFreewheel &&
+                    k != K::Undamped && k != K::NoHoldingCurrent);
+    }
+
     void intendedReversedLedIsNotReported() {
         // Volta 3, 3.3: LED mit Absicht verkehrt herum (Freilaufweg neben der Spule) - keine Meldung »verkehrt«
         auto s = session();

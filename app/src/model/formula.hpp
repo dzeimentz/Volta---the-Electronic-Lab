@@ -71,4 +71,30 @@ double rmsFromPeak(double peakV); // Sinus: Ueff = Us / Wurzel 2
 // Brummspannung am Ladeelko (Naeherung): dU = I / (n f C), n = 1 Einweg-, 2 Brueckengleichrichter
 double rippleV(double ampere, double farad, double hz, bool bridge);
 
+// ab Volta 3
+double thomsonHz(double henry, double farad); // Schwingkreis: f0 = 1 / (2 pi Wurzel(L C)); 0 bei L, C <= 0
+struct Band {
+    double bandwidthHz = 0.0; // B = fo - fu
+    double centerHz = 0.0;    // f0 = Wurzel(fu fo) (geometrische Mitte)
+    double quality = 0.0;     // Q = f0 / B
+    bool ok = false;          // 0 < fu < fo
+};
+Band band(double lowHz, double highHz);
+struct Efficiency {
+    double inW = 0.0, outW = 0.0, lossW = 0.0;
+    double eta = 0.0;          // Pab / Pzu
+    bool ok = false;           // Pzu > 0, Pab >= 0
+    bool impossible = false;   // Pab > Pzu: Messung pruefen
+};
+Efficiency efficiency(double inV, double inA, double outV, double outA);
+bool decibel(double inV, double outV, double& db); // Pegel 20 lg(Ua / Ue); false bei Ue, Ua <= 0
+double ratioFromDb(double db);                     // Ua / Ue = 10^(dB / 20)
+struct Duty {
+    double duty = 0.0; // Anteil 0..1 der Zeit oben
+    double hz = 0.0, periodS = 0.0;
+    bool ok = false;
+};
+Duty dutyCycle(double highS, double lowS);
+double divideHz(double hz, double n); // Frequenzteiler f / n; 0 bei f <= 0 oder n < 1
+
 } // namespace volta::model::formula

@@ -193,6 +193,8 @@ private:
             gp.offsetV = d.genOffsetV;
             gp.amDepth = d.genAmDepth;
             gp.amToneHz = d.genAmToneHz;
+            gp.sweepFactor = d.genSweepFactor;
+            gp.sweepTimeS = d.genSweepTimeS;
             m_net.desk[desk_id::kGenerator] = c.componentCount();
             c.add<core::FunctionGenerator>(desk_id::kGenerator, g, g0, gp).setEnabled(d.mainSwitch);
             c.add<core::Wire>(desk_id::kGeneratorGround, g0, core::kGround);

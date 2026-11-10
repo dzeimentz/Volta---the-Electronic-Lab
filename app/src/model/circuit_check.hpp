@@ -32,7 +32,14 @@ struct CircuitFinding {
         OpenSwitch,    // Kreis nur durch einen offenen Schalter unterbrochen
         DeadEnd,       // Kreis endet an einem Feld
         NoSupply,      // Aufbau nicht mit +9V bzw. 0V verbunden
-        MainSwitchOff  // Kreis geschlossen, Hauptschalter aus
+        MainSwitchOff, // Kreis geschlossen, Hauptschalter aus
+        // ab Volta 3 (Catalog::secondOrder)
+        NoHoldingCurrent, // Thyristor gezuendet, Laststrom unter dem Haltestrom
+        FloatingGate,     // MOSFET-Gate nur an Taster oder Kondensator
+        NoFreewheel,      // geschaltete Relais-/Magnetspule ohne Bauteil parallel (Freilauf)
+        OpenInput,        // Logik-Eingang offen, Ausgang verdrahtet
+        Bouncing,         // Taster direkt am Zaehltakt, ohne Kondensator
+        Undamped          // Generator direkt am Schwingkreis, ohne Widerstand
     };
     Kind kind;
     std::string partId;               // betroffenes Bauteil (leer: keins)

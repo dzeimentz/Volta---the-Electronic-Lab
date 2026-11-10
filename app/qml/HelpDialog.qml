@@ -23,7 +23,7 @@ Popup {
 
     property string band: "" // Band der Edition; leer oder »volta1«: Hilfe von Volta 1
     readonly property bool v2: band !== "" && band !== "volta1"
-    readonly property var chapters: v2 ? v2Chapters() : baseChapters
+    readonly property var chapters: v3 ? v3Chapters() : v2 ? v2Chapters() : baseChapters
 
     // Kapitel: Titel, Stimmung von Tick, was Tick sagt, Punkte
     readonly property var baseChapters: [
@@ -149,6 +149,58 @@ Popup {
             out.push(change ? Object.assign({}, c, change) : c)
             if (c.key === "messen")
                 for (const e of v2Extra) out.push(e)
+        }
+        return out
+    }
+
+    // ab Volta 3: geaenderte Teile einzelner Kapitel (zusaetzlich zu Volta 2) und neue Kapitel hinter »Ton und
+    // Zeitlupe«; die neuen Kapitel haben (noch) kein Teilbild
+    readonly property bool v3: band === "volta3"
+    readonly property var v3NoImage: ["frequenzgang", "logik", "generator3", "radio"]
+    readonly property var v3Changes: ({
+        willkommen: {
+            say: qsTr("Hallo, ich bin Tick! Willkommen in Volta 3. Hier geht es um Schwingkreise und Radio, um Stromversorgung, Thyristoren, Sensoren, Logik und Zähler. Was passiert, rechnet Volta wirklich aus.") },
+        werkzeug: {
+            points: [qsTr("Farbcode und E-Reihen: Welche Widerstände gibt es?"),
+                     qsTr("Lexikon: Was macht welches Bauteil und welches Modul? Dazu Begriffe wie Resonanz, Modulation, Pegel, Flanke und Prellen."),
+                     qsTr("Rechner: Formeln mit Rechenweg. Neu sind Schwingkreis, Bandbreite und Güte, Wirkungsgrad, Pegel in dB, Tastverhältnis und Frequenzteiler."),
+                     qsTr("Fehlersuche: Ich prüfe deinen Aufbau. Ich kenne jetzt auch Fallen wie ein offenes Gate, eine Spule ohne Freilaufdiode oder einen prellenden Taster."),
+                     qsTr("Zahlensysteme: dieselbe Zahl binär, dezimal und hexadezimal."),
+                     qsTr("Teileliste: Was du brauchst – auch als Aufbaukarte zum Ausdrucken.")] }
+    })
+    readonly property var v3Extra: [
+        { key: "frequenzgang", title: qsTr("Frequenzgang und Lupe"), mood: "neugierig",
+          say: qsTr("Welche Frequenzen lässt deine Schaltung durch? Der Frequenzgang-Schreiber zeigt es dir für alle Frequenzen auf einmal."),
+          points: [qsTr("Verbinde den Generator G mit dem Eingang deiner Schaltung und stecke den Tastkopf K1 an den Ausgang."),
+                   qsTr("Tippe in der Werkzeugleiste auf »dB«. Die Kurve reicht von 1 Hz bis 10 MHz. Oben ist viel Spannung, unten wenig."),
+                   qsTr("Die Marken f₀ und fg zeigen Resonanz und Grenzfrequenz. Daneben stehen sie als Zahl, dazu Bandbreite und Güte."),
+                   qsTr("Bei Schaltungen, die schalten (zum Beispiel mit Leuchtdioden oder Logik), zeige ich einen Hinweis statt einer Kurve."),
+                   qsTr("Die Lupe im Oszilloskop dehnt schnelle Vorgänge ×10, ×100 oder ×1000. Gedehnte Bilder haben einen gestrichelten Rahmen und den Faktor.")] },
+        { key: "generator3", title: qsTr("Generator: Modulation und Wobbeln"), mood: "erklaerend",
+          say: qsTr("Der Generator kann in Volta 3 zwei neue Dinge: einen Ton aufprägen und seine Frequenz selbst durchlaufen lassen."),
+          points: [qsTr("Modulation: Der Regler macht die Kurve im Takt eines Tons größer und kleiner. So arbeitet ein Mittelwellensender."),
+                   qsTr("Wobbeln: Die Frequenz steigt immer wieder vom eingestellten Wert bis zum 10-, 100- oder 1000-Fachen, in 1, 5 oder 10 Sekunden."),
+                   qsTr("Hängt ein Schwingkreis am Generator, wird die Kurve im Oszilloskop beim Wobbeln dort am größten, wo er in Resonanz ist.")] },
+        { key: "radio", title: qsTr("Senderanlage und Radio"), mood: "motivierend",
+          say: qsTr("Im Pult steht eine kleine Senderanlage. Sie sendet nur in Volta – eigene Aufnahmen, kein echtes Radio."),
+          points: [qsTr("Hole die Senderanlage aus dem Gerätefach ins Pult. Ihr Feld ANT ist die Antenne: Verbinde es mit deinem Empfänger."),
+                   qsTr("Im Senderfenster schaltest du die Sender ein und aus."),
+                   qsTr("Mit Spule und Drehkondensator stimmst du deinen Empfänger ab. Der Drehknopf erscheint, wenn du den Drehkondensator antippst.")] },
+        { key: "logik", title: qsTr("Logikanalysator"), mood: "neugierig",
+          say: qsTr("In der Digitaltechnik zählt nur H oder L. Der Logikanalysator zeigt viele Signale untereinander."),
+          points: [qsTr("Stecke Logik-Tastköpfe LA1 bis LA8 auf Felder. Jeder bekommt eine Zeile. H liegt oben, L unten, dazwischen das gestreifte Band »?«."),
+                   qsTr("»fein« zeigt 20 ms (da siehst du das Prellen), »grob« zeigt 5 s."),
+                   qsTr("Trigger: Wähle je Kanal H, L, ↑ (steigende) oder ↓ (fallende Flanke). Dann steht das Bild still, der Auslöser liegt bei T."),
+                   qsTr("Zeitmarken: Tippe auf die Spuren für A und B. Darüber steht der Abstand in µs oder ms."),
+                   qsTr("Die Schwellen für H und L stellst du selbst ein. Sie gelten nur für die Anzeige.")] }
+    ]
+    function v3Chapters() {
+        const out = []
+        for (const c of v2Chapters()) {
+            const change = v3Changes[c.key]
+            out.push(change ? Object.assign({}, c, change) : c)
+            if (c.key === "ton")
+                for (const e of v3Extra) out.push(e)
         }
         return out
     }
@@ -287,7 +339,7 @@ Popup {
                         // Teilbild der Oberflaeche mit markierten Knoepfen (nicht bei »Sicher experimentieren«)
                         Image {
                             objectName: "helpImage_" + section.modelData.key
-                            visible: section.modelData.key !== "sicher"
+                            visible: section.modelData.key !== "sicher" && !(help.v3 && help.v3NoImage.indexOf(section.modelData.key) >= 0)
                             anchors.horizontalCenter: parent.horizontalCenter
                             width: Math.min(parent.width, 560)
                             height: visible ? width * 300 / 760 : 0

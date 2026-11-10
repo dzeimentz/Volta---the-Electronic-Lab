@@ -105,6 +105,9 @@ class LabController : public QObject {
     Q_PROPERTY(double genOffset READ genOffset WRITE setGenOffset NOTIFY deskChanged)
     Q_PROPERTY(double genAmDepth READ genAmDepth WRITE setGenAmDepth NOTIFY deskChanged) // ab Volta 3
     Q_PROPERTY(double genAmTone READ genAmTone WRITE setGenAmTone NOTIFY deskChanged)    // ab Volta 3
+    // Wobbeln (ab Volta 3): Faktor der Endfrequenz (1 = aus) und Dauer eines Durchlaufs
+    Q_PROPERTY(double genSweepFactor READ genSweepFactor WRITE setGenSweepFactor NOTIFY deskChanged)
+    Q_PROPERTY(double genSweepTime READ genSweepTime WRITE setGenSweepTime NOTIFY deskChanged)
     // Pult nach Bedarf (ab Volta 2): Geraetefach statt Stufenanpassung; deskTray: [{part, present, locked, stage}]
     //   locked: noch nicht frei; unlock: "stufe" (stage), "experiment" (experiment: Nummer, z. B. "0.3") oder "nutzung"
     Q_PROPERTY(bool deskOnDemand READ deskOnDemand CONSTANT)
@@ -329,6 +332,10 @@ public:
     void setGenAmDepth(double depth);
     double genAmTone() const { return m_session->board().desk.genAmToneHz; }
     void setGenAmTone(double hz);
+    double genSweepFactor() const { return m_session->board().desk.genSweepFactor; }
+    void setGenSweepFactor(double factor);
+    double genSweepTime() const { return m_session->board().desk.genSweepTimeS; }
+    void setGenSweepTime(double s);
     bool deskOnDemand() const { return !m_deskOffers.isEmpty(); }
     int startColumns() const { return m_startColumns; }
     QVariantList deskTray() const;
@@ -524,6 +531,13 @@ public:
     // 1 ?, 2 H), segs (flach: x0, x1, Pegel je Abschnitt, x 0 ... 1 im Fenster)}]}; setLogicFine: Zeitfenster
     Q_INVOKABLE QVariantMap logicState() const;
     Q_INVOKABLE void setLogicFine(bool fine);
+    // Trigger je Kanal: 0 egal, 1 H, 2 L, 3 steigende, 4 fallende Flanke. Alle Bedingungen zugleich loesen aus;
+    // nur Pegel (Muster) loesen aus, sobald das Muster eintritt. Das Bild steht dann mit dem Ausloeser bei 20 %
+    // und bleibt bis zum naechsten Ausloesen stehen (logicState: trigger, triggered, triggerX, waiting).
+    Q_INVOKABLE void setLogicTrigger(int channel, int condition);
+    Q_INVOKABLE void clearLogicTrigger();
+    // Schwellen der Anzeige als Anteil der Batteriespannung (H ueber high, L unter low; Abstand mind. 10 %)
+    Q_INVOKABLE void setLogicThresholds(double high, double low);
     // Frequenzgang-Schreiber (ab Volta 3): Generator -> Tastkopf K1. bodeAvailable: Volta 3 mit Generator im Pult.
     // bodeState: {status ("ok", "nogen", "noprobe", "off", "switching", "wait", "error"), switching: [Typen, die
     // schalten], curve/phase (flach: x 0 ... 1 ueber 1 Hz ... 10 MHz logarithmisch, y 0 ... 1 von unten), topDb,
@@ -596,6 +610,11 @@ public slots:
     void handleUrl(const QUrl& url);
 
 private:
+    // Logikanalysator (ab Volta 3): Schwellen, Trigger und das zuletzt ausgeloeste Bild
+    double m_logicHigh = model::kLogicHighFraction;
+    double m_logicLow = model::kLogicLowFraction;
+    std::array<int, model::kLogicChannels> m_logicTrigger{};
+    mutable QVariantList m_logicHeld;
     void updateFinish();
     void onFrame();
     bool result(bool ok);

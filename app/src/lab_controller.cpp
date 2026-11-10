@@ -831,6 +831,39 @@ QVariantMap LabController::formulaSheet(const QString& sheet, const QVariantMap&
         const bool bridge = in.value(QStringLiteral("bridge")).toBool();
         const double du = f::rippleV(num("I"), num("C"), num("f"), bridge);
         out = {{QStringLiteral("ok"), du > 0.0}, {QStringLiteral("dU"), du}, {QStringLiteral("n"), bridge ? 2 : 1}};
+    } else if (sheet == QLatin1String("thomson")) { // ab Volta 3
+        const double hz = f::thomsonHz(num("L"), num("C"));
+        out = {{QStringLiteral("ok"), hz > 0.0}, {QStringLiteral("f"), hz}, {QStringLiteral("T"), hz > 0.0 ? 1.0 / hz : 0.0},
+               {QStringLiteral("X"), 2.0 * std::acos(-1.0) * hz * num("L")}};
+    } else if (sheet == QLatin1String("quality")) {
+        const f::Band b = f::band(num("fu"), num("fo"));
+        out = {{QStringLiteral("ok"), b.ok}, {QStringLiteral("B"), b.bandwidthHz}, {QStringLiteral("f0"), b.centerHz},
+               {QStringLiteral("Q"), b.quality}};
+    } else if (sheet == QLatin1String("efficiency")) {
+        const f::Efficiency e = f::efficiency(num("Ue"), num("Ie"), num("Ua"), num("Ia"));
+        out = {{QStringLiteral("ok"), e.ok},          {QStringLiteral("eta"), e.eta},
+               {QStringLiteral("Pin"), e.inW},        {QStringLiteral("Pout"), e.outW},
+               {QStringLiteral("loss"), e.lossW},     {QStringLiteral("impossible"), e.impossible}};
+    } else if (sheet == QLatin1String("db")) {
+        if (in.value(QStringLiteral("mode")).toString() == QLatin1String("back")) {
+            const double v = f::ratioFromDb(num("dB"));
+            out = {{QStringLiteral("ok"), in.contains(QStringLiteral("dB"))}, {QStringLiteral("v"), v},
+                   {QStringLiteral("Ua"), v * num("Ue")}};
+        } else {
+            double db = 0.0;
+            const bool ok = f::decibel(num("Ue"), num("Ua"), db);
+            out = {{QStringLiteral("ok"), ok}, {QStringLiteral("dB"), db}, {QStringLiteral("v"), ok ? num("Ua") / num("Ue") : 0.0}};
+        }
+    } else if (sheet == QLatin1String("duty")) {
+        const f::Duty d = f::dutyCycle(num("th"), num("tl"));
+        out = {{QStringLiteral("ok"), d.ok}, {QStringLiteral("duty"), d.duty}, {QStringLiteral("f"), d.hz},
+               {QStringLiteral("T"), d.periodS}};
+    } else if (sheet == QLatin1String("divide")) {
+        const double hz = num("f");
+        QVariantList q; // Zaehlermodul: Q0 = f/2, Q1 = f/4, Q2 = f/8, Q3 = f/16
+        for (int k = 1; k <= 4; ++k) q << f::divideHz(hz, std::pow(2.0, k));
+        out = {{QStringLiteral("ok"), f::divideHz(hz, num("n")) > 0.0}, {QStringLiteral("out"), f::divideHz(hz, num("n"))},
+               {QStringLiteral("q"), q}, {QStringLiteral("decade"), f::divideHz(hz, 10.0)}};
     }
     return out;
 }
@@ -944,6 +977,16 @@ QVariantList LabController::lexicon() const {
                 out << QVariantMap{{QStringLiteral("type"), qs(type)},
                                    {QStringLiteral("text"), m_repo.text(qs(e.lexiconKey))},
                                    {QStringLiteral("stage"), e.fromStage}};
+    // ab Volta 3 auch Begriffe ohne Bauteil (Name und Text aus den Inhaltstexten)
+    if (m_session->catalog().secondOrder)
+        for (const char* key : {"modulation", "resonanz", "wirkungsgrad", "pegel", "flanke", "prellen"}) {
+            const QString k = QStringLiteral("lex_begriff_") + QLatin1String(key);
+            out << QVariantMap{{QStringLiteral("type"), QString()},
+                               {QStringLiteral("term"), true},
+                               {QStringLiteral("name"), m_repo.text(k + QStringLiteral("_name"))},
+                               {QStringLiteral("text"), m_repo.text(k)},
+                               {QStringLiteral("stage"), 0}};
+        }
     return out;
 }
 
@@ -1092,7 +1135,9 @@ void LabController::nextHint() {
 
 QVariantList LabController::checkCircuit() const {
     static const char* const kKinds[] = {"short",    "bridged",   "broken",     "overload", "reversed", "noResistor",
-                                         "dangling", "looseWire", "openSwitch", "deadEnd",  "noSupply", "mainSwitch"};
+                                         "dangling", "looseWire", "openSwitch", "deadEnd",  "noSupply", "mainSwitch",
+                                         "noHoldingCurrent", "floatingGate", "noFreewheel", "openInput", "bouncing",
+                                         "undamped"};
     QVariantList out;
     for (const auto& f : m_session->checkCircuit()) {
         QString text = QCoreApplication::translate("Meldung", f.message.source);
@@ -1424,6 +1469,18 @@ void LabController::setGenAmDepth(double depth) {
 void LabController::setGenAmTone(double hz) {
     if (genAmTone() == hz) return;
     m_session->setGenAmTone(hz);
+    emit deskChanged();
+}
+
+void LabController::setGenSweepFactor(double factor) {
+    if (genSweepFactor() == factor) return;
+    m_session->setGenSweep(factor, genSweepTime());
+    emit deskChanged();
+}
+
+void LabController::setGenSweepTime(double s) {
+    if (genSweepTime() == s) return;
+    m_session->setGenSweep(genSweepFactor(), s);
     emit deskChanged();
 }
 
@@ -2622,13 +2679,67 @@ QVariantMap LabController::logicState() const {
     const double ub = logicSupplyV();
     m.insert(QStringLiteral("fine"), m_session->logicFine());
     m.insert(QStringLiteral("windowText"), siText(w, "s"));
-    m.insert(QStringLiteral("highText"), siText(model::kLogicHighFraction * ub, "V"));
-    m.insert(QStringLiteral("lowText"), siText(model::kLogicLowFraction * ub, "V"));
+    m.insert(QStringLiteral("highText"), siText(m_logicHigh * ub, "V"));
+    m.insert(QStringLiteral("lowText"), siText(m_logicLow * ub, "V"));
+    m.insert(QStringLiteral("high"), m_logicHigh);
+    m.insert(QStringLiteral("low"), m_logicLow);
+    auto levelOf = [&](double v) { return v > m_logicHigh * ub ? 2 : v < m_logicLow * ub ? 0 : 1; };
     const auto probes = m_session->logicProbes();
     const bool current = m_session->snapshotCurrent();
     const auto& samples = m_session->logicSamples();
     const double tEnd = current && !samples.empty() ? samples.back().t : 0.0;
-    const double t0 = tEnd - w;
+    double t0 = tEnd - w;
+    // Trigger: juengster Zeitpunkt, an dem alle Bedingungen gelten, mit 20 % Vorlauf und 80 % Nachlauf im Puffer
+    constexpr double kPre = 0.2;
+    QVariantList trig;
+    bool anyTrigger = false, edgeTrigger = false;
+    for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
+        trig << m_logicTrigger[c];
+        anyTrigger = anyTrigger || (m_logicTrigger[c] != 0 && !probes[c].empty());
+        edgeTrigger = edgeTrigger || ((m_logicTrigger[c] == 3 || m_logicTrigger[c] == 4) && !probes[c].empty());
+    }
+    m.insert(QStringLiteral("trigger"), trig);
+    m.insert(QStringLiteral("triggerOn"), anyTrigger);
+    bool triggered = false;
+    if (anyTrigger && current && !samples.empty()) {
+        std::array<int, model::kLogicChannels> last{};
+        last.fill(-1);
+        bool metBefore = true; // Muster: erst ausloesen, wenn es neu eintritt
+        double found = -1.0;
+        for (const auto& s : samples) {
+            bool met = true;
+            for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
+                const int cond = probes[c].empty() ? 0 : m_logicTrigger[c];
+                if (cond == 0) continue;
+                const int lv = levelOf(s.v[c]);
+                if (cond == 1) met = met && lv == 2;
+                else if (cond == 2) met = met && lv == 0;
+                else if (cond == 3) met = met && lv == 2 && last[c] == 0;
+                else if (cond == 4) met = met && lv == 0 && last[c] == 2;
+            }
+            if (met && (edgeTrigger || !metBefore) && s.t - kPre * w >= samples.front().t && s.t + (1.0 - kPre) * w <= tEnd)
+                found = s.t;
+            metBefore = met;
+            for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
+                const int lv = levelOf(s.v[c]);
+                if (lv != 1) last[c] = lv;
+            }
+        }
+        if (found >= 0.0) {
+            triggered = true;
+            t0 = found - kPre * w;
+        }
+    }
+    m.insert(QStringLiteral("triggered"), triggered);
+    m.insert(QStringLiteral("triggerX"), kPre);
+    if (anyTrigger && !triggered) {
+        // noch kein (neuer) Ausloeser: das letzte ausgeloeste Bild bleibt stehen
+        m.insert(QStringLiteral("waiting"), true);
+        m.insert(QStringLiteral("channels"), m_logicHeld);
+        return m;
+    }
+    m.insert(QStringLiteral("waiting"), false);
+    const double t1 = t0 + w;
     QVariantList channels;
     for (std::size_t c = 0; c < model::kLogicChannels; ++c) {
         if (probes[c].empty()) continue;
@@ -2641,8 +2752,9 @@ QVariantMap LabController::logicState() const {
             int prev = -1;
             for (const auto& s : samples) {
                 if (s.t < t0) continue;
+                if (s.t > t1) break;
                 const double x = std::clamp((s.t - t0) / w, 0.0, 1.0);
-                const int lv = logicLevel(s.v[c], ub);
+                const int lv = levelOf(s.v[c]);
                 if (lv != prev) {
                     if (prev >= 0) segs << x0 << x << prev;
                     x0 = x;
@@ -2657,8 +2769,32 @@ QVariantMap LabController::logicState() const {
         ch.insert(QStringLiteral("segs"), segs);
         channels << ch;
     }
+    if (triggered) m_logicHeld = channels;
     m.insert(QStringLiteral("channels"), channels);
     return m;
+}
+
+void LabController::setLogicTrigger(int channel, int condition) {
+    if (channel < 0 || channel >= static_cast<int>(model::kLogicChannels)) return;
+    m_logicTrigger[static_cast<std::size_t>(channel)] = std::clamp(condition, 0, 4);
+    m_logicHeld.clear();
+    emit deskChanged();
+}
+
+void LabController::clearLogicTrigger() {
+    m_logicTrigger.fill(0);
+    m_logicHeld.clear();
+    emit deskChanged();
+}
+
+void LabController::setLogicThresholds(double high, double low) {
+    if (!std::isfinite(high) || !std::isfinite(low)) return;
+    high = std::clamp(high, 0.2, 0.9);
+    low = std::clamp(low, 0.1, high - 0.1);
+    m_logicHigh = high;
+    m_logicLow = low;
+    m_logicHeld.clear();
+    emit deskChanged();
 }
 
 void LabController::setLogicFine(bool fine) {

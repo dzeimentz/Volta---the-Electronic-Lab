@@ -286,6 +286,77 @@ Popup {
                 }
             }
         }
+        Rectangle {
+            objectName: "genSweepFrame"
+            visible: panel.hasAm
+            width: parent.width
+            height: sweepColumn.implicitHeight + 20
+            radius: 8
+            color: "transparent"
+            border.color: "#9AA9B8"
+            border.width: 1.5
+            readonly property real endHz: panel.controller ? Math.min(panel.controller.genFrequency * panel.controller.genSweepFactor, 10000) : 0
+            Column {
+                id: sweepColumn
+                x: 10; y: 10
+                width: parent.width - 20
+                spacing: 6
+                Label {
+                    objectName: "genSweepLabel"
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    text: panel.controller && panel.controller.genSweepFactor > 1
+                          ? qsTr("Wobbeln: %1 bis %2 in %3 s").arg(panel.frequencyText(panel.controller.genFrequency))
+                                .arg(panel.frequencyText(parent.parent.endHz)).arg(panel.number(panel.controller.genSweepTime, 0))
+                          : qsTr("Wobbeln: aus")
+                    font.bold: true
+                    color: Theme.navy
+                }
+                Row {
+                    spacing: 6
+                    Repeater {
+                        model: [1, 10, 100, 1000]
+                        PanelButton {
+                            required property int modelData
+                            objectName: "genSweep" + modelData
+                            height: Theme.control
+                            width: (sweepColumn.width - 18) / 4
+                            checkable: true
+                            checked: panel.controller !== null && panel.controller.genSweepFactor === modelData
+                            text: modelData === 1 ? qsTr("aus") : "×" + modelData
+                            onClicked: panel.controller.genSweepFactor = modelData
+                            Accessible.name: modelData === 1 ? qsTr("Wobbeln aus") : qsTr("Wobbeln bis zum %1-Fachen").arg(modelData)
+                        }
+                    }
+                }
+                Row {
+                    spacing: 6
+                    visible: panel.controller !== null && panel.controller.genSweepFactor > 1
+                    Repeater {
+                        model: [1, 5, 10]
+                        PanelButton {
+                            required property int modelData
+                            objectName: "genSweepTime" + modelData
+                            height: Theme.control
+                            width: (sweepColumn.width - 12) / 3
+                            checkable: true
+                            checked: panel.controller !== null && panel.controller.genSweepTime === modelData
+                            text: qsTr("%1 s").arg(modelData)
+                            onClicked: panel.controller.genSweepTime = modelData
+                            Accessible.name: qsTr("Durchlauf %1 s").arg(modelData)
+                        }
+                    }
+                }
+                Label {
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    visible: panel.controller !== null && panel.controller.genSweepFactor > 1
+                    text: qsTr("Die Frequenz steigt immer wieder vom eingestellten Wert bis zum Endwert. Am Oszilloskop siehst du so, bei welcher Frequenz deine Schaltung am meisten durchlässt.")
+                    color: "#4A5560"
+                    font.pixelSize: Math.round(12 * Theme.fontScale)
+                }
+            }
+        }
         Label {
             width: parent.width
             wrapMode: Text.WordWrap

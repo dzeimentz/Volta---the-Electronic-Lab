@@ -701,10 +701,10 @@ Item {
                     border.color: "#7F93A8"
                 }
             }
-            // Frequenzgang-Schreiber ein-/ausblenden (ab Volta 3, mit Generator im Pult)
+            // Frequenzgang-Schreiber ein-/ausblenden (ab Volta 3, immer sichtbar; ohne Generator sagt das Fenster, was fehlt)
             ToolButton {
                 objectName: "bodeToggle"
-                visible: lab.controller.bodeAvailable
+                visible: lab.controller.band === "volta3"
                 width: Theme.control; height: Theme.control
                 checkable: true
                 checked: lab.bodeVisible
@@ -984,7 +984,7 @@ Item {
         id: bodePanel
         objectName: "bodePanel"
         controller: lab.controller
-        readonly property bool shown: lab.bodeVisible && lab.controller.bodeAvailable
+        readonly property bool shown: lab.bodeVisible && lab.controller.band === "volta3"
         visible: shown
         anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.top }
         height: shown ? Math.max(200, Math.min(270, lab.height * 0.32)) : 0

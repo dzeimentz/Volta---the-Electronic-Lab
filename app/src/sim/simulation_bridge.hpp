@@ -43,6 +43,8 @@ struct Action {
         SetGenOffset,    // Funktionsgenerator: value = Gleichanteil in V
         SetGenAmDepth,   // Funktionsgenerator (ab Volta 3): value = Tiefe der Amplitudenmodulation 0..1
         SetGenAmTone,    // Funktionsgenerator (ab Volta 3): value = Ton der Amplitudenmodulation in Hz
+        SetGenSweepFactor, // Funktionsgenerator (ab Volta 3): value = Wobbelfaktor (1 = aus)
+        SetGenSweepTime,   // Funktionsgenerator (ab Volta 3): value = Dauer eines Wobbeldurchlaufs in s
         SetTracerMin,    // Kennlinienschreiber: value = kleinste Pruefspannung in V
         SetTracerMax,    // Kennlinienschreiber: value = hoechste Pruefspannung in V
         SetTracerOhm,    // Kennlinienschreiber: value = Vorwiderstand in Ohm

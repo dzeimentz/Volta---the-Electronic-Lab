@@ -1,6 +1,7 @@
 #include "circuit_check.hpp"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <deque>
 #include <map>
@@ -9,6 +10,7 @@
 #include "anchor.hpp"
 #include "board_edit.hpp"
 #include "netlist_builder.hpp"
+#include "volta/core/components/thyristor.hpp"
 
 namespace volta::model {
 
@@ -388,9 +390,205 @@ std::vector<CircuitFinding> checkCircuit(const CircuitCheckInput& in) {
                                                                "Lautsprecher, um ihn zu reparieren."))});
     }
 
+    // ---- ab Volta 3: typische Fehler fortgeschrittener Schaltungen (Thyristor, MOSFET, Spule, Logik, Schwingkreis).
+    // Nur Hinweise als Frage; jeder Musteraufbau besteht sie (templatesPassCircuitCheck).
+    std::vector<CircuitFinding> hints;
+    if (catalog.secondOrder) {
+        std::map<std::string, std::string> partModel, moduleType;
+        for (const auto& p : board.parts)
+            if (const CatalogEntry* e = catalog.part(p.type)) partModel[p.id] = e->model;
+        for (const auto& m : board.modules) moduleType[m.id] = m.type;
+        auto modelOf = [&](const std::string& owner) {
+            const auto it = partModel.find(owner);
+            return it == partModel.end() ? std::string() : it->second;
+        };
+        auto upper = [](std::string s) {
+            for (auto& c : s) c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+            return s;
+        };
+
+        // Thyristor gezuendet, aber der Laststrom bleibt unter dem Haltestrom
+        if (board.desk.mainSwitch && in.reading)
+            for (const auto& p : board.parts) {
+                if (modelOf(p.id) != "thyristor") continue;
+                const core::ComponentReading* r = in.reading(p.id);
+                if (!r || r->destroyed) continue;
+                const double holdA = core::ThyristorParams{}.holdA;
+                const double gateA = r->terminalCurrentA[2], anodeA = r->terminalCurrentA[0];
+                if (gateA > 1e-3 && anodeA > -1e-4 && anodeA < 0.9 * holdA && r->voltV > 0.3) {
+                    std::vector<std::string> where;
+                    for (const auto& [pin, field] : p.pins) where.push_back(field);
+                    hints.push_back({CircuitFinding::Kind::NoHoldingCurrent, p.id, where,
+                                     msg(QT_TRANSLATE_NOOP("Meldung", "Am Gate von %1 fließt Strom, durch %1 selbst "
+                                                                      "aber weniger als der Haltestrom (etwa 3 mA). "
+                                                                      "Bleibt %1 eingeschaltet, wenn das Gate keinen "
+                                                                      "Strom mehr bekommt?"),
+                                         {p.id})});
+                }
+            }
+
+        // MOSFET-Gate nur an Taster oder Kondensator: ist der Taster offen, hat das Gate keine feste Spannung
+        for (const auto& p : board.parts) {
+            const std::string model = modelOf(p.id);
+            if (model != "mosfet_n" && model != "mosfet_p") continue;
+            const std::string g = pinField(p, "g");
+            if (g.empty()) continue;
+            bool fixed = false, loose = false;
+            for (const auto& t : terminals[nodes.find(g)]) {
+                if (t.owner == p.id && t.pin == "g") continue;
+                const std::string m = modelOf(t.owner);
+                if (m == "switch" || m == "capacitor" || m == "capacitor_polar" || m == "capacitor_variable")
+                    loose = true;
+                else
+                    fixed = true;
+            }
+            if (loose && !fixed)
+                hints.push_back({CircuitFinding::Kind::FloatingGate, p.id, {g},
+                                 msg(QT_TRANSLATE_NOOP("Meldung", "Das Gate von %1 hängt nur an einem Taster oder "
+                                                                  "Kondensator. Welche Spannung hat das Gate, wenn der "
+                                                                  "Taster offen ist?"),
+                                     {p.id})});
+        }
+
+        // Relais- oder Magnetspule, von einem Transistor geschaltet, ohne Bauteil parallel zur Spule
+        for (const auto& p : board.parts) {
+            const std::string model = modelOf(p.id);
+            if (model != "relay" && model != "electromagnet") continue;
+            const std::string fa = pinField(p, "a"), fb = pinField(p, "b");
+            if (fa.empty() || fb.empty()) continue;
+            const std::string na = nodes.find(fa), nb = nodes.find(fb);
+            if (na == nb) continue;
+            std::string driver;
+            for (const std::string& n : {na, nb})
+                for (const auto& t : terminals[n]) {
+                    const std::string m = modelOf(t.owner);
+                    if (((m == "bjt_npn" || m == "bjt_pnp") && t.pin == "c") ||
+                        ((m == "mosfet_n" || m == "mosfet_p") && t.pin == "d"))
+                        driver = t.owner;
+                }
+            if (driver.empty()) continue;
+            bool across = false;
+            for (const auto& q : board.parts) {
+                if (q.id == p.id) continue;
+                bool atA = false, atB = false;
+                for (const auto& [pin, field] : q.pins) {
+                    atA = atA || nodes.find(field) == na;
+                    atB = atB || nodes.find(field) == nb;
+                }
+                across = across || (atA && atB);
+            }
+            if (!across)
+                hints.push_back({CircuitFinding::Kind::NoFreewheel, p.id, {fa, fb},
+                                 msg(QT_TRANSLATE_NOOP("Meldung", "Schaltet %2 den Strom durch die Spule von %1 ab, "
+                                                                  "entsteht dort eine hohe Spannungsspitze. Was fängt "
+                                                                  "sie ab, damit %2 heil bleibt?"),
+                                     {p.id, driver})});
+        }
+
+        // Logik: Ausgang verdrahtet, Eingang offen (Gatter-Modul; Takt der Zaehler)
+        for (const auto& m : board.modules) {
+            const ModuleEntry* e = catalog.module(m.type);
+            if (!e) continue;
+            auto slotOf = [&](const std::string& pin) -> std::string {
+                for (std::size_t i = 0; i < e->pins.size(); ++i)
+                    if (e->pins[i] == pin) return moduleSlot(m.slot + static_cast<int>(i));
+                return {};
+            };
+            auto wired = [&](const std::string& pin) {
+                const std::string s = slotOf(pin);
+                return !s.empty() && terminals[nodes.find(s)].size() > 1;
+            };
+            std::vector<std::pair<std::string, std::vector<std::string>>> groups; // Eingang -> zugehoerige Ausgaenge
+            if (m.type == "gattermodul")
+                for (const char* k : {"1", "2", "3", "4"}) {
+                    groups.push_back({std::string("a") + k, {std::string("y") + k}});
+                    groups.push_back({std::string("b") + k, {std::string("y") + k}});
+                }
+            else if (m.type == "zaehlermodul")
+                groups.push_back({"clk", {"q0", "q1", "q2", "q3"}});
+            else if (m.type == "dekadenzaehler")
+                groups.push_back({"clk", {"q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9"}});
+            for (const auto& [input, outputs] : groups) {
+                if (wired(input) || slotOf(input).empty()) continue;
+                if (std::none_of(outputs.begin(), outputs.end(), wired)) continue;
+                hints.push_back({CircuitFinding::Kind::OpenInput, m.id, {slotOf(input)},
+                                 msg(QT_TRANSLATE_NOOP("Meldung", "Eingang %2 von %1 ist mit nichts verbunden, sein "
+                                                                  "Ausgang aber schon. Soll dieser Eingang H oder L "
+                                                                  "sein?"),
+                                     {m.id, upper(input)})});
+            }
+        }
+
+        // Taster zwischen V+ und dem Takteingang eines Zaehlers, ohne Kondensator: jeder Druck soll einmal zaehlen,
+        // aber der Taster prellt (schaltet der Taster einen Takt durch, ist das gewollt und keine Meldung)
+        for (const auto& p : board.parts) {
+            if (p.type != "taster" || p.pins.size() != 2) continue;
+            for (const auto& [pin, field] : p.pins) {
+                const std::string& other = field == p.pins[0].second ? p.pins[1].second : p.pins[0].second;
+                if (nodes.find(other) != plus) continue;
+                const auto& ts = terminals[nodes.find(field)];
+                std::string counter;
+                bool capacitor = false;
+                for (const auto& t : ts) {
+                    const auto it = moduleType.find(t.owner);
+                    if (it != moduleType.end() && t.pin == "clk" &&
+                        (it->second == "zaehlermodul" || it->second == "dekadenzaehler"))
+                        counter = t.owner;
+                    const std::string mo = modelOf(t.owner);
+                    capacitor = capacitor || mo == "capacitor" || mo == "capacitor_polar";
+                }
+                if (counter.empty() || capacitor) continue;
+                hints.push_back({CircuitFinding::Kind::Bouncing, p.id, {field},
+                                 msg(QT_TRANSLATE_NOOP("Meldung", "Taster %1 führt direkt an den Takteingang von %2. "
+                                                                  "Ein Taster prellt beim Drücken. Zählt %2 dann "
+                                                                  "einmal oder mehrmals?"),
+                                     {p.id, counter})});
+                break;
+            }
+        }
+
+        // Parallelschwingkreis (Spule und Kondensator mit beiden Enden an denselben Knoten) direkt am Generator, ohne
+        // Widerstand am Ausgang G: der Generator haelt die Spannung fest, die Resonanz ist kaum zu sehen
+        // (Reihenschwingkreise am Generator sind gewollt; seine 50 Ohm daempfen sie)
+        if (hasDeskPart(board, "generator")) {
+            const std::string g = nodes.find("P:G");
+            bool resistor = false;
+            std::vector<const PartPlacement*> coils, caps;
+            for (const auto& t : terminals[g]) {
+                const std::string m = modelOf(t.owner);
+                resistor = resistor || m == "resistor" || m == "potentiometer";
+                for (const auto& p : board.parts)
+                    if (p.id == t.owner && p.pins.size() == 2) {
+                        if (m == "inductor") coils.push_back(&p);
+                        if (m == "capacitor" || m == "capacitor_variable") caps.push_back(&p);
+                    }
+            }
+            auto otherEnd = [&](const PartPlacement* p) {
+                const std::string a = nodes.find(p->pins[0].second);
+                return a == g ? nodes.find(p->pins[1].second) : a;
+            };
+            std::string coil, cap;
+            for (const auto* l : coils)
+                for (const auto* c : caps)
+                    if (otherEnd(l) == otherEnd(c) && otherEnd(l) != g) {
+                        coil = l->id;
+                        cap = c->id;
+                    }
+            if (!resistor) {
+                if (!coil.empty() && !cap.empty())
+                    hints.push_back({CircuitFinding::Kind::Undamped, coil, {"P:G"},
+                                     msg(QT_TRANSLATE_NOOP("Meldung", "Zwischen dem Generator G und dem Schwingkreis "
+                                                                      "aus %1 und %2 liegt kein Widerstand. Was "
+                                                                      "begrenzt dann den Strom, und woran erkennst du "
+                                                                      "die Resonanz?"),
+                                         {coil, cap})});
+            }
+        }
+    }
+
     std::vector<CircuitFinding> out;
     for (auto* list : {&shorts, &broken, &reversed, &noResistor, &overload, &bridged, &dangling, &looseWires, &noSupply,
-                       &openSwitch, &deadEnd, &mainSwitch})
+                       &openSwitch, &deadEnd, &hints, &mainSwitch})
         out.insert(out.end(), list->begin(), list->end());
     return out;
 }

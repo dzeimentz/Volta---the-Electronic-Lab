@@ -78,6 +78,9 @@ struct DeskState {
     // Amplitudenmodulation (ab Volta 3): Tiefe 0 = aus ... 1 = 100 %, Ton 20 ... 1000 Hz
     double genAmDepth = 0.0;
     double genAmToneHz = 100.0;
+    // Wobbeln (ab Volta 3): Endfrequenz = Frequenz * Faktor (1 = aus), Dauer eines Durchlaufs
+    double genSweepFactor = 1.0;
+    double genSweepTimeS = 1.0;
     bool mainSwitch = false;    // Hauptschalter der Batterie
     bool switchClosed = false;  // Pultschalter S1-S2
     double p1 = 0.5;            // Drehregler P1

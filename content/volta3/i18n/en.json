@@ -1291,5 +1291,17 @@
   "exp3_0_3_mehr": "The charging curve has a time constant τ = R · C, here 1 kΩ · 10 nF = 10 µs. After one time constant the capacitor is about 63 % charged, after five almost fully.",
   "exp3_0_3_w1": "Set the magnifier to ×100. How long is one box now?",
   "exp3_0_3_w2": "Replace 1 kΩ with 10 kΩ. Does the capacitor still get all the way up?",
-  "exp3_0_3_echt": "Real oscilloscopes show very fast signals too, without any slow motion. For that they sample many million times per second."
+  "exp3_0_3_echt": "Real oscilloscopes show very fast signals too, without any slow motion. For that they sample many million times per second.",
+  "lex_begriff_modulation_name": "Modulation",
+  "lex_begriff_modulation": "Modulation means: one signal rides on another. In a radio, the music changes a fast carrier wave. With AM its height changes, with FM its frequency. The receiver takes the music out again. This is called demodulation.",
+  "lex_begriff_resonanz_name": "Resonance",
+  "lex_begriff_resonanz": "Resonance means: a tuned circuit swings along especially strongly at one particular frequency. That is its resonant frequency f₀. For a coil and a capacitor, f₀ = 1 : (2 · π · √(L · C)). This is how your radio picks a station.",
+  "lex_begriff_wirkungsgrad_name": "Efficiency",
+  "lex_begriff_wirkungsgrad": "Efficiency η tells you how much of the power you put in comes out as useful power: η = Pout : Pin. The rest turns into heat. A voltage regulator making 5 V from 9 V only reaches about 55 %. A switching converter often reaches 80 % and more.",
+  "lex_begriff_pegel_name": "Level",
+  "lex_begriff_pegel": "A level compares two voltages in decibels (dB). 20 dB more means ten times the voltage. 6 dB more is about twice as much. 3 dB less is about 71 %. In digital electronics, level also simply means H or L.",
+  "lex_begriff_flanke_name": "Edge",
+  "lex_begriff_flanke": "An edge is the moment when a digital signal jumps. From L to H it is the rising edge, from H to L the falling edge. A counter counts on an edge, not for the whole time the signal is H.",
+  "lex_begriff_prellen_name": "Contact bounce",
+  "lex_begriff_prellen": "A push button does not close cleanly. Its contacts spring back and forth a few times before they settle. This takes only 1 to 3 ms. A counter sees several edges and counts too many. A capacitor or a Schmitt trigger smooths this out. This is called debouncing."
 }

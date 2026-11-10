@@ -123,6 +123,7 @@ public:
     void setGenOffset(double volt);
     void setGenAmDepth(double depth);
     void setGenAmTone(double hz);
+    void setGenSweep(double factor, double timeS); // ab Volta 3; factor 1 = aus
     void setTracerSettings(const TracerSettings& s); // Kennlinienschreiber (Bedienhandlung)
     // Hoerbare Simulation (ab Volta 2, Konzept 5.3): Tonstrom des Audiodienstes; audible = Lautsprecher hoerbar
     // rechnen (Schrittweite 20 us, nur bei Echtzeit). Zeitlupe/Zeitraffer: timeScale (< 1 Zeitlupe, dann feinere

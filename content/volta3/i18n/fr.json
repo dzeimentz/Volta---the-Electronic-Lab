@@ -1291,5 +1291,17 @@
   "exp3_0_3_mehr": "La courbe de charge a une constante de temps τ = R · C, ici 1 kΩ · 10 nF = 10 µs. Après une constante de temps, le condensateur est chargé à environ 63 %, après cinq presque entièrement.",
   "exp3_0_3_w1": "Règle la loupe sur ×100. Combien dure maintenant un carreau ?",
   "exp3_0_3_w2": "Remplace 1 kΩ par 10 kΩ. Le condensateur monte-t-il encore jusqu'en haut ?",
-  "exp3_0_3_echt": "Les vrais oscilloscopes montrent aussi des signaux très rapides, sans ralenti. Pour cela, ils mesurent plusieurs millions de fois par seconde."
+  "exp3_0_3_echt": "Les vrais oscilloscopes montrent aussi des signaux très rapides, sans ralenti. Pour cela, ils mesurent plusieurs millions de fois par seconde.",
+  "lex_begriff_modulation_name": "Modulation",
+  "lex_begriff_modulation": "La modulation, c'est un signal qui voyage sur un autre. À la radio, la musique modifie une onde porteuse rapide. En AM, c'est sa hauteur qui change, en FM sa fréquence. Le récepteur ressort la musique. On appelle cela la démodulation.",
+  "lex_begriff_resonanz_name": "Résonance",
+  "lex_begriff_resonanz": "La résonance, c'est quand un circuit oscillant vibre très fort à une fréquence précise. C'est sa fréquence de résonance f₀. Pour une bobine et un condensateur : f₀ = 1 : (2 · π · √(L · C)). C'est ainsi que ta radio choisit une station.",
+  "lex_begriff_wirkungsgrad_name": "Rendement",
+  "lex_begriff_wirkungsgrad": "Le rendement η indique quelle part de la puissance fournie ressort de façon utile : η = Psortie : Pentrée. Le reste devient de la chaleur. Un régulateur qui fait 5 V à partir de 9 V n'atteint qu'environ 55 %. Un convertisseur à découpage atteint souvent 80 % et plus.",
+  "lex_begriff_pegel_name": "Niveau",
+  "lex_begriff_pegel": "Un niveau compare deux tensions en décibels (dB). 20 dB de plus, c'est dix fois plus de tension. 6 dB de plus, c'est environ le double. 3 dB de moins, c'est environ 71 %. En électronique numérique, le niveau veut aussi dire simplement H ou L.",
+  "lex_begriff_flanke_name": "Front",
+  "lex_begriff_flanke": "Un front est l'instant où un signal numérique saute. De L à H, c'est le front montant, de H à L le front descendant. Un compteur avance sur un front, et non pendant tout le temps où le signal est à H.",
+  "lex_begriff_prellen_name": "Rebond",
+  "lex_begriff_prellen": "Un bouton-poussoir ne se ferme pas proprement. Ses contacts rebondissent quelques fois avant de se poser. Cela ne dure que 1 à 3 ms. Un compteur voit alors plusieurs fronts et compte trop. Un condensateur ou une bascule de Schmitt lisse cela. C'est l'anti-rebond."
 }
