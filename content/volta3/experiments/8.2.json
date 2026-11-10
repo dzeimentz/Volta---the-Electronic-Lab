@@ -208,6 +208,7 @@
       }
     ]
   },
+  "aufbau_von": "volta3.8.1",
   "schritte": [
     "exp3_8_2_s1",
     "exp3_8_2_s2",

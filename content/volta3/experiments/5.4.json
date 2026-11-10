@@ -224,6 +224,7 @@
       }
     ]
   },
+  "aufbau_von": "volta3.5.3",
   "schritte": [
     "exp3_5_4_s1",
     "exp3_5_4_s2",
