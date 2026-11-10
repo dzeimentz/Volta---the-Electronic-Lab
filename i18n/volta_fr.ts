@@ -6809,6 +6809,12 @@
         <translation>condensateur</translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="128"/>
+        <source>Kondensator</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>condensateur</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="140"/>
         <source>Elektromagnet</source>
         <comment>Wortanfaenge im Aufbautext</comment>

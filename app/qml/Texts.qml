@@ -140,6 +140,7 @@ QtObject {
             ["diode_ge", qsTr("Germaniumdiode", "Wortanfaenge im Aufbautext")],
             ["diode_si", qsTr("Diode", "Wortanfaenge im Aufbautext")],
             ["drehkondensator", qsTr("Drehkondensator", "Wortanfaenge im Aufbautext")],
+            ["kondensator", qsTr("Kondensator", "Wortanfaenge im Aufbautext")],
             ["spule_100mh", qsTr("Spule", "Wortanfaenge im Aufbautext")],
             ["trimmer_10k", qsTr("Trimmer", "Wortanfaenge im Aufbautext")],
             ["blinkmodul", qsTr("Blinkmodul", "Wortanfaenge im Aufbautext")],

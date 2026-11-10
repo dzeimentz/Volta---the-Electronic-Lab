@@ -42,11 +42,18 @@ Flow {
 
     // Woerter in Stuecke zerlegen: [{kind: "text"|"field"|"symbol", value}]; field: einzelnes Feld des Wortes
     readonly property var words: {
-        const stems = Texts.partWords().map(e => [e[0], e[1].split(",").map(w => w.trim().toLowerCase())])
+        // Namen aus mehreren Woertern (»variable capacitor«) bleiben ein Wort, sonst traefe »capacitor« allein
+        const stems = Texts.partWords().map(e => [e[0], e[1].split(",").map(w => w.trim().toLowerCase().replace(/ /g, " "))])
+        let text = step.text
+        stems.forEach(e => e[1].forEach(st => {
+            if (st.indexOf(" ") < 0) return
+            const re = new RegExp(st.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/ /g, " "), "gi")
+            text = text.replace(re, m => m.replace(/ /g, " "))
+        }))
         const used = {}
         const list = []
         // Zahl und Einheit bleiben zusammen (»10 kΩ« nicht ueber zwei Zeilen)
-        const parts = step.text.replace(/([0-9]) ([kM]?Ω|µF|V)(?=[\s.,;:)]|$)/g, "$1 $2").split(" ")
+        const parts = text.replace(/([0-9]) ([kM]?Ω|µF|V)(?=[\s.,;:)]|$)/g, "$1 $2").split(" ")
         for (let i = 0; i < parts.length; ++i) {
             const word = parts[i]
             if (word === "") continue
@@ -84,7 +91,24 @@ Flow {
             if (type === "" && !used["widerstand"] && /^[0-9][0-9,.]* [kM]?Ω$/.test(core)
                     && step.templateParts.some(p => p.type === "widerstand"))
                 type = "widerstand"
+            // Kondensator oder Elko: im Englischen und Franzoesischen heissen beide gleich, der Musteraufbau entscheidet
+            if (type === "kondensator" || type === "elko") {
+                const other = type === "kondensator" ? "elko" : "kondensator"
+                if (!step.templateParts.some(p => p.type === type) && step.templateParts.some(p => p.type === other))
+                    type = other
+            }
             if (type !== "") used[type] = true
+            // Spule: Wert aus den folgenden Woertern (»Spule 1 H«), sonst die Spule aus dem Musteraufbau
+            if (type === "spule_100mh") {
+                const after = ((parts[i + 1] || "") + " " + (parts[i + 2] || "")).toLowerCase()
+                const coils = step.templateParts.map(p => p.type).filter(t => t.startsWith("spule_"))
+                let pick = coils.length > 0 ? coils[0] : ""
+                for (let k = 0; k < coils.length; ++k) {
+                    const v = Texts.partName(coils[k]).toLowerCase().replace(/^.* ([0-9]+ [µm]?h)$/, "$1")
+                    if (after.startsWith(v)) { pick = coils[k]; break }
+                }
+                if (pick !== "") type = pick
+            }
             // LED: die Farbe aus dem Nachbarwort (»grüne Leuchtdiode«, »LED verte«), sonst aus dem Musteraufbau
             if (type === "led_rot") {
                 const near = [parts[i - 1] || "", parts[i + 1] || ""].map(w => w.toLowerCase())

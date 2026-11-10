@@ -1574,6 +1574,18 @@ private slots:
         m_lab->chooseGuess(0);
         QTRY_VERIFY(pieces(QStringLiteral("stepText_0")).join(QLatin1Char(' ')).contains(QStringLiteral("symbol:relais")));
         QVERIFY(!pieces(QStringLiteral("stepText_0")).contains(QStringLiteral("field:B3 field:B4")));
+        // Kondensator bekommt sein Bild, die Spule das der gesteckten Spule (1 H statt 100 mH)
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta3.1.1")));
+        m_lab->chooseGuess(0);
+        QTRY_VERIFY(!pieces(QStringLiteral("stepText_0")).isEmpty());
+        // dieser Prueflauf laedt die Texte von Volta 1: den Satz aus Volta 3 direkt setzen
+        findItem(m_window->contentItem(), QStringLiteral("stepText_0_0"))->setProperty("text",
+            QStringLiteral("Stecke den Kondensator 1 µF auf A1 und A2 und die Spule 1 H auf C2 und C3."));
+        const QStringList lc = pieces(QStringLiteral("stepText_0"));
+        QVERIFY2(lc.contains(QStringLiteral("text:Kondensator symbol:kondensator")), qPrintable(lc.join(QLatin1Char('|'))));
+        QVERIFY2(lc.contains(QStringLiteral("text:Spule symbol:spule_1h")), qPrintable(lc.join(QLatin1Char('|'))));
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.3.15")));
+        m_lab->chooseGuess(0);
         // Stichpunkte: ein Handgriff je Zeile, Klammern und Nebensaetze bleiben ganz
         QCOMPARE(m_lab->property("steps").toStringList().size(), 3);
         const QVariant bullets = findItem(m_window->contentItem(), QStringLiteral("stepBullets_0"))->property("bullets");
