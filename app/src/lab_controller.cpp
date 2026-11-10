@@ -130,8 +130,11 @@ bool LabController::startExperiment(const QString& id) {
         start.columns = autoColumnsFor(exp.templateBoard, false, start.desk.meterVisible);
     else
         start.columns = model::highestUsedColumn(exp.templateBoard) <= m_preferredColumns ? m_preferredColumns : 12;
-    m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
+    // erst den neuen Aufbau, dann die Erfolgsbedingung: sonst bewertet sie noch den alten, eingeschalteten Aufbau
+    // (und »Fertig« waere sofort gruen, wenn er zufaellig passt)
+    m_session->clearSuccess();
     m_session->loadBoard(start);
+    m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
     setGuideActive(false); // Aufbauhilfe beginnt jedes Experiment ausgeschaltet
     m_experiment = std::move(exp);
