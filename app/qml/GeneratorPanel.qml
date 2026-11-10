@@ -190,8 +190,14 @@ Popup {
                     width: parent.width
                     height: Theme.control
                     from: 1; to: 10; stepSize: 0.1
-                    value: panel.controller ? panel.controller.genFrequency / panel.decade : 1
-                    onMoved: panel.controller.genFrequency = Math.round(value * 10) / 10 * panel.decade
+                    // Bereich beim Ziehen festhalten: am rechten Ende (10-Fache) wuerde er sonst schon waehrend des
+                    // Ziehens umspringen, und der Schieber stuende dann auf dem 10-Fachen des naechsten Bereichs.
+                    // Nach dem Loslassen gilt der neue Bereich (Schieber links), dort geht es weiter nach oben.
+                    property int heldDecade: 1
+                    readonly property int useDecade: pressed ? heldDecade : panel.decade
+                    onPressedChanged: if (pressed) heldDecade = panel.decade
+                    value: panel.controller ? panel.controller.genFrequency / useDecade : 1
+                    onMoved: panel.controller.genFrequency = Math.round(value * 10) / 10 * useDecade
                     Accessible.name: qsTr("Frequenz fein")
                 }
             }
