@@ -117,6 +117,7 @@
         "groesse": "spannung_V",
         "auswertung": "spitze_spitze",
         "fenster_s": 0.5,
+        "dauer_s": 1,
         "min": 0.6
       }
     ]

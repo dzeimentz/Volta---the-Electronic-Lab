@@ -20,6 +20,12 @@ Rectangle {
     property var sc: ({channels: []})
     property bool frozen: false // Standbild: das Bild bleibt stehen, die Simulation laeuft weiter
     property bool showHelp: false // »?«: kurze Hilfe ueber den Bedienelementen
+    // Bedienung eingeklappt: nur Schirm und Kopf (LED, Ausklappen, Schliessen) - Platz fuer Steckfeld und
+    // Frequenzgang-Schreiber daneben
+    property bool collapsed: false
+    readonly property real naturalScreen: Math.max(160, (panel.height - 12) * 1.25)
+    readonly property real compactHead: Theme.control
+    readonly property real collapsedWidth: 6 + naturalScreen + 10 + compactHead + 6
     readonly property var chans: sc.channels || []
     // Das Oszilloskop haengt am Hauptschalter (wie Generator und Wechselquelle): aus ist der Schirm dunkel
     readonly property bool powered: controller !== null && controller.mainSwitch
@@ -49,7 +55,8 @@ Rectangle {
         objectName: "scopeScreen"
         x: 6; y: 6
         // 10 x 8 Teilungen; bei wenig Platz kleiner, damit neben ihm zwei Gruppen der Bedienung nebeneinander passen
-        width: Math.max(160, Math.min((panel.height - 12) * 1.25, panel.width - 440))
+        width: panel.collapsed ? Math.max(160, Math.min(panel.naturalScreen, panel.width - 22 - panel.compactHead))
+                               : Math.max(160, Math.min(panel.naturalScreen, panel.width - 440))
         height: width / 1.25
         color: "#0E1A16"
         radius: 4
@@ -254,7 +261,7 @@ Rectangle {
     }
 
     // Kopf: Name, »?«, Schliessen
-    Row {
+    Flow { // eingeklappt so schmal wie ein Knopf: LED, Ausklappen und Schliessen untereinander
         id: head
         anchors { left: screen.right; leftMargin: 10; right: parent.right; rightMargin: 4 }
         y: 4
@@ -271,7 +278,8 @@ Rectangle {
             }
         }
         Label {
-            width: parent.width - 22 - helpButton.width - closeButton.width - 3 * parent.spacing
+            visible: !panel.collapsed
+            width: parent.width - 22 - helpButton.width - collapseButton.width - closeButton.width - 4 * parent.spacing
             height: Theme.control
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -283,8 +291,21 @@ Rectangle {
         HelpToggle {
             id: helpButton
             objectName: "scopeHelpButton"
+            visible: !panel.collapsed
             checked: panel.showHelp
             onClicked: panel.showHelp = !panel.showHelp
+        }
+        PanelButton {
+            id: collapseButton
+            objectName: "scopeCollapse"
+            width: Theme.control; height: Theme.control
+            contentItem: Item {
+                DrawnIcon { anchors.centerIn: parent; kind: panel.collapsed ? "left" : "right"; color: Theme.navy; size: 20 }
+            }
+            onClicked: panel.collapsed = !panel.collapsed
+            Accessible.name: panel.collapsed ? qsTr("Bedienung des Oszilloskops ausklappen")
+                                             : qsTr("Bedienung des Oszilloskops einklappen")
+            ToolTip.text: Accessible.name
         }
         PanelButton {
             id: closeButton
@@ -297,6 +318,7 @@ Rectangle {
 
     Flickable {
         id: controlsFlick
+        visible: !panel.collapsed
         anchors { left: screen.right; leftMargin: 10; right: parent.right; rightMargin: 4; top: head.bottom; bottom: parent.bottom; bottomMargin: 4 }
         contentHeight: controlsColumn.implicitHeight
         clip: true

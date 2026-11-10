@@ -835,20 +835,21 @@ private slots:
         QTRY_VERIFY_WITH_TIMEOUT(lab.buildComplete(), 5000);
         QTest::qWait(1500);
         QVERIFY(!lab.canFinish()); // 2 V Spitze-Spitze bei 100 Hz
-        lab.setGenFrequency(1600.0); // Schieber bei 1 kHz bis 10 kHz: 1,6 kHz
+        lab.setGenFrequency(3000.0); // ab der Grenzfrequenz aufwaerts gruen (nicht nur genau dort)
         QTRY_VERIFY_WITH_TIMEOUT(lab.canFinish(), 30000);
         QVERIFY(lab.startExperiment(QStringLiteral("volta3.0.3")));
         QVERIFY(!lab.experimentBode());
         // Startstellung des Generators (start_...): mit Musteraufbau bleibt »Fertig« grau, bis das Kind einstellt.
-        // 1.5 nach 0.3: der eingeschaltete Aufbau von 0.3 darf die neue Erfolgsbedingung nicht erfuellen
-        for (const char* id : {"volta3.1.4", "volta3.0.3", "volta3.1.5", "volta3.2.1"}) {
+        // Wechsel nach 0.3 und mehrfach: weder der alte Aufbau noch der Einschaltvorgang erfuellen die Bedingung
+        for (const char* id : {"volta3.1.5", "volta3.0.3", "volta3.1.4", "volta3.1.5", "volta3.2.1", "volta3.1.5"}) {
             QVERIFY(lab.startExperiment(QString::fromLatin1(id)));
+            QVERIFY(!lab.canFinish()); // nicht vom vorigen Experiment uebernommen
             lab.chooseGuess(0);
             while (!lab.solutionShown()) lab.nextHint();
             QVERIFY(lab.showTemplate());
             lab.setMainSwitch(true);
             QTRY_VERIFY_WITH_TIMEOUT(lab.buildComplete(), 5000);
-            QTest::qWait(1500);
+            QTest::qWait(2500); // Einschaltvorgang und Haltedauer 1 s
             QVERIFY2(!lab.canFinish(), id);
         }
     }

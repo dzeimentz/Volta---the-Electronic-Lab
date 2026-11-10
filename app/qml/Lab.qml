@@ -973,9 +973,18 @@ Item {
         controller: lab.controller
         readonly property bool shown: lab.recorderVisible && lab.controller.recorderAvailable && !lab.classicMeter
         visible: shown
-        onShownChanged: lab.controller.scopeActive = shown
+        onShownChanged: {
+            lab.controller.scopeActive = shown
+            if (shown && bodePanel.shown) collapsed = true // neben dem Frequenzgang-Schreiber: Bedienung einklappen
+        }
         Component.onCompleted: lab.controller.scopeActive = shown
-        anchors { left: tray.right; right: experimentPanel.left; bottom: recorderPanel.top }
+        // neben dem Frequenzgang-Schreiber nur so breit wie noetig (eingeklappt: Schirm und Kopf), sonst ganze Breite
+        readonly property real avail: experimentPanel.x - tray.x - tray.width
+        readonly property bool beside: shown && bodePanel.shown
+        anchors { left: tray.right; bottom: recorderPanel.top }
+        width: !beside ? avail
+             : collapsed ? Math.min(collapsedWidth, Math.max(avail * 0.45, 230))
+             : Math.max(collapsedWidth, Math.min(avail - 420, naturalScreen + 480))
         height: shown ? Math.max(190, Math.min(260, lab.height * 0.3)) : 0
         onCloseRequested: lab.recorderVisible = false
     }
@@ -987,8 +996,10 @@ Item {
         controller: lab.controller
         readonly property bool shown: lab.bodeVisible && lab.controller.band === "volta3"
         visible: shown
-        anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.top }
-        height: shown ? Math.max(200, Math.min(270, lab.height * 0.32)) : 0
+        // neben dem Oszilloskop in gleicher Hoehe (beide zusammen nehmen dem Steckfeld nur eine Zeile weg)
+        anchors { left: scopePanel.beside ? scopePanel.right : tray.right; right: experimentPanel.left; bottom: scopePanel.bottom }
+        height: !shown ? 0 : scopePanel.beside ? scopePanel.height : Math.max(200, Math.min(270, lab.height * 0.32))
+        onShownChanged: if (shown && scopePanel.shown) scopePanel.collapsed = true // Platz: Bedienung einklappen
         onCloseRequested: lab.bodeVisible = false
     }
 
@@ -1004,7 +1015,7 @@ Item {
             return false
         }
         visible: shown
-        anchors { left: tray.right; right: experimentPanel.left; bottom: bodePanel.top }
+        anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.shown ? scopePanel.top : bodePanel.top }
         height: shown ? Math.min(implicitHeight, Math.max(120, lab.height * 0.32)) : 0
     }
 

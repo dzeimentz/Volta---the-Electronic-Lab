@@ -156,6 +156,7 @@ bool LabController::startExperiment(const QString& id) {
     m_session->setIntendedReversed(exp.intendedReversed);
     loadSessionBoard(start);
     m_session->setSuccess(exp.successCondition, exp.templateBoard, exp.colourFixed);
+    updateFinish(); // »Fertig« des vorigen Experiments nicht stehen lassen
     m_flow.start(static_cast<int>(exp.hintKeys.size()), static_cast<int>(exp.observationKeys.size()));
     setGuideActive(false); // Aufbauhilfe beginnt jedes Experiment ausgeschaltet
     m_experiment = std::move(exp);

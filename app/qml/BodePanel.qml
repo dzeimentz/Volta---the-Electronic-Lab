@@ -16,6 +16,8 @@ Rectangle {
     property var bs: ({status: "wait"})
     property bool showPhase: false
     readonly property bool ok: bs.status === "ok"
+    // schmal (neben dem Oszilloskop): Kennwerte rechts und Untertitel entfallen, die Marken im Bild bleiben
+    readonly property bool narrow: width < 600
 
     function refresh() { panel.bs = panel.controller.bodeState() }
     // neu rechnen, solange er offen ist (Drehregler, Bauteilwerte und Arbeitspunkt aendern die Kurve)
@@ -73,13 +75,15 @@ Rectangle {
         }
         Label {
             anchors.verticalCenter: parent.verticalCenter
+            visible: !panel.narrow
             text: qsTr("Eingang G · Ausgang K1")
             font.pixelSize: Math.round(12 * Theme.fontScale)
             color: "#4A5866"
         }
-        Button {
+        PanelButton {
             objectName: "bodePhase"
             height: Theme.control
+            width: Math.max(Theme.control, implicitWidth)
             checkable: true
             checked: panel.showPhase
             text: panel.showPhase ? qsTr("Phase: an") : qsTr("Phase: aus")
@@ -87,11 +91,11 @@ Rectangle {
             Accessible.name: qsTr("Phase zeigen")
         }
     }
-    ToolButton {
+    PanelButton {
         objectName: "bodeClose"
         anchors { right: parent.right; top: parent.top; margins: 4 }
         width: Theme.control; height: Theme.control
-        text: "✕"
+        contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 20 } }
         onClicked: panel.closeRequested()
         Accessible.name: qsTr("Frequenzgang-Schreiber schließen")
     }
@@ -101,7 +105,7 @@ Rectangle {
         id: plotArea
         x: 8
         anchors { top: head.bottom; topMargin: 4; bottom: parent.bottom; bottomMargin: 6 }
-        width: Math.max(200, panel.width - 16 - side.width - 12)
+        width: Math.max(200, panel.width - 16 - (side.visible ? side.width + 12 : 0))
 
         readonly property real axisL: 52
         readonly property real axisB: 18
@@ -225,6 +229,7 @@ Rectangle {
             Label {
                 required property string modelData
                 required property int index
+                visible: !panel.narrow || index % 2 === 0 // schmal: jede zweite Dekade
                 x: screen.x + index * screen.width / 7 - (index === 7 ? width : index === 0 ? 0 : width / 2)
                 y: screen.y + screen.height + 2
                 text: modelData
@@ -240,7 +245,7 @@ Rectangle {
         anchors { right: parent.right; rightMargin: 8; top: head.bottom; topMargin: 4 }
         width: Math.min(230, panel.width * 0.3)
         spacing: 3
-        visible: panel.ok
+        visible: panel.ok && !panel.narrow
         Label {
             width: parent.width
             wrapMode: Text.Wrap

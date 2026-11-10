@@ -114,6 +114,7 @@
         "groesse": "spannung_V",
         "auswertung": "frequenz",
         "fenster_s": 0.5,
+        "dauer_s": 1,
         "zwischen": [
           9000,
           11000

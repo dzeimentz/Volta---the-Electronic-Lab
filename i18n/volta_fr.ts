@@ -5864,6 +5864,16 @@
 <context>
     <name>ScopePanel</name>
     <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Bedienung des Oszilloskops ausklappen</source>
+        <translation>Déplier les commandes de l'oscilloscope</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/ScopePanel.qml" line="1"/>
+        <source>Bedienung des Oszilloskops einklappen</source>
+        <translation>Replier les commandes de l'oscilloscope</translation>
+    </message>
+    <message>
         <location filename="../app/qml/ScopePanel.qml" line="128"/>
         <source>Spitze-Spitze %1</source>
         <translation>Crête à crête %1</translation>
