@@ -157,8 +157,9 @@ void SimulationBridge::applyPending() {
         retune = retune || a.type == Action::Type::SetCapacitance;
     }
     // Radio (ab Volta 3): Abstimmen ueber die Wechselstromanalyse (Speicher nur hier, zwischen zwei Schritten)
+    if (circuit || stationsChanged) m_radio = {};
     if ((circuit || stationsChanged || retune) && m_sim.hasCircuit() && (!m_stations.empty() || stationsChanged))
-        core::tuneRadio(m_sim, m_stations);
+        core::tuneRadio(m_sim, m_stations, &m_radio);
     // Frequenzgang-Schreiber (ab Volta 3): Wechselstromanalyse am angenommenen Zustand, Speicher nur hier
     if (sweep) {
         auto d = std::make_shared<SweepData>();
@@ -287,6 +288,7 @@ void SimulationBridge::publish(double realtimeRatio) {
     m_back.states.resize(c.componentCount());
     for (std::size_t i = 0; i < c.componentCount(); ++i) m_back.states[i] = c.component(i).saveState();
     m_back.realtimeRatio = realtimeRatio;
+    m_back.radio = m_radio;
     m_back.sweep = m_sweep;
     m_back.scope.resize(m_scopeCount);
     for (std::size_t k = 0; k < m_scopeCount; ++k)
@@ -314,6 +316,7 @@ void SimulationBridge::publish(double realtimeRatio) {
     std::swap(m_front.states, m_back.states);
     std::swap(m_front.lastStatus, m_back.lastStatus);
     std::swap(m_front.realtimeRatio, m_back.realtimeRatio);
+    std::swap(m_front.radio, m_back.radio);
     std::swap(m_front.scope, m_back.scope);
     std::swap(m_front.scopeHas, m_back.scopeHas);
     std::swap(m_front.tracer, m_back.tracer);
@@ -340,6 +343,7 @@ bool SimulationBridge::latest(Snapshot& out) {
     out.states.assign(m_front.states.begin(), m_front.states.end());
     out.lastStatus = m_front.lastStatus;
     out.realtimeRatio = m_front.realtimeRatio;
+    out.radio = m_front.radio;
     out.scope.assign(m_front.scope.begin(), m_front.scope.end());
     out.scopeHas = m_front.scopeHas;
     out.tracer.assign(m_front.tracer.begin(), m_front.tracer.end());

@@ -141,6 +141,23 @@ TEST_CASE("Sendersignale bleiben im Bereich und haben Pausen", "[radio][volta3]"
     }
 }
 
+TEST_CASE("Tonhoehe des Programms fuer den Ersatzton", "[radio][volta3]") {
+    CHECK(stationPitchHz(StationProgram::Tone, 880.0, 3.3) == 880.0);
+    CHECK(stationPitchHz(StationProgram::Morse, 700.0, 0.04) == 700.0); // V: Punkt
+    CHECK(stationPitchHz(StationProgram::Morse, 700.0, 0.12) == 0.0);   // Pause im Zeichen
+    CHECK(stationPitchHz(StationProgram::TimeSignal, 1000.0, 0.3) == 1000.0); // langer Piep (alle 10 s)
+    CHECK(stationPitchHz(StationProgram::TimeSignal, 1000.0, 1.05) == 1000.0);
+    CHECK(stationPitchHz(StationProgram::TimeSignal, 1000.0, 1.3) == 0.0);
+    CHECK(near(stationPitchHz(StationProgram::Melody, 1000.0, 0.1), 523.25 * std::pow(2.0, 7.0 / 12.0), 0.0));
+    // Tonhoehe und Signal passen zusammen: wo das Signal schweigt, ist auch die Tonhoehe 0
+    for (int k = 0; k < 2000; ++k) {
+        const double t = k * 0.0123;
+        for (StationProgram p : {StationProgram::Morse, StationProgram::TimeSignal, StationProgram::Melody,
+                                 StationProgram::Carol})
+            if (stationPitchHz(p, 1000.0, t) == 0.0) CHECK(stationSignal(p, 1000.0, t) == 0.0);
+    }
+}
+
 TEST_CASE("Detektordiode ohne Traeger verhaelt sich wie die Diode", "[radio][volta3]") {
     // 1,5 V und 9 V ueber 1 kOhm, in Durchlass- und Sperrrichtung
     for (int cells : {1, 6})
@@ -178,9 +195,11 @@ TEST_CASE("Abstimmen: der Traeger an der Diode ist bei der Thomson-Frequenz am g
         Built b;
         Simulator sim;
         REQUIRE(sim.setCircuit(build(r, b)) == Status::Ok);
-        REQUIRE(tuneRadio(sim, {st}) == Status::Ok);
+        DetectorDiode::Drive strongest;
+        REQUIRE(tuneRadio(sim, {st}, &strongest) == Status::Ok);
         const auto& det = static_cast<const DetectorDiode&>(sim.circuit().component(b.detector));
         REQUIRE(det.driveCount() == 1);
+        CHECK(strongest.e0V == det.drive(0).e0V); // fuer den Ersatzton
         if (det.drive(0).e0V > best) {
             best = det.drive(0).e0V;
             bestC = r.dkF;

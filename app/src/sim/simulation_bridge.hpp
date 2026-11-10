@@ -126,6 +126,7 @@ struct Snapshot {
     std::shared_ptr<const SweepData> sweep; // Frequenzgang-Schreiber: letzter Durchlauf (leer = keiner)
     core::Status lastStatus = core::Status::Ok;
     double realtimeRatio = 1.0;               // erreichte Simulationszeit je Wanduhrzeit (1 = Echtzeit)
+    core::DetectorDiode::Drive radio;         // staerkster empfangener Sender (e0V = 0: keiner), fuer den Ersatzton
 };
 
 // Entkoppelt Oberflaeche und Simulator (docs/architecture.md, Threads und Datenfluss).
@@ -219,6 +220,7 @@ private:
     std::shared_ptr<const SweepData> m_sweep; // im Simulations-Thread erzeugt, unveraendert weitergereicht
     std::vector<core::RadioStation> m_pendingStations;
     std::vector<core::RadioStation> m_stations; // im Simulations-Thread
+    core::DetectorDiode::Drive m_radio;         // staerkster Sender nach dem letzten Abstimmen
     ScopeConfig m_pendingScope;
 
     std::mutex m_outMutex; // Ausgang (Doppelpuffer)

@@ -66,6 +66,22 @@ double playNotes(const Note (&notes)[N], double unitS, double timeS) noexcept {
 }
 
 double tone(double hz, double t) noexcept { return std::sin(2.0 * kPi * hz * t); }
+
+template <std::size_t N>
+double notePitch(const Note (&notes)[N], double unitS, double timeS) noexcept {
+    int total = 0;
+    for (const Note& n : notes) total += n.units;
+    double t = std::fmod(timeS, total * unitS);
+    for (const Note& n : notes) {
+        const double durS = n.units * unitS;
+        if (t < durS) {
+            if (n.semitone == kRest || t > durS - 0.02) return 0.0;
+            return 523.25 * std::pow(2.0, n.semitone / 12.0);
+        }
+        t -= durS;
+    }
+    return 0.0;
+}
 } // namespace
 
 double stationSignal(StationProgram program, double toneHz, double timeS) noexcept {
@@ -88,6 +104,29 @@ double stationSignal(StationProgram program, double toneHz, double timeS) noexce
         return playNotes(kMelody, kMelodyUnitS, timeS);
     case StationProgram::Carol:
         return playNotes(kCarol, kCarolUnitS, timeS);
+    }
+    return 0.0;
+}
+
+double stationPitchHz(StationProgram program, double toneHz, double timeS) noexcept {
+    if (!std::isfinite(timeS) || timeS < 0.0) timeS = 0.0;
+    if (!(toneHz > 0.0) || !std::isfinite(toneHz)) toneHz = 1000.0;
+    switch (program) {
+    case StationProgram::Tone:
+        return toneHz;
+    case StationProgram::Morse: {
+        const auto unit = static_cast<std::size_t>(std::floor(timeS / kMorseUnitS)) % kMorseUnits;
+        return kMorse[unit] == '1' ? toneHz : 0.0;
+    }
+    case StationProgram::TimeSignal: {
+        const double sec = std::floor(timeS);
+        const bool full = std::fmod(sec, 10.0) < 0.5;
+        return timeS - sec < (full ? 0.5 : 0.1) ? toneHz : 0.0;
+    }
+    case StationProgram::Melody:
+        return notePitch(kMelody, kMelodyUnitS, timeS);
+    case StationProgram::Carol:
+        return notePitch(kCarol, kCarolUnitS, timeS);
     }
     return 0.0;
 }
@@ -303,7 +342,8 @@ void DetectorDiode::restoreState(const ComponentState& state) noexcept {
 
 // ---------------------------------------------------------------- Abstimmen
 
-Status tuneRadio(Simulator& sim, const std::vector<RadioStation>& stations) {
+Status tuneRadio(Simulator& sim, const std::vector<RadioStation>& stations, DetectorDiode::Drive* strongestOut) {
+    if (strongestOut) *strongestOut = DetectorDiode::Drive{};
     if (!sim.hasCircuit()) return Status::NoCircuit;
     Circuit& c = sim.circuit();
     std::size_t antenna = c.componentCount();
@@ -348,6 +388,7 @@ Status tuneRadio(Simulator& sim, const std::vector<RadioStation>& stations) {
             dr.program = on[i]->program;
             dr.toneHz = on[i]->toneHz;
             drives.push_back(dr);
+            if (strongestOut && dr.e0V > strongestOut->e0V) *strongestOut = dr;
             if (dr.e0V > strongest) {
                 const Complex z0 = z[2 * i], z1 = z[2 * i + 1];
                 strongest = dr.e0V;

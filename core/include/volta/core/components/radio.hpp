@@ -36,6 +36,9 @@ enum class StationProgram {
 
 // Modulationssignal des Programms zur Zeit t (s), Tonhoehe toneHz (Morse, Zeitzeichen; die Melodie hat eigene Toene).
 double stationSignal(StationProgram program, double toneHz, double timeS) noexcept;
+// Tonhoehe des Programms zur Zeit timeS in Hz, 0 in den Pausen (Ersatzton, wenn die Simulation langsamer als
+// Echtzeit rechnet)
+double stationPitchHz(StationProgram program, double toneHz, double timeS) noexcept;
 
 struct RadioStation {
     double carrierHz = 1e6; // Traegerfrequenz
@@ -142,6 +145,8 @@ private:
 // Antenneneinspeisung aus). Aufrufen nach setCircuit() und nach jeder Bedienhandlung, die den Kreis verstimmt
 // (Drehkondensator), sowie beim Ein-/Ausschalten von Sendern. Nicht im Echtzeitpfad (Speicheranforderung).
 // Ohne Antenneneinspeisung oder ohne eingeschalteten Sender erhalten alle Detektordioden keinen Traeger.
-Status tuneRadio(Simulator& sim, const std::vector<RadioStation>& stations);
+// strongest (optional): staerkster Traeger an einer Detektordiode (e0V = 0: kein Empfang)
+Status tuneRadio(Simulator& sim, const std::vector<RadioStation>& stations,
+                 DetectorDiode::Drive* strongest = nullptr);
 
 } // namespace volta::core

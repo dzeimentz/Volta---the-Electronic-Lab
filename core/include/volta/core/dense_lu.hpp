@@ -26,6 +26,7 @@ private:
     std::vector<double> m_lu;
     std::vector<std::size_t> m_perm;
     std::vector<double> m_colScale; // Betragsmaximum je Spalte (Pivotgrenze)
+    std::vector<std::size_t> m_cols; // besetzte Spalten der Pivotzeile (Arbeitsspeicher von factor)
     bool m_valid = false;
 };
 

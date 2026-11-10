@@ -1345,9 +1345,10 @@ bool LabController::speakerWired() const {
 }
 
 // Tonausgabe. Ab Volta 2 hoerbare Simulation (Konzept 5.3): Haengt der Pult-Lautsprecher in der Schaltung, rechnet
-// die Simulation mit 20 us und der Lautsprecherstrom selbst klingt. Faellt sie laenger als 0,6 s unter 90 % der
-// Echtzeit, erklingt offen angesagt ein Ton in der simulierten Frequenz (die Simulation rechnet weiter fein, nur
-// langsamer); nach 3 s wieder in Echtzeit klingt wieder die Rechnung. Zeitlupe ist stumm.
+// die Simulation mit 20 us und der Lautsprecherstrom selbst klingt. Faellt sie laenger als 0,6 s unter 97 % der
+// Echtzeit, erklingt offen angesagt ein Ton in der simulierten Frequenz, beim Radio das Programm des Senders (die
+// Simulation rechnet weiter fein, nur langsamer); nach 3 s wieder in Echtzeit klingt wieder die Rechnung. Zeitlupe
+// ist stumm.
 void LabController::updateAudio(double elapsedS) {
     if (!m_audio) return;
     const bool modern = !m_band.isEmpty() && m_band != QLatin1String("volta1");
@@ -1359,13 +1360,13 @@ void LabController::updateAudio(double elapsedS) {
         const double ratio = m_session->snapshot().realtimeRatio;
         if (!slowMotion && m_session->audible() && ratio > 0.0) { // 0: angehalten
             if (!m_toneFallback) {
-                m_slowS = ratio < 0.9 ? m_slowS + elapsedS : 0.0;
+                m_slowS = ratio < 0.97 ? m_slowS + elapsedS : 0.0; // schon knapp unter Echtzeit reisst der Ton ab
                 if (m_slowS > 0.6) {
                     m_toneFallback = true;
                     m_fastS = 0.0;
                 }
             } else {
-                m_fastS = ratio > 0.97 ? m_fastS + elapsedS : 0.0;
+                m_fastS = ratio > 0.99 ? m_fastS + elapsedS : 0.0;
                 if (m_fastS > 3.0) {
                     m_toneFallback = false;
                     m_slowS = 0.0;
@@ -1386,7 +1387,15 @@ void LabController::updateAudio(double elapsedS) {
         return;
     }
     core::ComponentReading ls;
-    if (!stream && m_session->speakerReading(ls) && !ls.destroyed) {
+    const core::DetectorDiode::Drive& radio = m_session->snapshot().radio;
+    if (!stream && m_session->speakerReading(ls) && !ls.destroyed && radio.e0V > 0.0
+        && model::antennaWired(m_session->board())) {
+        // Radio (ab Volta 3): der Lautsprecherstrom hat keine feste Tonhoehe, das Knacken je Impuls klaenge wie
+        // Knattern. Ersatzton ist das Programm des staerksten Senders, so laut wie der gerechnete Lautsprecher.
+        const double hz = core::stationPitchHz(radio.program, radio.toneHz, m_session->snapshot().timeS);
+        if (hz > 0.0 && ls.level > 0.005) voices.push_back({hz, ls.level}); // 2.5: etwa 2 mA effektiv = 0,02
+        m_lastPulses = ls.displayValue;
+    } else if (!stream && m_session->speakerReading(ls) && !ls.destroyed) {
         if (ls.frequencyHz >= 20.0 && ls.level > 0.02)
             voices.push_back({ls.frequencyHz, ls.level});
         else if (m_lastPulses >= 0.0 && ls.displayValue > m_lastPulses)

@@ -851,6 +851,32 @@ private slots:
         QVERIFY2(std::fabs(reading.displayValue - 4.5) < 0.01, qPrintable(QString::number(reading.displayValue)));
     }
 
+    // Drehregler P1/P2 und Pult-Schalter ohne Leitung: nicht in der Netzliste (kleineres Gleichungssystem, Volta 3
+    // Stufe 2.5 rechnet sonst nicht in Echtzeit); mit Leitung wie bisher
+    void unwiredDeskPartsLeftOut() {
+        model::Board board;
+        board.desk.mainSwitch = true;
+        board.parts.push_back({"R1", "widerstand", {{"a", "A1"}, {"b", "A2"}}, 1000.0});
+        board.wires.push_back({"L1", "P:+9V", "A1", "rot"});
+        board.wires.push_back({"L2", "A2", "P:0V", "schwarz"});
+        model::Netlist net = model::buildNetlist(board, m_catalog);
+        QVERIFY(net.ok());
+        QCOMPARE(net.desk.count(model::desk_id::kPot1), std::size_t(0));
+        QCOMPARE(net.desk.count(model::desk_id::kPot2), std::size_t(0));
+        QCOMPARE(net.desk.count(model::desk_id::kSwitch), std::size_t(0));
+        core::NodeId n = 0;
+        QVERIFY(!net.nodeOf("P:P1s", n));
+        const std::size_t small = net.circuit.nodeCount();
+        board.wires.push_back({"L3", "P:P2s", "A2", "blau"});
+        board.wires.push_back({"L4", "P:S1", "A1", "rot"});
+        net = model::buildNetlist(board, m_catalog);
+        QVERIFY(net.ok());
+        QCOMPARE(net.desk.count(model::desk_id::kPot1), std::size_t(0));
+        QCOMPARE(net.desk.count(model::desk_id::kPot2), std::size_t(1));
+        QCOMPARE(net.desk.count(model::desk_id::kSwitch), std::size_t(1));
+        QCOMPARE(net.circuit.nodeCount(), small + 5); // P2a, P2s, P2b, S1, S2
+    }
+
     void blinkModuleViaPinNames() {
         // Blinkmodul in den Feldern M1-M4 (plus, minus, aus, takt); LED mit 470 Ohm von +9V nach BL1.aus
         model::Board board;

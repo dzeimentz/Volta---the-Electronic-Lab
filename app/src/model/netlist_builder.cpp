@@ -106,6 +106,13 @@ private:
         }
     }
 
+    bool wired(std::initializer_list<const char*> anchors) const {
+        for (const auto& w : m_board.wires)
+            for (const char* a : anchors)
+                if (canonical(w.from) == a || canonical(w.to) == a) return true;
+        return false;
+    }
+
     static constexpr double kFloatingLeakOhm = 100e6; // Konzept Volta 2, 5.1
 
     void buildDesk() {
@@ -114,14 +121,11 @@ private:
         NodeId plus = 0, p1a = 0, p1s = 0, p1b = 0, p2a = 0, p2s = 0, p2b = 0, s1 = 0, s2 = 0, ls1 = 0, ls2 = 0;
         NodeId com = 0, vo = 0, amp = 0;
         node(kPlusAnchor, plus, "Pult");
-        node("P:P1a", p1a, "Pult");
-        node("P:P1s", p1s, "Pult");
-        node("P:P1b", p1b, "Pult");
-        node("P:P2a", p2a, "Pult");
-        node("P:P2s", p2s, "Pult");
-        node("P:P2b", p2b, "Pult");
-        node("P:S1", s1, "Pult");
-        node("P:S2", s2, "Pult");
+        const bool pot1 = wired({"P:P1a", "P:P1s", "P:P1b"}), pot2 = wired({"P:P2a", "P:P2s", "P:P2b"});
+        const bool sw = wired({"P:S1", "P:S2"});
+        if (pot1) { node("P:P1a", p1a, "Pult"); node("P:P1s", p1s, "Pult"); node("P:P1b", p1b, "Pult"); }
+        if (pot2) { node("P:P2a", p2a, "Pult"); node("P:P2s", p2s, "Pult"); node("P:P2b", p2b, "Pult"); }
+        if (sw) { node("P:S1", s1, "Pult"); node("P:S2", s2, "Pult"); }
         node("P:LS1", ls1, "Pult");
         node("P:LS2", ls2, "Pult");
         node("MESS:COM", com, "Pult");
@@ -133,12 +137,18 @@ private:
         c.add<core::Battery>(desk_id::kBattery, cell, core::kGround, core::BatteryParams{d.cells});
         m_net.desk[desk_id::kMainSwitch] = c.componentCount();
         c.add<core::Switch>(desk_id::kMainSwitch, cell, plus, d.mainSwitch);
-        m_net.desk[desk_id::kPot1] = c.componentCount();
-        c.add<core::Potentiometer>(desk_id::kPot1, p1a, p1s, p1b, core::PotentiometerParams{}, d.p1);
-        m_net.desk[desk_id::kPot2] = c.componentCount();
-        c.add<core::Potentiometer>(desk_id::kPot2, p2a, p2s, p2b, core::PotentiometerParams{}, d.p2);
-        m_net.desk[desk_id::kSwitch] = c.componentCount();
-        c.add<core::Switch>(desk_id::kSwitch, s1, s2, d.switchClosed);
+        if (pot1) {
+            m_net.desk[desk_id::kPot1] = c.componentCount();
+            c.add<core::Potentiometer>(desk_id::kPot1, p1a, p1s, p1b, core::PotentiometerParams{}, d.p1);
+        }
+        if (pot2) {
+            m_net.desk[desk_id::kPot2] = c.componentCount();
+            c.add<core::Potentiometer>(desk_id::kPot2, p2a, p2s, p2b, core::PotentiometerParams{}, d.p2);
+        }
+        if (sw) {
+            m_net.desk[desk_id::kSwitch] = c.componentCount();
+            c.add<core::Switch>(desk_id::kSwitch, s1, s2, d.switchClosed);
+        }
         // Lautsprecher: 8 Ohm, 0,5 W, mit Auswertung fuer die Klanganzeige (Tonhoehe, Signalstaerke, Impulse)
         m_net.desk[desk_id::kSpeaker] = c.componentCount();
         c.add<core::Speaker>(desk_id::kSpeaker, ls1, ls2);

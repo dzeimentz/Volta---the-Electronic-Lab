@@ -21,6 +21,7 @@ void DenseLu::resize(std::size_t n) {
     m_lu.assign(n * n, 0.0);
     m_perm.assign(n, 0);
     m_colScale.assign(n, 0.0);
+    m_cols.assign(n, 0);
     m_valid = false;
 }
 
@@ -31,14 +32,17 @@ bool DenseLu::factor(const std::vector<double>& a) noexcept {
     std::copy(a.begin(), a.end(), m_lu.begin());
     for (std::size_t i = 0; i < n; ++i) m_perm[i] = i;
 
+    // Betragsmaxima (gesamt und je Spalte) in einem Durchgang
     double scale = 0.0;
-    for (double v : m_lu) {
-        if (!std::isfinite(v)) return false;
-        scale = std::max(scale, std::fabs(v));
-    }
     std::fill(m_colScale.begin(), m_colScale.end(), 0.0);
     for (std::size_t r = 0; r < n; ++r)
-        for (std::size_t c = 0; c < n; ++c) m_colScale[c] = std::max(m_colScale[c], std::fabs(m_lu[r * n + c]));
+        for (std::size_t c = 0; c < n; ++c) {
+            const double v = m_lu[r * n + c];
+            if (!std::isfinite(v)) return false;
+            const double a = std::fabs(v);
+            m_colScale[c] = std::max(m_colScale[c], a);
+            scale = std::max(scale, a);
+        }
     const double pivotFloor = std::max(scale * kPivotGlobalRel, 1e-300);
 
     auto at = [&](std::size_t r, std::size_t c) -> double& { return m_lu[r * n + c]; };
@@ -58,11 +62,18 @@ bool DenseLu::factor(const std::vector<double>& a) noexcept {
             std::swap(m_perm[col], m_perm[piv]);
         }
         const double d = at(col, col);
+        // Die Knotenmatrix ist duenn besetzt (Volta 3: Empfaenger mit Verstaerker, viele Felder und Leitungen):
+        // nur die besetzten Spalten der Pivotzeile abziehen. Ein Abzug von f * 0 aendert nichts, das Ergebnis
+        // bleibt bitgleich.
+        std::size_t nz = 0;
+        for (std::size_t c = col + 1; c < n; ++c)
+            if (at(col, c) != 0.0) m_cols[nz++] = c;
         for (std::size_t r = col + 1; r < n; ++r) {
+            if (at(r, col) == 0.0) continue; // nichts abzuziehen (L-Eintrag bleibt 0)
             const double f = at(r, col) / d;
             at(r, col) = f; // L unterhalb der Diagonale, Einsen implizit
             if (f == 0.0) continue;
-            for (std::size_t c = col + 1; c < n; ++c) at(r, c) -= f * at(col, c);
+            for (std::size_t k = 0; k < nz; ++k) at(r, m_cols[k]) -= f * at(col, m_cols[k]);
         }
     }
     m_valid = true;
