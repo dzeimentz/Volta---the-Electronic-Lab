@@ -915,6 +915,7 @@ Item {
             function onExperimentChanged() {
                 tray.filter = ""
                 if (lab.controller.experimentScope) lab.recorderVisible = true // Vorlage stellt das Oszilloskop ein
+                if (lab.controller.experimentBode) lab.bodeVisible = true      // Vorlage braucht den Frequenzgang-Schreiber
             }
         }
         onLockedTapped: (type, stage) => toast.show(qsTr("%1 wird mit Stufe %2 freigeschaltet.").arg(Texts.partName(type)).arg(stage))

@@ -31,6 +31,7 @@
   "vorlage": {
     "pult": "bedienpult_2",
     "pult_stellung": {
+      "frequenzgang_schreiber": true,
       "generator": {
         "form": "sinus",
         "frequenz_Hz": 1584,

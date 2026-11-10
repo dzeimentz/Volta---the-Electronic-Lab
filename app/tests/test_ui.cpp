@@ -818,6 +818,29 @@ private slots:
     // Edition volta2: eigener Band mit Grundband volta1 (Bauteile von Anfang an frei, Texte und Lexikon geerbt)
     // »aufbau_von«: die Emitterschaltung (4.3) baut auf dem Arbeitspunkt (4.2) auf. Erst wenn der geschafft ist, steht
     // im ersten Schritt der Knopf; er uebernimmt den Arbeitspunkt ohne seine Messstelle in einem Befehl
+    void bodeExperimentVolta3() {
+        // Volta 3, 0.1: Frequenzgang-Schreiber beim Start eingeblendet; der Musteraufbau laesst den Generator auf
+        // 100 Hz, »Fertig« wird erst bei der Grenzfrequenz gruen
+        QTemporaryDir dir;
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta3"));
+        lab.useProgressFile(dir.filePath(QStringLiteral("fortschritt.json")));
+        QVERIFY(lab.startExperiment(QStringLiteral("volta3.0.1")));
+        QVERIFY(lab.experimentBode());
+        QVERIFY(lab.experimentScope());
+        lab.chooseGuess(0);
+        while (!lab.solutionShown()) lab.nextHint();
+        QVERIFY(lab.showTemplate());
+        lab.setMainSwitch(true);
+        QCOMPARE(lab.genFrequency(), 100.0);
+        QTRY_VERIFY_WITH_TIMEOUT(lab.buildComplete(), 5000);
+        QTest::qWait(1500);
+        QVERIFY(!lab.canFinish()); // 2 V Spitze-Spitze bei 100 Hz
+        lab.setGenFrequency(1600.0); // Schieber bei 1 kHz bis 10 kHz: 1,6 kHz
+        QTRY_VERIFY_WITH_TIMEOUT(lab.canFinish(), 30000);
+        QVERIFY(lab.startExperiment(QStringLiteral("volta3.0.3")));
+        QVERIFY(!lab.experimentBode());
+    }
+
     void adoptSetupVolta2() {
         QTemporaryDir dir;
         LabController lab(QStringLiteral(VOLTA_CONTENT_DIR), QStringLiteral("volta2"));

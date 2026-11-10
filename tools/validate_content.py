@@ -221,10 +221,12 @@ def check_experiment(path: Path, exp: dict, band: str, catalog: dict, rep: Repor
     pult = tpl.get("pult_stellung", {}) or {}
     volta2_keys = ("batterie2_V", "wechsel_V", "generator", "kennlinienschreiber", "oszilloskop", "anzeigegeraet")
     for k in pult:
-        if k not in ("batterie_V", "schalter", "p1", "p2", "messart", "raumlicht") + volta2_keys:
+        if k not in ("batterie_V", "schalter", "p1", "p2", "messart", "raumlicht", "frequenzgang_schreiber") + volta2_keys:
             rep.error(where, f"pult_stellung: unbekannter Schluessel '{k}'")
         elif k in volta2_keys and band == "volta1":
             rep.error(where, f"pult_stellung: '{k}' gibt es erst ab Volta 2")
+        elif k == "frequenzgang_schreiber" and band != "volta3":
+            rep.error(where, "pult_stellung: 'frequenzgang_schreiber' gibt es erst ab Volta 3")
     if "batterie2_V" in pult and pult["batterie2_V"] not in (4.5, 9):
         rep.error(where, "pult_stellung: batterie2_V muss 4.5 oder 9 sein")
     if "wechsel_V" in pult and pult["wechsel_V"] not in (6, 9):

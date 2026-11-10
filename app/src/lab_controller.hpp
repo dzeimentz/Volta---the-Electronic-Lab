@@ -153,6 +153,7 @@ class LabController : public QObject {
     Q_PROPERTY(QVariantList journal READ journal NOTIFY journalChanged)
     Q_PROPERTY(bool destructive READ destructive NOTIFY experimentChanged)
     Q_PROPERTY(bool experimentScope READ experimentScope NOTIFY experimentChanged) // Oszilloskop beim Start zeigen
+    Q_PROPERTY(bool experimentBode READ experimentBode NOTIFY experimentChanged) // Frequenzgang-Schreiber beim Start zeigen
     Q_PROPERTY(QString question READ question NOTIFY experimentChanged)
     Q_PROPERTY(QStringList guesses READ guesses NOTIFY experimentChanged)
     Q_PROPERTY(int guess READ guess NOTIFY flowChanged)
@@ -419,6 +420,7 @@ public:
     int phase() const { return static_cast<int>(m_flow.phase()); }
     bool destructive() const { return m_experiment.destructive; }
     bool experimentScope() const { return !m_freeLab && m_experiment.scopeShown; }
+    bool experimentBode() const { return !m_freeLab && m_experiment.bodeShown; }
     QString question() const { return m_repo.text(m_experiment.questionKey); }
     QStringList guesses() const { return texts(m_experiment.guessKeys); }
     int guess() const { return m_flow.guess(); }

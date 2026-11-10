@@ -19,6 +19,7 @@ struct Experiment {
     bool colourFixed = false; // »farbe_fest«: die LED-Farbe der Vorlage ist Teil des Versuchs
     // »absichtlich_verkehrt« (ab Volta 3): Bauteile der Vorlage, die mit Absicht verkehrt herum stecken
     std::vector<std::string> intendedReversed;
+    bool bodeShown = false;   // Vorlage verlangt den Frequenzgang-Schreiber: beim Start eingeblendet (Volta 3)
     bool scopeShown = false;  // Vorlage stellt das Oszilloskop ein: beim Start eingeblendet (ab Volta 2)
     // »start_frequenz_Hz« des Generators (ab Volta 3): Frequenz beim Start, wenn das Kind sie selbst finden soll
     // (Resonanz); die Vorlage behaelt ihre Frequenz (Musteraufbau, Inhaltstest). 0 = wie die Vorlage
