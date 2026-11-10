@@ -28,16 +28,14 @@ Rectangle {
     readonly property var conditionText: ["–", "H", "L", "↑", "↓"]
 
     function refresh() { panel.ls = panel.controller.logicState() }
-    Timer {
-        interval: 66
-        running: panel.visible && !panel.frozen
-        repeat: true
-        triggeredOnStart: true
-        onTriggered: panel.refresh()
-    }
+    // Takt aus dem LabController (stateChanged, ca. 10 Hz) wie Messgeraet und Module: laeuft auch, wenn das Fenster
+    // gerade nicht gezeichnet wird (ein QML-Timer haengt am Bildtakt und blieb dort stehen)
+    onVisibleChanged: if (visible && !frozen) refresh()
+    onFrozenChanged: if (visible && !frozen) refresh()
     Connections {
         target: panel.controller
-        function onDeskChanged() { if (panel.visible) panel.refresh() }
+        function onStateChanged() { if (panel.visible && !panel.frozen) panel.refresh() }
+        function onDeskChanged() { if (panel.visible && !panel.frozen) panel.refresh() }
     }
     // Fensterlaenge in Sekunden aus dem Kopf (fein 20 ms, grob 5 s)
     readonly property real windowS: ls.fine === true ? 0.02 : 5.0
