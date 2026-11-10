@@ -839,6 +839,18 @@ private slots:
         QTRY_VERIFY_WITH_TIMEOUT(lab.canFinish(), 30000);
         QVERIFY(lab.startExperiment(QStringLiteral("volta3.0.3")));
         QVERIFY(!lab.experimentBode());
+        // Startstellung des Generators (start_...): mit Musteraufbau bleibt »Fertig« grau, bis das Kind einstellt.
+        // 1.5 nach 0.3: der eingeschaltete Aufbau von 0.3 darf die neue Erfolgsbedingung nicht erfuellen
+        for (const char* id : {"volta3.1.4", "volta3.0.3", "volta3.1.5", "volta3.2.1"}) {
+            QVERIFY(lab.startExperiment(QString::fromLatin1(id)));
+            lab.chooseGuess(0);
+            while (!lab.solutionShown()) lab.nextHint();
+            QVERIFY(lab.showTemplate());
+            lab.setMainSwitch(true);
+            QTRY_VERIFY_WITH_TIMEOUT(lab.buildComplete(), 5000);
+            QTest::qWait(1500);
+            QVERIFY2(!lab.canFinish(), id);
+        }
     }
 
     void adoptSetupVolta2() {
