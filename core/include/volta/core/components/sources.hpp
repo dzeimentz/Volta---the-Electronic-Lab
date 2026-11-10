@@ -66,6 +66,11 @@ struct GeneratorParams {
     // multipliziert; amDepth 0 = aus (dann bitgleich ohne Modulation), 1 = 100 %. Der Gleichanteil bleibt.
     double amDepth = 0.0;
     double amToneHz = 100.0;
+    // Wobbeln (ab Volta 3): Die Frequenz laeuft in sweepTimeS logarithmisch von frequencyHz bis
+    // frequencyHz * sweepFactor (hoechstens kMaxFrequencyHz) und beginnt dann von vorn (Saegezahn).
+    // sweepFactor 1 = aus (dann bitgleich ohne Wobbeln).
+    double sweepFactor = 1.0;
+    double sweepTimeS = 1.0;
 
     static constexpr double kMinFrequencyHz = 1.0;
     static constexpr double kMaxFrequencyHz = 10000.0;
@@ -73,6 +78,9 @@ struct GeneratorParams {
     static constexpr double kMaxOffsetV = 4.0;
     static constexpr double kMinAmToneHz = 20.0;
     static constexpr double kMaxAmToneHz = 1000.0;
+    static constexpr double kMaxSweepFactor = 1000.0;
+    static constexpr double kMinSweepTimeS = 0.1;
+    static constexpr double kMaxSweepTimeS = 20.0;
 };
 
 // Funktionsgenerator (Pultfelder G, G0; G0 legt die App an 0V): Anschluss 0 = Ausgang, Anschluss 1 = Masse.
@@ -91,6 +99,12 @@ public:
     void setOffset(double volt) noexcept;
     void setAmDepth(double depth) noexcept;
     void setAmTone(double hz) noexcept;
+    void setSweep(double factor, double timeS) noexcept; // factor 1 = aus
+    bool sweeping() const noexcept { return m_params.sweepFactor > 1.0; }
+    double sweepPosition() const noexcept { return m_sweepPos; } // 0 .. 1 im Durchlauf
+    // Frequenz im Augenblick (beim Wobbeln die laufende, sonst frequencyHz); bei der Position s des Durchlaufs
+    double frequencyAt(double sweepPos) const noexcept;
+    double currentFrequency() const noexcept { return frequencyAt(m_sweepPos); }
     // Aus (Hauptschalter, Konzept Volta 2 ab 02.11.2026): Ausgang 0 V ueber den Ausgangswiderstand, die Phase
     // laeuft weiter
     void setEnabled(bool on) noexcept { m_enabled = on; }
@@ -113,6 +127,7 @@ private:
     bool m_enabled = true;
     double m_phase = 0.0;
     double m_tonePhase = 0.0;
+    double m_sweepPos = 0.0;
 };
 
 // Kennwerte des Kennlinienschreibers (ab Volta 2, Konzept 5.2): Pruefspannung -20 ... +20 V, Vorwiderstand zur

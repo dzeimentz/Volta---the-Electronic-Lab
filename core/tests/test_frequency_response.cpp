@@ -139,3 +139,24 @@ TEST_CASE("Frequenzgang: offene Felder stoeren die Rechnung bei 1 Hz nicht", "[b
     CHECK(r.kind == FrequencyResponse::Kind::LowPass);
     CHECK(r.cutHighHz == Catch::Approx(1.0 / (2.0 * kPi * 10050.0 * 10e-9)).epsilon(0.01));
 }
+
+// Wobbeln (ab Volta 3): logarithmischer Durchlauf, aus = bitgleich
+TEST_CASE("Generator wobbelt logarithmisch und beginnt von vorn", "[bode]") {
+    using namespace volta::core;
+    GeneratorParams gp;
+    gp.frequencyHz = 100.0;
+    FunctionGenerator off("G", 1, 0, gp);
+    CHECK(!off.sweeping());
+    CHECK(off.currentFrequency() == 100.0);
+    gp.sweepFactor = 100.0;
+    gp.sweepTimeS = 2.0;
+    FunctionGenerator g("G", 1, 0, gp);
+    CHECK(g.sweeping());
+    CHECK(g.frequencyAt(0.0) == Catch::Approx(100.0));
+    CHECK(g.frequencyAt(0.5) == Catch::Approx(1000.0));
+    CHECK(g.frequencyAt(1.0) == Catch::Approx(10000.0));
+    gp.frequencyHz = 1000.0; // Endwert hoechstens 10 kHz
+    FunctionGenerator capped("G", 1, 0, gp);
+    CHECK(capped.frequencyAt(1.0) == Catch::Approx(10000.0));
+    CHECK(capped.frequencyAt(0.5) == Catch::Approx(std::sqrt(1000.0 * 10000.0)));
+}

@@ -90,6 +90,7 @@ FunctionGenerator::FunctionGenerator(std::string id, NodeId out, NodeId ground, 
     setOffset(m_params.offsetV);
     setAmDepth(m_params.amDepth);
     setAmTone(m_params.amToneHz);
+    setSweep(m_params.sweepFactor, m_params.sweepTimeS);
     if (!(m_params.outputOhm >= kMinOhm) || !std::isfinite(m_params.outputOhm)) m_params.outputOhm = 50.0;
 }
 
@@ -115,6 +116,19 @@ void FunctionGenerator::setAmTone(double hz) noexcept {
         std::clamp(finiteOr(hz, 100.0), GeneratorParams::kMinAmToneHz, GeneratorParams::kMaxAmToneHz);
 }
 
+void FunctionGenerator::setSweep(double factor, double timeS) noexcept {
+    m_params.sweepFactor = std::clamp(finiteOr(factor, 1.0), 1.0, GeneratorParams::kMaxSweepFactor);
+    m_params.sweepTimeS =
+        std::clamp(finiteOr(timeS, 1.0), GeneratorParams::kMinSweepTimeS, GeneratorParams::kMaxSweepTimeS);
+    if (!sweeping()) m_sweepPos = 0.0;
+}
+
+double FunctionGenerator::frequencyAt(double sweepPos) const noexcept {
+    if (!sweeping()) return m_params.frequencyHz;
+    const double endHz = std::min(m_params.frequencyHz * m_params.sweepFactor, GeneratorParams::kMaxFrequencyHz);
+    return m_params.frequencyHz * std::pow(endHz / m_params.frequencyHz, std::clamp(sweepPos, 0.0, 1.0));
+}
+
 double FunctionGenerator::emfAt(double phase, double tonePhase) const noexcept {
     const double p = wrapPhase(phase);
     double shape = 0.0;
@@ -128,7 +142,7 @@ double FunctionGenerator::emfAt(double phase, double tonePhase) const noexcept {
 }
 
 void FunctionGenerator::stamp(MnaSystem& sys, const StampContext& ctx) const noexcept {
-    const double p = ctx.isDc() ? m_phase : m_phase + m_params.frequencyHz * ctx.dtS;
+    const double p = ctx.isDc() ? m_phase : m_phase + currentFrequency() * ctx.dtS;
     const double tp = ctx.isDc() ? m_tonePhase : m_tonePhase + m_params.amToneHz * ctx.dtS;
     const double emf = m_enabled ? emfAt(p, tp) * ctx.sourceScale : 0.0;
     sys.stampVoltageBranch(terminal(0), terminal(1), firstBranch(), emf, m_params.outputOhm);
@@ -146,14 +160,18 @@ double FunctionGenerator::terminalCurrent(const SolutionView& x, std::size_t t) 
 
 void FunctionGenerator::updateState(const SolutionView& /*x*/, double dtS) noexcept {
     if (dtS > 0.0) {
-        m_phase = wrapPhase(m_phase + m_params.frequencyHz * dtS);
+        m_phase = wrapPhase(m_phase + currentFrequency() * dtS);
         m_tonePhase = wrapPhase(m_tonePhase + m_params.amToneHz * dtS);
+        if (sweeping()) {
+            m_sweepPos += dtS / m_params.sweepTimeS;
+            if (m_sweepPos >= 1.0) m_sweepPos -= std::floor(m_sweepPos);
+        }
     }
 }
 
 ComponentReading FunctionGenerator::read(const SolutionView& x) const noexcept {
     ComponentReading r = ComponentModel::read(x);
-    r.frequencyHz = m_params.frequencyHz;
+    r.frequencyHz = currentFrequency();
     return r;
 }
 
