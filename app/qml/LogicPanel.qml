@@ -12,6 +12,7 @@ import QtQuick.Shapes
 Rectangle {
     id: panel
     required property var controller
+    signal closeRequested()
     color: "white"
     border.color: Theme.fieldOutline
     property var ls: ({channels: []})
@@ -61,10 +62,19 @@ Rectangle {
     implicitHeight: head.height + (showTrigger ? trigBar.height + 4 : 0) + (showThresholds ? thrBar.height + 4 : 0)
                     + Math.max(1, chans.length) * rowH + 14
 
+    PanelButton {
+        objectName: "logicClose"
+        anchors { right: parent.right; top: parent.top; margins: 4 }
+        width: Theme.control; height: Theme.control
+        contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "close"; color: Theme.navy; size: 20 } }
+        onClicked: panel.closeRequested()
+        Accessible.name: qsTr("Logikanalysator schließen")
+    }
+
     Flow {
         id: head
         x: 8; y: 4
-        width: panel.width - 16
+        width: panel.width - 16 - Theme.control - 8
         spacing: 8
         Label {
             height: Theme.control
@@ -74,7 +84,7 @@ Rectangle {
             font.pixelSize: Math.round(14 * Theme.fontScale)
             color: Theme.navy
         }
-        Button {
+        PanelButton {
             objectName: "logicFine"
             height: Theme.control
             checkable: true
@@ -83,7 +93,7 @@ Rectangle {
             onClicked: { panel.controller.setLogicFine(!(panel.ls.fine === true)); panel.markA = -1; panel.markB = -1 }
             Accessible.name: qsTr("Zeitfenster umschalten")
         }
-        Button {
+        PanelButton {
             objectName: "logicFreeze"
             height: Theme.control
             checkable: true
@@ -91,7 +101,7 @@ Rectangle {
             text: panel.frozen ? qsTr("Weiter") : qsTr("Standbild")
             onClicked: panel.frozen = !panel.frozen
         }
-        Button {
+        PanelButton {
             objectName: "logicTriggerButton"
             height: Theme.control
             checkable: true
@@ -101,7 +111,7 @@ Rectangle {
             onClicked: panel.showTrigger = !panel.showTrigger
             Accessible.name: qsTr("Trigger einstellen")
         }
-        Button {
+        PanelButton {
             objectName: "logicThresholdButton"
             height: Theme.control
             checkable: true
@@ -123,7 +133,7 @@ Rectangle {
             font.pixelSize: Math.round(12 * Theme.fontScale)
             color: Theme.navy
         }
-        Button {
+        PanelButton {
             objectName: "logicMarkClear"
             visible: panel.markA >= 0
             height: Theme.control
@@ -142,7 +152,7 @@ Rectangle {
         spacing: 6
         Repeater {
             model: panel.chans
-            Button {
+            PanelButton {
                 required property var modelData
                 readonly property int ch: Number(String(modelData.label).slice(2)) - 1
                 readonly property int cond: panel.ls.trigger ? panel.ls.trigger[ch] : 0
@@ -154,7 +164,7 @@ Rectangle {
                                  .arg([qsTr("egal"), qsTr("H"), qsTr("L"), qsTr("steigende Flanke"), qsTr("fallende Flanke")][cond])
             }
         }
-        Button {
+        PanelButton {
             objectName: "logicTrigClear"
             height: Theme.control
             text: qsTr("Trigger aus")
@@ -183,12 +193,12 @@ Rectangle {
         readonly property real lo: panel.ls.low !== undefined ? panel.ls.low : 0.3
         function set(h, l) { panel.controller.setLogicThresholds(Math.round(h * 10) / 10, Math.round(l * 10) / 10) }
         Label { height: Theme.control; verticalAlignment: Text.AlignVCenter; text: qsTr("H über %1").arg(panel.ls.highText || ""); color: Theme.navy; font.bold: true }
-        Button { objectName: "logicHighDown"; height: Theme.control; width: Theme.control; text: "−"; enabled: thrBar.hi > thrBar.lo + 0.15; onClicked: thrBar.set(thrBar.hi - 0.1, thrBar.lo); Accessible.name: qsTr("H-Schwelle tiefer") }
-        Button { objectName: "logicHighUp"; height: Theme.control; width: Theme.control; text: "+"; enabled: thrBar.hi < 0.85; onClicked: thrBar.set(thrBar.hi + 0.1, thrBar.lo); Accessible.name: qsTr("H-Schwelle höher") }
+        PanelButton { objectName: "logicHighDown"; height: Theme.control; width: Theme.control; text: "−"; enabled: thrBar.hi > thrBar.lo + 0.15; onClicked: thrBar.set(thrBar.hi - 0.1, thrBar.lo); Accessible.name: qsTr("H-Schwelle tiefer") }
+        PanelButton { objectName: "logicHighUp"; height: Theme.control; width: Theme.control; text: "+"; enabled: thrBar.hi < 0.85; onClicked: thrBar.set(thrBar.hi + 0.1, thrBar.lo); Accessible.name: qsTr("H-Schwelle höher") }
         Label { height: Theme.control; verticalAlignment: Text.AlignVCenter; text: qsTr("L unter %1").arg(panel.ls.lowText || ""); color: Theme.navy; font.bold: true }
-        Button { objectName: "logicLowDown"; height: Theme.control; width: Theme.control; text: "−"; enabled: thrBar.lo > 0.15; onClicked: thrBar.set(thrBar.hi, thrBar.lo - 0.1); Accessible.name: qsTr("L-Schwelle tiefer") }
-        Button { objectName: "logicLowUp"; height: Theme.control; width: Theme.control; text: "+"; enabled: thrBar.lo < thrBar.hi - 0.15; onClicked: thrBar.set(thrBar.hi, thrBar.lo + 0.1); Accessible.name: qsTr("L-Schwelle höher") }
-        Button { objectName: "logicThrReset"; height: Theme.control; text: qsTr("Standard"); onClicked: panel.controller.setLogicThresholds(0.7, 0.3) }
+        PanelButton { objectName: "logicLowDown"; height: Theme.control; width: Theme.control; text: "−"; enabled: thrBar.lo > 0.15; onClicked: thrBar.set(thrBar.hi, thrBar.lo - 0.1); Accessible.name: qsTr("L-Schwelle tiefer") }
+        PanelButton { objectName: "logicLowUp"; height: Theme.control; width: Theme.control; text: "+"; enabled: thrBar.lo < thrBar.hi - 0.15; onClicked: thrBar.set(thrBar.hi, thrBar.lo + 0.1); Accessible.name: qsTr("L-Schwelle höher") }
+        PanelButton { objectName: "logicThrReset"; height: Theme.control; text: qsTr("Standard"); onClicked: panel.controller.setLogicThresholds(0.7, 0.3) }
         Label {
             width: Math.min(thrBar.width, 420)
             height: Theme.control

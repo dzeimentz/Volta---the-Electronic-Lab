@@ -336,6 +336,8 @@ Item {
     Component.onCompleted: {
         Texts.band = lab.controller ? lab.controller.band : ""
         routeTimer.restart()
+        lastLogicProbes = logicProbes // gespeicherter Aufbau mit Logik-Tastkopf: Logikanalysator gleich offen
+        if (logicProbes > 0) logicVisible = true
     }
 
     // ------------------------------------------------------------------ Bedienzustand
@@ -369,6 +371,20 @@ Item {
     property bool schematicVisible: settings ? settings.schematicVisible : false // Schaltplan parallel zum Aufbau
     property bool recorderVisible: false // Zeitschreiber unter der Arbeitsflaeche
     property bool bodeVisible: false     // Frequenzgang-Schreiber (ab Volta 3)
+    property bool logicVisible: false    // Logikanalysator (ab Volta 3): geht auf, sobald ein Logik-Tastkopf steckt
+    readonly property int logicProbes: {
+        const parts = lab.controller.parts
+        let n = 0
+        for (let k = 0; k < parts.length; ++k)
+            if (parts[k].type === "logiktastkopf") ++n
+        return n
+    }
+    property int lastLogicProbes: 0
+    onLogicProbesChanged: {
+        if (logicProbes > 0 && lastLogicProbes === 0) logicVisible = true      // erster Tastkopf: Fenster auf
+        else if (logicProbes === 0 && lastLogicProbes > 0) logicVisible = false // letzter weg: Fenster zu
+        lastLogicProbes = logicProbes
+    }
     property var highlightFields: []        // Felder eines im Schaltplan angetippten Knotens
     property string selectedWire: ""
     // Lieblingsfarbe (Stern im Farbmenue): Leitungen ohne Verbindung zu einem Pol. Mit der Farbautomatik zeigt der
@@ -421,6 +437,7 @@ Item {
 
         // Oben rechts: Sprache, Info, Einstellungen (gemeinsam mit der Startseite)
         TopBarActions {
+            id: topActions
             anchors.right: parent.right
             anchors.rightMargin: 12
             anchors.verticalCenter: parent.verticalCenter
@@ -435,10 +452,17 @@ Item {
         }
 
         Row {
+            id: leftTools
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: Theme.margin
-            spacing: 12
+            // Abstand 12; reicht der Platz bis zu Sprache/Info/Menue nicht (Tablet), rueckt die Leiste enger zusammen
+            spacing: {
+                let w = 0, n = 0
+                for (const c of leftTools.visibleChildren) { w += c.width; ++n }
+                const free = topActions.x - leftTools.x - 12 - w
+                return Math.max(2, Math.min(12, free / Math.max(1, n - 1)))
+            }
 
             ToolButton {
                 objectName: "homeButton"
@@ -715,6 +739,27 @@ Item {
                 palette.buttonText: "white"
                 ToolTip.visible: hovered
                 ToolTip.text: lab.bodeVisible ? qsTr("Frequenzgang-Schreiber ausblenden") : qsTr("Frequenzgang-Schreiber zeigen")
+                Accessible.name: ToolTip.text
+                background: Rectangle {
+                    radius: 6
+                    color: parent.checked ? Theme.accent : (parent.hovered ? "#2A4A6E" : "transparent")
+                    border.color: "#7F93A8"
+                }
+            }
+            // Logikanalysator ein-/ausblenden (ab Volta 3; ohne Logik-Tastkopf sagt das Fenster, was fehlt)
+            ToolButton {
+                objectName: "logicToggle"
+                visible: lab.controller.band === "volta3"
+                width: Theme.control; height: Theme.control
+                checkable: true
+                checked: lab.logicVisible
+                onClicked: lab.logicVisible = !lab.logicVisible
+                text: "LA"
+                font.pixelSize: 15
+                font.bold: true
+                palette.buttonText: "white"
+                ToolTip.visible: hovered
+                ToolTip.text: lab.logicVisible ? qsTr("Logikanalysator ausblenden") : qsTr("Logikanalysator zeigen")
                 Accessible.name: ToolTip.text
                 background: Rectangle {
                     radius: 6
@@ -1008,12 +1053,8 @@ Item {
         id: logicPanel
         objectName: "logicPanel"
         controller: lab.controller
-        readonly property bool shown: {
-            const parts = lab.controller.parts
-            for (let k = 0; k < parts.length; ++k)
-                if (parts[k].type === "logiktastkopf") return true
-            return false
-        }
+        readonly property bool shown: lab.logicVisible && lab.controller.band === "volta3"
+        onCloseRequested: lab.logicVisible = false
         visible: shown
         anchors { left: tray.right; right: experimentPanel.left; bottom: scopePanel.shown ? scopePanel.top : bodePanel.top }
         height: shown ? Math.min(implicitHeight, Math.max(120, lab.height * 0.32)) : 0

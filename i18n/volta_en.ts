@@ -3166,6 +3166,16 @@
 <context>
     <name>Lab</name>
     <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Logikanalysator zeigen</source>
+        <translation>Show logic analyser</translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Logikanalysator ausblenden</source>
+        <translation>Hide logic analyser</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Lab.qml" line="737"/>
         <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
         <translation>Automatic wire colour: plus red, minus black</translation>
@@ -3585,6 +3595,11 @@
 </context>
 <context>
     <name>LogicPanel</name>
+    <message>
+        <location filename="../app/qml/LogicPanel.qml" line="1"/>
+        <source>Logikanalysator schließen</source>
+        <translation>Close logic analyser</translation>
+    </message>
     <message>
         <location filename="../app/qml/LogicPanel.qml" line="1"/>
         <source>Logikanalysator</source>
