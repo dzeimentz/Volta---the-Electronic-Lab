@@ -1555,6 +1555,11 @@
 <context>
     <name>Lab</name>
     <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Auf diesen Feldern steckt schon: %1. Bauteile auf denselben Feldern sind parallelgeschaltet. Die Zahl »×%2« am Bauteil zeigt, wie viele es sind.</source>
+        <translation>Op dëse Felder stécht schonn: %1. Bauelementer op deene selwechte Felder si parallel geschalt. D'Zuel »×%2« um Bauelement weist, wéi vill et der sinn.</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Lab.qml" line="675" />
         <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
         <translation>Leitungsfaarf automatesch: Plus rout, Minus schwaarz</translation>
@@ -3152,6 +3157,11 @@
 </context>
 <context>
     <name>PartItem</name>
+    <message>
+        <location filename="../app/qml/PartItem.qml" line="1"/>
+        <source>%1 Bauteile auf denselben Feldern</source>
+        <translation>%1 Bauelementer op deene selwechte Felder</translation>
+    </message>
     <message>
         <location filename="../app/qml/PartItem.qml" line="127" />
         <source>%1 kaputt</source>
