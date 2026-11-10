@@ -2341,6 +2341,18 @@ private slots:
         QTRY_VERIFY(std::fabs(panel->property("x").toDouble() - (x0 + dx)) < 2.0);
         QQuickItem* wave = item(QStringLiteral("genWave2"));
         QVERIFY(wave && wave->height() >= 48);
+        // Schieber bis ans rechte Ende: der Bereich bleibt beim Ziehen fest (50 Hz -> 100 Hz, nicht 1 kHz);
+        // danach gilt der 100-Hz-Bereich und es geht weiter nach oben
+        m_lab->setGenFrequency(50.0);
+        QQuickItem* slider = item(QStringLiteral("genFrequencySlider"));
+        QVERIFY(slider && slider->isVisible());
+        const QPointF left = slider->mapToScene(QPointF(slider->width() * 0.5, slider->height() / 2));
+        const QPointF right = slider->mapToScene(QPointF(slider->width() + 40, slider->height() / 2));
+        drag(left.toPoint(), right.toPoint());
+        QTRY_COMPARE(m_lab->genFrequency(), 100.0);
+        const QPointF start = slider->mapToScene(QPointF(14, slider->height() / 2));
+        drag(start.toPoint(), slider->mapToScene(QPointF(slider->width() * 0.6, slider->height() / 2)).toPoint());
+        QTRY_VERIFY(m_lab->genFrequency() > 100.0 && m_lab->genFrequency() < 1000.0);
         QMetaObject::invokeMethod(panel, "close");
         QTRY_VERIFY(!panel->property("visible").toBool());
     }
