@@ -11,6 +11,7 @@
     "drehkondensator",
     "diode_ge",
     "widerstand",
+    "tastkopf",
     "leitung"
   ],
   "frage_key": "exp3_2_2_frage",
@@ -75,6 +76,13 @@
           "E7"
         ],
         "wert": 22000
+      },
+      {
+        "id": "TK1",
+        "typ": "tastkopf",
+        "felder": {
+          "spitze": "A5"
+        }
       }
     ],
     "leitungen": [
