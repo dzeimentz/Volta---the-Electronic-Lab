@@ -3155,6 +3155,11 @@
     <name>Lab</name>
     <message>
         <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Auf diesen Feldern steckt schon: %1. Bauteile auf denselben Feldern sind parallelgeschaltet. Die Zahl »×%2« am Bauteil zeigt, wie viele es sind.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
         <source>Logikanalysator zeigen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5311,6 +5316,11 @@
 </context>
 <context>
     <name>PartItem</name>
+    <message>
+        <location filename="../app/qml/PartItem.qml" line="1"/>
+        <source>%1 Bauteile auf denselben Feldern</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../app/qml/PartItem.qml" line="64"/>
         <source>Spannung abschalten!</source>

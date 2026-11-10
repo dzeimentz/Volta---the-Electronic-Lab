@@ -12,6 +12,7 @@ Item {
     property bool selected: false
     property var points: []      // Steckloecher je Anschluss (Lab.socketPoint)
     property var partState: ({}) // partState() des LabController
+    property int stackCount: 1   // Bauteile auf denselben Feldern (nur am obersten > 1)
     property bool movable: true  // Steckmodus: verschiebbar; Betrieb: fest (Taster, Schalter bleiben bedienbar)
 
     signal dragFinished(point delta)
@@ -200,6 +201,29 @@ Item {
         }
     }
 
+    // mehrere Bauteile auf denselben Feldern: Zahl am obersten (Farbe nie allein: »×2«)
+    Rectangle {
+        objectName: "stackBadge"
+        visible: root.stackCount > 1
+        z: 5
+        width: Math.max(height, stackText.implicitWidth + 8)
+        height: Math.round(18 * Theme.fontScale)
+        radius: height / 2
+        x: root.bodyRect.x + root.bodyRect.width - width / 2
+        y: root.bodyRect.y - height / 2
+        color: Theme.accent
+        border.color: "white"
+        border.width: 1
+        Text {
+            id: stackText
+            anchors.centerIn: parent
+            text: "×" + root.stackCount
+            color: "white"
+            font.bold: true
+            font.pixelSize: Math.round(12 * Theme.fontScale)
+        }
+    }
+
     // Bildschirmleser: Bauteil, Kennung, Wert und Zustand (Farbe nie allein)
     Accessible.role: Accessible.Button
     Accessible.name: Texts.partName(root.partType) + " " + Texts.partLabel(root.partId)
@@ -207,5 +231,6 @@ Item {
                      + (root.single && root.partState.probeText ? ", " + root.partState.probeText : "")
                      + (Texts.partValue(root.partType, root.value) !== "" ? ", " + Texts.partValue(root.partType, root.value) : "")
                      + (root.destroyed ? ", " + qsTr("kaputt") : root.overloaded ? ", " + qsTr("überlastet") : "")
+                     + (root.stackCount > 1 ? ", " + qsTr("%1 Bauteile auf denselben Feldern").arg(root.stackCount) : "")
                      + (root.selected ? ", " + qsTr("ausgewählt") : "")
 }
