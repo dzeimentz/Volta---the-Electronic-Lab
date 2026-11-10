@@ -128,6 +128,7 @@ QtObject {
             ["optokoppler", qsTr("Optokoppler", "Wortanfaenge im Aufbautext")],
             ["spannungsregler_5v", qsTr("Spannungsregler", "Wortanfaenge im Aufbautext")],
             ["heissleiter", qsTr("Heißleiter", "Wortanfaenge im Aufbautext")],
+            ["kondensator", qsTr("Kondensator", "Wortanfaenge im Aufbautext")],
             ["elko", qsTr("Elko", "Wortanfaenge im Aufbautext")],
             ["elektromagnet", qsTr("Elektromagnet", "Wortanfaenge im Aufbautext")],
             ["relais", qsTr("Relais", "Wortanfaenge im Aufbautext")],

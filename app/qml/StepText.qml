@@ -84,6 +84,12 @@ Flow {
             if (type === "" && !used["widerstand"] && /^[0-9][0-9,.]* [kM]?Ω$/.test(core)
                     && step.templateParts.some(p => p.type === "widerstand"))
                 type = "widerstand"
+            // Kondensator oder Elko: im Englischen und Franzoesischen heissen beide gleich, der Musteraufbau entscheidet
+            if (type === "kondensator" || type === "elko") {
+                const other = type === "kondensator" ? "elko" : "kondensator"
+                if (!step.templateParts.some(p => p.type === type) && step.templateParts.some(p => p.type === other))
+                    type = other
+            }
             if (type !== "") used[type] = true
             // LED: die Farbe aus dem Nachbarwort (»grüne Leuchtdiode«, »LED verte«), sonst aus dem Musteraufbau
             if (type === "led_rot") {
