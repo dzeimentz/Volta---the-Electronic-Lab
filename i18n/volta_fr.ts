@@ -2597,6 +2597,11 @@
 <context>
     <name>Lab</name>
     <message>
+        <location filename="../app/qml/Lab.qml" line="1"/>
+        <source>Auf diesen Feldern steckt schon: %1. Bauteile auf denselben Feldern sind parallelgeschaltet. Die Zahl »×%2« am Bauteil zeigt, wie viele es sind.</source>
+        <translation>Il y a déjà un composant sur ces cases : %1. Les composants placés sur les mêmes cases sont montés en parallèle. Le nombre « ×%2 » sur le composant indique combien il y en a.</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Lab.qml" line="736"/>
         <source>Leitungsfarbe automatisch: Plus rot, Minus schwarz</source>
         <translation>Couleur automatique des fils : plus rouge, moins noir</translation>
@@ -4305,6 +4310,11 @@
 </context>
 <context>
     <name>PartItem</name>
+    <message>
+        <location filename="../app/qml/PartItem.qml" line="1"/>
+        <source>%1 Bauteile auf denselben Feldern</source>
+        <translation>%1 composants sur les mêmes cases</translation>
+    </message>
     <message>
         <location filename="../app/qml/PartItem.qml" line="64"/>
         <source>Spannung abschalten!</source>

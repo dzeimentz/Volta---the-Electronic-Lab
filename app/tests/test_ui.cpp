@@ -1506,6 +1506,35 @@ private slots:
         QVERIFY(!m_lab->addPart(QStringLiteral("led_rot"), QStringLiteral("A3"), false, false));
     }
 
+    // Zwei Bauteile auf denselben Feldern: erlaubt (parallel), Hinweis und Zahl »×2« am oberen Bauteil
+    void stackedPartsWarned() {
+        m_settings->setUnlockAll(true);
+        m_lab->startFreeLab();
+        m_lab->clearBoard();
+        QSignalSpy stacked(m_lab.get(), &LabController::partStacked);
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("A3"), false, false));
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("C3"), false, false));
+        QCOMPARE(stacked.count(), 0);
+        QVERIFY(m_lab->addPart(QStringLiteral("widerstand"), QStringLiteral("A3"), false, false));
+        QCOMPARE(stacked.count(), 1);
+        QCOMPARE(stacked.at(0).at(2).toInt(), 2);
+        int tops = 0, twos = 0;
+        for (const QVariant& v : m_lab->parts()) {
+            const QVariantMap p = v.toMap();
+            if (p.value(QStringLiteral("stack")).toInt() == 2) ++twos;
+            if (p.value(QStringLiteral("stackTop")).toBool() && p.value(QStringLiteral("stack")).toInt() == 2) ++tops;
+        }
+        QCOMPARE(twos, 2);
+        QCOMPARE(tops, 1);
+        QTRY_VERIFY(findItem(m_window->contentItem(), QStringLiteral("stackBadge")) != nullptr);
+        // Verschieben auf denselben Platz meldet ebenfalls
+        const QString lower = m_lab->parts().at(1).toMap().value(QStringLiteral("id")).toString();
+        QVERIFY(m_lab->movePart(lower, QStringLiteral("A3"), false, false));
+        QCOMPARE(stacked.count(), 2);
+        QCOMPARE(stacked.at(1).at(2).toInt(), 3);
+        m_lab->clearBoard();
+    }
+
     // Bild-Schritte ab Stufe 3: Kennung nach dem Bauteilnamen bleibt Text, »B3 und B4« am Relais sind zwei Leitungen
     void pictureStepsHigherStages() {
         m_settings->setUnlockAll(true);

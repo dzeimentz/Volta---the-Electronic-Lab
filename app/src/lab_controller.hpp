@@ -3,6 +3,10 @@
 #include <QElapsedTimer>
 #include <QObject>
 #include <QSet>
+
+#include <map>
+#include <string>
+#include <vector>
 #include <QString>
 #include <QStringList>
 #include <QTimer>
@@ -550,6 +554,8 @@ signals:
     void experimentSolved(); // »Fertig« mit funktionierendem Aufbau (Glueckwunsch)
     void historyChanged();
     void editFailed();
+    // Bauteil liegt auf denselben Feldern wie ein anderes (parallel); count = Bauteile im Stapel
+    void partStacked(const QString& type, const QString& otherType, int count);
     void flowChanged();
     void progressChanged();
     void journalChanged();
@@ -640,6 +646,8 @@ private:
     bool m_freeLab = false;
     QStringList m_errors;
     QString m_lastEditError;
+    void noteStacking(const std::map<std::string, int>& before, const std::vector<std::string>& beforeIds,
+                      const std::string& movedId);
     double m_timeScale = 1.0;
     QTimer m_timer;
     QElapsedTimer m_clock;

@@ -393,6 +393,11 @@ Item {
     Connections {
         target: lab.controller
         function onEditFailed() { toast.show(lab.controller.lastEditError) }
+        // zwei Bauteile auf denselben Feldern: erlaubt (parallel), aber sonst nicht zu sehen
+        function onPartStacked(type, otherType, count) {
+            toast.show(qsTr("Auf diesen Feldern steckt schon: %1. Bauteile auf denselben Feldern sind parallelgeschaltet. Die Zahl »×%2« am Bauteil zeigt, wie viele es sind.")
+                       .arg(Texts.partName(otherType)).arg(count))
+        }
         // Ersatzton offen ansagen (Konzept 5.3)
         function onToneModeChanged() {
             if (lab.controller.toneMode === "ersatz")
@@ -1382,6 +1387,7 @@ Item {
                     objectName: "part_" + modelData.id
                     partId: modelData.id
                     partType: modelData.type
+                    stackCount: modelData.stackTop ? modelData.stack : 1
                     value: modelData.type === "gluehlampe" ? lab.lampVolt(modelData) : modelData.value
                     closed: partState.closed === true
                     selected: lab.selectedPart === modelData.id

@@ -1827,9 +1827,57 @@ bool LabController::setBoardColumns(int columns) {
     return true;
 }
 
+namespace {
+// Bauteile auf genau denselben Feldern (parallelgeschaltet, eines verdeckt das andere): Schluessel = sortierte Felder
+template <class P> std::string stackKey(const P& p) {
+    std::vector<std::string> f;
+    for (const auto& pin : p.pins) f.push_back(pin.second);
+    std::sort(f.begin(), f.end());
+    f.erase(std::unique(f.begin(), f.end()), f.end());
+    if (f.size() < 2) return {};
+    std::string key;
+    for (const auto& x : f) key += x + "|";
+    return key;
+}
+template <class B> std::map<std::string, int> stackCounts(const B& board) {
+    std::map<std::string, int> out;
+    for (const auto& p : board.parts)
+        if (const std::string k = stackKey(p); !k.empty()) ++out[k];
+    return out;
+}
+} // namespace
+
+// Nach dem Stecken oder Verschieben: liegt das Bauteil jetzt auf denselben Feldern wie ein anderes, Hinweis geben
+void LabController::noteStacking(const std::map<std::string, int>& before, const std::vector<std::string>& beforeIds,
+                                 const std::string& movedId) {
+    const auto& board = m_session->board();
+    const auto after = stackCounts(board);
+    for (const auto& p : board.parts) {
+        const bool placed = movedId.empty() ? std::find(beforeIds.begin(), beforeIds.end(), p.id) == beforeIds.end()
+                                            : p.id == movedId;
+        if (!placed) continue;
+        const std::string key = stackKey(p);
+        if (key.empty()) return;
+        const auto a = after.find(key);
+        const int n = a == after.end() ? 0 : a->second;
+        const auto b = before.find(key);
+        if (n < 2 || n <= (b == before.end() ? 0 : b->second)) return;
+        for (const auto& q : board.parts)
+            if (q.id != p.id && stackKey(q) == key) {
+                emit partStacked(qs(p.type), qs(q.type), n);
+                return;
+            }
+        return;
+    }
+}
+
 QVariantList LabController::parts() const {
     QVariantList out;
     const model::SocketAssignment sockets = model::assignSockets(m_session->board());
+    const auto stacks = stackCounts(m_session->board());
+    std::map<std::string, std::string> stackTop; // zuletzt gezeichnetes Bauteil eines Stapels traegt die Zahl
+    for (const auto& p : m_session->board().parts)
+        if (const std::string k = stackKey(p); !k.empty()) stackTop[k] = p.id;
     for (const auto& p : m_session->board().parts) {
         QVariantList pinSockets; // Loch je Anschluss (0 links ... 4 rechts)
         if (const auto it = sockets.partPins.find(p.id); it != sockets.partPins.end())
@@ -1871,7 +1919,9 @@ QVariantList LabController::parts() const {
                            {QStringLiteral("longSpan"), longSpan},
                            {QStringLiteral("pins"), pinNames},
                            {QStringLiteral("anchors"), anchors},
-                           {QStringLiteral("sockets"), pinSockets}};
+                           {QStringLiteral("sockets"), pinSockets},
+                           {QStringLiteral("stack"), stackKey(p).empty() ? 1 : stacks.at(stackKey(p))},
+                           {QStringLiteral("stackTop"), !stackKey(p).empty() && stackTop.at(stackKey(p)) == p.id}};
     }
     return out;
 }
@@ -1967,7 +2017,12 @@ bool LabController::addPart(const QString& type, const QString& start, bool vert
             return false;
         }
     }
-    return result(m_session->addPart(ss(type), ss(start), orient(vertical), spanOf(longSpan)));
+    const auto before = stackCounts(m_session->board());
+    std::vector<std::string> ids;
+    for (const auto& p : m_session->board().parts) ids.push_back(p.id);
+    if (!result(m_session->addPart(ss(type), ss(start), orient(vertical), spanOf(longSpan)))) return false;
+    noteStacking(before, ids, {});
+    return true;
 }
 QVariantMap LabController::partPreview(const QString& type, const QString& start, bool vertical, bool longSpan) const {
     std::vector<std::pair<std::string, std::string>> pins;
@@ -2004,7 +2059,10 @@ QVariantList LabController::routeWires(const QRectF& bounds, const QVariantList&
 }
 
 bool LabController::movePart(const QString& id, const QString& start, bool vertical, bool longSpan) {
-    return result(m_session->movePart(ss(id), ss(start), orient(vertical), spanOf(longSpan)));
+    const auto before = stackCounts(m_session->board());
+    if (!result(m_session->movePart(ss(id), ss(start), orient(vertical), spanOf(longSpan)))) return false;
+    noteStacking(before, {}, ss(id));
+    return true;
 }
 bool LabController::removePart(const QString& id) { return result(m_session->removePart(ss(id))); }
 
