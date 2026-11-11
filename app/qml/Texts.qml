@@ -135,6 +135,7 @@ QtObject {
             ["transistor_pnp", qsTr("PNP-Transistor", "Wortanfaenge im Aufbautext")],
             ["transistor_npn", qsTr("Transistor", "Wortanfaenge im Aufbautext")],
             ["feuchtesonde", qsTr("Feuchtesonde", "Wortanfaenge im Aufbautext")],
+            ["tastkopf", qsTr("Tastkopf", "Wortanfaenge im Aufbautext")], // Oszilloskop; nach dem Logik-Tastkopf
             ["piezo", qsTr("Piezo", "Wortanfaenge im Aufbautext")],
             ["zeitmodul", qsTr("Zeitmodul", "Wortanfaenge im Aufbautext")],
             ["verstaerkermodul", qsTr("Verstärkermodul", "Wortanfaenge im Aufbautext")],
