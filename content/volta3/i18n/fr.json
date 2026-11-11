@@ -452,7 +452,7 @@
   "exp3_3_7_b2": "Avec 10 kΩ, la LED reste sombre.",
   "exp3_3_7_b3": "Avec 10 kΩ, le montage consomme plus de 100 mA.",
   "exp3_3_7_s1": "Règle la pile sur 1,5 V. Place IM1 sur A1 et A2 et relie +9V à A1. Place une résistance de 10 kΩ sur A2 et A3. C’est moins que dans 3.5.",
-  "exp3_3_7_s2": "Construis le reste comme dans 3.5 : transformateur sur B2 à C3 avec les points à gauche, transistor NPN sur B5 à C6, LED blanche avec l’anode sur B7 et la cathode sur C7. Relie A2 à B2, A3 à C3, C2 à B5, B3 à B6, B6 à B7, B7 à A7, C5 et C7 à 0V.",
+  "exp3_3_7_s2": "Construis le reste comme dans 3.5 : transformateur sur B2 à C3 avec les points à gauche, transistor NPN sur B5 à C6, LED blanche avec l’anode sur B7 et la cathode sur C7. Place la sonde sur A7. Relie A2 à B2, A3 à C3, C2 à B5, B3 à B6, B6 à B7, B7 à A7, C5 et C7 à 0V.",
   "exp3_3_7_s3": "Allume. Lis sur IM1 le courant de la pile et regarde la LED. Objectif : la LED brille au moins à 35 sur 100, et IM1 affiche au plus 25 mA.",
   "exp3_3_7_h1": "La résistance détermine à quel point le transistor est allumé. Une résistance plus petite donne plus de courant de base et plus d’énergie par cycle.",
   "exp3_3_7_h2": "Essaie 15 kΩ, 10 kΩ et 4,7 kΩ. Note pour chaque valeur la luminosité et le courant sur IM1.",

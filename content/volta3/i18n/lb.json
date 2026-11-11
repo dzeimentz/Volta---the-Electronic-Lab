@@ -452,7 +452,7 @@
   "exp3_3_7_b2": "Mat 10 kΩ bleift d’LED donkel.",
   "exp3_3_7_b3": "Mat 10 kΩ zitt d’Schaltung iwwer 100 mA.",
   "exp3_3_7_s1": "Stell d’Batterie op 1,5 V. Steck IM1 op A1 an A2 a verbann +9V mat A1. Steck e Widderstand mat 10 kΩ op A2 an A3. Dat ass manner wéi an 3.5.",
-  "exp3_3_7_s2": "Bau de Rescht wéi an 3.5: Iwwerdroer op B2 bis C3 mat de Punkten no lénks, NPN-Transistor op B5 bis C6, wäiss LED mat der Anode op B7 an der Kathode op C7. Verbann A2 mat B2, A3 mat C3, C2 mat B5, B3 mat B6, B6 mat B7, B7 mat A7, C5 a C7 mat 0V.",
+  "exp3_3_7_s2": "Bau de Rescht wéi an 3.5: Iwwerdroer op B2 bis C3 mat de Punkten no lénks, NPN-Transistor op B5 bis C6, wäiss LED mat der Anode op B7 an der Kathode op C7. Steck den Taaschtkapp op A7. Verbann A2 mat B2, A3 mat C3, C2 mat B5, B3 mat B6, B6 mat B7, B7 mat A7, C5 a C7 mat 0V.",
   "exp3_3_7_s3": "Schalt un. Lies un IM1 de Stroum aus der Zell of a kuck op d’LED. Zil: D’LED liicht mindestens mat 35 vun 100, an IM1 weist héchstens 25 mA.",
   "exp3_3_7_h1": "De Widderstand bestëmmt, wéi staark den Transistor ageschalt gëtt. E méi klenge Widderstand bedeit méi Basisstroum a méi Energie pro Takt.",
   "exp3_3_7_h2": "Probéier 15 kΩ, 10 kΩ a 4,7 kΩ. Schreif dir fir all Wäert d’Hellegkeet an de Stroum un IM1 op.",

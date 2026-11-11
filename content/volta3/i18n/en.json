@@ -452,7 +452,7 @@
   "exp3_3_7_b2": "With 10 kΩ the LED stays dark.",
   "exp3_3_7_b3": "With 10 kΩ the circuit draws over 100 mA.",
   "exp3_3_7_s1": "Set the battery to 1.5 V. Put IM1 on A1 and A2 and connect +9V to A1. Put a 10 kΩ resistor on A2 and A3. That is less than in 3.5.",
-  "exp3_3_7_s2": "Build the rest as in 3.5: transformer on B2 to C3 with the dots on the left, NPN transistor on B5 to C6, white LED with the anode on B7 and the cathode on C7. Connect A2 to B2, A3 to C3, C2 to B5, B3 to B6, B6 to B7, B7 to A7, C5 and C7 to 0V.",
+  "exp3_3_7_s2": "Build the rest as in 3.5: transformer on B2 to C3 with the dots on the left, NPN transistor on B5 to C6, white LED with the anode on B7 and the cathode on C7. Put the probe on A7. Connect A2 to B2, A3 to C3, C2 to B5, B3 to B6, B6 to B7, B7 to A7, C5 and C7 to 0V.",
   "exp3_3_7_s3": "Switch on. Read the current from the cell at IM1 and look at the LED. Goal: the LED shines at least at 35 out of 100, and IM1 shows at most 25 mA.",
   "exp3_3_7_h1": "The resistor decides how strongly the transistor is switched on. A smaller resistor means more base current and more energy per cycle.",
   "exp3_3_7_h2": "Try 15 kΩ, 10 kΩ and 4.7 kΩ. Write down the brightness and the current at IM1 for each value.",

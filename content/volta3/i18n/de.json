@@ -452,7 +452,7 @@
   "exp3_3_7_b2": "Mit 10 kΩ bleibt die LED dunkel.",
   "exp3_3_7_b3": "Mit 10 kΩ zieht die Schaltung über 100 mA.",
   "exp3_3_7_s1": "Stelle die Batterie auf 1,5 V. Stecke IM1 auf A1 und A2 und verbinde +9V mit A1. Stecke einen Widerstand mit 10 kΩ auf A2 und A3. Das ist weniger als in 3.5.",
-  "exp3_3_7_s2": "Baue den Rest wie in 3.5: Übertrager auf B2 bis C3 mit den Punkten nach links, NPN-Transistor auf B5 bis C6, weiße LED mit der Anode auf B7 und der Kathode auf C7. Verbinde A2 mit B2, A3 mit C3, C2 mit B5, B3 mit B6, B6 mit B7, B7 mit A7, C5 und C7 mit 0V.",
+  "exp3_3_7_s2": "Baue den Rest wie in 3.5: Übertrager auf B2 bis C3 mit den Punkten nach links, NPN-Transistor auf B5 bis C6, weiße LED mit der Anode auf B7 und der Kathode auf C7. Stecke den Tastkopf auf A7. Verbinde A2 mit B2, A3 mit C3, C2 mit B5, B3 mit B6, B6 mit B7, B7 mit A7, C5 und C7 mit 0V.",
   "exp3_3_7_s3": "Schalte ein. Lies an IM1 den Strom aus der Zelle ab und schau auf die LED. Ziel: Die LED leuchtet mindestens mit 35 von 100, und IM1 zeigt höchstens 25 mA.",
   "exp3_3_7_h1": "Der Widerstand bestimmt, wie stark der Transistor eingeschaltet wird. Ein kleinerer Widerstand bedeutet mehr Basisstrom und mehr Energie je Takt.",
   "exp3_3_7_h2": "Probiere 15 kΩ, 10 kΩ und 4,7 kΩ. Schreib dir zu jedem Wert die Helligkeit und den Strom an IM1 auf.",
