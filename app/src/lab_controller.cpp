@@ -37,6 +37,11 @@
 namespace volta {
 
 namespace {
+// Gleichgroesse, die merklich schwankt (Wechselanteil ueber 5 % des Mittelwerts): Messgeraete zeigen dann den
+// Mittelwert des Messfensters statt des springenden Augenblickswerts
+bool pulsing(const core::SignalSummary* s) {
+    return s && s->valid && s->acRms > 0.05 * std::fabs(s->mean);
+}
 // Logikpegel aus der Spannung gegen 0V: 2 = H, 0 = L, 1 = verbotener Bereich (CMOS-Schwellen 70 % / 30 %)
 int logicLevel(double v, double supplyV) {
     if (v > model::kLogicHighFraction * supplyV) return 2;
@@ -1679,6 +1684,8 @@ QVariantMap LabController::partState(const QString& id) const {
                 s && s->isAc()) {
                 ac = true;
                 value = s->acRms;
+            } else if (pulsing(s)) {
+                value = -s->mean; // schwankende Gleichgroesse: Mittelwert wie an der Anzeige im Pult
             }
         const model::MeterText t = model::formatMeter(mode, value);
         QString text = QString::fromStdString(t.value);
@@ -2663,15 +2670,15 @@ QVariantMap LabController::displayState(int slot) const {
         m.insert(QStringLiteral("unit"), QString());
         return m;
     }
-    // Gleichgroesse: Mittelwert des Messfensters, solange der Wechselanteil ueberwiegt (wie ein echtes Geraet im
-    // DC-Bereich), sonst der Augenblickswert; Wechselgroesse: Effektivwert des Wechselanteils. Die Statistik laeuft
+    // Gleichgroesse: Mittelwert des Messfensters, sobald sie merklich schwankt (wie ein echtes Geraet im DC-Bereich,
+    // z. B. Stromstoesse eines Sperrschwingers), sonst der Augenblickswert; Wechselgroesse: Effektivwert des Wechselanteils. Die Statistik laeuft
     // ueber Spannung bzw. Strom am ersten Anschluss des Kernmodells (minus) und hat darum das umgekehrte Vorzeichen.
     const core::SignalSummary* st = mode == core::MeterMode::Ohm
                                         ? nullptr
                                         : m_session->readingStats(ss(source), mode == core::MeterMode::Ampere);
     double value = r->displayValue;
     if (acChosen) value = st && st->valid ? st->acRms : 0.0;
-    else if (st && st->isAc()) value = -st->mean;
+    else if (pulsing(st)) value = -st->mean;
     const bool foreign = (r->displayFlags & core::kDisplayForeignVoltage) != 0;
     const model::DisplayText t =
         model::formatDisplay(mode, range, value, (r->displayFlags & core::kDisplayOverrange) != 0);
