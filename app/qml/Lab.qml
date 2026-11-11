@@ -113,7 +113,8 @@ Item {
     readonly property int deskPanelHeight: 140 // Bedienelemente und Schaltzeichen; darunter im selben Pult die Felder
     readonly property int groupLineY: deskPanelHeight + 6
     readonly property int deskY: deskPanelHeight + 4
-    readonly property int deskBottom: deskY + Theme.fieldHeight + 12 // Unterkante des Pults (schliesst die Felder ein)
+    // Unterkante des Pults (schliesst die Felder ein); mit Generator etwas tiefer fuer die Linie G0 - 0V darunter
+    readonly property int deskBottom: deskY + Theme.fieldHeight + 12 + (deskNames.indexOf("P:G0") >= 0 ? 6 : 0)
     readonly property int boardY: deskBottom + Theme.fieldGap + 4
     readonly property int boardWidth: columns * Theme.fieldWidth + (columns - 1) * Theme.fieldGap
     // Messgeraet neben der Grundplatte ist 5 Reihen hoch: die Modulleiste rutscht bei kleinem Steckbrett darunter
@@ -1426,6 +1427,37 @@ Item {
                 contentItem: Item { DrawnIcon { anchors.centerIn: parent; kind: "trash"; size: 26; color: lab.trashHot ? "white" : Theme.navy } }
             }
 
+            // Generator: G0 liegt intern fest an 0V (Konzept Volta 2, 5.1). Die Verbindung steht gestrichelt unter den
+            // Feldern, dazu »GND« unter G0 (nie allein ueber Farbe); die Wechselquelle bleibt potentialfrei
+            Canvas {
+                id: groundLink
+                objectName: "generatorGroundLink"
+                readonly property bool shown: lab.deskNames.indexOf("P:G0") >= 0 && lab.deskNames.indexOf("P:0V") >= 0
+                readonly property point from: shown ? lab.anchorPoint("P:0V") : Qt.point(0, 0)
+                readonly property point to: shown ? lab.anchorPoint("P:G0") : Qt.point(0, 0)
+                readonly property real low: Math.max(from.y, to.y) + Theme.fieldHeight / 2 + 11 // unter den Rahmen
+                visible: shown
+                x: Math.min(from.x, to.x) - 2
+                y: Math.min(from.y, to.y)
+                width: Math.abs(to.x - from.x) + 4
+                height: low - y + 3
+                onFromChanged: requestPaint()
+                onToChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.strokeStyle = "#E6EBF0" // hell auf dem dunklen Pult
+                    ctx.lineWidth = 2
+                    ctx.setLineDash([6, 4])
+                    ctx.beginPath()
+                    ctx.moveTo(from.x - x, from.y - y)
+                    ctx.lineTo(from.x - x, low - y)
+                    ctx.lineTo(to.x - x, low - y)
+                    ctx.lineTo(to.x - x, to.y - y)
+                    ctx.stroke()
+                }
+            }
+
             // Alle Anschlusspunkte: Pultleiste, Messgeraet, Grundplatte, Modulleiste
             Repeater {
                 model: lab.allAnchors
@@ -1445,7 +1477,7 @@ Item {
                     fillColor: modelData === "P:+9V" || modelData === "P:+B2" ? "#C62828"
                              : modelData === "P:0V" || modelData === "P:G0" ? "#17191C" // G0 ist 0V
                              : modelData === "P:-B2" ? "#2C62C9" : "transparent"
-                    subLabel: modelData === "P:0V" ? "GND" : ""
+                    subLabel: modelData === "P:0V" || modelData === "P:G0" ? "GND" : ""
                     pitch: lab.socketPitch(modelData)
                     width: lab.anchorSize(modelData).width
                     height: lab.anchorSize(modelData).height
