@@ -169,7 +169,7 @@ class LabController : public QObject {
     Q_PROPERTY(QString moreKnowledge READ moreKnowledge NOTIFY experimentChanged)
     Q_PROPERTY(QStringList further READ further NOTIFY experimentChanged)
     Q_PROPERTY(QString realLife READ realLife NOTIFY experimentChanged)
-    Q_PROPERTY(QString nextExperimentId READ nextExperimentId NOTIFY experimentChanged)
+    Q_PROPERTY(QString nextExperimentId READ nextExperimentId NOTIFY nextExperimentChanged)
     // Schritt-fuer-Schritt-Aufbauhilfe (model::GuideStep): eingeschaltet vom Kind; guideStep beschreibt den ersten
     // offenen Schritt: {index, count, kind ("modul", "bauteil", "leitung", "hauptschalter", "fertig"), id, type,
     // value, pins: [{name, field}], from, to, color, targets[], labels[] (Feldnamen fuer den Text)}
@@ -546,6 +546,7 @@ public:
 signals:
     void toneModeChanged();
     void experimentChanged();
+    void nextExperimentChanged(); // Experiment gewechselt oder Fortschritt (Stufe frei)
     void adoptChanged();
     void boardChanged();
     void deskChanged();
