@@ -1658,13 +1658,14 @@ Item {
             id: valueMenu
             margins: 8 // immer ganz im Fenster
             title: qsTr("Wert")
-            enabled: partMenu.part.type === "widerstand"
+            readonly property bool elko: partMenu.part.type === "elko"
+            enabled: partMenu.part.type === "widerstand" || elko
             Instantiator {
-                model: Texts.resistorValues
+                model: valueMenu.elko ? Texts.elkoValues : Texts.resistorValues
                 delegate: MenuItem {
                     height: Theme.control
                     required property var modelData
-                    text: Texts.ohm(modelData)
+                    text: valueMenu.elko ? Texts.farad(modelData) : Texts.ohm(modelData)
                     checkable: true
                     checked: partMenu.part.value === modelData
                     onTriggered: { lab.beginEdit(); lab.controller.setPartValue(partMenu.part.id, modelData) }
