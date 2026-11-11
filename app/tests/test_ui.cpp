@@ -23,6 +23,7 @@
 #include "app_settings.hpp"
 #include "language_service.hpp"
 #include "services/progress_store.hpp"
+#include "services/profile_transfer.hpp"
 #include "services/journal_store.hpp"
 #include "volta_paths.hpp"
 #include <QImage>
@@ -1313,6 +1314,31 @@ private slots:
         QCOMPARE(stacked.count(), 2);
         QCOMPARE(stacked.at(1).at(2).toInt(), 3);
         m_lab->clearBoard();
+    }
+
+    // »Naechstes Experiment« springt nicht in eine gesperrte Stufe: ist die vorige Stufe noch nicht ganz geschafft,
+    // fuehrt der Knopf zum ersten offenen Experiment
+    void nextExperimentRespectsLock() {
+        QTemporaryDir dir;
+        LabController lab(QStringLiteral(VOLTA_CONTENT_DIR));
+        lab.useDataRoot(dir.path());
+        lab.setUnlockAll(false);
+        QStringList first, second;
+        for (const QVariant& st : lab.stages()) {
+            const int n = st.toMap().value(QStringLiteral("number")).toInt();
+            for (const QVariant& e : st.toMap().value(QStringLiteral("experiments")).toList())
+                (n == 1 ? first : n == 2 ? second : first) << e.toMap().value(QStringLiteral("id")).toString();
+            if (n == 0) first.clear(); // Stufe 0 (Volta 3) ist immer frei
+        }
+        QVERIFY(first.size() >= 3 && !second.isEmpty());
+        QStringList done; // alle der Stufe 1 ausser dem zweiten
+        for (int i = 0; i < first.size(); ++i)
+            if (i != 1) done << first.at(i);
+        lab.importProgressLink(services::transfer::progressLink(QStringLiteral("volta1"), done));
+        QVERIFY(lab.startExperiment(first.last()));
+        QCOMPARE(lab.nextExperimentId(), first.at(1)); // nicht second.first(): Stufe 2 ist noch gesperrt
+        lab.importProgressLink(services::transfer::progressLink(QStringLiteral("volta1"), {first.at(1)}));
+        QCOMPARE(lab.nextExperimentId(), second.first());
     }
 
     // Bild-Schritte ab Stufe 3: Kennung nach dem Bauteilnamen bleibt Text, »B3 und B4« am Relais sind zwei Leitungen

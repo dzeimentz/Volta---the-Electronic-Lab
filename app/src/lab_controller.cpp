@@ -62,6 +62,8 @@ LabController::LabController(QString contentRoot, QObject* parent)
     m_experimentIds = m_repo.experimentIds(QStringLiteral("volta1"));
     m_stages = m_repo.stages(QStringLiteral("volta1"));
     rebuildExperimentList();
+    connect(this, &LabController::experimentChanged, this, &LabController::nextExperimentChanged);
+    connect(this, &LabController::progressChanged, this, &LabController::nextExperimentChanged);
     m_session->onBoardChanged = [this] {
         m_errors.clear();
         for (const auto& e : m_session->netlist().errors) m_errors << qs(e);
@@ -1090,7 +1092,17 @@ bool LabController::finishExperiment() {
 
 QString LabController::nextExperimentId() const {
     const qsizetype i = m_experimentIds.indexOf(m_experiment.id);
-    return i >= 0 && i + 1 < m_experimentIds.size() ? m_experimentIds.at(i + 1) : QString();
+    if (i < 0) return {};
+    // das folgende, wenn seine Stufe frei ist; sonst das erste noch offene freie Experiment ab Stufe 1 (die naechste
+    // Stufe wird erst frei, wenn alle Experimente der vorigen geschafft sind; Stufe 0 zaehlt dafuer nicht)
+    if (i + 1 < m_experimentIds.size() && isUnlocked(m_experimentIds.at(i + 1))) return m_experimentIds.at(i + 1);
+    for (const QVariant& v : m_experimentList) {
+        const QVariantMap e = v.toMap();
+        const QString id = e.value(QStringLiteral("id")).toString();
+        if (e.value(QStringLiteral("stage")).toInt() >= 1 && id != m_experiment.id && isUnlocked(id) && !m_progress.isDone(id))
+            return id;
+    }
+    return {};
 }
 
 QStringList LabController::texts(const QStringList& keys) const {
