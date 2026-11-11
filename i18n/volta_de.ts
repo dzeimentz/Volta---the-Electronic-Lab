@@ -6791,6 +6791,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../app/qml/Texts.qml" line="1"/>
+        <source>Tastkopf</source>
+        <comment>Wortanfaenge im Aufbautext</comment>
+        <translation>Tastkopf</translation>
+    </message>
+    <message>
         <location filename="../app/qml/Texts.qml" line="128"/>
         <source>Kondensator</source>
         <comment>Wortanfaenge im Aufbautext</comment>

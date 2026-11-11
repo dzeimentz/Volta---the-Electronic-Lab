@@ -1679,6 +1679,13 @@ private slots:
         const QStringList lc = pieces(QStringLiteral("stepText_0"));
         QVERIFY2(lc.contains(QStringLiteral("text:Kondensator symbol:kondensator")), qPrintable(lc.join(QLatin1Char('|'))));
         QVERIFY2(lc.contains(QStringLiteral("text:Spule symbol:spule_1h")), qPrintable(lc.join(QLatin1Char('|'))));
+        // Tastkopf (3.7): Bild wie die anderen Bauteile
+        QVERIFY(m_lab->startExperiment(QStringLiteral("volta3.3.7")));
+        m_lab->chooseGuess(0);
+        QTRY_VERIFY(!pieces(QStringLiteral("stepText_1")).isEmpty());
+        findItem(m_window->contentItem(), QStringLiteral("stepText_1_0"))->setProperty("text", QStringLiteral("Stecke den Tastkopf auf A7."));
+        const QStringList tk = pieces(QStringLiteral("stepText_1"));
+        QVERIFY2(tk.contains(QStringLiteral("text:Tastkopf symbol:tastkopf")), qPrintable(tk.join(QLatin1Char('|'))));
         QVERIFY(m_lab->startExperiment(QStringLiteral("volta1.3.15")));
         m_lab->chooseGuess(0);
         // Stichpunkte: ein Handgriff je Zeile, Klammern und Nebensaetze bleiben ganz

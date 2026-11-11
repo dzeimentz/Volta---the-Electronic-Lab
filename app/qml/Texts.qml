@@ -177,6 +177,7 @@ QtObject {
             ["ukwmodul", qsTr("UKW-Modul", "Wortanfaenge im Aufbautext")],
             ["gattermodul", qsTr("Gatter-Modul", "Wortanfaenge im Aufbautext")],
             ["logiktastkopf", qsTr("Logik-Tastkopf", "Wortanfaenge im Aufbautext")],
+            ["tastkopf", qsTr("Tastkopf", "Wortanfaenge im Aufbautext")], // Oszilloskop; nach dem Logik-Tastkopf
             ["dekadenzaehler", qsTr("Dekadenzähler", "Wortanfaenge im Aufbautext")],
             ["zaehlermodul", qsTr("Zähler-Modul", "Wortanfaenge im Aufbautext")],
             ["anzeigemodul", qsTr("Anzeige-Modul", "Wortanfaenge im Aufbautext")]
