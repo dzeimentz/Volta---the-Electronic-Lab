@@ -1769,9 +1769,10 @@ Item {
             title: qsTr("Wert")
             // Kondensator: Werte ab Volta 2 (Folienkondensatoren)
             readonly property bool cap: partMenu.part.type === "kondensator" && Texts.band !== "" && Texts.band !== "volta1"
-            enabled: partMenu.part.type === "widerstand" || cap
+            readonly property bool elko: partMenu.part.type === "elko"
+            enabled: partMenu.part.type === "widerstand" || cap || elko
             // Widerstand ab Volta 2: alle E12-Werte, je Zehnerstufe ein Untermenue (eine lange Liste passt nicht)
-            readonly property bool decades: !cap && Texts.band !== "" && Texts.band !== "volta1"
+            readonly property bool decades: !cap && !elko && Texts.band !== "" && Texts.band !== "volta1"
             Instantiator {
                 model: valueMenu.decades ? Texts.resistorDecades : []
                 delegate: Menu {
@@ -1799,11 +1800,12 @@ Item {
                 onObjectRemoved: (index, object) => valueMenu.removeMenu(object)
             }
             Instantiator {
-                model: valueMenu.decades ? [] : valueMenu.cap ? Texts.capacitorValues : Texts.resistorValues
+                model: valueMenu.decades ? [] : valueMenu.elko ? Texts.elkoValues : valueMenu.cap ? Texts.capacitorValues : Texts.resistorValues
                 delegate: MenuItem {
                     height: Theme.control
                     required property var modelData
-                    text: valueMenu.cap ? Texts.farad(modelData) + " (" + Texts.capacitorCode(modelData) + ")" : Texts.ohm(modelData)
+                    text: valueMenu.cap ? Texts.farad(modelData) + " (" + Texts.capacitorCode(modelData) + ")"
+                          : valueMenu.elko ? Texts.farad(modelData) : Texts.ohm(modelData)
                     checkable: true
                     checked: partMenu.part.value === modelData
                     onTriggered: { lab.beginEdit(); lab.controller.setPartValue(partMenu.part.id, modelData) }

@@ -285,6 +285,8 @@ QtObject {
 
     readonly property var wireColors: ["rot", "schwarz", "blau", "gelb", "gruen", "weiss"]
     // E12-Auswahl fuer Volta 1 (Werkzeugkasten zeigt spaeter alle Werte)
+    // Elkos (gepolt): 1 µF bis 1000 µF in der Reihe E3/E6 (Musteraufbauten nutzen 10 bis 1000 µF)
+    readonly property var elkoValues: [1e-6, 2.2e-6, 4.7e-6, 10e-6, 22e-6, 47e-6, 100e-6, 220e-6, 470e-6, 1e-3]
     readonly property var resistorValues: [100, 220, 330, 470, 680, 1000, 2200, 4700, 10000, 47000, 100000, 1000000]
     // Volta 2 und 3: alle Werte der Reihe E12 (Katalog), je Zehnerstufe ein Untermenue; 1 MΩ am Ende der letzten
     readonly property var resistorDecades: {
