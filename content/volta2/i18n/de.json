@@ -906,7 +906,7 @@
   "exp2_6_6_loesung": "Nach einem Tipp auf S1 leuchtet die LED und bleibt an. Erst ein Tipp auf S2 schaltet sie aus. Sie bleibt dann aus, bis du wieder S1 drückst.",
   "exp2_6_6_erklaerung": "Im 555 steckt ein Flipflop. Es kennt zwei Zustände und bleibt im letzten, bis es umgestellt wird. TR stellt es auf »an«, R stellt es auf »aus«. Weil die Schaltung in beiden Zuständen ruhig bleibt, heißt sie bistabil.",
   "exp2_6_6_mehr": "Ein Flipflop speichert ein Bit, also eine Eins oder eine Null. Im Computer stecken Milliarden davon. Mehr darüber lernst du in der Zuse-Reihe.",
-  "exp2_6_6_w1": "Drücke beide Taster gleichzeitig. Wer gewinnt?",
+  "exp2_6_6_w1": "Verbinde B1 mit B3. Jetzt drückt S1 beide Eingänge auf einmal. Drücke S1. Wer gewinnt?",
   "exp2_6_6_w2": "Schalte die Batterie aus und wieder ein. Weiß der 555 noch, was er gespeichert hatte?",
   "exp2_6_6_echt": "Viele Geräte haben einen Ein-Knopf und einen Aus-Knopf. Dahinter steckt oft so ein Speicher.",
   "exp2_6_7_titel": "Ein Ton aus dem Chip",
