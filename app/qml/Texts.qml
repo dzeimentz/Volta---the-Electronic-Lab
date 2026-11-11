@@ -235,5 +235,5 @@ QtObject {
 
     readonly property var wireColors: ["rot", "schwarz", "blau", "gelb", "gruen", "weiss"]
     // E12-Auswahl fuer Volta 1 (Werkzeugkasten zeigt spaeter alle Werte)
-    readonly property var resistorValues: [100, 220, 330, 470, 680, 1000, 2200, 4700, 10000, 47000, 100000]
+    readonly property var resistorValues: [100, 220, 330, 470, 680, 1000, 2200, 4700, 10000, 47000, 100000, 1000000]
 }
