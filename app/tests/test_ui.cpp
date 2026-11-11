@@ -1590,6 +1590,8 @@ private slots:
             for (const QVariant& d : eval(QStringLiteral("Texts.resistorDecades")).toList())
                 for (const QVariant& v : d.toList()) ohm << v.toDouble();
             for (const QVariant& v : eval(QStringLiteral("Texts.capacitorValues")).toList()) farad << v.toDouble();
+            QList<double> elko;
+            for (const QVariant& v : eval(QStringLiteral("Texts.elkoValues")).toList()) elko << v.toDouble();
             QVERIFY(ohm.size() == 61);
             auto has = [](const QList<double>& list, double x) {
                 return std::any_of(list.begin(), list.end(), [x](double v) { return std::fabs(v - x) <= 1e-6 * x; });
@@ -1602,6 +1604,8 @@ private slots:
                         QVERIFY2(has(ohm, p.value), qPrintable(id + QLatin1Char(' ') + QString::number(p.value)));
                     if (p.type == "kondensator")
                         QVERIFY2(has(farad, p.value), qPrintable(id + QLatin1Char(' ') + QString::number(p.value)));
+                    if (p.type == "elko" && p.value > 0)
+                        QVERIFY2(has(elko, p.value), qPrintable(id + QLatin1Char(' ') + QString::number(p.value)));
                 }
             }
         }
