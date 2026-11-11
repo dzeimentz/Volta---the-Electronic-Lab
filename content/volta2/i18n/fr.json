@@ -906,7 +906,7 @@
   "exp2_6_6_loesung": "Après un appui sur S1, la LED s'allume et reste allumée. Seul un appui sur S2 l'éteint. Elle reste alors éteinte jusqu'à ce que tu appuies de nouveau sur S1.",
   "exp2_6_6_erklaerung": "Dans le 555, il y a une bascule. Elle connaît deux états et reste dans le dernier jusqu'à ce qu'on la change. TR la met sur « allumé », R sur « éteint ». Comme le circuit reste tranquille dans les deux états, on l'appelle bistable.",
   "exp2_6_6_mehr": "Une bascule mémorise un bit, c'est-à-dire un un ou un zéro. Un ordinateur en contient des milliards. Tu en apprendras plus dans la série Zuse.",
-  "exp2_6_6_w1": "Appuie sur les deux boutons en même temps. Lequel gagne ?",
+  "exp2_6_6_w1": "Relie B1 à B3. Maintenant, S1 agit sur les deux entrées à la fois. Appuie sur S1. Laquelle gagne ?",
   "exp2_6_6_w2": "Éteins la pile et rallume-la. Le 555 sait-il encore ce qu'il avait mémorisé ?",
   "exp2_6_6_echt": "Beaucoup d'appareils ont un bouton marche et un bouton arrêt. Derrière, il y a souvent une mémoire comme celle-ci.",
   "exp2_6_7_titel": "Un son sorti de la puce",

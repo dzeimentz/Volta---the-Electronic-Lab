@@ -906,7 +906,7 @@
   "exp2_6_6_loesung": "No engem Tipp op S1 liicht d'Liichtdiod a bleift un. Eréischt en Tipp op S2 schalt se aus. Si bleift dann aus, bis s du erëm S1 drécks.",
   "exp2_6_6_erklaerung": "Am 555 stécht e Flipflop. E kennt zwee Zoustänn a bleift am leschten, bis en ëmgestallt gëtt. TR stellt en op »un«, R stellt en op »aus«. Well d'Schaltung an allebéid Zoustänn roueg bleift, heescht se bistabil.",
   "exp2_6_6_mehr": "E Flipflop späichert e Bit, also eng Eent oder eng Null. An engem Computer stiechen der Milliarden. Méi doriwwer léiers du an der Zuse-Rei.",
-  "exp2_6_6_w1": "Dréck béid Taster gläichzäiteg. Wien gewënnt?",
+  "exp2_6_6_w1": "Verbann B1 mat B3. Elo dréckt S1 béid Agäng op eemol. Dréck op S1. Wien gewënnt?",
   "exp2_6_6_w2": "Schalt d'Batterie aus an erëm un. Weess de 555 nach, wat e gespäichert hat?",
   "exp2_6_6_echt": "Vill Apparater hunn en Un-Knäppchen an en Aus-Knäppchen. Dohannert stécht dacks esou e Späicher.",
   "exp2_6_7_titel": "En Toun aus dem Chip",

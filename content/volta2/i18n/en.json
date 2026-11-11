@@ -906,7 +906,7 @@
   "exp2_6_6_loesung": "After a tap on S1 the LED lights and stays on. Only a tap on S2 switches it off. It then stays off until you press S1 again.",
   "exp2_6_6_erklaerung": "Inside the 555 there is a flip-flop. It knows two states and stays in the last one until it is switched. TR sets it to »on«, R sets it to »off«. Because the circuit stays still in both states, it is called bistable.",
   "exp2_6_6_mehr": "A flip-flop stores one bit, a one or a zero. A computer contains billions of them. You will learn more about this in the Zuse series.",
-  "exp2_6_6_w1": "Press both push buttons at the same time. Which one wins?",
+  "exp2_6_6_w1": "Connect B1 to B3. Now S1 presses both inputs at once. Press S1. Which one wins?",
   "exp2_6_6_w2": "Switch the battery off and on again. Does the 555 still know what it had stored?",
   "exp2_6_6_echt": "Many devices have an on button and an off button. Behind them there is often a memory like this.",
   "exp2_6_7_titel": "A tone from the chip",
