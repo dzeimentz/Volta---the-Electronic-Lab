@@ -324,6 +324,8 @@ Aufbau der App wie Volta 1: Die **Startseite** begrüßt mit Zetti und bietet di
 
 ### 7.2 Zuse 2 (Skizze)
 
+> Ausgearbeitet im **Konzept Zuse 2 v0.1** (`docs/Konzept_Zuse2.md`, 14.11.2026): 9 Lernstufen, 41 Experimente, Zuse-4 mit fest verdrahtetem Steuerwerk, Zuse-8 mit Mikroprogramm und eigenem Befehlssatz. Die Skizze unten bleibt als Entstehungsstand stehen.
+
 Zuse 2 knüpft an das Ende von Zuse 1 an: Die Erfindungen aus Zuse 1 (Register, Zähler, Rechenwerk, Vergleicher) werden übernommen bzw. zu Beginn kurz wiederholt.
 
 | Stufe | Thema | Ergebnis |
@@ -338,6 +340,8 @@ Zuse 2 knüpft an das Ende von Zuse 1 an: Die Erfindungen aus Zuse 1 (Register, 
 | 8 | Vom Schalter zum Assembler; Projekt | Programme als Text; Zuse-8 mit kleinem Spiel |
 
 ### 7.3 Zuse 3 (Skizze, neu ausgerichtet)
+
+> Ausgearbeitet im **Konzept Zuse 3 v0.1** (`docs/Konzept_Zuse3.md`, 14.11.2026): 10 Lernstufen, 38 Experimente; zusätzlich Speicherhierarchie, mehrere Kerne und »Vom Text zum Befehl«.
 
 Zuse 3 vertieft die Rechnerarchitektur und endet dort, wo der MCU Explorer beginnt. Unterbrechungen und Zeitgeber werden hier nur auf Bauebene behandelt (aus Gattern und Registern); ihre Benutzung am echten Chip in C/C++ mit elektrischer Umgebung ist Sache des MCU Explorers. Die Arbeitsteilung im Einzelnen steht im Konzept MCU Explorer, Abschnitt 4.
 
@@ -480,8 +484,8 @@ Summe Zuse 1: ca. 100–135 PT (Speicher mit Adressen, Steuerwerk und Zuse-4 sin
 | Markenrecherche »Zuse« und »Zetti«; Produktzusätze Zuse 2 und 3 | vor Veröffentlichung |
 | Altersangabe Zuse 1 (10–14) und Lehrplanbezug je Bundesland | vor Phase Z3 |
 | Abgrenzung der Bände bestätigen: Zuse 1 endet mit der von Hand gesteuerten Rechenmaschine, Programm im Speicher ab Zuse 2 (Abschnitt 4.1) | jetzt |
-| Befehlssatz Zuse-4 (Umfang, Adressbreite) | Konzept Zuse 2 |
-| Zuschnitt Zuse 3 gegenüber dem MCU Explorer bestätigen | vor Konzept Zuse 3 |
+| ~~Befehlssatz Zuse-4 (Umfang, Adressbreite)~~ | erledigt: Konzept Zuse 2, Abschnitt 4.2 (16 Wörter zu 8 Bit, Befehls- und Zahlteil) |
+| ~~Zuschnitt Zuse 3 gegenüber dem MCU Explorer bestätigen~~ | erledigt 14.11.2026 (Konzept Zuse 3, Abschnitt 2.3) |
 | Gemeinsames Projektformat (.dclearn) und gemeinsame QML-Komponenten mit Volta | vor Phase Z3 |
 | Qt-Lizenzweg für iOS (gemeinsam mit Volta) | vor iPad-Ausgabe |
 
@@ -511,7 +515,8 @@ Version 0.3 behält die tragfähige Technik von v0.2 – Logiksimulation, Prüfu
 ## Anhang B: Referenzen
 
 - DC Learning Ecosystem – Gesamtkonzept v1.1 und DC Learning Design Standard v1.0 (15.10.2026, Projektordner »Learning ECOSYSTEM«)
-- Konzept MCU Explorer v0.1 (`docs/Konzept_MCU_Explorer.md`): Abgrenzung zu Zuse 3
+- Konzept MCU Explorer v0.2 (`docs/Konzept_MCU_Explorer.md`): Abgrenzung zu Zuse 3
+- Konzept Zuse 2 v0.1 (`docs/Konzept_Zuse2.md`) und Konzept Zuse 3 v0.1 (`docs/Konzept_Zuse3.md`)
 - Konzept Volta – Das Elektronik-Labor v3.0
 - ADR-0010: Zuse als eigene Produktlinie (`docs/adr/0010-zuse-eigene-linie.md`)
 - ADR-0001 Qt 6, ADR-0005 Befehlsmuster, ADR-0006 keine Datenerhebung, ADR-0011 Inhalte als Qt-Ressource

@@ -184,7 +184,9 @@ Nach jeder Aenderung am Kern: `ctest --preset core-only` muss gruen sein. Nach A
 | `docs/roadmap.md` | Phasen, Aufwaende, offene Entscheidungen |
 | `docs/volta2-planung.md` | Entwurf Volta 2: Schwerpunkte, Bedienpult II, Audio-Risiko, Stufen, Timer 555 |
 | `docs/Konzept_Zuse.md` | Konzept der Zuse-Reihe (v0.3): Raetselkisten, Werkzeugkiste, Bedienfeld, Zahlensysteme, Lernpfade, Ecosystem; PDF mit `python3 tools/konzept_pdf.py docs/Konzept_Zuse.md` |
-| `docs/Konzept_MCU_Explorer.md` | Konzept MCU Explorer (v0.1): ATmega328P-Emulator, Kopplung an den Volta-Kern, Toolchain, Lernpfade, Abgrenzung zu Zuse 3 |
+| `docs/Konzept_Zuse2.md` | Konzept Zuse 2 (v0.1): gespeicherter Ablauf, Speicher, Bus, Steuerwerk fest und als Mikroprogramm, Zuse-4, Zuse-8, Assembler, 41 Experimente |
+| `docs/Konzept_Zuse3.md` | Konzept Zuse 3 (v0.1): Unterbrechungen, Zeitgeber, Ports, Harvard, Cache, Fliessband, zwei Kerne, Zuse-Text-Uebersetzer, Zuse-K, 38 Experimente |
+| `docs/Konzept_MCU_Explorer.md` | Konzept MCU Explorer (v0.2): ATmega328P-Emulator, Kopplung an den Volta-Kern, Toolchain (entschieden), Lernpfade, Abgrenzung zu Zuse 3 |
 | `docs/zuse1-planung.md` | Ergaenzungen zu Zuse 1: Entscheidungen, Auswertung ELRAD-Lehrgang Digitaltechnik |
 | `docs/partner/rechte-und-lizenzen.md` | Rechteinhaber, Fremdlizenzen, Marken, offene Punkte (fuer Partner/Verlage) |
 | `docs/partner/branding-konzept.md` | Partnerausgaben: was anpassbar ist, was fest bleibt, Aufwand |

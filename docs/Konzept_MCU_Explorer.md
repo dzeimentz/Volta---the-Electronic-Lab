@@ -2,17 +2,18 @@
 
 _Konzept der Linie MCU Explorer im DC Learning Ecosystem (Arduino-Uno-kompatible Plattform, ATmega328P)_
 
-Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_MCU_Explorer_v0.1.pdf` (erzeugt mit `tools/konzept_pdf.py`).
+Markdown-Fassung des Konzepts und Quelle des PDFs `docs/Konzept_MCU_Explorer_v0.2.pdf` (erzeugt mit `tools/konzept_pdf.py`).
 
 | | |
 |---|---|
 | Dokument | Konzept |
-| Version | 0.1 |
+| Version | 0.2 |
 | Status | ENTWURF |
 | Autor | Daniel Zeimentz · DC Software Engineering |
-| Datum | 15.10.2026 |
-| Bezug | DC Learning Ecosystem – Gesamtkonzept v1.1, Konzept und Marktanalyse v1.0, DC Learning Design Standard v1.0; Konzept Volta v3.0; Konzept Zuse v0.3; ADR-0002 (Qt-freier Kern), ADR-0006 (keine Datenerhebung) |
+| Datum | 14.11.2026 |
+| Bezug | DC Learning Ecosystem – Gesamtkonzept v1.1, Konzept und Marktanalyse v1.0, DC Learning Design Standard v1.0; Konzept Volta v3.0; Konzept Volta 3 v0.5; Konzept Zuse v0.3, Zuse 2 v0.1, Zuse 3 v0.1; ADR-0002 (Qt-freier Kern), ADR-0006 (keine Datenerhebung) |
 | Zielplattformen | Windows, Linux, macOS (zuerst); Android-Tablet und iPadOS nach Machbarkeitsnachweis |
+| Änderungen zu v0.1 | Entscheidung 14.11.2026: Übersetzungsweg festgeschrieben (Desktop avr-gcc, Tablet per Machbarkeitstest, Übergang über Desktop-Übersetzung); Arbeitsteilung mit Zuse 3 bestätigt und um Cache, Fließband, mehrere Kerne und Übersetzer erweitert; Kopplung digitaler Bausteine an den Kern aus Volta 3 wird wiederverwendet |
 
 ## 1. Zusammenfassung
 
@@ -77,7 +78,8 @@ Die Marktchance ist laut Ecosystem-Analyse »hoch (Hypothese)«; Kaufbereitschaf
 | Zeitgeber | Zähler und Vergleicher selbst zusammensetzen | Timer konfigurieren, `millis()`, PWM-Modi, Frequenzen messen |
 | Ein-/Ausgabe | Port als Speicheradresse bauen | GPIO, Pull-up, Pegelschwellen, Stromgrenzen, elektrische Lasten |
 | Architektur | Von-Neumann und Harvard vergleichen, einfaches Fließband | ATmega328P als Harvard-Rechner: Flash, SRAM, EEPROM, PROGMEM |
-| Sprache | Assembler des eigenen Kerns (Zuse-K) | C/C++; Assembler nur als Einblick (MCU Explorer 2) |
+| Sprache | Assembler des eigenen Kerns (Zuse-K); Lehrsprache Zuse-Text, deren Übersetzung Schritt für Schritt sichtbar wird | C/C++ mit avr-gcc; Assembler nur als Einblick (MCU Explorer 2) |
+| Leistung | Cache, Fließband und zwei Kerne selbst bauen und in Takten messen | ATmega328P hat weder Cache noch mehrere Kerne; Befehlszyklen im Disassembler (MCU Explorer 2) |
 | Elektrik | keine (rein digital) | volle Rückwirkung über den Volta-Kern |
 | Rechner | selbst gebauter Prozessorkern Zuse-K | fertiger, industrieller Mikrocontroller |
 
@@ -95,7 +97,7 @@ Die Marktchance ist laut Ecosystem-Analyse »hoch (Hypothese)«; Kaufbereitschaf
 
 ### 4.4 Folgen für das Zuse-Konzept
 
-Zuse 3 behandelt Unterbrechungen und Zeitgeber nur auf Bauebene und verzichtet auf Programmierung in C/C++, Sensorik und Elektrik. Das Zuse-Konzept v0.3 (Abschnitte 4.1, 7.3) entspricht dem bereits und verweist auf dieses Dokument.
+Zuse 3 behandelt Unterbrechungen und Zeitgeber nur auf Bauebene und verzichtet auf Programmierung in C/C++, Sensorik und Elektrik. Die Arbeitsteilung ist am 14.11.2026 bestätigt; das Konzept Zuse 3 v0.1 (Abschnitt 2.3) übernimmt sie. Zuse 3 endet mit Experiment 9.3 »Der echte Mikrocontroller«, das die Register des ATmega328P in der Zuse-Darstellung zeigt; die Ansicht »Register als Bedienfeld« wird als gemeinsame Komponente gebaut.
 
 ## 5. Lösungskonzept
 
@@ -137,6 +139,7 @@ Bedienung nach dem DC Learning Design Standard, Volta als Referenz:
 | Grenzwerte | 40 mA je Pin, 200 mA gesamt, Spannungen außerhalb −0,5 … VCC + 0,5 V: Warnung, bei Dauer Zerstörung (»Nur in der App!«) |
 | Versorgung | 5 V über USB oder VIN über Spannungsregler (Volta-3-Modell); Brown-out bei Unterspannung |
 
+- **Wiederverwendung aus Volta 3:** Die Kopplung digitaler Module an den Kern (Eingang als Schaltschwelle, Ausgang als Spannungsquelle mit Innenwiderstand, Logik ereignisgesteuert) ist in Volta 3 gebaut (`core/modules/gate_module`, `counter_module`) und dient als Vorlage für die Pin-Modelle des Controllers.
 - **Zeitkopplung:** Der Emulator läuft in Zeitscheiben; jede Pinänderung ist ein Ereignis, an dem der Volta-Kern einen Teilschritt rechnet. Zwischen Ereignissen rechnet der Kern mit der üblichen Schrittweite. Grundlage ist der Leistungstest aus Volta 2 (lineare Schaltungen mit 20 µs auf dem Tablet mehrfach echtzeitfähig).
 - **PWM** wird ereignisgenau gerechnet (keine Mittelwert-Abkürzung); Helligkeit und Klang entstehen aus der Simulation.
 
@@ -149,7 +152,7 @@ Bedienung nach dem DC Learning Design Standard, Volta als Referenz:
 | C: eigener Übersetzer für eine klar benannte Teilmenge (»Explorer-C«) direkt nach AVR-Maschinencode | alle, auch iPadOS | volle Kontrolle und klein; nur Teilmenge, muss ehrlich so benannt werden |
 | D: Übersetzung am Desktop, Ergebnis (HEX) auf dem Tablet ausführen | alle | für Unterricht praktikabel, kein eigenständiges Tablet-Erlebnis |
 
-**Vorschlag:** Desktop zuerst mit Weg A. Für Tablets per Machbarkeitsnachweis zwischen B und C entscheiden; Weg D als Übergang. Der Emulator ist in allen Fällen derselbe.
+**Entschieden (14.11.2026):** Desktop zuerst mit Weg A. Für Tablets wird per Machbarkeitsnachweis zwischen B und C entschieden; Weg D dient als Übergang. Der Emulator ist in allen Fällen derselbe.
 
 ### 5.5 Brücke zur echten Hardware (optional, später)
 
@@ -252,7 +255,6 @@ Auf dem Desktop kann ein Programm über USB auf ein reales Uno-kompatibles Board
 
 | Entscheidung | Spätestens |
 |---|---|
-| Arbeitsteilung mit Zuse 3 bestätigen (Abschnitt 4) | vor Phase M0 |
 | Tablet-Weg der Übersetzung (B oder C) | Ende Phase M1 |
 | Maskottchen oder neutrales Hilfesystem | vor Phase M2 |
 | Altersstufe und Zielmärkte (Schule, Maker, Berufsausbildung) nach Verlagsrückmeldung | vor Phase M2 |
@@ -263,7 +265,7 @@ Auf dem Desktop kann ein Programm über USB auf ein reales Uno-kompatibles Board
 
 Der MCU Explorer schließt die Kernlinie: Wer mit Volta Schaltungen versteht und mit Zuse weiß, wie ein Prozessor arbeitet, steuert jetzt eine echte Schaltung mit eigenem Code – und sieht, was der Code elektrisch bewirkt. Die Abgrenzung zu Zuse 3 ist eindeutig: Zuse baut den Prozessor, der MCU Explorer benutzt ihn. Technisch entscheidend sind der eigene AVR-Emulator, seine Kopplung an den Volta-Kern und der Übersetzungsweg auf Tablets; alle drei werden zuerst in einem kleinen Machbarkeitsnachweis geprüft.
 
-**Nächste Schritte:** (1) Arbeitsteilung mit Zuse 3 bestätigen. (2) Machbarkeitsnachweis M0 nach der Verlagsrückmeldung zu Volta 1. (3) Markenrecherche »MCU Explorer« und Lizenzprüfung der Toolchain.
+**Nächste Schritte:** (1) Machbarkeitsnachweis M0 nach der Verlagsrückmeldung zu Volta 1, aufbauend auf der Digitalkopplung aus Volta 3. (2) Markenrecherche »MCU Explorer« und Lizenzprüfung der Toolchain. (3) Tablet-Weg (B oder C) bis Ende Phase M1 entscheiden.
 
 ## Anhang A: Begriffe
 
